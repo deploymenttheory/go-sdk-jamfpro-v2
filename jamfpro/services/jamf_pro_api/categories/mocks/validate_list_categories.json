@@ -1,0 +1,7 @@
+{
+  "totalCount": 2,
+  "results": [
+    {"id": "1", "name": "No priority", "priority": 9},
+    {"id": "2", "name": "Critical",    "priority": 1}
+  ]
+}
