@@ -16,7 +16,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// acceptanceTestPackageURL is a public web source used for package upload acceptance tests.
 const acceptanceTestPackageURL = "https://ftp.mozilla.org/pub/firefox/releases/147.0/mac/en-GB/Firefox%20147.0.pkg"
 
 func uniquePackageName(base string) string {
@@ -34,7 +33,8 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	svc := acc.Client.Packages
 	ctx := context.Background()
 
-	// 1. Download package from web source and DoPackageUpload (create metadata → upload → verify SHA3_512)
+	// 1. Download package from web source and DoPackageUpload (create metadata → upload → verify SHA3_512).
+	// Multipart upload uses application/octet-stream so the server hashes the same bytes we hashed locally.
 	acc.LogTestStage(t, "DoPackageUpload", "Downloading package from web source, creating metadata, uploading file, verifying SHA3_512")
 
 	tmpDir := t.TempDir()

@@ -90,10 +90,11 @@ func (t *Transport) PostMultipart(ctx context.Context, path string, fileField st
 	req := t.client.R().SetContext(ctx).SetResult(result)
 	if fileReader != nil && fileName != "" && fileField != "" {
 		field := &resty.MultipartField{
-			Name:     fileField,
-			FileName: fileName,
-			Reader:   fileReader,
-			FileSize: fileSize,
+			Name:        fileField,
+			FileName:    fileName,
+			ContentType: "application/octet-stream",
+			Reader:      fileReader,
+			FileSize:    fileSize,
 		}
 		if progressCallback != nil {
 			field.ProgressCallback = func(p resty.MultipartFieldProgress) {

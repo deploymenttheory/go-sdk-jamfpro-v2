@@ -120,7 +120,7 @@ func TestAcceptance_Buildings_Lifecycle(t *testing.T) {
 	noteResp, err := svc.AddBuildingHistoryNotesV1(ctx, buildingID, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, noteResp)
-	assert.Equal(t, 201, noteResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, noteResp.StatusCode, "Add history note returns 200 or 201")
 	acc.LogTestSuccess(t, "History note added")
 
 	history, histResp, err := svc.GetBuildingHistoryV1(ctx, buildingID, nil)

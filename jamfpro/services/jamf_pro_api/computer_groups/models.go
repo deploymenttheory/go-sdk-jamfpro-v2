@@ -50,9 +50,10 @@ type SiteRef struct {
 }
 
 // RequestStaticGroup is the body for creating and updating static groups.
+// ComputerIds is omitted when empty so create (POST) accepts name-only; API may not accept computerIds on create.
 type RequestStaticGroup struct {
 	Name        string   `json:"name"`
-	ComputerIds []string `json:"computerIds"`
+	ComputerIds []string `json:"computerIds,omitempty"`
 }
 
 // CreateSmartResponse is the response for CreateSmartGroupV2.

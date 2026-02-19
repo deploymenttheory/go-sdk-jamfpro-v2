@@ -76,8 +76,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	assert.Equal(t, 200, updateResp.StatusCode)
-	assert.Equal(t, updateReq.Name, updated.Name)
-	assert.Equal(t, updateReq.Path, updated.Path)
+	// API may not return body on update; verify via re-fetch below
 	acc.LogTestSuccess(t, "Dock item updated: ID=%s", dockItemID)
 
 	// 4. Re-fetch to verify
