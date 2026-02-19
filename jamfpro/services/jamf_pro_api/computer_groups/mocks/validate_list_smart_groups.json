@@ -1,0 +1,1 @@
+{"totalCount":2,"results":[{"id":"1","name":"MacBooks","isSmart":true,"criteria":[{"name":"Model","priority":0,"andOr":"and","searchType":"is","value":"MacBook Pro"}]},{"id":"2","name":"Engineering Macs","isSmart":true,"criteria":[{"name":"Department","priority":0,"andOr":"and","searchType":"is","value":"Engineering"}]}]}

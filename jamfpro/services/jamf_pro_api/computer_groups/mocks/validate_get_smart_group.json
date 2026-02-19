@@ -1,0 +1,1 @@
+{"id":"1","name":"MacBooks","isSmart":true,"criteria":[{"name":"Model","priority":0,"andOr":"and","searchType":"is","value":"MacBook Pro"}]}

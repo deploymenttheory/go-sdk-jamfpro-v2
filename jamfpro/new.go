@@ -5,8 +5,12 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/sites"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
 	"go.uber.org/zap"
 )
@@ -19,9 +23,13 @@ type Client struct {
 	Sites *sites.Service
 
 	// Jamf Pro API services
-	Categories   *categories.Service
-	Departments  *departments.Service
-	Scripts      *scripts.Service
+	Buildings      *buildings.Service
+	Categories     *categories.Service
+	ComputerGroups *computer_groups.Service
+	Departments    *departments.Service
+	DockItems      *dock_items.Service
+	Packages       *packages.Service
+	Scripts        *scripts.Service
 }
 
 // NewClient creates a new Jamf Pro API client.
@@ -31,11 +39,15 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		return nil, fmt.Errorf("failed to create transport: %w", err)
 	}
 	c := &Client{
-		transport:   transport,
-		Sites:       sites.NewService(transport),
-		Categories:  categories.NewService(transport),
-		Departments: departments.NewService(transport),
-		Scripts:     scripts.NewService(transport),
+		transport:      transport,
+		Sites:          sites.NewService(transport),
+		Buildings:      buildings.NewService(transport),
+		Categories:     categories.NewService(transport),
+		ComputerGroups: computer_groups.NewService(transport),
+		Departments:    departments.NewService(transport),
+		DockItems:      dock_items.NewService(transport),
+		Packages:       packages.NewService(transport),
+		Scripts:        scripts.NewService(transport),
 	}
 	return c, nil
 }

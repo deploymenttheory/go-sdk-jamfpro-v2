@@ -1,0 +1,1 @@
+{"id":"1","name":"MacBooks Updated","isSmart":true,"criteria":[{"name":"Model","priority":0,"andOr":"and","searchType":"is","value":"MacBook Air"}]}
