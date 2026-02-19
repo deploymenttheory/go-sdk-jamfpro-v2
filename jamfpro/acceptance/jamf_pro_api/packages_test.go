@@ -3,6 +3,8 @@ package jamf_pro_api
 import (
 	"context"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"testing"
@@ -13,6 +15,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+// acceptanceTestPackageURL is a public web source used for package upload acceptance tests.
+const acceptanceTestPackageURL = "https://ftp.mozilla.org/pub/firefox/releases/147.0/mac/en-GB/Firefox%20147.0.pkg"
 
 func uniquePackageName(base string) string {
 	return fmt.Sprintf("%s-%d", base, time.Now().UnixMilli())
@@ -29,12 +34,22 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	svc := acc.Client.Packages
 	ctx := context.Background()
 
-	// 1. Create temp package file and DoPackageUpload (create metadata → upload → verify)
-	acc.LogTestStage(t, "DoPackageUpload", "Creating metadata, uploading file, verifying SHA3_512")
+	// 1. Download package from web source and DoPackageUpload (create metadata → upload → verify SHA3_512)
+	acc.LogTestStage(t, "DoPackageUpload", "Downloading package from web source, creating metadata, uploading file, verifying SHA3_512")
 
 	tmpDir := t.TempDir()
-	pkgPath := filepath.Join(tmpDir, "acc-test.pkg")
-	require.NoError(t, os.WriteFile(pkgPath, []byte("minimal package content for acceptance test"), 0644))
+	pkgPath := filepath.Join(tmpDir, "Firefox_147.0.pkg")
+	func() {
+		resp, err := http.Get(acceptanceTestPackageURL)
+		require.NoError(t, err, "download package from web source")
+		defer resp.Body.Close()
+		require.Equal(t, http.StatusOK, resp.StatusCode, "web source must return 200")
+		out, err := os.Create(pkgPath)
+		require.NoError(t, err)
+		defer out.Close()
+		_, err = io.Copy(out, resp.Body)
+		require.NoError(t, err)
+	}()
 
 	createReq := &packages.RequestPackage{
 		PackageName:           uniquePackageName("acc-test-package"),
