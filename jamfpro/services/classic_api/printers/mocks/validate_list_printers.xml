@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<printers>
+  <size>2</size>
+  <printer>
+    <id>1</id>
+    <name>Office Printer</name>
+  </printer>
+  <printer>
+    <id>2</id>
+    <name>Lab Printer</name>
+  </printer>
+</printers>

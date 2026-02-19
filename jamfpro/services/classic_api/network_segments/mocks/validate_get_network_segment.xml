@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<network_segment>
+  <id>1</id>
+  <name>HQ Network</name>
+  <starting_address>10.0.0.0</starting_address>
+  <ending_address>10.0.0.255</ending_address>
+  <distribution_server>dist.example.com</distribution_server>
+  <distribution_point>dp.example.com</distribution_point>
+  <url>https://example.com</url>
+  <swu_server>swu.example.com</swu_server>
+  <building>HQ Building</building>
+  <department>IT</department>
+  <override_buildings>false</override_buildings>
+  <override_departments>false</override_departments>
+</network_segment>

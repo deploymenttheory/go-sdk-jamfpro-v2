@@ -1,0 +1,1 @@
+{"enabled":false,"authenticationType":"NONE","connectionSettings":{"host":"smtp.example.com","port":587,"encryptionType":"TLS","connectionTimeout":30},"senderSettings":{"displayName":"Jamf","emailAddress":"jamf@example.com"}}

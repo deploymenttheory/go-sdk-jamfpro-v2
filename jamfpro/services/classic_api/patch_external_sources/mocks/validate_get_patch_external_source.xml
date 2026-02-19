@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch_external_source>
+  <id>1</id>
+  <name>Primary Patch Source</name>
+  <host_name>patches.example.com</host_name>
+  <ssl_enabled>true</ssl_enabled>
+  <port>443</port>
+</patch_external_source>

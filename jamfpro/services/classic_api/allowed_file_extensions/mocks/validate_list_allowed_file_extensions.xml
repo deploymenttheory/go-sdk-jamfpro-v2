@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<allowed_file_extensions>
+  <size>2</size>
+  <allowed_file_extension>
+    <id>1</id>
+    <extension>dmg</extension>
+  </allowed_file_extension>
+  <allowed_file_extension>
+    <id>2</id>
+    <extension>pkg</extension>
+  </allowed_file_extension>
+</allowed_file_extensions>

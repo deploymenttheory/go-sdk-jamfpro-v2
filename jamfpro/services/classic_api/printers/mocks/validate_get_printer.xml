@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<printer>
+  <id>1</id>
+  <name>Office Printer</name>
+  <category>Printers</category>
+  <uri>ipp://printer.example.com/ipp</uri>
+  <CUPS_name>Office_Printer</CUPS_name>
+  <location>Main Office</location>
+  <model>HP LaserJet</model>
+  <info>Main office printer</info>
+  <notes>Toner replaced monthly</notes>
+  <make_default>false</make_default>
+  <use_generic>false</use_generic>
+  <ppd>HP_LaserJet.ppd</ppd>
+  <ppd_path>/Library/Printers/PPDs/HP_LaserJet.ppd</ppd_path>
+  <ppd_contents></ppd_contents>
+</printer>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<software_update_servers>
+  <size>2</size>
+  <software_update_server>
+    <id>1</id>
+    <name>Primary SUS</name>
+  </software_update_server>
+  <software_update_server>
+    <id>2</id>
+    <name>Secondary SUS</name>
+  </software_update_server>
+</software_update_servers>

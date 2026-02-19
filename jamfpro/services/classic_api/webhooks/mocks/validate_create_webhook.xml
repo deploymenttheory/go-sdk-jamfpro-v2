@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webhook>
+  <id>3</id>
+  <name>New Webhook</name>
+  <enabled>true</enabled>
+  <url>https://hooks.example.com/new</url>
+  <content_type>application/json</content_type>
+  <event>ComputerAdded</event>
+  <connection_timeout>5000</connection_timeout>
+  <read_timeout>5000</read_timeout>
+  <authentication_type>NONE</authentication_type>
+</webhook>

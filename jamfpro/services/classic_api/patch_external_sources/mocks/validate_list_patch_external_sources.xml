@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch_external_sources>
+  <size>2</size>
+  <patch_external_source>
+    <id>1</id>
+    <name>Primary Patch Source</name>
+  </patch_external_source>
+  <patch_external_source>
+    <id>2</id>
+    <name>Secondary Patch Source</name>
+  </patch_external_source>
+</patch_external_sources>

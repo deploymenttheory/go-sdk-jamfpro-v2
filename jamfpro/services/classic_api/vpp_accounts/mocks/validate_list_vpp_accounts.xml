@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vpp_accounts>
+  <size>2</size>
+  <vpp_account>
+    <id>1</id>
+    <name>Production VPP</name>
+  </vpp_account>
+  <vpp_account>
+    <id>2</id>
+    <name>Education VPP</name>
+  </vpp_account>
+</vpp_accounts>

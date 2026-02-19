@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vpp_account>
+  <id>1</id>
+  <name>Production VPP Updated</name>
+  <contact>admin@example.com</contact>
+  <account_name>Example Org</account_name>
+  <country>US</country>
+  <populate_catalog_from_vpp_content>true</populate_catalog_from_vpp_content>
+  <notify_disassociation>false</notify_disassociation>
+  <auto_register_managed_users>true</auto_register_managed_users>
+</vpp_account>

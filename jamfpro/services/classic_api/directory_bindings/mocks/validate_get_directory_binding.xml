@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directory_binding>
+  <id>1</id>
+  <name>AD Binding</name>
+  <priority>1</priority>
+  <domain>example.com</domain>
+  <username>bind-user</username>
+  <password>bind-password</password>
+  <computer_ou>CN=Computers,DC=example,DC=com</computer_ou>
+  <type>Active Directory</type>
+</directory_binding>

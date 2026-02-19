@@ -1,0 +1,1 @@
+{"totalCount":2,"results":[{"id":"1","displayName":"Administrator","privileges":["Create Computers","Read Computers"]},{"id":"2","displayName":"Read Only","privileges":["Read Computers"]}]}

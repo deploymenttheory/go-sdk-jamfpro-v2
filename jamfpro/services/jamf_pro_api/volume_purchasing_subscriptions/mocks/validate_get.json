@@ -1,0 +1,1 @@
+{"id":"1","name":"VPS One","enabled":true,"triggers":["LICENSE_USAGE"],"locationIds":["1"],"internalRecipients":[],"externalRecipients":[{"name":"Admin","email":"admin@example.com"}],"siteId":""}

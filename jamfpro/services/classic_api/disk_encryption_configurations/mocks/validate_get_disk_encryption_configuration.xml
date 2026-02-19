@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<disk_encryption_configuration>
+  <id>1</id>
+  <name>FileVault Config</name>
+  <key_type>Individual</key_type>
+  <file_vault_enabled_users>Management Account</file_vault_enabled_users>
+</disk_encryption_configuration>

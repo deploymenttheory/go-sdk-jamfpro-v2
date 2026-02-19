@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directory_bindings>
+  <size>2</size>
+  <directory_binding>
+    <id>1</id>
+    <name>AD Binding</name>
+  </directory_binding>
+  <directory_binding>
+    <id>2</id>
+    <name>LDAP Binding</name>
+  </directory_binding>
+</directory_bindings>

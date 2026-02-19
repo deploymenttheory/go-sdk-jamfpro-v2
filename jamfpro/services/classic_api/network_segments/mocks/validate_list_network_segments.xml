@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<network_segments>
+  <size>2</size>
+  <network_segment>
+    <id>1</id>
+    <name>HQ Network</name>
+    <starting_address>10.0.0.0</starting_address>
+    <ending_address>10.0.0.255</ending_address>
+  </network_segment>
+  <network_segment>
+    <id>2</id>
+    <name>Branch Network</name>
+    <starting_address>192.168.1.0</starting_address>
+    <ending_address>192.168.1.255</ending_address>
+  </network_segment>
+</network_segments>

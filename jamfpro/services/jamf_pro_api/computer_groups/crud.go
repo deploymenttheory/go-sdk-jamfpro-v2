@@ -13,22 +13,60 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
 	ComputerGroupsServiceInterface interface {
-		// Smart groups
+		// ListSmartGroupsV2 returns all smart computer groups (Get Smart Computer Group objects).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
 		ListSmartGroupsV2(ctx context.Context, queryParams map[string]string) (*ListSmartResponse, *interfaces.Response, error)
+
+		// GetSmartGroupByIDV2 returns the specified smart computer group by ID (Get specified Smart Computer Group object).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups-id
 		GetSmartGroupByIDV2(ctx context.Context, id string) (*ResourceSmartGroup, *interfaces.Response, error)
+
+		// CreateSmartGroupV2 creates a new smart computer group (Create Smart Computer Group record).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-smart-groups
 		CreateSmartGroupV2(ctx context.Context, req *RequestSmartGroup) (*CreateSmartResponse, *interfaces.Response, error)
+
+		// UpdateSmartGroupV2 updates the specified smart computer group by ID (Update specified Smart Computer Group object).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-smart-groups-id
 		UpdateSmartGroupV2(ctx context.Context, id string, req *RequestSmartGroup) (*ResourceSmartGroup, *interfaces.Response, error)
+
+		// DeleteSmartGroupV2 removes the specified smart computer group by ID (Remove specified Smart Computer Group record).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-groups-smart-groups-id
 		DeleteSmartGroupV2(ctx context.Context, id string) (*interfaces.Response, error)
 
-		// Static groups
+		// ListStaticGroupsV2 returns all static computer groups (Get Static Computer Group objects).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups
 		ListStaticGroupsV2(ctx context.Context, queryParams map[string]string) (*ListStaticResponse, *interfaces.Response, error)
+
+		// GetStaticGroupByIDV2 returns the specified static computer group by ID (Get specified Static Computer Group object).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups-id
 		GetStaticGroupByIDV2(ctx context.Context, id string) (*ResourceStaticGroup, *interfaces.Response, error)
+
+		// CreateStaticGroupV2 creates a new static computer group (Create Static Computer Group record).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-static-groups
 		CreateStaticGroupV2(ctx context.Context, req *RequestStaticGroup) (*CreateStaticResponse, *interfaces.Response, error)
+
+		// UpdateStaticGroupByIDV2 updates the specified static computer group by ID (Update specified Static Computer Group object).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-static-groups-id
 		UpdateStaticGroupByIDV2(ctx context.Context, id string, req *RequestStaticGroup) (*ResourceStaticGroup, *interfaces.Response, error)
+
+		// DeleteStaticGroupByIDV2 removes the specified static computer group by ID (Remove specified Static Computer Group record).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-groups-static-groups-id
 		DeleteStaticGroupByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the computer groups-related methods of the Jamf Pro API.
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
 	Service struct {
 		client interfaces.HTTPClient
 	}

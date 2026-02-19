@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<software_update_server>
+  <id>1</id>
+  <name>Primary SUS</name>
+  <ip_address>192.168.1.50</ip_address>
+  <port>8088</port>
+  <set_system_wide>true</set_system_wide>
+</software_update_server>

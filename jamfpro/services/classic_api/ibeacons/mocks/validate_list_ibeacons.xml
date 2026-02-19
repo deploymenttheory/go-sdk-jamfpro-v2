@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibeacons>
+  <size>2</size>
+  <ibeacon>
+    <id>1</id>
+    <name>Lobby Beacon</name>
+  </ibeacon>
+  <ibeacon>
+    <id>2</id>
+    <name>Cafeteria Beacon</name>
+  </ibeacon>
+</ibeacons>

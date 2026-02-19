@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webhooks>
+  <size>2</size>
+  <webhook>
+    <id>1</id>
+    <name>Computer Enrolled</name>
+  </webhook>
+  <webhook>
+    <id>2</id>
+    <name>Policy Completed</name>
+  </webhook>
+</webhooks>

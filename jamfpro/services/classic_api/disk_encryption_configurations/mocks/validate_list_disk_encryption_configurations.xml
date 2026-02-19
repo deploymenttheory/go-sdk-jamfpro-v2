@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<disk_encryption_configurations>
+  <size>2</size>
+  <disk_encryption_configuration>
+    <id>1</id>
+    <name>FileVault Config</name>
+  </disk_encryption_configuration>
+  <disk_encryption_configuration>
+    <id>2</id>
+    <name>Recovery Key Config</name>
+  </disk_encryption_configuration>
+</disk_encryption_configurations>
