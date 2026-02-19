@@ -1,4 +1,4 @@
-// Package main demonstrates GetScriptHistory — retrieves the history object for a script.
+// Package main demonstrates GetScriptHistoryV1 — retrieves the history object for a script.
 //
 // Run with: go run ./examples/jamf_pro_api/scripts/get_history
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set SCRIPT_ID or uses first from list.
@@ -22,7 +22,7 @@ func main() {
 	ctx := context.Background()
 	id := os.Getenv("SCRIPT_ID")
 	if id == "" {
-		list, _, err := client.Scripts.ListScripts(ctx, map[string]string{"page": "0", "page-size": "1"})
+		list, _, err := client.Scripts.ListScriptsV1(ctx, map[string]string{"page": "0", "page-size": "1"})
 		if err != nil || len(list.Results) == 0 {
 			log.Fatal("Set SCRIPT_ID or ensure at least one script exists")
 		}
@@ -30,9 +30,9 @@ func main() {
 		fmt.Printf("Using first script ID: %s\n", id)
 	}
 
-	history, resp, err := client.Scripts.GetScriptHistory(ctx, id, nil)
+	history, resp, err := client.Scripts.GetScriptHistoryV1(ctx, id, nil)
 	if err != nil {
-		log.Fatalf("GetScriptHistory failed: %v", err)
+		log.Fatalf("GetScriptHistoryV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

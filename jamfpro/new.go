@@ -6,6 +6,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/sites"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
 	"go.uber.org/zap"
 )
@@ -18,8 +19,9 @@ type Client struct {
 	Sites *sites.Service
 
 	// Jamf Pro API services
-	Categories *categories.Service
-	Scripts    *scripts.Service
+	Categories   *categories.Service
+	Departments  *departments.Service
+	Scripts      *scripts.Service
 }
 
 // NewClient creates a new Jamf Pro API client.
@@ -29,10 +31,11 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		return nil, fmt.Errorf("failed to create transport: %w", err)
 	}
 	c := &Client{
-		transport:  transport,
-		Sites:      sites.NewService(transport),
-		Categories: categories.NewService(transport),
-		Scripts:    scripts.NewService(transport),
+		transport:   transport,
+		Sites:       sites.NewService(transport),
+		Categories:  categories.NewService(transport),
+		Departments: departments.NewService(transport),
+		Scripts:     scripts.NewService(transport),
 	}
 	return c, nil
 }

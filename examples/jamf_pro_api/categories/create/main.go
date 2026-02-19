@@ -1,4 +1,4 @@
-// Package main demonstrates CreateCategory - creates a new category.
+// Package main demonstrates CreateCategoryV1 - creates a new category.
 //
 // Run with: go run ./examples/jamf_pro_api/categories/create
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -27,9 +27,9 @@ func main() {
 		Priority: 5,
 	}
 
-	result, resp, err := client.Categories.CreateCategory(ctx, req)
+	result, resp, err := client.Categories.CreateCategoryV1(ctx, req)
 	if err != nil {
-		log.Fatalf("CreateCategory failed: %v", err)
+		log.Fatalf("CreateCategoryV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
@@ -37,7 +37,7 @@ func main() {
 	fmt.Printf("Href: %s\n", result.Href)
 
 	// Cleanup: delete the created category
-	if _, err := client.Categories.DeleteCategoryByID(ctx, result.ID); err != nil {
+	if _, err := client.Categories.DeleteCategoryByIDV1(ctx, result.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: category deleted")

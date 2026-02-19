@@ -1,4 +1,4 @@
-// Package main demonstrates DeleteCategoriesByID - deletes multiple categories by their IDs.
+// Package main demonstrates DeleteCategoriesByIDV1 - deletes multiple categories by their IDs.
 //
 // Run with: go run ./examples/jamf_pro_api/categories/delete_multiple
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Creates two categories then bulk deletes them.
@@ -29,9 +29,9 @@ func main() {
 			Name:     fmt.Sprintf("example-bulk-%d-%d", i, time.Now().UnixMilli()),
 			Priority: 1,
 		}
-		created, _, err := client.Categories.CreateCategory(ctx, req)
+		created, _, err := client.Categories.CreateCategoryV1(ctx, req)
 		if err != nil {
-			log.Fatalf("CreateCategory %d failed: %v", i, err)
+			log.Fatalf("CreateCategoryV1 %d failed: %v", i, err)
 		}
 		ids = append(ids, created.ID)
 		fmt.Printf("Created category ID: %s\n", created.ID)
@@ -39,9 +39,9 @@ func main() {
 
 	// Bulk delete
 	bulkReq := &categories.DeleteCategoriesByIDRequest{IDs: ids}
-	resp, err := client.Categories.DeleteCategoriesByID(ctx, bulkReq)
+	resp, err := client.Categories.DeleteCategoriesByIDV1(ctx, bulkReq)
 	if err != nil {
-		log.Fatalf("DeleteCategoriesByID failed: %v", err)
+		log.Fatalf("DeleteCategoriesByIDV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d (204 = success)\n", resp.StatusCode)

@@ -1,7 +1,7 @@
-// Package main demonstrates GetCategoryHistoryV1 - retrieves the history object for a category.
+// Package main demonstrates GetDepartmentHistoryV1 - retrieves the history object for a department.
 //
-// Run with: go run ./examples/jamf_pro_api/categories/get_history
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set CATEGORY_ID or uses first from list.
+// Run with: go run ./examples/jamf_pro_api/departments/get_history
+// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set DEPARTMENT_ID or uses first from list.
 package main
 
 import (
@@ -20,19 +20,19 @@ func main() {
 	}
 
 	ctx := context.Background()
-	id := os.Getenv("CATEGORY_ID")
+	id := os.Getenv("DEPARTMENT_ID")
 	if id == "" {
-		list, _, err := client.Categories.ListCategoriesV1(ctx, map[string]string{"page": "0", "pageSize": "1"})
+		list, _, err := client.Departments.ListDepartmentsV1(ctx, map[string]string{"page": "0", "pageSize": "1"})
 		if err != nil || len(list.Results) == 0 {
-			log.Fatal("Set CATEGORY_ID or ensure at least one category exists")
+			log.Fatal("Set DEPARTMENT_ID or ensure at least one department exists")
 		}
 		id = list.Results[0].ID
-		fmt.Printf("Using first category ID: %s\n", id)
+		fmt.Printf("Using first department ID: %s\n", id)
 	}
 
-	history, resp, err := client.Categories.GetCategoryHistoryV1(ctx, id, nil)
+	history, resp, err := client.Departments.GetDepartmentHistoryV1(ctx, id, nil)
 	if err != nil {
-		log.Fatalf("GetCategoryHistoryV1 failed: %v", err)
+		log.Fatalf("GetDepartmentHistoryV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

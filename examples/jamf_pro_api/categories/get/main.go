@@ -1,4 +1,4 @@
-// Package main demonstrates GetCategoryByID - retrieves a single category by ID.
+// Package main demonstrates GetCategoryByIDV1 - retrieves a single category by ID.
 //
 // Run with: go run ./examples/jamf_pro_api/categories/get
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set CATEGORY_ID or uses first from list.
@@ -23,7 +23,7 @@ func main() {
 	id := os.Getenv("CATEGORY_ID")
 	if id == "" {
 		// Fallback: use first category from list
-		list, _, err := client.Categories.ListCategories(ctx, map[string]string{"page": "0", "pageSize": "1"})
+		list, _, err := client.Categories.ListCategoriesV1(ctx, map[string]string{"page": "0", "pageSize": "1"})
 		if err != nil || len(list.Results) == 0 {
 			log.Fatal("Set CATEGORY_ID or ensure at least one category exists")
 		}
@@ -31,9 +31,9 @@ func main() {
 		fmt.Printf("Using first category ID: %s\n", id)
 	}
 
-	category, resp, err := client.Categories.GetCategoryByID(ctx, id)
+	category, resp, err := client.Categories.GetCategoryByIDV1(ctx, id)
 	if err != nil {
-		log.Fatalf("GetCategoryByID failed: %v", err)
+		log.Fatalf("GetCategoryByIDV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

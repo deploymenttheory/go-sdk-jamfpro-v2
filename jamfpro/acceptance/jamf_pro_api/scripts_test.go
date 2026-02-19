@@ -38,10 +38,10 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 		ScriptContents: "#!/bin/bash\necho 'acceptance test'",
 	}
 
-	created, createResp, err := svc.CreateScript(ctx, createReq)
-	require.NoError(t, err, "CreateScript should not return an error")
-	require.NotNil(t, created, "CreateScript result should not be nil")
-	require.NotNil(t, createResp, "CreateScript response should not be nil")
+	created, createResp, err := svc.CreateScriptV1(ctx, createReq)
+	require.NoError(t, err, "CreateScriptV1 should not return an error")
+	require.NotNil(t, created, "CreateScriptV1 result should not be nil")
+	require.NotNil(t, createResp, "CreateScriptV1 response should not be nil")
 	assert.Equal(t, 201, createResp.StatusCode, "expected 201 Created")
 	assert.NotEmpty(t, created.ID, "created script ID should not be empty")
 	assert.NotEmpty(t, created.Href, "created script Href should not be empty")
@@ -52,7 +52,7 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteScriptByID(cleanupCtx, scriptID)
+		_, delErr := svc.DeleteScriptByIDV1(cleanupCtx, scriptID)
 		acc.LogCleanupDeleteError(t, "script", scriptID, delErr)
 	})
 
@@ -64,8 +64,8 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListScripts(ctx2, map[string]string{"page": "0", "page-size": "200"})
-	require.NoError(t, err, "ListScripts should not return an error")
+	list, listResp, err := svc.ListScriptsV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
+	require.NoError(t, err, "ListScriptsV1 should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.TotalCount, "total count should be positive")
@@ -89,8 +89,8 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetScriptByID(ctx3, scriptID)
-	require.NoError(t, err, "GetScriptByID should not return an error")
+	fetched, fetchResp, err := svc.GetScriptByIDV1(ctx3, scriptID)
+	require.NoError(t, err, "GetScriptByIDV1 should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, scriptID, fetched.ID)
@@ -116,8 +116,8 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	updated, updateResp, err := svc.UpdateScriptByID(ctx4, scriptID, updateReq)
-	require.NoError(t, err, "UpdateScriptByID should not return an error")
+	updated, updateResp, err := svc.UpdateScriptByIDV1(ctx4, scriptID, updateReq)
+	require.NoError(t, err, "UpdateScriptByIDV1 should not return an error")
 	require.NotNil(t, updated)
 	assert.Equal(t, 200, updateResp.StatusCode)
 	assert.Equal(t, scriptID, updated.ID)
@@ -131,7 +131,7 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5()
 
-	verified, verifyResp, err := svc.GetScriptByID(ctx5, scriptID)
+	verified, verifyResp, err := svc.GetScriptByIDV1(ctx5, scriptID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -140,7 +140,7 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Update verified: name=%q priority=%s", verified.Name, verified.Priority)
 
 	// ------------------------------------------------------------------
-	// 6. AddScriptHistoryNotes
+	// 6. AddScriptHistoryNotesV1
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "AddHistoryNotes", "Adding history note to script ID=%s", scriptID)
 
@@ -150,22 +150,22 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	ctx6, cancel6 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel6()
 
-	noteResp, err := svc.AddScriptHistoryNotes(ctx6, scriptID, noteReq)
-	require.NoError(t, err, "AddScriptHistoryNotes should not return an error")
+	noteResp, err := svc.AddScriptHistoryNotesV1(ctx6, scriptID, noteReq)
+	require.NoError(t, err, "AddScriptHistoryNotesV1 should not return an error")
 	require.NotNil(t, noteResp)
 	assert.Contains(t, []int{200, 201}, noteResp.StatusCode)
 	acc.LogTestSuccess(t, "History note added")
 
 	// ------------------------------------------------------------------
-	// 7. GetScriptHistory — verify note appears
+	// 7. GetScriptHistoryV1 — verify note appears
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "GetHistory", "Fetching history for script ID=%s", scriptID)
 
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	history, historyResp, err := svc.GetScriptHistory(ctx7, scriptID, nil)
-	require.NoError(t, err, "GetScriptHistory should not return an error")
+	history, historyResp, err := svc.GetScriptHistoryV1(ctx7, scriptID, nil)
+	require.NoError(t, err, "GetScriptHistoryV1 should not return an error")
 	require.NotNil(t, history)
 	assert.Equal(t, 200, historyResp.StatusCode)
 	assert.Positive(t, history.TotalCount, "history should have at least one entry")
@@ -183,15 +183,15 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "History verified: %d entries, note present=%v", history.TotalCount, noteFound)
 
 	// ------------------------------------------------------------------
-	// 8. DeleteScriptByID
+	// 8. DeleteScriptByIDV1
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Delete", "Deleting script ID=%s", scriptID)
 
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteScriptByID(ctx8, scriptID)
-	require.NoError(t, err, "DeleteScriptByID should not return an error")
+	deleteResp, err := svc.DeleteScriptByIDV1(ctx8, scriptID)
+	require.NoError(t, err, "DeleteScriptByIDV1 should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Script ID=%s deleted", scriptID)
@@ -224,8 +224,8 @@ func TestAcceptance_Scripts_ListWithRSQLFilter(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateScript(ctx1, createReq)
-	require.NoError(t, err, "CreateScript should not return an error")
+	created, _, err := svc.CreateScriptV1(ctx1, createReq)
+	require.NoError(t, err, "CreateScriptV1 should not return an error")
 	require.NotNil(t, created)
 
 	scriptID := created.ID
@@ -234,7 +234,7 @@ func TestAcceptance_Scripts_ListWithRSQLFilter(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteScriptByID(cleanupCtx, scriptID)
+		_, delErr := svc.DeleteScriptByIDV1(cleanupCtx, scriptID)
 		acc.LogCleanupDeleteError(t, "script", scriptID, delErr)
 	})
 
@@ -250,8 +250,8 @@ func TestAcceptance_Scripts_ListWithRSQLFilter(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListScripts(ctx2, rsqlQuery)
-	require.NoError(t, err, "ListScripts with RSQL filter should not return an error")
+	list, listResp, err := svc.ListScriptsV1(ctx2, rsqlQuery)
+	require.NoError(t, err, "ListScriptsV1 with RSQL filter should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 
@@ -278,37 +278,37 @@ func TestAcceptance_Scripts_ValidationErrors(t *testing.T) {
 	svc := acc.Client.Scripts
 
 	t.Run("GetScriptByID_EmptyID", func(t *testing.T) {
-		_, _, err := svc.GetScriptByID(context.Background(), "")
+		_, _, err := svc.GetScriptByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "script ID is required")
 	})
 
 	t.Run("CreateScript_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateScript(context.Background(), nil)
+		_, _, err := svc.CreateScriptV1(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateScriptByID_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateScriptByID(context.Background(), "", &scripts.RequestScript{Name: "x"})
+		_, _, err := svc.UpdateScriptByIDV1(context.Background(), "", &scripts.RequestScript{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "script ID is required")
 	})
 
 	t.Run("DeleteScriptByID_EmptyID", func(t *testing.T) {
-		_, err := svc.DeleteScriptByID(context.Background(), "")
+		_, err := svc.DeleteScriptByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "script ID is required")
 	})
 
 	t.Run("GetScriptHistory_EmptyID", func(t *testing.T) {
-		_, _, err := svc.GetScriptHistory(context.Background(), "", nil)
+		_, _, err := svc.GetScriptHistoryV1(context.Background(), "", nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "script ID is required")
 	})
 
 	t.Run("AddScriptHistoryNotes_NilRequest", func(t *testing.T) {
-		_, err := svc.AddScriptHistoryNotes(context.Background(), "1", nil)
+		_, err := svc.AddScriptHistoryNotesV1(context.Background(), "1", nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request body is required")
 	})

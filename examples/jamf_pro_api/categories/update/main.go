@@ -1,4 +1,4 @@
-// Package main demonstrates UpdateCategoryByID - updates an existing category.
+// Package main demonstrates UpdateCategoryByIDV1 - updates an existing category.
 //
 // Run with: go run ./examples/jamf_pro_api/categories/update
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -27,9 +27,9 @@ func main() {
 		Name:     fmt.Sprintf("example-update-%d", time.Now().UnixMilli()),
 		Priority: 1,
 	}
-	created, _, err := client.Categories.CreateCategory(ctx, createReq)
+	created, _, err := client.Categories.CreateCategoryV1(ctx, createReq)
 	if err != nil {
-		log.Fatalf("CreateCategory failed: %v", err)
+		log.Fatalf("CreateCategoryV1 failed: %v", err)
 	}
 	id := created.ID
 
@@ -38,10 +38,10 @@ func main() {
 		Name:     fmt.Sprintf("example-updated-%d", time.Now().UnixMilli()),
 		Priority: 9,
 	}
-	result, resp, err := client.Categories.UpdateCategoryByID(ctx, id, updateReq)
+	result, resp, err := client.Categories.UpdateCategoryByIDV1(ctx, id, updateReq)
 	if err != nil {
-		_, _ = client.Categories.DeleteCategoryByID(ctx, id)
-		log.Fatalf("UpdateCategoryByID failed: %v", err)
+		_, _ = client.Categories.DeleteCategoryByIDV1(ctx, id)
+		log.Fatalf("UpdateCategoryByIDV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
@@ -49,11 +49,11 @@ func main() {
 	fmt.Printf("Href: %s\n", result.Href)
 
 	// Verify
-	fetched, _, _ := client.Categories.GetCategoryByID(ctx, id)
+	fetched, _, _ := client.Categories.GetCategoryByIDV1(ctx, id)
 	if fetched != nil {
 		fmt.Printf("Verified: name=%q priority=%d\n", fetched.Name, fetched.Priority)
 	}
 
-	_, _ = client.Categories.DeleteCategoryByID(ctx, id)
+	_, _ = client.Categories.DeleteCategoryByIDV1(ctx, id)
 	fmt.Println("Cleanup: category deleted")
 }

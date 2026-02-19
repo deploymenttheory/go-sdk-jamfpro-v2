@@ -1,4 +1,4 @@
-// Package main demonstrates GetScriptByID — retrieves a single script by ID.
+// Package main demonstrates GetScriptByIDV1 — retrieves a single script by ID.
 //
 // Run with: go run ./examples/jamf_pro_api/scripts/get
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set SCRIPT_ID or uses first from list.
@@ -22,7 +22,7 @@ func main() {
 	ctx := context.Background()
 	id := os.Getenv("SCRIPT_ID")
 	if id == "" {
-		list, _, err := client.Scripts.ListScripts(ctx, map[string]string{"page": "0", "page-size": "1"})
+		list, _, err := client.Scripts.ListScriptsV1(ctx, map[string]string{"page": "0", "page-size": "1"})
 		if err != nil || len(list.Results) == 0 {
 			log.Fatal("Set SCRIPT_ID or ensure at least one script exists")
 		}
@@ -30,9 +30,9 @@ func main() {
 		fmt.Printf("Using first script ID: %s\n", id)
 	}
 
-	script, resp, err := client.Scripts.GetScriptByID(ctx, id)
+	script, resp, err := client.Scripts.GetScriptByIDV1(ctx, id)
 	if err != nil {
-		log.Fatalf("GetScriptByID failed: %v", err)
+		log.Fatalf("GetScriptByIDV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

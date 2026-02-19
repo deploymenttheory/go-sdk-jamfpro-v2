@@ -1,4 +1,4 @@
-// Package main demonstrates ListScripts — retrieves all script objects with optional pagination and RSQL filtering.
+// Package main demonstrates ListScriptsV1 — retrieves all script objects with optional pagination and RSQL filtering.
 //
 // Run with: go run ./examples/jamf_pro_api/scripts/list
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and OAuth2 or Basic auth env vars.
@@ -21,12 +21,12 @@ func main() {
 	ctx := context.Background()
 
 	// List all scripts (first page, default page size)
-	result, resp, err := client.Scripts.ListScripts(ctx, map[string]string{
+	result, resp, err := client.Scripts.ListScriptsV1(ctx, map[string]string{
 		"page":      "0",
 		"page-size": "50",
 	})
 	if err != nil {
-		log.Fatalf("ListScripts failed: %v", err)
+		log.Fatalf("ListScriptsV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
@@ -40,11 +40,11 @@ func main() {
 	}
 
 	// Example: list with RSQL filter
-	filtered, _, err := client.Scripts.ListScripts(ctx, map[string]string{
+	filtered, _, err := client.Scripts.ListScriptsV1(ctx, map[string]string{
 		"filter": `name=="Install Homebrew"`,
 	})
 	if err != nil {
-		log.Fatalf("ListScripts with filter failed: %v", err)
+		log.Fatalf("ListScriptsV1 with filter failed: %v", err)
 	}
 	fmt.Printf("\nFiltered (name==\"Install Homebrew\"): %d result(s)\n", filtered.TotalCount)
 	for _, s := range filtered.Results {

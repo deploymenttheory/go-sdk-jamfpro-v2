@@ -1,4 +1,4 @@
-// Package main demonstrates DeleteScriptByID — removes a script by ID.
+// Package main demonstrates DeleteScriptByIDV1 — removes a script by ID.
 //
 // Run with: go run ./examples/jamf_pro_api/scripts/delete
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Creates a script then deletes it.
@@ -28,16 +28,16 @@ func main() {
 		Priority:       scripts.ScriptPriorityAfter,
 		ScriptContents: "#!/bin/bash\necho 'to be deleted'",
 	}
-	created, _, err := client.Scripts.CreateScript(ctx, createReq)
+	created, _, err := client.Scripts.CreateScriptV1(ctx, createReq)
 	if err != nil {
-		log.Fatalf("CreateScript failed: %v", err)
+		log.Fatalf("CreateScriptV1 failed: %v", err)
 	}
 	id := created.ID
 	fmt.Printf("Created script ID: %s\n", id)
 
-	resp, err := client.Scripts.DeleteScriptByID(ctx, id)
+	resp, err := client.Scripts.DeleteScriptByIDV1(ctx, id)
 	if err != nil {
-		log.Fatalf("DeleteScriptByID failed: %v", err)
+		log.Fatalf("DeleteScriptByIDV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d (204 = success)\n", resp.StatusCode)

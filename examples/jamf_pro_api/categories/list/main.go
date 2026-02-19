@@ -1,4 +1,4 @@
-// Package main demonstrates ListCategories - retrieves all category objects with optional pagination and RSQL filtering.
+// Package main demonstrates ListCategoriesV1 - retrieves all category objects with optional pagination and RSQL filtering.
 //
 // Run with: go run ./examples/jamf_pro_api/categories/list
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and OAuth2 or Basic auth env vars.
@@ -21,12 +21,12 @@ func main() {
 	ctx := context.Background()
 
 	// List all categories (first page, default page size)
-	result, resp, err := client.Categories.ListCategories(ctx, map[string]string{
+	result, resp, err := client.Categories.ListCategoriesV1(ctx, map[string]string{
 		"page":     "0",
 		"pageSize": "50",
 	})
 	if err != nil {
-		log.Fatalf("ListCategories failed: %v", err)
+		log.Fatalf("ListCategoriesV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
@@ -40,11 +40,11 @@ func main() {
 	}
 
 	// Example: list with RSQL filter
-	filtered, _, err := client.Categories.ListCategories(ctx, map[string]string{
+	filtered, _, err := client.Categories.ListCategoriesV1(ctx, map[string]string{
 		"filter": `name=="Critical"`,
 	})
 	if err != nil {
-		log.Fatalf("ListCategories with filter failed: %v", err)
+		log.Fatalf("ListCategoriesV1 with filter failed: %v", err)
 	}
 	fmt.Printf("\nFiltered (name==\"Critical\"): %d result(s)\n", filtered.TotalCount)
 	for _, c := range filtered.Results {

@@ -1,4 +1,4 @@
-// Package main demonstrates CreateScript — creates a new script.
+// Package main demonstrates CreateScriptV1 — creates a new script.
 //
 // Run with: go run ./examples/jamf_pro_api/scripts/create
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -30,9 +30,9 @@ func main() {
 		ScriptContents: "#!/bin/bash\necho 'Hello from Jamf Pro SDK example'",
 	}
 
-	result, resp, err := client.Scripts.CreateScript(ctx, req)
+	result, resp, err := client.Scripts.CreateScriptV1(ctx, req)
 	if err != nil {
-		log.Fatalf("CreateScript failed: %v", err)
+		log.Fatalf("CreateScriptV1 failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
@@ -40,7 +40,7 @@ func main() {
 	fmt.Printf("Href: %s\n", result.Href)
 
 	// Cleanup: delete the created script
-	if _, err := client.Scripts.DeleteScriptByID(ctx, result.ID); err != nil {
+	if _, err := client.Scripts.DeleteScriptByIDV1(ctx, result.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: script deleted")

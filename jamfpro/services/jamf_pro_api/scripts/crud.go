@@ -13,55 +13,55 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts
 	ScriptsServiceInterface interface {
-		// ListScripts returns a paged list of script objects.
+		// ListScriptsV1 returns a paged list of script objects.
 		//
 		// Supports optional RSQL filtering and pagination via rsqlQuery
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts
-		ListScripts(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListScriptsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
-		// GetScriptByID returns the specified script by ID.
+		// GetScriptByIDV1 returns the specified script by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts-id
-		GetScriptByID(ctx context.Context, id string) (*ResourceScript, *interfaces.Response, error)
+		GetScriptByIDV1(ctx context.Context, id string) (*ResourceScript, *interfaces.Response, error)
 
-		// CreateScript creates a new script record.
+		// CreateScriptV1 creates a new script record.
 		//
 		// Returns the created script's ID and href.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-scripts
-		CreateScript(ctx context.Context, req *RequestScript) (*CreateResponse, *interfaces.Response, error)
+		CreateScriptV1(ctx context.Context, req *RequestScript) (*CreateResponse, *interfaces.Response, error)
 
-		// UpdateScriptByID replaces the specified script by ID.
+		// UpdateScriptByIDV1 replaces the specified script by ID.
 		//
 		// Returns the full updated script resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-scripts-id
-		UpdateScriptByID(ctx context.Context, id string, req *RequestScript) (*ResourceScript, *interfaces.Response, error)
+		UpdateScriptByIDV1(ctx context.Context, id string, req *RequestScript) (*ResourceScript, *interfaces.Response, error)
 
-		// DeleteScriptByID removes the specified script by ID.
+		// DeleteScriptByIDV1 removes the specified script by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-scripts-id
-		DeleteScriptByID(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteScriptByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 
-		// DownloadScriptByID downloads the script contents as plain text.
+		// DownloadScriptByIDV1 downloads the script contents as plain text.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts-id-download
-		DownloadScriptByID(ctx context.Context, id string) ([]byte, *interfaces.Response, error)
+		DownloadScriptByIDV1(ctx context.Context, id string) ([]byte, *interfaces.Response, error)
 
-		// GetScriptHistory returns the history object for the specified script.
+		// GetScriptHistoryV1 returns the history object for the specified script.
 		//
 		// Supports optional RSQL filtering and pagination via rsqlQuery
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts-id-history
-		GetScriptHistory(ctx context.Context, id string, rsqlQuery map[string]string) (*ScriptHistoryResponse, *interfaces.Response, error)
+		GetScriptHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ScriptHistoryResponse, *interfaces.Response, error)
 
-		// AddScriptHistoryNotes adds notes to the specified script's history.
+		// AddScriptHistoryNotesV1 adds notes to the specified script's history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-scripts-id-history
-		AddScriptHistoryNotes(ctx context.Context, id string, req *AddScriptHistoryNotesRequest) (*interfaces.Response, error)
+		AddScriptHistoryNotesV1(ctx context.Context, id string, req *AddScriptHistoryNotesRequest) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the scripts-related methods of the Jamf Pro API.
@@ -83,11 +83,11 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API - Scripts CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListScripts returns a paged list of script objects.
+// ListScriptsV1 returns a paged list of script objects.
 // URL: GET /api/v1/scripts
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-scripts
-func (s *Service) ListScripts(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListScriptsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	resp, err := s.client.Get(ctx, EndpointScriptsV1, rsqlQuery, shared.JSONHeaders(), &result)
@@ -98,10 +98,10 @@ func (s *Service) ListScripts(ctx context.Context, rsqlQuery map[string]string) 
 	return &result, resp, nil
 }
 
-// GetScriptByID returns the specified script by ID.
+// GetScriptByIDV1 returns the specified script by ID.
 // URL: GET /api/v1/scripts/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-scripts-id
-func (s *Service) GetScriptByID(ctx context.Context, id string) (*ResourceScript, *interfaces.Response, error) {
+func (s *Service) GetScriptByIDV1(ctx context.Context, id string) (*ResourceScript, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("script ID is required")
 	}
@@ -118,10 +118,10 @@ func (s *Service) GetScriptByID(ctx context.Context, id string) (*ResourceScript
 	return &result, resp, nil
 }
 
-// CreateScript creates a new script record.
+// CreateScriptV1 creates a new script record.
 // URL: POST /api/v1/scripts
 // https://developer.jamf.com/jamf-pro/reference/post_v1-scripts
-func (s *Service) CreateScript(ctx context.Context, req *RequestScript) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateScriptV1(ctx context.Context, req *RequestScript) (*CreateResponse, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -136,11 +136,11 @@ func (s *Service) CreateScript(ctx context.Context, req *RequestScript) (*Create
 	return &result, resp, nil
 }
 
-// UpdateScriptByID replaces the specified script by ID.
+// UpdateScriptByIDV1 replaces the specified script by ID.
 // URL: PUT /api/v1/scripts/{id}
 // Returns the full updated script resource.
 // https://developer.jamf.com/jamf-pro/reference/put_v1-scripts-id
-func (s *Service) UpdateScriptByID(ctx context.Context, id string, req *RequestScript) (*ResourceScript, *interfaces.Response, error) {
+func (s *Service) UpdateScriptByIDV1(ctx context.Context, id string, req *RequestScript) (*ResourceScript, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("script ID is required")
 	}
@@ -160,10 +160,10 @@ func (s *Service) UpdateScriptByID(ctx context.Context, id string, req *RequestS
 	return &result, resp, nil
 }
 
-// DeleteScriptByID removes the specified script by ID.
+// DeleteScriptByIDV1 removes the specified script by ID.
 // URL: DELETE /api/v1/scripts/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-scripts-id
-func (s *Service) DeleteScriptByID(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteScriptByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("script ID is required")
 	}
@@ -178,10 +178,10 @@ func (s *Service) DeleteScriptByID(ctx context.Context, id string) (*interfaces.
 	return resp, nil
 }
 
-// DownloadScriptByID downloads the script contents as plain text.
+// DownloadScriptByIDV1 downloads the script contents as plain text.
 // URL: GET /api/v1/scripts/{id}/download
 // https://developer.jamf.com/jamf-pro/reference/get_v1-scripts-id-download
-func (s *Service) DownloadScriptByID(ctx context.Context, id string) ([]byte, *interfaces.Response, error) {
+func (s *Service) DownloadScriptByIDV1(ctx context.Context, id string) ([]byte, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("script ID is required")
 	}
@@ -196,11 +196,11 @@ func (s *Service) DownloadScriptByID(ctx context.Context, id string) ([]byte, *i
 	return data, resp, nil
 }
 
-// GetScriptHistory returns the history object for the specified script.
+// GetScriptHistoryV1 returns the history object for the specified script.
 // URL: GET /api/v1/scripts/{id}/history
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-scripts-id-history
-func (s *Service) GetScriptHistory(ctx context.Context, id string, rsqlQuery map[string]string) (*ScriptHistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetScriptHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ScriptHistoryResponse, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("script ID is required")
 	}
@@ -217,10 +217,10 @@ func (s *Service) GetScriptHistory(ctx context.Context, id string, rsqlQuery map
 	return &result, resp, nil
 }
 
-// AddScriptHistoryNotes adds notes to the specified script's history.
+// AddScriptHistoryNotesV1 adds notes to the specified script's history.
 // URL: POST /api/v1/scripts/{id}/history
 // https://developer.jamf.com/jamf-pro/reference/post_v1-scripts-id-history
-func (s *Service) AddScriptHistoryNotes(ctx context.Context, id string, req *AddScriptHistoryNotesRequest) (*interfaces.Response, error) {
+func (s *Service) AddScriptHistoryNotesV1(ctx context.Context, id string, req *AddScriptHistoryNotesRequest) (*interfaces.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("script ID is required")
 	}
