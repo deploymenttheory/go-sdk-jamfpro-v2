@@ -5,9 +5,9 @@ const (
 	EndpointDockItemsV1 = "/api/v1/dock-items"
 )
 
-// Dock item type constants.
+// Dock item type constants (API expects uppercase: APP, FILE, FOLDER).
 const (
-	TypeApp    = "App"
-	TypeFile   = "File"
-	TypeFolder = "Folder"
+	TypeApp    = "APP"
+	TypeFile   = "FILE"
+	TypeFolder = "FOLDER"
 )

@@ -58,7 +58,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 		Info:                  "Acceptance test package",
 		Notes:                 "Created by SDK acceptance test",
 		Priority:              10,
-		FillUserTemplate:      packages.BoolPtr(true),
+		FillUserTemplate:      packages.BoolPtr(false), // must be false for non-.dmg (e.g. .pkg)
 		FillExistingUsers:     packages.BoolPtr(false),
 		RebootRequired:        packages.BoolPtr(false),
 		OSInstall:             packages.BoolPtr(false),
@@ -127,7 +127,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 		Info:                 "Updated acceptance test package",
 		Notes:                "Updated by SDK acceptance test",
 		Priority:             15,
-		FillUserTemplate:     packages.BoolPtr(true),
+		FillUserTemplate:     packages.BoolPtr(false), // must stay false for .pkg
 		FillExistingUsers:    packages.BoolPtr(true),
 		RebootRequired:       fetched.RebootRequired,
 		OSInstall:            fetched.OSInstall,
@@ -251,9 +251,10 @@ func TestAcceptance_Packages_DeleteMultiple(t *testing.T) {
 
 	ids := make([]string, 0, 2)
 	for i := 0; i < 2; i++ {
+		baseName := uniquePackageName(fmt.Sprintf("acc-bulk-delete-%d", i))
 		req := &packages.RequestPackage{
-			PackageName:           uniquePackageName(fmt.Sprintf("acc-bulk-delete-%d", i)),
-			FileName:              "acc-bulk.pkg",
+			PackageName:           baseName,
+			FileName:              baseName + ".pkg",
 			CategoryID:            "-1",
 			Info:                  "Bulk delete test",
 			Priority:              9,
