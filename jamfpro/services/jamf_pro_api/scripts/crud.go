@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 )
 
 type (
@@ -87,14 +88,9 @@ func NewService(client interfaces.HTTPClient) *Service {
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-scripts
 func (s *Service) ListScripts(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
-	headers := map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-	}
-
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointScriptsV1, rsqlQuery, headers, &result)
+	resp, err := s.client.Get(ctx, EndpointScriptsV1, rsqlQuery, shared.JSONHeaders(), &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -112,14 +108,9 @@ func (s *Service) GetScriptByID(ctx context.Context, id string) (*ResourceScript
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointScriptsV1, id)
 
-	headers := map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-	}
-
 	var result ResourceScript
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -135,14 +126,9 @@ func (s *Service) CreateScript(ctx context.Context, req *RequestScript) (*Create
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	headers := map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-	}
-
 	var result CreateResponse
 
-	resp, err := s.client.Post(ctx, EndpointScriptsV1, req, headers, &result)
+	resp, err := s.client.Post(ctx, EndpointScriptsV1, req, shared.JSONHeaders(), &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -164,14 +150,9 @@ func (s *Service) UpdateScriptByID(ctx context.Context, id string, req *RequestS
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointScriptsV1, id)
 
-	headers := map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-	}
-
 	var result ResourceScript
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -189,12 +170,7 @@ func (s *Service) DeleteScriptByID(ctx context.Context, id string) (*interfaces.
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointScriptsV1, id)
 
-	headers := map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
 	if err != nil {
 		return resp, err
 	}
@@ -212,11 +188,7 @@ func (s *Service) DownloadScriptByID(ctx context.Context, id string) ([]byte, *i
 
 	endpoint := fmt.Sprintf("%s/%s/download", EndpointScriptsV1, id)
 
-	headers := map[string]string{
-		"Accept": "text/plain",
-	}
-
-	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
+	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, map[string]string{"Accept": "text/plain"})
 	if err != nil {
 		return nil, resp, err
 	}
@@ -235,14 +207,9 @@ func (s *Service) GetScriptHistory(ctx context.Context, id string, rsqlQuery map
 
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointScriptsV1, id)
 
-	headers := map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-	}
-
 	var result ScriptHistoryResponse
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, shared.JSONHeaders(), &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -263,12 +230,7 @@ func (s *Service) AddScriptHistoryNotes(ctx context.Context, id string, req *Add
 
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointScriptsV1, id)
 
-	headers := map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
 	if err != nil {
 		return resp, err
 	}

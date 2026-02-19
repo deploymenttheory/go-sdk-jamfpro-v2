@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sites>
+  <size>2</size>
+  <site>
+    <id>1</id>
+    <name>Main Campus</name>
+  </site>
+  <site>
+    <id>2</id>
+    <name>Remote Office</name>
+  </site>
+</sites>

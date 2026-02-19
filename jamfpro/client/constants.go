@@ -27,14 +27,6 @@ const (
 	adaptiveDelayMax = 5 * time.Second
 )
 
-// Headers
-const (
-	ContentTypeJSON = "application/json"
-	AcceptJSON      = "application/json"
-	ContentTypeXML  = "application/xml"
-	AcceptXML       = "application/xml"
-)
-
 // Jamf Pro API authentication and token management endpoints.
 // See: https://developer.jamf.com/jamf-pro/docs/classic-api-authentication-changes
 const (

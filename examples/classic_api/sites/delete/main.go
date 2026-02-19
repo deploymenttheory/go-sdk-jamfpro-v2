@@ -1,0 +1,42 @@
+// Package main demonstrates DeleteSiteByID — removes a site via the Classic API.
+//
+// Run with: go run ./examples/classic_api/sites/delete
+// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Creates a site then deletes it.
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/sites"
+)
+
+func main() {
+	client, err := jamfpro.NewClientFromEnv()
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+
+	ctx := context.Background()
+
+	// Create a site to delete
+	createReq := &sites.RequestSite{
+		Name: fmt.Sprintf("example-delete-%d", time.Now().UnixMilli()),
+	}
+	created, _, err := client.Sites.CreateSite(ctx, createReq)
+	if err != nil {
+		log.Fatalf("CreateSite failed: %v", err)
+	}
+	fmt.Printf("Created site ID: %d\n", created.ID)
+
+	resp, err := client.Sites.DeleteSiteByID(ctx, created.ID)
+	if err != nil {
+		log.Fatalf("DeleteSiteByID failed: %v", err)
+	}
+
+	fmt.Printf("Status: %d (200 = success)\n", resp.StatusCode)
+	fmt.Println("Site deleted successfully")
+}
