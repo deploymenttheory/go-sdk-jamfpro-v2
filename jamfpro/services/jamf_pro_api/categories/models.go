@@ -1,5 +1,9 @@
 package categories
 
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/normalization"
+)
+
 // ResourceCategory represents a category resource.
 type ResourceCategory struct {
 	ID       string `json:"id"`
@@ -32,7 +36,7 @@ type DeleteCategoriesByIDRequest struct {
 
 // HistoryObject represents a category history entry.
 type HistoryObject struct {
-	ID       string `json:"id"`
+	ID       normalization.IDAsString `json:"id"`
 	Username string `json:"username"`
 	Date     string `json:"date"`
 	Note     string `json:"note"`
