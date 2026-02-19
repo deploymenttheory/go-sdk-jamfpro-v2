@@ -54,9 +54,8 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		if _, delErr := svc.DeleteCategoryByID(cleanupCtx, categoryID); delErr != nil {
-			acc.LogTestWarning(t, "Cleanup: failed to delete category ID=%s: %v", categoryID, delErr)
-		}
+		_, delErr := svc.DeleteCategoryByID(cleanupCtx, categoryID)
+		acc.LogCleanupDeleteError(t, "category", categoryID, delErr)
 	})
 
 	// ------------------------------------------------------------------
@@ -231,9 +230,8 @@ func TestAcceptance_Categories_ListWithRSQLFilter(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		if _, delErr := svc.DeleteCategoryByID(cleanupCtx, categoryID); delErr != nil {
-			acc.LogTestWarning(t, "Cleanup: failed to delete category ID=%s: %v", categoryID, delErr)
-		}
+		_, delErr := svc.DeleteCategoryByID(cleanupCtx, categoryID)
+		acc.LogCleanupDeleteError(t, "category", categoryID, delErr)
 	})
 
 	// ------------------------------------------------------------------
@@ -300,7 +298,8 @@ func TestAcceptance_Categories_BulkDelete(t *testing.T) {
 		cleanCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 		defer cancel()
 		for _, id := range ids {
-			_, _ = svc.DeleteCategoryByID(cleanCtx, id)
+			_, delErr := svc.DeleteCategoryByID(cleanCtx, id)
+			acc.LogCleanupDeleteError(t, "category", id, delErr)
 		}
 	})
 

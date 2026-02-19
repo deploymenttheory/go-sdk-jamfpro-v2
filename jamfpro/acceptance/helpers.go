@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/stretchr/testify/require"
 )
 
@@ -73,6 +74,20 @@ func LogTestSuccess(t *testing.T, message string, args ...any) {
 	if Config.Verbose {
 		t.Logf("OK: %s", formatted)
 	}
+}
+
+// LogCleanupDeleteError logs cleanup delete results. A 404 is treated as expected
+// (resource already deleted); other errors are logged as warnings.
+func LogCleanupDeleteError(t *testing.T, resourceType, id string, err error) {
+	t.Helper()
+	if err == nil {
+		return
+	}
+	if client.IsNotFound(err) {
+		LogTestStage(t, "Cleanup", "%s ID=%s already deleted (404 received, expected)", resourceType, id)
+		return
+	}
+	LogTestWarning(t, "Cleanup: failed to delete %s ID=%s: %v", resourceType, id, err)
 }
 
 // LogTestWarning logs a non-fatal warning.
