@@ -48,7 +48,7 @@ func main() {
 	fmt.Println("History note added")
 
 	// Fetch history to verify
-	history, _, err := client.Categories.GetCategoryHistory(ctx, id)
+	history, _, err := client.Categories.GetCategoryHistory(ctx, id, nil)
 	if err == nil {
 		fmt.Printf("History entries: %d\n", history.TotalCount)
 		for _, e := range history.Results {

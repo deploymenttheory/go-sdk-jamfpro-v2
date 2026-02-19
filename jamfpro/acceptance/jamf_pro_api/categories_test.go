@@ -164,7 +164,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	history, historyResp, err := svc.GetCategoryHistory(ctx7, categoryID)
+	history, historyResp, err := svc.GetCategoryHistory(ctx7, categoryID, nil)
 	require.NoError(t, err, "GetCategoryHistory should not return an error")
 	require.NotNil(t, history)
 	assert.Equal(t, 200, historyResp.StatusCode)
@@ -365,7 +365,7 @@ func TestAcceptance_Categories_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("GetCategoryHistory_EmptyID", func(t *testing.T) {
-		_, _, err := svc.GetCategoryHistory(context.Background(), "")
+		_, _, err := svc.GetCategoryHistory(context.Background(), "", nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "category ID is required")
 	})

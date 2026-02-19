@@ -257,7 +257,7 @@ func TestUnitGetCategoryHistory_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetCategoryHistoryMock()
 
-	result, resp, err := svc.GetCategoryHistory(context.Background(), "1")
+	result, resp, err := svc.GetCategoryHistory(context.Background(), "1", nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -272,7 +272,7 @@ func TestUnitGetCategoryHistory_Success(t *testing.T) {
 func TestUnitGetCategoryHistory_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetCategoryHistory(context.Background(), "")
+	result, resp, err := svc.GetCategoryHistory(context.Background(), "", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)

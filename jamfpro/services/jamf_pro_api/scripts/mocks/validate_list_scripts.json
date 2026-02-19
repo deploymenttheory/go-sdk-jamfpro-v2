@@ -1,0 +1,23 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "name": "Install Homebrew",
+      "categoryName": "Utils",
+      "categoryId": "10",
+      "info": "Installs Homebrew package manager",
+      "notes": "Run as root",
+      "osRequirements": ">=10.15",
+      "priority": "AFTER",
+      "scriptContents": "#!/bin/bash\n/bin/bash -c \"$(curl -fsSL https://example.com/install.sh)\""
+    },
+    {
+      "id": "2",
+      "name": "Set Hostname",
+      "priority": "BEFORE",
+      "scriptContents": "#!/bin/bash\nscutil --set ComputerName \"$4\"",
+      "parameter4": "hostname"
+    }
+  ]
+}

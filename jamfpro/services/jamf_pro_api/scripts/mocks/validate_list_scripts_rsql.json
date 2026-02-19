@@ -1,0 +1,13 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "id": "1",
+      "name": "Install Homebrew",
+      "categoryName": "Utils",
+      "categoryId": "10",
+      "priority": "AFTER",
+      "scriptContents": "#!/bin/bash\n/bin/bash -c \"$(curl -fsSL https://example.com/install.sh)\""
+    }
+  ]
+}

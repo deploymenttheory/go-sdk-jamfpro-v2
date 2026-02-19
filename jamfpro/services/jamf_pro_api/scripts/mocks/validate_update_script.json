@@ -1,0 +1,11 @@
+{
+  "id": "1",
+  "name": "Install Homebrew Updated",
+  "categoryName": "Utils",
+  "categoryId": "10",
+  "info": "Installs Homebrew package manager",
+  "notes": "Run as root",
+  "osRequirements": ">=10.15",
+  "priority": "BEFORE",
+  "scriptContents": "#!/bin/bash\n/bin/bash -c \"$(curl -fsSL https://example.com/install.sh)\""
+}

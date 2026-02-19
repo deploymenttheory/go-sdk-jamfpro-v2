@@ -58,8 +58,11 @@ type (
 
 		// GetCategoryHistory returns the history object for the specified category (Get specified Category history object).
 		//
+		// Supports optional RSQL filtering and pagination via rsqlQuery
+		// (keys: filter, sort, page, page-size).
+		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-categories-id-history
-		GetCategoryHistory(ctx context.Context, id string) (*CategoryHistoryResponse, *interfaces.Response, error)
+		GetCategoryHistory(ctx context.Context, id string, rsqlQuery map[string]string) (*CategoryHistoryResponse, *interfaces.Response, error)
 
 		// AddCategoryHistoryNotes adds notes to the specified category history (Add specified Category history object notes).
 		//
@@ -237,8 +240,9 @@ func (s *Service) DeleteCategoriesByID(ctx context.Context, req *DeleteCategorie
 
 // GetCategoryHistory returns the history object for the specified category (Get specified Category history object).
 // URL: GET /api/v1/categories/{id}/history
+// rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-categories-id-history
-func (s *Service) GetCategoryHistory(ctx context.Context, id string) (*CategoryHistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetCategoryHistory(ctx context.Context, id string, rsqlQuery map[string]string) (*CategoryHistoryResponse, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("category ID is required")
 	}
@@ -252,7 +256,7 @@ func (s *Service) GetCategoryHistory(ctx context.Context, id string) (*CategoryH
 
 	var result CategoryHistoryResponse
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
