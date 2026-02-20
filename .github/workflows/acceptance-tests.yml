@@ -70,18 +70,18 @@ jobs:
           echo "::group::📈 Detailed Coverage Report"
           go tool cover -func=coverage.out
           echo "::endgroup::"
-      
-          - name: Upload coverage reports to Codecov
-          if: always()
-          uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
-          with:
-            token: ${{ secrets.CODECOV_TOKEN }}
-            slug: deploymenttheory/go-sdk-jamfpro-v2
-            files: ./coverage.out
-            flags: unittests
-            name: codecov-umbrella
-            fail_ci_if_error: false  # Don't fail CI if Codecov upload fails
-            verbose: true  # Enable verbose output for debugging
+
+      - name: Upload coverage reports to Codecov
+        if: always()
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: deploymenttheory/go-sdk-jamfpro-v2
+          files: ./coverage.out
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false  # Don't fail CI if Codecov upload fails
+          verbose: true  # Enable verbose output for debugging
   
       - name: Upload Coverage Artifact
         if: always()
