@@ -14,7 +14,7 @@ import (
 
 // uniqueName returns a name unique to the test run to avoid conflicts with
 // existing data and between parallel test runs.
-func uniqueName(prefix string) string {
+func uniqueAccountName(prefix string) string {
 	return fmt.Sprintf("%s-%d", prefix, time.Now().UnixMilli())
 }
 

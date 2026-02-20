@@ -26,12 +26,12 @@ type (
 		// CreateAPIRoleV1 creates a new API role (Create API Role record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-api-roles
-		CreateAPIRoleV1(ctx context.Context, req *RequestAPIRole) (*ResourceAPIRole, *interfaces.Response, error)
+		CreateAPIRoleV1(ctx context.Context, request *RequestAPIRole) (*ResourceAPIRole, *interfaces.Response, error)
 
 		// UpdateAPIRoleByIDV1 updates the specified API role by ID (Update specified API Role object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-api-roles-id
-		UpdateAPIRoleByIDV1(ctx context.Context, id string, req *RequestAPIRole) (*ResourceAPIRole, *interfaces.Response, error)
+		UpdateAPIRoleByIDV1(ctx context.Context, id string, request *RequestAPIRole) (*ResourceAPIRole, *interfaces.Response, error)
 
 		// DeleteAPIRoleByIDV1 removes the specified API role by ID (Remove specified API Role record).
 		//
@@ -106,10 +106,11 @@ func (s *Service) GetAPIRoleByIDV1(ctx context.Context, id string) (*ResourceAPI
 // CreateAPIRoleV1 creates a new API role.
 // URL: POST /api/v1/api-roles
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-api-roles
-func (s *Service) CreateAPIRoleV1(ctx context.Context, req *RequestAPIRole) (*ResourceAPIRole, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateAPIRoleV1(ctx context.Context, request *RequestAPIRole) (*ResourceAPIRole, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	var result ResourceAPIRole
 
 	endpoint := EndpointAPIRolesV1
@@ -119,7 +120,7 @@ func (s *Service) CreateAPIRoleV1(ctx context.Context, req *RequestAPIRole) (*Re
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -130,14 +131,17 @@ func (s *Service) CreateAPIRoleV1(ctx context.Context, req *RequestAPIRole) (*Re
 // UpdateAPIRoleByIDV1 updates the specified API role by ID.
 // URL: PUT /api/v1/api-roles/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-api-roles-id
-func (s *Service) UpdateAPIRoleByIDV1(ctx context.Context, id string, req *RequestAPIRole) (*ResourceAPIRole, *interfaces.Response, error) {
+func (s *Service) UpdateAPIRoleByIDV1(ctx context.Context, id string, request *RequestAPIRole) (*ResourceAPIRole, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	endpoint := fmt.Sprintf("%s/%s", EndpointAPIRolesV1, id)
+
 	var result ResourceAPIRole
 
 	headers := map[string]string{
@@ -145,7 +149,7 @@ func (s *Service) UpdateAPIRoleByIDV1(ctx context.Context, id string, req *Reque
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

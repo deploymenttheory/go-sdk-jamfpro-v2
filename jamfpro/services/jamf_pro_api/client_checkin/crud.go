@@ -21,7 +21,7 @@ type (
 		// UpdateV3 updates the client check-in settings (Update Check-In).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-check-in
-		UpdateV3(ctx context.Context, settings *ResourceClientCheckinSettings) (*ResourceClientCheckinSettings, *interfaces.Response, error)
+		UpdateV3(ctx context.Context, request *ResourceClientCheckinSettings) (*ResourceClientCheckinSettings, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the client check-in endpoint.
@@ -62,10 +62,11 @@ func (s *Service) GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *i
 // UpdateV3 updates the client check-in settings.
 // URL: PUT /api/v3/check-in
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-check-in
-func (s *Service) UpdateV3(ctx context.Context, settings *ResourceClientCheckinSettings) (*ResourceClientCheckinSettings, *interfaces.Response, error) {
-	if settings == nil {
-		return nil, nil, fmt.Errorf("settings is required")
+func (s *Service) UpdateV3(ctx context.Context, request *ResourceClientCheckinSettings) (*ResourceClientCheckinSettings, *interfaces.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	var result ResourceClientCheckinSettings
 
 	endpoint := EndpointClientCheckinV3
@@ -75,7 +76,7 @@ func (s *Service) UpdateV3(ctx context.Context, settings *ResourceClientCheckinS
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, settings, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

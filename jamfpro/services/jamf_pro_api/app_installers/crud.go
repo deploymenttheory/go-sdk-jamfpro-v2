@@ -36,12 +36,12 @@ type (
 		// CreateDeploymentV1 creates a new app installer deployment (Create App Installer Deployment record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-app-installers-deployments
-		CreateDeploymentV1(ctx context.Context, req *RequestDeployment) (*CreateDeploymentResponse, *interfaces.Response, error)
+		CreateDeploymentV1(ctx context.Context, request *RequestDeployment) (*CreateDeploymentResponse, *interfaces.Response, error)
 
 		// UpdateDeploymentByIDV1 updates the specified deployment by ID (Update specified App Installer Deployment object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-app-installers-deployments-id
-		UpdateDeploymentByIDV1(ctx context.Context, id string, req *RequestDeployment) (*ResourceJamfAppCatalogDeployment, *interfaces.Response, error)
+		UpdateDeploymentByIDV1(ctx context.Context, id string, request *RequestDeployment) (*ResourceJamfAppCatalogDeployment, *interfaces.Response, error)
 
 		// DeleteDeploymentByIDV1 removes the specified deployment by ID (Remove specified App Installer Deployment record).
 		//
@@ -154,10 +154,11 @@ func (s *Service) GetDeploymentByIDV1(ctx context.Context, id string) (*Resource
 // CreateDeploymentV1 creates a new app installer deployment.
 // URL: POST /api/v1/app-installers/deployments
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-app-installers-deployments
-func (s *Service) CreateDeploymentV1(ctx context.Context, req *RequestDeployment) (*CreateDeploymentResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateDeploymentV1(ctx context.Context, request *RequestDeployment) (*CreateDeploymentResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	var result CreateDeploymentResponse
 
 	endpoint := EndpointDeploymentsV1
@@ -167,7 +168,7 @@ func (s *Service) CreateDeploymentV1(ctx context.Context, req *RequestDeployment
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -178,14 +179,17 @@ func (s *Service) CreateDeploymentV1(ctx context.Context, req *RequestDeployment
 // UpdateDeploymentByIDV1 updates the specified deployment by ID.
 // URL: PUT /api/v1/app-installers/deployments/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-app-installers-deployments-id
-func (s *Service) UpdateDeploymentByIDV1(ctx context.Context, id string, req *RequestDeployment) (*ResourceJamfAppCatalogDeployment, *interfaces.Response, error) {
+func (s *Service) UpdateDeploymentByIDV1(ctx context.Context, id string, request *RequestDeployment) (*ResourceJamfAppCatalogDeployment, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	endpoint := fmt.Sprintf("%s/%s", EndpointDeploymentsV1, id)
+
 	var result ResourceJamfAppCatalogDeployment
 
 	headers := map[string]string{
@@ -193,7 +197,7 @@ func (s *Service) UpdateDeploymentByIDV1(ctx context.Context, id string, req *Re
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

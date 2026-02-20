@@ -36,7 +36,7 @@ type (
 		// Required: PackageName, FileName, CategoryID, Priority, and the seven *bool fields.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages
-		CreatePackageV1(ctx context.Context, req *RequestPackage) (*CreateResponse, *interfaces.Response, error)
+		CreatePackageV1(ctx context.Context, request *RequestPackage) (*CreateResponse, *interfaces.Response, error)
 
 		// UploadPackageV1 uploads a package file to an existing package record.
 		//
@@ -52,7 +52,7 @@ type (
 		// Metadata only; no file upload.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-packages-id
-		UpdatePackageByIDV1(ctx context.Context, id string, req *ResourcePackage) (*ResourcePackage, *interfaces.Response, error)
+		UpdatePackageByIDV1(ctx context.Context, id string, request *ResourcePackage) (*ResourcePackage, *interfaces.Response, error)
 
 		// AssignManifestToPackageV1 assigns a manifest file to an existing package.
 		//
@@ -162,8 +162,8 @@ func (s *Service) GetPackageByIDV1(ctx context.Context, id string) (*ResourcePac
 // URL: POST /api/v1/packages
 // Body: JSON with metadata (name, category, info, notes, priority, etc.) - no file upload
 // https://developer.jamf.com/jamf-pro/reference/post_v1-packages
-func (s *Service) CreatePackageV1(ctx context.Context, req *RequestPackage) (*CreateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreatePackageV1(ctx context.Context, request *RequestPackage) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -176,7 +176,7 @@ func (s *Service) CreatePackageV1(ctx context.Context, req *RequestPackage) (*Cr
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -230,11 +230,12 @@ func (s *Service) UploadPackageV1(ctx context.Context, id string, filePath strin
 // URL: PUT /api/v1/packages/{id}
 // Body: JSON with full ResourcePackage - no file upload
 // https://developer.jamf.com/jamf-pro/reference/put_v1-packages-id
-func (s *Service) UpdatePackageByIDV1(ctx context.Context, id string, req *ResourcePackage) (*ResourcePackage, *interfaces.Response, error) {
+func (s *Service) UpdatePackageByIDV1(ctx context.Context, id string, request *ResourcePackage) (*ResourcePackage, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -247,7 +248,7 @@ func (s *Service) UpdatePackageByIDV1(ctx context.Context, id string, req *Resou
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

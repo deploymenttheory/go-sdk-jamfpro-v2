@@ -24,7 +24,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of UpdateIBeaconByID — replace with the desired iBeacon ID and updated payload
+	// Example usage of UpdateIBeaconByID — replace with the desired iBeacon ID and updated request
 	ibeaconID := 1
 	updateReq := &ibeacons.RequestIBeacon{
 		Name:  "go-sdk-v2-iBeacon-Updated",

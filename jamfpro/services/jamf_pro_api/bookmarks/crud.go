@@ -26,12 +26,12 @@ type (
 		// CreateV1 creates a new bookmark (Create Bookmark).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-bookmarks
-		CreateV1(ctx context.Context, bookmark *ResourceBookmark) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *ResourceBookmark) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateByIDV1 updates the specified bookmark by ID (Update Bookmark by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-bookmarks-id
-		UpdateByIDV1(ctx context.Context, id string, bookmark *ResourceBookmark) (*ResourceBookmark, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *ResourceBookmark) (*ResourceBookmark, *interfaces.Response, error)
 
 		// DeleteByIDV1 removes the specified bookmark by ID (Delete Bookmark by ID).
 		//
@@ -100,10 +100,11 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceBookmark, 
 // CreateV1 creates a new bookmark.
 // URL: POST /api/v1/bookmarks
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-bookmarks
-func (s *Service) CreateV1(ctx context.Context, bookmark *ResourceBookmark) (*CreateResponse, *interfaces.Response, error) {
-	if bookmark == nil {
-		return nil, nil, fmt.Errorf("bookmark is required")
+func (s *Service) CreateV1(ctx context.Context, request *ResourceBookmark) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	var result CreateResponse
 
 	endpoint := EndpointBookmarksV1
@@ -113,7 +114,7 @@ func (s *Service) CreateV1(ctx context.Context, bookmark *ResourceBookmark) (*Cr
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, bookmark, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -124,14 +125,17 @@ func (s *Service) CreateV1(ctx context.Context, bookmark *ResourceBookmark) (*Cr
 // UpdateByIDV1 updates the specified bookmark by ID.
 // URL: PUT /api/v1/bookmarks/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-bookmarks-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, bookmark *ResourceBookmark) (*ResourceBookmark, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceBookmark) (*ResourceBookmark, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if bookmark == nil {
-		return nil, nil, fmt.Errorf("bookmark is required")
+
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
+
 	var result ResourceBookmark
 
 	headers := map[string]string{
@@ -139,7 +143,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, bookmark *Resourc
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, bookmark, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

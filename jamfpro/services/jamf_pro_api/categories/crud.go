@@ -34,14 +34,14 @@ type (
 		// Returns the created category ID and href.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-categories
-		CreateCategoryV1(ctx context.Context, req *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error)
+		CreateCategoryV1(ctx context.Context, request *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error)
 
 		// UpdateCategoryByIDV1 updates the specified category by ID (Update specified Category object).
 		//
 		// Updates an existing category. All updatable fields (name, priority) may be sent.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-categories-id
-		UpdateCategoryByIDV1(ctx context.Context, id string, req *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateCategoryByIDV1(ctx context.Context, id string, request *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error)
 
 		// DeleteCategoryByIDV1 removes the specified category by ID (Remove specified Category record).
 		//
@@ -141,8 +141,8 @@ func (s *Service) GetCategoryByIDV1(ctx context.Context, id string) (*ResourceCa
 // URL: POST /api/v1/categories
 // Body: JSON with name, priority (optional)
 // https://developer.jamf.com/jamf-pro/reference/post_v1-categories
-func (s *Service) CreateCategoryV1(ctx context.Context, req *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateCategoryV1(ctx context.Context, request *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -155,7 +155,7 @@ func (s *Service) CreateCategoryV1(ctx context.Context, req *RequestCategory) (*
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -167,11 +167,12 @@ func (s *Service) CreateCategoryV1(ctx context.Context, req *RequestCategory) (*
 // URL: PUT /api/v1/categories/{id}
 // Body: JSON with name, priority (optional)
 // https://developer.jamf.com/jamf-pro/reference/put_v1-categories-id
-func (s *Service) UpdateCategoryByIDV1(ctx context.Context, id string, req *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateCategoryByIDV1(ctx context.Context, id string, request *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -184,7 +185,7 @@ func (s *Service) UpdateCategoryByIDV1(ctx context.Context, id string, req *Requ
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

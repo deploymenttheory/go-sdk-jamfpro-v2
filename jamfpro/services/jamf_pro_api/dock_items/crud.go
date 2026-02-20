@@ -21,14 +21,14 @@ type (
 		// CreateDockItemV1 creates a new dock item record (Create Dock Item record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-dock-items
-		CreateDockItemV1(ctx context.Context, req *RequestDockItem) (*CreateResponse, *interfaces.Response, error)
+		CreateDockItemV1(ctx context.Context, request *RequestDockItem) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateDockItemByIDV1 updates the specified dock item by ID (Update specified Dock Item object).
 		//
 		// Returns the full updated dock item resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-dock-items-id
-		UpdateDockItemByIDV1(ctx context.Context, id string, req *RequestDockItem) (*ResourceDockItem, *interfaces.Response, error)
+		UpdateDockItemByIDV1(ctx context.Context, id string, request *RequestDockItem) (*ResourceDockItem, *interfaces.Response, error)
 
 		// DeleteDockItemByIDV1 removes the specified dock item by ID (Remove specified Dock Item record).
 		//
@@ -83,8 +83,8 @@ func (s *Service) GetDockItemByIDV1(ctx context.Context, id string) (*ResourceDo
 // URL: POST /api/v1/dock-items
 // Body: JSON with name, path, type
 // https://developer.jamf.com/jamf-pro/reference/post_v1-dock-items
-func (s *Service) CreateDockItemV1(ctx context.Context, req *RequestDockItem) (*CreateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateDockItemV1(ctx context.Context, request *RequestDockItem) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -97,7 +97,7 @@ func (s *Service) CreateDockItemV1(ctx context.Context, req *RequestDockItem) (*
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -109,11 +109,12 @@ func (s *Service) CreateDockItemV1(ctx context.Context, req *RequestDockItem) (*
 // URL: PUT /api/v1/dock-items/{id}
 // Body: JSON with name, path, type
 // https://developer.jamf.com/jamf-pro/reference/put_v1-dock-items-id
-func (s *Service) UpdateDockItemByIDV1(ctx context.Context, id string, req *RequestDockItem) (*ResourceDockItem, *interfaces.Response, error) {
+func (s *Service) UpdateDockItemByIDV1(ctx context.Context, id string, request *RequestDockItem) (*ResourceDockItem, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -126,7 +127,7 @@ func (s *Service) UpdateDockItemByIDV1(ctx context.Context, id string, req *Requ
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

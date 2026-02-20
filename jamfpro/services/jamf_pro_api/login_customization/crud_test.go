@@ -32,14 +32,14 @@ func TestUnitUpdateLoginCustomizationV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateLoginCustomizationMock()
 
-	payload := &ResourceLoginCustomizationV1{
+	request := &ResourceLoginCustomizationV1{
 		RampInstance:            true,
 		IncludeCustomDisclaimer: true,
 		DisclaimerHeading:       "Updated Disclaimer Header",
 		DisclaimerMainText:      "Updated disclaimer main text",
 		ActionText:              "Accept",
 	}
-	result, resp, err := svc.UpdateLoginCustomizationV1(context.Background(), payload)
+	result, resp, err := svc.UpdateLoginCustomizationV1(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

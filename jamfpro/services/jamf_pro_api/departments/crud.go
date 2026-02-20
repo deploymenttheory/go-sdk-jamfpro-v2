@@ -29,14 +29,14 @@ type (
 		// CreateDepartmentV1 creates a new department record (Create Department record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments
-		CreateDepartmentV1(ctx context.Context, req *RequestDepartment) (*CreateResponse, *interfaces.Response, error)
+		CreateDepartmentV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateDepartmentByIDV1 updates the specified department by ID (Update specified Department object).
 		//
 		// Returns the full updated department resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-departments-id
-		UpdateDepartmentByIDV1(ctx context.Context, id string, req *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error)
+		UpdateDepartmentByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error)
 
 		// DeleteDepartmentByIDV1 removes the specified department by ID (Remove specified Department record).
 		//
@@ -123,8 +123,8 @@ func (s *Service) GetDepartmentByIDV1(ctx context.Context, id string) (*Resource
 // URL: POST /api/v1/departments
 // Body: JSON with name
 // https://developer.jamf.com/jamf-pro/reference/post_v1-departments
-func (s *Service) CreateDepartmentV1(ctx context.Context, req *RequestDepartment) (*CreateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateDepartmentV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -137,7 +137,7 @@ func (s *Service) CreateDepartmentV1(ctx context.Context, req *RequestDepartment
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -149,11 +149,12 @@ func (s *Service) CreateDepartmentV1(ctx context.Context, req *RequestDepartment
 // URL: PUT /api/v1/departments/{id}
 // Body: JSON with name
 // https://developer.jamf.com/jamf-pro/reference/put_v1-departments-id
-func (s *Service) UpdateDepartmentByIDV1(ctx context.Context, id string, req *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error) {
+func (s *Service) UpdateDepartmentByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -166,7 +167,7 @@ func (s *Service) UpdateDepartmentByIDV1(ctx context.Context, id string, req *Re
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

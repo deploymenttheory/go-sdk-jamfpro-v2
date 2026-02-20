@@ -24,7 +24,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of UpdateNetworkSegmentByID — replace with the desired network segment ID and updated payload
+	// Example usage of UpdateNetworkSegmentByID — replace with the desired network segment ID and updated request
 	segmentID := 1
 	updateReq := &network_segments.RequestNetworkSegment{
 		Name:            "go-sdk-v2-NetworkSegment-Updated",

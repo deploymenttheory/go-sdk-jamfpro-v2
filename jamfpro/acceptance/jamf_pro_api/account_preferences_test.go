@@ -31,15 +31,15 @@ func TestAcceptance_AccountPreferences_UpdateAccountPreferencesV2(t *testing.T) 
 	require.NoError(t, err)
 	require.NotNil(t, current)
 
-	payload := *current
-	payload.DisablePageLeaveCheck = !payload.DisablePageLeaveCheck
-	updated, resp, err := svc.UpdateAccountPreferencesV2(ctx, &payload)
+	request := *current
+	request.DisablePageLeaveCheck = !request.DisablePageLeaveCheck
+	updated, resp, err := svc.UpdateAccountPreferencesV2(ctx, &request)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
 
 	// Restore original
-	payload.DisablePageLeaveCheck = !payload.DisablePageLeaveCheck
-	_, _, _ = svc.UpdateAccountPreferencesV2(ctx, &payload)
+	request.DisablePageLeaveCheck = !request.DisablePageLeaveCheck
+	_, _, _ = svc.UpdateAccountPreferencesV2(ctx, &request)
 }

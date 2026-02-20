@@ -26,12 +26,12 @@ type (
 		// CreateVolumePurchasingLocationV1 creates a new volume purchasing location (Create Volume Purchasing Location record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations
-		CreateVolumePurchasingLocationV1(ctx context.Context, req *RequestVolumePurchasingLocation) (*CreateResponse, *interfaces.Response, error)
+		CreateVolumePurchasingLocationV1(ctx context.Context, request *RequestVolumePurchasingLocation) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateVolumePurchasingLocationByIDV1 updates the specified volume purchasing location by ID (Update specified Volume Purchasing Location object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-volume-purchasing-locations-id
-		UpdateVolumePurchasingLocationByIDV1(ctx context.Context, id string, req *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *interfaces.Response, error)
+		UpdateVolumePurchasingLocationByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *interfaces.Response, error)
 
 		// DeleteVolumePurchasingLocationByIDV1 removes the specified volume purchasing location by ID (Remove specified Volume Purchasing Location record).
 		//
@@ -116,8 +116,8 @@ func (s *Service) GetVolumePurchasingLocationByIDV1(ctx context.Context, id stri
 // CreateVolumePurchasingLocationV1 creates a new volume purchasing location.
 // URL: POST /api/v1/volume-purchasing-locations
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations
-func (s *Service) CreateVolumePurchasingLocationV1(ctx context.Context, req *RequestVolumePurchasingLocation) (*CreateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateVolumePurchasingLocationV1(ctx context.Context, request *RequestVolumePurchasingLocation) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -130,7 +130,7 @@ func (s *Service) CreateVolumePurchasingLocationV1(ctx context.Context, req *Req
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -141,11 +141,12 @@ func (s *Service) CreateVolumePurchasingLocationV1(ctx context.Context, req *Req
 // UpdateVolumePurchasingLocationByIDV1 updates the specified volume purchasing location by ID (PATCH).
 // URL: PATCH /api/v1/volume-purchasing-locations/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-volume-purchasing-locations-id
-func (s *Service) UpdateVolumePurchasingLocationByIDV1(ctx context.Context, id string, req *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *interfaces.Response, error) {
+func (s *Service) UpdateVolumePurchasingLocationByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -158,7 +159,7 @@ func (s *Service) UpdateVolumePurchasingLocationByIDV1(ctx context.Context, id s
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Patch(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

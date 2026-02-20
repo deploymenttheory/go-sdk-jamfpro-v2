@@ -30,15 +30,15 @@ func TestAcceptance_LoginCustomization_UpdateLoginCustomizationV1(t *testing.T) 
 	require.NoError(t, err)
 	require.NotNil(t, current)
 
-	payload := *current
-	payload.DisclaimerHeading = "Acceptance test disclaimer"
-	updated, resp, err := svc.UpdateLoginCustomizationV1(ctx, &payload)
+	request := *current
+	request.DisclaimerHeading = "Acceptance test disclaimer"
+	updated, resp, err := svc.UpdateLoginCustomizationV1(ctx, &request)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
 
 	// Restore original
-	payload.DisclaimerHeading = current.DisclaimerHeading
-	_, _, _ = svc.UpdateLoginCustomizationV1(ctx, &payload)
+	request.DisclaimerHeading = current.DisclaimerHeading
+	_, _, _ = svc.UpdateLoginCustomizationV1(ctx, &request)
 }

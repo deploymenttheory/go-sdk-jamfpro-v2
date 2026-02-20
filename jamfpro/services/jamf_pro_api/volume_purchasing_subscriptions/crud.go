@@ -26,12 +26,12 @@ type (
 		// CreateVolumePurchasingSubscriptionV1 creates a new volume purchasing subscription (Create Volume Purchasing Subscription record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-subscriptions
-		CreateVolumePurchasingSubscriptionV1(ctx context.Context, req *RequestVolumePurchasingSubscription) (*CreateResponse, *interfaces.Response, error)
+		CreateVolumePurchasingSubscriptionV1(ctx context.Context, request *RequestVolumePurchasingSubscription) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateVolumePurchasingSubscriptionByIDV1 updates the specified volume purchasing subscription by ID (Update specified Volume Purchasing Subscription object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-volume-purchasing-subscriptions-id
-		UpdateVolumePurchasingSubscriptionByIDV1(ctx context.Context, id string, req *RequestVolumePurchasingSubscription) (*ResourceVolumePurchasingSubscription, *interfaces.Response, error)
+		UpdateVolumePurchasingSubscriptionByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingSubscription) (*ResourceVolumePurchasingSubscription, *interfaces.Response, error)
 
 		// DeleteVolumePurchasingSubscriptionByIDV1 removes the specified volume purchasing subscription by ID (Remove specified Volume Purchasing Subscription record).
 		//
@@ -106,8 +106,8 @@ func (s *Service) GetVolumePurchasingSubscriptionByIDV1(ctx context.Context, id 
 // CreateVolumePurchasingSubscriptionV1 creates a new volume purchasing subscription.
 // URL: POST /api/v1/volume-purchasing-subscriptions
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-subscriptions
-func (s *Service) CreateVolumePurchasingSubscriptionV1(ctx context.Context, req *RequestVolumePurchasingSubscription) (*CreateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateVolumePurchasingSubscriptionV1(ctx context.Context, request *RequestVolumePurchasingSubscription) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -120,7 +120,7 @@ func (s *Service) CreateVolumePurchasingSubscriptionV1(ctx context.Context, req 
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -131,11 +131,12 @@ func (s *Service) CreateVolumePurchasingSubscriptionV1(ctx context.Context, req 
 // UpdateVolumePurchasingSubscriptionByIDV1 updates the specified volume purchasing subscription by ID.
 // URL: PUT /api/v1/volume-purchasing-subscriptions/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-volume-purchasing-subscriptions-id
-func (s *Service) UpdateVolumePurchasingSubscriptionByIDV1(ctx context.Context, id string, req *RequestVolumePurchasingSubscription) (*ResourceVolumePurchasingSubscription, *interfaces.Response, error) {
+func (s *Service) UpdateVolumePurchasingSubscriptionByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingSubscription) (*ResourceVolumePurchasingSubscription, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -148,7 +149,7 @@ func (s *Service) UpdateVolumePurchasingSubscriptionByIDV1(ctx context.Context, 
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

@@ -33,17 +33,17 @@ type (
 		// Returns a ListItem with the created server's ID and name (not the full resource).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createldapserverbyid
-		CreateLDAPServer(ctx context.Context, req *RequestLDAPServer) (*ListItem, *interfaces.Response, error)
+		CreateLDAPServer(ctx context.Context, request *RequestLDAPServer) (*ListItem, *interfaces.Response, error)
 
 		// UpdateLDAPServerByID updates the specified LDAP server by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateldapserverbyid
-		UpdateLDAPServerByID(ctx context.Context, id int, req *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error)
+		UpdateLDAPServerByID(ctx context.Context, id int, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error)
 
 		// UpdateLDAPServerByName updates the specified LDAP server by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateldapserverbyname
-		UpdateLDAPServerByName(ctx context.Context, name string, req *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error)
+		UpdateLDAPServerByName(ctx context.Context, name string, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error)
 
 		// DeleteLDAPServerByID removes the specified LDAP server by ID.
 		//
@@ -150,8 +150,8 @@ func (s *Service) GetLDAPServerByName(ctx context.Context, name string) (*Resour
 // URL: POST /JSSResource/ldapservers/id/0
 // Returns a ListItem with the created server's ID and name (not the full resource).
 // https://developer.jamf.com/jamf-pro/reference/createldapserverbyid
-func (s *Service) CreateLDAPServer(ctx context.Context, req *RequestLDAPServer) (*ListItem, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateLDAPServer(ctx context.Context, request *RequestLDAPServer) (*ListItem, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -164,7 +164,7 @@ func (s *Service) CreateLDAPServer(ctx context.Context, req *RequestLDAPServer) 
 		"Content-Type": mime.ApplicationXML,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &createResp)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &createResp)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -181,11 +181,12 @@ func (s *Service) CreateLDAPServer(ctx context.Context, req *RequestLDAPServer) 
 // UpdateLDAPServerByID updates the specified LDAP server by ID.
 // URL: PUT /JSSResource/ldapservers/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updateldapserverbyid
-func (s *Service) UpdateLDAPServerByID(ctx context.Context, id int, req *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error) {
+func (s *Service) UpdateLDAPServerByID(ctx context.Context, id int, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("LDAP server ID must be a positive integer")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -198,7 +199,7 @@ func (s *Service) UpdateLDAPServerByID(ctx context.Context, id int, req *Request
 		"Content-Type": mime.ApplicationXML,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -209,11 +210,12 @@ func (s *Service) UpdateLDAPServerByID(ctx context.Context, id int, req *Request
 // UpdateLDAPServerByName updates the specified LDAP server by name.
 // URL: PUT /JSSResource/ldapservers/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updateldapserverbyname
-func (s *Service) UpdateLDAPServerByName(ctx context.Context, name string, req *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error) {
+func (s *Service) UpdateLDAPServerByName(ctx context.Context, name string, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("LDAP server name is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -226,7 +228,7 @@ func (s *Service) UpdateLDAPServerByName(ctx context.Context, name string, req *
 		"Content-Type": mime.ApplicationXML,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

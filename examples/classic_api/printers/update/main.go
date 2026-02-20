@@ -24,7 +24,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of UpdatePrinterByID — replace with the desired printer ID and updated payload
+	// Example usage of UpdatePrinterByID — replace with the desired printer ID and updated request
 	printerID := 1
 	updateReq := &printers.RequestPrinter{
 		Name:     "go-sdk-v2-Printer-Updated",

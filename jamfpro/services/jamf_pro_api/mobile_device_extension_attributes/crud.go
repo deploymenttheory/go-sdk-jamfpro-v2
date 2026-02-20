@@ -26,12 +26,12 @@ type (
 		// CreateMobileDeviceExtensionAttributeV1 creates a new mobile device extension attribute (Create Mobile Device Extension Attribute record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes
-		CreateMobileDeviceExtensionAttributeV1(ctx context.Context, req *RequestMobileDeviceExtensionAttribute) (*CreateResponse, *interfaces.Response, error)
+		CreateMobileDeviceExtensionAttributeV1(ctx context.Context, request *RequestMobileDeviceExtensionAttribute) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateMobileDeviceExtensionAttributeByIDV1 updates the specified mobile device extension attribute by ID (Update specified Mobile Device Extension Attribute object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-mobile-device-extension-attributes-id
-		UpdateMobileDeviceExtensionAttributeByIDV1(ctx context.Context, id string, req *RequestMobileDeviceExtensionAttribute) (*ResourceMobileDeviceExtensionAttribute, *interfaces.Response, error)
+		UpdateMobileDeviceExtensionAttributeByIDV1(ctx context.Context, id string, request *RequestMobileDeviceExtensionAttribute) (*ResourceMobileDeviceExtensionAttribute, *interfaces.Response, error)
 
 		// DeleteMobileDeviceExtensionAttributeByIDV1 removes the specified mobile device extension attribute by ID (Remove specified Mobile Device Extension Attribute record).
 		//
@@ -111,8 +111,8 @@ func (s *Service) GetMobileDeviceExtensionAttributeByIDV1(ctx context.Context, i
 // CreateMobileDeviceExtensionAttributeV1 creates a new mobile device extension attribute.
 // URL: POST /api/v1/mobile-device-extension-attributes
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes
-func (s *Service) CreateMobileDeviceExtensionAttributeV1(ctx context.Context, req *RequestMobileDeviceExtensionAttribute) (*CreateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateMobileDeviceExtensionAttributeV1(ctx context.Context, request *RequestMobileDeviceExtensionAttribute) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -125,7 +125,7 @@ func (s *Service) CreateMobileDeviceExtensionAttributeV1(ctx context.Context, re
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -136,11 +136,12 @@ func (s *Service) CreateMobileDeviceExtensionAttributeV1(ctx context.Context, re
 // UpdateMobileDeviceExtensionAttributeByIDV1 updates the specified mobile device extension attribute by ID.
 // URL: PUT /api/v1/mobile-device-extension-attributes/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-mobile-device-extension-attributes-id
-func (s *Service) UpdateMobileDeviceExtensionAttributeByIDV1(ctx context.Context, id string, req *RequestMobileDeviceExtensionAttribute) (*ResourceMobileDeviceExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) UpdateMobileDeviceExtensionAttributeByIDV1(ctx context.Context, id string, request *RequestMobileDeviceExtensionAttribute) (*ResourceMobileDeviceExtensionAttribute, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -153,7 +154,7 @@ func (s *Service) UpdateMobileDeviceExtensionAttributeByIDV1(ctx context.Context
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

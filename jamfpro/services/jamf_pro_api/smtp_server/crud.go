@@ -21,7 +21,7 @@ type (
 		// UpdateSMTPServerV2 updates the SMTP server configuration (Update SMTP server).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
-		UpdateSMTPServerV2(ctx context.Context, settings *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error)
+		UpdateSMTPServerV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the SMTP server-related methods of the Jamf Pro API.
@@ -62,10 +62,11 @@ func (s *Service) GetSMTPServerV2(ctx context.Context) (*ResourceSMTPServer, *in
 // UpdateSMTPServerV2 updates the SMTP server configuration.
 // URL: PUT /api/v2/smtp-server
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
-func (s *Service) UpdateSMTPServerV2(ctx context.Context, settings *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error) {
-	if settings == nil {
-		return nil, nil, fmt.Errorf("settings is required")
+func (s *Service) UpdateSMTPServerV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	var result ResourceSMTPServer
 
 	endpoint := EndpointSMTPServerV2
@@ -75,7 +76,7 @@ func (s *Service) UpdateSMTPServerV2(ctx context.Context, settings *ResourceSMTP
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, settings, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

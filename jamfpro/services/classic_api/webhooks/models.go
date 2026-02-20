@@ -22,7 +22,7 @@ type ResourceWebhook struct {
 	SmartGroupID                int            `xml:"smart_group_id,omitempty"`
 }
 
-// DisplayField represents a single display field included in webhook payloads.
+// DisplayField represents a single display field included in webhook requests.
 type DisplayField struct {
 	Name string `xml:"name"`
 }

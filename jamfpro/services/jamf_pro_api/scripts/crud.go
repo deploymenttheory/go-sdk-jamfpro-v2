@@ -31,14 +31,14 @@ type (
 		// Returns the created script's ID and href.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-scripts
-		CreateScriptV1(ctx context.Context, req *RequestScript) (*CreateResponse, *interfaces.Response, error)
+		CreateScriptV1(ctx context.Context, request *RequestScript) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateScriptByIDV1 replaces the specified script by ID.
 		//
 		// Returns the full updated script resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-scripts-id
-		UpdateScriptByIDV1(ctx context.Context, id string, req *RequestScript) (*ResourceScript, *interfaces.Response, error)
+		UpdateScriptByIDV1(ctx context.Context, id string, request *RequestScript) (*ResourceScript, *interfaces.Response, error)
 
 		// DeleteScriptByIDV1 removes the specified script by ID.
 		//
@@ -133,8 +133,8 @@ func (s *Service) GetScriptByIDV1(ctx context.Context, id string) (*ResourceScri
 // CreateScriptV1 creates a new script record.
 // URL: POST /api/v1/scripts
 // https://developer.jamf.com/jamf-pro/reference/post_v1-scripts
-func (s *Service) CreateScriptV1(ctx context.Context, req *RequestScript) (*CreateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateScriptV1(ctx context.Context, request *RequestScript) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -147,7 +147,7 @@ func (s *Service) CreateScriptV1(ctx context.Context, req *RequestScript) (*Crea
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -159,11 +159,12 @@ func (s *Service) CreateScriptV1(ctx context.Context, req *RequestScript) (*Crea
 // URL: PUT /api/v1/scripts/{id}
 // Returns the full updated script resource.
 // https://developer.jamf.com/jamf-pro/reference/put_v1-scripts-id
-func (s *Service) UpdateScriptByIDV1(ctx context.Context, id string, req *RequestScript) (*ResourceScript, *interfaces.Response, error) {
+func (s *Service) UpdateScriptByIDV1(ctx context.Context, id string, request *RequestScript) (*ResourceScript, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("script ID is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -176,7 +177,7 @@ func (s *Service) UpdateScriptByIDV1(ctx context.Context, id string, req *Reques
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

@@ -27,12 +27,12 @@ type (
 		// CreateV1 creates a new advanced mobile device search (Create Advanced Mobile Device Search).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches
-		CreateV1(ctx context.Context, search *ResourceAdvancedMobileDeviceSearch) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *ResourceAdvancedMobileDeviceSearch) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateByIDV1 updates the specified advanced mobile device search by ID (Update Advanced Mobile Device Search by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-advanced-mobile-device-searches-id
-		UpdateByIDV1(ctx context.Context, id string, search *ResourceAdvancedMobileDeviceSearch) (*ResourceAdvancedMobileDeviceSearch, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedMobileDeviceSearch) (*ResourceAdvancedMobileDeviceSearch, *interfaces.Response, error)
 
 		// DeleteByIDV1 removes the specified advanced mobile device search by ID (Delete Advanced Mobile Device Search by ID).
 		//
@@ -105,10 +105,11 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedMo
 // CreateV1 creates a new advanced mobile device search.
 // URL: POST /api/v1/advanced-mobile-device-searches
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches
-func (s *Service) CreateV1(ctx context.Context, search *ResourceAdvancedMobileDeviceSearch) (*CreateResponse, *interfaces.Response, error) {
-	if search == nil {
+func (s *Service) CreateV1(ctx context.Context, request *ResourceAdvancedMobileDeviceSearch) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("search is required")
 	}
+
 	var result CreateResponse
 
 	endpoint := EndpointAdvancedMobileDeviceSearchesV1
@@ -118,7 +119,7 @@ func (s *Service) CreateV1(ctx context.Context, search *ResourceAdvancedMobileDe
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, search, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -128,14 +129,17 @@ func (s *Service) CreateV1(ctx context.Context, search *ResourceAdvancedMobileDe
 // UpdateByIDV1 updates the specified advanced mobile device search by ID.
 // URL: PUT /api/v1/advanced-mobile-device-searches/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-advanced-mobile-device-searches-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, search *ResourceAdvancedMobileDeviceSearch) (*ResourceAdvancedMobileDeviceSearch, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedMobileDeviceSearch) (*ResourceAdvancedMobileDeviceSearch, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if search == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("search is required")
 	}
+
 	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedMobileDeviceSearchesV1, id)
+
 	var result ResourceAdvancedMobileDeviceSearch
 
 	headers := map[string]string{
@@ -143,7 +147,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, search *ResourceA
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, search, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

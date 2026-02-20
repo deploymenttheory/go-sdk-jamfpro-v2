@@ -21,12 +21,12 @@ type (
 		// CreateV1 provisions a cloud distribution point (Create Cloud Distribution Point).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point
-		CreateV1(ctx context.Context, req *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error)
 
 		// UpdateV1 updates the cloud distribution point configuration (Update Cloud Distribution Point).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-cloud-distribution-point
-		UpdateV1(ctx context.Context, req *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error)
+		UpdateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error)
 
 		// DeleteV1 removes the cloud distribution point configuration (Remove Cloud Distribution Point).
 		//
@@ -82,10 +82,11 @@ func (s *Service) GetV1(ctx context.Context) (*ResourceCloudDistributionPointV1,
 // CreateV1 provisions a cloud distribution point.
 // URL: POST /api/v1/cloud-distribution-point
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point
-func (s *Service) CreateV1(ctx context.Context, req *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	var result ResourceCloudDistributionPointV1
 
 	endpoint := EndpointCloudDistributionPointV1
@@ -95,7 +96,7 @@ func (s *Service) CreateV1(ctx context.Context, req *RequestCloudDistributionPoi
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -106,10 +107,11 @@ func (s *Service) CreateV1(ctx context.Context, req *RequestCloudDistributionPoi
 // UpdateV1 updates the cloud distribution point (PATCH).
 // URL: PATCH /api/v1/cloud-distribution-point
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-cloud-distribution-point
-func (s *Service) UpdateV1(ctx context.Context, req *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) UpdateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	var result ResourceCloudDistributionPointV1
 
 	endpoint := EndpointCloudDistributionPointV1
@@ -119,7 +121,7 @@ func (s *Service) UpdateV1(ctx context.Context, req *RequestCloudDistributionPoi
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Patch(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

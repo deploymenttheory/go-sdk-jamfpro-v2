@@ -32,14 +32,14 @@ func TestUnitUpdateAccountPreferencesV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateAccountPreferencesMock()
 
-	payload := &ResourceAccountPreferencesV2{
+	request := &ResourceAccountPreferencesV2{
 		Language:                  "en",
 		DateFormat:                "MM/dd/yyyy",
 		Timezone:                  "America/Chicago",
 		UserInterfaceDisplayTheme: "DARK",
 		ResultsPerPage:            20,
 	}
-	result, resp, err := svc.UpdateAccountPreferencesV2(context.Background(), payload)
+	result, resp, err := svc.UpdateAccountPreferencesV2(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

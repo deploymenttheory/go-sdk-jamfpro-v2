@@ -29,14 +29,14 @@ type (
 		// CreateBuildingV1 creates a new building record (Create Building record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings
-		CreateBuildingV1(ctx context.Context, req *RequestBuilding) (*CreateResponse, *interfaces.Response, error)
+		CreateBuildingV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateBuildingByIDV1 updates the specified building by ID (Update specified Building object).
 		//
 		// Returns the full updated building resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-buildings-id
-		UpdateBuildingByIDV1(ctx context.Context, id string, req *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error)
+		UpdateBuildingByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error)
 
 		// DeleteBuildingByIDV1 removes the specified building by ID (Remove specified Building record).
 		//
@@ -130,8 +130,8 @@ func (s *Service) GetBuildingByIDV1(ctx context.Context, id string) (*ResourceBu
 // URL: POST /api/v1/buildings
 // Body: JSON with name, streetAddress1, streetAddress2, city, stateProvince, zipPostalCode, country
 // https://developer.jamf.com/jamf-pro/reference/post_v1-buildings
-func (s *Service) CreateBuildingV1(ctx context.Context, req *RequestBuilding) (*CreateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateBuildingV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -144,7 +144,7 @@ func (s *Service) CreateBuildingV1(ctx context.Context, req *RequestBuilding) (*
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -156,11 +156,12 @@ func (s *Service) CreateBuildingV1(ctx context.Context, req *RequestBuilding) (*
 // URL: PUT /api/v1/buildings/{id}
 // Body: JSON with name, streetAddress1, streetAddress2, city, stateProvince, zipPostalCode, country
 // https://developer.jamf.com/jamf-pro/reference/put_v1-buildings-id
-func (s *Service) UpdateBuildingByIDV1(ctx context.Context, id string, req *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error) {
+func (s *Service) UpdateBuildingByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -173,7 +174,7 @@ func (s *Service) UpdateBuildingByIDV1(ctx context.Context, id string, req *Requ
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

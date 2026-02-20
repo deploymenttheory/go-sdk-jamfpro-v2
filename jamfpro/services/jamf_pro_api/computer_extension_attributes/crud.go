@@ -26,12 +26,12 @@ type (
 		// CreateComputerExtensionAttributeV1 creates a new computer extension attribute (Create Computer Extension Attribute record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes
-		CreateComputerExtensionAttributeV1(ctx context.Context, req *RequestComputerExtensionAttribute) (*CreateResponse, *interfaces.Response, error)
+		CreateComputerExtensionAttributeV1(ctx context.Context, request *RequestComputerExtensionAttribute) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateComputerExtensionAttributeByIDV1 updates the specified computer extension attribute by ID (Update specified Computer Extension Attribute object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-computer-extension-attributes-id
-		UpdateComputerExtensionAttributeByIDV1(ctx context.Context, id string, req *RequestComputerExtensionAttribute) (*ResourceComputerExtensionAttribute, *interfaces.Response, error)
+		UpdateComputerExtensionAttributeByIDV1(ctx context.Context, id string, request *RequestComputerExtensionAttribute) (*ResourceComputerExtensionAttribute, *interfaces.Response, error)
 
 		// DeleteComputerExtensionAttributeByIDV1 removes the specified computer extension attribute by ID (Remove specified Computer Extension Attribute record).
 		//
@@ -111,8 +111,8 @@ func (s *Service) GetComputerExtensionAttributeByIDV1(ctx context.Context, id st
 // CreateComputerExtensionAttributeV1 creates a new computer extension attribute.
 // URL: POST /api/v1/computer-extension-attributes
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes
-func (s *Service) CreateComputerExtensionAttributeV1(ctx context.Context, req *RequestComputerExtensionAttribute) (*CreateResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateComputerExtensionAttributeV1(ctx context.Context, request *RequestComputerExtensionAttribute) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -125,7 +125,7 @@ func (s *Service) CreateComputerExtensionAttributeV1(ctx context.Context, req *R
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -136,11 +136,12 @@ func (s *Service) CreateComputerExtensionAttributeV1(ctx context.Context, req *R
 // UpdateComputerExtensionAttributeByIDV1 updates the specified computer extension attribute by ID.
 // URL: PUT /api/v1/computer-extension-attributes/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-computer-extension-attributes-id
-func (s *Service) UpdateComputerExtensionAttributeByIDV1(ctx context.Context, id string, req *RequestComputerExtensionAttribute) (*ResourceComputerExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) UpdateComputerExtensionAttributeByIDV1(ctx context.Context, id string, request *RequestComputerExtensionAttribute) (*ResourceComputerExtensionAttribute, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -153,7 +154,7 @@ func (s *Service) UpdateComputerExtensionAttributeByIDV1(ctx context.Context, id
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

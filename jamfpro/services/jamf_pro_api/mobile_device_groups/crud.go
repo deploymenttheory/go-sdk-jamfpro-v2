@@ -26,12 +26,12 @@ type (
 		// CreateSmartV1 creates a new smart mobile device group (Create Smart Mobile Device Group record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-smart-groups
-		CreateSmartV1(ctx context.Context, req *RequestSmartMobileDeviceGroup) (*CreateSmartResponse, *interfaces.Response, error)
+		CreateSmartV1(ctx context.Context, request *RequestSmartMobileDeviceGroup) (*CreateSmartResponse, *interfaces.Response, error)
 
 		// UpdateSmartByIDV1 updates the specified smart mobile device group by ID (Update specified Smart Mobile Device Group object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-mobile-device-groups-smart-groups-id
-		UpdateSmartByIDV1(ctx context.Context, id string, req *RequestSmartMobileDeviceGroup) (*ResourceSmartMobileDeviceGroup, *interfaces.Response, error)
+		UpdateSmartByIDV1(ctx context.Context, id string, request *RequestSmartMobileDeviceGroup) (*ResourceSmartMobileDeviceGroup, *interfaces.Response, error)
 
 		// DeleteSmartByIDV1 removes the specified smart mobile device group by ID (Remove specified Smart Mobile Device Group record).
 		//
@@ -51,12 +51,12 @@ type (
 		// CreateStaticV1 creates a new static mobile device group (Create Static Mobile Device Group record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-static-groups
-		CreateStaticV1(ctx context.Context, req *RequestStaticMobileDeviceGroup) (*CreateStaticResponse, *interfaces.Response, error)
+		CreateStaticV1(ctx context.Context, request *RequestStaticMobileDeviceGroup) (*CreateStaticResponse, *interfaces.Response, error)
 
 		// UpdateStaticByIDV1 updates the specified static mobile device group by ID (Update specified Static Mobile Device Group object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-mobile-device-groups-static-groups-id
-		UpdateStaticByIDV1(ctx context.Context, id string, req *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *interfaces.Response, error)
+		UpdateStaticByIDV1(ctx context.Context, id string, request *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *interfaces.Response, error)
 
 		// DeleteStaticByIDV1 removes the specified static mobile device group by ID (Remove specified Static Mobile Device Group record).
 		//
@@ -131,8 +131,8 @@ func (s *Service) GetSmartByIDV1(ctx context.Context, id string) (*ResourceSmart
 // CreateSmartV1 creates a new smart mobile device group.
 // URL: POST /api/v1/mobile-device-groups/smart-groups
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-smart-groups
-func (s *Service) CreateSmartV1(ctx context.Context, req *RequestSmartMobileDeviceGroup) (*CreateSmartResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateSmartV1(ctx context.Context, request *RequestSmartMobileDeviceGroup) (*CreateSmartResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -145,7 +145,7 @@ func (s *Service) CreateSmartV1(ctx context.Context, req *RequestSmartMobileDevi
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -156,11 +156,12 @@ func (s *Service) CreateSmartV1(ctx context.Context, req *RequestSmartMobileDevi
 // UpdateSmartByIDV1 updates the specified smart mobile device group by ID.
 // URL: PUT /api/v1/mobile-device-groups/smart-groups/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-mobile-device-groups-smart-groups-id
-func (s *Service) UpdateSmartByIDV1(ctx context.Context, id string, req *RequestSmartMobileDeviceGroup) (*ResourceSmartMobileDeviceGroup, *interfaces.Response, error) {
+func (s *Service) UpdateSmartByIDV1(ctx context.Context, id string, request *RequestSmartMobileDeviceGroup) (*ResourceSmartMobileDeviceGroup, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -173,7 +174,7 @@ func (s *Service) UpdateSmartByIDV1(ctx context.Context, id string, req *Request
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -257,12 +258,13 @@ func (s *Service) GetStaticByIDV1(ctx context.Context, id string) (*ResourceStat
 // CreateStaticV1 creates a new static mobile device group.
 // URL: POST /api/v1/mobile-device-groups/static-groups
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-static-groups
-func (s *Service) CreateStaticV1(ctx context.Context, req *RequestStaticMobileDeviceGroup) (*CreateStaticResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateStaticV1(ctx context.Context, request *RequestStaticMobileDeviceGroup) (*CreateStaticResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
-	if req.Assignments == nil {
-		req.Assignments = []StaticMobileDeviceGroupAssignment{}
+
+	if request.Assignments == nil {
+		request.Assignments = []StaticMobileDeviceGroupAssignment{}
 	}
 
 	var result CreateStaticResponse
@@ -274,7 +276,7 @@ func (s *Service) CreateStaticV1(ctx context.Context, req *RequestStaticMobileDe
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -285,15 +287,17 @@ func (s *Service) CreateStaticV1(ctx context.Context, req *RequestStaticMobileDe
 // UpdateStaticByIDV1 updates the specified static mobile device group by ID (PATCH).
 // URL: PATCH /api/v1/mobile-device-groups/static-groups/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-mobile-device-groups-static-groups-id
-func (s *Service) UpdateStaticByIDV1(ctx context.Context, id string, req *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *interfaces.Response, error) {
+func (s *Service) UpdateStaticByIDV1(ctx context.Context, id string, request *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
-	if req.Assignments == nil {
-		req.Assignments = []StaticMobileDeviceGroupAssignment{}
+
+	if request.Assignments == nil {
+		request.Assignments = []StaticMobileDeviceGroupAssignment{}
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV1, id)
@@ -305,7 +309,7 @@ func (s *Service) UpdateStaticByIDV1(ctx context.Context, id string, req *Reques
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Patch(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

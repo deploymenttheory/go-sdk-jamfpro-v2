@@ -26,12 +26,12 @@ type (
 		// CreateSmartGroupV2 creates a new smart computer group (Create Smart Computer Group record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-smart-groups
-		CreateSmartGroupV2(ctx context.Context, req *RequestSmartGroup) (*CreateSmartResponse, *interfaces.Response, error)
+		CreateSmartGroupV2(ctx context.Context, request *RequestSmartGroup) (*CreateSmartResponse, *interfaces.Response, error)
 
 		// UpdateSmartGroupV2 updates the specified smart computer group by ID (Update specified Smart Computer Group object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-smart-groups-id
-		UpdateSmartGroupV2(ctx context.Context, id string, req *RequestSmartGroup) (*ResourceSmartGroup, *interfaces.Response, error)
+		UpdateSmartGroupV2(ctx context.Context, id string, request *RequestSmartGroup) (*ResourceSmartGroup, *interfaces.Response, error)
 
 		// DeleteSmartGroupV2 removes the specified smart computer group by ID (Remove specified Smart Computer Group record).
 		//
@@ -51,12 +51,12 @@ type (
 		// CreateStaticGroupV2 creates a new static computer group (Create Static Computer Group record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-static-groups
-		CreateStaticGroupV2(ctx context.Context, req *RequestStaticGroup) (*CreateStaticResponse, *interfaces.Response, error)
+		CreateStaticGroupV2(ctx context.Context, request *RequestStaticGroup) (*CreateStaticResponse, *interfaces.Response, error)
 
 		// UpdateStaticGroupByIDV2 updates the specified static computer group by ID (Update specified Static Computer Group object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-static-groups-id
-		UpdateStaticGroupByIDV2(ctx context.Context, id string, req *RequestStaticGroup) (*ResourceStaticGroup, *interfaces.Response, error)
+		UpdateStaticGroupByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*ResourceStaticGroup, *interfaces.Response, error)
 
 		// DeleteStaticGroupByIDV2 removes the specified static computer group by ID (Remove specified Static Computer Group record).
 		//
@@ -128,8 +128,8 @@ func (s *Service) GetSmartGroupByIDV2(ctx context.Context, id string) (*Resource
 
 // CreateSmartGroupV2 creates a new smart computer group.
 // URL: POST /api/v2/computer-groups/smart-groups
-func (s *Service) CreateSmartGroupV2(ctx context.Context, req *RequestSmartGroup) (*CreateSmartResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateSmartGroupV2(ctx context.Context, request *RequestSmartGroup) (*CreateSmartResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -142,7 +142,7 @@ func (s *Service) CreateSmartGroupV2(ctx context.Context, req *RequestSmartGroup
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -152,11 +152,12 @@ func (s *Service) CreateSmartGroupV2(ctx context.Context, req *RequestSmartGroup
 
 // UpdateSmartGroupV2 updates the specified smart group by ID.
 // URL: PUT /api/v2/computer-groups/smart-groups/{id}
-func (s *Service) UpdateSmartGroupV2(ctx context.Context, id string, req *RequestSmartGroup) (*ResourceSmartGroup, *interfaces.Response, error) {
+func (s *Service) UpdateSmartGroupV2(ctx context.Context, id string, request *RequestSmartGroup) (*ResourceSmartGroup, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -169,7 +170,7 @@ func (s *Service) UpdateSmartGroupV2(ctx context.Context, id string, req *Reques
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -249,8 +250,8 @@ func (s *Service) GetStaticGroupByIDV2(ctx context.Context, id string) (*Resourc
 
 // CreateStaticGroupV2 creates a new static computer group with membership.
 // URL: POST /api/v2/computer-groups/static-groups
-func (s *Service) CreateStaticGroupV2(ctx context.Context, req *RequestStaticGroup) (*CreateStaticResponse, *interfaces.Response, error) {
-	if req == nil {
+func (s *Service) CreateStaticGroupV2(ctx context.Context, request *RequestStaticGroup) (*CreateStaticResponse, *interfaces.Response, error) {
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -263,7 +264,7 @@ func (s *Service) CreateStaticGroupV2(ctx context.Context, req *RequestStaticGro
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -273,11 +274,12 @@ func (s *Service) CreateStaticGroupV2(ctx context.Context, req *RequestStaticGro
 
 // UpdateStaticGroupByIDV2 updates the membership of the specified static group (PATCH).
 // URL: PATCH /api/v2/computer-groups/static-groups/{id}
-func (s *Service) UpdateStaticGroupByIDV2(ctx context.Context, id string, req *RequestStaticGroup) (*ResourceStaticGroup, *interfaces.Response, error) {
+func (s *Service) UpdateStaticGroupByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*ResourceStaticGroup, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	if req == nil {
+
+	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
@@ -290,7 +292,7 @@ func (s *Service) UpdateStaticGroupByIDV2(ctx context.Context, id string, req *R
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Patch(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
