@@ -12,12 +12,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// uniqueName returns a category name that is unique per test run to avoid
-// conflicts with pre-existing data.
-func uniqueName(base string) string {
-	return fmt.Sprintf("%s-%d", base, time.Now().UnixMilli())
-}
-
 // =============================================================================
 // TestAcceptance_Categories_Lifecycle exercises the full write/read/delete
 // lifecycle in the order: Create → List → GetByID → Update → GetByID
@@ -36,10 +30,10 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test category")
 
 	createReq := &categories.RequestCategory{
-		Name:     uniqueName("acc-test-category"),
+		Name:     acc.UniqueName("acc-test-category"),
 		Priority: 7,
 	}
-	created, createResp, err := svc.CreateCategoryV1(ctx, createReq)
+	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateCategoryV1 should not return an error")
 	require.NotNil(t, created, "CreateCategoryV1 result should not be nil")
 	require.NotNil(t, createResp, "CreateCategoryV1 response should not be nil")
@@ -54,7 +48,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteCategoryByIDV1(cleanupCtx, categoryID)
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, categoryID)
 		acc.LogCleanupDeleteError(t, "category", categoryID, delErr)
 	})
 
@@ -66,7 +60,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListCategoriesV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
+	list, listResp, err := svc.ListV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err, "ListCategoriesV1 should not return an error")
 	require.NotNil(t, list, "ListCategoriesV1 result should not be nil")
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -92,7 +86,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetCategoryByIDV1(ctx3, categoryID)
+	fetched, fetchResp, err := svc.GetByIDV1(ctx3, categoryID)
 	require.NoError(t, err, "GetCategoryByIDV1 should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -106,7 +100,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Update", "Updating category ID=%s", categoryID)
 
-	updatedName := uniqueName("acc-test-category-updated")
+	updatedName := acc.UniqueName("acc-test-category-updated")
 	updateReq := &categories.RequestCategory{
 		Name:     updatedName,
 		Priority: 2,
@@ -115,7 +109,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	updated, updateResp, err := svc.UpdateCategoryByIDV1(ctx4, categoryID, updateReq)
+	updated, updateResp, err := svc.UpdateByIDV1(ctx4, categoryID, updateReq)
 	require.NoError(t, err, "UpdateCategoryByIDV1 should not return an error")
 	require.NotNil(t, updated)
 	assert.Equal(t, 200, updateResp.StatusCode)
@@ -130,7 +124,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5()
 
-	verified, verifyResp, err := svc.GetCategoryByIDV1(ctx5, categoryID)
+	verified, verifyResp, err := svc.GetByIDV1(ctx5, categoryID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -190,7 +184,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteCategoryByIDV1(ctx8, categoryID)
+	deleteResp, err := svc.DeleteByIDV1(ctx8, categoryID)
 	require.NoError(t, err, "DeleteCategoryByIDV1 should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)
@@ -214,13 +208,13 @@ func TestAcceptance_Categories_ListWithRSQLFilter(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating category for RSQL filter test")
 
-	name := uniqueName("acc-rsql-test")
+	name := acc.UniqueName("acc-rsql-test")
 	createReq := &categories.RequestCategory{Name: name, Priority: 5}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateCategoryV1(ctx1, createReq)
+	created, _, err := svc.CreateV1(ctx1, createReq)
 	require.NoError(t, err, "CreateCategoryV1 should not return an error")
 	require.NotNil(t, created)
 
@@ -230,7 +224,7 @@ func TestAcceptance_Categories_ListWithRSQLFilter(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteCategoryByIDV1(cleanupCtx, categoryID)
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, categoryID)
 		acc.LogCleanupDeleteError(t, "category", categoryID, delErr)
 	})
 
@@ -246,7 +240,7 @@ func TestAcceptance_Categories_ListWithRSQLFilter(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListCategoriesV1(ctx2, rsqlQuery)
+	list, listResp, err := svc.ListV1(ctx2, rsqlQuery)
 	require.NoError(t, err, "ListCategoriesV1 with RSQL filter should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -279,12 +273,12 @@ func TestAcceptance_Categories_BulkDelete(t *testing.T) {
 	ids := make([]string, 0, 2)
 	for i := 0; i < 2; i++ {
 		req := &categories.RequestCategory{
-			Name:     uniqueName(fmt.Sprintf("acc-bulk-delete-%d", i)),
+			Name:     acc.UniqueName(fmt.Sprintf("acc-bulk-delete-%d", i)),
 			Priority: 9,
 		}
 
 		ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-		created, resp, err := svc.CreateCategoryV1(ctx1, req)
+		created, resp, err := svc.CreateV1(ctx1, req)
 		cancel1()
 		require.NoError(t, err, "CreateCategoryV1 %d should succeed", i)
 		require.NotNil(t, created)
@@ -298,7 +292,7 @@ func TestAcceptance_Categories_BulkDelete(t *testing.T) {
 		cleanCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 		defer cancel()
 		for _, id := range ids {
-			_, delErr := svc.DeleteCategoryByIDV1(cleanCtx, id)
+			_, delErr := svc.DeleteByIDV1(cleanCtx, id)
 			acc.LogCleanupDeleteError(t, "category", id, delErr)
 		}
 	})
@@ -318,7 +312,7 @@ func TestAcceptance_Categories_BulkDelete(t *testing.T) {
 	// Verify both are gone
 	for _, id := range ids {
 		ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-		_, _, getErr := svc.GetCategoryByIDV1(ctx3, id)
+		_, _, getErr := svc.GetByIDV1(ctx3, id)
 		cancel3()
 		assert.Error(t, getErr, "deleted category ID=%s should return error on Get", id)
 	}
@@ -335,25 +329,25 @@ func TestAcceptance_Categories_ValidationErrors(t *testing.T) {
 	svc := acc.Client.Categories
 
 	t.Run("GetCategoryByID_EmptyID", func(t *testing.T) {
-		_, _, err := svc.GetCategoryByIDV1(context.Background(), "")
+		_, _, err := svc.GetByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "category ID is required")
 	})
 
 	t.Run("CreateCategory_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateCategoryV1(context.Background(), nil)
+		_, _, err := svc.CreateV1(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateCategoryByID_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateCategoryByIDV1(context.Background(), "", &categories.RequestCategory{Name: "x"})
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &categories.RequestCategory{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})
 
 	t.Run("DeleteCategoryByID_EmptyID", func(t *testing.T) {
-		_, err := svc.DeleteCategoryByIDV1(context.Background(), "")
+		_, err := svc.DeleteByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "category ID is required")
 	})

@@ -12,10 +12,10 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-time-zones
 	TimeZonesServiceInterface interface {
-		// ListTimeZonesV1 returns all available time zones (Get Time Zones).
+		// ListV1 returns all available time zones (Get Time Zones).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-time-zones
-		ListTimeZonesV1(ctx context.Context) ([]ResourceTimeZone, *interfaces.Response, error)
+		ListV1(ctx context.Context) ([]ResourceTimeZone, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the time zones-related methods of the Jamf Pro API.
@@ -32,10 +32,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// ListTimeZonesV1 returns all available time zones.
+// -----------------------------------------------------------------------------
+// Jamf Pro API - Time Zones Operations
+// -----------------------------------------------------------------------------
+
+// ListV1 returns all available time zones.
 // URL: GET /api/v1/time-zones
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-time-zones
-func (s *Service) ListTimeZonesV1(ctx context.Context) ([]ResourceTimeZone, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context) ([]ResourceTimeZone, *interfaces.Response, error) {
 	var result []ResourceTimeZone
 
 	endpoint := EndpointTimeZonesV1

@@ -21,7 +21,7 @@ func main() {
 	}
 
 	locationID := "1" // Replace with the desired volume purchasing location ID to delete
-	_, err = jamfClient.VolumePurchasingLocations.DeleteVolumePurchasingLocationByIDV1(context.Background(), locationID)
+	_, err = jamfClient.VolumePurchasingLocations.DeleteByIDV1(context.Background(), locationID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -26,7 +26,7 @@ func main() {
 		Name:     "Updated Category Name",
 		Priority: 9,
 	}
-	result, _, err := jamfClient.Categories.UpdateCategoryByIDV1(context.Background(), id, updateReq)
+	result, _, err := jamfClient.Categories.UpdateByIDV1(context.Background(), id, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

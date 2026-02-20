@@ -19,7 +19,7 @@ func TestUnitListVolumePurchasingLocations_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
-	result, resp, err := svc.ListVolumePurchasingLocationsV1(context.Background(), nil)
+	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -35,7 +35,7 @@ func TestUnitGetVolumePurchasingLocationByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
-	result, resp, err := svc.GetVolumePurchasingLocationByIDV1(context.Background(), "1")
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -49,7 +49,7 @@ func TestUnitGetVolumePurchasingLocationByID_Success(t *testing.T) {
 func TestUnitGetVolumePurchasingLocationByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetVolumePurchasingLocationByIDV1(context.Background(), "")
+	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -64,7 +64,7 @@ func TestUnitCreateVolumePurchasingLocation_Success(t *testing.T) {
 		ServiceToken:                          "token",
 		AutomaticallyPopulatePurchasedContent: true,
 	}
-	result, resp, err := svc.CreateVolumePurchasingLocationV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -84,7 +84,7 @@ func TestUnitUpdateVolumePurchasingLocationByID_Success(t *testing.T) {
 		AutomaticallyPopulatePurchasedContent: false,
 		SendNotificationWhenNoLongerAssigned:  true,
 	}
-	result, resp, err := svc.UpdateVolumePurchasingLocationByIDV1(context.Background(), "1", req)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -98,7 +98,7 @@ func TestUnitDeleteVolumePurchasingLocationByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
-	resp, err := svc.DeleteVolumePurchasingLocationByIDV1(context.Background(), "1")
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)

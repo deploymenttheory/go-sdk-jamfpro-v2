@@ -122,3 +122,9 @@ func PollUntil(t *testing.T, timeout, interval time.Duration, fn func() bool) bo
 func isGitHubActions() bool {
 	return os.Getenv("GITHUB_ACTIONS") == "true"
 }
+
+// UniqueName returns a category name that is unique per test run to avoid
+// conflicts with pre-existing data.
+func UniqueName(base string) string {
+	return fmt.Sprintf("%s-%d", base, time.Now().UnixMilli())
+}

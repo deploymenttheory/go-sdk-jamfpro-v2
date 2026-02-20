@@ -14,7 +14,7 @@ func TestAcceptance_Locales_List(t *testing.T) {
 	svc := acc.Client.Locales
 	ctx := context.Background()
 
-	result, resp, err := svc.ListLocalesV1(ctx)
+	result, resp, err := svc.ListV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

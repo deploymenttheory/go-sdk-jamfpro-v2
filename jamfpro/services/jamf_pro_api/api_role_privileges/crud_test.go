@@ -15,9 +15,9 @@ func setupMockService(t *testing.T) (*Service, *mocks.APIRolePrivilegesMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListPrivilegesV1_Success(t *testing.T) {
+func TestUnitListV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
-	result, resp, err := svc.ListPrivilegesV1(context.Background())
+	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.Equal(t, 200, resp.StatusCode)

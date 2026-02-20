@@ -13,35 +13,35 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments
 	DepartmentsServiceInterface interface {
-		// ListDepartmentsV1 returns all department objects (Get Department objects).
+		// ListV1 returns all department objects (Get Department objects).
 		//
 		// Returns a paged list of department objects. Optional query parameters support
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments
-		ListDepartmentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
-		// GetDepartmentByIDV1 returns the specified department by ID (Get specified Department object).
+		// GetByIDV1 returns the specified department by ID (Get specified Department object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id
-		GetDepartmentByIDV1(ctx context.Context, id string) (*ResourceDepartment, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceDepartment, *interfaces.Response, error)
 
-		// CreateDepartmentV1 creates a new department record (Create Department record).
+		// CreateV1 creates a new department record (Create Department record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments
-		CreateDepartmentV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *interfaces.Response, error)
 
-		// UpdateDepartmentByIDV1 updates the specified department by ID (Update specified Department object).
+		// UpdateByIDV1 updates the specified department by ID (Update specified Department object).
 		//
 		// Returns the full updated department resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-departments-id
-		UpdateDepartmentByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error)
 
-		// DeleteDepartmentByIDV1 removes the specified department by ID (Remove specified Department record).
+		// DeleteByIDV1 removes the specified department by ID (Remove specified Department record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-departments-id
-		DeleteDepartmentByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 
 		// GetDepartmentHistoryV1 returns the history object for the specified department.
 		//
@@ -72,11 +72,11 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API - Departments CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListDepartmentsV1 returns all department objects (Get Department objects).
+// ListV1 returns all department objects (Get Department objects).
 // URL: GET /api/v1/departments
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-departments
-func (s *Service) ListDepartmentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointDepartmentsV1
@@ -94,10 +94,10 @@ func (s *Service) ListDepartmentsV1(ctx context.Context, rsqlQuery map[string]st
 	return &result, resp, nil
 }
 
-// GetDepartmentByIDV1 returns the specified department by ID (Get specified Department object).
+// GetByIDV1 returns the specified department by ID (Get specified Department object).
 // URL: GET /api/v1/departments/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id
-func (s *Service) GetDepartmentByIDV1(ctx context.Context, id string) (*ResourceDepartment, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDepartment, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("department ID is required")
 	}
@@ -119,11 +119,11 @@ func (s *Service) GetDepartmentByIDV1(ctx context.Context, id string) (*Resource
 	return &result, resp, nil
 }
 
-// CreateDepartmentV1 creates a new department record (Create Department record).
+// CreateV1 creates a new department record (Create Department record).
 // URL: POST /api/v1/departments
 // Body: JSON with name
 // https://developer.jamf.com/jamf-pro/reference/post_v1-departments
-func (s *Service) CreateDepartmentV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -145,11 +145,11 @@ func (s *Service) CreateDepartmentV1(ctx context.Context, request *RequestDepart
 	return &result, resp, nil
 }
 
-// UpdateDepartmentByIDV1 updates the specified department by ID (Update specified Department object).
+// UpdateByIDV1 updates the specified department by ID (Update specified Department object).
 // URL: PUT /api/v1/departments/{id}
 // Body: JSON with name
 // https://developer.jamf.com/jamf-pro/reference/put_v1-departments-id
-func (s *Service) UpdateDepartmentByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -175,10 +175,10 @@ func (s *Service) UpdateDepartmentByIDV1(ctx context.Context, id string, request
 	return &result, resp, nil
 }
 
-// DeleteDepartmentByIDV1 removes the specified department by ID (Remove specified Department record).
+// DeleteByIDV1 removes the specified department by ID (Remove specified Department record).
 // URL: DELETE /api/v1/departments/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-departments-id
-func (s *Service) DeleteDepartmentByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("department ID is required")
 	}

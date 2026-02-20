@@ -24,7 +24,7 @@ func TestUnitListCategories_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListCategoriesMock()
 
-	result, resp, err := svc.ListCategoriesV1(context.Background(), nil)
+	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -45,7 +45,7 @@ func TestUnitListCategories_WithrsqlQuery(t *testing.T) {
 	mock.RegisterListCategoriesMock()
 
 	params := map[string]string{"page": "0", "page-size": "50", "sort": "name:asc"}
-	result, resp, err := svc.ListCategoriesV1(context.Background(), params)
+	result, resp, err := svc.ListV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -56,7 +56,7 @@ func TestUnitListCategories_WithRSQLFilter(t *testing.T) {
 	mock.RegisterListCategoriesRSQLMock()
 
 	rsqlQuery := map[string]string{"filter": `name=="Critical"`}
-	result, resp, err := svc.ListCategoriesV1(context.Background(), rsqlQuery)
+	result, resp, err := svc.ListV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -80,7 +80,7 @@ func TestUnitGetCategoryByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetCategoryMock()
 
-	result, resp, err := svc.GetCategoryByIDV1(context.Background(), "1")
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -94,7 +94,7 @@ func TestUnitGetCategoryByID_Success(t *testing.T) {
 func TestUnitGetCategoryByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetCategoryByIDV1(context.Background(), "")
+	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -105,7 +105,7 @@ func TestUnitGetCategoryByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetCategoryByIDV1(context.Background(), "999")
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -121,7 +121,7 @@ func TestUnitCreateCategory_Success(t *testing.T) {
 	mock.RegisterCreateCategoryMock()
 
 	req := &RequestCategory{Name: "Test Category", Priority: 5}
-	result, resp, err := svc.CreateCategoryV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -134,7 +134,7 @@ func TestUnitCreateCategory_Success(t *testing.T) {
 func TestUnitCreateCategory_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateCategoryV1(context.Background(), nil)
+	result, resp, err := svc.CreateV1(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -146,7 +146,7 @@ func TestUnitCreateCategory_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestCategory{Name: "Duplicate Category", Priority: 5}
-	result, resp, err := svc.CreateCategoryV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -162,7 +162,7 @@ func TestUnitUpdateCategoryByID_Success(t *testing.T) {
 	mock.RegisterUpdateCategoryMock()
 
 	req := &RequestCategory{Name: "Updated Category", Priority: 3}
-	result, resp, err := svc.UpdateCategoryByIDV1(context.Background(), "1", req)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -175,7 +175,7 @@ func TestUnitUpdateCategoryByID_Success(t *testing.T) {
 func TestUnitUpdateCategoryByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateCategoryByIDV1(context.Background(), "", &RequestCategory{Name: "x"})
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &RequestCategory{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -185,7 +185,7 @@ func TestUnitUpdateCategoryByID_EmptyID(t *testing.T) {
 func TestUnitUpdateCategoryByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateCategoryByIDV1(context.Background(), "1", nil)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -200,7 +200,7 @@ func TestUnitDeleteCategoryByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteCategoryMock()
 
-	resp, err := svc.DeleteCategoryByIDV1(context.Background(), "1")
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
@@ -209,7 +209,7 @@ func TestUnitDeleteCategoryByID_Success(t *testing.T) {
 func TestUnitDeleteCategoryByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteCategoryByIDV1(context.Background(), "")
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "category ID is required")

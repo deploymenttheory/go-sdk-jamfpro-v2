@@ -13,35 +13,35 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
 	BuildingsServiceInterface interface {
-		// ListBuildingsV1 returns all building objects (Get Building objects).
+		// ListV1 returns all building objects (Get Building objects).
 		//
 		// Returns a paged list of building objects. Optional query parameters support
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
-		ListBuildingsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
-		// GetBuildingByIDV1 returns the specified building by ID (Get specified Building object).
+		// GetByIDV1 returns the specified building by ID (Get specified Building object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id
-		GetBuildingByIDV1(ctx context.Context, id string) (*ResourceBuilding, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceBuilding, *interfaces.Response, error)
 
-		// CreateBuildingV1 creates a new building record (Create Building record).
+		// CreateV1 creates a new building record (Create Building record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings
-		CreateBuildingV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *interfaces.Response, error)
 
-		// UpdateBuildingByIDV1 updates the specified building by ID (Update specified Building object).
+		// UpdateByIDV1 updates the specified building by ID (Update specified Building object).
 		//
 		// Returns the full updated building resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-buildings-id
-		UpdateBuildingByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error)
 
-		// DeleteBuildingByIDV1 removes the specified building by ID (Remove specified Building record).
+		// DeleteByIDV1 removes the specified building by ID (Remove specified Building record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-buildings-id
-		DeleteBuildingByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 
 		// DeleteBuildingsByIDV1 deletes multiple buildings by their IDs (Delete multiple Buildings by their IDs).
 		//
@@ -79,11 +79,11 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API - Buildings CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListBuildingsV1 returns all building objects (Get Building objects).
+// ListV1 returns all building objects (Get Building objects).
 // URL: GET /api/v1/buildings
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
-func (s *Service) ListBuildingsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointBuildingsV1
@@ -101,10 +101,10 @@ func (s *Service) ListBuildingsV1(ctx context.Context, rsqlQuery map[string]stri
 	return &result, resp, nil
 }
 
-// GetBuildingByIDV1 returns the specified building by ID (Get specified Building object).
+// GetByIDV1 returns the specified building by ID (Get specified Building object).
 // URL: GET /api/v1/buildings/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id
-func (s *Service) GetBuildingByIDV1(ctx context.Context, id string) (*ResourceBuilding, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceBuilding, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("building ID is required")
 	}
@@ -126,11 +126,11 @@ func (s *Service) GetBuildingByIDV1(ctx context.Context, id string) (*ResourceBu
 	return &result, resp, nil
 }
 
-// CreateBuildingV1 creates a new building record (Create Building record).
+// CreateV1 creates a new building record (Create Building record).
 // URL: POST /api/v1/buildings
 // Body: JSON with name, streetAddress1, streetAddress2, city, stateProvince, zipPostalCode, country
 // https://developer.jamf.com/jamf-pro/reference/post_v1-buildings
-func (s *Service) CreateBuildingV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -152,11 +152,11 @@ func (s *Service) CreateBuildingV1(ctx context.Context, request *RequestBuilding
 	return &result, resp, nil
 }
 
-// UpdateBuildingByIDV1 updates the specified building by ID (Update specified Building object).
+// UpdateByIDV1 updates the specified building by ID (Update specified Building object).
 // URL: PUT /api/v1/buildings/{id}
 // Body: JSON with name, streetAddress1, streetAddress2, city, stateProvince, zipPostalCode, country
 // https://developer.jamf.com/jamf-pro/reference/put_v1-buildings-id
-func (s *Service) UpdateBuildingByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -182,10 +182,10 @@ func (s *Service) UpdateBuildingByIDV1(ctx context.Context, id string, request *
 	return &result, resp, nil
 }
 
-// DeleteBuildingByIDV1 removes the specified building by ID (Remove specified Building record).
+// DeleteByIDV1 removes the specified building by ID (Remove specified Building record).
 // URL: DELETE /api/v1/buildings/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-buildings-id
-func (s *Service) DeleteBuildingByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("building ID is required")
 	}

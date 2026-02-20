@@ -21,7 +21,7 @@ func main() {
 	}
 
 	groupID := "1" // Replace with the desired smart computer group ID to delete
-	_, err = jamfClient.ComputerGroups.DeleteSmartGroupV2(context.Background(), groupID)
+	_, err = jamfClient.ComputerGroups.DeleteSmartV2(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -30,11 +30,10 @@ type RequestLDAPServer struct {
 	MappingsForUsers Mappings          `xml:"mappings_for_users"`
 }
 
-// CreateResponse is the response for create operations which returns only ID and Name.
+// CreateResponse is the response for create operations which returns only ID.
 type CreateResponse struct {
 	XMLName xml.Name `xml:"ldap_server"`
 	ID      int      `xml:"id"`
-	Name    string   `xml:"name"`
 }
 
 // Connection contains the connection settings for an LDAP server.

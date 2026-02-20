@@ -19,7 +19,7 @@ func TestUnitListMobileDeviceExtensionAttributes_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
-	result, resp, err := svc.ListMobileDeviceExtensionAttributesV1(context.Background(), nil)
+	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -35,7 +35,7 @@ func TestUnitGetMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
-	result, resp, err := svc.GetMobileDeviceExtensionAttributeByIDV1(context.Background(), "1")
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -49,7 +49,7 @@ func TestUnitGetMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
 func TestUnitGetMobileDeviceExtensionAttributeByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetMobileDeviceExtensionAttributeByIDV1(context.Background(), "")
+	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -59,7 +59,7 @@ func TestUnitGetMobileDeviceExtensionAttributeByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetMobileDeviceExtensionAttributeByIDV1(context.Background(), "999")
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -76,7 +76,7 @@ func TestUnitCreateMobileDeviceExtensionAttribute_Success(t *testing.T) {
 		InventoryDisplayType: "General",
 		InputType:            "Text Field",
 	}
-	result, resp, err := svc.CreateMobileDeviceExtensionAttributeV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -89,7 +89,7 @@ func TestUnitCreateMobileDeviceExtensionAttribute_Success(t *testing.T) {
 func TestUnitCreateMobileDeviceExtensionAttribute_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateMobileDeviceExtensionAttributeV1(context.Background(), nil)
+	result, resp, err := svc.CreateV1(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -106,7 +106,7 @@ func TestUnitUpdateMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
 		InventoryDisplayType: "General",
 		InputType:            "Text Field",
 	}
-	result, resp, err := svc.UpdateMobileDeviceExtensionAttributeByIDV1(context.Background(), "1", req)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -120,7 +120,7 @@ func TestUnitDeleteMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
-	resp, err := svc.DeleteMobileDeviceExtensionAttributeByIDV1(context.Background(), "1")
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)

@@ -28,7 +28,7 @@ func main() {
 		Type: dock_items.TypeApp,
 	}
 
-	result, _, err := jamfClient.DockItems.UpdateDockItemByIDV1(context.Background(), dockItemID, updateReq)
+	result, _, err := jamfClient.DockItems.UpdateByIDV1(context.Background(), dockItemID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

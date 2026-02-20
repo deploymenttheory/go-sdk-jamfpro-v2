@@ -22,7 +22,7 @@ func main() {
 	}
 
 	packageID := "1" // Replace with the desired package ID
-	fetched, _, err := jamfClient.Packages.GetPackageByIDV1(context.Background(), packageID)
+	fetched, _, err := jamfClient.Packages.GetByIDV1(context.Background(), packageID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
@@ -35,7 +35,7 @@ func main() {
 	updateReq.FillUserTemplate = packages.BoolPtr(true)
 	updateReq.FillExistingUsers = packages.BoolPtr(true)
 
-	result, _, err := jamfClient.Packages.UpdatePackageByIDV1(context.Background(), packageID, updateReq)
+	result, _, err := jamfClient.Packages.UpdateByIDV1(context.Background(), packageID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

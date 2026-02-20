@@ -22,7 +22,7 @@ func main() {
 	}
 
 	packageID := "1" // Replace with the desired package ID
-	history, _, err := jamfClient.Packages.GetPackageHistoryV1(context.Background(), packageID, nil)
+	history, _, err := jamfClient.Packages.GetHistoryV1(context.Background(), packageID, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

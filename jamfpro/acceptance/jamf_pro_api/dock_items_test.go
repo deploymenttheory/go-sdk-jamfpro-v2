@@ -2,7 +2,6 @@ package jamf_pro_api
 
 import (
 	"context"
-	"fmt"
 	"testing"
 	"time"
 
@@ -11,10 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
-
-func uniqueDockItemName(base string) string {
-	return fmt.Sprintf("%s-%d", base, time.Now().UnixMilli())
-}
 
 // =============================================================================
 // TestAcceptance_DockItems_Lifecycle exercises the full write/read/delete
@@ -31,11 +26,11 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test dock item")
 
 	createReq := &dock_items.RequestDockItem{
-		Name: uniqueDockItemName("acc-test-dock"),
+		Name: acc.UniqueName("acc-test-dock"),
 		Path: "/Applications/Safari.app",
 		Type: dock_items.TypeApp,
 	}
-	created, createResp, err := svc.CreateDockItemV1(ctx, createReq)
+	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateDockItemV1 should not return an error")
 	require.NotNil(t, created)
 	assert.Equal(t, 201, createResp.StatusCode)
@@ -47,14 +42,14 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteDockItemByIDV1(cleanupCtx, dockItemID)
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, dockItemID)
 		acc.LogCleanupDeleteError(t, "dock item", dockItemID, delErr)
 	})
 
 	// 2. GetByID
 	acc.LogTestStage(t, "GetByID", "Fetching dock item by ID=%s", dockItemID)
 
-	fetched, fetchResp, err := svc.GetDockItemByIDV1(ctx, dockItemID)
+	fetched, fetchResp, err := svc.GetByIDV1(ctx, dockItemID)
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -68,11 +63,11 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating dock item ID=%s", dockItemID)
 
 	updateReq := &dock_items.RequestDockItem{
-		Name: uniqueDockItemName("acc-test-dock-updated"),
+		Name: acc.UniqueName("acc-test-dock-updated"),
 		Path: "/Applications/Google Chrome.app",
 		Type: dock_items.TypeApp,
 	}
-	updated, updateResp, err := svc.UpdateDockItemByIDV1(ctx, dockItemID, updateReq)
+	updated, updateResp, err := svc.UpdateByIDV1(ctx, dockItemID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	assert.Equal(t, 200, updateResp.StatusCode)
@@ -80,7 +75,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Dock item updated: ID=%s", dockItemID)
 
 	// 4. Re-fetch to verify
-	fetched2, _, err := svc.GetDockItemByIDV1(ctx, dockItemID)
+	fetched2, _, err := svc.GetByIDV1(ctx, dockItemID)
 	require.NoError(t, err)
 	assert.Equal(t, updateReq.Name, fetched2.Name)
 	assert.Equal(t, updateReq.Path, fetched2.Path)
@@ -89,7 +84,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	// 5. Delete
 	acc.LogTestStage(t, "Delete", "Deleting dock item ID=%s", dockItemID)
 
-	deleteResp, err := svc.DeleteDockItemByIDV1(ctx, dockItemID)
+	deleteResp, err := svc.DeleteByIDV1(ctx, dockItemID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)
@@ -106,19 +101,19 @@ func TestAcceptance_DockItems_ValidationErrors(t *testing.T) {
 	svc := acc.Client.DockItems
 
 	t.Run("GetDockItemByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.GetDockItemByIDV1(context.Background(), "")
+		_, _, err := svc.GetByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "dock item ID is required")
 	})
 
 	t.Run("CreateDockItemV1_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateDockItemV1(context.Background(), nil)
+		_, _, err := svc.CreateV1(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateDockItemByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateDockItemByIDV1(context.Background(), "", &dock_items.RequestDockItem{
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &dock_items.RequestDockItem{
 			Name: "x", Path: "/path", Type: dock_items.TypeApp,
 		})
 		assert.Error(t, err)
@@ -126,7 +121,7 @@ func TestAcceptance_DockItems_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("DeleteDockItemByIDV1_EmptyID", func(t *testing.T) {
-		_, err := svc.DeleteDockItemByIDV1(context.Background(), "")
+		_, err := svc.DeleteByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "dock item ID is required")
 	})

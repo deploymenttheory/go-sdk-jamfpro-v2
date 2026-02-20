@@ -39,7 +39,7 @@ type (
 		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 	}
 
-	// Service handles communication with the bookmarks endpoint.
+	// Service handles communication with the bookmarks-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks
 	Service struct {
@@ -52,6 +52,10 @@ var _ BookmarksServiceInterface = (*Service)(nil)
 func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
+
+// -----------------------------------------------------------------------------
+// Jamf Pro API - Bookmarks Operations
+// -----------------------------------------------------------------------------
 
 // ListV1 returns all bookmarks. Optional rsqlQuery: filter (RSQL), sort, page, page-size.
 // URL: GET /api/v1/bookmarks

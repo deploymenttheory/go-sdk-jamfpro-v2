@@ -28,7 +28,7 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.ComputerGroups.CreateSmartGroupV2(context.Background(), req)
+	result, _, err := jamfClient.ComputerGroups.CreateSmartV2(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

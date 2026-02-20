@@ -32,7 +32,7 @@ type (
 		DownloadV1(ctx context.Context, id int, res, scale string) ([]byte, *interfaces.Response, error)
 	}
 
-	// Service handles communication with the icons endpoint.
+	// Service handles communication with the icons-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
 	Service struct {

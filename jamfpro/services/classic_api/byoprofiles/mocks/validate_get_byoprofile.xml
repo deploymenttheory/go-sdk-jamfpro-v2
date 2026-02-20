@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<byoprofile>
+    <id>1</id>
+    <general>
+        <id>1</id>
+        <name>Test BYO Profile 1</name>
+        <site>
+            <id>-1</id>
+            <name>None</name>
+        </site>
+        <enabled>true</enabled>
+        <description>Test BYO profile description</description>
+    </general>
+</byoprofile>

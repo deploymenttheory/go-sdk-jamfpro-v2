@@ -21,7 +21,7 @@ func main() {
 	}
 
 	attrID := "1" // Replace with the desired computer extension attribute ID to delete
-	_, err = jamfClient.ComputerExtensionAttributes.DeleteComputerExtensionAttributeByIDV1(context.Background(), attrID)
+	_, err = jamfClient.ComputerExtensionAttributes.DeleteByIDV1(context.Background(), attrID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -26,7 +26,7 @@ func main() {
 		Priority: 5,
 	}
 
-	result, _, err := jamfClient.Categories.CreateCategoryV1(context.Background(), req)
+	result, _, err := jamfClient.Categories.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

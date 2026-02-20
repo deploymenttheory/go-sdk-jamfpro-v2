@@ -27,7 +27,7 @@ func main() {
 		ComputerIds: []string{},
 	}
 
-	result, _, err := jamfClient.ComputerGroups.UpdateStaticGroupByIDV2(context.Background(), groupID, req)
+	result, _, err := jamfClient.ComputerGroups.UpdateStaticByIDV2(context.Background(), groupID, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

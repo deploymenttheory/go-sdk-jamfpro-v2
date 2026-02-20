@@ -11,13 +11,13 @@ import (
 // TestAcceptance_VolumePurchasingSubscriptions_List verifies that listing volume purchasing
 // subscriptions works against a real Jamf Pro instance. Create/Update/Delete require VPL
 // configuration and are not exercised here.
-func TestAcceptance_VolumePurchasingSubscriptions_List(t *testing.T) {
+func TestAcceptance_VolumePurchasingSubscriptions_ListV1(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.VolumePurchasingSubscriptions
 	ctx := context.Background()
 
-	list, resp, err := svc.ListVolumePurchasingSubscriptionsV1(ctx, map[string]string{"page": "0", "page-size": "100"})
+	list, resp, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "100"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	require.NotNil(t, resp)
@@ -26,13 +26,13 @@ func TestAcceptance_VolumePurchasingSubscriptions_List(t *testing.T) {
 }
 
 // TestAcceptance_VolumePurchasingSubscriptions_GetByID fetches a single subscription by ID when at least one exists.
-func TestAcceptance_VolumePurchasingSubscriptions_GetByID(t *testing.T) {
+func TestAcceptance_VolumePurchasingSubscriptions_GetByIDV1(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.VolumePurchasingSubscriptions
 	ctx := context.Background()
 
-	list, _, err := svc.ListVolumePurchasingSubscriptionsV1(ctx, map[string]string{"page": "0", "page-size": "1"})
+	list, _, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "1"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
 
@@ -40,7 +40,7 @@ func TestAcceptance_VolumePurchasingSubscriptions_GetByID(t *testing.T) {
 		t.Skip("No volume purchasing subscriptions exist; skipping GetByID")
 	}
 
-	got, resp, err := svc.GetVolumePurchasingSubscriptionByIDV1(ctx, list.Results[0].ID)
+	got, resp, err := svc.GetByIDV1(ctx, list.Results[0].ID)
 	require.NoError(t, err)
 	require.NotNil(t, got)
 	require.NotNil(t, resp)

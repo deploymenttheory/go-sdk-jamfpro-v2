@@ -26,7 +26,7 @@ func main() {
 	noteReq := &packages.AddHistoryNotesRequest{
 		Note: fmt.Sprintf("Example note added at %s", time.Now().Format(time.RFC3339)),
 	}
-	_, err = jamfClient.Packages.AddPackageHistoryNotesV1(context.Background(), packageID, noteReq)
+	_, err = jamfClient.Packages.AddHistoryNotesV1(context.Background(), packageID, noteReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -21,7 +21,7 @@ func main() {
 	}
 
 	packageID := "1" // Replace with the desired package ID to delete
-	_, err = jamfClient.Packages.DeletePackageByIDV1(context.Background(), packageID)
+	_, err = jamfClient.Packages.DeleteByIDV1(context.Background(), packageID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

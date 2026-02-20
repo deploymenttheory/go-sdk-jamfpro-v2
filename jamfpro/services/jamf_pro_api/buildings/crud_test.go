@@ -19,7 +19,7 @@ func TestUnitListBuildings_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListBuildingsMock()
 
-	result, resp, err := svc.ListBuildingsV1(context.Background(), nil)
+	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -38,7 +38,7 @@ func TestUnitListBuildings_WithrsqlQuery(t *testing.T) {
 	mock.RegisterListBuildingsMock()
 
 	params := map[string]string{"page": "0", "page-size": "50", "sort": "name:asc"}
-	result, resp, err := svc.ListBuildingsV1(context.Background(), params)
+	result, resp, err := svc.ListV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -49,7 +49,7 @@ func TestUnitListBuildings_WithRSQLFilter(t *testing.T) {
 	mock.RegisterListBuildingsRSQLMock()
 
 	rsqlQuery := map[string]string{"filter": `name=="Warehouse"`}
-	result, resp, err := svc.ListBuildingsV1(context.Background(), rsqlQuery)
+	result, resp, err := svc.ListV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -66,7 +66,7 @@ func TestUnitGetBuildingByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetBuildingMock()
 
-	result, resp, err := svc.GetBuildingByIDV1(context.Background(), "1")
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -81,7 +81,7 @@ func TestUnitGetBuildingByID_Success(t *testing.T) {
 func TestUnitGetBuildingByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetBuildingByIDV1(context.Background(), "")
+	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -92,7 +92,7 @@ func TestUnitGetBuildingByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetBuildingByIDV1(context.Background(), "999")
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -110,7 +110,7 @@ func TestUnitCreateBuilding_Success(t *testing.T) {
 		StateProvince:  "TX",
 		Country:        "United States",
 	}
-	result, resp, err := svc.CreateBuildingV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -123,7 +123,7 @@ func TestUnitCreateBuilding_Success(t *testing.T) {
 func TestUnitCreateBuilding_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateBuildingV1(context.Background(), nil)
+	result, resp, err := svc.CreateV1(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -135,7 +135,7 @@ func TestUnitCreateBuilding_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestBuilding{Name: "Duplicate"}
-	result, resp, err := svc.CreateBuildingV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -154,7 +154,7 @@ func TestUnitUpdateBuildingByID_Success(t *testing.T) {
 		ZipPostalCode:  "78702",
 		Country:        "United States",
 	}
-	result, resp, err := svc.UpdateBuildingByIDV1(context.Background(), "1", req)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -167,7 +167,7 @@ func TestUnitUpdateBuildingByID_Success(t *testing.T) {
 func TestUnitUpdateBuildingByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateBuildingByIDV1(context.Background(), "", &RequestBuilding{Name: "x"})
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &RequestBuilding{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -177,7 +177,7 @@ func TestUnitUpdateBuildingByID_EmptyID(t *testing.T) {
 func TestUnitUpdateBuildingByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateBuildingByIDV1(context.Background(), "1", nil)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -188,7 +188,7 @@ func TestUnitDeleteBuildingByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteBuildingMock()
 
-	resp, err := svc.DeleteBuildingByIDV1(context.Background(), "1")
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
@@ -197,7 +197,7 @@ func TestUnitDeleteBuildingByID_Success(t *testing.T) {
 func TestUnitDeleteBuildingByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteBuildingByIDV1(context.Background(), "")
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "building ID is required")

@@ -25,7 +25,7 @@ func main() {
 	updateReq := &departments.RequestDepartment{
 		Name: "Updated Department Name",
 	}
-	result, _, err := jamfClient.Departments.UpdateDepartmentByIDV1(context.Background(), id, updateReq)
+	result, _, err := jamfClient.Departments.UpdateByIDV1(context.Background(), id, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

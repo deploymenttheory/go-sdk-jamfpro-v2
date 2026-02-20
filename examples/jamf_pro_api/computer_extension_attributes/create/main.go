@@ -31,7 +31,7 @@ func main() {
 		InputType:            "Text Field",
 	}
 
-	result, _, err := jamfClient.ComputerExtensionAttributes.CreateComputerExtensionAttributeV1(context.Background(), req)
+	result, _, err := jamfClient.ComputerExtensionAttributes.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

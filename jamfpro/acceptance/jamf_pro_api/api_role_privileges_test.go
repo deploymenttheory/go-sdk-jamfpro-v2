@@ -9,12 +9,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_APIRolePrivileges_List(t *testing.T) {
+func TestAcceptance_APIRolePrivileges_ListV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.APIRolePrivileges
 	ctx := context.Background()
 
-	result, resp, err := svc.ListPrivilegesV1(ctx)
+	result, resp, err := svc.ListV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -22,7 +22,7 @@ func TestAcceptance_APIRolePrivileges_List(t *testing.T) {
 	assert.NotEmpty(t, result.Privileges)
 }
 
-func TestAcceptance_APIRolePrivileges_SearchByName(t *testing.T) {
+func TestAcceptance_APIRolePrivileges_SearchByNameV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.APIRolePrivileges
 	ctx := context.Background()

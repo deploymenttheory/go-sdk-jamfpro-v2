@@ -22,23 +22,23 @@ func main() {
 	}
 
 	req := &packages.RequestPackage{
-		PackageName:           "go-sdk-v2-Package",
-		FileName:              "example.pkg",
-		CategoryID:            "-1",
-		Info:                  "Example package created via SDK",
-		Notes:                 "Metadata only - use UploadPackageV1 to add file",
-		Priority:              10,
-		FillUserTemplate:      packages.BoolPtr(true),
-		FillExistingUsers:     packages.BoolPtr(false),
-		RebootRequired:        packages.BoolPtr(false),
-		OSInstall:             packages.BoolPtr(false),
-		SuppressUpdates:       packages.BoolPtr(false),
-		SuppressFromDock:      packages.BoolPtr(false),
-		SuppressEula:          packages.BoolPtr(false),
+		PackageName:          "go-sdk-v2-Package",
+		FileName:             "example.pkg",
+		CategoryID:           "-1",
+		Info:                 "Example package created via SDK",
+		Notes:                "Metadata only - use UploadV1 to add file",
+		Priority:             10,
+		FillUserTemplate:     packages.BoolPtr(true),
+		FillExistingUsers:    packages.BoolPtr(false),
+		RebootRequired:       packages.BoolPtr(false),
+		OSInstall:            packages.BoolPtr(false),
+		SuppressUpdates:      packages.BoolPtr(false),
+		SuppressFromDock:     packages.BoolPtr(false),
+		SuppressEula:         packages.BoolPtr(false),
 		SuppressRegistration: packages.BoolPtr(false),
 	}
 
-	result, _, err := jamfClient.Packages.CreatePackageV1(context.Background(), req)
+	result, _, err := jamfClient.Packages.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

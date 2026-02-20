@@ -4,10 +4,18 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/accounts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/accounts_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/activation_code"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/advanced_computer_searches"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/advanced_user_searches"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/allowed_file_extensions"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/byoprofiles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/classes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/directory_bindings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/disk_encryption_configurations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ibeacons"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ldap_servers"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/network_segments"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/patch_external_sources"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/printers"
@@ -38,10 +46,20 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/ldap"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/locales"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/login_customization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/adue_session_token_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/reenrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/return_to_service"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_plus_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/service_discovery_enrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_certificate"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/notifications"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/onboarding"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/policy_properties"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smtp_server"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/startup_status"
@@ -56,10 +74,18 @@ type Client struct {
 	transport *client.Transport
 
 	// Classic API services
+	Accounts                     *accounts.Service
+	AccountGroups                *accounts_groups.Service
+	ActivationCode               *activation_code.Service
+	AdvancedComputerSearches     *advanced_computer_searches.Service
+	AdvancedUserSearches         *advanced_user_searches.Service
 	AllowedFileExtensions        *allowed_file_extensions.Service
+	BYOProfiles                  *byoprofiles.Service
+	Classes                      *classes.Service
 	DirectoryBindings            *directory_bindings.Service
 	DiskEncryptionConfigurations *disk_encryption_configurations.Service
 	IBeacons                     *ibeacons.Service
+	LdapServers                  *ldap_servers.Service
 	NetworkSegments              *network_segments.Service
 	PatchExternalSources         *patch_external_sources.Service
 	Printers                     *printers.Service
@@ -89,14 +115,24 @@ type Client struct {
 	Icons                           *icons.Service
 	Ldap                            *ldap.Service
 	LoginCustomization              *login_customization.Service
-	JamfProInformation              *jamf_pro_information.Service
+	ServiceDiscoveryEnrollment      *service_discovery_enrollment.Service
+	SelfServiceSettings              *self_service_settings.Service
+	Reenrollment                     *reenrollment.Service
+	AdueSessionTokenSettings         *adue_session_token_settings.Service
+	SsoCertificate                   *sso_certificate.Service
+	SsoSettings                      *sso_settings.Service
+	JamfProInformation               *jamf_pro_information.Service
 	JamfProVersion                  *jamf_pro_version.Service
 	Locales                         *locales.Service
 	MobileDeviceExtensionAttributes *mobile_device_extension_attributes.Service
 	MobileDeviceGroups              *mobile_device_groups.Service
 	Notifications                   *notifications.Service
+	Onboarding                      *onboarding.Service
 	Packages                        *packages.Service
+	PolicyProperties                *policy_properties.Service
+	ReturnToService                 *return_to_service.Service
 	Scripts                         *scripts.Service
+	SelfServicePlusSettings         *self_service_plus_settings.Service
 	SMTPServer                      *smtp_server.Service
 	StartupStatus                   *startup_status.Service
 	TimeZones                       *time_zones.Service
@@ -112,10 +148,18 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 	}
 	c := &Client{
 		transport:                       transport,
+		Accounts:                        accounts.NewService(transport),
+		AccountGroups:                   accounts_groups.NewService(transport),
+		ActivationCode:                  activation_code.NewService(transport),
+		AdvancedComputerSearches:        advanced_computer_searches.NewService(transport),
+		AdvancedUserSearches:            advanced_user_searches.NewService(transport),
 		AllowedFileExtensions:           allowed_file_extensions.NewService(transport),
+		BYOProfiles:                     byoprofiles.NewService(transport),
+		Classes:                         classes.NewService(transport),
 		DirectoryBindings:               directory_bindings.NewService(transport),
 		DiskEncryptionConfigurations:    disk_encryption_configurations.NewService(transport),
 		IBeacons:                        ibeacons.NewService(transport),
+		LdapServers:                     ldap_servers.NewService(transport),
 		NetworkSegments:                 network_segments.NewService(transport),
 		PatchExternalSources:            patch_external_sources.NewService(transport),
 		Printers:                        printers.NewService(transport),
@@ -143,14 +187,24 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		Icons:                           icons.NewService(transport),
 		Ldap:                            ldap.NewService(transport),
 		LoginCustomization:              login_customization.NewService(transport),
+		ServiceDiscoveryEnrollment:      service_discovery_enrollment.NewService(transport),
+		SelfServiceSettings:              self_service_settings.NewService(transport),
+		Reenrollment:                     reenrollment.NewService(transport),
+		AdueSessionTokenSettings:         adue_session_token_settings.NewService(transport),
+		SsoCertificate:                  sso_certificate.NewService(transport),
+		SsoSettings:                     sso_settings.NewService(transport),
 		JamfProInformation:              jamf_pro_information.NewService(transport),
 		JamfProVersion:                  jamf_pro_version.NewService(transport),
 		Locales:                         locales.NewService(transport),
 		MobileDeviceExtensionAttributes: mobile_device_extension_attributes.NewService(transport),
 		MobileDeviceGroups:              mobile_device_groups.NewService(transport),
 		Notifications:                   notifications.NewService(transport),
+		Onboarding:                      onboarding.NewService(transport),
 		Packages:                        packages.NewService(transport),
+		PolicyProperties:                policy_properties.NewService(transport),
+		ReturnToService:                 return_to_service.NewService(transport),
 		Scripts:                         scripts.NewService(transport),
+		SelfServicePlusSettings:         self_service_plus_settings.NewService(transport),
 		SMTPServer:                      smtp_server.NewService(transport),
 		StartupStatus:                   startup_status.NewService(transport),
 		TimeZones:                       time_zones.NewService(transport),

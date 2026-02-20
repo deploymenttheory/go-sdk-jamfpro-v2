@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<group>
+    <id>1</id>
+    <name>testgroup1</name>
+    <access_level>Full Access</access_level>
+    <privilege_set>Administrator</privilege_set>
+    <site>
+        <id>-1</id>
+        <name>None</name>
+    </site>
+    <privileges>
+        <jss_objects>
+            <privilege>Read Accounts</privilege>
+            <privilege>Update Accounts</privilege>
+        </jss_objects>
+        <jss_settings>
+            <privilege>Read JSS Settings</privilege>
+        </jss_settings>
+        <jss_actions>
+            <privilege>Send Computer Unmanage Command</privilege>
+        </jss_actions>
+    </privileges>
+    <members>
+        <user>
+            <id>1</id>
+            <name>testuser1</name>
+        </user>
+        <user>
+            <id>2</id>
+            <name>testuser2</name>
+        </user>
+    </members>
+    <ldap_server>
+        <id>-1</id>
+        <name>None</name>
+    </ldap_server>
+</group>

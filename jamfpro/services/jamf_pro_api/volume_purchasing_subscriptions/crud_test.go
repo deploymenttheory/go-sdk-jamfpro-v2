@@ -19,7 +19,7 @@ func TestUnitListVolumePurchasingSubscriptions_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
-	result, resp, err := svc.ListVolumePurchasingSubscriptionsV1(context.Background(), nil)
+	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -35,7 +35,7 @@ func TestUnitGetVolumePurchasingSubscriptionByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
-	result, resp, err := svc.GetVolumePurchasingSubscriptionByIDV1(context.Background(), "1")
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -49,7 +49,7 @@ func TestUnitGetVolumePurchasingSubscriptionByID_Success(t *testing.T) {
 func TestUnitGetVolumePurchasingSubscriptionByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetVolumePurchasingSubscriptionByIDV1(context.Background(), "")
+	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -59,7 +59,7 @@ func TestUnitGetVolumePurchasingSubscriptionByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetVolumePurchasingSubscriptionByIDV1(context.Background(), "999")
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -74,7 +74,7 @@ func TestUnitCreateVolumePurchasingSubscription_Success(t *testing.T) {
 		Name:    "New VPS",
 		Enabled: true,
 	}
-	result, resp, err := svc.CreateVolumePurchasingSubscriptionV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -87,7 +87,7 @@ func TestUnitCreateVolumePurchasingSubscription_Success(t *testing.T) {
 func TestUnitCreateVolumePurchasingSubscription_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateVolumePurchasingSubscriptionV1(context.Background(), nil)
+	result, resp, err := svc.CreateV1(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -101,7 +101,7 @@ func TestUnitUpdateVolumePurchasingSubscriptionByID_Success(t *testing.T) {
 		Name:    "VPS One Updated",
 		Enabled: false,
 	}
-	result, resp, err := svc.UpdateVolumePurchasingSubscriptionByIDV1(context.Background(), "1", req)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -115,7 +115,7 @@ func TestUnitDeleteVolumePurchasingSubscriptionByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
-	resp, err := svc.DeleteVolumePurchasingSubscriptionByIDV1(context.Background(), "1")
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
@@ -124,7 +124,7 @@ func TestUnitDeleteVolumePurchasingSubscriptionByID_Success(t *testing.T) {
 func TestUnitDeleteVolumePurchasingSubscriptionByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteVolumePurchasingSubscriptionByIDV1(context.Background(), "")
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_AdvancedMobileDeviceSearches_List(t *testing.T) {
+func TestAcceptance_AdvancedMobileDeviceSearches_ListV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AdvancedMobileDeviceSearches
 	ctx := context.Background()

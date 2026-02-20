@@ -19,7 +19,7 @@ func TestUnitListDepartments_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListDepartmentsMock()
 
-	result, resp, err := svc.ListDepartmentsV1(context.Background(), nil)
+	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -38,7 +38,7 @@ func TestUnitListDepartments_WithrsqlQuery(t *testing.T) {
 	mock.RegisterListDepartmentsMock()
 
 	params := map[string]string{"page": "0", "page-size": "50", "sort": "name:asc"}
-	result, resp, err := svc.ListDepartmentsV1(context.Background(), params)
+	result, resp, err := svc.ListV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -49,7 +49,7 @@ func TestUnitListDepartments_WithRSQLFilter(t *testing.T) {
 	mock.RegisterListDepartmentsRSQLMock()
 
 	rsqlQuery := map[string]string{"filter": `name=="Sales"`}
-	result, resp, err := svc.ListDepartmentsV1(context.Background(), rsqlQuery)
+	result, resp, err := svc.ListV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -66,7 +66,7 @@ func TestUnitGetDepartmentByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetDepartmentMock()
 
-	result, resp, err := svc.GetDepartmentByIDV1(context.Background(), "1")
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -79,7 +79,7 @@ func TestUnitGetDepartmentByID_Success(t *testing.T) {
 func TestUnitGetDepartmentByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetDepartmentByIDV1(context.Background(), "")
+	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -90,7 +90,7 @@ func TestUnitGetDepartmentByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetDepartmentByIDV1(context.Background(), "999")
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -102,7 +102,7 @@ func TestUnitCreateDepartment_Success(t *testing.T) {
 	mock.RegisterCreateDepartmentMock()
 
 	req := &RequestDepartment{Name: "Marketing"}
-	result, resp, err := svc.CreateDepartmentV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -115,7 +115,7 @@ func TestUnitCreateDepartment_Success(t *testing.T) {
 func TestUnitCreateDepartment_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateDepartmentV1(context.Background(), nil)
+	result, resp, err := svc.CreateV1(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -127,7 +127,7 @@ func TestUnitCreateDepartment_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestDepartment{Name: "Duplicate"}
-	result, resp, err := svc.CreateDepartmentV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -139,7 +139,7 @@ func TestUnitUpdateDepartmentByID_Success(t *testing.T) {
 	mock.RegisterUpdateDepartmentMock()
 
 	req := &RequestDepartment{Name: "Engineering Updated"}
-	result, resp, err := svc.UpdateDepartmentByIDV1(context.Background(), "1", req)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -152,7 +152,7 @@ func TestUnitUpdateDepartmentByID_Success(t *testing.T) {
 func TestUnitUpdateDepartmentByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateDepartmentByIDV1(context.Background(), "", &RequestDepartment{Name: "x"})
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &RequestDepartment{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -162,7 +162,7 @@ func TestUnitUpdateDepartmentByID_EmptyID(t *testing.T) {
 func TestUnitUpdateDepartmentByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateDepartmentByIDV1(context.Background(), "1", nil)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -173,7 +173,7 @@ func TestUnitDeleteDepartmentByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteDepartmentMock()
 
-	resp, err := svc.DeleteDepartmentByIDV1(context.Background(), "1")
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
@@ -182,7 +182,7 @@ func TestUnitDeleteDepartmentByID_Success(t *testing.T) {
 func TestUnitDeleteDepartmentByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteDepartmentByIDV1(context.Background(), "")
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "department ID is required")

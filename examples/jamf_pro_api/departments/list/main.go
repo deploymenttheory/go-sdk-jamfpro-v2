@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	result, _, err := jamfClient.Departments.ListDepartmentsV1(context.Background(), map[string]string{
+	result, _, err := jamfClient.Departments.ListV1(context.Background(), map[string]string{
 		"page":     "0",
 		"pageSize": "50",
 	})

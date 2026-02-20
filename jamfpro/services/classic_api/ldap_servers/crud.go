@@ -170,9 +170,10 @@ func (s *Service) CreateLDAPServer(ctx context.Context, request *RequestLDAPServ
 	}
 
 	// Convert CreateResponse to ListItem
+	// Note: Classic API only returns ID in create response, name comes from request
 	result := &ListItem{
 		ID:   createResp.ID,
-		Name: createResp.Name,
+		Name: request.Connection.Name,
 	}
 
 	return result, resp, nil

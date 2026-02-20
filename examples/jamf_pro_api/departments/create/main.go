@@ -25,7 +25,7 @@ func main() {
 		Name: "go-sdk-v2-Department",
 	}
 
-	result, _, err := jamfClient.Departments.CreateDepartmentV1(context.Background(), req)
+	result, _, err := jamfClient.Departments.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

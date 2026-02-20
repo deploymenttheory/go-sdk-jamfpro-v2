@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupID := "1" // Replace with the desired smart computer group ID
-	result, _, err := jamfClient.ComputerGroups.GetSmartGroupByIDV2(context.Background(), groupID)
+	result, _, err := jamfClient.ComputerGroups.GetSmartByIDV2(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

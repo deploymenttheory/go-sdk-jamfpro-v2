@@ -13,30 +13,30 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
 	VolumePurchasingLocationsServiceInterface interface {
-		// ListVolumePurchasingLocationsV1 returns all volume purchasing location objects (Get Volume Purchasing Location objects).
+		// ListV1 returns all volume purchasing location objects (Get Volume Purchasing Location objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
-		ListVolumePurchasingLocationsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
-		// GetVolumePurchasingLocationByIDV1 returns the specified volume purchasing location by ID (Get specified Volume Purchasing Location object).
+		// GetByIDV1 returns the specified volume purchasing location by ID (Get specified Volume Purchasing Location object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id
-		GetVolumePurchasingLocationByIDV1(ctx context.Context, id string) (*ResourceVolumePurchasingLocation, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceVolumePurchasingLocation, *interfaces.Response, error)
 
-		// CreateVolumePurchasingLocationV1 creates a new volume purchasing location (Create Volume Purchasing Location record).
+		// CreateV1 creates a new volume purchasing location (Create Volume Purchasing Location record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations
-		CreateVolumePurchasingLocationV1(ctx context.Context, request *RequestVolumePurchasingLocation) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestVolumePurchasingLocation) (*CreateResponse, *interfaces.Response, error)
 
-		// UpdateVolumePurchasingLocationByIDV1 updates the specified volume purchasing location by ID (Update specified Volume Purchasing Location object).
+		// UpdateByIDV1 updates the specified volume purchasing location by ID (Update specified Volume Purchasing Location object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-volume-purchasing-locations-id
-		UpdateVolumePurchasingLocationByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *interfaces.Response, error)
 
-		// DeleteVolumePurchasingLocationByIDV1 removes the specified volume purchasing location by ID (Remove specified Volume Purchasing Location record).
+		// DeleteByIDV1 removes the specified volume purchasing location by ID (Remove specified Volume Purchasing Location record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-volume-purchasing-locations-id
-		DeleteVolumePurchasingLocationByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 
 		// ReclaimVolumePurchasingLocationByIDV1 reclaims the specified volume purchasing location by ID.
 		//
@@ -67,10 +67,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API - Volume Purchasing Locations CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListVolumePurchasingLocationsV1 returns all volume purchasing location objects.
+// ListV1 returns all volume purchasing location objects.
 // URL: GET /api/v1/volume-purchasing-locations
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
-func (s *Service) ListVolumePurchasingLocationsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointVolumePurchasingLocationsV1
@@ -88,10 +88,10 @@ func (s *Service) ListVolumePurchasingLocationsV1(ctx context.Context, rsqlQuery
 	return &result, resp, nil
 }
 
-// GetVolumePurchasingLocationByIDV1 returns the specified volume purchasing location by ID.
+// GetByIDV1 returns the specified volume purchasing location by ID.
 // URL: GET /api/v1/volume-purchasing-locations/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id
-func (s *Service) GetVolumePurchasingLocationByIDV1(ctx context.Context, id string) (*ResourceVolumePurchasingLocation, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceVolumePurchasingLocation, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("volume purchasing location ID is required")
 	}
@@ -113,10 +113,10 @@ func (s *Service) GetVolumePurchasingLocationByIDV1(ctx context.Context, id stri
 	return &result, resp, nil
 }
 
-// CreateVolumePurchasingLocationV1 creates a new volume purchasing location.
+// CreateV1 creates a new volume purchasing location.
 // URL: POST /api/v1/volume-purchasing-locations
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations
-func (s *Service) CreateVolumePurchasingLocationV1(ctx context.Context, request *RequestVolumePurchasingLocation) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestVolumePurchasingLocation) (*CreateResponse, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -138,10 +138,10 @@ func (s *Service) CreateVolumePurchasingLocationV1(ctx context.Context, request 
 	return &result, resp, nil
 }
 
-// UpdateVolumePurchasingLocationByIDV1 updates the specified volume purchasing location by ID (PATCH).
+// UpdateByIDV1 updates the specified volume purchasing location by ID (PATCH).
 // URL: PATCH /api/v1/volume-purchasing-locations/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-volume-purchasing-locations-id
-func (s *Service) UpdateVolumePurchasingLocationByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -167,10 +167,10 @@ func (s *Service) UpdateVolumePurchasingLocationByIDV1(ctx context.Context, id s
 	return &result, resp, nil
 }
 
-// DeleteVolumePurchasingLocationByIDV1 removes the specified volume purchasing location by ID.
+// DeleteByIDV1 removes the specified volume purchasing location by ID.
 // URL: DELETE /api/v1/volume-purchasing-locations/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-volume-purchasing-locations-id
-func (s *Service) DeleteVolumePurchasingLocationByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("volume purchasing location ID is required")
 	}

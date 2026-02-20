@@ -9,12 +9,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_TimeZones_List(t *testing.T) {
+func TestAcceptance_TimeZones_ListV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.TimeZones
 	ctx := context.Background()
 
-	result, resp, err := svc.ListTimeZonesV1(ctx)
+	result, resp, err := svc.ListV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

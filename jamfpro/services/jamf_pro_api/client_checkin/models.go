@@ -14,3 +14,23 @@ type ResourceClientCheckinSettings struct {
 	StartupSsh                       bool `json:"startupSsh"`
 	EnableLocalConfigurationProfiles bool `json:"enableLocalConfigurationProfiles"`
 }
+
+// ResourceClientCheckinHistoryEntry represents a single client check-in history entry.
+type ResourceClientCheckinHistoryEntry struct {
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Date     string `json:"date"`
+	Note     string `json:"note"`
+	Details  string `json:"details"`
+}
+
+// ResourceClientCheckinHistory is the response for GetHistoryV3.
+type ResourceClientCheckinHistory struct {
+	TotalCount int                                `json:"totalCount"`
+	Results    []ResourceClientCheckinHistoryEntry `json:"results"`
+}
+
+// RequestClientCheckinHistoryNote is the body for AddHistoryNoteV3.
+type RequestClientCheckinHistoryNote struct {
+	Note string `json:"note"`
+}

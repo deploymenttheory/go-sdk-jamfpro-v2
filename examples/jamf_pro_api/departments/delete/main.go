@@ -21,7 +21,7 @@ func main() {
 	}
 
 	id := "1" // Replace with the desired department ID
-	_, err = jamfClient.Departments.DeleteDepartmentByIDV1(context.Background(), id)
+	_, err = jamfClient.Departments.DeleteByIDV1(context.Background(), id)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<advanced_computer_search>
+    <id>1</id>
+    <name>Test Search</name>
+    <view_as>Standard Web Page</view_as>
+    <sort_1>Computer Name</sort_1>
+    <sort_2></sort_2>
+    <sort_3></sort_3>
+    <criteria>
+        <size>2</size>
+        <criterion>
+            <name>Operating System</name>
+            <priority>0</priority>
+            <and_or>and</and_or>
+            <search_type>is</search_type>
+            <value>macOS 13</value>
+            <opening_paren>false</opening_paren>
+            <closing_paren>false</closing_paren>
+        </criterion>
+        <criterion>
+            <name>Computer Name</name>
+            <priority>1</priority>
+            <and_or>and</and_or>
+            <search_type>like</search_type>
+            <value>Mac</value>
+            <opening_paren>false</opening_paren>
+            <closing_paren>false</closing_paren>
+        </criterion>
+    </criteria>
+    <display_fields>
+        <display_field>
+            <name>Computer Name</name>
+        </display_field>
+        <display_field>
+            <name>Operating System</name>
+        </display_field>
+        <display_field>
+            <name>Serial Number</name>
+        </display_field>
+    </display_fields>
+    <computers>
+        <computer>
+            <id>100</id>
+            <name>TestMac001</name>
+            <udid>12345678-1234-1234-1234-123456789012</udid>
+            <Computer_Name>TestMac001</Computer_Name>
+        </computer>
+        <computer>
+            <id>101</id>
+            <name>TestMac002</name>
+            <udid>12345678-1234-1234-1234-123456789013</udid>
+            <Computer_Name>TestMac002</Computer_Name>
+        </computer>
+    </computers>
+    <site>
+        <id>-1</id>
+        <name>None</name>
+    </site>
+</advanced_computer_search>

@@ -13,15 +13,15 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
 	LoginCustomizationServiceInterface interface {
-		// GetLoginCustomizationV1 returns the current login customization settings (Get Login Customization).
+		// GetV1 returns the current login customization settings (Get Login Customization).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
-		GetLoginCustomizationV1(ctx context.Context) (*ResourceLoginCustomizationV1, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *interfaces.Response, error)
 
-		// UpdateLoginCustomizationV1 updates login customization settings (Update Login Customization / PUT).
+		// UpdateV1 updates login customization settings (Update Login Customization / PUT).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-login-customization
-		UpdateLoginCustomizationV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *interfaces.Response, error)
+		UpdateV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the login customization-related methods of the Jamf Pro API.
@@ -42,10 +42,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API - Login Customization Operations
 // -----------------------------------------------------------------------------
 
-// GetLoginCustomizationV1 returns the current login customization settings.
+// GetV1 returns the current login customization settings.
 // URL: GET /api/v1/login-customization
-// https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
-func (s *Service) GetLoginCustomizationV1(ctx context.Context) (*ResourceLoginCustomizationV1, *interfaces.Response, error) {
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
+func (s *Service) GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *interfaces.Response, error) {
 	var result ResourceLoginCustomizationV1
 
 	endpoint := EndpointLoginCustomizationV1
@@ -63,10 +63,10 @@ func (s *Service) GetLoginCustomizationV1(ctx context.Context) (*ResourceLoginCu
 	return &result, resp, nil
 }
 
-// UpdateLoginCustomizationV1 updates login customization settings.
+// UpdateV1 updates login customization settings.
 // URL: PUT /api/v1/login-customization
-// https://developer.jamf.com/jamf-pro/reference/put_v1-login-customization
-func (s *Service) UpdateLoginCustomizationV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *interfaces.Response, error) {
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-login-customization
+func (s *Service) UpdateV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

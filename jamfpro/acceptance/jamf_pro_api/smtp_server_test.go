@@ -9,12 +9,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_SMTPServer_Get(t *testing.T) {
+func TestAcceptance_SMTPServer_GetV2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SMTPServer
 	ctx := context.Background()
 
-	result, resp, err := svc.GetSMTPServerV2(ctx)
+	result, resp, err := svc.GetV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

@@ -24,7 +24,7 @@ func uniquePackageName(base string) string {
 
 // =============================================================================
 // TestAcceptance_Packages_Lifecycle exercises the full write/read/delete
-// lifecycle: DoPackageUpload (create metadata → upload → verify SHA3_512) → List → GetByID → Update → History → Delete.
+// lifecycle: CreateAndUpload (create metadata → upload → verify SHA3_512) → List → GetByID → Update → History → Delete.
 // =============================================================================
 
 func TestAcceptance_Packages_Lifecycle(t *testing.T) {
@@ -33,9 +33,9 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	svc := acc.Client.Packages
 	ctx := context.Background()
 
-	// 1. Download package from web source and DoPackageUpload (create metadata → upload → verify SHA3_512).
+	// 1. Download package from web source and CreateAndUpload (create metadata → upload → verify SHA3_512).
 	// Multipart upload uses application/octet-stream so the server hashes the same bytes we hashed locally.
-	acc.LogTestStage(t, "DoPackageUpload", "Downloading package from web source, creating metadata, uploading file, verifying SHA3_512")
+	acc.LogTestStage(t, "CreateAndUpload", "Downloading package from web source, creating metadata, uploading file, verifying SHA3_512")
 
 	tmpDir := t.TempDir()
 	pkgPath := filepath.Join(tmpDir, "Firefox_147.0.pkg")
@@ -52,23 +52,23 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	}()
 
 	createReq := &packages.RequestPackage{
-		PackageName:           uniquePackageName("acc-test-package"),
-		FileName:               "", // set by DoPackageUpload from filepath
-		CategoryID:            "-1",
-		Info:                  "Acceptance test package",
-		Notes:                 "Created by SDK acceptance test",
-		Priority:              10,
-		FillUserTemplate:      packages.BoolPtr(false), // must be false for non-.dmg (e.g. .pkg)
-		FillExistingUsers:     packages.BoolPtr(false),
-		RebootRequired:        packages.BoolPtr(false),
-		OSInstall:             packages.BoolPtr(false),
-		SuppressUpdates:       packages.BoolPtr(false),
-		SuppressFromDock:      packages.BoolPtr(false),
-		SuppressEula:          packages.BoolPtr(false),
+		PackageName:          uniquePackageName("acc-test-package"),
+		FileName:             "", // set by CreateAndUpload from filepath
+		CategoryID:           "-1",
+		Info:                 "Acceptance test package",
+		Notes:                "Created by SDK acceptance test",
+		Priority:             10,
+		FillUserTemplate:     packages.BoolPtr(false), // must be false for non-.dmg (e.g. .pkg)
+		FillExistingUsers:    packages.BoolPtr(false),
+		RebootRequired:       packages.BoolPtr(false),
+		OSInstall:            packages.BoolPtr(false),
+		SuppressUpdates:      packages.BoolPtr(false),
+		SuppressFromDock:     packages.BoolPtr(false),
+		SuppressEula:         packages.BoolPtr(false),
 		SuppressRegistration: packages.BoolPtr(false),
 	}
-	created, createResp, err := svc.DoPackageUpload(ctx, pkgPath, createReq)
-	require.NoError(t, err, "DoPackageUpload should not return an error")
+	created, createResp, err := svc.CreateAndUpload(ctx, pkgPath, createReq)
+	require.NoError(t, err, "CreateAndUpload should not return an error")
 	require.NotNil(t, created)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "create may return 200 or 201")
 	assert.NotEmpty(t, created.ID)
@@ -79,7 +79,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeletePackageByIDV1(cleanupCtx, packageID)
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, packageID)
 		acc.LogCleanupDeleteError(t, "package", packageID, delErr)
 	})
 
@@ -89,7 +89,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListPackagesV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
+	list, listResp, err := svc.ListV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -108,7 +108,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	// 3. GetByID
 	acc.LogTestStage(t, "GetByID", "Fetching package by ID=%s", packageID)
 
-	fetched, fetchResp, err := svc.GetPackageByIDV1(ctx, packageID)
+	fetched, fetchResp, err := svc.GetByIDV1(ctx, packageID)
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -136,7 +136,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 		SuppressEula:         fetched.SuppressEula,
 		SuppressRegistration: fetched.SuppressRegistration,
 	}
-	updated, updateResp, err := svc.UpdatePackageByIDV1(ctx, packageID, updateReq)
+	updated, updateResp, err := svc.UpdateByIDV1(ctx, packageID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	assert.Equal(t, 200, updateResp.StatusCode)
@@ -144,7 +144,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Package updated: ID=%s", packageID)
 
 	// 5. Re-fetch to verify
-	fetched2, _, err := svc.GetPackageByIDV1(ctx, packageID)
+	fetched2, _, err := svc.GetByIDV1(ctx, packageID)
 	require.NoError(t, err)
 	assert.Equal(t, updateReq.PackageName, fetched2.PackageName)
 	acc.LogTestSuccess(t, "Update verified: packageName=%q", fetched2.PackageName)
@@ -155,13 +155,13 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	noteReq := &packages.AddHistoryNotesRequest{
 		Note: fmt.Sprintf("Acceptance test note at %s", time.Now().Format(time.RFC3339)),
 	}
-	noteResp, err := svc.AddPackageHistoryNotesV1(ctx, packageID, noteReq)
+	noteResp, err := svc.AddHistoryNotesV1(ctx, packageID, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, noteResp)
 	assert.Equal(t, 201, noteResp.StatusCode)
 	acc.LogTestSuccess(t, "History note added")
 
-	history, histResp, err := svc.GetPackageHistoryV1(ctx, packageID, nil)
+	history, histResp, err := svc.GetHistoryV1(ctx, packageID, nil)
 	require.NoError(t, err)
 	require.NotNil(t, history)
 	assert.Equal(t, 200, histResp.StatusCode)
@@ -171,7 +171,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	// 6. Delete
 	acc.LogTestStage(t, "Delete", "Deleting package ID=%s", packageID)
 
-	deleteResp, err := svc.DeletePackageByIDV1(ctx, packageID)
+	deleteResp, err := svc.DeleteByIDV1(ctx, packageID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)
@@ -190,21 +190,21 @@ func TestAcceptance_Packages_ListWithRSQLFilter(t *testing.T) {
 
 	name := uniquePackageName("acc-rsql-package")
 	createReq := &packages.RequestPackage{
-		PackageName:           name,
-		FileName:              "acc-rsql.pkg",
-		CategoryID:            "-1",
-		Info:                  "RSQL filter test",
-		Priority:              5,
-		FillUserTemplate:      packages.BoolPtr(false),
-		RebootRequired:        packages.BoolPtr(false),
-		OSInstall:             packages.BoolPtr(false),
-		SuppressUpdates:       packages.BoolPtr(false),
-		SuppressFromDock:      packages.BoolPtr(false),
-		SuppressEula:          packages.BoolPtr(false),
-		SuppressRegistration:  packages.BoolPtr(false),
+		PackageName:          name,
+		FileName:             "acc-rsql.pkg",
+		CategoryID:           "-1",
+		Info:                 "RSQL filter test",
+		Priority:             5,
+		FillUserTemplate:     packages.BoolPtr(false),
+		RebootRequired:       packages.BoolPtr(false),
+		OSInstall:            packages.BoolPtr(false),
+		SuppressUpdates:      packages.BoolPtr(false),
+		SuppressFromDock:     packages.BoolPtr(false),
+		SuppressEula:         packages.BoolPtr(false),
+		SuppressRegistration: packages.BoolPtr(false),
 	}
 
-	created, _, err := svc.CreatePackageV1(ctx, createReq)
+	created, _, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -214,7 +214,7 @@ func TestAcceptance_Packages_ListWithRSQLFilter(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeletePackageByIDV1(cleanupCtx, packageID)
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, packageID)
 		acc.LogCleanupDeleteError(t, "package", packageID, delErr)
 	})
 
@@ -222,7 +222,7 @@ func TestAcceptance_Packages_ListWithRSQLFilter(t *testing.T) {
 		"filter": fmt.Sprintf(`packageName=="%s"`, name),
 	}
 
-	list, listResp, err := svc.ListPackagesV1(ctx, rsqlQuery)
+	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -253,20 +253,20 @@ func TestAcceptance_Packages_DeleteMultiple(t *testing.T) {
 	for i := 0; i < 2; i++ {
 		baseName := uniquePackageName(fmt.Sprintf("acc-bulk-delete-%d", i))
 		req := &packages.RequestPackage{
-			PackageName:           baseName,
-			FileName:              baseName + ".pkg",
-			CategoryID:            "-1",
-			Info:                  "Bulk delete test",
-			Priority:              9,
-			FillUserTemplate:      packages.BoolPtr(false),
-			RebootRequired:        packages.BoolPtr(false),
-			OSInstall:             packages.BoolPtr(false),
-			SuppressUpdates:       packages.BoolPtr(false),
-			SuppressFromDock:      packages.BoolPtr(false),
-			SuppressEula:          packages.BoolPtr(false),
-			SuppressRegistration:  packages.BoolPtr(false),
+			PackageName:          baseName,
+			FileName:             baseName + ".pkg",
+			CategoryID:           "-1",
+			Info:                 "Bulk delete test",
+			Priority:             9,
+			FillUserTemplate:     packages.BoolPtr(false),
+			RebootRequired:       packages.BoolPtr(false),
+			OSInstall:            packages.BoolPtr(false),
+			SuppressUpdates:      packages.BoolPtr(false),
+			SuppressFromDock:     packages.BoolPtr(false),
+			SuppressEula:         packages.BoolPtr(false),
+			SuppressRegistration: packages.BoolPtr(false),
 		}
-		created, _, err := svc.CreatePackageV1(ctx, req)
+		created, _, err := svc.CreateV1(ctx, req)
 		require.NoError(t, err)
 		require.NotNil(t, created)
 		ids = append(ids, created.ID)
@@ -277,7 +277,7 @@ func TestAcceptance_Packages_DeleteMultiple(t *testing.T) {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 		defer cancel()
 		for _, id := range ids {
-			_, delErr := svc.DeletePackageByIDV1(cleanupCtx, id)
+			_, delErr := svc.DeleteByIDV1(cleanupCtx, id)
 			acc.LogCleanupDeleteError(t, "package", id, delErr)
 		}
 	})
@@ -290,7 +290,7 @@ func TestAcceptance_Packages_DeleteMultiple(t *testing.T) {
 	acc.LogTestSuccess(t, "Bulk delete of %d packages succeeded", len(ids))
 
 	for _, id := range ids {
-		_, _, getErr := svc.GetPackageByIDV1(ctx, id)
+		_, _, getErr := svc.GetByIDV1(ctx, id)
 		assert.Error(t, getErr, "deleted package ID=%s should return error on Get", id)
 	}
 }
@@ -304,26 +304,26 @@ func TestAcceptance_Packages_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.Packages
 
-	t.Run("GetPackageByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.GetPackageByIDV1(context.Background(), "")
+	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
+		_, _, err := svc.GetByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "package ID is required")
 	})
 
-	t.Run("CreatePackageV1_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreatePackageV1(context.Background(), nil)
+	t.Run("CreateV1_NilRequest", func(t *testing.T) {
+		_, _, err := svc.CreateV1(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdatePackageByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdatePackageByIDV1(context.Background(), "", &packages.ResourcePackage{PackageName: "x"})
+	t.Run("UpdateByIDV1_EmptyID", func(t *testing.T) {
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &packages.ResourcePackage{PackageName: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})
 
-	t.Run("DeletePackageByIDV1_EmptyID", func(t *testing.T) {
-		_, err := svc.DeletePackageByIDV1(context.Background(), "")
+	t.Run("DeleteByIDV1_EmptyID", func(t *testing.T) {
+		_, err := svc.DeleteByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "package ID is required")
 	})
@@ -334,14 +334,14 @@ func TestAcceptance_Packages_ValidationErrors(t *testing.T) {
 		assert.Contains(t, err.Error(), "ids are required")
 	})
 
-	t.Run("GetPackageHistoryV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.GetPackageHistoryV1(context.Background(), "", nil)
+	t.Run("GetHistoryV1_EmptyID", func(t *testing.T) {
+		_, _, err := svc.GetHistoryV1(context.Background(), "", nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "package ID is required")
 	})
 
-	t.Run("AddPackageHistoryNotesV1_NilRequest", func(t *testing.T) {
-		_, err := svc.AddPackageHistoryNotesV1(context.Background(), "1", nil)
+	t.Run("AddHistoryNotesV1_NilRequest", func(t *testing.T) {
+		_, err := svc.AddHistoryNotesV1(context.Background(), "1", nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request body is required")
 	})

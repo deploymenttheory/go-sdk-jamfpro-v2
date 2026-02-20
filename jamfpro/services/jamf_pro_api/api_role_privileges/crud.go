@@ -14,10 +14,10 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/api-role-privileges
 	APIRolePrivilegesServiceInterface interface {
-		// ListPrivilegesV1 returns all API role privileges (Get API Role Privileges).
+		// ListV1 returns all API role privileges (Get API Role Privileges).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges
-		ListPrivilegesV1(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
 		// SearchPrivilegesByNameV1 returns privileges matching the given name (Get API Role Privileges by name).
 		//
@@ -39,10 +39,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// ListPrivilegesV1 returns all API role privileges.
+// ListV1 returns all API role privileges.
 // URL: GET /api/v1/api-role-privileges
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges
-func (s *Service) ListPrivilegesV1(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointAPIRolePrivilegesV1

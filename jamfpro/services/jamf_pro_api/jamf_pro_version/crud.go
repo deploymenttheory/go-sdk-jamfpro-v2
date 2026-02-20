@@ -18,7 +18,7 @@ type (
 		GetV1(ctx context.Context) (*ResourceJamfProVersion, *interfaces.Response, error)
 	}
 
-	// Service handles communication with the Jamf Pro version endpoint.
+	// Service handles communication with the Jamf Pro version-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-version
 	Service struct {
@@ -31,6 +31,10 @@ var _ JamfProVersionServiceInterface = (*Service)(nil)
 func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
+
+// -----------------------------------------------------------------------------
+// Jamf Pro API - Jamf Pro Version Operations
+// -----------------------------------------------------------------------------
 
 // GetV1 returns the Jamf Pro server version.
 // URL: GET /api/v1/jamf-pro-version

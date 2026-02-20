@@ -26,7 +26,7 @@ func main() {
 		ComputerIds: []string{},
 	}
 
-	result, _, err := jamfClient.ComputerGroups.CreateStaticGroupV2(context.Background(), req)
+	result, _, err := jamfClient.ComputerGroups.CreateStaticV2(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_AppInstallers_ListTitles(t *testing.T) {
+func TestAcceptance_AppInstallers_ListTitlesV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AppInstallers
 	ctx := context.Background()
@@ -21,7 +21,7 @@ func TestAcceptance_AppInstallers_ListTitles(t *testing.T) {
 	require.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_AppInstallers_ListDeployments(t *testing.T) {
+func TestAcceptance_AppInstallers_ListDeploymentsV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AppInstallers
 	ctx := context.Background()

@@ -31,7 +31,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_Lifecycle(t *testing.T) {
 		InventoryDisplayType: "General",
 		InputType:            "TEXT",
 	}
-	created, createResp, err := svc.CreateMobileDeviceExtensionAttributeV1(ctx, createReq)
+	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
@@ -42,12 +42,12 @@ func TestAcceptance_MobileDeviceExtensionAttributes_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteMobileDeviceExtensionAttributeByIDV1(cleanupCtx, eaID)
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, eaID)
 		acc.LogCleanupDeleteError(t, "mobile device extension attribute", eaID, delErr)
 	})
 
 	acc.LogTestStage(t, "List", "Listing mobile device extension attributes")
-	list, listResp, err := svc.ListMobileDeviceExtensionAttributesV1(ctx, map[string]string{"page": "0", "page-size": "200"})
+	list, listResp, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -63,7 +63,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_Lifecycle(t *testing.T) {
 	assert.True(t, found)
 
 	acc.LogTestStage(t, "GetByID", "Fetching mobile device extension attribute by ID=%s", eaID)
-	fetched, fetchResp, err := svc.GetMobileDeviceExtensionAttributeByIDV1(ctx, eaID)
+	fetched, fetchResp, err := svc.GetByIDV1(ctx, eaID)
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -79,19 +79,19 @@ func TestAcceptance_MobileDeviceExtensionAttributes_Lifecycle(t *testing.T) {
 		InventoryDisplayType: "General",
 		InputType:            "TEXT",
 	}
-	updated, updateResp, err := svc.UpdateMobileDeviceExtensionAttributeByIDV1(ctx, eaID, updateReq)
+	updated, updateResp, err := svc.UpdateByIDV1(ctx, eaID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 202}, updateResp.StatusCode)
 	assert.Equal(t, eaID, updated.ID)
 
-	verified, _, err := svc.GetMobileDeviceExtensionAttributeByIDV1(ctx, eaID)
+	verified, _, err := svc.GetByIDV1(ctx, eaID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, updatedName, verified.Name)
 
 	acc.LogTestStage(t, "Delete", "Deleting mobile device extension attribute ID=%s", eaID)
-	deleteResp, err := svc.DeleteMobileDeviceExtensionAttributeByIDV1(ctx, eaID)
+	deleteResp, err := svc.DeleteByIDV1(ctx, eaID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)

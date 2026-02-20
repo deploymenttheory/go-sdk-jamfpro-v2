@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<advanced_computer_searches>
+    <size>2</size>
+    <advanced_computer_search>
+        <id>1</id>
+        <name>Test Search</name>
+    </advanced_computer_search>
+    <advanced_computer_search>
+        <id>2</id>
+        <name>Another Search</name>
+    </advanced_computer_search>
+</advanced_computer_searches>

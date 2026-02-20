@@ -22,7 +22,7 @@ func main() {
 	}
 
 	buildingID := "1" // Replace with the desired building ID
-	result, _, err := jamfClient.Buildings.GetBuildingByIDV1(context.Background(), buildingID)
+	result, _, err := jamfClient.Buildings.GetByIDV1(context.Background(), buildingID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

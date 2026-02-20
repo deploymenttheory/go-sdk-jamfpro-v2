@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_Bookmarks_List(t *testing.T) {
+func TestAcceptance_Bookmarks_ListV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Bookmarks
 	ctx := context.Background()

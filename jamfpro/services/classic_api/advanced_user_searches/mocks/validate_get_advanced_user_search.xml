@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<advanced_user_search>
+    <id>1</id>
+    <name>Test Search</name>
+    <criteria>
+        <size>2</size>
+        <criterion>
+            <name>Username</name>
+            <priority>0</priority>
+            <and_or>and</and_or>
+            <search_type>like</search_type>
+            <value>test</value>
+            <opening_paren>false</opening_paren>
+            <closing_paren>false</closing_paren>
+        </criterion>
+        <criterion>
+            <name>Email Address</name>
+            <priority>1</priority>
+            <and_or>and</and_or>
+            <search_type>like</search_type>
+            <value>@example.com</value>
+            <opening_paren>false</opening_paren>
+            <closing_paren>false</closing_paren>
+        </criterion>
+    </criteria>
+    <display_fields>
+        <display_field>
+            <name>Username</name>
+        </display_field>
+        <display_field>
+            <name>Email Address</name>
+        </display_field>
+        <display_field>
+            <name>Full Name</name>
+        </display_field>
+    </display_fields>
+    <users>
+        <user>
+            <id>100</id>
+            <name>Test User 1</name>
+            <Username>testuser1</Username>
+            <Email>testuser1@example.com</Email>
+        </user>
+        <user>
+            <id>101</id>
+            <name>Test User 2</name>
+            <Username>testuser2</Username>
+            <Email>testuser2@example.com</Email>
+        </user>
+    </users>
+    <site>
+        <id>-1</id>
+        <name>None</name>
+    </site>
+</advanced_user_search>

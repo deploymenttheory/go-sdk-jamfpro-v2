@@ -15,9 +15,9 @@ func setupMockService(t *testing.T) (*Service, *mocks.SMTPServerMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetSMTPServerV2_Success(t *testing.T) {
+func TestUnitGetV2_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
-	result, resp, err := svc.GetSMTPServerV2(context.Background())
+	result, resp, err := svc.GetV2(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.Equal(t, 200, resp.StatusCode)
@@ -27,7 +27,7 @@ func TestUnitGetSMTPServerV2_Success(t *testing.T) {
 	require.Equal(t, "smtp.example.com", result.ConnectionSettings.Host)
 }
 
-func TestUnitUpdateSMTPServerV2_Success(t *testing.T) {
+func TestUnitUpdateV2_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	settings := &ResourceSMTPServer{
 		Enabled:            false,
@@ -35,15 +35,15 @@ func TestUnitUpdateSMTPServerV2_Success(t *testing.T) {
 		ConnectionSettings: &ResourceSMTPServerConnectionSettings{Host: "smtp.example.com", Port: 587},
 		SenderSettings:     &ResourceSMTPServerSenderSettings{EmailAddress: "jamf@example.com"},
 	}
-	result, resp, err := svc.UpdateSMTPServerV2(context.Background(), settings)
+	result, resp, err := svc.UpdateV2(context.Background(), settings)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateSMTPServerV2_NilSettings(t *testing.T) {
+func TestUnitUpdateV2_NilSettings(t *testing.T) {
 	svc, _ := setupMockService(t)
-	result, resp, err := svc.UpdateSMTPServerV2(context.Background(), nil)
+	result, resp, err := svc.UpdateV2(context.Background(), nil)
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.Nil(t, resp)

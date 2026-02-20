@@ -62,7 +62,7 @@ func (m *DirectoryBindingsMock) RegisterGetDirectoryBindingByIDMock() {
 }
 
 func (m *DirectoryBindingsMock) RegisterGetDirectoryBindingByNameMock() {
-	m.register("GET", "/JSSResource/directorybindings/name/AD Binding", 200, "validate_get_directory_binding.xml")
+	m.register("GET", "/JSSResource/directorybindings/name/AD%20Binding", 200, "validate_get_directory_binding.xml")
 }
 
 func (m *DirectoryBindingsMock) RegisterCreateDirectoryBindingMock() {
@@ -74,7 +74,7 @@ func (m *DirectoryBindingsMock) RegisterUpdateDirectoryBindingByIDMock() {
 }
 
 func (m *DirectoryBindingsMock) RegisterUpdateDirectoryBindingByNameMock() {
-	m.register("PUT", "/JSSResource/directorybindings/name/AD Binding", 200, "validate_update_directory_binding.xml")
+	m.register("PUT", "/JSSResource/directorybindings/name/AD%20Binding", 200, "validate_update_directory_binding.xml")
 }
 
 func (m *DirectoryBindingsMock) RegisterDeleteDirectoryBindingByIDMock() {
@@ -82,7 +82,7 @@ func (m *DirectoryBindingsMock) RegisterDeleteDirectoryBindingByIDMock() {
 }
 
 func (m *DirectoryBindingsMock) RegisterDeleteDirectoryBindingByNameMock() {
-	m.register("DELETE", "/JSSResource/directorybindings/name/AD Binding", 200, "")
+	m.register("DELETE", "/JSSResource/directorybindings/name/AD%20Binding", 200, "")
 }
 
 func (m *DirectoryBindingsMock) RegisterNotFoundErrorMock() {

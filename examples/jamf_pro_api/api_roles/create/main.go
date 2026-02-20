@@ -25,7 +25,7 @@ func main() {
 		DisplayName: "go-sdk-v2-API-Role",
 		Privileges:  []string{"Read Computers"},
 	}
-	result, _, err := jamfClient.APIRoles.CreateAPIRoleV1(context.Background(), req)
+	result, _, err := jamfClient.APIRoles.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

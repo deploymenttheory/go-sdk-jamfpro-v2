@@ -1,0 +1,1 @@
+{"keystore":{"type":"SELF_SERVICE","keystoreFileName":"sso.jamfcloud.com.jks","keystoreSetupType":"SELF_SERVICE"},"keystoreDetails":{"keys":["key-id-1"],"issuer":"CN=example","subject":"CN=example","expiration":"2030-01-01T00:00:00Z","serialNumber":12345}}

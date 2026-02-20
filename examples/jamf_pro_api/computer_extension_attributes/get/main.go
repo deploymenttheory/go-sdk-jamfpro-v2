@@ -22,7 +22,7 @@ func main() {
 	}
 
 	attrID := "1" // Replace with the desired computer extension attribute ID
-	result, _, err := jamfClient.ComputerExtensionAttributes.GetComputerExtensionAttributeByIDV1(context.Background(), attrID)
+	result, _, err := jamfClient.ComputerExtensionAttributes.GetByIDV1(context.Background(), attrID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

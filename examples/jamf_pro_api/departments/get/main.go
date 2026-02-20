@@ -22,7 +22,7 @@ func main() {
 	}
 
 	id := "1" // Replace with the desired department ID
-	result, _, err := jamfClient.Departments.GetDepartmentByIDV1(context.Background(), id)
+	result, _, err := jamfClient.Departments.GetByIDV1(context.Background(), id)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

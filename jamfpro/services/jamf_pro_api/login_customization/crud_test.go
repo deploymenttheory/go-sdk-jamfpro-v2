@@ -15,11 +15,11 @@ func setupMockService(t *testing.T) (*Service, *mocks.LoginCustomizationMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetLoginCustomizationV1_Success(t *testing.T) {
+func TestUnitGetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLoginCustomizationMock()
 
-	result, resp, err := svc.GetLoginCustomizationV1(context.Background())
+	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -28,7 +28,7 @@ func TestUnitGetLoginCustomizationV1_Success(t *testing.T) {
 	assert.Equal(t, "Accept", result.ActionText)
 }
 
-func TestUnitUpdateLoginCustomizationV1_Success(t *testing.T) {
+func TestUnitUpdateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateLoginCustomizationMock()
 
@@ -39,7 +39,7 @@ func TestUnitUpdateLoginCustomizationV1_Success(t *testing.T) {
 		DisclaimerMainText:      "Updated disclaimer main text",
 		ActionText:              "Accept",
 	}
-	result, resp, err := svc.UpdateLoginCustomizationV1(context.Background(), request)
+	result, resp, err := svc.UpdateV1(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

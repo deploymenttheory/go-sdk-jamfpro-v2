@@ -13,15 +13,15 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
 	SMTPServerServiceInterface interface {
-		// GetSMTPServerV2 returns the current SMTP server configuration (Get SMTP server).
+		// GetV2 returns the current SMTP server configuration (Get SMTP server).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
-		GetSMTPServerV2(ctx context.Context) (*ResourceSMTPServer, *interfaces.Response, error)
+		GetV2(ctx context.Context) (*ResourceSMTPServer, *interfaces.Response, error)
 
-		// UpdateSMTPServerV2 updates the SMTP server configuration (Update SMTP server).
+		// UpdateV2 updates the SMTP server configuration (Update SMTP server).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
-		UpdateSMTPServerV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error)
+		UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the SMTP server-related methods of the Jamf Pro API.
@@ -38,10 +38,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// GetSMTPServerV2 returns the current SMTP server configuration.
+// GetV2 returns the current SMTP server configuration.
 // URL: GET /api/v2/smtp-server
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
-func (s *Service) GetSMTPServerV2(ctx context.Context) (*ResourceSMTPServer, *interfaces.Response, error) {
+func (s *Service) GetV2(ctx context.Context) (*ResourceSMTPServer, *interfaces.Response, error) {
 	var result ResourceSMTPServer
 
 	endpoint := EndpointSMTPServerV2
@@ -59,10 +59,10 @@ func (s *Service) GetSMTPServerV2(ctx context.Context) (*ResourceSMTPServer, *in
 	return &result, resp, nil
 }
 
-// UpdateSMTPServerV2 updates the SMTP server configuration.
+// UpdateV2 updates the SMTP server configuration.
 // URL: PUT /api/v2/smtp-server
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
-func (s *Service) UpdateSMTPServerV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error) {
+func (s *Service) UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

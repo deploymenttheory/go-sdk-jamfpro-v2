@@ -21,7 +21,7 @@ func main() {
 	}
 
 	buildingID := "1" // Replace with the desired building ID to delete
-	_, err = jamfClient.Buildings.DeleteBuildingByIDV1(context.Background(), buildingID)
+	_, err = jamfClient.Buildings.DeleteByIDV1(context.Background(), buildingID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

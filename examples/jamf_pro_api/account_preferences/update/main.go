@@ -53,7 +53,7 @@ func main() {
 		UserEbookSearchMethod:                "CONTAINS",
 	}
 
-	updated, _, err := jamfClient.AccountPreferences.UpdateAccountPreferencesV2(context.Background(), &newSettings)
+	updated, _, err := jamfClient.AccountPreferences.UpdateV2(context.Background(), &newSettings)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

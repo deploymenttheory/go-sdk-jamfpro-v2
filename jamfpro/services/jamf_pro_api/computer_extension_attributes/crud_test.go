@@ -19,7 +19,7 @@ func TestUnitListComputerExtensionAttributes_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
-	result, resp, err := svc.ListComputerExtensionAttributesV1(context.Background(), nil)
+	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -38,7 +38,7 @@ func TestUnitListComputerExtensionAttributes_WithrsqlQuery(t *testing.T) {
 	mock.RegisterListMock()
 
 	params := map[string]string{"page": "0", "page-size": "50"}
-	result, resp, err := svc.ListComputerExtensionAttributesV1(context.Background(), params)
+	result, resp, err := svc.ListV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -48,7 +48,7 @@ func TestUnitGetComputerExtensionAttributeByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
-	result, resp, err := svc.GetComputerExtensionAttributeByIDV1(context.Background(), "1")
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -64,7 +64,7 @@ func TestUnitGetComputerExtensionAttributeByID_Success(t *testing.T) {
 func TestUnitGetComputerExtensionAttributeByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetComputerExtensionAttributeByIDV1(context.Background(), "")
+	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -74,7 +74,7 @@ func TestUnitGetComputerExtensionAttributeByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetComputerExtensionAttributeByIDV1(context.Background(), "999")
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -91,7 +91,7 @@ func TestUnitCreateComputerExtensionAttribute_Success(t *testing.T) {
 		InventoryDisplayType: "General",
 		InputType:            "Text Field",
 	}
-	result, resp, err := svc.CreateComputerExtensionAttributeV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -104,7 +104,7 @@ func TestUnitCreateComputerExtensionAttribute_Success(t *testing.T) {
 func TestUnitCreateComputerExtensionAttribute_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateComputerExtensionAttributeV1(context.Background(), nil)
+	result, resp, err := svc.CreateV1(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -121,7 +121,7 @@ func TestUnitUpdateComputerExtensionAttributeByID_Success(t *testing.T) {
 		InventoryDisplayType: "General",
 		InputType:            "Text Field",
 	}
-	result, resp, err := svc.UpdateComputerExtensionAttributeByIDV1(context.Background(), "1", req)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -136,7 +136,7 @@ func TestUnitUpdateComputerExtensionAttributeByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestComputerExtensionAttribute{Name: "x", DataType: "String", InventoryDisplayType: "General", InputType: "Text Field"}
 
-	result, resp, err := svc.UpdateComputerExtensionAttributeByIDV1(context.Background(), "", req)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -145,7 +145,7 @@ func TestUnitUpdateComputerExtensionAttributeByID_EmptyID(t *testing.T) {
 func TestUnitUpdateComputerExtensionAttributeByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateComputerExtensionAttributeByIDV1(context.Background(), "1", nil)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -155,7 +155,7 @@ func TestUnitDeleteComputerExtensionAttributeByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
-	resp, err := svc.DeleteComputerExtensionAttributeByIDV1(context.Background(), "1")
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
@@ -164,7 +164,7 @@ func TestUnitDeleteComputerExtensionAttributeByID_Success(t *testing.T) {
 func TestUnitDeleteComputerExtensionAttributeByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteComputerExtensionAttributeByIDV1(context.Background(), "")
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 }

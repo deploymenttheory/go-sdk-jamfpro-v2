@@ -30,7 +30,7 @@ func main() {
 		ActionText:              "Accept",
 	}
 
-	updated, _, err := jamfClient.LoginCustomization.UpdateLoginCustomizationV1(context.Background(), newLoginCustomization)
+	updated, _, err := jamfClient.LoginCustomization.UpdateV1(context.Background(), newLoginCustomization)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

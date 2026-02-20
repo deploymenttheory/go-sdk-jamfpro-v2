@@ -15,9 +15,9 @@ func setupMockService(t *testing.T) (*Service, *mocks.TimeZonesMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListTimeZonesV1_Success(t *testing.T) {
+func TestUnitListV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
-	result, resp, err := svc.ListTimeZonesV1(context.Background())
+	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.Equal(t, 200, resp.StatusCode)

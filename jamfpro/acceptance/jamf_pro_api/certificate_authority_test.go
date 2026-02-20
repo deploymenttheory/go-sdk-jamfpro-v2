@@ -9,12 +9,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_CertificateAuthority_GetActiveCertificateAuthorityV1(t *testing.T) {
+func TestAcceptance_CertificateAuthority_GetV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.CertificateAuthority
 	ctx := context.Background()
 
-	result, resp, err := svc.GetActiveCertificateAuthorityV1(ctx)
+	result, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

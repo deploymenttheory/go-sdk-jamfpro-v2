@@ -31,7 +31,7 @@ func main() {
 		Country:        "United States",
 	}
 
-	result, _, err := jamfClient.Buildings.UpdateBuildingByIDV1(context.Background(), buildingID, updateReq)
+	result, _, err := jamfClient.Buildings.UpdateByIDV1(context.Background(), buildingID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

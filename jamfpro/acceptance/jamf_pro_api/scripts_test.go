@@ -29,7 +29,7 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test script")
 
-	scriptName := uniqueName("acc-test-script")
+	scriptName := acc.UniqueName("acc-test-script")
 	createReq := &scripts.RequestScript{
 		Name:           scriptName,
 		Priority:       scripts.ScriptPriorityAfter,
@@ -104,7 +104,7 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Update", "Updating script ID=%s", scriptID)
 
-	updatedName := uniqueName("acc-test-script-updated")
+	updatedName := acc.UniqueName("acc-test-script-updated")
 	updateReq := &scripts.RequestScript{
 		Name:           updatedName,
 		Priority:       scripts.ScriptPriorityBefore,
@@ -214,7 +214,7 @@ func TestAcceptance_Scripts_ListWithRSQLFilter(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating script for RSQL filter test")
 
-	name := uniqueName("acc-rsql-script")
+	name := acc.UniqueName("acc-rsql-script")
 	createReq := &scripts.RequestScript{
 		Name:           name,
 		Priority:       scripts.ScriptPriorityAfter,

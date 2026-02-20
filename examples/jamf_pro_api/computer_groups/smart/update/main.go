@@ -29,7 +29,7 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.ComputerGroups.UpdateSmartGroupV2(context.Background(), groupID, req)
+	result, _, err := jamfClient.ComputerGroups.UpdateSmartV2(context.Background(), groupID, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

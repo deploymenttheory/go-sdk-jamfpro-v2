@@ -13,10 +13,10 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
 	CertificateAuthorityServiceInterface interface {
-		// GetActiveCertificateAuthorityV1 returns the active certificate authority X.509 details.
+		// GetV1 returns the active certificate authority X.509 details.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
-		GetActiveCertificateAuthorityV1(ctx context.Context) (*ResourceActiveCertificateAuthorityV1, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceActiveCertificateAuthorityV1, *interfaces.Response, error)
 		// GetActiveCertificateAuthorityDERV1 returns the active certificate authority in DER format.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active-der
@@ -57,10 +57,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API - Certificate Authority Operations
 // -----------------------------------------------------------------------------
 
-// GetActiveCertificateAuthorityV1 returns the active certificate authority X.509 details.
+// GetV1 returns the active certificate authority X.509 details.
 // URL: GET /api/v1/pki/certificate-authority/active
 // https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
-func (s *Service) GetActiveCertificateAuthorityV1(ctx context.Context) (*ResourceActiveCertificateAuthorityV1, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceActiveCertificateAuthorityV1, *interfaces.Response, error) {
 	endpoint := fmt.Sprintf("%s/active", EndpointCertificateAuthorityV1)
 	var result ResourceActiveCertificateAuthorityV1
 

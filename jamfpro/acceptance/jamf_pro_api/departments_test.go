@@ -12,10 +12,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func uniqueDepartmentName(base string) string {
-	return fmt.Sprintf("%s-%d", base, time.Now().UnixMilli())
-}
-
 // =============================================================================
 // TestAcceptance_Departments_Lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → Update → GetByID (verify) → Delete.
@@ -31,9 +27,9 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test department")
 
 	createReq := &departments.RequestDepartment{
-		Name: uniqueDepartmentName("acc-test-dept"),
+		Name: acc.UniqueName("acc-test-dept"),
 	}
-	created, createResp, err := svc.CreateDepartmentV1(ctx, createReq)
+	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateDepartmentV1 should not return an error")
 	require.NotNil(t, created)
 	assert.Equal(t, 201, createResp.StatusCode)
@@ -45,7 +41,7 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteDepartmentByIDV1(cleanupCtx, departmentID)
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, departmentID)
 		acc.LogCleanupDeleteError(t, "department", departmentID, delErr)
 	})
 
@@ -55,7 +51,7 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListDepartmentsV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
+	list, listResp, err := svc.ListV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -74,7 +70,7 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 	// 3. GetByID
 	acc.LogTestStage(t, "GetByID", "Fetching department by ID=%s", departmentID)
 
-	fetched, fetchResp, err := svc.GetDepartmentByIDV1(ctx, departmentID)
+	fetched, fetchResp, err := svc.GetByIDV1(ctx, departmentID)
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -86,9 +82,9 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating department ID=%s", departmentID)
 
 	updateReq := &departments.RequestDepartment{
-		Name: uniqueDepartmentName("acc-test-dept-updated"),
+		Name: acc.UniqueName("acc-test-dept-updated"),
 	}
-	updated, updateResp, err := svc.UpdateDepartmentByIDV1(ctx, departmentID, updateReq)
+	updated, updateResp, err := svc.UpdateByIDV1(ctx, departmentID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	assert.Equal(t, 200, updateResp.StatusCode)
@@ -96,7 +92,7 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Department updated: ID=%s", departmentID)
 
 	// 5. Re-fetch to verify
-	fetched2, _, err := svc.GetDepartmentByIDV1(ctx, departmentID)
+	fetched2, _, err := svc.GetByIDV1(ctx, departmentID)
 	require.NoError(t, err)
 	assert.Equal(t, updateReq.Name, fetched2.Name)
 	acc.LogTestSuccess(t, "Update verified: name=%q", fetched2.Name)
@@ -123,7 +119,7 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 	// 6. Delete
 	acc.LogTestStage(t, "Delete", "Deleting department ID=%s", departmentID)
 
-	deleteResp, err := svc.DeleteDepartmentByIDV1(ctx, departmentID)
+	deleteResp, err := svc.DeleteByIDV1(ctx, departmentID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)
@@ -140,10 +136,10 @@ func TestAcceptance_Departments_ListWithRSQLFilter(t *testing.T) {
 	svc := acc.Client.Departments
 	ctx := context.Background()
 
-	name := uniqueDepartmentName("acc-rsql-dept")
+	name := acc.UniqueName("acc-rsql-dept")
 	createReq := &departments.RequestDepartment{Name: name}
 
-	created, _, err := svc.CreateDepartmentV1(ctx, createReq)
+	created, _, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -153,7 +149,7 @@ func TestAcceptance_Departments_ListWithRSQLFilter(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteDepartmentByIDV1(cleanupCtx, departmentID)
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, departmentID)
 		acc.LogCleanupDeleteError(t, "department", departmentID, delErr)
 	})
 
@@ -161,7 +157,7 @@ func TestAcceptance_Departments_ListWithRSQLFilter(t *testing.T) {
 		"filter": fmt.Sprintf(`name=="%s"`, name),
 	}
 
-	list, listResp, err := svc.ListDepartmentsV1(ctx, rsqlQuery)
+	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -188,25 +184,25 @@ func TestAcceptance_Departments_ValidationErrors(t *testing.T) {
 	svc := acc.Client.Departments
 
 	t.Run("GetDepartmentByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.GetDepartmentByIDV1(context.Background(), "")
+		_, _, err := svc.GetByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "department ID is required")
 	})
 
 	t.Run("CreateDepartmentV1_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateDepartmentV1(context.Background(), nil)
+		_, _, err := svc.CreateV1(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateDepartmentByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateDepartmentByIDV1(context.Background(), "", &departments.RequestDepartment{Name: "x"})
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &departments.RequestDepartment{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})
 
 	t.Run("DeleteDepartmentByIDV1_EmptyID", func(t *testing.T) {
-		_, err := svc.DeleteDepartmentByIDV1(context.Background(), "")
+		_, err := svc.DeleteByIDV1(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "department ID is required")
 	})

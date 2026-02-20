@@ -21,7 +21,7 @@ func main() {
 	}
 
 	id := "1" // Replace with the desired category ID
-	_, err = jamfClient.Categories.DeleteCategoryByIDV1(context.Background(), id)
+	_, err = jamfClient.Categories.DeleteByIDV1(context.Background(), id)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

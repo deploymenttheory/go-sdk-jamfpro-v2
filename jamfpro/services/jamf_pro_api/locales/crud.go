@@ -12,10 +12,10 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
 	LocalesServiceInterface interface {
-		// ListLocalesV1 returns all available locales (Get Locales).
+		// ListV1 returns all available locales (Get Locales).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
-		ListLocalesV1(ctx context.Context) ([]ResourceLocale, *interfaces.Response, error)
+		ListV1(ctx context.Context) ([]ResourceLocale, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the locales-related methods of the Jamf Pro API.
@@ -32,10 +32,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// ListLocalesV1 returns all available locales.
+// -----------------------------------------------------------------------------
+// Jamf Pro API - Locales Operations
+// -----------------------------------------------------------------------------
+
+// ListV1 returns all available locales.
 // URL: GET /api/v1/locales
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
-func (s *Service) ListLocalesV1(ctx context.Context) ([]ResourceLocale, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context) ([]ResourceLocale, *interfaces.Response, error) {
 	var result []ResourceLocale
 
 	endpoint := EndpointLocalesV1

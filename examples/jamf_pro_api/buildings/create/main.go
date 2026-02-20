@@ -34,7 +34,7 @@ func main() {
 		Country:        "United States",
 	}
 
-	result, _, err := jamfClient.Buildings.CreateBuildingV1(context.Background(), req)
+	result, _, err := jamfClient.Buildings.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

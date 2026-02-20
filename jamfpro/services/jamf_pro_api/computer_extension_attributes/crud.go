@@ -13,30 +13,30 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes
 	ComputerExtensionAttributesServiceInterface interface {
-		// ListComputerExtensionAttributesV1 returns all computer extension attribute objects (Get Computer Extension Attribute objects).
+		// ListV1 returns all computer extension attribute objects (Get Computer Extension Attribute objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes
-		ListComputerExtensionAttributesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
-		// GetComputerExtensionAttributeByIDV1 returns the specified computer extension attribute by ID (Get specified Computer Extension Attribute object).
+		// GetByIDV1 returns the specified computer extension attribute by ID (Get specified Computer Extension Attribute object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id
-		GetComputerExtensionAttributeByIDV1(ctx context.Context, id string) (*ResourceComputerExtensionAttribute, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceComputerExtensionAttribute, *interfaces.Response, error)
 
-		// CreateComputerExtensionAttributeV1 creates a new computer extension attribute (Create Computer Extension Attribute record).
+		// CreateV1 creates a new computer extension attribute (Create Computer Extension Attribute record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes
-		CreateComputerExtensionAttributeV1(ctx context.Context, request *RequestComputerExtensionAttribute) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestComputerExtensionAttribute) (*CreateResponse, *interfaces.Response, error)
 
-		// UpdateComputerExtensionAttributeByIDV1 updates the specified computer extension attribute by ID (Update specified Computer Extension Attribute object).
+		// UpdateByIDV1 updates the specified computer extension attribute by ID (Update specified Computer Extension Attribute object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-computer-extension-attributes-id
-		UpdateComputerExtensionAttributeByIDV1(ctx context.Context, id string, request *RequestComputerExtensionAttribute) (*ResourceComputerExtensionAttribute, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestComputerExtensionAttribute) (*ResourceComputerExtensionAttribute, *interfaces.Response, error)
 
-		// DeleteComputerExtensionAttributeByIDV1 removes the specified computer extension attribute by ID (Remove specified Computer Extension Attribute record).
+		// DeleteByIDV1 removes the specified computer extension attribute by ID (Remove specified Computer Extension Attribute record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-computer-extension-attributes-id
-		DeleteComputerExtensionAttributeByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 
 		// DeleteComputerExtensionAttributesByIDV1 deletes multiple computer extension attributes by their IDs (Delete multiple Computer Extension Attributes by their IDs).
 		//
@@ -62,10 +62,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API - Computer Extension Attributes CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListComputerExtensionAttributesV1 returns all computer extension attribute objects.
+// ListV1 returns all computer extension attribute objects.
 // URL: GET /api/v1/computer-extension-attributes
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes
-func (s *Service) ListComputerExtensionAttributesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointComputerExtensionAttributesV1
@@ -83,10 +83,10 @@ func (s *Service) ListComputerExtensionAttributesV1(ctx context.Context, rsqlQue
 	return &result, resp, nil
 }
 
-// GetComputerExtensionAttributeByIDV1 returns the specified computer extension attribute by ID.
+// GetByIDV1 returns the specified computer extension attribute by ID.
 // URL: GET /api/v1/computer-extension-attributes/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id
-func (s *Service) GetComputerExtensionAttributeByIDV1(ctx context.Context, id string) (*ResourceComputerExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceComputerExtensionAttribute, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("computer extension attribute ID is required")
 	}
@@ -108,10 +108,10 @@ func (s *Service) GetComputerExtensionAttributeByIDV1(ctx context.Context, id st
 	return &result, resp, nil
 }
 
-// CreateComputerExtensionAttributeV1 creates a new computer extension attribute.
+// CreateV1 creates a new computer extension attribute.
 // URL: POST /api/v1/computer-extension-attributes
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes
-func (s *Service) CreateComputerExtensionAttributeV1(ctx context.Context, request *RequestComputerExtensionAttribute) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestComputerExtensionAttribute) (*CreateResponse, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -133,10 +133,10 @@ func (s *Service) CreateComputerExtensionAttributeV1(ctx context.Context, reques
 	return &result, resp, nil
 }
 
-// UpdateComputerExtensionAttributeByIDV1 updates the specified computer extension attribute by ID.
+// UpdateByIDV1 updates the specified computer extension attribute by ID.
 // URL: PUT /api/v1/computer-extension-attributes/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-computer-extension-attributes-id
-func (s *Service) UpdateComputerExtensionAttributeByIDV1(ctx context.Context, id string, request *RequestComputerExtensionAttribute) (*ResourceComputerExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestComputerExtensionAttribute) (*ResourceComputerExtensionAttribute, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -162,10 +162,10 @@ func (s *Service) UpdateComputerExtensionAttributeByIDV1(ctx context.Context, id
 	return &result, resp, nil
 }
 
-// DeleteComputerExtensionAttributeByIDV1 removes the specified computer extension attribute by ID.
+// DeleteByIDV1 removes the specified computer extension attribute by ID.
 // URL: DELETE /api/v1/computer-extension-attributes/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-computer-extension-attributes-id
-func (s *Service) DeleteComputerExtensionAttributeByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("computer extension attribute ID is required")
 	}

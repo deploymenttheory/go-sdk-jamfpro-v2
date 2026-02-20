@@ -11,10 +11,10 @@ type Criterion struct {
 
 // ResourceSmartGroup represents a smart computer group resource.
 type ResourceSmartGroup struct {
-	ID       string       `json:"id"`
-	Name     string       `json:"name"`
-	IsSmart  bool         `json:"isSmart"`
-	Criteria []Criterion  `json:"criteria"`
+	ID       string      `json:"id"`
+	Name     string      `json:"name"`
+	IsSmart  bool        `json:"isSmart"`
+	Criteria []Criterion `json:"criteria"`
 }
 
 // ResourceStaticGroup represents a static computer group resource.
@@ -25,13 +25,13 @@ type ResourceStaticGroup struct {
 	ComputerIds []string `json:"computerIds"`
 }
 
-// ListSmartResponse is the response for ListSmartGroupsV2.
+// ListSmartResponse is the response for ListSmartV2.
 type ListSmartResponse struct {
 	TotalCount int                  `json:"totalCount"`
 	Results    []ResourceSmartGroup `json:"results"`
 }
 
-// ListStaticResponse is the response for ListStaticGroupsV2.
+// ListStaticResponse is the response for ListStaticV2.
 type ListStaticResponse struct {
 	TotalCount int                   `json:"totalCount"`
 	Results    []ResourceStaticGroup `json:"results"`
@@ -56,13 +56,13 @@ type RequestStaticGroup struct {
 	ComputerIds []string `json:"computerIds,omitempty"`
 }
 
-// CreateSmartResponse is the response for CreateSmartGroupV2.
+// CreateSmartResponse is the response for CreateSmartV2.
 type CreateSmartResponse struct {
 	ID   string `json:"id"`
 	Href string `json:"href"`
 }
 
-// CreateStaticResponse is the response for CreateStaticGroupV2.
+// CreateStaticResponse is the response for CreateStaticV2.
 type CreateStaticResponse struct {
 	ID   string `json:"id"`
 	Href string `json:"href"`

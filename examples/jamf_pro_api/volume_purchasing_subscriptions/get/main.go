@@ -22,7 +22,7 @@ func main() {
 	}
 
 	subscriptionID := "1" // Replace with the desired volume purchasing subscription ID
-	result, _, err := jamfClient.VolumePurchasingSubscriptions.GetVolumePurchasingSubscriptionByIDV1(context.Background(), subscriptionID)
+	result, _, err := jamfClient.VolumePurchasingSubscriptions.GetByIDV1(context.Background(), subscriptionID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

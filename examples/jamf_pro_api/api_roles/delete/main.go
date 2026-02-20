@@ -21,7 +21,7 @@ func main() {
 	}
 
 	roleID := "1" // Replace with the desired API role ID to delete
-	_, err = jamfClient.APIRoles.DeleteAPIRoleByIDV1(context.Background(), roleID)
+	_, err = jamfClient.APIRoles.DeleteByIDV1(context.Background(), roleID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

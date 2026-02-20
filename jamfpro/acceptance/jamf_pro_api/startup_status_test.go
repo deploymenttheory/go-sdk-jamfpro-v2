@@ -9,12 +9,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_StartupStatus_GetStartupStatusV1(t *testing.T) {
+func TestAcceptance_StartupStatus_GetV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.StartupStatus
 	ctx := context.Background()
 
-	result, resp, err := svc.GetStartupStatusV1(ctx)
+	result, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

@@ -15,11 +15,11 @@ func setupMockService(t *testing.T) (*Service, *mocks.CertificateAuthorityMock) 
 	return NewService(mock), mock
 }
 
-func TestUnitGetActiveCertificateAuthorityV1_Success(t *testing.T) {
+func TestUnitGetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetActiveCertificateAuthorityMock()
 
-	result, resp, err := svc.GetActiveCertificateAuthorityV1(context.Background())
+	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

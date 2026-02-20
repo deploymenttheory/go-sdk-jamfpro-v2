@@ -12,10 +12,10 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_startup-status
 	StartupStatusServiceInterface interface {
-		// GetStartupStatusV1 returns the Jamf Pro server startup status.
+		// GetV1 returns the Jamf Pro server startup status.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_startup-status
-		GetStartupStatusV1(ctx context.Context) (*ResourceStartupStatusV1, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceStartupStatusV1, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the startup status-related methods of the Jamf Pro API.
@@ -36,10 +36,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API - Startup Status Operations
 // -----------------------------------------------------------------------------
 
-// GetStartupStatusV1 returns the Jamf Pro server startup status.
+// GetV1 returns the Jamf Pro server startup status.
 // URL: GET /api/startup-status
-// https://developer.jamf.com/jamf-pro/reference/get_startup-status
-func (s *Service) GetStartupStatusV1(ctx context.Context) (*ResourceStartupStatusV1, *interfaces.Response, error) {
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_startup-status
+func (s *Service) GetV1(ctx context.Context) (*ResourceStartupStatusV1, *interfaces.Response, error) {
 	var result ResourceStartupStatusV1
 
 	endpoint := EndpointStartupStatus

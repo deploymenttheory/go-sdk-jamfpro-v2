@@ -22,7 +22,7 @@ func main() {
 	}
 
 	attrID := "1" // Replace with the desired mobile device extension attribute ID
-	result, _, err := jamfClient.MobileDeviceExtensionAttributes.GetMobileDeviceExtensionAttributeByIDV1(context.Background(), attrID)
+	result, _, err := jamfClient.MobileDeviceExtensionAttributes.GetByIDV1(context.Background(), attrID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

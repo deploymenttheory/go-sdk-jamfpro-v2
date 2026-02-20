@@ -8,13 +8,19 @@ import (
 )
 
 type (
+	// HealthCheckServiceInterface defines the interface for health check operations.
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
 	HealthCheckServiceInterface interface {
-		// GetV1 returns whether the Jamf Pro API is healthy (GET returns 200).
+		// GetV1 returns whether the Jamf Pro API is healthy (Get Health Check).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
 		GetV1(ctx context.Context) (healthy bool, resp *interfaces.Response, err error)
 	}
 
+	// Service handles communication with the health check-related methods of the Jamf Pro API.
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
 	Service struct {
 		client interfaces.HTTPClient
 	}
@@ -26,7 +32,12 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// GetV1 performs GET /api/v1/health-check. healthy is true when status is 200.
+// -----------------------------------------------------------------------------
+// Jamf Pro API - Health Check Operations
+// -----------------------------------------------------------------------------
+
+// GetV1 returns whether the Jamf Pro API is healthy.
+// URL: GET /api/v1/health-check
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
 func (s *Service) GetV1(ctx context.Context) (bool, *interfaces.Response, error) {
 	endpoint := EndpointHealthCheckV1

@@ -35,6 +35,8 @@ func (m *ClientCheckinMock) register(method, path string, statusCode int, fixtur
 func (m *ClientCheckinMock) RegisterMocks() {
 	m.register("GET", "/api/v3/check-in", 200, "validate_get.json")
 	m.register("PUT", "/api/v3/check-in", 200, "validate_get.json")
+	m.register("GET", "/api/v3/check-in/history", 200, "validate_history_get.json")
+	m.register("POST", "/api/v3/check-in/history", 201, "validate_history_get.json")
 }
 
 func (m *ClientCheckinMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

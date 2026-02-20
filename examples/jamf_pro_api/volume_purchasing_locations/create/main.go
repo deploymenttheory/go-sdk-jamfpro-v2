@@ -30,7 +30,7 @@ func main() {
 		AutoRegisterManagedUsers:              false,
 	}
 
-	result, _, err := jamfClient.VolumePurchasingLocations.CreateVolumePurchasingLocationV1(context.Background(), req)
+	result, _, err := jamfClient.VolumePurchasingLocations.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

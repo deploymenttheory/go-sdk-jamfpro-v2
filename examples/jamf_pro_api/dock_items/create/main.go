@@ -27,7 +27,7 @@ func main() {
 		Type: dock_items.TypeApp,
 	}
 
-	result, _, err := jamfClient.DockItems.CreateDockItemV1(context.Background(), req)
+	result, _, err := jamfClient.DockItems.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

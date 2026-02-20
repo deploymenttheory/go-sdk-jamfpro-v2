@@ -18,7 +18,7 @@ type (
 		GetV2(ctx context.Context) (*ResourceJamfProInformation, *interfaces.Response, error)
 	}
 
-	// Service handles communication with the Jamf Pro information endpoint.
+	// Service handles communication with the Jamf Pro information-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-pro-information
 	Service struct {
@@ -31,6 +31,10 @@ var _ JamfProInformationServiceInterface = (*Service)(nil)
 func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
+
+// -----------------------------------------------------------------------------
+// Jamf Pro API - Jamf Pro Information Operations
+// -----------------------------------------------------------------------------
 
 // GetV2 returns Jamf Pro information (feature flags).
 // URL: GET /api/v2/jamf-pro-information

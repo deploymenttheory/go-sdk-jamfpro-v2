@@ -19,7 +19,7 @@ func TestUnitGetDockItemByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetDockItemMock()
 
-	result, resp, err := svc.GetDockItemByIDV1(context.Background(), "1")
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -34,7 +34,7 @@ func TestUnitGetDockItemByID_Success(t *testing.T) {
 func TestUnitGetDockItemByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetDockItemByIDV1(context.Background(), "")
+	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -45,7 +45,7 @@ func TestUnitGetDockItemByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetDockItemByIDV1(context.Background(), "999")
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -61,7 +61,7 @@ func TestUnitCreateDockItem_Success(t *testing.T) {
 		Path: "/Applications/Safari.app",
 		Type: TypeApp,
 	}
-	result, resp, err := svc.CreateDockItemV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -74,7 +74,7 @@ func TestUnitCreateDockItem_Success(t *testing.T) {
 func TestUnitCreateDockItem_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateDockItemV1(context.Background(), nil)
+	result, resp, err := svc.CreateV1(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -90,7 +90,7 @@ func TestUnitCreateDockItem_Conflict(t *testing.T) {
 		Path: "/Applications/App.app",
 		Type: TypeApp,
 	}
-	result, resp, err := svc.CreateDockItemV1(context.Background(), req)
+	result, resp, err := svc.CreateV1(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -106,7 +106,7 @@ func TestUnitUpdateDockItemByID_Success(t *testing.T) {
 		Path: "/Applications/Safari.app",
 		Type: TypeApp,
 	}
-	result, resp, err := svc.UpdateDockItemByIDV1(context.Background(), "1", req)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -119,7 +119,7 @@ func TestUnitUpdateDockItemByID_Success(t *testing.T) {
 func TestUnitUpdateDockItemByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateDockItemByIDV1(context.Background(), "", &RequestDockItem{
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &RequestDockItem{
 		Name: "x",
 		Path: "/path",
 		Type: TypeApp,
@@ -133,7 +133,7 @@ func TestUnitUpdateDockItemByID_EmptyID(t *testing.T) {
 func TestUnitUpdateDockItemByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateDockItemByIDV1(context.Background(), "1", nil)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -144,7 +144,7 @@ func TestUnitDeleteDockItemByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteDockItemMock()
 
-	resp, err := svc.DeleteDockItemByIDV1(context.Background(), "1")
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
@@ -153,7 +153,7 @@ func TestUnitDeleteDockItemByID_Success(t *testing.T) {
 func TestUnitDeleteDockItemByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteDockItemByIDV1(context.Background(), "")
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "dock item ID is required")
