@@ -42,21 +42,21 @@ type ClassItem struct {
 
 // RequestClass is the body for creating or updating a class.
 // The ID field is not included; the target is specified via the URL path.
+// The API does not allow both teachers and teacher_ids in the request; use only TeacherIDs.
 type RequestClass struct {
-	XMLName             xml.Name                  `xml:"class"`
-	Name                string                    `xml:"name"`
-	Description         string                    `xml:"description,omitempty"`
+	XMLName             xml.Name                   `xml:"class"`
+	Name                string                     `xml:"name"`
+	Description         string                     `xml:"description,omitempty"`
 	Site                *shared.SharedResourceSite `xml:"site,omitempty"`
-	MobileDeviceGroup   *MobileDeviceGroup        `xml:"mobile_device_group,omitempty"`
-	Students            []Student                 `xml:"students>student,omitempty"`
-	Teachers            []Teacher                 `xml:"teachers>teacher,omitempty"`
-	TeacherIDs          []TeacherID               `xml:"teacher_ids>id,omitempty"`
+	MobileDeviceGroup   *MobileDeviceGroup         `xml:"mobile_device_group,omitempty"`
+	Students            []Student                  `xml:"students>student,omitempty"`
+	TeacherIDs          []TeacherID                `xml:"teacher_ids>id,omitempty"`
 	StudentGroupIDs     []StudentGroupID          `xml:"student_group_ids>id,omitempty"`
-	TeacherGroupIDs     []TeacherGroupID          `xml:"teacher_group_ids>id,omitempty"`
-	MobileDevices       []MobileDevice            `xml:"mobile_devices>mobile_device,omitempty"`
-	MobileDeviceGroupID []MobileDeviceGroupID     `xml:"mobile_device_group_id>id,omitempty"`
-	MeetingTimes        *MeetingTimesContainer    `xml:"meeting_times,omitempty"`
-	AppleTVs            []AppleTV                 `xml:"apple_tvs>apple_tv,omitempty"`
+	TeacherGroupIDs     []TeacherGroupID           `xml:"teacher_group_ids>id,omitempty"`
+	MobileDevices       []MobileDevice             `xml:"mobile_devices>mobile_device,omitempty"`
+	MobileDeviceGroupID []MobileDeviceGroupID      `xml:"mobile_device_group_id>id,omitempty"`
+	MeetingTimes        *MeetingTimesContainer     `xml:"meeting_times,omitempty"`
+	AppleTVs            []AppleTV                  `xml:"apple_tvs>apple_tv,omitempty"`
 }
 
 // CreateUpdateResponse represents the response from Create/Update operations.

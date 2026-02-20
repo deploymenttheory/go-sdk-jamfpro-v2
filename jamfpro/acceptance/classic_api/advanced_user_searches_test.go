@@ -185,6 +185,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 				{
 					Name:       "Username",
 					Priority:   0,
+					AndOr:      "and",
 					SearchType: "like",
 					Value:      "test",
 				},

@@ -152,6 +152,7 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 				{
 					Name:       "Computer Name",
 					Priority:   0,
+					AndOr:      "and",
 					SearchType: "like",
 					Value:      "Mac",
 				},
@@ -185,6 +186,7 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 				{
 					Name:       "Operating System",
 					Priority:   0,
+					AndOr:      "and",
 					SearchType: "like",
 					Value:      "macOS",
 				},
