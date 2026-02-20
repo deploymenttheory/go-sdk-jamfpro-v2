@@ -2,7 +2,7 @@
 # Classic API swagger and Jamf Pro API schema, suffixes filenames with version, opens a PR.
 # Requires repository secrets: INSTANCE_DOMAIN, AUTH_METHOD, and either
 # (CLIENT_ID + CLIENT_SECRET) or (BASIC_AUTH_USERNAME + BASIC_AUTH_PASSWORD).
-name: Fetch OpenAPI specs
+name: Maintainence | Get OpenAPI specs
 
 on:
   schedule:
@@ -56,9 +56,10 @@ jobs:
 
       - name: Download OpenAPI specs
         run: |
-          mkdir -p openapi-specs
-          curl -fsSL "${{ steps.base.outputs.url }}/classicapi/doc/swagger.yaml" -o "openapi-specs/swagger-${{ steps.version.outputs.version }}.yaml"
-          curl -fsSL "${{ steps.base.outputs.url }}/api/schema/" -o "openapi-specs/api-schema-${{ steps.version.outputs.version }}.json"
+          VERSION="${{ steps.version.outputs.version }}"
+          mkdir -p "openapi-specs/${VERSION}"
+          curl -fsSL "${{ steps.base.outputs.url }}/classicapi/doc/swagger.yaml" -o "openapi-specs/${VERSION}/swagger.yaml"
+          curl -fsSL "${{ steps.base.outputs.url }}/api/schema/" -o "openapi-specs/${VERSION}/api-schema.json"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
