@@ -2,9 +2,12 @@ package jamf_pro_api
 
 import (
 	"context"
+	"errors"
+	"strings"
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -34,7 +37,13 @@ func TestAcceptance_CacheSettings_UpdateV1(t *testing.T) {
 	request := *current
 	request.TimeToLiveSeconds = current.TimeToLiveSeconds
 	updated, resp, err := svc.UpdateV1(ctx, &request)
-	require.NoError(t, err)
+	if err != nil {
+		var apiErr *client.APIError
+		if errors.As(err, &apiErr) && apiErr.StatusCode == 403 && strings.Contains(strings.ToLower(apiErr.Message), "hosted") {
+			t.Skipf("PUT cache-settings not available in hosted environments: %s", apiErr.Message)
+		}
+		require.NoError(t, err)
+	}
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)

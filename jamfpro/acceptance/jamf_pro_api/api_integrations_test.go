@@ -35,7 +35,6 @@ func TestAcceptance_ApiIntegrations_CreateGetUpdateDelete(t *testing.T) {
 		Enabled:                    true,
 		AuthorizationScopes:        []string{"read"},
 		AccessTokenLifetimeSeconds: 3600,
-		AppType:                    "CLIENT_CREDENTIALS",
 	})
 	require.NoError(t, err)
 	require.NotNil(t, created)
@@ -63,7 +62,6 @@ func TestAcceptance_ApiIntegrations_CreateGetUpdateDelete(t *testing.T) {
 		Enabled:                    false,
 		AuthorizationScopes:        created.AuthorizationScopes,
 		AccessTokenLifetimeSeconds: 3600,
-		AppType:                    created.AppType,
 		ClientID:                   created.ClientID,
 	})
 	require.NoError(t, err)
