@@ -11,14 +11,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// findValidIconID tries IDs in random order (1–100) until GetByIDV1 succeeds.
-// Returns (id, result, true) when found, (0, nil, false) when none exist. Failures are suppressed.
+// findValidIconID tries IDs in random order (1–100) until GetByIDV1 returns 200.
+// Logs success to test notifications. Returns (id, result, true) when found, (0, nil, false) when none exist.
 func findValidIconID(t *testing.T) (int, *icons.ResourceIcon, bool) {
 	t.Helper()
 	acc.RequireClient(t)
 	svc := acc.Client.Icons
 	ctx := context.Background()
 
+	acc.LogTestStage(t, "Icons", "Finding icon: trying IDs 1–100 until GetByID returns 200")
 	perm := rand.Perm(100)
 	for i := range perm {
 		id := perm[i] + 1
@@ -27,6 +28,7 @@ func findValidIconID(t *testing.T) (int, *icons.ResourceIcon, bool) {
 			continue
 		}
 		if resp != nil && resp.StatusCode == 200 && result != nil {
+			acc.LogTestSuccess(t, "GetByID succeeded for icon ID=%d", id)
 			return id, result, true
 		}
 	}
@@ -55,6 +57,7 @@ func TestAcceptance_Icons_Download(t *testing.T) {
 	svc := acc.Client.Icons
 	ctx := context.Background()
 
+	acc.LogTestStage(t, "Icons", "Attempting download for icon ID=%d", id)
 	body, resp, err := svc.DownloadV1(ctx, id, "original", "0")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
