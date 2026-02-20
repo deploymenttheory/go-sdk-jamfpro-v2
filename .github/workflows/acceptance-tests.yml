@@ -68,9 +68,9 @@ jobs:
             echo "::error::CLIENT_SECRET is not set"
             exit 1
           fi
-          echo "✅ INSTANCE_DOMAIN: ${INSTANCE_DOMAIN:0:30}..." # Show first 30 chars
-          echo "✅ AUTH_METHOD: $AUTH_METHOD"
-          echo "✅ CLIENT_ID: ${CLIENT_ID:0:8}..." # Show first 8 chars for security
+          echo "✅ INSTANCE_DOMAIN is set (hidden)"
+          echo "✅ AUTH_METHOD is set (hidden)"
+          echo "✅ CLIENT_ID is set (hidden)"
           echo "✅ CLIENT_SECRET is set (hidden)"
           echo "All required environment variables are configured"
           echo "::endgroup::"
