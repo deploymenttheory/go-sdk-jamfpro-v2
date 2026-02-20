@@ -5,7 +5,9 @@
 [![License](https://img.shields.io/github/license/deploymenttheory/go-sdk-jamfpro-v2)](LICENSE)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/deploymenttheory/go-sdk-jamfpro-v2)](https://go.dev/)
 [![Release](https://img.shields.io/github/v/release/deploymenttheory/go-sdk-jamfpro-v2)](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/releases)
+[![codecov](https://codecov.io/gh/deploymenttheory/go-sdk-jamfpro-v2/graph/badge.svg)](https://codecov.io/gh/deploymenttheory/go-sdk-jamfpro-v2)
 [![Tests](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/workflows/Tests/badge.svg)](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/actions)
+![Status: Experimental](https://img.shields.io/badge/status-experimental-yellow)
 
 A Go client library for the [Jamf Pro API](https://developer.jamf.com/jamf-pro/reference), supporting both the Classic API and the Jamf Pro API (REST). Uses OAuth2 or Basic auth with bearer token exchange, automatic token refresh, and production-ready transport (retries, sticky sessions, logging, optional OpenTelemetry tracing).
 
