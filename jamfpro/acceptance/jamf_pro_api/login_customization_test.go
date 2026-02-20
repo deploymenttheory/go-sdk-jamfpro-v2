@@ -31,7 +31,7 @@ func TestAcceptance_LoginCustomization_UpdateV1(t *testing.T) {
 	require.NotNil(t, current)
 
 	request := *current
-	request.DisclaimerHeading = "Acceptance test disclaimer"
+	request.DisclaimerHeading = "Acceptance test" // max 20 chars per API
 	updated, resp, err := svc.UpdateV1(ctx, &request)
 	require.NoError(t, err)
 	require.NotNil(t, updated)

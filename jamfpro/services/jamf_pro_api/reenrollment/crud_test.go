@@ -95,7 +95,7 @@ func TestUnitExportHistory_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportHistoryMock()
 
-	resp, body, err := svc.ExportHistory(context.Background(), map[string]string{"page": "0", "page-size": "100"}, nil, "application/json")
+	resp, body, err := svc.ExportHistory(context.Background(), map[string]string{"page": "0", "page-size": "100"}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)

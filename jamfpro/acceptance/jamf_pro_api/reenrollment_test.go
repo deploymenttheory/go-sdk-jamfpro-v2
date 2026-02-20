@@ -69,7 +69,7 @@ func TestAcceptance_Reenrollment_AddHistoryNotes(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode, "API may return 200 or 201")
 	assert.Equal(t, request.Note, result.Note)
 }
 
@@ -78,7 +78,7 @@ func TestAcceptance_Reenrollment_ExportHistory(t *testing.T) {
 	svc := acc.Client.Reenrollment
 	ctx := context.Background()
 
-	resp, body, err := svc.ExportHistory(ctx, map[string]string{"page": "0", "page-size": "100"}, nil, "application/json")
+	resp, body, err := svc.ExportHistory(ctx, map[string]string{"page": "0", "page-size": "100"}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)

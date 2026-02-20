@@ -29,9 +29,9 @@ type (
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-reenrollment-history
 		AddHistoryNotes(ctx context.Context, request *AddReenrollmentHistoryNotesRequest) (*ReenrollmentHistoryObject, *interfaces.Response, error)
 
-		// ExportHistory exports re-enrollment history as CSV or JSON. query may include page, page-size, sort, filter, export-fields, export-labels. body may override when URI exceeds ~2k chars. accept is "text/csv" or "application/json".
+		// ExportHistory exports re-enrollment history. query may include page, page-size, sort, filter, export-fields, export-labels. body may override when URI exceeds ~2k chars. Uses Accept: text/csv,application/json.
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-reenrollment-history-export
-		ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest, accept string) (*interfaces.Response, []byte, error)
+		ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*interfaces.Response, []byte, error)
 	}
 
 	// Service handles communication with the re-enrollment settings methods of the Jamf Pro API.
@@ -127,15 +127,16 @@ func (s *Service) AddHistoryNotes(ctx context.Context, request *AddReenrollmentH
 	return &result, resp, nil
 }
 
-// ExportHistory exports re-enrollment history. query: page, page-size, sort, filter, export-fields, export-labels. body optional. accept: "text/csv" or "application/json" (default application/json).
+// ExportHistory exports re-enrollment history. query: page, page-size, sort, filter, export-fields, export-labels. body optional (overrides query when URI would exceed ~2k chars; use page, pageSize, sort, filter, fields). Uses Accept: text/csv,application/json and Content-Type: application/json when body is sent.
 // URL: POST /api/v1/reenrollment/history/export
-func (s *Service) ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest, accept string) (*interfaces.Response, []byte, error) {
-
-	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+func (s *Service) ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*interfaces.Response, []byte, error) {
+	headers := map[string]string{"Accept": "text/csv,application/json"}
+	var sendBody any
+	if body != nil {
+		sendBody = body
+		headers["Content-Type"] = mime.ApplicationJSON
 	}
-
-	resp, err := s.client.PostWithQuery(ctx, EndpointReenrollmentHistoryExport, query, body, headers, nil)
+	resp, err := s.client.PostWithQuery(ctx, EndpointReenrollmentHistoryExport, query, sendBody, headers, nil)
 	if err != nil {
 		return nil, nil, err
 	}
