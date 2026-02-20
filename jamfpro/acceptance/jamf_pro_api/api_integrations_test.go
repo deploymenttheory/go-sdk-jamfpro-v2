@@ -2,6 +2,7 @@ package jamf_pro_api
 
 import (
 	"context"
+	"math/rand"
 	"strconv"
 	"testing"
 
@@ -27,13 +28,19 @@ func TestAcceptance_ApiIntegrations_ListV1(t *testing.T) {
 func TestAcceptance_ApiIntegrations_CreateGetUpdateDelete(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ApiIntegrations
+	privSvc := acc.Client.APIRolePrivileges
 	ctx := context.Background()
 	name := acc.UniqueName("acc-api-integration")
+
+	privList, _, err := privSvc.ListV1(ctx)
+	require.NoError(t, err)
+	require.NotEmpty(t, privList.Privileges, "need at least one API role privilege to create an integration")
+	scope := privList.Privileges[rand.Intn(len(privList.Privileges))]
 
 	created, resp, err := svc.CreateV1(ctx, &api_integrations.ResourceApiIntegration{
 		DisplayName:                name,
 		Enabled:                    true,
-		AuthorizationScopes:        []string{"read"},
+		AuthorizationScopes:        []string{scope},
 		AccessTokenLifetimeSeconds: 3600,
 	})
 	require.NoError(t, err)

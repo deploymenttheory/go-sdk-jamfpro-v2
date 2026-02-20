@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -127,4 +129,60 @@ func isGitHubActions() bool {
 // conflicts with pre-existing data.
 func UniqueName(base string) string {
 	return fmt.Sprintf("%s-%d", base, time.Now().UnixMilli())
+}
+
+// GreaterThanJamfProVersion skips the test if the Jamf Pro server version is
+// not greater than the given major.minor.patch. Use for features that exist only
+// in newer Jamf Pro versions (e.g. service discovery enrollment well-known
+// settings in 11.26+). Assumes RequireClient(t) has already been called.
+func GreaterThanJamfProVersion(t *testing.T, major, minor, patch int) {
+	t.Helper()
+	if Client == nil {
+		t.Skip("Jamf Pro client not initialised")
+		return
+	}
+	ctx := context.Background()
+	result, _, err := Client.JamfProVersion.GetV1(ctx)
+	if err != nil {
+		t.Skipf("Could not get Jamf Pro version: %v", err)
+		return
+	}
+	if result == nil || result.Version == nil || *result.Version == "" {
+		t.Skip("Jamf Pro version is empty")
+		return
+	}
+	v := strings.TrimSpace(*result.Version)
+	parts := strings.Split(v, ".")
+	parseInt := func(s string) int {
+		n, _ := strconv.Atoi(s)
+		return n
+	}
+	var curMajor, curMinor, curPatch int
+	if len(parts) >= 1 {
+		curMajor = parseInt(parts[0])
+	}
+	if len(parts) >= 2 {
+		curMinor = parseInt(parts[1])
+	}
+	if len(parts) >= 3 {
+		curPatch = parseInt(parts[2])
+	}
+	if curMajor > major {
+		return
+	}
+	if curMajor < major {
+		t.Skipf("Jamf Pro version %s is not greater than %d.%d.%d", v, major, minor, patch)
+		return
+	}
+	if curMinor > minor {
+		return
+	}
+	if curMinor < minor {
+		t.Skipf("Jamf Pro version %s is not greater than %d.%d.%d", v, major, minor, patch)
+		return
+	}
+	if curPatch > patch {
+		return
+	}
+	t.Skipf("Jamf Pro version %s is not greater than %d.%d.%d", v, major, minor, patch)
 }
