@@ -31,7 +31,7 @@ func TestAcceptance_ComputerExtensionAttributes_Lifecycle(t *testing.T) {
 		DataType:             "String",
 		Enabled:              &enabled,
 		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		InputType:            "TEXT",
 	}
 	created, createResp, err := svc.CreateComputerExtensionAttributeV1(ctx, createReq)
 	require.NoError(t, err)
@@ -114,7 +114,7 @@ func TestAcceptance_ComputerExtensionAttributes_DeleteMultiple(t *testing.T) {
 		Name:                 uniqueCategoryName("acc-delmulti-ea-1"),
 		DataType:             "String",
 		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		InputType:            "TEXT",
 		Enabled:              &enabled,
 	}
 	c1, _, err := svc.CreateComputerExtensionAttributeV1(ctx, createReq)
@@ -125,7 +125,7 @@ func TestAcceptance_ComputerExtensionAttributes_DeleteMultiple(t *testing.T) {
 		Name:                 uniqueCategoryName("acc-delmulti-ea-2"),
 		DataType:             "String",
 		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		InputType:            "TEXT",
 		Enabled:              &enabled,
 	}
 	c2, _, err := svc.CreateComputerExtensionAttributeV1(ctx, createReq2)

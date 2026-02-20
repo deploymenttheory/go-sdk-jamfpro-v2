@@ -24,6 +24,12 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
 		UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceIcon, *interfaces.Response, error)
+
+		// DownloadV1 downloads the icon image bytes (Download a self service icon).
+		// res: original, 300, or 512 (default original). scale: 0 = original, non-0 = scaled to 300.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-download-id
+		DownloadV1(ctx context.Context, id int, res, scale string) ([]byte, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the icons endpoint.
@@ -53,14 +59,14 @@ func (s *Service) GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *interf
 	return &result, resp, nil
 }
 
-// UploadV1 uploads an icon image (multipart/form-data, field "file", image/png).
+// UploadV1 uploads an icon image (multipart/form-data, field "file").
 // URL: POST /api/v1/icon
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
 func (s *Service) UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceIcon, *interfaces.Response, error) {
 	if fileName == "" {
 		fileName = "icon.png"
 	}
-	headers := map[string]string{"file": "image/png"}
+	headers := map[string]string{"Content-Type": "multipart/form-data"}
 	var result ResourceIcon
 	resp, err := s.client.PostMultipart(ctx, EndpointIconsV1, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
 	if err != nil {
@@ -85,4 +91,25 @@ func (s *Service) UploadV1FromFile(ctx context.Context, filePath string) (*Resou
 		name = "icon.png"
 	}
 	return s.UploadV1(ctx, f, info.Size(), name)
+}
+
+// DownloadV1 downloads the icon image bytes. res: original, 300, or 512 (default original).
+// scale: 0 = original image, non-0 = scaled to 300. Use Accept: image/*.
+// URL: GET /api/v1/icon/download/{id}?res=...&scale=...
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-download-id
+func (s *Service) DownloadV1(ctx context.Context, id int, res, scale string) ([]byte, *interfaces.Response, error) {
+	endpoint := fmt.Sprintf("%s/%d", EndpointIconsDownloadV1, id)
+	if res == "" {
+		res = "original"
+	}
+	if scale == "" {
+		scale = "0"
+	}
+	queryParams := map[string]string{"res": res, "scale": scale}
+	headers := map[string]string{"Accept": "image/*"}
+	resp, body, err := s.client.GetBytes(ctx, endpoint, queryParams, headers)
+	if err != nil {
+		return nil, resp, err
+	}
+	return body, resp, nil
 }

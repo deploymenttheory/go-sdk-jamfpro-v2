@@ -36,3 +36,20 @@ func TestUnitUploadV1_Success(t *testing.T) {
 	require.Equal(t, 2, result.ID)
 	require.Equal(t, "uploaded.png", result.Name)
 }
+
+func TestUnitDownloadV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	body, resp, err := svc.DownloadV1(context.Background(), 1, "original", "0")
+	require.NoError(t, err)
+	require.Equal(t, 200, resp.StatusCode)
+	require.NotNil(t, body)
+	require.Greater(t, len(body), 0)
+}
+
+func TestUnitDownloadV1_Defaults(t *testing.T) {
+	svc, _ := setupMockService(t)
+	body, resp, err := svc.DownloadV1(context.Background(), 1, "", "")
+	require.NoError(t, err)
+	require.Equal(t, 200, resp.StatusCode)
+	require.NotNil(t, body)
+}

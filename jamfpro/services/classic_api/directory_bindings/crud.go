@@ -3,6 +3,7 @@ package directory_bindings
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
@@ -117,7 +118,7 @@ func (s *Service) GetDirectoryBindingByName(ctx context.Context, name string) (*
 		return nil, nil, fmt.Errorf("directory binding name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, name)
+	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, url.PathEscape(name))
 
 	var result ResourceDirectoryBinding
 
@@ -184,7 +185,7 @@ func (s *Service) UpdateDirectoryBindingByName(ctx context.Context, name string,
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, name)
+	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, url.PathEscape(name))
 
 	var result ResourceDirectoryBinding
 
@@ -222,7 +223,7 @@ func (s *Service) DeleteDirectoryBindingByName(ctx context.Context, name string)
 		return nil, fmt.Errorf("directory binding name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, name)
+	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, url.PathEscape(name))
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
 	if err != nil {

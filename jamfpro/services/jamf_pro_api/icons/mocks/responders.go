@@ -38,6 +38,7 @@ func (m *IconsMock) register(method, path string, statusCode int, fixture string
 func (m *IconsMock) RegisterMocks() {
 	m.register("GET", "/api/v1/icon/1", 200, "validate_get.json")
 	m.register("POST", "/api/v1/icon", 201, "validate_upload.json")
+	m.register("GET", "/api/v1/icon/download/1", 200, "download_icon.bin")
 }
 
 func (m *IconsMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

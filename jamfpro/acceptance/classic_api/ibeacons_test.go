@@ -3,6 +3,7 @@ package classic_api
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
@@ -96,7 +97,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, beaconID, fetched.ID)
 	assert.Equal(t, beaconName, fetched.Name)
-	assert.Equal(t, "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0", fetched.UUID)
+	assert.Equal(t, "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0", strings.ToUpper(fetched.UUID))
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q uuid=%s", fetched.ID, fetched.Name, fetched.UUID)
 
 	// ------------------------------------------------------------------

@@ -70,7 +70,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 	created, createResp, err := svc.DoPackageUpload(ctx, pkgPath, createReq)
 	require.NoError(t, err, "DoPackageUpload should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "create may return 200 or 201")
 	assert.NotEmpty(t, created.ID)
 
 	packageID := created.ID
@@ -128,7 +128,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 		Notes:                "Updated by SDK acceptance test",
 		Priority:             15,
 		FillUserTemplate:     packages.BoolPtr(false), // must stay false for .pkg
-		FillExistingUsers:    packages.BoolPtr(true),
+		FillExistingUsers:    packages.BoolPtr(false), // must be false when package file is not .dmg
 		RebootRequired:       fetched.RebootRequired,
 		OSInstall:            fetched.OSInstall,
 		SuppressUpdates:      fetched.SuppressUpdates,

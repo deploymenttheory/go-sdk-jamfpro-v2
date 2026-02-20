@@ -29,7 +29,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_Lifecycle(t *testing.T) {
 		Description:          "Acceptance test MDEA",
 		DataType:             "String",
 		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		InputType:            "TEXT",
 	}
 	created, createResp, err := svc.CreateMobileDeviceExtensionAttributeV1(ctx, createReq)
 	require.NoError(t, err)
