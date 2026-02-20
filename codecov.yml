@@ -100,9 +100,12 @@ flags:
 ignore:
   # Directories
   - "tools/"
+  - "tools/**"
   - "scripts/"
-  - "examples/"
+  - "scripts/**"
+  - "examples/**"  # All example code
   - "docs/"
+  - "docs/**"
 
   # Test files and fixtures
   - "**/*_test.go"

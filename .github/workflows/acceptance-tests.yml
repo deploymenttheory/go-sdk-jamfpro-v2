@@ -84,7 +84,7 @@ jobs:
           echo "::endgroup::"
           echo ""
 
-          go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+          go test -v -count=1 -race -coverprofile=coverage.out -covermode=atomic ./jamfpro/acceptance/...
 
           echo ""
           echo "::group::📊 Coverage Summary"
