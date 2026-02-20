@@ -1,0 +1,129 @@
+name: go | Unit Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - '.github/workflows/unit-tests.yml'
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+
+permissions:
+  contents: read
+  pull-requests: write  # Needed for commenting on PR
+  issues: write  # Needed for commenting on PR
+
+jobs:
+  unit-tests:
+    name: '🧪 Run Unit Tests'
+    runs-on: ubuntu-24.04-arm
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
+        with:
+          egress-policy: audit
+
+      - name: Check Out
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0  # Get full history for coverage analysis
+
+      - name: Set up Go
+        uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
+        with:
+          go-version-file: 'go.mod'
+          cache-dependency-path: 'go.sum'
+          cache: true
+          go-version: stable
+
+      - name: Download Dependencies
+        run: |
+          echo "::group::📦 Downloading Go modules"
+          go mod download
+          go mod verify
+          echo "::endgroup::"
+
+      - name: Run Unit Tests
+        run: |
+          echo "::group::🧪 Unit Tests Setup"
+          echo "========================================================================"
+          echo "  Running Unit Tests with Coverage"
+          echo "========================================================================"
+          echo "::endgroup::"
+          echo ""
+
+          go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+
+          echo ""
+          echo "::group::📊 Coverage Summary"
+          go tool cover -func=coverage.out | tail -1
+          echo "::endgroup::"
+
+      - name: Generate Coverage Report
+        if: always()
+        run: |
+          echo "::group::📈 Detailed Coverage Report"
+          go tool cover -func=coverage.out
+          echo "::endgroup::"
+
+      - name: Upload coverage reports to Codecov
+        if: always()
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: deploymenttheory/go-sdk-jamfpro-v2
+          files: ./coverage.out
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false  # Don't fail CI if Codecov upload fails
+          verbose: true  # Enable verbose output for debugging
+
+      - name: Upload Coverage Artifact
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: coverage-report
+          path: coverage.out
+          retention-days: 30
+
+      # Save artifacts on failure
+      - name: Save artifacts
+        if: failure()
+        run: |
+          mkdir -p wr_actions
+          echo ${{ github.repository_owner }} > wr_actions/ghowner.txt
+          echo ${{ github.event.repository.name }} > wr_actions/ghrepo.txt
+          echo ${{ github.event.pull_request.number }} > wr_actions/prnumber.txt
+
+      - name: Upload artifacts
+        if: failure()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: artifact
+          path: wr_actions
+
+      # Comment on failure
+      - name: Get run url
+        if: failure()
+        run: |
+          echo "gha_url=https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}" >> $GITHUB_ENV
+
+      - name: Send build failure comment
+        if: failure()
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          GHA_URL: ${{ env.gha_url }}
+        with:
+          result-encoding: string
+          script: |
+            const runUrl = process.env.GHA_URL;
+            github.rest.issues.createComment({
+              issue_number: ${{ github.event.pull_request.number }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `<b>🧪 Unit Test Failure</b> \n\n This pull request contains failing unit tests which need to be addressed [here](${runUrl}) .`
+            })

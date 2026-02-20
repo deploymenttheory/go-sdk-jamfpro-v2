@@ -89,8 +89,8 @@ func TestIsServerError_NonAPIError(t *testing.T) {
 func TestParseErrorResponse_DefaultMessageForStatus(t *testing.T) {
 	logger := zap.NewNop()
 	for code, want := range map[int]string{
-		StatusForbidden: "Forbidden",
-		StatusConflict:  "Conflict",
+		StatusForbidden: "Authentication required or token invalid. The server understood the request but refuses to authorize it.",
+		StatusConflict:  "The request could not be completed due to a conflict with the current state of the resource.",
 	} {
 		err := ParseErrorResponse(nil, code, "", "GET", "/", logger)
 		require.Error(t, err)
