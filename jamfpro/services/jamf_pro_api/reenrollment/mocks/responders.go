@@ -45,6 +45,18 @@ func (m *ReenrollmentMock) RegisterUpdateMock() {
 	m.register("PUT", "/api/v1/reenrollment", 200, "validate_get.json")
 }
 
+func (m *ReenrollmentMock) RegisterGetHistoryMock() {
+	m.register("GET", "/api/v1/reenrollment/history", 200, "history_list.json")
+}
+
+func (m *ReenrollmentMock) RegisterAddHistoryNotesMock() {
+	m.register("POST", "/api/v1/reenrollment/history", 201, "history_note.json")
+}
+
+func (m *ReenrollmentMock) RegisterExportHistoryMock() {
+	m.register("POST", "/api/v1/reenrollment/history/export", 200, "export.json")
+}
+
 func (m *ReenrollmentMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

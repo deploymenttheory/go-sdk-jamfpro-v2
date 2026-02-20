@@ -23,8 +23,8 @@ type ListItem struct {
 // This is returned by GET operations and includes all fields including computed results.
 type ResourceAdvancedComputerSearch struct {
 	XMLName       xml.Name               `xml:"advanced_computer_search"`
-	ID            int                    `xml:"id"`
-	Name          string                 `xml:"name"`
+	ID            int                    `xml:"id,omitempty"`
+	Name          string                 `xml:"name,omitempty"`
 	ViewAs        string                 `xml:"view_as,omitempty"`
 	Sort1         string                 `xml:"sort_1,omitempty"`
 	Sort2         string                 `xml:"sort_2,omitempty"`

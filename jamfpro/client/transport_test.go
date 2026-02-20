@@ -263,7 +263,7 @@ func TestTransport_ValidateResponse_EmptyBody(t *testing.T) {
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
-	var result map[string]interface{}
+	var result map[string]any
 	resp, err := tr.Get(ctx, "/api/empty", nil, nil, &result)
 	require.NoError(t, err)
 	assert.Equal(t, 204, resp.StatusCode)
@@ -365,7 +365,7 @@ func TestTransport_AdaptiveDelay(t *testing.T) {
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
-	var result map[string]interface{}
+	var result map[string]any
 	_, err = tr.Get(ctx, "/api/slow", nil, nil, &result)
 	require.NoError(t, err)
 	_, err = tr.Get(ctx, "/api/slow", nil, nil, &result)

@@ -1,0 +1,1 @@
+{"autoRenewMobileDeviceMdmProfileWhenCaRenewed":true,"autoRenewMobileDeviceMdmProfileWhenDeviceIdentityCertExpiring":true,"autoRenewComputerMdmProfileWhenCaRenewed":true,"autoRenewComputerMdmProfileWhenDeviceIdentityCertExpiring":true,"mdmProfileMobileDeviceExpirationLimitInDays":30,"mdmProfileComputerExpirationLimitInDays":30}

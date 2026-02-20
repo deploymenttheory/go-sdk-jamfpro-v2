@@ -9,9 +9,9 @@ import (
 // ResourceClass represents a Jamf Pro Classic API class resource.
 type ResourceClass struct {
 	XMLName             xml.Name                     `xml:"class"`
-	ID                  int                          `xml:"id"`
+	ID                  int                          `xml:"id,omitempty"`
 	Source              string                       `xml:"source,omitempty"`
-	Name                string                       `xml:"name"`
+	Name                string                       `xml:"name,omitempty"`
 	Description         string                       `xml:"description,omitempty"`
 	Site                shared.SharedResourceSite    `xml:"site"`
 	MobileDeviceGroup   MobileDeviceGroup            `xml:"mobile_device_group,omitempty"`
@@ -74,7 +74,10 @@ type MobileDeviceGroup struct {
 
 // MobileDevice represents a mobile device in a class.
 type MobileDevice struct {
+	ID             int    `xml:"id,omitempty"`
 	Name           string `xml:"name,omitempty"`
+	Match          string `xml:"match,omitempty"`
+	Subset         string `xml:"subset,omitempty"`
 	UDID           string `xml:"udid,omitempty"`
 	WifiMacAddress string `xml:"wifi_mac_address,omitempty"`
 }

@@ -1,0 +1,1 @@
+{"totalCount":1,"results":[{"id":1,"displayName":"Test Integration","enabled":true,"clientId":"abc-123","authorizationScopes":["read"],"accessTokenLifetimeSeconds":3600,"appType":"CLIENT_CREDENTIALS"}]}

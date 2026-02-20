@@ -87,9 +87,9 @@ func TestTransport_GetPaginated_MergeError(t *testing.T) {
 		if r.URL.Path == "/api/v3/items" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			_ = json.NewEncoder(w).Encode(map[string]interface{}{
+			_ = json.NewEncoder(w).Encode(map[string]any{
 				"totalCount": 1,
-				"results":    []interface{}{map[string]string{"id": "1"}},
+				"results":    []any{map[string]string{"id": "1"}},
 			})
 			return
 		}

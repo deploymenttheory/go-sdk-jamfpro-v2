@@ -5,8 +5,8 @@ import "encoding/xml"
 // ResourceWebhook represents a Jamf Pro Classic API webhook resource.
 type ResourceWebhook struct {
 	XMLName                     xml.Name       `xml:"webhook"`
-	ID                          int            `xml:"id"`
-	Name                        string         `xml:"name"`
+	ID                          int            `xml:"id,omitempty"`
+	Name                        string         `xml:"name,omitempty"`
 	Enabled                     bool           `xml:"enabled"`
 	URL                         string         `xml:"url,omitempty"`
 	ContentType                 string         `xml:"content_type,omitempty"`

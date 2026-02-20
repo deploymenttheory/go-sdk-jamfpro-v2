@@ -57,7 +57,7 @@ func TestResponseTimeTracker_Record_Concurrent(t *testing.T) {
 	}
 }
 
-func requireNotNil(t *testing.T, v interface{}) {
+func requireNotNil(t *testing.T, v any) {
 	t.Helper()
 	if v == nil {
 		t.Fatal("expected non-nil")

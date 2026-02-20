@@ -5,8 +5,8 @@ import "encoding/xml"
 // ResourceAllowedFileExtension represents a Jamf Pro Classic API allowed file extension resource.
 type ResourceAllowedFileExtension struct {
 	XMLName   xml.Name `xml:"allowed_file_extension"`
-	ID        int      `xml:"id"`
-	Extension string   `xml:"extension"`
+	ID        int      `xml:"id,omitempty"`
+	Extension string   `xml:"extension,omitempty"`
 }
 
 // ListResponse is the response for ListAllowedFileExtensions (GET /JSSResource/allowedfileextensions).

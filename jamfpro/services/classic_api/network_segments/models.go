@@ -5,8 +5,8 @@ import "encoding/xml"
 // ResourceNetworkSegment represents a Jamf Pro Classic API network segment resource.
 type ResourceNetworkSegment struct {
 	XMLName             xml.Name `xml:"network_segment"`
-	ID                  int      `xml:"id"`
-	Name                string   `xml:"name"`
+	ID                  int      `xml:"id,omitempty"`
+	Name                string   `xml:"name,omitempty"`
 	StartingAddress     string   `xml:"starting_address"`
 	EndingAddress       string   `xml:"ending_address"`
 	DistributionServer  string   `xml:"distribution_server,omitempty"`

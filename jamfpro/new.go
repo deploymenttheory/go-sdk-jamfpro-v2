@@ -25,13 +25,16 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/software_update_servers"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_accounts"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/webhooks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/access_management_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/account_preferences"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/advanced_mobile_device_searches"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_integrations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_role_privileges"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_installers"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/bookmarks"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cache_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/certificate_authority"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/client_checkin"
@@ -39,7 +42,9 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_extension_attributes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_communication_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icons"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_information"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_version"
@@ -97,21 +102,26 @@ type Client struct {
 	Webhooks                     *webhooks.Service
 
 	// Jamf Pro API services
+	AccessManagementSettings        *access_management_settings.Service
 	AccountPreferences              *account_preferences.Service
 	AdvancedMobileDeviceSearches    *advanced_mobile_device_searches.Service
+	ApiIntegrations                 *api_integrations.Service
 	APIRolePrivileges               *api_role_privileges.Service
 	CertificateAuthority            *certificate_authority.Service
 	APIRoles                        *api_roles.Service
 	AppInstallers                   *app_installers.Service
 	Bookmarks                       *bookmarks.Service
 	Buildings                       *buildings.Service
+	CacheSettings                   *cache_settings.Service
 	Categories                      *categories.Service
 	ClientCheckin                   *client_checkin.Service
 	CloudDistributionPoint          *cloud_distribution_point.Service
 	ComputerExtensionAttributes     *computer_extension_attributes.Service
 	ComputerGroups                  *computer_groups.Service
 	Departments                     *departments.Service
+	DeviceCommunicationSettings     *device_communication_settings.Service
 	DockItems                       *dock_items.Service
+	EnrollmentSettings              *enrollment_settings.Service
 	Icons                           *icons.Service
 	Ldap                            *ldap.Service
 	LoginCustomization              *login_customization.Service
@@ -169,21 +179,26 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		SoftwareUpdateServers:           software_update_servers.NewService(transport),
 		VPPAccounts:                     vpp_accounts.NewService(transport),
 		Webhooks:                        webhooks.NewService(transport),
+		AccessManagementSettings:        access_management_settings.NewService(transport),
 		AccountPreferences:              account_preferences.NewService(transport),
 		AdvancedMobileDeviceSearches:    advanced_mobile_device_searches.NewService(transport),
+		ApiIntegrations:                 api_integrations.NewService(transport),
 		APIRolePrivileges:               api_role_privileges.NewService(transport),
 		CertificateAuthority:            certificate_authority.NewService(transport),
 		APIRoles:                        api_roles.NewService(transport),
 		AppInstallers:                   app_installers.NewService(transport),
 		Bookmarks:                       bookmarks.NewService(transport),
 		Buildings:                       buildings.NewService(transport),
+		CacheSettings:                   cache_settings.NewService(transport),
 		Categories:                      categories.NewService(transport),
 		ClientCheckin:                   client_checkin.NewService(transport),
 		CloudDistributionPoint:          cloud_distribution_point.NewService(transport),
 		ComputerExtensionAttributes:     computer_extension_attributes.NewService(transport),
 		ComputerGroups:                  computer_groups.NewService(transport),
 		Departments:                     departments.NewService(transport),
+		DeviceCommunicationSettings:     device_communication_settings.NewService(transport),
 		DockItems:                       dock_items.NewService(transport),
+		EnrollmentSettings:              enrollment_settings.NewService(transport),
 		Icons:                           icons.NewService(transport),
 		Ldap:                            ldap.NewService(transport),
 		LoginCustomization:              login_customization.NewService(transport),

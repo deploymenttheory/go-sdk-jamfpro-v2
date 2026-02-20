@@ -5,8 +5,8 @@ import "encoding/xml"
 // ResourceDirectoryBinding represents a Jamf Pro Classic API directory binding resource.
 type ResourceDirectoryBinding struct {
 	XMLName    xml.Name `xml:"directory_binding"`
-	ID         int      `xml:"id"`
-	Name       string   `xml:"name"`
+	ID         int      `xml:"id,omitempty"`
+	Name       string   `xml:"name,omitempty"`
 	Priority   int      `xml:"priority,omitempty"`
 	Domain     string   `xml:"domain,omitempty"`
 	Username   string   `xml:"username,omitempty"`

@@ -5,9 +5,10 @@ import "encoding/xml"
 // ResourceIBeacon represents a Jamf Pro Classic API iBeacon resource.
 type ResourceIBeacon struct {
 	XMLName xml.Name `xml:"ibeacon"`
-	ID      int      `xml:"id"`
-	Name    string   `xml:"name"`
+	ID      int      `xml:"id,omitempty"`
+	Name    string   `xml:"name,omitempty"`
 	UUID    string   `xml:"uuid"`
+	UDID    string   `xml:"udid,omitempty"`
 	Major   int      `xml:"major,omitempty"`
 	Minor   int      `xml:"minor,omitempty"`
 }

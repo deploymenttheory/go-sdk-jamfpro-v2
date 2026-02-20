@@ -5,8 +5,8 @@ import "encoding/xml"
 // ResourcePrinter represents a Jamf Pro Classic API printer resource.
 type ResourcePrinter struct {
 	XMLName     xml.Name `xml:"printer"`
-	ID          int      `xml:"id"`
-	Name        string   `xml:"name"`
+	ID          int      `xml:"id,omitempty"`
+	Name        string   `xml:"name,omitempty"`
 	Category    string   `xml:"category,omitempty"`
 	URI         string   `xml:"uri,omitempty"`
 	CUPSName    string   `xml:"CUPS_name,omitempty"`

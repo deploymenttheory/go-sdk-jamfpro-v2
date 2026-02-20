@@ -9,7 +9,8 @@ import (
 // ResourceBYOProfile represents a Jamf Pro Classic API BYO profile resource.
 type ResourceBYOProfile struct {
 	XMLName xml.Name        `xml:"byoprofile"`
-	ID      int             `xml:"id"`
+	ID      int             `xml:"id,omitempty"`
+	Name    string          `xml:"name,omitempty"`
 	General GeneralSettings `xml:"general"`
 }
 

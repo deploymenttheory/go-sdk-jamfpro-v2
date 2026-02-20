@@ -5,8 +5,8 @@ import "encoding/xml"
 // ResourceSoftwareUpdateServer represents a Jamf Pro Classic API software update server resource.
 type ResourceSoftwareUpdateServer struct {
 	XMLName       xml.Name `xml:"software_update_server"`
-	ID            int      `xml:"id"`
-	Name          string   `xml:"name"`
+	ID            int      `xml:"id,omitempty"`
+	Name          string   `xml:"name,omitempty"`
 	IPAddress     string   `xml:"ip_address,omitempty"`
 	Port          int      `xml:"port,omitempty"`
 	SetSystemWide bool     `xml:"set_system_wide"`
