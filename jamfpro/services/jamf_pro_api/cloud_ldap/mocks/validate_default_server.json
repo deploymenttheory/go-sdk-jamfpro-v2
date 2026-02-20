@@ -1,0 +1,13 @@
+{
+  "id": "",
+  "enabled": false,
+  "serverUrl": "",
+  "domainName": "",
+  "port": 636,
+  "keystore": null,
+  "connectionTimeout": 15,
+  "searchTimeout": 60,
+  "useWildcards": false,
+  "connectionType": "LDAPS",
+  "membershipCalculationOptimizationEnabled": false
+}

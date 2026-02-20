@@ -1,0 +1,31 @@
+{
+  "cloudIdPCommon": {
+    "displayName": "Test Azure IDP",
+    "providerName": "AZURE"
+  },
+  "server": {
+    "id": "1",
+    "tenantId": "12345678-1234-1234-1234-123456789012",
+    "enabled": true,
+    "migrated": false,
+    "mappings": {
+      "userId": "objectGUID",
+      "userName": "userPrincipalName",
+      "realName": "displayName",
+      "email": "mail",
+      "department": "department",
+      "building": "physicalDeliveryOfficeName",
+      "room": "roomNumber",
+      "phone": "telephoneNumber",
+      "position": "title",
+      "groupId": "objectGUID",
+      "groupName": "cn"
+    },
+    "searchTimeout": 30,
+    "transitiveMembershipEnabled": true,
+    "transitiveMembershipUserField": "userPrincipalName",
+    "transitiveDirectoryMembershipEnabled": false,
+    "membershipCalculationOptimizationEnabled": true,
+    "code": "test-code"
+  }
+}

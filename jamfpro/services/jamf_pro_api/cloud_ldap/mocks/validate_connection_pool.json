@@ -1,0 +1,15 @@
+{
+  "numConnectionsClosedDefunct": 0,
+  "numConnectionsClosedExpired": 2,
+  "numConnectionsClosedUnneeded": 5,
+  "numFailedCheckouts": 0,
+  "numFailedConnectionAttempts": 0,
+  "numReleasedValid": 100,
+  "numSuccessfulCheckouts": 95,
+  "numSuccessfulCheckoutsNewConnection": 10,
+  "numSuccessfulConnectionAttempts": 10,
+  "maximumAvailableConnections": 20,
+  "numSuccessfulCheckoutsWithoutWaiting": 85,
+  "numSuccessfulCheckoutsAfterWaiting": 10,
+  "numAvailableConnections": 15
+}

@@ -1,0 +1,12 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "distinguishedName": "CN=TestGroup,OU=Groups,DC=example,DC=com",
+      "id": "group-123",
+      "uuid": "12345678-1234-1234-1234-123456789012",
+      "serverId": "1",
+      "name": "TestGroup"
+    }
+  ]
+}

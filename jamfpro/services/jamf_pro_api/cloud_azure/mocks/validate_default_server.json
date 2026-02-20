@@ -1,0 +1,25 @@
+{
+  "id": "",
+  "tenantId": "",
+  "enabled": false,
+  "migrated": false,
+  "mappings": {
+    "userId": "objectGUID",
+    "userName": "userPrincipalName",
+    "realName": "displayName",
+    "email": "mail",
+    "department": "department",
+    "building": "physicalDeliveryOfficeName",
+    "room": "roomNumber",
+    "phone": "telephoneNumber",
+    "position": "title",
+    "groupId": "objectGUID",
+    "groupName": "cn"
+  },
+  "searchTimeout": 30,
+  "transitiveMembershipEnabled": false,
+  "transitiveMembershipUserField": "userPrincipalName",
+  "transitiveDirectoryMembershipEnabled": false,
+  "membershipCalculationOptimizationEnabled": false,
+  "code": ""
+}

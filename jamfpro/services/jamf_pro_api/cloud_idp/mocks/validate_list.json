@@ -1,0 +1,17 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "displayName": "Test Azure IDP",
+      "enabled": true,
+      "providerName": "AZURE"
+    },
+    {
+      "id": "2",
+      "displayName": "Test Google IDP",
+      "enabled": false,
+      "providerName": "GOOGLE"
+    }
+  ]
+}

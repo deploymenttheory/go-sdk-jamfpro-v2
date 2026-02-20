@@ -1,0 +1,10 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "configProfileId": 1,
+      "configProfileName": "Test Profile",
+      "configProfileType": "OSX_CONFIGURATION_PROFILE"
+    }
+  ]
+}

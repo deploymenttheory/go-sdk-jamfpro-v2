@@ -1,0 +1,21 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "distinguishedName": "CN=Test User,OU=Users,DC=example,DC=com",
+      "id": "user-123",
+      "uuid": "87654321-4321-4321-4321-210987654321",
+      "serverId": "1",
+      "name": "testuser",
+      "attributes": {
+        "fullName": "Test User",
+        "emailAddress": "testuser@example.com",
+        "phoneNumber": "555-1234",
+        "position": "Engineer",
+        "room": "101",
+        "buildingName": "Main Building",
+        "departmentName": "IT"
+      }
+    }
+  ]
+}

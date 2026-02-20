@@ -1,0 +1,55 @@
+{
+  "cloudIdPCommon": {
+    "id": "1",
+    "providerName": "GOOGLE",
+    "displayName": "Test Google LDAP"
+  },
+  "server": {
+    "enabled": true,
+    "keystore": {
+      "type": "PKCS12",
+      "expirationDate": "2025-12-31T23:59:59Z",
+      "subject": "CN=ldap.example.com",
+      "fileName": "keystore.p12"
+    },
+    "useWildcards": false,
+    "connectionType": "LDAPS",
+    "serverUrl": "ldaps://ldap.google.com",
+    "domainName": "example.com",
+    "port": 636,
+    "connectionTimeout": 15,
+    "searchTimeout": 60,
+    "membershipCalculationOptimizationEnabled": true
+  },
+  "mappings": {
+    "userMappings": {
+      "objectClassLimitation": "user",
+      "objectClasses": "person",
+      "searchBase": "dc=example,dc=com",
+      "searchScope": "ALL_SUBTREES",
+      "additionalSearchBase": "",
+      "userID": "uid",
+      "username": "uid",
+      "realName": "cn",
+      "emailAddress": "mail",
+      "department": "ou",
+      "building": "physicalDeliveryOfficeName",
+      "room": "roomNumber",
+      "phone": "telephoneNumber",
+      "position": "title",
+      "userUuid": "entryUUID"
+    },
+    "groupMappings": {
+      "objectClassLimitation": "group",
+      "objectClasses": "groupOfNames",
+      "searchBase": "dc=example,dc=com",
+      "searchScope": "ALL_SUBTREES",
+      "groupID": "cn",
+      "groupName": "cn",
+      "groupUuid": "entryUUID"
+    },
+    "membershipMappings": {
+      "groupMembershipMapping": "member"
+    }
+  }
+}

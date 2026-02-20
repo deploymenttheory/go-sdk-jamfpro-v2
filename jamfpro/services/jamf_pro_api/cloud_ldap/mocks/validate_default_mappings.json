@@ -1,0 +1,31 @@
+{
+  "userMappings": {
+    "objectClassLimitation": "user",
+    "objectClasses": "person",
+    "searchBase": "dc=example,dc=com",
+    "searchScope": "ALL_SUBTREES",
+    "additionalSearchBase": "",
+    "userID": "uid",
+    "username": "uid",
+    "realName": "cn",
+    "emailAddress": "mail",
+    "department": "ou",
+    "building": "physicalDeliveryOfficeName",
+    "room": "roomNumber",
+    "phone": "telephoneNumber",
+    "position": "title",
+    "userUuid": "entryUUID"
+  },
+  "groupMappings": {
+    "objectClassLimitation": "group",
+    "objectClasses": "groupOfNames",
+    "searchBase": "dc=example,dc=com",
+    "searchScope": "ALL_SUBTREES",
+    "groupID": "cn",
+    "groupName": "cn",
+    "groupUuid": "entryUUID"
+  },
+  "membershipMappings": {
+    "groupMembershipMapping": "member"
+  }
+}

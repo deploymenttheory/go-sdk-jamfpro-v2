@@ -1,0 +1,25 @@
+{
+  "id": "1",
+  "displayName": "Test ADCS",
+  "caName": "TestCA",
+  "fqdn": "adcs.example.com",
+  "adcsUrl": "https://adcs.example.com/certsrv",
+  "serverCert": {
+    "filename": "server.p12",
+    "serialNumber": "1234567890",
+    "subject": "CN=server.example.com",
+    "issuer": "CN=TestCA",
+    "expirationDate": "2025-12-31T23:59:59Z"
+  },
+  "clientCert": {
+    "filename": "client.p12",
+    "serialNumber": "0987654321",
+    "subject": "CN=client.example.com",
+    "issuer": "CN=TestCA",
+    "expirationDate": "2025-12-31T23:59:59Z"
+  },
+  "revocationEnabled": true,
+  "apiClientId": "test-client-id",
+  "outbound": false,
+  "connectorLastCheckInTimestamp": "2024-01-15T10:30:00Z"
+}
