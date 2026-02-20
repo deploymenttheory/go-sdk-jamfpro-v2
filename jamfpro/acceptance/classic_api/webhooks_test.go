@@ -36,8 +36,8 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 		URL:                "https://hooks.example.com/test",
 		ContentType:        "application/json",
 		Event:              "ComputerAdded",
-		ConnectionTimeout:  30,
-		ReadTimeout:        30,
+		ConnectionTimeout:  5000,
+		ReadTimeout:        5000,
 		AuthenticationType: "NONE",
 	}
 
@@ -215,6 +215,8 @@ func TestAcceptance_Webhooks_DeleteByName(t *testing.T) {
 		URL:                "https://hooks.example.com/dbn",
 		ContentType:        "application/json",
 		Event:              "ComputerAdded",
+		ConnectionTimeout:  5000,
+		ReadTimeout:        5000,
 		AuthenticationType: "NONE",
 	}
 

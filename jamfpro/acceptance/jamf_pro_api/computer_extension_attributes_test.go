@@ -83,7 +83,7 @@ func TestAcceptance_ComputerExtensionAttributes_Lifecycle(t *testing.T) {
 		DataType:             "String",
 		Enabled:              &enabled,
 		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		InputType:            "TEXT",
 	}
 	updated, updateResp, err := svc.UpdateComputerExtensionAttributeByIDV1(ctx, eaID, updateReq)
 	require.NoError(t, err)

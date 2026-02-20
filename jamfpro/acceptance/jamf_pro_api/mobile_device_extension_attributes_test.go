@@ -77,7 +77,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_Lifecycle(t *testing.T) {
 		Description:          "Updated description",
 		DataType:             "String",
 		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		InputType:            "TEXT",
 	}
 	updated, updateResp, err := svc.UpdateMobileDeviceExtensionAttributeByIDV1(ctx, eaID, updateReq)
 	require.NoError(t, err)
