@@ -20,8 +20,9 @@ type ListItem struct {
 }
 
 // ListResponse is the response for ListRestrictedSoftware (GET /JSSResource/restrictedsoftware).
+// Jamf Pro returns root element <restricted_software> (not restricted_software_titles).
 type ListResponse struct {
-	XMLName xml.Name   `xml:"restricted_software_titles"`
+	XMLName xml.Name   `xml:"restricted_software"`
 	Size    int        `xml:"size"`
 	Results []ListItem `xml:"restricted_software_title"`
 }

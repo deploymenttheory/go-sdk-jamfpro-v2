@@ -43,6 +43,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 				{
 					Name:       "Username",
 					Priority:   0,
+					AndOr:      "and",
 					SearchType: "like",
 					Value:      "test",
 				},
@@ -151,6 +152,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 				{
 					Name:       "Email Address",
 					Priority:   0,
+					AndOr:      "and",
 					SearchType: "like",
 					Value:      "@example.com",
 				},
@@ -244,6 +246,7 @@ func TestAcceptance_AdvancedUserSearches_DeleteByName(t *testing.T) {
 				{
 					Name:       "Username",
 					Priority:   0,
+					AndOr:      "and",
 					SearchType: "like",
 					Value:      "test",
 				},

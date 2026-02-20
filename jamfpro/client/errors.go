@@ -13,6 +13,8 @@ const (
 	StatusForbidden           = 403
 	StatusNotFound            = 404
 	StatusConflict            = 409
+	StatusPreconditionFailed  = 412
+	StatusUnprocessableEntity = 422
 	StatusTooManyRequests     = 429
 	StatusInternalServerError = 500
 	StatusServiceUnavailable  = 503
@@ -72,22 +74,26 @@ func ParseErrorResponse(body []byte, statusCode int, status, method, endpoint st
 
 func defaultMessageForStatus(statusCode int) string {
 	switch statusCode {
-	case StatusBadRequest:
-		return "Bad request"
-	case StatusUnauthorized:
-		return "Authentication required"
-	case StatusForbidden:
-		return "Forbidden"
-	case StatusNotFound:
-		return "Resource not found"
-	case StatusConflict:
-		return "Conflict"
-	case StatusTooManyRequests:
-		return "Too many requests"
-	case StatusInternalServerError:
-		return "Internal server error"
-	case StatusServiceUnavailable:
-		return "Service unavailable"
+	case 400:
+		return "The request could not be understood by the server due to malformed syntax."
+	case 401:
+		return "The request has not been applied because it lacks valid authentication credentials for the target resource."
+	case 403:
+		return "Authentication required or token invalid. The server understood the request but refuses to authorize it."
+	case 404:
+		return "The server has not found anything matching the Request-URI."
+	case 409:
+		return "The request could not be completed due to a conflict with the current state of the resource."
+	case 412:
+		return "One or more conditions given in the request header fields evaluated to false when tested on the server."
+	case 422:
+		return "The request has correct syntax, but has a field with a bad value, such as an ID which does not exist, an illegal enum value, or a field is missing entirely."
+	case 429:
+		return "The user has sent too many requests in a given amount of time (rate limiting)."
+	case 500:
+		return "The server encountered an unexpected condition which prevented it from fulfilling the request."
+	case 503:
+		return "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
 	default:
 		return "Unknown error"
 	}

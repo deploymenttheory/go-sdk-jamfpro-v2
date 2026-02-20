@@ -37,9 +37,6 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 			{Student: "student1@example.com"},
 			{Student: "student2@example.com"},
 		},
-		Teachers: []classes.Teacher{
-			{Teacher: "teacher1@example.com"},
-		},
 		MeetingTimes: &classes.MeetingTimesContainer{
 			MeetingTime: classes.MeetingTime{
 				Days:      "MWF",
