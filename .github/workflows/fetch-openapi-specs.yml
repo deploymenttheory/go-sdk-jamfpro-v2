@@ -1,0 +1,70 @@
+# Fetches Jamf Pro version via SDK (scripts/swagger/GetJamfProVersion), downloads
+# Classic API swagger and Jamf Pro API schema, suffixes filenames with version, opens a PR.
+# Requires repository secrets: INSTANCE_DOMAIN, AUTH_METHOD, and either
+# (CLIENT_ID + CLIENT_SECRET) or (BASIC_AUTH_USERNAME + BASIC_AUTH_PASSWORD).
+name: Fetch OpenAPI specs
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  fetch-specs:
+    name: 'Fetch OpenAPI specs'
+    runs-on: ubuntu-latest
+    env:
+      INSTANCE_DOMAIN: ${{ secrets.INSTANCE_DOMAIN }}
+      AUTH_METHOD: ${{ secrets.AUTH_METHOD }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Go
+        uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
+        with:
+          go-version-file: 'go.mod'
+          cache-dependency-path: 'go.sum'
+          cache: true
+
+      - name: Get Jamf Pro version
+        id: version
+        run: |
+          VERSION=$(go run ./scripts/swagger/GetJamfProVersion)
+          VERSION="${VERSION// /}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Jamf Pro version: $VERSION"
+
+      - name: Ensure base URL
+        id: base
+        run: |
+          D="${{ env.INSTANCE_DOMAIN }}"
+          D="${D%/}"
+          case "$D" in http://*|https://*) ;; *) D="https://$D";; esac
+          echo "url=$D" >> "$GITHUB_OUTPUT"
+
+      - name: Download OpenAPI specs
+        run: |
+          mkdir -p openapi-specs
+          curl -fsSL "${{ steps.base.outputs.url }}/classicapi/doc/swagger.yaml" -o "openapi-specs/swagger-${{ steps.version.outputs.version }}.yaml"
+          curl -fsSL "${{ steps.base.outputs.url }}/api/schema/" -o "openapi-specs/api-schema-${{ steps.version.outputs.version }}.json"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: openapi-specs-${{ steps.version.outputs.version }}
+          commit-message: "openapi: add specs for Jamf Pro ${{ steps.version.outputs.version }}"
+          title: "OpenAPI specs for Jamf Pro ${{ steps.version.outputs.version }}"
+          body: "Fetched Classic API swagger and Jamf Pro API schema for version ${{ steps.version.outputs.version }}."

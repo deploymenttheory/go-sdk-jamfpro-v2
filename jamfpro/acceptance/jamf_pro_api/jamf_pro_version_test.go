@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_JamfProVersion_Get(t *testing.T) {
+func TestAcceptance_JamfProVersion_GetV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.JamfProVersion
 	ctx := context.Background()
