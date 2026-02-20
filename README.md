@@ -30,30 +30,19 @@ The [examples directory](examples/) contains working examples for many SDK servi
 
 Each example includes a complete `main.go` you can run with your Jamf Pro credentials.
 
-## SDK Services
-
-### Jamf Pro API (REST)
-
-- **Access & Account:** Access Management Settings, Account Preferences, API Integrations, API Roles, API Role Privileges
-- **Enrollment & SSO:** Enrollment Settings, Reenrollment, Service Discovery Enrollment, SSO Certificate, SSO Settings, Adue Session Token Settings, Login Customization
-- **Inventory & Groups:** Buildings, Categories, Computer Extension Attributes, Computer Groups (static/smart), Computer Prestages, Departments, Mobile Device Extension Attributes, Mobile Device Groups
-- **Configuration & Distribution:** Cache Settings, Certificate Authority, Client Check-in, Cloud Distribution Point, Dock Items, Packages, Policy Properties, Scripts, Volume Purchasing Locations, Volume Purchasing Subscriptions
-- **Self Service & Notifications:** Self Service Settings, Self Service Plus Settings, Notifications, Onboarding, Return to Service, Startup Status
-- **Infrastructure:** Bookmarks, Icons, Jamf Pro Information, Jamf Pro Version, LDAP, Locales, SMTPServer, Time Zones
-- **Other:** App Installers, Device Communication Settings, Policy Properties
-
-### Classic API
-
-- Accounts, Account Groups, Activation Code, Advanced Computer/User Searches, Allowed File Extensions, BYO Profiles, Classes, Directory Bindings, Disk Encryption Configurations, IBeacons, LDAP Servers, Network Segments, Patch External Sources, Printers, Removeable Mac Addresses, Restricted Software, Sites, Software Update Servers, VPP Accounts, Webhooks
 
 ## HTTP Client Configuration
 
-The SDK uses a transport layer with bearer token auth, retries, and optional observability:
+The SDK includes a powerful HTTP client with production-ready configuration options:
 
-- **[Authentication](docs/guides/authentication.md)** — OAuth2 and Basic auth, environment variables, config files, and secure credential handling
-- **Client options** — `WithLogger` (zap), `EnableTracing` (OpenTelemetry); pass options into `jamfpro.NewClient(authConfig, options...)` or `jamfpro.NewClientFromEnv(options...)`
-
-The transport applies idempotent retries, sticky-session cookies for Jamf Cloud, and adaptive throttling. See [Quick Start](docs/guides/quick-start.md) for a minimal client and [Authentication](docs/guides/authentication.md) for production patterns.
+- **[Authentication](docs/guides/authentication.md)** - OAuth2 and Basic auth with secure credential management
+- **[Timeouts & Retries](docs/guides/timeouts-retries.md)** - Configurable timeouts and automatic retry logic with exponential backoff
+- **[TLS/SSL Configuration](docs/guides/tls-configuration.md)** - Custom certificates, mutual TLS, and security settings
+- **[Proxy Support](docs/guides/proxy.md)** - HTTP/HTTPS/SOCKS5 proxy configuration
+- **[Custom Headers](docs/guides/custom-headers.md)** - Global and per-request header management
+- **[Structured Logging](docs/guides/logging.md)** - Integration with zap for production logging
+- **[OpenTelemetry Tracing](docs/guides/opentelemetry.md)** - Distributed tracing and observability
+- **[Debug Mode](docs/guides/debugging.md)** - Detailed request/response inspection
 
 ## Configuration Options
 
@@ -88,12 +77,85 @@ jamfClient, err := jamfpro.NewClient(authConfig, client.WithLogger(logger))
 
 ### Optional client options
 
+The SDK client supports extensive configuration through functional options. Below is the complete list of available configuration options grouped by category.
+
+#### Basic Configuration
+
 ```go
-client.WithLogger(zapLogger)   // Structured logging (zap)
-jamfClient.EnableTracing(otelConfig)  // OpenTelemetry HTTP tracing (call after NewClient)
+client.WithBaseURL("https://...")                    // Custom base URL
+client.WithTimeout(30*time.Second)                   // Request timeout
+client.WithRetryCount(3)                             // Number of retry attempts
+client.WithRetryWaitTime(2*time.Second)              // Initial retry wait time
+client.WithRetryMaxWaitTime(10*time.Second)          // Maximum retry wait time
+client.WithTotalRetryDuration(2*time.Minute)         // Total retry budget
 ```
 
-See the [configuration guides](docs/guides/) for detailed documentation.
+#### TLS/Security
+
+```go
+client.WithTLSClientConfig(tlsConfig)                // Custom TLS configuration
+client.WithInsecureSkipVerify()                      // Skip cert verification (dev only!)
+```
+
+#### Network
+
+```go
+client.WithProxy("http://proxy:8080")                // HTTP/HTTPS/SOCKS5 proxy
+client.WithTransport(customTransport)                // Custom HTTP transport
+```
+
+#### Headers
+
+```go
+client.WithUserAgent("MyApp/1.0")                    // Set User-Agent header
+client.WithGlobalHeader("X-Custom-Header", "value")  // Add single global header
+client.WithGlobalHeaders(map[string]string{...})     // Add multiple global headers
+```
+
+#### Observability
+
+```go
+client.WithLogger(zapLogger)                         // Structured logging with zap
+jamfClient.EnableTracing(otelConfig)                 // OpenTelemetry distributed tracing (call after NewClient)
+client.WithDebug()                                   // Enable debug mode (dev only!)
+```
+
+#### Concurrency & Rate Limiting
+
+```go
+client.WithMaxConcurrentRequests(5)                  // Limit concurrent requests (Jamf Pro recommendation: ≤5)
+client.WithMandatoryRequestDelay(100*time.Millisecond) // Add delay between requests
+```
+
+#### Example: Production Configuration
+
+```go
+import (
+    "time"
+    "go.uber.org/zap"
+    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+)
+
+logger, _ := zap.NewProduction()
+authConfig := client.AuthConfigFromEnv()
+
+jamfClient, err := jamfpro.NewClient(
+    authConfig,
+    client.WithTimeout(30*time.Second),
+    client.WithRetryCount(3),
+    client.WithLogger(logger),
+    client.WithMaxConcurrentRequests(5),
+    client.WithGlobalHeader("X-Application-Name", "MyJamfIntegration"),
+)
+
+// Enable OpenTelemetry tracing (optional)
+jamfClient.EnableTracing(&client.OTelConfig{
+    ServiceName: "my-jamf-integration",
+})
+```
+
+See the [configuration guides](docs/guides/) for detailed documentation on each option.
 
 ## Documentation
 

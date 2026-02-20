@@ -1,0 +1,242 @@
+# Codecov configuration for go-api-sdk-virustotal
+# For more info: https://docs.codecov.io/docs/codecov-yaml
+
+# Go Integration Test Coverage (Go 1.20+ Features)
+#
+#   1. https://go.dev/blog/integration-test-coverage
+#     - Official Go blog explaining Go 1.20+ coverage for integration tests
+#     - How to use go build -cover and go tool covdata
+#   2. https://dustinspecker.com/posts/go-combined-unit-integration-code-coverage/
+#     - Practical examples of merging unit and integration test coverage
+#     - Step-by-step commands for combining coverage data
+#   3. https://go.dev/doc/build-cover
+#     - Official documentation on coverage profiling
+#     - Using GOCOVERDIR environment variable
+#   4. https://netdevops.me/2023/test-coverage-for-go-integration-tests/
+#     - Real-world implementation examples
+#     - How to convert binary coverage format to text format for Codecov
+
+codecov:
+  bot: "codecov-io"
+  require_ci_to_pass: true
+  max_report_age: 24h
+  notify:
+    after_n_builds: 1
+    wait_for_ci: true
+
+coverage:
+  precision: 2
+  round: down
+  range: "60...90"
+
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 2%
+        base: auto
+        branches:
+          - main
+        if_ci_failed: error  # Informational only - GitHub Actions enforces
+        informational: true
+
+    patch:
+      default:
+        target: 80%  # Minimum coverage for new code - GitHub Actions enforces this
+        threshold: 5%
+        base: auto
+        branches:
+          - main
+        if_ci_failed: ignore  # Informational only - GitHub Actions enforces
+        informational: true
+
+# Flags for different test types
+flags:
+  unittests:
+    paths:
+      - "jamfpro/"
+    carryforward: false
+
+  acceptancetests:
+    paths:
+      - "jamfpro/acceptance/"
+    carryforward: false
+
+  # Component-specific flags
+  client:
+    paths:
+      - "jamfpro/client/"
+    carryforward: false
+
+  interfaces:
+    paths:
+      - "jamfpro/interfaces/"
+    carryforward: false
+
+  # Service-specific flags for API endpoints
+  files:
+    paths:
+      - "jamfpro/services/files/"
+    carryforward: false
+
+  urls:
+    paths:
+      - "virustotal/services/urls/"
+    carryforward: false
+
+  domains:
+    paths:
+      - "virustotal/services/domains/"
+    carryforward: false
+
+  ip_addresses:
+    paths:
+      - "virustotal/services/ip_addresses/"
+    carryforward: false
+
+  analyses:
+    paths:
+      - "virustotal/services/analyses/"
+    carryforward: false
+
+  comments:
+    paths:
+      - "virustotal/services/comments/"
+    carryforward: false
+
+  votes:
+    paths:
+      - "virustotal/services/votes/"
+    carryforward: false
+
+  intelligence:
+    paths:
+      - "virustotal/services/intelligence/"
+    carryforward: false
+
+  graphs:
+    paths:
+      - "virustotal/services/graphs/"
+    carryforward: false
+
+  monitor:
+    paths:
+      - "virustotal/services/monitor/"
+    carryforward: false
+
+  users:
+    paths:
+      - "virustotal/services/users/"
+    carryforward: false
+
+  groups:
+    paths:
+      - "virustotal/services/groups/"
+    carryforward: false
+
+  api_keys:
+    paths:
+      - "virustotal/services/api_keys/"
+    carryforward: false
+
+  attack_tactics:
+    paths:
+      - "virustotal/services/attack_tactics/"
+    carryforward: false
+
+  attack_techniques:
+    paths:
+      - "virustotal/services/attack_techniques/"
+    carryforward: false
+
+  collections:
+    paths:
+      - "virustotal/services/collections/"
+    carryforward: false
+
+  popular_threat_categories:
+    paths:
+      - "virustotal/services/popular_threat_categories/"
+    carryforward: false
+
+  search:
+    paths:
+      - "virustotal/services/search/"
+    carryforward: false
+
+  metadata:
+    paths:
+      - "virustotal/services/metadata/"
+    carryforward: false
+
+  sigma_rules:
+    paths:
+      - "virustotal/services/sigma_rules/"
+    carryforward: false
+
+  yara_rules:
+    paths:
+      - "virustotal/services/yara_rules/"
+    carryforward: false
+
+  livehunt_notifications:
+    paths:
+      - "virustotal/services/livehunt_notifications/"
+    carryforward: false
+
+  livehunt_rulesets:
+    paths:
+      - "virustotal/services/livehunt_rulesets/"
+    carryforward: false
+
+  retrohunt_jobs:
+    paths:
+      - "virustotal/services/retrohunt_jobs/"
+    carryforward: false
+
+  zip_files:
+    paths:
+      - "virustotal/services/zip_files/"
+    carryforward: false
+
+# Ignore paths that shouldn't count towards coverage
+ignore:
+  # Directories
+  - "tools/"
+  - "scripts/"
+  - "examples/"
+  - "docs/"
+
+  # Test files and fixtures
+  - "**/*_test.go"
+  - "**/testdata/**"
+  - "**/mocks/**"
+  - "**/tests/**"
+  - "**/acceptance/**"  # Acceptance test helpers and dependencies
+
+  # File types
+  - "*.md"              # Documentation files
+  - "*.json"            # Mock responses
+  - "*.yml"
+  - "*.yaml"
+  - "go.mod"
+  - "go.sum"
+
+# Parser settings for Go
+parsers:
+  go:
+    partials_as_hits: false
+
+# Pull request comment configuration
+comment:
+  layout: "diff, flags, files"
+  behavior: default
+  require_changes: false
+  require_base: false
+  require_head: true
+  branches:
+    - main
+
+# GitHub Checks annotations
+github_checks:
+  annotations: true
