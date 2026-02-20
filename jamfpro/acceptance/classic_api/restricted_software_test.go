@@ -50,11 +50,11 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	defer cancel1()
 
 	created, createResp, err := svc.CreateRestrictedSoftware(ctx1, createReq)
-	require.NoError(t, err, "CreateRestrictedSoftware should not return an error")
-	require.NotNil(t, created)
-	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
-	assert.Positive(t, created.ID, "created restricted software ID should be a positive integer")
+	require.NoError(t, err, "Create: %v", err)
+	require.NotNil(t, created, "Create: created is nil")
+	require.NotNil(t, createResp, "Create: createResp is nil")
+	require.Contains(t, []int{200, 201}, createResp.StatusCode, "Create: expected status 200 or 201, got %d", createResp.StatusCode)
+	require.Positive(t, created.ID, "Create: created.ID should be positive, got %d", created.ID)
 	// Classic API POST responses return only the assigned ID, not the full resource.
 
 	swID := created.ID
@@ -76,20 +76,20 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	defer cancel2()
 
 	list, listResp, err := svc.ListRestrictedSoftware(ctx2)
-	require.NoError(t, err, "ListRestrictedSoftware should not return an error")
-	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
-	assert.Positive(t, list.Size, "size should be positive")
+	require.NoError(t, err, "List: %v", err)
+	require.NotNil(t, list, "List: list is nil")
+	require.Equal(t, 200, listResp.StatusCode, "List: status code")
+	require.Positive(t, list.Size, "List: size should be positive, got %d", list.Size)
 
 	found := false
 	for _, item := range list.Results {
 		if item.ID == swID {
 			found = true
-			assert.Equal(t, swName, item.Name)
+			require.Equal(t, swName, item.Name, "List: item name")
 			break
 		}
 	}
-	assert.True(t, found, "newly created restricted software should appear in list")
+	require.True(t, found, "List: newly created restricted software ID=%d should appear in list (size=%d)", swID, list.Size)
 	acc.LogTestSuccess(t, "Restricted software ID=%d found in list (%d total)", swID, list.Size)
 
 	// ------------------------------------------------------------------
@@ -101,17 +101,17 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	defer cancel3()
 
 	fetched, fetchResp, err := svc.GetRestrictedSoftwareByID(ctx3, swID)
-	require.NoError(t, err, "GetRestrictedSoftwareByID should not return an error")
-	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
-	assert.Equal(t, swID, fetched.General.ID)
-	assert.Equal(t, swName, fetched.General.Name)
-	assert.Equal(t, "testprocess.exe", fetched.General.ProcessName)
-	assert.True(t, fetched.General.MatchExactProcessName)
-	assert.True(t, fetched.General.SendNotification)
-	assert.False(t, fetched.General.KillProcess)
-	assert.False(t, fetched.General.DeleteExecutable)
-	assert.Equal(t, "This software is restricted", fetched.General.DisplayMessage)
+	require.NoError(t, err, "GetByID: %v", err)
+	require.NotNil(t, fetched, "GetByID: fetched is nil")
+	require.Equal(t, 200, fetchResp.StatusCode, "GetByID: status code")
+	require.Equal(t, swID, fetched.General.ID, "GetByID: ID")
+	require.Equal(t, swName, fetched.General.Name, "GetByID: Name")
+	require.Equal(t, "testprocess.exe", fetched.General.ProcessName, "GetByID: ProcessName")
+	require.True(t, fetched.General.MatchExactProcessName, "GetByID: MatchExactProcessName")
+	require.True(t, fetched.General.SendNotification, "GetByID: SendNotification")
+	require.False(t, fetched.General.KillProcess, "GetByID: KillProcess")
+	require.False(t, fetched.General.DeleteExecutable, "GetByID: DeleteExecutable")
+	require.Equal(t, "This software is restricted", fetched.General.DisplayMessage, "GetByID: DisplayMessage")
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.General.ID, fetched.General.Name)
 
 	// ------------------------------------------------------------------
@@ -123,11 +123,11 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	defer cancel4()
 
 	fetchedByName, fetchByNameResp, err := svc.GetRestrictedSoftwareByName(ctx4, swName)
-	require.NoError(t, err, "GetRestrictedSoftwareByName should not return an error")
-	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
-	assert.Equal(t, swID, fetchedByName.General.ID)
-	assert.Equal(t, swName, fetchedByName.General.Name)
+	require.NoError(t, err, "GetByName: %v", err)
+	require.NotNil(t, fetchedByName, "GetByName: fetched is nil")
+	require.Equal(t, 200, fetchByNameResp.StatusCode, "GetByName: status code")
+	require.Equal(t, swID, fetchedByName.General.ID, "GetByName: ID")
+	require.Equal(t, swName, fetchedByName.General.Name, "GetByName: Name")
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.General.ID, fetchedByName.General.Name)
 
 	// ------------------------------------------------------------------
@@ -156,9 +156,9 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	}
 
 	updated, updateResp, err := svc.UpdateRestrictedSoftwareByID(ctx5, swID, updateReq)
-	require.NoError(t, err, "UpdateRestrictedSoftwareByID should not return an error")
-	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	require.NoError(t, err, "UpdateByID: %v", err)
+	require.NotNil(t, updated, "UpdateByID: updated is nil")
+	require.Contains(t, []int{200, 201}, updateResp.StatusCode, "UpdateByID: expected status 200 or 201, got %d", updateResp.StatusCode)
 	// Classic API PUT responses return only the resource ID, not the full resource.
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
 
@@ -171,16 +171,16 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	defer cancel6()
 
 	verified, verifyResp, err := svc.GetRestrictedSoftwareByID(ctx6, swID)
-	require.NoError(t, err)
-	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
-	assert.Equal(t, updatedName, verified.General.Name, "name should reflect the update")
-	assert.Equal(t, "updatedprocess.exe", verified.General.ProcessName)
-	assert.False(t, verified.General.MatchExactProcessName)
-	assert.False(t, verified.General.SendNotification)
-	assert.True(t, verified.General.KillProcess)
-	assert.True(t, verified.General.DeleteExecutable)
-	assert.Equal(t, "Updated message", verified.General.DisplayMessage)
+	require.NoError(t, err, "GetByID (post-update): %v", err)
+	require.NotNil(t, verified, "GetByID (post-update): verified is nil")
+	require.Equal(t, 200, verifyResp.StatusCode, "GetByID (post-update): status code")
+	require.Equal(t, updatedName, verified.General.Name, "GetByID (post-update): name should reflect the update, got %q", verified.General.Name)
+	require.Equal(t, "updatedprocess.exe", verified.General.ProcessName, "GetByID (post-update): ProcessName")
+	require.False(t, verified.General.MatchExactProcessName, "GetByID (post-update): MatchExactProcessName")
+	require.False(t, verified.General.SendNotification, "GetByID (post-update): SendNotification")
+	require.True(t, verified.General.KillProcess, "GetByID (post-update): KillProcess")
+	require.True(t, verified.General.DeleteExecutable, "GetByID (post-update): DeleteExecutable")
+	require.Equal(t, "Updated message", verified.General.DisplayMessage, "GetByID (post-update): DisplayMessage")
 	acc.LogTestSuccess(t, "Name update verified: %q", verified.General.Name)
 
 	// ------------------------------------------------------------------
@@ -192,9 +192,9 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	defer cancel7()
 
 	deleteResp, err := svc.DeleteRestrictedSoftwareByID(ctx7, swID)
-	require.NoError(t, err, "DeleteRestrictedSoftwareByID should not return an error")
-	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	require.NoError(t, err, "DeleteByID: %v", err)
+	require.NotNil(t, deleteResp, "DeleteByID: deleteResp is nil")
+	require.Contains(t, []int{200, 204}, deleteResp.StatusCode, "DeleteByID: expected status 200 or 204, got %d", deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Restricted software ID=%d deleted", swID)
 }
 
