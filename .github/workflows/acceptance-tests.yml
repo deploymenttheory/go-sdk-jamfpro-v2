@@ -48,6 +48,33 @@ jobs:
           go mod verify
           echo "::endgroup::"
 
+      - name: Verify Environment Configuration
+        run: |
+          echo "::group::🔍 Environment Verification"
+          echo "Checking required environment variables..."
+          if [ -z "$INSTANCE_DOMAIN" ]; then
+            echo "::error::INSTANCE_DOMAIN is not set"
+            exit 1
+          fi
+          if [ -z "$AUTH_METHOD" ]; then
+            echo "::error::AUTH_METHOD is not set"
+            exit 1
+          fi
+          if [ -z "$CLIENT_ID" ]; then
+            echo "::error::CLIENT_ID is not set"
+            exit 1
+          fi
+          if [ -z "$CLIENT_SECRET" ]; then
+            echo "::error::CLIENT_SECRET is not set"
+            exit 1
+          fi
+          echo "✅ INSTANCE_DOMAIN: ${INSTANCE_DOMAIN:0:30}..." # Show first 30 chars
+          echo "✅ AUTH_METHOD: $AUTH_METHOD"
+          echo "✅ CLIENT_ID: ${CLIENT_ID:0:8}..." # Show first 8 chars for security
+          echo "✅ CLIENT_SECRET is set (hidden)"
+          echo "All required environment variables are configured"
+          echo "::endgroup::"
+
       - name: Run Acceptance Tests
         run: |
           echo "::group::🧪 Acceptance Tests Setup"
