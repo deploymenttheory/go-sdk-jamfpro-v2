@@ -120,6 +120,50 @@ func TestUnitDeleteByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
+func TestUnitUpdateByNameV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+	mock.RegisterUpdateByIDMock("1")
+
+	request := &ResourceApiIntegration{DisplayName: "Updated", Enabled: true}
+	result, resp, err := svc.UpdateByNameV1(context.Background(), "Test Integration", request)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnitUpdateByNameV1_NilRequest(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+
+	result, resp, err := svc.UpdateByNameV1(context.Background(), "Test Integration", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnitDeleteByNameV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+	mock.RegisterDeleteByIDMock("1")
+
+	resp, err := svc.DeleteByNameV1(context.Background(), "Test Integration")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnitDeleteByNameV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+
+	resp, err := svc.DeleteByNameV1(context.Background(), "Nonexistent")
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "not found")
+	// resp may be non-nil (list response) when name is not in results
+	_ = resp
+}
+
 func TestUnitRefreshClientCredentialsByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 

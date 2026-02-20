@@ -14,9 +14,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiintegrations
 	ApiIntegrationsServiceInterface interface {
-		// ListV1 returns a page of API integrations (Get API Integrations).
+		// ListV1 returns a page of API integrations (Get API Integrations / Get with Search Criteria).
 		//
-		// Optional rsqlQuery keys: page, page-size, sort.
+		// Query params (optional, pass via rsqlQuery): page (default 0), page-size (default 100),
+		// sort (e.g. "id:asc", "displayName:desc"), filter (RSQL, e.g. displayName=="IntegrationName").
+		// Allowed sort/filter fields: id, displayName.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiintegrations
 		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
@@ -50,7 +52,8 @@ type (
 		// DeleteByNameV1 deletes the API integration by display name.
 		DeleteByNameV1(ctx context.Context, name string) (*interfaces.Response, error)
 
-		// RefreshClientCredentialsByIDV1 creates new client credentials for the API integration by ID.
+		// RefreshClientCredentialsByIDV1 creates client credentials for the API integration by ID (Create client credentials).
+		// POST /api/v1/api-integrations/{id}/client-credentials
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/refreshclientcredentials
 		RefreshClientCredentialsByIDV1(ctx context.Context, id string) (*ResourceClientCredentials, *interfaces.Response, error)
@@ -70,7 +73,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// ListV1 returns a page of API integrations.
+// ListV1 returns a page of API integrations (Get API Integrations; supports page, page-size, sort, filter).
 // URL: GET /api/v1/api-integrations
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiintegrations
 func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
