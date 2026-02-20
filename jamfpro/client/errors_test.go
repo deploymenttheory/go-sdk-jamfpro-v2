@@ -28,14 +28,14 @@ func TestParseErrorResponse(t *testing.T) {
 		wantMsg    string
 	}{
 		{"json body", []byte(`{"code":"ERR","message":"not found"}`), 404, "Not Found", "not found"},
-		{"empty body", []byte(``), 404, "Not Found", "Resource not found"},
+		{"empty body", []byte(``), 404, "Not Found", "The server has not found anything matching the Request-URI."},
 		{"plain body", []byte("plain"), 500, "Internal", "plain"},
-		{"default 400", nil, 400, "Bad Request", "Bad request"},
-		{"default 401", nil, 401, "Unauthorized", "Authentication required"},
-		{"default 403", nil, 403, "Forbidden", "Forbidden"},
-		{"default 409", nil, 409, "Conflict", "Conflict"},
-		{"default 429", nil, 429, "Too Many", "Too many requests"},
-		{"default 503", nil, 503, "Unavailable", "Service unavailable"},
+		{"default 400", nil, 400, "Bad Request", "The request could not be understood by the server due to malformed syntax."},
+		{"default 401", nil, 401, "Unauthorized", "The request has not been applied because it lacks valid authentication credentials for the target resource."},
+		{"default 403", nil, 403, "Forbidden", "Authentication required or token invalid. The server understood the request but refuses to authorize it."},
+		{"default 409", nil, 409, "Conflict", "The request could not be completed due to a conflict with the current state of the resource."},
+		{"default 429", nil, 429, "Too Many", "The user has sent too many requests in a given amount of time (rate limiting)."},
+		{"default 503", nil, 503, "Unavailable", "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server."},
 		{"unknown status", nil, 418, "Teapot", "Unknown error"},
 	}
 	for _, tt := range tests {

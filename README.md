@@ -1,75 +1,118 @@
-# Template
+# Go SDK for Jamf Pro API
 
-This repository serves as a **Default Template Repository** according official [GitHub Contributing Guidelines][ProjectSetup] for healthy contributions. It brings you clean default Templates for several areas:
+[![Go Report Card](https://goreportcard.com/badge/github.com/deploymenttheory/go-sdk-jamfpro-v2)](https://goreportcard.com/report/github.com/deploymenttheory/go-sdk-jamfpro-v2)
+[![GoDoc](https://pkg.go.dev/badge/github.com/deploymenttheory/go-sdk-jamfpro-v2)](https://pkg.go.dev/github.com/deploymenttheory/go-sdk-jamfpro-v2)
+[![License](https://img.shields.io/github/license/deploymenttheory/go-sdk-jamfpro-v2)](LICENSE)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/deploymenttheory/go-sdk-jamfpro-v2)](https://go.dev/)
+[![Release](https://img.shields.io/github/v/release/deploymenttheory/go-sdk-jamfpro-v2)](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/releases)
+[![Tests](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/workflows/Tests/badge.svg)](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/actions)
 
-- [Azure DevOps Pull Requests](.azuredevops/PULL_REQUEST_TEMPLATE.md) ([`.azuredevops\PULL_REQUEST_TEMPLATE.md`](`.azuredevops\PULL_REQUEST_TEMPLATE.md`))
-- [Azure Pipelines](.pipelines/pipeline.yml) ([`.pipelines/pipeline.yml`](`.pipelines/pipeline.yml`))
-- [GitHub Workflows](.github/workflows/)
-  - [Super Linter](.github/workflows/linter.yml) ([`.github/workflows/linter.yml`](`.github/workflows/linter.yml`))
-  - [Sample Workflows](.github/workflows/workflow.yml) ([`.github/workflows/workflow.yml`](`.github/workflows/workflow.yml`))
-- [GitHub Pull Requests](.github/PULL_REQUEST_TEMPLATE.md) ([`.github/PULL_REQUEST_TEMPLATE.md`](`.github/PULL_REQUEST_TEMPLATE.md`))
-- [GitHub Issues](.github/ISSUE_TEMPLATE/)
-  - [Feature Requests](.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md) ([`.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md`](`.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md`))
-  - [Bug Reports](.github/ISSUE_TEMPLATE/BUG_REPORT.md) ([`.github/ISSUE_TEMPLATE/BUG_REPORT.md`](`.github/ISSUE_TEMPLATE/BUG_REPORT.md`))
-- [Codeowners](.github/CODEOWNERS) ([`.github/CODEOWNERS`](`.github/CODEOWNERS`)) _adjust usernames once cloned_
-- [Wiki and Documentation](docs/) ([`docs/`](`docs/`))
-- [gitignore](.gitignore) ([`.gitignore`](.gitignore))
-- [gitattributes](.gitattributes) ([`.gitattributes`](.gitattributes))
-- [Changelog](CHANGELOG.md) ([`CHANGELOG.md`](`CHANGELOG.md`))
-- [Code of Conduct](CODE_OF_CONDUCT.md) ([`CODE_OF_CONDUCT.md`](`CODE_OF_CONDUCT.md`))
-- [Contribution](CONTRIBUTING.md) ([`CONTRIBUTING.md`](`CONTRIBUTING.md`))
-- [License](LICENSE) ([`LICENSE`](`LICENSE`)) _adjust projectname once cloned_
-- [Readme](README.md) ([`README.md`](`README.md`))
-- [Security](SECURITY.md) ([`SECURITY.md`](`SECURITY.md`))
+A Go client library for the [Jamf Pro API](https://developer.jamf.com/jamf-pro/reference), supporting both the Classic API and the Jamf Pro API (REST). Uses OAuth2 or Basic auth with bearer token exchange, automatic token refresh, and production-ready transport (retries, sticky sessions, logging, optional OpenTelemetry tracing).
 
 
-## Status
+## Quick Start
 
-[![Super Linter](<https://github.com/segraef/Template/actions/workflows/linter.yml/badge.svg>)](<https://github.com/segraef/Template/actions/workflows/linter.yml>)
+Get started quickly with the SDK using the **[Quick Start Guide](docs/guides/quick-start.md)**, which includes:
 
-[![Sample Workflow](<https://github.com/segraef/Template/actions/workflows/workflow.yml/badge.svg>)](<https://github.com/segraef/Template/actions/workflows/workflow.yml>)
+- Installation instructions
+- Your first API call
+- Common operations (list, get, create, update, delete)
+- Authentication from environment or config file
+- Error handling and response metadata
+- Links to configuration guides for production use
 
-## Creating a repository from a template
+## Examples
 
-You can [generate](https://github.com/segraef/Template/generate) a new repository with the same directory structure and files as an existing repository. More details can be found [here][CreateFromTemplate].
+The [examples directory](examples/) contains working examples for many SDK services:
 
-## Reporting Issues and Feedback
+- **Jamf Pro API:** [examples/jamf_pro_api/](examples/jamf_pro_api/) — API integrations, API roles, buildings, categories, computer groups, computer prestages, departments, dock items, enrollment settings, packages, reenrollment, SSO settings, volume purchasing, and more
+- **Classic API:** [examples/classic_api/](examples/classic_api/) — Network segments, printers, restricted software, webhooks, and other Classic endpoints
 
-### Issues and Bugs
+Each example includes a complete `main.go` you can run with your Jamf Pro credentials.
 
-If you find any bugs, please file an issue in the [GitHub Issues][GitHubIssues] page. Please fill out the provided template with the appropriate information.
+## SDK Services
 
-If you are taking the time to mention a problem, even a seemingly minor one, it is greatly appreciated, and a totally valid contribution to this project. **Thank you!**
+### Jamf Pro API (REST)
 
-## Feedback
+- **Access & Account:** Access Management Settings, Account Preferences, API Integrations, API Roles, API Role Privileges
+- **Enrollment & SSO:** Enrollment Settings, Reenrollment, Service Discovery Enrollment, SSO Certificate, SSO Settings, Adue Session Token Settings, Login Customization
+- **Inventory & Groups:** Buildings, Categories, Computer Extension Attributes, Computer Groups (static/smart), Computer Prestages, Departments, Mobile Device Extension Attributes, Mobile Device Groups
+- **Configuration & Distribution:** Cache Settings, Certificate Authority, Client Check-in, Cloud Distribution Point, Dock Items, Packages, Policy Properties, Scripts, Volume Purchasing Locations, Volume Purchasing Subscriptions
+- **Self Service & Notifications:** Self Service Settings, Self Service Plus Settings, Notifications, Onboarding, Return to Service, Startup Status
+- **Infrastructure:** Bookmarks, Icons, Jamf Pro Information, Jamf Pro Version, LDAP, Locales, SMTPServer, Time Zones
+- **Other:** App Installers, Device Communication Settings, Policy Properties
 
-If there is a feature you would like to see in here, please file an issue or feature request in the [GitHub Issues][GitHubIssues] page to provide direct feedback.
+### Classic API
 
-## Contribution
+- Accounts, Account Groups, Activation Code, Advanced Computer/User Searches, Allowed File Extensions, BYO Profiles, Classes, Directory Bindings, Disk Encryption Configurations, IBeacons, LDAP Servers, Network Segments, Patch External Sources, Printers, Removeable Mac Addresses, Restricted Software, Sites, Software Update Servers, VPP Accounts, Webhooks
 
-If you would like to become an active contributor to this repository or project, please follow the instructions provided in [`CONTRIBUTING.md`][Contributing].
+## HTTP Client Configuration
 
-## Learn More
+The SDK uses a transport layer with bearer token auth, retries, and optional observability:
 
-* [GitHub Documentation][GitHubDocs]
-* [Azure DevOps Documentation][AzureDevOpsDocs]
-* [Microsoft Azure Documentation][MicrosoftAzureDocs]
+- **[Authentication](docs/guides/authentication.md)** — OAuth2 and Basic auth, environment variables, config files, and secure credential handling
+- **Client options** — `WithLogger` (zap), `EnableTracing` (OpenTelemetry); pass options into `jamfpro.NewClient(authConfig, options...)` or `jamfpro.NewClientFromEnv(options...)`
 
-<!-- References -->
+The transport applies idempotent retries, sticky-session cookies for Jamf Cloud, and adaptive throttling. See [Quick Start](docs/guides/quick-start.md) for a minimal client and [Authentication](docs/guides/authentication.md) for production patterns.
 
-<!-- Local -->
-[ProjectSetup]: <https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions>
-[CreateFromTemplate]: <https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/creating-a-repository-from-a-template>
-[GitHubDocs]: <https://docs.github.com/>
-[AzureDevOpsDocs]: <https://docs.microsoft.com/en-us/azure/devops/?view=azure-devops>
-[GitHubIssues]: <https://github.com/segraef/Template/issues>
-[Contributing]: CONTRIBUTING.md
+## Configuration Options
 
-<!-- External -->
-[Az]: <https://img.shields.io/powershellgallery/v/Az.svg?style=flat-square&label=Az>
-[AzGallery]: <https://www.powershellgallery.com/packages/Az/>
-[PowerShellCore]: <https://github.com/PowerShell/PowerShell/releases/latest>
+### Creating a client
 
-<!-- Docs -->
-[MicrosoftAzureDocs]: <https://docs.microsoft.com/en-us/azure/>
-[PowerShellDocs]: <https://docs.microsoft.com/en-us/powershell/>
+```go
+import (
+    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+)
+
+// From environment (INSTANCE_DOMAIN, AUTH_METHOD, CLIENT_ID, CLIENT_SECRET or BASIC_AUTH_*)
+jamfClient, err := jamfpro.NewClientFromEnv()
+
+// From AuthConfig (e.g. from file or secret manager)
+authConfig := client.AuthConfigFromEnv() // or LoadAuthConfigFromFile(path)
+jamfClient, err := jamfpro.NewClient(authConfig, client.WithLogger(logger))
+```
+
+### AuthConfig fields
+
+```go
+&client.AuthConfig{
+    InstanceDomain:           "https://your-instance.jamfcloud.com",
+    AuthMethod:               client.AuthMethodOAuth2, // or client.AuthMethodBasic
+    ClientID:                 "your-client-id",
+    ClientSecret:             "your-client-secret",
+    TokenRefreshBufferPeriod: 5 * time.Minute,  // refresh before expiry
+    HideSensitiveData:        true,              // redact tokens in logs
+}
+```
+
+### Optional client options
+
+```go
+client.WithLogger(zapLogger)   // Structured logging (zap)
+jamfClient.EnableTracing(otelConfig)  // OpenTelemetry HTTP tracing (call after NewClient)
+```
+
+See the [configuration guides](docs/guides/) for detailed documentation.
+
+## Documentation
+
+- [Jamf Pro API Reference](https://developer.jamf.com/jamf-pro/reference)
+- [GoDoc](https://pkg.go.dev/github.com/deploymenttheory/go-sdk-jamfpro-v2)
+
+## Contributing
+
+Contributions are welcome. Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+- **Issues:** [GitHub Issues](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/issues)
+- **Jamf Pro API docs:** [developer.jamf.com](https://developer.jamf.com/jamf-pro/reference)
+
+## Disclaimer
+
+This is a community SDK and is not affiliated with or endorsed by Jamf LLC.
