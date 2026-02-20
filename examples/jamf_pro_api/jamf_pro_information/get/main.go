@@ -1,33 +1,31 @@
-// Package main demonstrates GetV2 - gets Jamf Pro information (feature flags).
-//
-// Run with: go run ./examples/jamf_pro_api/jamf_pro_information/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-	ctx := context.Background()
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
+	}
 
-	result, resp, err := client.JamfProInformation.GetV2(ctx)
+	result, _, err := jamfClient.JamfProInformation.GetV2(context.Background())
 	if err != nil {
-		log.Fatalf("GetV2 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	if result.VppTokenEnabled != nil {
-		fmt.Printf("VPP enabled: %v\n", *result.VppTokenEnabled)
-	}
-	if result.PatchEnabled != nil {
-		fmt.Printf("Patch enabled: %v\n", *result.PatchEnabled)
-	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Jamf Pro information:\n" + string(out))
 }

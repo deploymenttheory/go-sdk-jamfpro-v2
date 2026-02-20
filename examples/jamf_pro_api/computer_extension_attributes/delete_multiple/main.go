@@ -1,37 +1,33 @@
-// Package main demonstrates DeleteComputerExtensionAttributesByIDV1 - deletes multiple computer extension attributes by ID.
-//
-// Run with: go run ./examples/jamf_pro_api/computer_extension_attributes/delete_multiple <id1> [id2 ...]
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_extension_attributes"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: go run ./examples/jamf_pro_api/computer_extension_attributes/delete_multiple <id1> [id2 ...]")
-	}
-	ids := os.Args[1:]
-
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
-	resp, err := client.ComputerExtensionAttributes.DeleteComputerExtensionAttributesByIDV1(ctx, &computer_extension_attributes.DeleteComputerExtensionAttributesByIDRequest{
+	ids := []string{"1", "2"} // Replace with the desired computer extension attribute IDs to delete
+	_, err = jamfClient.ComputerExtensionAttributes.DeleteComputerExtensionAttributesByIDV1(context.Background(), &computer_extension_attributes.DeleteComputerExtensionAttributesByIDRequest{
 		IDs: ids,
 	})
 	if err != nil {
-		log.Fatalf("DeleteComputerExtensionAttributesByIDV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	log.Printf("Deleted %d computer extension attribute(s) (status %d)", len(ids), resp.StatusCode)
+	fmt.Println("Computer extension attributes deleted successfully")
 }

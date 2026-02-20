@@ -1,50 +1,32 @@
-// Package main demonstrates DeleteBuildingsByIDV1 - deletes multiple buildings by their IDs.
-//
-// Run with: go run ./examples/jamf_pro_api/buildings/delete_multiple
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Creates two buildings then bulk deletes them.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
-	// Create two buildings
-	ids := make([]string, 0, 2)
-	for i := 0; i < 2; i++ {
-		req := &buildings.RequestBuilding{
-			Name:    fmt.Sprintf("example-bulk-%d-%d", i, time.Now().UnixMilli()),
-			City:    "Austin",
-			Country: "United States",
-		}
-		created, _, err := client.Buildings.CreateBuildingV1(ctx, req)
-		if err != nil {
-			log.Fatalf("CreateBuildingV1 %d failed: %v", i, err)
-		}
-		ids = append(ids, created.ID)
-		fmt.Printf("Created building ID: %s\n", created.ID)
-	}
-
-	// Bulk delete
+	ids := []string{"1", "2"} // Replace with the desired building IDs to delete
 	bulkReq := &buildings.DeleteBuildingsByIDRequest{IDs: ids}
-	resp, err := client.Buildings.DeleteBuildingsByIDV1(ctx, bulkReq)
+	_, err = jamfClient.Buildings.DeleteBuildingsByIDV1(context.Background(), bulkReq)
 	if err != nil {
-		log.Fatalf("DeleteBuildingsByIDV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d (204 = success)\n", resp.StatusCode)
-	fmt.Printf("Deleted %d buildings: %v\n", len(ids), ids)
+	fmt.Println("Buildings deleted successfully")
 }

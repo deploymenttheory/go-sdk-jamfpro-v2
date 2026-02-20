@@ -8,38 +8,32 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
 	req := &categories.RequestCategory{
-		Name:     fmt.Sprintf("example-category-%d", time.Now().UnixMilli()),
+		Name:     "go-sdk-v2-Category",
 		Priority: 5,
 	}
 
-	result, resp, err := client.Categories.CreateCategoryV1(ctx, req)
+	result, _, err := jamfClient.Categories.CreateCategoryV1(context.Background(), req)
 	if err != nil {
-		log.Fatalf("CreateCategoryV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Created category ID: %s\n", result.ID)
-	fmt.Printf("Href: %s\n", result.Href)
-
-	// Cleanup: delete the created category
-	if _, err := client.Categories.DeleteCategoryByIDV1(ctx, result.ID); err != nil {
-		fmt.Printf("Note: cleanup delete failed: %v\n", err)
-	} else {
-		fmt.Println("Cleanup: category deleted")
-	}
+	fmt.Printf("Created category: %+v\n", result)
 }

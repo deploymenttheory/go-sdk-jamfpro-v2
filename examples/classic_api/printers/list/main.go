@@ -1,31 +1,40 @@
-// Package main demonstrates ListPrinters — returns all printers from the Classic API.
-//
-// Run with: go run ./examples/classic_api/printers/list
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	list, resp, err := client.Printers.ListPrinters(context.Background())
+	// Call the ListPrinters function to retrieve the list of printers
+	list, _, err := jamfClient.Printers.ListPrinters(context.Background())
 	if err != nil {
-		log.Fatalf("ListPrinters failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Total printers: %d\n", list.Size)
-	for _, p := range list.Results {
-		fmt.Printf("  ID=%-5d  Name=%s\n", p.ID, p.Name)
+	// Pretty print the printers details in XML
+	listXML, err := xml.MarshalIndent(list, "", "    ")
+	if err != nil {
+		log.Fatalf("Error marshaling printers data: %v", err)
 	}
+	fmt.Println("Printers Details:\n" + string(listXML))
 }

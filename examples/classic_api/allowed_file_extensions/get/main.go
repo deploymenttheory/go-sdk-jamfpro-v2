@@ -1,48 +1,42 @@
-// Package main demonstrates GetAllowedFileExtensionByID — retrieves a single allowed file extension by ID.
-//
-// Run with: go run ./examples/classic_api/allowed_file_extensions/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set ALLOWED_FILE_EXTENSION_ID or uses first from list.
 package main
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	var id int
-	if raw := os.Getenv("ALLOWED_FILE_EXTENSION_ID"); raw != "" {
-		id, err = strconv.Atoi(raw)
-		if err != nil {
-			log.Fatalf("invalid ALLOWED_FILE_EXTENSION_ID %q: %v", raw, err)
-		}
-	} else {
-		list, _, err := client.AllowedFileExtensions.ListAllowedFileExtensions(ctx)
-		if err != nil || len(list.Results) == 0 {
-			log.Fatal("Set ALLOWED_FILE_EXTENSION_ID or ensure at least one allowed file extension exists")
-		}
-		id = list.Results[0].ID
-		fmt.Printf("Using first allowed file extension ID: %d\n", id)
-	}
-
-	ext, resp, err := client.AllowedFileExtensions.GetAllowedFileExtensionByID(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetAllowedFileExtensionByID failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status:    %d\n", resp.StatusCode)
-	fmt.Printf("ID:        %d\n", ext.ID)
-	fmt.Printf("Extension: %s\n", ext.Extension)
+	// Example usage of GetAllowedFileExtensionByID
+	extensionID := 1 // Replace with the desired allowed file extension ID
+	ext, _, err := jamfClient.AllowedFileExtensions.GetAllowedFileExtensionByID(context.Background(), extensionID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	// Pretty print the allowed file extension details in XML
+	extXML, err := xml.MarshalIndent(ext, "", "    ")
+	if err != nil {
+		log.Fatalf("Error marshaling allowed file extension data: %v", err)
+	}
+	fmt.Println("Allowed File Extension Details (ID " + strconv.Itoa(extensionID) + "):\n" + string(extXML))
 }

@@ -1,34 +1,34 @@
-// Package main demonstrates CreateAPIRoleV1 - creates an API role.
-//
-// Run with: go run ./examples/jamf_pro_api/api_roles/create
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-	ctx := context.Background()
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
+	}
 
 	req := &api_roles.RequestAPIRole{
-		DisplayName: fmt.Sprintf("example-role-%d", time.Now().UnixMilli()),
+		DisplayName: "go-sdk-v2-API-Role",
 		Privileges:  []string{"Read Computers"},
 	}
-	result, resp, err := client.APIRoles.CreateAPIRoleV1(ctx, req)
+	result, _, err := jamfClient.APIRoles.CreateAPIRoleV1(context.Background(), req)
 	if err != nil {
-		log.Fatalf("CreateAPIRoleV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-	fmt.Printf("Status: %d Created ID: %s DisplayName: %s\n", resp.StatusCode, result.ID, result.DisplayName)
-	_, _ = client.APIRoles.DeleteAPIRoleByIDV1(ctx, result.ID)
+	fmt.Printf("Created API role: %+v\n", result)
 }

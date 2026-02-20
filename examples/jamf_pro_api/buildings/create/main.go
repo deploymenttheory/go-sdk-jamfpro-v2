@@ -8,22 +8,25 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
 	req := &buildings.RequestBuilding{
-		Name:           fmt.Sprintf("example-building-%d", time.Now().UnixMilli()),
+		Name:           "go-sdk-v2-Building",
 		StreetAddress1: "100 Example St",
 		City:           "Austin",
 		StateProvince:  "TX",
@@ -31,18 +34,10 @@ func main() {
 		Country:        "United States",
 	}
 
-	result, resp, err := client.Buildings.CreateBuildingV1(ctx, req)
+	result, _, err := jamfClient.Buildings.CreateBuildingV1(context.Background(), req)
 	if err != nil {
-		log.Fatalf("CreateBuildingV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Created building ID: %s\n", result.ID)
-	fmt.Printf("Href: %s\n", result.Href)
-
-	if _, err := client.Buildings.DeleteBuildingByIDV1(ctx, result.ID); err != nil {
-		fmt.Printf("Note: cleanup delete failed: %v\n", err)
-	} else {
-		fmt.Println("Cleanup: building deleted")
-	}
+	fmt.Printf("Created building: %+v\n", result)
 }

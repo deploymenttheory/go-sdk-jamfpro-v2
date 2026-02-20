@@ -1,33 +1,32 @@
-// Package main demonstrates GetAPIRoleByIDV1 - gets an API role by ID.
-//
-// Run with: go run ./examples/jamf_pro_api/api_roles/get <id>
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: go run ./examples/jamf_pro_api/api_roles/get <id>")
-	}
-	id := os.Args[1]
-
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-	ctx := context.Background()
-
-	result, resp, err := client.APIRoles.GetAPIRoleByIDV1(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetAPIRoleByIDV1 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
-	fmt.Printf("Status: %d ID: %s DisplayName: %s Privileges: %v\n", resp.StatusCode, result.ID, result.DisplayName, result.Privileges)
+
+	roleID := "1" // Replace with the desired API role ID
+	result, _, err := jamfClient.APIRoles.GetAPIRoleByIDV1(context.Background(), roleID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("API role details:\n" + string(out))
 }

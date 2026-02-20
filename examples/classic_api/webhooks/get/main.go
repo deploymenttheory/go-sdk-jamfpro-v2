@@ -1,51 +1,42 @@
-// Package main demonstrates GetWebhookByID — retrieves a single webhook by ID.
-//
-// Run with: go run ./examples/classic_api/webhooks/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set WEBHOOK_ID or uses first from list.
 package main
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	var id int
-	if raw := os.Getenv("WEBHOOK_ID"); raw != "" {
-		id, err = strconv.Atoi(raw)
-		if err != nil {
-			log.Fatalf("invalid WEBHOOK_ID %q: %v", raw, err)
-		}
-	} else {
-		list, _, err := client.Webhooks.ListWebhooks(ctx)
-		if err != nil || len(list.Results) == 0 {
-			log.Fatal("Set WEBHOOK_ID or ensure at least one webhook exists")
-		}
-		id = list.Results[0].ID
-		fmt.Printf("Using first webhook ID: %d\n", id)
-	}
-
-	webhook, resp, err := client.Webhooks.GetWebhookByID(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetWebhookByID failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status:  %d\n", resp.StatusCode)
-	fmt.Printf("ID:      %d\n", webhook.ID)
-	fmt.Printf("Name:    %s\n", webhook.Name)
-	fmt.Printf("Enabled: %v\n", webhook.Enabled)
-	fmt.Printf("URL:     %s\n", webhook.URL)
-	fmt.Printf("Event:   %s\n", webhook.Event)
+	// Example usage of GetWebhookByID
+	webhookID := 4 // Replace with the desired webhook ID
+	webhookByID, _, err := jamfClient.Webhooks.GetWebhookByID(context.Background(), webhookID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	// Pretty print the webhook details in XML
+	webhooksXML, err := xml.MarshalIndent(webhookByID, "", "    ")
+	if err != nil {
+		log.Fatalf("Error marshaling webhook data: %v", err)
+	}
+	fmt.Println("Webhook Details (ID " + strconv.Itoa(webhookID) + "):\n" + string(webhooksXML))
 }

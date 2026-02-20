@@ -1,34 +1,30 @@
-// Package main demonstrates DeleteComputerExtensionAttributeByIDV1 - deletes a computer extension attribute by ID.
-//
-// Run with: go run ./examples/jamf_pro_api/computer_extension_attributes/delete <id>
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: go run ./examples/jamf_pro_api/computer_extension_attributes/delete <id>")
-	}
-	id := os.Args[1]
-
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	resp, err := client.ComputerExtensionAttributes.DeleteComputerExtensionAttributeByIDV1(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("DeleteComputerExtensionAttributeByIDV1 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	log.Printf("Deleted computer extension attribute ID=%s (status %d)", id, resp.StatusCode)
+	attrID := "1" // Replace with the desired computer extension attribute ID to delete
+	_, err = jamfClient.ComputerExtensionAttributes.DeleteComputerExtensionAttributeByIDV1(context.Background(), attrID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	fmt.Println("Computer extension attribute deleted successfully")
 }

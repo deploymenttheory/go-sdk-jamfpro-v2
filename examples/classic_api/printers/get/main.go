@@ -1,52 +1,42 @@
-// Package main demonstrates GetPrinterByID — retrieves a single printer by ID.
-//
-// Run with: go run ./examples/classic_api/printers/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set PRINTER_ID or uses first from list.
 package main
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	var id int
-	if raw := os.Getenv("PRINTER_ID"); raw != "" {
-		id, err = strconv.Atoi(raw)
-		if err != nil {
-			log.Fatalf("invalid PRINTER_ID %q: %v", raw, err)
-		}
-	} else {
-		list, _, err := client.Printers.ListPrinters(ctx)
-		if err != nil || len(list.Results) == 0 {
-			log.Fatal("Set PRINTER_ID or ensure at least one printer exists")
-		}
-		id = list.Results[0].ID
-		fmt.Printf("Using first printer ID: %d\n", id)
-	}
-
-	printer, resp, err := client.Printers.GetPrinterByID(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetPrinterByID failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status:   %d\n", resp.StatusCode)
-	fmt.Printf("ID:       %d\n", printer.ID)
-	fmt.Printf("Name:     %s\n", printer.Name)
-	fmt.Printf("CUPSName: %s\n", printer.CUPSName)
-	fmt.Printf("URI:      %s\n", printer.URI)
-	fmt.Printf("Location: %s\n", printer.Location)
-	fmt.Printf("Model:    %s\n", printer.Model)
+	// Example usage of GetPrinterByID
+	printerID := 1 // Replace with the desired printer ID
+	printer, _, err := jamfClient.Printers.GetPrinterByID(context.Background(), printerID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	// Pretty print the printer details in XML
+	printerXML, err := xml.MarshalIndent(printer, "", "    ")
+	if err != nil {
+		log.Fatalf("Error marshaling printer data: %v", err)
+	}
+	fmt.Println("Printer Details (ID " + strconv.Itoa(printerID) + "):\n" + string(printerXML))
 }

@@ -8,36 +8,31 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
+	}
 
 	req := &departments.RequestDepartment{
-		Name: fmt.Sprintf("example-dept-%d", time.Now().UnixMilli()),
+		Name: "go-sdk-v2-Department",
 	}
 
-	result, resp, err := client.Departments.CreateDepartmentV1(ctx, req)
+	result, _, err := jamfClient.Departments.CreateDepartmentV1(context.Background(), req)
 	if err != nil {
-		log.Fatalf("CreateDepartmentV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Created department ID: %s\n", result.ID)
-	fmt.Printf("Href: %s\n", result.Href)
-
-	if _, err := client.Departments.DeleteDepartmentByIDV1(ctx, result.ID); err != nil {
-		fmt.Printf("Note: cleanup delete failed: %v\n", err)
-	} else {
-		fmt.Println("Cleanup: department deleted")
-	}
+	fmt.Printf("Created department: %+v\n", result)
 }

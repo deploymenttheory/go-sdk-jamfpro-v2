@@ -33,11 +33,11 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	createReq := &webhooks.RequestWebhook{
 		Name:               webhookName,
 		Enabled:            true,
-		URL:                "https://hooks.example.com/test",
+		URL:                "https://server.com",
 		ContentType:        "application/json",
-		Event:              "ComputerAdded",
-		ConnectionTimeout:  5000,
-		ReadTimeout:        5000,
+		Event:              "PatchSoftwareTitleUpdated",
+		ConnectionTimeout:  5,
+		ReadTimeout:        2,
 		AuthenticationType: "NONE",
 	}
 
@@ -131,11 +131,11 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	updateReq := &webhooks.RequestWebhook{
 		Name:               updatedName,
 		Enabled:            true,
-		URL:                "https://hooks.example.com/test",
+		URL:                "https://server.com",
 		ContentType:        "application/json",
-		Event:              "ComputerAdded",
-		ConnectionTimeout:  5000,
-		ReadTimeout:        5000,
+		Event:              "PatchSoftwareTitleUpdated",
+		ConnectionTimeout:  5,
+		ReadTimeout:        2,
 		AuthenticationType: "NONE",
 	}
 	updated, updateResp, err := svc.UpdateWebhookByID(ctx5, webhookID, updateReq)
@@ -155,11 +155,11 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	revertReq := &webhooks.RequestWebhook{
 		Name:               webhookName,
 		Enabled:            true,
-		URL:                "https://hooks.example.com/test",
+		URL:                "https://server.com",
 		ContentType:        "application/json",
-		Event:              "ComputerAdded",
-		ConnectionTimeout:  5000,
-		ReadTimeout:        5000,
+		Event:              "PatchSoftwareTitleUpdated",
+		ConnectionTimeout:  5,
+		ReadTimeout:        2,
 		AuthenticationType: "NONE",
 	}
 	reverted, revertResp, err := svc.UpdateWebhookByName(ctx6, updatedName, revertReq)
@@ -212,11 +212,11 @@ func TestAcceptance_Webhooks_DeleteByName(t *testing.T) {
 	createReq := &webhooks.RequestWebhook{
 		Name:               webhookName,
 		Enabled:            false,
-		URL:                "https://hooks.example.com/dbn",
+		URL:                "https://server.com",
 		ContentType:        "application/json",
-		Event:              "ComputerAdded",
-		ConnectionTimeout:  5000,
-		ReadTimeout:        5000,
+		Event:              "PatchSoftwareTitleUpdated",
+		ConnectionTimeout:  5,
+		ReadTimeout:        2,
 		AuthenticationType: "NONE",
 	}
 

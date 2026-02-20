@@ -1,31 +1,40 @@
-// Package main demonstrates ListWebhooks — returns all webhooks from the Classic API.
-//
-// Run with: go run ./examples/classic_api/webhooks/list
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	list, resp, err := client.Webhooks.ListWebhooks(context.Background())
+	// Call the ListWebhooks function to retrieve the list of webhooks
+	webhooks, _, err := jamfClient.Webhooks.ListWebhooks(context.Background())
 	if err != nil {
-		log.Fatalf("ListWebhooks failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Total webhooks: %d\n", list.Size)
-	for _, w := range list.Results {
-		fmt.Printf("  ID=%-5d  Name=%s\n", w.ID, w.Name)
+	// Pretty print the webhooks details in XML
+	webhooksXML, err := xml.MarshalIndent(webhooks, "", "    ")
+	if err != nil {
+		log.Fatalf("Error marshaling webhook data: %v", err)
 	}
+	fmt.Println("Webhooks Details:\n" + string(webhooksXML))
 }

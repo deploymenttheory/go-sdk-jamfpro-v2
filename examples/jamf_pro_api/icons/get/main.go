@@ -1,37 +1,32 @@
-// Package main demonstrates GetByIDV1 - gets icon metadata by ID.
-//
-// Run with: go run ./examples/jamf_pro_api/icons/get <id>
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
-	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: go run ./examples/jamf_pro_api/icons/get <id>")
-	}
-	id, err := strconv.Atoi(os.Args[1])
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("invalid id: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	client, err := jamfpro.NewClientFromEnv()
+	iconID := 1 // Replace with the desired icon ID
+	result, _, err := jamfClient.Icons.GetByIDV1(context.Background(), iconID)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-	ctx := context.Background()
-
-	result, resp, err := client.Icons.GetByIDV1(ctx, id)
-	if err != nil {
-		log.Fatalf("GetByIDV1 failed: %v", err)
-	}
-	fmt.Printf("Status: %d ID: %d Name: %s URL: %s\n", resp.StatusCode, result.ID, result.Name, result.URL)
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Icon details:\n" + string(out))
 }

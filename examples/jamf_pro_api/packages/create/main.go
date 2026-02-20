@@ -1,29 +1,28 @@
-// Package main demonstrates CreatePackageV1 - creates a new package (metadata only, no file upload).
-//
-// Run with: go run ./examples/jamf_pro_api/packages/create
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
 	req := &packages.RequestPackage{
-		PackageName:           fmt.Sprintf("example-package-%d", time.Now().UnixMilli()),
+		PackageName:           "go-sdk-v2-Package",
 		FileName:              "example.pkg",
 		CategoryID:            "-1",
 		Info:                  "Example package created via SDK",
@@ -39,18 +38,10 @@ func main() {
 		SuppressRegistration: packages.BoolPtr(false),
 	}
 
-	result, resp, err := client.Packages.CreatePackageV1(ctx, req)
+	result, _, err := jamfClient.Packages.CreatePackageV1(context.Background(), req)
 	if err != nil {
-		log.Fatalf("CreatePackageV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Created package ID: %s\n", result.ID)
-	fmt.Printf("Href: %s\n", result.Href)
-
-	if _, err := client.Packages.DeletePackageByIDV1(ctx, result.ID); err != nil {
-		fmt.Printf("Note: cleanup delete failed: %v\n", err)
-	} else {
-		fmt.Println("Cleanup: package deleted")
-	}
+	fmt.Printf("Created package: %+v\n", result)
 }

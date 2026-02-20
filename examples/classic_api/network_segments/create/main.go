@@ -1,45 +1,40 @@
-// Package main demonstrates CreateNetworkSegment — creates a new network segment via the Classic API.
-//
-// Run with: go run ./examples/classic_api/network_segments/create
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Creates a network segment then deletes it.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/network_segments"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
-	req := &network_segments.RequestNetworkSegment{
-		Name:            fmt.Sprintf("example-netseg-%d", time.Now().UnixMilli()),
+	// Example usage of CreateNetworkSegment
+	newSegment := &network_segments.RequestNetworkSegment{
+		Name:            "go-sdk-v2-NetworkSegment",
 		StartingAddress: "10.10.10.0",
 		EndingAddress:   "10.10.10.255",
 	}
 
-	created, resp, err := client.NetworkSegments.CreateNetworkSegment(ctx, req)
+	createdSegment, _, err := jamfClient.NetworkSegments.CreateNetworkSegment(context.Background(), newSegment)
 	if err != nil {
-		log.Fatalf("CreateNetworkSegment failed: %v", err)
+		fmt.Printf("Error creating network segment: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Created network segment ID: %d\n", created.ID)
-
-	// Cleanup: delete the created network segment
-	if _, err := client.NetworkSegments.DeleteNetworkSegmentByID(ctx, created.ID); err != nil {
-		fmt.Printf("Note: cleanup delete failed: %v\n", err)
-	} else {
-		fmt.Println("Cleanup: network segment deleted")
-	}
+	fmt.Printf("Created Network Segment: %+v\n", createdSegment)
 }

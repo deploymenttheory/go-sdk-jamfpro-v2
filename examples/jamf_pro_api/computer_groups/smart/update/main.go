@@ -1,45 +1,38 @@
-// Package main demonstrates UpdateSmartGroupV2 - updates a smart computer group.
-//
-// Run with: go run ./examples/jamf_pro_api/computer_groups/smart/update
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, auth env vars, and GROUP_ID env var.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_groups"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	groupID := os.Getenv("GROUP_ID")
-	if groupID == "" {
-		log.Fatal("GROUP_ID env var required")
-	}
-
-	ctx := context.Background()
-
+	groupID := "1" // Replace with the desired smart computer group ID
 	req := &computer_groups.RequestSmartGroup{
-		Name: "Updated Smart Group Name",
+		Name: "go-sdk-v2-Smart-Group-Updated",
 		Criteria: []computer_groups.Criterion{
-			{Name: "Computer Name", Priority: 0, AndOr: "and", SearchType: "is", Value: "MyMac"},
+			{Name: "Computer Name", Priority: 0, AndOr: "and", SearchType: "like", Value: "Mac-%"},
 		},
 	}
 
-	result, resp, err := client.ComputerGroups.UpdateSmartGroupV2(ctx, groupID, req)
+	result, _, err := jamfClient.ComputerGroups.UpdateSmartGroupV2(context.Background(), groupID, req)
 	if err != nil {
-		log.Fatalf("UpdateSmartGroupV2 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Updated smart group ID: %s\n", result.ID)
-	fmt.Printf("Name: %s\n", result.Name)
+	fmt.Printf("Updated smart group: %+v\n", result)
 }

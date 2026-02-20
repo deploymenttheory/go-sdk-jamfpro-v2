@@ -1,37 +1,32 @@
-// Package main demonstrates GetVolumePurchasingLocationByIDV1 - retrieves a volume purchasing location by ID.
-//
-// Run with: go run ./examples/jamf_pro_api/volume_purchasing_locations/get <id>
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: go run ./examples/jamf_pro_api/volume_purchasing_locations/get <id>")
-	}
-	id := os.Args[1]
-
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	result, resp, err := client.VolumePurchasingLocations.GetVolumePurchasingLocationByIDV1(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetVolumePurchasingLocationByIDV1 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("ID: %s Name: %s\n", result.ID, result.Name)
-	fmt.Printf("AutomaticallyPopulatePurchasedContent: %v\n", result.AutomaticallyPopulatePurchasedContent)
+	locationID := "1" // Replace with the desired volume purchasing location ID
+	result, _, err := jamfClient.VolumePurchasingLocations.GetVolumePurchasingLocationByIDV1(context.Background(), locationID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Volume purchasing location:\n" + string(out))
 }

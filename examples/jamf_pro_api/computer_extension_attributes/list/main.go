@@ -1,40 +1,31 @@
-// Package main demonstrates ListComputerExtensionAttributesV1 - retrieves all computer extension attributes with optional pagination.
-//
-// Run with: go run ./examples/jamf_pro_api/computer_extension_attributes/list
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and OAuth2 or Basic auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	result, resp, err := client.ComputerExtensionAttributes.ListComputerExtensionAttributesV1(ctx, map[string]string{
-		"page":     "0",
-		"pageSize": "50",
-	})
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("ListComputerExtensionAttributesV1 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Total count: %d\n", result.TotalCount)
-	for i, r := range result.Results {
-		if i >= 5 {
-			fmt.Printf("... and %d more\n", result.TotalCount-5)
-			break
-		}
-		fmt.Printf("  ID=%s Name=%q DataType=%s\n", r.ID, r.Name, r.DataType)
+	result, _, err := jamfClient.ComputerExtensionAttributes.ListComputerExtensionAttributesV1(context.Background(), map[string]string{"page": "0", "pageSize": "50"})
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Computer extension attributes:\n" + string(out))
 }

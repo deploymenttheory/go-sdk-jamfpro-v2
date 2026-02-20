@@ -1,40 +1,31 @@
-// Package main demonstrates ListSmartGroupsV2 - retrieves all smart computer groups.
-//
-// Run with: go run ./examples/jamf_pro_api/computer_groups/smart/list
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	result, resp, err := client.ComputerGroups.ListSmartGroupsV2(ctx, map[string]string{
-		"page":     "0",
-		"pageSize": "50",
-	})
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("ListSmartGroupsV2 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Total count: %d\n", result.TotalCount)
-	for i, g := range result.Results {
-		if i >= 5 {
-			fmt.Printf("... and %d more\n", result.TotalCount-5)
-			break
-		}
-		fmt.Printf("  ID=%s Name=%q (smart)\n", g.ID, g.Name)
+	result, _, err := jamfClient.ComputerGroups.ListSmartGroupsV2(context.Background(), map[string]string{"page": "0", "page-size": "50"})
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Smart computer groups:\n" + string(out))
 }

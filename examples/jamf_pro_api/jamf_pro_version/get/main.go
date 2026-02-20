@@ -1,34 +1,31 @@
-// Package main demonstrates GetV1 - gets Jamf Pro server version.
-//
-// Run with: go run ./examples/jamf_pro_api/jamf_pro_version/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-	ctx := context.Background()
-
-	result, resp, err := client.JamfProVersion.GetV1(ctx)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetV1 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
-	fmt.Printf("Status: %d Version: %s\n", resp.StatusCode, stringPtrToStr(result.Version))
-}
 
-func stringPtrToStr(s *string) string {
-	if s == nil {
-		return ""
+	result, _, err := jamfClient.JamfProVersion.GetV1(context.Background())
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-	return *s
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Jamf Pro version:\n" + string(out))
 }

@@ -1,51 +1,42 @@
-// Package main demonstrates GetIBeaconByID — retrieves a single iBeacon by ID.
-//
-// Run with: go run ./examples/classic_api/ibeacons/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set IBEACON_ID or uses first from list.
 package main
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	var id int
-	if raw := os.Getenv("IBEACON_ID"); raw != "" {
-		id, err = strconv.Atoi(raw)
-		if err != nil {
-			log.Fatalf("invalid IBEACON_ID %q: %v", raw, err)
-		}
-	} else {
-		list, _, err := client.IBeacons.ListIBeacons(ctx)
-		if err != nil || len(list.Results) == 0 {
-			log.Fatal("Set IBEACON_ID or ensure at least one iBeacon exists")
-		}
-		id = list.Results[0].ID
-		fmt.Printf("Using first iBeacon ID: %d\n", id)
-	}
-
-	beacon, resp, err := client.IBeacons.GetIBeaconByID(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetIBeaconByID failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("ID:     %d\n", beacon.ID)
-	fmt.Printf("Name:   %s\n", beacon.Name)
-	fmt.Printf("UUID:   %s\n", beacon.UUID)
-	fmt.Printf("Major:  %d\n", beacon.Major)
-	fmt.Printf("Minor:  %d\n", beacon.Minor)
+	// Example usage of GetIBeaconByID
+	ibeaconID := 1 // Replace with the desired iBeacon ID
+	ibeaconByID, _, err := jamfClient.IBeacons.GetIBeaconByID(context.Background(), ibeaconID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	// Pretty print the iBeacon details in XML
+	ibeaconXML, err := xml.MarshalIndent(ibeaconByID, "", "    ")
+	if err != nil {
+		log.Fatalf("Error marshaling iBeacon data: %v", err)
+	}
+	fmt.Println("iBeacon Details (ID " + strconv.Itoa(ibeaconID) + "):\n" + string(ibeaconXML))
 }

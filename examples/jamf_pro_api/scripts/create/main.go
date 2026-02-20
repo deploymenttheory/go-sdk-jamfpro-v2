@@ -8,41 +8,35 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
 	req := &scripts.RequestScript{
-		Name:           fmt.Sprintf("example-script-%d", time.Now().UnixMilli()),
+		Name:           "go-sdk-v2-Script",
 		Priority:       scripts.ScriptPriorityAfter,
 		Info:           "Example script created by SDK",
 		Notes:          "For testing purposes only",
 		ScriptContents: "#!/bin/bash\necho 'Hello from Jamf Pro SDK example'",
 	}
 
-	result, resp, err := client.Scripts.CreateScriptV1(ctx, req)
+	result, _, err := jamfClient.Scripts.CreateScriptV1(context.Background(), req)
 	if err != nil {
-		log.Fatalf("CreateScriptV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Created script ID: %s\n", result.ID)
-	fmt.Printf("Href: %s\n", result.Href)
-
-	// Cleanup: delete the created script
-	if _, err := client.Scripts.DeleteScriptByIDV1(ctx, result.ID); err != nil {
-		fmt.Printf("Note: cleanup delete failed: %v\n", err)
-	} else {
-		fmt.Println("Cleanup: script deleted")
-	}
+	fmt.Printf("Created script: %+v\n", result)
 }

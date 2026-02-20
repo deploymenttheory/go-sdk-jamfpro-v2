@@ -1,36 +1,30 @@
-// Package main demonstrates DeleteSmartGroupV2 - deletes a smart computer group.
-//
-// Run with: go run ./examples/jamf_pro_api/computer_groups/smart/delete
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, auth env vars, and GROUP_ID env var.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	groupID := os.Getenv("GROUP_ID")
-	if groupID == "" {
-		log.Fatal("GROUP_ID env var required")
-	}
-
-	ctx := context.Background()
-
-	resp, err := client.ComputerGroups.DeleteSmartGroupV2(ctx, groupID)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("DeleteSmartGroupV2 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Println("Smart group deleted successfully")
+	groupID := "1" // Replace with the desired smart computer group ID to delete
+	_, err = jamfClient.ComputerGroups.DeleteSmartGroupV2(context.Background(), groupID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	fmt.Println("Smart computer group deleted successfully")
 }

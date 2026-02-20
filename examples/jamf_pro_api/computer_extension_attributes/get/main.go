@@ -1,43 +1,32 @@
-// Package main demonstrates GetComputerExtensionAttributeByIDV1 - retrieves a single computer extension attribute by ID.
-//
-// Run with: go run ./examples/jamf_pro_api/computer_extension_attributes/get <id>
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: go run ./examples/jamf_pro_api/computer_extension_attributes/get <id>")
-	}
-	id := os.Args[1]
-
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	result, resp, err := client.ComputerExtensionAttributes.GetComputerExtensionAttributeByIDV1(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetComputerExtensionAttributeByIDV1 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("ID: %s\n", result.ID)
-	fmt.Printf("Name: %s\n", result.Name)
-	fmt.Printf("DataType: %s\n", result.DataType)
-	fmt.Printf("InputType: %s\n", result.InputType)
-	fmt.Printf("InventoryDisplayType: %s\n", result.InventoryDisplayType)
-	if result.Description != "" {
-		fmt.Printf("Description: %s\n", result.Description)
+	attrID := "1" // Replace with the desired computer extension attribute ID
+	result, _, err := jamfClient.ComputerExtensionAttributes.GetComputerExtensionAttributeByIDV1(context.Background(), attrID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Computer extension attribute:\n" + string(out))
 }

@@ -1,45 +1,39 @@
-// Package main demonstrates CreateVolumePurchasingLocationV1 - creates a new volume purchasing location.
-// Requires a valid Apple VPP service token (ServiceToken). Reclaim is not called here; call
-// ReclaimVolumePurchasingLocationByIDV1 after create if needed.
-//
-// Run with: go run ./examples/jamf_pro_api/volume_purchasing_locations/create
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, auth env vars, and a valid VPP service token.
 package main
 
 import (
 	"context"
+	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/volume_purchasing_locations"
 )
 
 func main() {
-	token := os.Getenv("VPP_SERVICE_TOKEN")
-	if token == "" {
-		log.Fatal("VPP_SERVICE_TOKEN is required for this example")
-	}
-
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
+	serviceToken := "YOUR_VPP_SERVICE_TOKEN" // Replace with a valid Apple VPP service token
 	req := &volume_purchasing_locations.RequestVolumePurchasingLocation{
-		Name:                                  "Example VPL",
-		ServiceToken:                          token,
+		Name:                                  "go-sdk-v2-VPL",
+		ServiceToken:                          serviceToken,
 		AutomaticallyPopulatePurchasedContent: true,
 		SendNotificationWhenNoLongerAssigned:  false,
 		AutoRegisterManagedUsers:              false,
 	}
 
-	result, resp, err := client.VolumePurchasingLocations.CreateVolumePurchasingLocationV1(ctx, req)
+	result, _, err := jamfClient.VolumePurchasingLocations.CreateVolumePurchasingLocationV1(context.Background(), req)
 	if err != nil {
-		log.Fatalf("CreateVolumePurchasingLocationV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	log.Printf("Status: %d Created ID: %s Href: %s", resp.StatusCode, result.ID, result.Href)
+	fmt.Printf("Created volume purchasing location: %+v\n", result)
 }

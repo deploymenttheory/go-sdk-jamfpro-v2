@@ -31,11 +31,14 @@ func TestAcceptance_AdvancedMobileDeviceSearches_Lifecycle(t *testing.T) {
 	ctx := context.Background()
 
 	name := fmt.Sprintf("acc-adv-md-search-%d", time.Now().UnixMilli())
-	// Use "Device Name" criterion for mobile device searches
+	// Use valid criterion for mobile device searches
+	falseBool := false
+	siteId := "-1"
 	search := &advanced_mobile_device_searches.ResourceAdvancedMobileDeviceSearch{
 		Name:          name,
-		Criteria:      []advanced_mobile_device_searches.CriteriaJamfProAPI{{Name: "Device Name", Priority: 1, AndOr: "and", SearchType: "like", Value: "iPhone"}},
-		DisplayFields: []string{"Device Name"},
+		Criteria:      []advanced_mobile_device_searches.CriteriaJamfProAPI{{Name: "Last Inventory Update", Priority: 0, AndOr: "and", SearchType: "more than x days ago", Value: "7", OpeningParen: &falseBool, ClosingParen: &falseBool}},
+		DisplayFields: []string{"IP Address"},
+		SiteId:        &siteId,
 	}
 	created, createResp, err := svc.CreateV1(ctx, search)
 	require.NoError(t, err)

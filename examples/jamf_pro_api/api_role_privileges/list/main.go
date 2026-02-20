@@ -1,33 +1,31 @@
-// Package main demonstrates ListPrivilegesV1 - lists API role privileges.
-//
-// Run with: go run ./examples/jamf_pro_api/api_role_privileges/list
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-	ctx := context.Background()
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
+	}
 
-	result, resp, err := client.APIRolePrivileges.ListPrivilegesV1(ctx)
+	result, _, err := jamfClient.APIRolePrivileges.ListPrivilegesV1(context.Background())
 	if err != nil {
-		log.Fatalf("ListPrivilegesV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-	fmt.Printf("Status: %d Privileges: %d\n", resp.StatusCode, len(result.Privileges))
-	for i, p := range result.Privileges {
-		if i >= 10 {
-			break
-		}
-		fmt.Printf("  %s\n", p)
-	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("API role privileges:\n" + string(out))
 }

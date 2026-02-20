@@ -1,58 +1,42 @@
-// Package main demonstrates UpdateIBeaconByID — updates an existing iBeacon via the Classic API.
-//
-// Run with: go run ./examples/classic_api/ibeacons/update
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ibeacons"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	// Create an iBeacon to update
-	createReq := &ibeacons.RequestIBeacon{
-		Name:  fmt.Sprintf("example-update-%d", time.Now().UnixMilli()),
-		UUID:  "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0",
-		Major: 1,
-		Minor: 1,
-	}
-	created, _, err := client.IBeacons.CreateIBeacon(ctx, createReq)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("CreateIBeacon failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
-	fmt.Printf("Created iBeacon ID: %d name: %s\n", created.ID, created.Name)
 
-	// Update the iBeacon
+	// Example usage of UpdateIBeaconByID — replace with the desired iBeacon ID and updated payload
+	ibeaconID := 1
 	updateReq := &ibeacons.RequestIBeacon{
-		Name:  fmt.Sprintf("example-updated-%d", time.Now().UnixMilli()),
+		Name:  "go-sdk-v2-iBeacon-Updated",
 		UUID:  "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0",
 		Major: 1,
 		Minor: 2,
 	}
-	updated, resp, err := client.IBeacons.UpdateIBeaconByID(ctx, created.ID, updateReq)
+
+	updatedIBeacon, _, err := jamfClient.IBeacons.UpdateIBeaconByID(context.Background(), ibeaconID, updateReq)
 	if err != nil {
-		_, _ = client.IBeacons.DeleteIBeaconByID(ctx, created.ID)
-		log.Fatalf("UpdateIBeaconByID failed: %v", err)
+		fmt.Printf("Error updating iBeacon by ID: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Updated iBeacon ID: %d\n", updated.ID)
-	fmt.Printf("New name: %s\n", updated.Name)
-	fmt.Printf("Minor: %d\n", updated.Minor)
-
-	_, _ = client.IBeacons.DeleteIBeaconByID(ctx, created.ID)
-	fmt.Println("Cleanup: iBeacon deleted")
+	fmt.Printf("Updated iBeacon: %+v\n", updatedIBeacon)
 }

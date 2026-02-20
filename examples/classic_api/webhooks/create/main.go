@@ -1,49 +1,45 @@
-// Package main demonstrates CreateWebhook — creates a new webhook via the Classic API.
-//
-// Run with: go run ./examples/classic_api/webhooks/create
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Creates a webhook then deletes it.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/webhooks"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
-	req := &webhooks.RequestWebhook{
-		Name:               fmt.Sprintf("example-webhook-%d", time.Now().UnixMilli()),
-		Enabled:            false,
-		URL:                "https://hooks.example.com/jamf",
+	// Example usage of CreateWebhook
+	newWebhook := &webhooks.RequestWebhook{
+		Name:               "go-sdk-v2-Webhook",
+		Enabled:            true,
+		URL:                "https://server.com",
 		ContentType:        "application/json",
-		Event:              "ComputerAdded",
+		Event:              "SmartGroupComputerMembershipChange",
+		ConnectionTimeout:  30,
+		ReadTimeout:        30,
 		AuthenticationType: "NONE",
 	}
 
-	created, resp, err := client.Webhooks.CreateWebhook(ctx, req)
+	createdWebhook, _, err := jamfClient.Webhooks.CreateWebhook(context.Background(), newWebhook)
 	if err != nil {
-		log.Fatalf("CreateWebhook failed: %v", err)
+		fmt.Printf("Error creating webhook: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Created webhook ID: %d\n", created.ID)
-	fmt.Printf("Name: %s\n", created.Name)
-
-	// Cleanup: delete the created webhook
-	if _, err := client.Webhooks.DeleteWebhookByID(ctx, created.ID); err != nil {
-		fmt.Printf("Note: cleanup delete failed: %v\n", err)
-	} else {
-		fmt.Println("Cleanup: webhook deleted")
-	}
+	fmt.Printf("Created Webhook: %+v\n", createdWebhook)
 }

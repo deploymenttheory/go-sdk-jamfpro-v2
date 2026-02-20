@@ -1,45 +1,36 @@
-// Package main demonstrates CreateDockItemV1 - creates a new dock item.
-//
-// Run with: go run ./examples/jamf_pro_api/dock_items/create
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
 	req := &dock_items.RequestDockItem{
-		Name: fmt.Sprintf("example-dock-%d", time.Now().UnixMilli()),
+		Name: "go-sdk-v2-Dock-Item",
 		Path: "/Applications/Safari.app",
 		Type: dock_items.TypeApp,
 	}
 
-	result, resp, err := client.DockItems.CreateDockItemV1(ctx, req)
+	result, _, err := jamfClient.DockItems.CreateDockItemV1(context.Background(), req)
 	if err != nil {
-		log.Fatalf("CreateDockItemV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Created dock item ID: %s\n", result.ID)
-	fmt.Printf("Href: %s\n", result.Href)
-
-	if _, err := client.DockItems.DeleteDockItemByIDV1(ctx, result.ID); err != nil {
-		fmt.Printf("Note: cleanup delete failed: %v\n", err)
-	} else {
-		fmt.Println("Cleanup: dock item deleted")
-	}
+	fmt.Printf("Created dock item: %+v\n", result)
 }

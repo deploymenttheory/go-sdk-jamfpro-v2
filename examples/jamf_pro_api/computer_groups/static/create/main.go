@@ -1,44 +1,35 @@
-// Package main demonstrates CreateStaticGroupV2 - creates a new static computer group.
-//
-// Run with: go run ./examples/jamf_pro_api/computer_groups/static/create
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_groups"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
 	req := &computer_groups.RequestStaticGroup{
-		Name:        fmt.Sprintf("example-static-group-%d", time.Now().UnixMilli()),
+		Name:        "go-sdk-v2-Static-Group",
 		ComputerIds: []string{},
 	}
 
-	result, resp, err := client.ComputerGroups.CreateStaticGroupV2(ctx, req)
+	result, _, err := jamfClient.ComputerGroups.CreateStaticGroupV2(context.Background(), req)
 	if err != nil {
-		log.Fatalf("CreateStaticGroupV2 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Created static group ID: %s\n", result.ID)
-	fmt.Printf("Href: %s\n", result.Href)
-
-	if _, err := client.ComputerGroups.DeleteStaticGroupByIDV2(ctx, result.ID); err != nil {
-		fmt.Printf("Note: cleanup delete failed: %v\n", err)
-	} else {
-		fmt.Println("Cleanup: static group deleted")
-	}
+	fmt.Printf("Created static group: %+v\n", result)
 }

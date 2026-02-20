@@ -1,44 +1,32 @@
-// Package main demonstrates GetSmartGroupByIDV2 - retrieves a smart computer group by ID.
-//
-// Run with: go run ./examples/jamf_pro_api/computer_groups/smart/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, auth env vars, and GROUP_ID env var (or pass as arg).
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	groupID := os.Getenv("GROUP_ID")
-	if groupID == "" && len(os.Args) > 1 {
-		groupID = os.Args[1]
-	}
-	if groupID == "" {
-		log.Fatal("GROUP_ID env var or argument required")
-	}
-
-	ctx := context.Background()
-
-	result, resp, err := client.ComputerGroups.GetSmartGroupByIDV2(ctx, groupID)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetSmartGroupByIDV2 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("ID: %s\n", result.ID)
-	fmt.Printf("Name: %s\n", result.Name)
-	fmt.Printf("IsSmart: %v\n", result.IsSmart)
-	for i, c := range result.Criteria {
-		fmt.Printf("  Criterion[%d]: %s %s %q\n", i, c.Name, c.SearchType, c.Value)
+	groupID := "1" // Replace with the desired smart computer group ID
+	result, _, err := jamfClient.ComputerGroups.GetSmartGroupByIDV2(context.Background(), groupID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Smart computer group:\n" + string(out))
 }

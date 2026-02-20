@@ -1,50 +1,42 @@
-// Package main demonstrates GetNetworkSegmentByID — retrieves a single network segment by ID.
-//
-// Run with: go run ./examples/classic_api/network_segments/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set NETWORK_SEGMENT_ID or uses first from list.
 package main
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-
-	var id int
-	if raw := os.Getenv("NETWORK_SEGMENT_ID"); raw != "" {
-		id, err = strconv.Atoi(raw)
-		if err != nil {
-			log.Fatalf("invalid NETWORK_SEGMENT_ID %q: %v", raw, err)
-		}
-	} else {
-		list, _, err := client.NetworkSegments.ListNetworkSegments(ctx)
-		if err != nil || len(list.Results) == 0 {
-			log.Fatal("Set NETWORK_SEGMENT_ID or ensure at least one network segment exists")
-		}
-		id = list.Results[0].ID
-		fmt.Printf("Using first network segment ID: %d\n", id)
-	}
-
-	segment, resp, err := client.NetworkSegments.GetNetworkSegmentByID(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetNetworkSegmentByID failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("ID:              %d\n", segment.ID)
-	fmt.Printf("Name:            %s\n", segment.Name)
-	fmt.Printf("StartingAddress: %s\n", segment.StartingAddress)
-	fmt.Printf("EndingAddress:   %s\n", segment.EndingAddress)
+	// Example usage of GetNetworkSegmentByID
+	segmentID := 1 // Replace with the desired network segment ID
+	segment, _, err := jamfClient.NetworkSegments.GetNetworkSegmentByID(context.Background(), segmentID)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	// Pretty print the network segment details in XML
+	segmentXML, err := xml.MarshalIndent(segment, "", "    ")
+	if err != nil {
+		log.Fatalf("Error marshaling network segment data: %v", err)
+	}
+	fmt.Println("Network Segment Details (ID " + strconv.Itoa(segmentID) + "):\n" + string(segmentXML))
 }

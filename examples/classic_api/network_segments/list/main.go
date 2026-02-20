@@ -1,31 +1,40 @@
-// Package main demonstrates ListNetworkSegments — returns all network segments from the Classic API.
-//
-// Run with: go run ./examples/classic_api/network_segments/list
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	// Define the path to the JSON configuration file
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	// Initialize the Jamf Pro client with the HTTP client configuration
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	list, resp, err := client.NetworkSegments.ListNetworkSegments(context.Background())
+	// Call the ListNetworkSegments function to retrieve the list of network segments
+	list, _, err := jamfClient.NetworkSegments.ListNetworkSegments(context.Background())
 	if err != nil {
-		log.Fatalf("ListNetworkSegments failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Total network segments: %d\n", list.Size)
-	for _, s := range list.Results {
-		fmt.Printf("  ID=%-5d  Name=%s\n", s.ID, s.Name)
+	// Pretty print the network segments details in XML
+	listXML, err := xml.MarshalIndent(list, "", "    ")
+	if err != nil {
+		log.Fatalf("Error marshaling network segments data: %v", err)
 	}
+	fmt.Println("Network Segments Details:\n" + string(listXML))
 }
