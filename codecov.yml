@@ -1,4 +1,4 @@
-# Codecov configuration for go-api-sdk-virustotal
+# Codecov configuration for go-sdk-jamfpro-v2
 # For more info: https://docs.codecov.io/docs/codecov-yaml
 
 # Go Integration Test Coverage (Go 1.20+ Features)
@@ -52,6 +52,7 @@ coverage:
 
 # Flags for different test types
 flags:
+  # General test categories
   unittests:
     paths:
       - "jamfpro/"
@@ -62,7 +63,7 @@ flags:
       - "jamfpro/acceptance/"
     carryforward: false
 
-  # Component-specific flags
+  # Core components
   client:
     paths:
       - "jamfpro/client/"
@@ -73,131 +74,27 @@ flags:
       - "jamfpro/interfaces/"
     carryforward: false
 
-  # Service-specific flags for API endpoints
-  files:
+  validators:
     paths:
-      - "jamfpro/services/files/"
+      - "jamfpro/services/validators/"
     carryforward: false
 
-  urls:
+  shared:
     paths:
-      - "virustotal/services/urls/"
+      - "jamfpro/services/shared/"
     carryforward: false
 
-  domains:
+  # API-level categories
+  classic_api:
     paths:
-      - "virustotal/services/domains/"
+      - "jamfpro/services/classic_api/"
     carryforward: false
 
-  ip_addresses:
+  jamf_pro_api:
     paths:
-      - "virustotal/services/ip_addresses/"
+      - "jamfpro/services/jamf_pro_api/"
     carryforward: false
 
-  analyses:
-    paths:
-      - "virustotal/services/analyses/"
-    carryforward: false
-
-  comments:
-    paths:
-      - "virustotal/services/comments/"
-    carryforward: false
-
-  votes:
-    paths:
-      - "virustotal/services/votes/"
-    carryforward: false
-
-  intelligence:
-    paths:
-      - "virustotal/services/intelligence/"
-    carryforward: false
-
-  graphs:
-    paths:
-      - "virustotal/services/graphs/"
-    carryforward: false
-
-  monitor:
-    paths:
-      - "virustotal/services/monitor/"
-    carryforward: false
-
-  users:
-    paths:
-      - "virustotal/services/users/"
-    carryforward: false
-
-  groups:
-    paths:
-      - "virustotal/services/groups/"
-    carryforward: false
-
-  api_keys:
-    paths:
-      - "virustotal/services/api_keys/"
-    carryforward: false
-
-  attack_tactics:
-    paths:
-      - "virustotal/services/attack_tactics/"
-    carryforward: false
-
-  attack_techniques:
-    paths:
-      - "virustotal/services/attack_techniques/"
-    carryforward: false
-
-  collections:
-    paths:
-      - "virustotal/services/collections/"
-    carryforward: false
-
-  popular_threat_categories:
-    paths:
-      - "virustotal/services/popular_threat_categories/"
-    carryforward: false
-
-  search:
-    paths:
-      - "virustotal/services/search/"
-    carryforward: false
-
-  metadata:
-    paths:
-      - "virustotal/services/metadata/"
-    carryforward: false
-
-  sigma_rules:
-    paths:
-      - "virustotal/services/sigma_rules/"
-    carryforward: false
-
-  yara_rules:
-    paths:
-      - "virustotal/services/yara_rules/"
-    carryforward: false
-
-  livehunt_notifications:
-    paths:
-      - "virustotal/services/livehunt_notifications/"
-    carryforward: false
-
-  livehunt_rulesets:
-    paths:
-      - "virustotal/services/livehunt_rulesets/"
-    carryforward: false
-
-  retrohunt_jobs:
-    paths:
-      - "virustotal/services/retrohunt_jobs/"
-    carryforward: false
-
-  zip_files:
-    paths:
-      - "virustotal/services/zip_files/"
-    carryforward: false
 
 # Ignore paths that shouldn't count towards coverage
 ignore:
@@ -216,7 +113,8 @@ ignore:
 
   # File types
   - "*.md"              # Documentation files
-  - "*.json"            # Mock responses
+  - "*.json"            # Mock responses and fixture data
+  - "*.xml"             # Classic API XML fixtures
   - "*.yml"
   - "*.yaml"
   - "go.mod"
