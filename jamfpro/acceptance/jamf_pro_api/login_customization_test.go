@@ -32,6 +32,12 @@ func TestAcceptance_LoginCustomization_UpdateV1(t *testing.T) {
 
 	request := *current
 	request.DisclaimerHeading = "Acceptance test" // max 20 chars per API
+	if request.DisclaimerMainText == "" {
+		request.DisclaimerMainText = "Acceptance test disclaimer text"
+	}
+	if request.ActionText == "" {
+		request.ActionText = "Acceptance test action text"
+	}
 	updated, resp, err := svc.UpdateV1(ctx, &request)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
