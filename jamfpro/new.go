@@ -41,6 +41,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_distribution_point"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_extension_attributes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_prestages"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_communication_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
@@ -118,6 +119,7 @@ type Client struct {
 	CloudDistributionPoint          *cloud_distribution_point.Service
 	ComputerExtensionAttributes     *computer_extension_attributes.Service
 	ComputerGroups                  *computer_groups.Service
+	ComputerPrestages                *computer_prestages.Service
 	Departments                     *departments.Service
 	DeviceCommunicationSettings     *device_communication_settings.Service
 	DockItems                       *dock_items.Service
@@ -195,6 +197,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		CloudDistributionPoint:          cloud_distribution_point.NewService(transport),
 		ComputerExtensionAttributes:     computer_extension_attributes.NewService(transport),
 		ComputerGroups:                  computer_groups.NewService(transport),
+		ComputerPrestages:               computer_prestages.NewService(transport),
 		Departments:                     departments.NewService(transport),
 		DeviceCommunicationSettings:     device_communication_settings.NewService(transport),
 		DockItems:                       dock_items.NewService(transport),

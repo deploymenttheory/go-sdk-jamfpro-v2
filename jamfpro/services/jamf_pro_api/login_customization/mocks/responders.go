@@ -41,7 +41,7 @@ func (m *LoginCustomizationMock) RegisterGetLoginCustomizationMock() {
 
 // RegisterUpdateLoginCustomizationMock registers a successful PUT /api/v1/login-customization response.
 func (m *LoginCustomizationMock) RegisterUpdateLoginCustomizationMock() {
-	m.register("PUT", "/api/v1/login-customization", 200, "validate_get.json")
+	m.register("PUT", "/api/v1/login-customization", 200, "validate_update.json")
 }
 
 func (m *LoginCustomizationMock) dispatch(method, path string, result any) (*interfaces.Response, error) {

@@ -1,0 +1,7 @@
+{
+  "rampInstance": true,
+  "includeCustomDisclaimer": true,
+  "disclaimerHeading": "Updated Disclaimer Header",
+  "disclaimerMainText": "Updated disclaimer main text",
+  "actionText": "Accept"
+}
