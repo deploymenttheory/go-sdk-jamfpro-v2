@@ -1,43 +1,32 @@
-// Package main demonstrates GetCategoryByIDV1 - retrieves a single category by ID.
-//
-// Run with: go run ./examples/jamf_pro_api/categories/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set CATEGORY_ID or uses first from list.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-	id := os.Getenv("CATEGORY_ID")
-	if id == "" {
-		// Fallback: use first category from list
-		list, _, err := client.Categories.ListCategoriesV1(ctx, map[string]string{"page": "0", "pageSize": "1"})
-		if err != nil || len(list.Results) == 0 {
-			log.Fatal("Set CATEGORY_ID or ensure at least one category exists")
-		}
-		id = list.Results[0].ID
-		fmt.Printf("Using first category ID: %s\n", id)
-	}
-
-	category, resp, err := client.Categories.GetCategoryByIDV1(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetCategoryByIDV1 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("ID: %s\n", category.ID)
-	fmt.Printf("Name: %s\n", category.Name)
-	fmt.Printf("Priority: %d\n", category.Priority)
+	id := "1" // Replace with the desired category ID
+	result, _, err := jamfClient.Categories.GetCategoryByIDV1(context.Background(), id)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println(string(out))
 }

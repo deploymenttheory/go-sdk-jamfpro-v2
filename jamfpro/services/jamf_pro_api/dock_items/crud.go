@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -66,7 +66,12 @@ func (s *Service) GetDockItemByIDV1(ctx context.Context, id string) (*ResourceDo
 
 	var result ResourceDockItem
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -85,7 +90,14 @@ func (s *Service) CreateDockItemV1(ctx context.Context, req *RequestDockItem) (*
 
 	var result CreateResponse
 
-	resp, err := s.client.Post(ctx, EndpointDockItemsV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointDockItemsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -109,7 +121,12 @@ func (s *Service) UpdateDockItemByIDV1(ctx context.Context, id string, req *Requ
 
 	var result ResourceDockItem
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -127,7 +144,12 @@ func (s *Service) DeleteDockItemByIDV1(ctx context.Context, id string) (*interfa
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointDockItemsV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

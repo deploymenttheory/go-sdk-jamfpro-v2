@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ldap_server>
+    <connection>
+        <id>1</id>
+        <name>Test LDAP Server</name>
+        <hostname>ldap.example.com</hostname>
+        <server_type>Active Directory</server_type>
+        <port>389</port>
+        <use_ssl>false</use_ssl>
+        <authentication_type>simple</authentication_type>
+        <account>
+            <distinguished_username>cn=admin,dc=example,dc=com</distinguished_username>
+            <password>********</password>
+        </account>
+        <open_close_timeout>5</open_close_timeout>
+        <search_timeout>60</search_timeout>
+        <referral_response>follow</referral_response>
+        <use_wildcards>true</use_wildcards>
+    </connection>
+    <mappings_for_users>
+        <user_mappings>
+            <map_object_class_to_any_or_all>any</map_object_class_to_any_or_all>
+            <object_classes>user</object_classes>
+            <search_base>dc=example,dc=com</search_base>
+            <search_scope>subtree</search_scope>
+            <map_user_id>sAMAccountName</map_user_id>
+            <map_username>sAMAccountName</map_username>
+            <map_realname>cn</map_realname>
+            <map_email_address>mail</map_email_address>
+            <append_to_email_results></append_to_email_results>
+            <map_department>department</map_department>
+            <map_building>physicalDeliveryOfficeName</map_building>
+            <map_room>roomNumber</map_room>
+            <map_phone>telephoneNumber</map_phone>
+            <map_position>title</map_position>
+            <map_user_uuid>objectGUID</map_user_uuid>
+        </user_mappings>
+        <user_group_mappings>
+            <map_object_class_to_any_or_all>any</map_object_class_to_any_or_all>
+            <object_classes>group</object_classes>
+            <search_base>dc=example,dc=com</search_base>
+            <search_scope>subtree</search_scope>
+            <map_group_id>cn</map_group_id>
+            <map_group_name>cn</map_group_name>
+            <map_group_uuid>objectGUID</map_group_uuid>
+        </user_group_mappings>
+        <user_group_membership_mappings>
+            <user_group_membership_stored_in>user object</user_group_membership_stored_in>
+            <map_group_membership_to_user_field>memberOf</map_group_membership_to_user_field>
+            <append_to_username></append_to_username>
+            <use_dn>true</use_dn>
+            <recursive_lookups>true</recursive_lookups>
+            <group_membership_enabled_when_user_membership_selected>false</group_membership_enabled_when_user_membership_selected>
+            <map_user_membership_to_group_field>member</map_user_membership_to_group_field>
+            <map_user_membership_use_dn>true</map_user_membership_use_dn>
+            <map_object_class_to_any_or_all>any</map_object_class_to_any_or_all>
+            <object_classes>group</object_classes>
+            <search_base>dc=example,dc=com</search_base>
+            <search_scope>subtree</search_scope>
+            <username></username>
+            <group_id></group_id>
+            <user_group_membership_use_ldap_compare>false</user_group_membership_use_ldap_compare>
+            <membership_scoping_optimization>false</membership_scoping_optimization>
+        </user_group_membership_mappings>
+    </mappings_for_users>
+</ldap_server>

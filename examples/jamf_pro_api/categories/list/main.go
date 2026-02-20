@@ -1,53 +1,34 @@
-// Package main demonstrates ListCategoriesV1 - retrieves all category objects with optional pagination and RSQL filtering.
-//
-// Run with: go run ./examples/jamf_pro_api/categories/list
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and OAuth2 or Basic auth env vars.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	ctx := context.Background()
-
-	// List all categories (first page, default page size)
-	result, resp, err := client.Categories.ListCategoriesV1(ctx, map[string]string{
+	result, _, err := jamfClient.Categories.ListCategoriesV1(context.Background(), map[string]string{
 		"page":     "0",
 		"pageSize": "50",
 	})
 	if err != nil {
-		log.Fatalf("ListCategoriesV1 failed: %v", err)
+		fmt.Printf("Error: %v\n", err)
+		return
 	}
-
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("Total count: %d\n", result.TotalCount)
-	for i, c := range result.Results {
-		if i >= 5 {
-			fmt.Printf("... and %d more\n", result.TotalCount-5)
-			break
-		}
-		fmt.Printf("  ID=%s Name=%q Priority=%d\n", c.ID, c.Name, c.Priority)
-	}
-
-	// Example: list with RSQL filter
-	filtered, _, err := client.Categories.ListCategoriesV1(ctx, map[string]string{
-		"filter": `name=="Critical"`,
-	})
-	if err != nil {
-		log.Fatalf("ListCategoriesV1 with filter failed: %v", err)
-	}
-	fmt.Printf("\nFiltered (name==\"Critical\"): %d result(s)\n", filtered.TotalCount)
-	for _, c := range filtered.Results {
-		fmt.Printf("  ID=%s Name=%q\n", c.ID, c.Name)
-	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println(string(out))
 }

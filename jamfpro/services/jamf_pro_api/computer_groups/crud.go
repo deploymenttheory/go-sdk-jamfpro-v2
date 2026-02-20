@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -16,7 +16,7 @@ type (
 		// ListSmartGroupsV2 returns all smart computer groups (Get Smart Computer Group objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
-		ListSmartGroupsV2(ctx context.Context, queryParams map[string]string) (*ListSmartResponse, *interfaces.Response, error)
+		ListSmartGroupsV2(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *interfaces.Response, error)
 
 		// GetSmartGroupByIDV2 returns the specified smart computer group by ID (Get specified Smart Computer Group object).
 		//
@@ -41,7 +41,7 @@ type (
 		// ListStaticGroupsV2 returns all static computer groups (Get Static Computer Group objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups
-		ListStaticGroupsV2(ctx context.Context, queryParams map[string]string) (*ListStaticResponse, *interfaces.Response, error)
+		ListStaticGroupsV2(ctx context.Context, rsqlQuery map[string]string) (*ListStaticResponse, *interfaces.Response, error)
 
 		// GetStaticGroupByIDV2 returns the specified static computer group by ID (Get specified Static Computer Group object).
 		//
@@ -84,10 +84,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListSmartGroupsV2 returns all smart computer groups.
 // URL: GET /api/v2/computer-groups/smart-groups
-func (s *Service) ListSmartGroupsV2(ctx context.Context, queryParams map[string]string) (*ListSmartResponse, *interfaces.Response, error) {
+func (s *Service) ListSmartGroupsV2(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *interfaces.Response, error) {
 	var result ListSmartResponse
 
-	resp, err := s.client.Get(ctx, EndpointSmartGroupsV2, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointSmartGroupsV2
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -106,7 +113,12 @@ func (s *Service) GetSmartGroupByIDV2(ctx context.Context, id string) (*Resource
 
 	var result ResourceSmartGroup
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -123,7 +135,14 @@ func (s *Service) CreateSmartGroupV2(ctx context.Context, req *RequestSmartGroup
 
 	var result CreateSmartResponse
 
-	resp, err := s.client.Post(ctx, EndpointSmartGroupsV2, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointSmartGroupsV2
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -145,7 +164,12 @@ func (s *Service) UpdateSmartGroupV2(ctx context.Context, id string, req *Reques
 
 	var result ResourceSmartGroup
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -162,7 +186,12 @@ func (s *Service) DeleteSmartGroupV2(ctx context.Context, id string) (*interface
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -176,10 +205,17 @@ func (s *Service) DeleteSmartGroupV2(ctx context.Context, id string) (*interface
 
 // ListStaticGroupsV2 returns all static computer groups.
 // URL: GET /api/v2/computer-groups/static-groups
-func (s *Service) ListStaticGroupsV2(ctx context.Context, queryParams map[string]string) (*ListStaticResponse, *interfaces.Response, error) {
+func (s *Service) ListStaticGroupsV2(ctx context.Context, rsqlQuery map[string]string) (*ListStaticResponse, *interfaces.Response, error) {
 	var result ListStaticResponse
 
-	resp, err := s.client.Get(ctx, EndpointStaticGroupsV2, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointStaticGroupsV2
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -198,7 +234,12 @@ func (s *Service) GetStaticGroupByIDV2(ctx context.Context, id string) (*Resourc
 
 	var result ResourceStaticGroup
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -215,7 +256,14 @@ func (s *Service) CreateStaticGroupV2(ctx context.Context, req *RequestStaticGro
 
 	var result CreateStaticResponse
 
-	resp, err := s.client.Post(ctx, EndpointStaticGroupsV2, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointStaticGroupsV2
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -237,7 +285,12 @@ func (s *Service) UpdateStaticGroupByIDV2(ctx context.Context, id string, req *R
 
 	var result ResourceStaticGroup
 
-	resp, err := s.client.Patch(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Patch(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -254,7 +307,12 @@ func (s *Service) DeleteStaticGroupByIDV2(ctx context.Context, id string) (*inte
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

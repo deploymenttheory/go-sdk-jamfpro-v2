@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -76,7 +76,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListPatchExternalSources(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointClassicPatchExternalSources, nil, shared.XMLHeaders(), &result)
+	endpoint := EndpointClassicPatchExternalSources
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -96,7 +103,12 @@ func (s *Service) GetPatchExternalSourceByID(ctx context.Context, id int) (*Reso
 
 	var result ResourcePatchExternalSource
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -116,7 +128,12 @@ func (s *Service) GetPatchExternalSourceByName(ctx context.Context, name string)
 
 	var result ResourcePatchExternalSource
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -137,7 +154,12 @@ func (s *Service) CreatePatchExternalSource(ctx context.Context, req *RequestPat
 
 	var result ResourcePatchExternalSource
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -160,7 +182,12 @@ func (s *Service) UpdatePatchExternalSourceByID(ctx context.Context, id int, req
 
 	var result ResourcePatchExternalSource
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -183,7 +210,12 @@ func (s *Service) UpdatePatchExternalSourceByName(ctx context.Context, name stri
 
 	var result ResourcePatchExternalSource
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -201,7 +233,12 @@ func (s *Service) DeletePatchExternalSourceByID(ctx context.Context, id int) (*i
 
 	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicPatchExternalSources, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

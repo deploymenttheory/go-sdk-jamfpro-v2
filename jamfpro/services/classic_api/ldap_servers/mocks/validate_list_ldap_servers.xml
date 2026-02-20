@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ldap_servers>
+    <size>2</size>
+    <ldap_server>
+        <id>1</id>
+        <name>Test LDAP Server 1</name>
+    </ldap_server>
+    <ldap_server>
+        <id>2</id>
+        <name>Test LDAP Server 2</name>
+    </ldap_server>
+</ldap_servers>

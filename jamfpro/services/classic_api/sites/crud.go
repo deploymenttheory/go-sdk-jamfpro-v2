@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -81,7 +81,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListSites(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointClassicSites, nil, shared.XMLHeaders(), &result)
+	endpoint := EndpointClassicSites
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -101,7 +108,12 @@ func (s *Service) GetSiteByID(ctx context.Context, id int) (*ResourceSite, *inte
 
 	var result ResourceSite
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -121,7 +133,12 @@ func (s *Service) GetSiteByName(ctx context.Context, name string) (*ResourceSite
 
 	var result ResourceSite
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -142,7 +159,12 @@ func (s *Service) CreateSite(ctx context.Context, req *RequestSite) (*ResourceSi
 
 	var result ResourceSite
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -165,7 +187,12 @@ func (s *Service) UpdateSiteByID(ctx context.Context, id int, req *RequestSite) 
 
 	var result ResourceSite
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -188,7 +215,12 @@ func (s *Service) UpdateSiteByName(ctx context.Context, name string, req *Reques
 
 	var result ResourceSite
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -206,7 +238,12 @@ func (s *Service) DeleteSiteByID(ctx context.Context, id int) (*interfaces.Respo
 
 	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicSites, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -224,7 +261,12 @@ func (s *Service) DeleteSiteByName(ctx context.Context, name string) (*interface
 
 	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicSites, name)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

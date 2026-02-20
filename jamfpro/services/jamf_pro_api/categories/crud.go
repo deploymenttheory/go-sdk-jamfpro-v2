@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -19,7 +19,7 @@ type (
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-categories
-		ListCategoriesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListCategoriesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetCategoryByIDV1 returns the specified category by ID (Get specified Category object).
 		//
@@ -94,10 +94,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/categories
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-categories
-func (s *Service) ListCategoriesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListCategoriesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointCategoriesV1, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointCategoriesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -117,7 +124,12 @@ func (s *Service) GetCategoryByIDV1(ctx context.Context, id string) (*ResourceCa
 
 	var result ResourceCategory
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -136,7 +148,14 @@ func (s *Service) CreateCategoryV1(ctx context.Context, req *RequestCategory) (*
 
 	var result CreateUpdateResponse
 
-	resp, err := s.client.Post(ctx, EndpointCategoriesV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointCategoriesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -160,7 +179,12 @@ func (s *Service) UpdateCategoryByIDV1(ctx context.Context, id string, req *Requ
 
 	var result CreateUpdateResponse
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -178,7 +202,12 @@ func (s *Service) DeleteCategoryByIDV1(ctx context.Context, id string) (*interfa
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointCategoriesV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -197,7 +226,12 @@ func (s *Service) DeleteCategoriesByIDV1(ctx context.Context, req *DeleteCategor
 
 	endpoint := EndpointCategoriesV1 + "/delete-multiple"
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -218,7 +252,12 @@ func (s *Service) GetCategoryHistoryV1(ctx context.Context, id string, rsqlQuery
 
 	var result CategoryHistoryResponse
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -240,7 +279,12 @@ func (s *Service) AddCategoryHistoryNotesV1(ctx context.Context, id string, req 
 
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointCategoriesV1, id)
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}

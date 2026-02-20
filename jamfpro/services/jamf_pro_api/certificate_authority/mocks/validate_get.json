@@ -1,0 +1,17 @@
+{
+  "subjectX500Principal": "CN=Jamf Pro CA",
+  "issuerX500Principal": "CN=Jamf Pro CA",
+  "serialNumber": "12345",
+  "version": 3,
+  "notAfter": 2000000000,
+  "notBefore": 1000000000,
+  "signature": {
+    "algorithm": "SHA256withRSA",
+    "algorithmOid": "1.2.840.113549.1.1.11",
+    "value": "base64value"
+  },
+  "keyUsage": ["keyCertSign", "cRLSign"],
+  "keyUsageExtended": [],
+  "sha1Fingerprint": "aa:bb:cc:dd",
+  "sha256Fingerprint": "aa:bb:cc:dd:ee:ff"
+}

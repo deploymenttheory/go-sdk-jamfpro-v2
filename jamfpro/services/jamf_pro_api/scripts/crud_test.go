@@ -40,7 +40,7 @@ func TestUnitListScripts_Success(t *testing.T) {
 	assert.Equal(t, "BEFORE", result.Results[1].Priority)
 }
 
-func TestUnitListScripts_WithQueryParams(t *testing.T) {
+func TestUnitListScripts_WithrsqlQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListScriptsMock()
 

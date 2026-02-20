@@ -4,6 +4,8 @@
 package mime
 
 const (
-	ApplicationJSON = "application/json"
-	ApplicationXML  = "application/xml"
+	ApplicationJSON                = "application/json"
+	ApplicationXML                 = "application/xml"
+	ApplicationPKIXCert            = "application/pkix-cert"
+	ApplicationPEMCertificateChain = "application/pem-certificate-chain"
 )

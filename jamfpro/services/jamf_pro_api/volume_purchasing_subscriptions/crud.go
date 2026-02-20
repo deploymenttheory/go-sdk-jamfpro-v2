@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -16,7 +16,7 @@ type (
 		// ListVolumePurchasingSubscriptionsV1 returns all volume purchasing subscription objects (Get Volume Purchasing Subscription objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-subscriptions
-		ListVolumePurchasingSubscriptionsV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListVolumePurchasingSubscriptionsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetVolumePurchasingSubscriptionByIDV1 returns the specified volume purchasing subscription by ID (Get specified Volume Purchasing Subscription object).
 		//
@@ -60,10 +60,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListVolumePurchasingSubscriptionsV1 returns all volume purchasing subscription objects.
 // URL: GET /api/v1/volume-purchasing-subscriptions
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-subscriptions
-func (s *Service) ListVolumePurchasingSubscriptionsV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListVolumePurchasingSubscriptionsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointVolumePurchasingSubscriptionsV1, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointVolumePurchasingSubscriptionsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -83,7 +90,12 @@ func (s *Service) GetVolumePurchasingSubscriptionByIDV1(ctx context.Context, id 
 
 	var result ResourceVolumePurchasingSubscription
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -101,7 +113,14 @@ func (s *Service) CreateVolumePurchasingSubscriptionV1(ctx context.Context, req 
 
 	var result CreateResponse
 
-	resp, err := s.client.Post(ctx, EndpointVolumePurchasingSubscriptionsV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointVolumePurchasingSubscriptionsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -124,7 +143,12 @@ func (s *Service) UpdateVolumePurchasingSubscriptionByIDV1(ctx context.Context, 
 
 	var result ResourceVolumePurchasingSubscription
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -142,7 +166,12 @@ func (s *Service) DeleteVolumePurchasingSubscriptionByIDV1(ctx context.Context, 
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingSubscriptionsV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

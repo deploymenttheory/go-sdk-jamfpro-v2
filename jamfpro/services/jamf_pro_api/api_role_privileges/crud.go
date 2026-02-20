@@ -6,7 +6,7 @@ import (
 	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -44,10 +44,19 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges
 func (s *Service) ListPrivilegesV1(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
-	resp, err := s.client.Get(ctx, EndpointAPIRolePrivilegesV1, nil, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointAPIRolePrivilegesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -60,9 +69,16 @@ func (s *Service) SearchPrivilegesByNameV1(ctx context.Context, name string, lim
 	}
 	endpoint := fmt.Sprintf("%s/search?name=%s&limit=%d", EndpointAPIRolePrivilegesV1, url.QueryEscape(name), limit)
 	var result ListResponse
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }

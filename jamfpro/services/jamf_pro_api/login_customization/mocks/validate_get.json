@@ -1,0 +1,7 @@
+{
+  "rampInstance": false,
+  "includeCustomDisclaimer": true,
+  "disclaimerHeading": "Disclaimer",
+  "disclaimerMainText": "By signing in you accept the terms.",
+  "actionText": "Accept"
+}

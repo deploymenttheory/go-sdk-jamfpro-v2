@@ -33,7 +33,7 @@ func TestUnitListDepartments_Success(t *testing.T) {
 	assert.Equal(t, "Sales", result.Results[1].Name)
 }
 
-func TestUnitListDepartments_WithQueryParams(t *testing.T) {
+func TestUnitListDepartments_WithrsqlQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListDepartmentsMock()
 

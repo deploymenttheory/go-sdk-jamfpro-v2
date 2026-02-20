@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -19,7 +19,7 @@ type (
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
-		ListBuildingsV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListBuildingsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetBuildingByIDV1 returns the specified building by ID (Get specified Building object).
 		//
@@ -53,7 +53,7 @@ type (
 		// GetBuildingHistoryV1 returns the history object for the specified building.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id-history
-		GetBuildingHistoryV1(ctx context.Context, id string, queryParams map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetBuildingHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
 
 		// AddBuildingHistoryNotesV1 adds notes to the specified building history.
 		//
@@ -83,10 +83,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/buildings
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
-func (s *Service) ListBuildingsV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListBuildingsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointBuildingsV1, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointBuildingsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -106,7 +113,12 @@ func (s *Service) GetBuildingByIDV1(ctx context.Context, id string) (*ResourceBu
 
 	var result ResourceBuilding
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -125,7 +137,14 @@ func (s *Service) CreateBuildingV1(ctx context.Context, req *RequestBuilding) (*
 
 	var result CreateResponse
 
-	resp, err := s.client.Post(ctx, EndpointBuildingsV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointBuildingsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -149,7 +168,12 @@ func (s *Service) UpdateBuildingByIDV1(ctx context.Context, id string, req *Requ
 
 	var result ResourceBuilding
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -167,7 +191,12 @@ func (s *Service) DeleteBuildingByIDV1(ctx context.Context, id string) (*interfa
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointBuildingsV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -186,7 +215,12 @@ func (s *Service) DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuilding
 
 	endpoint := EndpointBuildingsV1 + "/delete-multiple"
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -198,7 +232,7 @@ func (s *Service) DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuilding
 // URL: GET /api/v1/buildings/{id}/history
 // Query Params: filter, sort, page, page-size (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id-history
-func (s *Service) GetBuildingHistoryV1(ctx context.Context, id string, queryParams map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetBuildingHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("building ID is required")
 	}
@@ -207,7 +241,12 @@ func (s *Service) GetBuildingHistoryV1(ctx context.Context, id string, queryPara
 
 	var result HistoryResponse
 
-	resp, err := s.client.Get(ctx, endpoint, queryParams, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -229,7 +268,12 @@ func (s *Service) AddBuildingHistoryNotesV1(ctx context.Context, id string, req 
 
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointBuildingsV1, id)
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}

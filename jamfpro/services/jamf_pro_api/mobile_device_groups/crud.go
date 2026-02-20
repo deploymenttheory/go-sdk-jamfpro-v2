@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -16,7 +16,7 @@ type (
 		// ListSmartV1 returns all smart mobile device groups (Get Smart Mobile Device Group objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-groups
-		ListSmartV1(ctx context.Context, queryParams map[string]string) (*ListSmartResponse, *interfaces.Response, error)
+		ListSmartV1(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *interfaces.Response, error)
 
 		// GetSmartByIDV1 returns the specified smart mobile device group by ID (Get specified Smart Mobile Device Group object).
 		//
@@ -41,7 +41,7 @@ type (
 		// ListStaticV1 returns all static mobile device groups (Get Static Mobile Device Group objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-groups
-		ListStaticV1(ctx context.Context, queryParams map[string]string) (*ListStaticResponse, *interfaces.Response, error)
+		ListStaticV1(ctx context.Context, rsqlQuery map[string]string) (*ListStaticResponse, *interfaces.Response, error)
 
 		// GetStaticByIDV1 returns the specified static mobile device group by ID (Get specified Static Mobile Device Group object).
 		//
@@ -85,10 +85,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListSmartV1 returns all smart mobile device groups.
 // URL: GET /api/v1/mobile-device-groups/smart-groups
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-groups
-func (s *Service) ListSmartV1(ctx context.Context, queryParams map[string]string) (*ListSmartResponse, *interfaces.Response, error) {
+func (s *Service) ListSmartV1(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *interfaces.Response, error) {
 	var result ListSmartResponse
 
-	resp, err := s.client.Get(ctx, EndpointSmartGroupsV1, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointSmartGroupsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -108,7 +115,12 @@ func (s *Service) GetSmartByIDV1(ctx context.Context, id string) (*ResourceSmart
 
 	var result ResourceSmartMobileDeviceGroup
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -126,7 +138,14 @@ func (s *Service) CreateSmartV1(ctx context.Context, req *RequestSmartMobileDevi
 
 	var result CreateSmartResponse
 
-	resp, err := s.client.Post(ctx, EndpointSmartGroupsV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointSmartGroupsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -149,7 +168,12 @@ func (s *Service) UpdateSmartByIDV1(ctx context.Context, id string, req *Request
 
 	var result ResourceSmartMobileDeviceGroup
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -167,7 +191,12 @@ func (s *Service) DeleteSmartByIDV1(ctx context.Context, id string) (*interfaces
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -182,10 +211,17 @@ func (s *Service) DeleteSmartByIDV1(ctx context.Context, id string) (*interfaces
 // ListStaticV1 returns all static mobile device groups.
 // URL: GET /api/v1/mobile-device-groups/static-groups
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-groups
-func (s *Service) ListStaticV1(ctx context.Context, queryParams map[string]string) (*ListStaticResponse, *interfaces.Response, error) {
+func (s *Service) ListStaticV1(ctx context.Context, rsqlQuery map[string]string) (*ListStaticResponse, *interfaces.Response, error) {
 	var result ListStaticResponse
 
-	resp, err := s.client.Get(ctx, EndpointStaticGroupsV1, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointStaticGroupsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -205,7 +241,12 @@ func (s *Service) GetStaticByIDV1(ctx context.Context, id string) (*ResourceStat
 
 	var result ResourceStaticMobileDeviceGroup
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -226,7 +267,14 @@ func (s *Service) CreateStaticV1(ctx context.Context, req *RequestStaticMobileDe
 
 	var result CreateStaticResponse
 
-	resp, err := s.client.Post(ctx, EndpointStaticGroupsV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointStaticGroupsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -252,7 +300,12 @@ func (s *Service) UpdateStaticByIDV1(ctx context.Context, id string, req *Reques
 
 	var result ResourceStaticMobileDeviceGroup
 
-	resp, err := s.client.Patch(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Patch(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -270,7 +323,12 @@ func (s *Service) DeleteStaticByIDV1(ctx context.Context, id string) (*interface
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

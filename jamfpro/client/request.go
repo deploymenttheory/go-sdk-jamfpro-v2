@@ -52,9 +52,9 @@ func (t *Transport) Post(ctx context.Context, path string, body any, headers map
 }
 
 // PostWithQuery executes a POST request with both body and query parameters.
-func (t *Transport) PostWithQuery(ctx context.Context, path string, queryParams map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result)
-	for k, v := range queryParams {
+	for k, v := range rsqlQuery {
 		if v != "" {
 			req.SetQueryParam(k, v)
 		}
@@ -140,9 +140,9 @@ func (t *Transport) Patch(ctx context.Context, path string, body any, headers ma
 }
 
 // Delete executes a DELETE request.
-func (t *Transport) Delete(ctx context.Context, path string, queryParams map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result)
-	for k, v := range queryParams {
+	for k, v := range rsqlQuery {
 		if v != "" {
 			req.SetQueryParam(k, v)
 		}
@@ -189,4 +189,3 @@ func (t *Transport) GetBytes(ctx context.Context, path string, rsqlQuery map[str
 	}
 	return ifaceResp, []byte(resp.String()), nil
 }
-

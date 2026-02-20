@@ -9,7 +9,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/crypto"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -23,7 +23,7 @@ type (
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages
-		ListPackagesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListPackagesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetPackageByIDV1 returns the specified package by ID (Get specified Package object).
 		//
@@ -79,7 +79,7 @@ type (
 		// GetPackageHistoryV1 returns the history object for the specified package.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id-history
-		GetPackageHistoryV1(ctx context.Context, id string, queryParams map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetPackageHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
 
 		// AddPackageHistoryNotesV1 adds notes to the specified package history.
 		//
@@ -115,10 +115,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/packages
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-packages
-func (s *Service) ListPackagesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListPackagesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointPackagesV1, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointPackagesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -138,7 +145,12 @@ func (s *Service) GetPackageByIDV1(ctx context.Context, id string) (*ResourcePac
 
 	var result ResourcePackage
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -157,7 +169,14 @@ func (s *Service) CreatePackageV1(ctx context.Context, req *RequestPackage) (*Cr
 
 	var result CreateResponse
 
-	resp, err := s.client.Post(ctx, EndpointPackagesV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointPackagesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -174,6 +193,11 @@ func (s *Service) UploadPackageV1(ctx context.Context, id string, filePath strin
 	}
 	if filePath == "" {
 		return nil, nil, fmt.Errorf("file path is required")
+	}
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
 	}
 
 	f, err := os.Open(filePath)
@@ -194,7 +218,7 @@ func (s *Service) UploadPackageV1(ctx context.Context, id string, filePath strin
 	}
 
 	var result CreateResponse
-	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, f, info.Size(), nil, shared.JSONHeaders(), nil, &result)
+	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, f, info.Size(), nil, headers, nil, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -218,7 +242,12 @@ func (s *Service) UpdatePackageByIDV1(ctx context.Context, id string, req *Resou
 
 	var result ResourcePackage
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -255,7 +284,12 @@ func (s *Service) AssignManifestToPackageV1(ctx context.Context, id string, mani
 	}
 
 	var result CreateResponse
-	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, f, info.Size(), nil, shared.JSONHeaders(), nil, &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, f, info.Size(), nil, headers, nil, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -273,7 +307,12 @@ func (s *Service) DeletePackageManifestV1(ctx context.Context, id string) (*inte
 
 	endpoint := fmt.Sprintf("%s/%s/manifest", EndpointPackagesV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -291,7 +330,12 @@ func (s *Service) DeletePackageByIDV1(ctx context.Context, id string) (*interfac
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointPackagesV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -310,7 +354,12 @@ func (s *Service) DeletePackagesByIDV1(ctx context.Context, req *DeletePackagesB
 
 	endpoint := EndpointPackagesV1 + "/delete-multiple"
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -322,7 +371,7 @@ func (s *Service) DeletePackagesByIDV1(ctx context.Context, req *DeletePackagesB
 // URL: GET /api/v1/packages/{id}/history
 // Query Params: filter, sort, page, page-size (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id-history
-func (s *Service) GetPackageHistoryV1(ctx context.Context, id string, queryParams map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetPackageHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
 	}
@@ -331,7 +380,12 @@ func (s *Service) GetPackageHistoryV1(ctx context.Context, id string, queryParam
 
 	var result HistoryResponse
 
-	resp, err := s.client.Get(ctx, endpoint, queryParams, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -353,7 +407,12 @@ func (s *Service) AddPackageHistoryNotesV1(ctx context.Context, id string, req *
 
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointPackagesV1, id)
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}

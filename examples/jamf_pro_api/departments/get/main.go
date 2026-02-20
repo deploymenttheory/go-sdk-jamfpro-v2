@@ -1,41 +1,32 @@
-// Package main demonstrates GetDepartmentByIDV1 - retrieves a single department by ID.
-//
-// Run with: go run ./examples/jamf_pro_api/departments/get
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set DEPARTMENT_ID or uses first from list.
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	client, err := jamfpro.NewClientFromEnv()
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("Failed to load config: %v", err)
 	}
-
-	ctx := context.Background()
-	id := os.Getenv("DEPARTMENT_ID")
-	if id == "" {
-		list, _, err := client.Departments.ListDepartmentsV1(ctx, map[string]string{"page": "0", "pageSize": "1"})
-		if err != nil || len(list.Results) == 0 {
-			log.Fatal("Set DEPARTMENT_ID or ensure at least one department exists")
-		}
-		id = list.Results[0].ID
-		fmt.Printf("Using first department ID: %s\n", id)
-	}
-
-	dept, resp, err := client.Departments.GetDepartmentByIDV1(ctx, id)
+	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
-		log.Fatalf("GetDepartmentByIDV1 failed: %v", err)
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
-	fmt.Printf("ID: %s\n", dept.ID)
-	fmt.Printf("Name: %s\n", dept.Name)
+	id := "1" // Replace with the desired department ID
+	result, _, err := jamfClient.Departments.GetDepartmentByIDV1(context.Background(), id)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println(string(out))
 }

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -16,7 +16,7 @@ type (
 		// ListAPIRolesV1 returns all API role objects (Get API Role objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-roles
-		ListAPIRolesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListAPIRolesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetAPIRoleByIDV1 returns the specified API role by ID (Get specified API Role object).
 		//
@@ -60,12 +60,21 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListAPIRolesV1 returns all API role objects.
 // URL: GET /api/v1/api-roles
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-roles
-func (s *Service) ListAPIRolesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListAPIRolesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
-	resp, err := s.client.Get(ctx, EndpointAPIRolesV1, queryParams, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointAPIRolesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -76,12 +85,21 @@ func (s *Service) GetAPIRoleByIDV1(ctx context.Context, id string) (*ResourceAPI
 	if id == "" {
 		return nil, nil, fmt.Errorf("API role ID is required")
 	}
+
 	endpoint := fmt.Sprintf("%s/%s", EndpointAPIRolesV1, id)
+
 	var result ResourceAPIRole
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -93,10 +111,19 @@ func (s *Service) CreateAPIRoleV1(ctx context.Context, req *RequestAPIRole) (*Re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourceAPIRole
-	resp, err := s.client.Post(ctx, EndpointAPIRolesV1, req, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointAPIRolesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -112,10 +139,17 @@ func (s *Service) UpdateAPIRoleByIDV1(ctx context.Context, id string, req *Reque
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointAPIRolesV1, id)
 	var result ResourceAPIRole
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -127,9 +161,16 @@ func (s *Service) DeleteAPIRoleByIDV1(ctx context.Context, id string) (*interfac
 		return nil, fmt.Errorf("API role ID is required")
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointAPIRolesV1, id)
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }

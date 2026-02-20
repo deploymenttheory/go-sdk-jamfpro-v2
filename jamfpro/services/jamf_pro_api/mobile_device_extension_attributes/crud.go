@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -16,7 +16,7 @@ type (
 		// ListMobileDeviceExtensionAttributesV1 returns all mobile device extension attribute objects (Get Mobile Device Extension Attribute objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes
-		ListMobileDeviceExtensionAttributesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListMobileDeviceExtensionAttributesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetMobileDeviceExtensionAttributeByIDV1 returns the specified mobile device extension attribute by ID (Get specified Mobile Device Extension Attribute object).
 		//
@@ -65,10 +65,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListMobileDeviceExtensionAttributesV1 returns all mobile device extension attribute objects.
 // URL: GET /api/v1/mobile-device-extension-attributes
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes
-func (s *Service) ListMobileDeviceExtensionAttributesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListMobileDeviceExtensionAttributesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointMobileDeviceExtensionAttributesV1, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointMobileDeviceExtensionAttributesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -88,7 +95,12 @@ func (s *Service) GetMobileDeviceExtensionAttributeByIDV1(ctx context.Context, i
 
 	var result ResourceMobileDeviceExtensionAttribute
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -106,7 +118,14 @@ func (s *Service) CreateMobileDeviceExtensionAttributeV1(ctx context.Context, re
 
 	var result CreateResponse
 
-	resp, err := s.client.Post(ctx, EndpointMobileDeviceExtensionAttributesV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointMobileDeviceExtensionAttributesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -129,7 +148,12 @@ func (s *Service) UpdateMobileDeviceExtensionAttributeByIDV1(ctx context.Context
 
 	var result ResourceMobileDeviceExtensionAttribute
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -147,7 +171,12 @@ func (s *Service) DeleteMobileDeviceExtensionAttributeByIDV1(ctx context.Context
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDeviceExtensionAttributesV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -165,7 +194,12 @@ func (s *Service) DeleteMobileDeviceExtensionAttributesByIDV1(ctx context.Contex
 
 	endpoint := EndpointMobileDeviceExtensionAttributesV1 + "/delete-multiple"
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}

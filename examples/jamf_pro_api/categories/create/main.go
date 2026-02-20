@@ -1,7 +1,3 @@
-// Package main demonstrates CreateCategoryV1 - creates a new category.
-//
-// Run with: go run ./examples/jamf_pro_api/categories/create
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (

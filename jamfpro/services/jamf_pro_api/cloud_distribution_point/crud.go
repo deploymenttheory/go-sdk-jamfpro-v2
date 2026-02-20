@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -63,10 +63,19 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point
 func (s *Service) GetV1(ctx context.Context) (*ResourceCloudDistributionPointV1, *interfaces.Response, error) {
 	var result ResourceCloudDistributionPointV1
-	resp, err := s.client.Get(ctx, EndpointCloudDistributionPointV1, nil, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointCloudDistributionPointV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -78,10 +87,19 @@ func (s *Service) CreateV1(ctx context.Context, req *RequestCloudDistributionPoi
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourceCloudDistributionPointV1
-	resp, err := s.client.Post(ctx, EndpointCloudDistributionPointV1, req, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointCloudDistributionPointV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -93,10 +111,19 @@ func (s *Service) UpdateV1(ctx context.Context, req *RequestCloudDistributionPoi
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourceCloudDistributionPointV1
-	resp, err := s.client.Patch(ctx, EndpointCloudDistributionPointV1, req, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointCloudDistributionPointV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Patch(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -104,10 +131,18 @@ func (s *Service) UpdateV1(ctx context.Context, req *RequestCloudDistributionPoi
 // URL: DELETE /api/v1/cloud-distribution-point
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-cloud-distribution-point
 func (s *Service) DeleteV1(ctx context.Context) (*interfaces.Response, error) {
-	resp, err := s.client.Delete(ctx, EndpointCloudDistributionPointV1, nil, shared.JSONHeaders(), nil)
+	endpoint := EndpointCloudDistributionPointV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }
 
@@ -117,10 +152,17 @@ func (s *Service) DeleteV1(ctx context.Context) (*interfaces.Response, error) {
 func (s *Service) GetUploadCapabilityV1(ctx context.Context) (*UploadCapabilityV1, *interfaces.Response, error) {
 	endpoint := EndpointCloudDistributionPointV1 + "/upload-capability"
 	var result UploadCapabilityV1
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -130,9 +172,16 @@ func (s *Service) GetUploadCapabilityV1(ctx context.Context) (*UploadCapabilityV
 func (s *Service) GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *interfaces.Response, error) {
 	endpoint := EndpointCloudDistributionPointV1 + "/test-connection"
 	var result TestConnectionV1
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }

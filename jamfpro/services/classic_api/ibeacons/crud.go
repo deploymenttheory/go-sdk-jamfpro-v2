@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -81,7 +81,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListIBeacons(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointClassicIBeacons, nil, shared.XMLHeaders(), &result)
+	endpoint := EndpointClassicIBeacons
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -101,7 +108,12 @@ func (s *Service) GetIBeaconByID(ctx context.Context, id int) (*ResourceIBeacon,
 
 	var result ResourceIBeacon
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -121,7 +133,12 @@ func (s *Service) GetIBeaconByName(ctx context.Context, name string) (*ResourceI
 
 	var result ResourceIBeacon
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -142,7 +159,12 @@ func (s *Service) CreateIBeacon(ctx context.Context, req *RequestIBeacon) (*Reso
 
 	var result ResourceIBeacon
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -165,7 +187,12 @@ func (s *Service) UpdateIBeaconByID(ctx context.Context, id int, req *RequestIBe
 
 	var result ResourceIBeacon
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -188,7 +215,12 @@ func (s *Service) UpdateIBeaconByName(ctx context.Context, name string, req *Req
 
 	var result ResourceIBeacon
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -206,7 +238,12 @@ func (s *Service) DeleteIBeaconByID(ctx context.Context, id int) (*interfaces.Re
 
 	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicIBeacons, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -224,7 +261,12 @@ func (s *Service) DeleteIBeaconByName(ctx context.Context, name string) (*interf
 
 	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicIBeacons, name)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

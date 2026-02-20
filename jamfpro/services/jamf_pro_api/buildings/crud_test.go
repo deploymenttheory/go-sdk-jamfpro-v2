@@ -33,7 +33,7 @@ func TestUnitListBuildings_Success(t *testing.T) {
 	assert.Equal(t, "Warehouse", result.Results[1].Name)
 }
 
-func TestUnitListBuildings_WithQueryParams(t *testing.T) {
+func TestUnitListBuildings_WithrsqlQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListBuildingsMock()
 
@@ -104,11 +104,11 @@ func TestUnitCreateBuilding_Success(t *testing.T) {
 	mock.RegisterCreateBuildingMock()
 
 	req := &RequestBuilding{
-		Name:          "Marketing",
+		Name:           "Marketing",
 		StreetAddress1: "100 Marketing Way",
-		City:          "Austin",
-		StateProvince: "TX",
-		Country:       "United States",
+		City:           "Austin",
+		StateProvince:  "TX",
+		Country:        "United States",
 	}
 	result, resp, err := svc.CreateBuildingV1(context.Background(), req)
 	require.NoError(t, err)
@@ -147,12 +147,12 @@ func TestUnitUpdateBuildingByID_Success(t *testing.T) {
 	mock.RegisterUpdateBuildingMock()
 
 	req := &RequestBuilding{
-		Name:          "Main Office Updated",
+		Name:           "Main Office Updated",
 		StreetAddress1: "789 New St",
-		City:          "Austin",
-		StateProvince: "TX",
-		ZipPostalCode: "78702",
-		Country:       "United States",
+		City:           "Austin",
+		StateProvince:  "TX",
+		ZipPostalCode:  "78702",
+		Country:        "United States",
 	}
 	result, resp, err := svc.UpdateBuildingByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -81,7 +81,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListSoftwareUpdateServers(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointClassicSoftwareUpdateServers, nil, shared.XMLHeaders(), &result)
+	endpoint := EndpointClassicSoftwareUpdateServers
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -101,7 +108,12 @@ func (s *Service) GetSoftwareUpdateServerByID(ctx context.Context, id int) (*Res
 
 	var result ResourceSoftwareUpdateServer
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -121,7 +133,12 @@ func (s *Service) GetSoftwareUpdateServerByName(ctx context.Context, name string
 
 	var result ResourceSoftwareUpdateServer
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -142,7 +159,12 @@ func (s *Service) CreateSoftwareUpdateServer(ctx context.Context, req *RequestSo
 
 	var result ResourceSoftwareUpdateServer
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -165,7 +187,12 @@ func (s *Service) UpdateSoftwareUpdateServerByID(ctx context.Context, id int, re
 
 	var result ResourceSoftwareUpdateServer
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -188,7 +215,12 @@ func (s *Service) UpdateSoftwareUpdateServerByName(ctx context.Context, name str
 
 	var result ResourceSoftwareUpdateServer
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -206,7 +238,12 @@ func (s *Service) DeleteSoftwareUpdateServerByID(ctx context.Context, id int) (*
 
 	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicSoftwareUpdateServers, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -224,7 +261,12 @@ func (s *Service) DeleteSoftwareUpdateServerByName(ctx context.Context, name str
 
 	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicSoftwareUpdateServers, name)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

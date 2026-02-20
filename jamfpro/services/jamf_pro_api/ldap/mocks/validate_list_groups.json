@@ -1,0 +1,12 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "id": "group-uuid-1",
+      "uuid": "uuid-1",
+      "ldapServerId": 1,
+      "name": "Engineering",
+      "distinguishedName": "CN=Engineering,OU=Groups,DC=example,DC=com"
+    }
+  ]
+}

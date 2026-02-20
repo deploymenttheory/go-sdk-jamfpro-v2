@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -81,7 +81,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListDiskEncryptionConfigurations(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointClassicDiskEncryptionConfigurations, nil, shared.XMLHeaders(), &result)
+	endpoint := EndpointClassicDiskEncryptionConfigurations
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -101,7 +108,12 @@ func (s *Service) GetDiskEncryptionConfigurationByID(ctx context.Context, id int
 
 	var result ResourceDiskEncryptionConfiguration
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -121,7 +133,12 @@ func (s *Service) GetDiskEncryptionConfigurationByName(ctx context.Context, name
 
 	var result ResourceDiskEncryptionConfiguration
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -142,7 +159,12 @@ func (s *Service) CreateDiskEncryptionConfiguration(ctx context.Context, req *Re
 
 	var result CreateUpdateResponse
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -165,7 +187,12 @@ func (s *Service) UpdateDiskEncryptionConfigurationByID(ctx context.Context, id 
 
 	var result CreateUpdateResponse
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -188,7 +215,12 @@ func (s *Service) UpdateDiskEncryptionConfigurationByName(ctx context.Context, n
 
 	var result CreateUpdateResponse
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -206,7 +238,12 @@ func (s *Service) DeleteDiskEncryptionConfigurationByID(ctx context.Context, id 
 
 	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDiskEncryptionConfigurations, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -224,7 +261,12 @@ func (s *Service) DeleteDiskEncryptionConfigurationByName(ctx context.Context, n
 
 	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDiskEncryptionConfigurations, name)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

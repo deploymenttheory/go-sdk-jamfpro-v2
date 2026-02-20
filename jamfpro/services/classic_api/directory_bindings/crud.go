@@ -6,7 +6,7 @@ import (
 	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -82,7 +82,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListDirectoryBindings(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointClassicDirectoryBindings, nil, shared.XMLHeaders(), &result)
+	endpoint := EndpointClassicDirectoryBindings
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -102,7 +109,12 @@ func (s *Service) GetDirectoryBindingByID(ctx context.Context, id int) (*Resourc
 
 	var result ResourceDirectoryBinding
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -122,7 +134,12 @@ func (s *Service) GetDirectoryBindingByName(ctx context.Context, name string) (*
 
 	var result ResourceDirectoryBinding
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -143,7 +160,12 @@ func (s *Service) CreateDirectoryBinding(ctx context.Context, req *RequestDirect
 
 	var result ResourceDirectoryBinding
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -166,7 +188,12 @@ func (s *Service) UpdateDirectoryBindingByID(ctx context.Context, id int, req *R
 
 	var result ResourceDirectoryBinding
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -189,7 +216,12 @@ func (s *Service) UpdateDirectoryBindingByName(ctx context.Context, name string,
 
 	var result ResourceDirectoryBinding
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.XMLHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -207,7 +239,12 @@ func (s *Service) DeleteDirectoryBindingByID(ctx context.Context, id int) (*inte
 
 	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDirectoryBindings, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -225,7 +262,12 @@ func (s *Service) DeleteDirectoryBindingByName(ctx context.Context, name string)
 
 	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, url.PathEscape(name))
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.XMLHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

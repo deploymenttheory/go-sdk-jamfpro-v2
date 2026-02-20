@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -16,7 +16,7 @@ type (
 		// ListTitlesV1 returns all app installer titles (Get App Installer Title objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-titles
-		ListTitlesV1(ctx context.Context, queryParams map[string]string) (*ListTitlesResponse, *interfaces.Response, error)
+		ListTitlesV1(ctx context.Context, rsqlQuery map[string]string) (*ListTitlesResponse, *interfaces.Response, error)
 
 		// GetTitleByIDV1 returns the specified app installer title by ID (Get specified App Installer Title object).
 		//
@@ -26,7 +26,7 @@ type (
 		// ListDeploymentsV1 returns all app installer deployments (Get App Installer Deployment objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-deployments
-		ListDeploymentsV1(ctx context.Context, queryParams map[string]string) (*ListDeploymentsResponse, *interfaces.Response, error)
+		ListDeploymentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListDeploymentsResponse, *interfaces.Response, error)
 
 		// GetDeploymentByIDV1 returns the specified deployment by ID (Get specified App Installer Deployment object).
 		//
@@ -66,12 +66,21 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListTitlesV1 returns all app installer titles.
 // URL: GET /api/v1/app-installers/titles
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-titles
-func (s *Service) ListTitlesV1(ctx context.Context, queryParams map[string]string) (*ListTitlesResponse, *interfaces.Response, error) {
+func (s *Service) ListTitlesV1(ctx context.Context, rsqlQuery map[string]string) (*ListTitlesResponse, *interfaces.Response, error) {
 	var result ListTitlesResponse
-	resp, err := s.client.Get(ctx, EndpointTitlesV1, queryParams, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointTitlesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -84,22 +93,38 @@ func (s *Service) GetTitleByIDV1(ctx context.Context, id string) (*ResourceJamfA
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointTitlesV1, id)
 	var result ResourceJamfAppCatalogAppInstaller
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
 // ListDeploymentsV1 returns all app installer deployments.
 // URL: GET /api/v1/app-installers/deployments
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-deployments
-func (s *Service) ListDeploymentsV1(ctx context.Context, queryParams map[string]string) (*ListDeploymentsResponse, *interfaces.Response, error) {
+func (s *Service) ListDeploymentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListDeploymentsResponse, *interfaces.Response, error) {
 	var result ListDeploymentsResponse
-	resp, err := s.client.Get(ctx, EndpointDeploymentsV1, queryParams, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointDeploymentsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -112,10 +137,17 @@ func (s *Service) GetDeploymentByIDV1(ctx context.Context, id string) (*Resource
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointDeploymentsV1, id)
 	var result ResourceJamfAppCatalogDeployment
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -127,10 +159,19 @@ func (s *Service) CreateDeploymentV1(ctx context.Context, req *RequestDeployment
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result CreateDeploymentResponse
-	resp, err := s.client.Post(ctx, EndpointDeploymentsV1, req, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointDeploymentsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -146,10 +187,17 @@ func (s *Service) UpdateDeploymentByIDV1(ctx context.Context, id string, req *Re
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointDeploymentsV1, id)
 	var result ResourceJamfAppCatalogDeployment
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -161,9 +209,16 @@ func (s *Service) DeleteDeploymentByIDV1(ctx context.Context, id string) (*inter
 		return nil, fmt.Errorf("deployment ID is required")
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointDeploymentsV1, id)
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }

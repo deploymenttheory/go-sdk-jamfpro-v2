@@ -1,7 +1,3 @@
-// Package main demonstrates CreateScriptV1 — creates a new script.
-//
-// Run with: go run ./examples/jamf_pro_api/scripts/create
-// Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
 package main
 
 import (

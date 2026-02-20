@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<restricted_software_titles>
+    <size>2</size>
+    <restricted_software_title>
+        <id>1</id>
+        <name>Calculator</name>
+    </restricted_software_title>
+    <restricted_software_title>
+        <id>2</id>
+        <name>Chess</name>
+    </restricted_software_title>
+</restricted_software_titles>

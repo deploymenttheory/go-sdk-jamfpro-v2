@@ -109,7 +109,7 @@ func TestTransport_PostMultipart_NoFile(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestTransport_Delete_NilQueryParams(t *testing.T) {
+func TestTransport_Delete_NilrsqlQuery(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}

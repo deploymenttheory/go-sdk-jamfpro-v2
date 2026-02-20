@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<account>
+    <id>1</id>
+    <name>testuser1</name>
+    <directory_user>false</directory_user>
+    <full_name>Test User One</full_name>
+    <email>testuser1@example.com</email>
+    <email_address>testuser1@example.com</email_address>
+    <enabled>Enabled</enabled>
+    <ldap_server>
+        <id>-1</id>
+        <name>None</name>
+    </ldap_server>
+    <force_password_change>false</force_password_change>
+    <access_level>Full Access</access_level>
+    <privilege_set>Administrator</privilege_set>
+    <site>
+        <id>-1</id>
+        <name>None</name>
+    </site>
+    <privileges>
+        <jss_objects>
+            <privilege>Read Accounts</privilege>
+            <privilege>Update Accounts</privilege>
+        </jss_objects>
+        <jss_settings>
+            <privilege>Read JSS Settings</privilege>
+        </jss_settings>
+        <jss_actions>
+            <privilege>Send Computer Unmanage Command</privilege>
+        </jss_actions>
+    </privileges>
+</account>

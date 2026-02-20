@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accounts>
+    <users>
+        <user>
+            <id>1</id>
+            <name>testuser1</name>
+        </user>
+        <user>
+            <id>2</id>
+            <name>testuser2</name>
+        </user>
+    </users>
+    <groups>
+        <group>
+            <id>3</id>
+            <name>testgroup1</name>
+        </group>
+    </groups>
+</accounts>

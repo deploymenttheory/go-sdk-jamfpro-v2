@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -19,7 +19,7 @@ type (
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments
-		ListDepartmentsV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListDepartmentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetDepartmentByIDV1 returns the specified department by ID (Get specified Department object).
 		//
@@ -46,7 +46,7 @@ type (
 		// GetDepartmentHistoryV1 returns the history object for the specified department.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id-history
-		GetDepartmentHistoryV1(ctx context.Context, id string, queryParams map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
 
 		// AddDepartmentHistoryNotesV1 adds notes to the specified department history.
 		//
@@ -76,10 +76,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/departments
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-departments
-func (s *Service) ListDepartmentsV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListDepartmentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointDepartmentsV1, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointDepartmentsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -99,7 +106,12 @@ func (s *Service) GetDepartmentByIDV1(ctx context.Context, id string) (*Resource
 
 	var result ResourceDepartment
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -118,7 +130,14 @@ func (s *Service) CreateDepartmentV1(ctx context.Context, req *RequestDepartment
 
 	var result CreateResponse
 
-	resp, err := s.client.Post(ctx, EndpointDepartmentsV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointDepartmentsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -142,7 +161,12 @@ func (s *Service) UpdateDepartmentByIDV1(ctx context.Context, id string, req *Re
 
 	var result ResourceDepartment
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -160,7 +184,12 @@ func (s *Service) DeleteDepartmentByIDV1(ctx context.Context, id string) (*inter
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointDepartmentsV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -172,7 +201,7 @@ func (s *Service) DeleteDepartmentByIDV1(ctx context.Context, id string) (*inter
 // URL: GET /api/v1/departments/{id}/history
 // Query Params: filter, sort, page, page-size (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id-history
-func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, queryParams map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("department ID is required")
 	}
@@ -181,7 +210,12 @@ func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, queryPa
 
 	var result HistoryResponse
 
-	resp, err := s.client.Get(ctx, endpoint, queryParams, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -203,7 +237,12 @@ func (s *Service) AddDepartmentHistoryNotesV1(ctx context.Context, id string, re
 
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointDepartmentsV1, id)
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}

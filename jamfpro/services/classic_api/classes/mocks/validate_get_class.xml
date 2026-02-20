@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class>
+    <id>1</id>
+    <source>JAMF</source>
+    <name>Test Class 1</name>
+    <description>Test class description</description>
+    <site>
+        <id>-1</id>
+        <name>None</name>
+    </site>
+    <mobile_device_group>
+        <id>0</id>
+        <name></name>
+    </mobile_device_group>
+    <students>
+        <student>student1@example.com</student>
+        <student>student2@example.com</student>
+    </students>
+    <teachers>
+        <teacher>teacher1@example.com</teacher>
+    </teachers>
+    <teacher_ids>
+    </teacher_ids>
+    <student_group_ids>
+    </student_group_ids>
+    <teacher_group_ids>
+    </teacher_group_ids>
+    <mobile_devices>
+    </mobile_devices>
+    <mobile_device_group_id>
+    </mobile_device_group_id>
+    <meeting_times>
+        <meeting_time>
+            <days>MWF</days>
+            <start_time>900</start_time>
+            <end_time>1000</end_time>
+        </meeting_time>
+    </meeting_times>
+    <apple_tvs>
+    </apple_tvs>
+</class>

@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -52,10 +52,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *interfaces.Response, error) {
 	endpoint := fmt.Sprintf("%s/%d", EndpointIconsV1, id)
 	var result ResourceIcon
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -105,9 +112,9 @@ func (s *Service) DownloadV1(ctx context.Context, id int, res, scale string) ([]
 	if scale == "" {
 		scale = "0"
 	}
-	queryParams := map[string]string{"res": res, "scale": scale}
+	rsqlQuery := map[string]string{"res": res, "scale": scale}
 	headers := map[string]string{"Accept": "image/*"}
-	resp, body, err := s.client.GetBytes(ctx, endpoint, queryParams, headers)
+	resp, body, err := s.client.GetBytes(ctx, endpoint, rsqlQuery, headers)
 	if err != nil {
 		return nil, resp, err
 	}

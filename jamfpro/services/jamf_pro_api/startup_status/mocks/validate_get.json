@@ -1,0 +1,12 @@
+{
+  "step": "Database",
+  "stepCode": "DB_READY",
+  "stepParam": "",
+  "percentage": 100,
+  "warning": "",
+  "warningCode": "",
+  "warningParam": "",
+  "error": "",
+  "errorCode": "",
+  "setupAssistantNecessary": false
+}

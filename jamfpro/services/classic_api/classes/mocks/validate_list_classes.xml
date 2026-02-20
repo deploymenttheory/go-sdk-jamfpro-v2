@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classes>
+    <size>2</size>
+    <class>
+        <id>1</id>
+        <name>Test Class 1</name>
+        <description>First test class</description>
+    </class>
+    <class>
+        <id>2</id>
+        <name>Test Class 2</name>
+        <description>Second test class</description>
+    </class>
+</classes>

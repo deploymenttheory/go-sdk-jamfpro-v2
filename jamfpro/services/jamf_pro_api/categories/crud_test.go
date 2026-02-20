@@ -40,7 +40,7 @@ func TestUnitListCategories_Success(t *testing.T) {
 	assert.Equal(t, 1, result.Results[1].Priority)
 }
 
-func TestUnitListCategories_WithQueryParams(t *testing.T) {
+func TestUnitListCategories_WithrsqlQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListCategoriesMock()
 

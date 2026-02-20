@@ -35,7 +35,7 @@ func TestUnitListPackages_Success(t *testing.T) {
 	assert.Equal(t, "Chrome", result.Results[1].PackageName)
 }
 
-func TestUnitListPackages_WithQueryParams(t *testing.T) {
+func TestUnitListPackages_WithrsqlQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListPackagesMock()
 
@@ -106,20 +106,20 @@ func TestUnitCreatePackage_Success(t *testing.T) {
 	mock.RegisterCreatePackageMock()
 
 	req := &RequestPackage{
-		PackageName:           "Safari Extension",
-		FileName:              "SafariExtension.pkg",
-		CategoryID:            "2",
-		Info:                  "Sample package",
-		Notes:                 "For testing",
-		Priority:              10,
-		FillUserTemplate:      BoolPtr(true),
-		FillExistingUsers:     BoolPtr(false),
-		RebootRequired:        BoolPtr(false),
-		OSInstall:             BoolPtr(false),
-		SuppressUpdates:       BoolPtr(false),
-		SuppressFromDock:      BoolPtr(false),
-		SuppressEula:          BoolPtr(false),
-		SuppressRegistration:  BoolPtr(false),
+		PackageName:          "Safari Extension",
+		FileName:             "SafariExtension.pkg",
+		CategoryID:           "2",
+		Info:                 "Sample package",
+		Notes:                "For testing",
+		Priority:             10,
+		FillUserTemplate:     BoolPtr(true),
+		FillExistingUsers:    BoolPtr(false),
+		RebootRequired:       BoolPtr(false),
+		OSInstall:            BoolPtr(false),
+		SuppressUpdates:      BoolPtr(false),
+		SuppressFromDock:     BoolPtr(false),
+		SuppressEula:         BoolPtr(false),
+		SuppressRegistration: BoolPtr(false),
 	}
 	result, resp, err := svc.CreatePackageV1(context.Background(), req)
 	require.NoError(t, err)
@@ -207,17 +207,17 @@ func TestUnitCreatePackage_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestPackage{
-		PackageName:           "Duplicate",
-		FileName:              "Duplicate.pkg",
-		CategoryID:            "1",
-		Priority:              1,
-		FillUserTemplate:      BoolPtr(false),
-		RebootRequired:        BoolPtr(false),
-		OSInstall:             BoolPtr(false),
-		SuppressUpdates:       BoolPtr(false),
-		SuppressFromDock:      BoolPtr(false),
-		SuppressEula:          BoolPtr(false),
-		SuppressRegistration:  BoolPtr(false),
+		PackageName:          "Duplicate",
+		FileName:             "Duplicate.pkg",
+		CategoryID:           "1",
+		Priority:             1,
+		FillUserTemplate:     BoolPtr(false),
+		RebootRequired:       BoolPtr(false),
+		OSInstall:            BoolPtr(false),
+		SuppressUpdates:      BoolPtr(false),
+		SuppressFromDock:     BoolPtr(false),
+		SuppressEula:         BoolPtr(false),
+		SuppressRegistration: BoolPtr(false),
 	}
 	result, resp, err := svc.CreatePackageV1(context.Background(), req)
 	assert.Error(t, err)

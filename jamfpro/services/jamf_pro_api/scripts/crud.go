@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -90,7 +90,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListScriptsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointScriptsV1, rsqlQuery, shared.JSONHeaders(), &result)
+	endpoint := EndpointScriptsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -110,7 +117,12 @@ func (s *Service) GetScriptByIDV1(ctx context.Context, id string) (*ResourceScri
 
 	var result ResourceScript
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -128,7 +140,14 @@ func (s *Service) CreateScriptV1(ctx context.Context, req *RequestScript) (*Crea
 
 	var result CreateResponse
 
-	resp, err := s.client.Post(ctx, EndpointScriptsV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointScriptsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -152,7 +171,12 @@ func (s *Service) UpdateScriptByIDV1(ctx context.Context, id string, req *Reques
 
 	var result ResourceScript
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -170,7 +194,12 @@ func (s *Service) DeleteScriptByIDV1(ctx context.Context, id string) (*interface
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointScriptsV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -209,7 +238,12 @@ func (s *Service) GetScriptHistoryV1(ctx context.Context, id string, rsqlQuery m
 
 	var result ScriptHistoryResponse
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -230,7 +264,12 @@ func (s *Service) AddScriptHistoryNotesV1(ctx context.Context, id string, req *A
 
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointScriptsV1, id)
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}

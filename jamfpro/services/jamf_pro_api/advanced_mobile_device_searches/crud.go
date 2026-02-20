@@ -6,7 +6,7 @@ import (
 	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -17,7 +17,7 @@ type (
 		// ListV1 returns all advanced mobile device searches (Get Advanced Mobile Device Searches).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches
-		ListV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetByIDV1 returns the specified advanced mobile device search by ID (Get Advanced Mobile Device Search by ID).
 		//
@@ -62,9 +62,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV1 returns all advanced mobile device searches.
 // URL: GET /api/v1/advanced-mobile-device-searches
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches
-func (s *Service) ListV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
-	resp, err := s.client.Get(ctx, EndpointAdvancedMobileDeviceSearchesV1, queryParams, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointAdvancedMobileDeviceSearchesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -80,10 +88,17 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedMo
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedMobileDeviceSearchesV1, id)
 	var result ResourceAdvancedMobileDeviceSearch
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -95,7 +110,15 @@ func (s *Service) CreateV1(ctx context.Context, search *ResourceAdvancedMobileDe
 		return nil, nil, fmt.Errorf("search is required")
 	}
 	var result CreateResponse
-	resp, err := s.client.Post(ctx, EndpointAdvancedMobileDeviceSearchesV1, search, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointAdvancedMobileDeviceSearchesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, search, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -114,10 +137,17 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, search *ResourceA
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedMobileDeviceSearchesV1, id)
 	var result ResourceAdvancedMobileDeviceSearch
-	resp, err := s.client.Put(ctx, endpoint, search, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, search, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -129,10 +159,17 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 		return nil, fmt.Errorf("id is required")
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedMobileDeviceSearchesV1, id)
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }
 
@@ -146,9 +183,16 @@ func (s *Service) GetChoicesV1(ctx context.Context, criteria, site, contains str
 		url.QueryEscape(site),
 		url.QueryEscape(contains))
 	var result ChoicesResponse
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }

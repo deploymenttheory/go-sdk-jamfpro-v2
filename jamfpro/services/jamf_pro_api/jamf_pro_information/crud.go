@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -37,9 +37,18 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-pro-information
 func (s *Service) GetV2(ctx context.Context) (*ResourceJamfProInformation, *interfaces.Response, error) {
 	var result ResourceJamfProInformation
-	resp, err := s.client.Get(ctx, EndpointJamfProInformationV2, nil, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointJamfProInformationV2
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }

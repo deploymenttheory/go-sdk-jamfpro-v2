@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -13,10 +13,10 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks
 	BookmarksServiceInterface interface {
-		// ListV1 returns all bookmarks with optional query params (Get Bookmarks).
+		// ListV1 returns all bookmarks. Optional rsqlQuery: filter (RSQL), sort, page, page-size (Get Bookmarks).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks
-		ListV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetByIDV1 returns the specified bookmark by ID (Get Bookmark by ID).
 		//
@@ -53,15 +53,24 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// ListV1 returns all bookmarks.
+// ListV1 returns all bookmarks. Optional rsqlQuery: filter (RSQL), sort, page, page-size.
 // URL: GET /api/v1/bookmarks
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks
-func (s *Service) ListV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
-	resp, err := s.client.Get(ctx, EndpointBookmarksV1, queryParams, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointBookmarksV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -74,10 +83,17 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceBookmark, 
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
 	var result ResourceBookmark
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -89,10 +105,19 @@ func (s *Service) CreateV1(ctx context.Context, bookmark *ResourceBookmark) (*Cr
 		return nil, nil, fmt.Errorf("bookmark is required")
 	}
 	var result CreateResponse
-	resp, err := s.client.Post(ctx, EndpointBookmarksV1, bookmark, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointBookmarksV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, bookmark, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -108,10 +133,17 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, bookmark *Resourc
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
 	var result ResourceBookmark
-	resp, err := s.client.Put(ctx, endpoint, bookmark, shared.JSONHeaders(), &result)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, bookmark, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -123,9 +155,16 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 		return nil, fmt.Errorf("id is required")
 	}
 	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }

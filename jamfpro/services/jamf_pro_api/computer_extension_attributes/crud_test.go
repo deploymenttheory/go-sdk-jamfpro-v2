@@ -33,7 +33,7 @@ func TestUnitListComputerExtensionAttributes_Success(t *testing.T) {
 	assert.Equal(t, "EA Two", result.Results[1].Name)
 }
 
-func TestUnitListComputerExtensionAttributes_WithQueryParams(t *testing.T) {
+func TestUnitListComputerExtensionAttributes_WithrsqlQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 

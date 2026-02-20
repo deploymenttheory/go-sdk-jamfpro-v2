@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -43,10 +43,19 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in
 func (s *Service) GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *interfaces.Response, error) {
 	var result ResourceClientCheckinSettings
-	resp, err := s.client.Get(ctx, EndpointClientCheckinV3, nil, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointClientCheckinV3
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -58,9 +67,18 @@ func (s *Service) UpdateV3(ctx context.Context, settings *ResourceClientCheckinS
 		return nil, nil, fmt.Errorf("settings is required")
 	}
 	var result ResourceClientCheckinSettings
-	resp, err := s.client.Put(ctx, EndpointClientCheckinV3, settings, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointClientCheckinV3
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, settings, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }

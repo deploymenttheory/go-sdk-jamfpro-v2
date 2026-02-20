@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<removable_mac_addresses>
+    <size>2</size>
+    <removable_mac_address>
+        <id>1</id>
+        <name>AA:BB:CC:DD:EE:FF</name>
+    </removable_mac_address>
+    <removable_mac_address>
+        <id>2</id>
+        <name>11:22:33:44:55:66</name>
+    </removable_mac_address>
+</removable_mac_addresses>

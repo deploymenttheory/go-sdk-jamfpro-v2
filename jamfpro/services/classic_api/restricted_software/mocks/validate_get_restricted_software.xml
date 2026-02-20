@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<restricted_software>
+    <general>
+        <id>1</id>
+        <name>Calculator</name>
+        <process_name>Calculator.app</process_name>
+        <match_exact_process_name>true</match_exact_process_name>
+        <send_notification>true</send_notification>
+        <kill_process>true</kill_process>
+        <delete_executable>false</delete_executable>
+        <display_message>Calculator is restricted</display_message>
+        <site>
+            <id>-1</id>
+            <name>None</name>
+        </site>
+    </general>
+    <scope>
+        <all_computers>false</all_computers>
+        <computers>
+            <computer>
+                <id>10</id>
+                <name>Test Computer</name>
+            </computer>
+        </computers>
+        <computer_groups>
+            <computer_group>
+                <id>5</id>
+                <name>Test Group</name>
+            </computer_group>
+        </computer_groups>
+        <buildings/>
+        <departments/>
+        <exclusions>
+            <computers/>
+            <computer_groups/>
+            <buildings/>
+            <departments/>
+            <users/>
+        </exclusions>
+    </scope>
+</restricted_software>

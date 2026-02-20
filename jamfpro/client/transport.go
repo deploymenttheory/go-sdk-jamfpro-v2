@@ -147,7 +147,7 @@ func (t *Transport) GetLogger() *zap.Logger {
 }
 
 // RSQLBuilder returns a new RSQL filter expression builder.
-// Pass the Build() result as queryParams["filter"] to filter endpoint results.
+// Pass the Build() result as rsqlQuery["filter"] to filter endpoint results.
 func (t *Transport) RSQLBuilder() interfaces.RSQLFilterBuilder {
 	return NewRSQLFilterBuilder()
 }

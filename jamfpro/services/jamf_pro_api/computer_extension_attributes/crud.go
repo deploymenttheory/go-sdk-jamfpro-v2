@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -16,7 +16,7 @@ type (
 		// ListComputerExtensionAttributesV1 returns all computer extension attribute objects (Get Computer Extension Attribute objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes
-		ListComputerExtensionAttributesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListComputerExtensionAttributesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetComputerExtensionAttributeByIDV1 returns the specified computer extension attribute by ID (Get specified Computer Extension Attribute object).
 		//
@@ -65,10 +65,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListComputerExtensionAttributesV1 returns all computer extension attribute objects.
 // URL: GET /api/v1/computer-extension-attributes
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes
-func (s *Service) ListComputerExtensionAttributesV1(ctx context.Context, queryParams map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListComputerExtensionAttributesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	resp, err := s.client.Get(ctx, EndpointComputerExtensionAttributesV1, queryParams, shared.JSONHeaders(), &result)
+	endpoint := EndpointComputerExtensionAttributesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -88,7 +95,12 @@ func (s *Service) GetComputerExtensionAttributeByIDV1(ctx context.Context, id st
 
 	var result ResourceComputerExtensionAttribute
 
-	resp, err := s.client.Get(ctx, endpoint, nil, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -106,7 +118,14 @@ func (s *Service) CreateComputerExtensionAttributeV1(ctx context.Context, req *R
 
 	var result CreateResponse
 
-	resp, err := s.client.Post(ctx, EndpointComputerExtensionAttributesV1, req, shared.JSONHeaders(), &result)
+	endpoint := EndpointComputerExtensionAttributesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -129,7 +148,12 @@ func (s *Service) UpdateComputerExtensionAttributeByIDV1(ctx context.Context, id
 
 	var result ResourceComputerExtensionAttribute
 
-	resp, err := s.client.Put(ctx, endpoint, req, shared.JSONHeaders(), &result)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -147,7 +171,12 @@ func (s *Service) DeleteComputerExtensionAttributeByIDV1(ctx context.Context, id
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointComputerExtensionAttributesV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -165,7 +194,12 @@ func (s *Service) DeleteComputerExtensionAttributesByIDV1(ctx context.Context, r
 
 	endpoint := EndpointComputerExtensionAttributesV1 + "/delete-multiple"
 
-	resp, err := s.client.Post(ctx, endpoint, req, shared.JSONHeaders(), nil)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}

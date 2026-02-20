@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 type (
@@ -43,10 +43,19 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
 func (s *Service) GetSMTPServerV2(ctx context.Context) (*ResourceSMTPServer, *interfaces.Response, error) {
 	var result ResourceSMTPServer
-	resp, err := s.client.Get(ctx, EndpointSMTPServerV2, nil, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointSMTPServerV2
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -58,9 +67,18 @@ func (s *Service) UpdateSMTPServerV2(ctx context.Context, settings *ResourceSMTP
 		return nil, nil, fmt.Errorf("settings is required")
 	}
 	var result ResourceSMTPServer
-	resp, err := s.client.Put(ctx, EndpointSMTPServerV2, settings, shared.JSONHeaders(), &result)
+
+	endpoint := EndpointSMTPServerV2
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, settings, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
