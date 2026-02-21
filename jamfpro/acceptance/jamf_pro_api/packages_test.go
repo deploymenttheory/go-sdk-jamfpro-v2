@@ -16,6 +16,78 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// =============================================================================
+// Acceptance Tests: Packages
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • ListV1(ctx, rsqlQuery) - Lists packages with optional RSQL filtering
+//   • GetByIDV1(ctx, id) - Retrieves a package by ID
+//   • CreateV1(ctx, request) - Creates package metadata (file upload separate)
+//   • UploadV1(ctx, id, filePath) - Uploads package file to existing metadata
+//   • UpdateByIDV1(ctx, id, request) - Updates package metadata (no file upload)
+//   • DeleteByIDV1(ctx, id) - Deletes a package by ID
+//   • DeletePackagesByIDV1(ctx, request) - Deletes multiple packages by IDs
+//   • GetHistoryV1(ctx, id, rsqlQuery) - Retrieves package history with RSQL filtering
+//   • AddHistoryNotesV1(ctx, id, request) - Adds notes to package history
+//   • AssignManifestToPackageV1(ctx, id, manifestPath) - Assigns manifest to package
+//   • DeletePackageManifestV1(ctx, id) - Removes manifest from package
+//   • CreateAndUpload(ctx, filePath, request) - Helper: create + upload + verify SHA3_512
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 1: Full CRUD Lifecycle
+//     -- Reason: Service supports complete Create, Read, Update, Delete operations
+//     -- Tests: TestAcceptance_Packages_Lifecycle
+//     -- Flow: CreateAndUpload (download → create → upload → verify) → List → GetByID → Update → Verify → History → Delete
+//
+//   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
+//     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
+//     -- Tests: TestAcceptance_Packages_ListWithRSQLFilter
+//     -- Flow: Create unique package → Filter with RSQL → Verify filtered results
+//
+//   ✓ Pattern 6: Bulk Operations
+//     -- Reason: Service provides DeletePackagesByIDV1 for bulk deletion
+//     -- Tests: TestAcceptance_Packages_DeleteMultiple
+//     -- Flow: Create multiple → Bulk delete → Verify deletion
+//
+//   ✓ Pattern 7: Validation Errors
+//     -- Reason: Client-side validation prevents invalid API calls
+//     -- Tests: TestAcceptance_Packages_ValidationErrors
+//     -- Cases: Empty IDs, nil requests, missing required fields
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Create operations (metadata creation via CreateAndUpload)
+//   ✓ File upload operations (package upload with SHA3_512 verification)
+//   ✓ Read operations (GetByID, List with pagination)
+//   ✓ List with RSQL filtering (mandatory for RSQL-supported endpoints)
+//   ✓ Update operations (metadata update only)
+//   ✓ Delete operations (single delete)
+//   ✓ Bulk delete operations (multiple packages)
+//   ✓ History operations (add notes, retrieve history)
+//   ✓ Input validation and error handling
+//   ✓ Cleanup and resource management
+//   ✗ Manifest operations (not yet tested - should be added)
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • RSQL testing is mandatory because ListV1 supports filtering
+//   • All tests register cleanup handlers to remove test packages
+//   • Lifecycle test downloads real package from Mozilla Firefox FTP (147.0)
+//   • CreateAndUpload helper verifies SHA3_512 hash after upload
+//   • Package upload is multipart with application/octet-stream
+//   • Update only modifies metadata - file re-upload requires separate call
+//   • Seven boolean fields required: FillUserTemplate, FillExistingUsers, RebootRequired,
+//     OSInstall, SuppressUpdates, SuppressFromDock, SuppressEula, SuppressRegistration
+//   • FillUserTemplate and FillExistingUsers must be false for non-.dmg packages
+//   • Manifest operations available but not tested
+//   • Tests use uniquePackageName() (timestamp-based) to avoid conflicts
+//   • GetHistoryV1 also supports RSQL filtering for history entries
+//
+// =============================================================================
+
 const acceptanceTestPackageURL = "https://ftp.mozilla.org/pub/firefox/releases/147.0/mac/en-GB/Firefox%20147.0.pkg"
 
 func uniquePackageName(base string) string {

@@ -1,0 +1,13 @@
+{
+  "computerId": "1",
+  "name": "Test-Mac-001",
+  "personalRecoveryKey": "ABCD-EFGH-IJKL-MNOP-QRST-UVWX",
+  "bootPartitionEncryptionDetails": {
+    "partitionName": "Macintosh HD",
+    "partitionFileVault2State": "ENCRYPTED",
+    "partitionFileVault2Percent": 100
+  },
+  "individualRecoveryKeyValidityStatus": "VALID",
+  "institutionalRecoveryKeyPresent": true,
+  "diskEncryptionConfigurationName": "Default FileVault Config"
+}

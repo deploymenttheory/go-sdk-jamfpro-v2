@@ -4,17 +4,17 @@ import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance/acc"
+	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/adcs_settings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
-func TestAdcsSettings_CreateGetUpdateDelete(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+func TestAdcsSettings_Lifecycle(t *testing.T) {
+	acc.RequireClient(t)
 
-	svc := adcs_settings.NewService(client)
+	svc := acc.Client.AdcsSettings
+	ctx := context.Background()
 
 	displayName := acc.UniqueName("Test ADCS")
 
@@ -83,10 +83,10 @@ func TestAdcsSettings_CreateGetUpdateDelete(t *testing.T) {
 }
 
 func TestAdcsSettings_ValidateCertificates(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := adcs_settings.NewService(client)
+	svc := acc.Client.AdcsSettings
+	ctx := context.Background()
 
 	serverCertReq := &adcs_settings.ValidateCertificateRequest{
 		Filename: "server.cer",

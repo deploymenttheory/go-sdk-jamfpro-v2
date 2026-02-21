@@ -1,0 +1,31 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "siteId": "-1",
+      "displayName": "Test Customization 1",
+      "description": "First test customization",
+      "enrollmentCustomizationBrandingSettings": {
+        "textColor": "#000000",
+        "buttonColor": "#0071CE",
+        "buttonTextColor": "#FFFFFF",
+        "backgroundColor": "#FFFFFF",
+        "iconUrl": "https://example.com/icon1.png"
+      }
+    },
+    {
+      "id": "2",
+      "siteId": "-1",
+      "displayName": "Test Customization 2",
+      "description": "Second test customization",
+      "enrollmentCustomizationBrandingSettings": {
+        "textColor": "#FFFFFF",
+        "buttonColor": "#FF0000",
+        "buttonTextColor": "#000000",
+        "backgroundColor": "#000000",
+        "iconUrl": "https://example.com/icon2.png"
+      }
+    }
+  ]
+}

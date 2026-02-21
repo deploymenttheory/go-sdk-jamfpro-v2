@@ -8,4 +8,5 @@ const (
 	ApplicationXML                 = "application/xml"
 	ApplicationPKIXCert            = "application/pkix-cert"
 	ApplicationPEMCertificateChain = "application/pem-certificate-chain"
+	ApplicationXPEMFile            = "application/x-pem-file"
 )

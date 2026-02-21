@@ -1,0 +1,9 @@
+{
+  "groupPlatformId": "platform-1",
+  "groupJamfProId": "101",
+  "groupName": "Test Computer Group",
+  "groupDescription": "A test computer group",
+  "groupType": "COMPUTER",
+  "smart": false,
+  "membershipCount": 5
+}

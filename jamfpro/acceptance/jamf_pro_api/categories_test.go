@@ -13,6 +13,63 @@ import (
 )
 
 // =============================================================================
+// Acceptance Tests: Categories
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • ListV1(ctx, rsqlQuery) - Lists categories with optional RSQL filtering
+//   • GetByIDV1(ctx, id) - Retrieves a category by ID
+//   • CreateV1(ctx, request) - Creates a new category
+//   • UpdateByIDV1(ctx, id, request) - Updates an existing category
+//   • DeleteByIDV1(ctx, id) - Deletes a category by ID
+//   • DeleteCategoriesByIDV1(ctx, request) - Deletes multiple categories by IDs
+//   • GetCategoryHistoryV1(ctx, id, rsqlQuery) - Retrieves category history
+//   • AddCategoryHistoryNotesV1(ctx, id, request) - Adds notes to category history
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 1: Full CRUD Lifecycle
+//     -- Reason: Service supports complete Create, Read, Update, Delete operations
+//     -- Tests: TestAcceptance_Categories_Lifecycle
+//     -- Flow: Create → List → GetByID → Update → Verify → History → Delete
+//
+//   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
+//     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
+//     -- Tests: TestAcceptance_Categories_ListWithRSQLFilter
+//     -- Flow: Create unique category → Filter with RSQL → Verify filtered results
+//
+//   ✓ Pattern 6: Bulk Operations
+//     -- Reason: Service provides DeleteCategoriesByIDV1 for bulk deletion
+//     -- Tests: TestAcceptance_Categories_BulkDelete
+//     -- Flow: Create multiple → Bulk delete → Verify deletion
+//
+//   ✓ Pattern 7: Validation Errors
+//     -- Reason: Client-side validation prevents invalid API calls
+//     -- Tests: TestAcceptance_Categories_ValidationErrors
+//     -- Cases: Empty IDs, nil requests, missing required fields
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Create operations (single category creation)
+//   ✓ Read operations (GetByID, List with pagination)
+//   ✓ List with RSQL filtering (mandatory for RSQL-supported endpoints)
+//   ✓ Update operations (full resource update)
+//   ✓ Delete operations (single delete)
+//   ✓ Bulk delete operations (multiple categories)
+//   ✓ History operations (add notes, retrieve history)
+//   ✓ Input validation and error handling
+//   ✓ Cleanup and resource management
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • RSQL testing is mandatory because ListV1 supports filtering
+//   • All tests register cleanup handlers to remove test categories
+//   • History operations tested as API provides dedicated endpoints
+//   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
+//   • Categories have a Priority field that can be tested for update verification
+//
+// =============================================================================
 // TestAcceptance_Categories_Lifecycle exercises the full write/read/delete
 // lifecycle in the order: Create → List → GetByID → Update → GetByID
 // (verify update) → AddHistoryNotes → GetHistory → Delete.

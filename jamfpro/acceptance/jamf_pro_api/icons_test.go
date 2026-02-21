@@ -11,6 +11,51 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// =============================================================================
+// Acceptance Tests: Icons
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • GetByIDV1(ctx, id) - Retrieves icon metadata by ID
+//   • UploadV1(ctx, fileReader, fileSize, fileName) - Uploads an icon image (Create)
+//   • UploadV1FromFile(ctx, filePath) - Helper to upload from file path
+//   • DownloadV1(ctx, id, res, scale) - Downloads icon image bytes (various resolutions)
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 4: Read-Only with Existing Data
+//     -- Reason: Tests use existing icons from the system (IDs 1-100)
+//     -- Tests: TestAcceptance_Icons_GetByID
+//     -- Flow: Find existing icon → GetByID → Verify metadata
+//     -- Note: Upload operation not tested in acceptance tests
+//
+//   ✗ Download operation (commented out)
+//     -- TestAcceptance_Icons_Download exists but is commented out
+//     -- Reason: Server-side issues with corrupted/missing icon files causing 500 errors
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Get icon metadata by ID (using existing icons)
+//   ✗ Upload icon (not yet tested - should be added)
+//   ✗ Download icon image (commented out - server issues)
+//   ✗ Delete icon (no delete operation available in API)
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • Icons are used for Self Service applications and policies
+//   • No List operation available - tests search IDs 1-100 to find valid icons
+//   • No Update or Delete operations available in the API
+//   • Upload creates new icons but no way to clean them up (no delete)
+//   • Download test commented out due to server-side corrupted files (500 errors)
+//   • Resolution options for download: "original", "300", "512"
+//   • Scale options: "0" (original), non-zero (scaled to 300)
+//   • Upload uses multipart/form-data with "file" field
+//   • TODO: Add upload test (but note cleanup issues - no delete available)
+//   • TODO: Uncomment/fix download test when server-side issues resolved
+//
+// =============================================================================
+
 // findValidIconID tries IDs in random order (1–100) until GetByIDV1 returns 200.
 // Logs success to test notifications. Returns (id, result, true) when found, (0, nil, false) when none exist.
 func findValidIconID(t *testing.T) (int, *icons.ResourceIcon, bool) {

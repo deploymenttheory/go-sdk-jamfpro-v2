@@ -1,0 +1,19 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "id": "1",
+      "name": "Example Device Enrollment Instance",
+      "supervisionIdentityId": "1",
+      "siteId": "-1",
+      "serverName": "Acme ASM",
+      "serverUuid": "BASD08C11F3C455",
+      "adminId": "admin1234",
+      "orgName": "Acme Enterprises",
+      "orgEmail": "admin@test.com",
+      "orgPhone": "555-0123",
+      "orgAddress": "124 Conch Street, Bikini Bottom, Pacific Ocean",
+      "tokenExpirationDate": "2000-10-30"
+    }
+  ]
+}

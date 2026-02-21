@@ -4,17 +4,17 @@ import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance/acc"
+	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_ldap_keystore"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestCloudLdapKeystore_Validate(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := cloud_ldap_keystore.NewService(client)
+	svc := acc.Client.CloudLdapKeystore
+	ctx := context.Background()
 
 	request := &cloud_ldap_keystore.ValidateKeystoreRequest{
 		Password:  "test-password",

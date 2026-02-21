@@ -4,17 +4,17 @@ import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance/acc"
+	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_azure"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestCloudAzure_GetDefaultServerConfiguration(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := cloud_azure.NewService(client)
+	svc := acc.Client.CloudAzure
+	ctx := context.Background()
 
 	result, _, err := svc.GetDefaultServerConfigurationV1(ctx)
 	if err != nil {
@@ -27,10 +27,10 @@ func TestCloudAzure_GetDefaultServerConfiguration(t *testing.T) {
 }
 
 func TestCloudAzure_GetDefaultMappings(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := cloud_azure.NewService(client)
+	svc := acc.Client.CloudAzure
+	ctx := context.Background()
 
 	result, _, err := svc.GetDefaultMappingsV1(ctx)
 	if err != nil {
@@ -42,11 +42,11 @@ func TestCloudAzure_GetDefaultMappings(t *testing.T) {
 	assert.NotEmpty(t, result.UserId)
 }
 
-func TestCloudAzure_CreateGetUpdateDelete(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+func TestCloudAzure_Lifecycle(t *testing.T) {
+	acc.RequireClient(t)
 
-	svc := cloud_azure.NewService(client)
+	svc := acc.Client.CloudAzure
+	ctx := context.Background()
 
 	displayName := acc.UniqueName("Test Azure IDP")
 

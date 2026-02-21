@@ -1,0 +1,71 @@
+{
+  "id": "1",
+  "udid": "12345678-1234-1234-1234-123456789012",
+  "general": {
+    "name": "Test-Mac-001",
+    "lastIpAddress": "192.168.1.100",
+    "lastReportedIp": "192.168.1.100",
+    "jamfBinaryVersion": "10.50.0",
+    "platform": "Mac",
+    "barcode1": "BARCODE001",
+    "assetTag": "ASSET001",
+    "remoteManagement": {
+      "managed": true,
+      "managementUsername": "admin"
+    },
+    "supervised": false,
+    "mdmCapable": {
+      "capable": true,
+      "capableUsers": ["user1"]
+    },
+    "site": {
+      "id": "1",
+      "name": "Default"
+    },
+    "managementId": "mgmt-001"
+  },
+  "hardware": {
+    "make": "Apple",
+    "model": "MacBook Pro",
+    "modelIdentifier": "MacBookPro16,1",
+    "serialNumber": "C02ABC123DEF",
+    "processorSpeedMhz": 2600,
+    "processorCount": 1,
+    "coreCount": 8,
+    "processorType": "Intel Core i7",
+    "processorArchitecture": "x86_64",
+    "totalRamMegabytes": 16384,
+    "macAddress": "00:11:22:33:44:55",
+    "appleSilicon": false
+  },
+  "operatingSystem": {
+    "name": "macOS",
+    "version": "14.2.1",
+    "build": "23C71"
+  },
+  "userAndLocation": {
+    "username": "testuser",
+    "realname": "Test User",
+    "email": "testuser@example.com",
+    "position": "Developer",
+    "phone": "555-0100",
+    "departmentId": "1",
+    "buildingId": "1",
+    "room": "101"
+  },
+  "purchasing": {
+    "leased": false,
+    "purchased": true,
+    "vendor": "Apple Inc.",
+    "purchasePrice": "2499.00",
+    "lifeExpectancy": 5
+  },
+  "security": {
+    "sipStatus": "Enabled",
+    "gatekeeperStatus": "Enabled",
+    "xprotectVersion": "2024.1",
+    "firewallEnabled": true,
+    "secureBootLevel": "Full",
+    "externalBootLevel": "Allow"
+  }
+}

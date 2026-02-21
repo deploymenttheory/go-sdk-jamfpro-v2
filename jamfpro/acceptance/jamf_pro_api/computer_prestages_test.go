@@ -11,6 +11,71 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// =============================================================================
+// Acceptance Tests: Computer Prestages
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   Prestage CRUD (V3 API):
+//   • ListV3(ctx, query) - Lists computer prestages with pagination/sorting (page, page-size, sort)
+//   • GetByIDV3(ctx, id) - Retrieves a computer prestage by ID
+//   • GetByNameV3(ctx, name) - Retrieves a computer prestage by display name (helper)
+//   • CreateV3(ctx, request) - Creates a new computer prestage
+//   • UpdateByIDV3(ctx, id, request) - Updates an existing computer prestage
+//   • UpdateByNameV3(ctx, name, request) - Updates a computer prestage by display name (helper)
+//   • DeleteByIDV3(ctx, id) - Deletes a computer prestage by ID
+//   • DeleteByNameV3(ctx, name) - Deletes a computer prestage by display name (helper)
+//
+//   Device Scope Management (V2 API):
+//   • GetDeviceScopeByIDV2(ctx, id) - Retrieves device scope for a prestage
+//   • ReplaceDeviceScopeByIDV2(ctx, id, request) - Replaces device scope for a prestage
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 1: Full CRUD Lifecycle
+//     -- Reason: Service supports complete Create, Read, Update, Delete operations
+//     -- Tests: TestAcceptance_ComputerPrestages_LifecycleReplaceScope
+//     -- Flow: Create → GetByID → GetByName → GetDeviceScope → ReplaceScope → Update → Delete
+//
+//   ✓ List Operations
+//     -- Tests: TestAcceptance_ComputerPrestages_ListV3
+//     -- Flow: List all prestages → Verify response structure
+//
+//   Note: RSQL Filter Testing NOT applicable
+//     -- ListV3 supports pagination (page, page-size) and sorting (sort), not RSQL filtering
+//     -- Query params are for pagination/sorting only, not RSQL filter expressions
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Create operations (prestage creation with comprehensive settings)
+//   ✓ Read operations (GetByID, GetByName, List with pagination)
+//   ✓ Update operations (full resource update with version locking)
+//   ✓ Delete operations (single delete by ID)
+//   ✓ Device scope operations (get scope, replace scope with version locking)
+//   ✓ Cleanup and resource management
+//   ✗ Input validation and error handling (not yet tested)
+//   ✗ Update by name operations (not yet tested)
+//   ✗ Delete by name operations (not yet tested)
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • Computer prestages define automated enrollment settings for DEP/ABM devices
+//   • Requires enrollment site and DEP instance - test handles gracefully if unavailable
+//   • Uses optimistic locking with VersionLock field (critical for updates)
+//   • CRUD operations use V3 API, device scope operations use V2 API
+//   • GetByName, UpdateByName, DeleteByName are helper methods (use ListV3 for lookup)
+//   • Device scope defines which serial numbers are assigned to this prestage
+//   • ReplaceDeviceScope requires current VersionLock to prevent conflicts
+//   • All tests register cleanup handlers to remove test prestages
+//   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
+//   • SkipSetupItems controls which setup assistant screens are skipped
+//   • AccountSettings, LocationInformation, PurchasingInformation are complex nested objects
+//   • TODO: Add validation error tests for empty IDs, nil requests, etc.
+//   • TODO: Add tests for UpdateByNameV3 and DeleteByNameV3 operations
+//
+// =============================================================================
+
 // Helper to create bool pointers
 func boolPtr(b bool) *bool { return &b }
 
@@ -28,7 +93,7 @@ func TestAcceptance_ComputerPrestages_ListV3(t *testing.T) {
 	assert.NotNil(t, result.Results)
 }
 
-func TestAcceptance_ComputerPrestages_CreateGetUpdateDeleteReplaceScope(t *testing.T) {
+func TestAcceptance_ComputerPrestages_LifecycleReplaceScope(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
 	ctx := context.Background()
@@ -38,21 +103,21 @@ func TestAcceptance_ComputerPrestages_CreateGetUpdateDeleteReplaceScope(t *testi
 	boolPtr := func(b bool) *bool { return &b }
 
 	created, resp, err := svc.CreateV3(ctx, &computer_prestages.ResourceComputerPrestage{
-		DisplayName:                        name,
-		Mandatory:                          boolPtr(true),
-		MDMRemovable:                       boolPtr(true),
-		SupportPhoneNumber:                 "111-222-3333",
-		SupportEmailAddress:                "email@company.com",
-		Department:                         "IT Department",
-		DefaultPrestage:                    boolPtr(false),
-		EnrollmentSiteId:                   "-1",
-		KeepExistingSiteMembership:         boolPtr(false),
-		KeepExistingLocationInformation:    boolPtr(false),
-		RequireAuthentication:              boolPtr(false),
-		AuthenticationPrompt:               "Welcome to your enterprise managed macOS device",
-		PreventActivationLock:              boolPtr(false),
-		EnableDeviceBasedActivationLock:    boolPtr(false),
-		DeviceEnrollmentProgramInstanceId:  "1",
+		DisplayName:                       name,
+		Mandatory:                         boolPtr(true),
+		MDMRemovable:                      boolPtr(true),
+		SupportPhoneNumber:                "111-222-3333",
+		SupportEmailAddress:               "email@company.com",
+		Department:                        "IT Department",
+		DefaultPrestage:                   boolPtr(false),
+		EnrollmentSiteId:                  "-1",
+		KeepExistingSiteMembership:        boolPtr(false),
+		KeepExistingLocationInformation:   boolPtr(false),
+		RequireAuthentication:             boolPtr(false),
+		AuthenticationPrompt:              "Welcome to your enterprise managed macOS device",
+		PreventActivationLock:             boolPtr(false),
+		EnableDeviceBasedActivationLock:   boolPtr(false),
+		DeviceEnrollmentProgramInstanceId: "1",
 		SkipSetupItems: &computer_prestages.SkipSetupItems{
 			Biometric:          boolPtr(false),
 			TermsOfAddress:     boolPtr(false),

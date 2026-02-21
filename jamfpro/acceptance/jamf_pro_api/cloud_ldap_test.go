@@ -4,17 +4,17 @@ import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance/acc"
+	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_ldap"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestCloudLdap_GetDefaults(t *testing.T) {
-	client := acc.RequireClient(t)
+	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := cloud_ldap.NewService(client)
+	svc := acc.Client.CloudLdap
 
 	mappings, _, err := svc.GetDefaultMappingsV2(ctx, "GOOGLE")
 	if err != nil {
@@ -36,11 +36,11 @@ func TestCloudLdap_GetDefaults(t *testing.T) {
 	assert.NotEmpty(t, serverConfig.ConnectionType)
 }
 
-func TestCloudLdap_CreateGetUpdateDelete(t *testing.T) {
-	client := acc.RequireClient(t)
+func TestCloudLdap_Lifecycle(t *testing.T) {
+	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := cloud_ldap.NewService(client)
+	svc := acc.Client.CloudLdap
 
 	displayName := acc.UniqueName("Test Google LDAP")
 

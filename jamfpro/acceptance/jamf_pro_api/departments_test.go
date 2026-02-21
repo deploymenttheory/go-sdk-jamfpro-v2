@@ -13,6 +13,58 @@ import (
 )
 
 // =============================================================================
+// Acceptance Tests: Departments
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • ListV1(ctx, rsqlQuery) - Lists departments with optional RSQL filtering
+//   • GetByIDV1(ctx, id) - Retrieves a department by ID
+//   • CreateV1(ctx, request) - Creates a new department
+//   • UpdateByIDV1(ctx, id, request) - Updates an existing department
+//   • DeleteByIDV1(ctx, id) - Deletes a department by ID
+//   • GetDepartmentHistoryV1(ctx, id, rsqlQuery) - Retrieves department history with RSQL filtering
+//   • AddDepartmentHistoryNotesV1(ctx, id, request) - Adds notes to department history
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 1: Full CRUD Lifecycle
+//     -- Reason: Service supports complete Create, Read, Update, Delete operations
+//     -- Tests: TestAcceptance_Departments_Lifecycle
+//     -- Flow: Create → List → GetByID → Update → Verify → History → Delete
+//
+//   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
+//     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
+//     -- Tests: TestAcceptance_Departments_ListWithRSQLFilter
+//     -- Flow: Create unique department → Filter with RSQL → Verify filtered results
+//
+//   ✓ Pattern 7: Validation Errors
+//     -- Reason: Client-side validation prevents invalid API calls
+//     -- Tests: TestAcceptance_Departments_ValidationErrors
+//     -- Cases: Empty IDs, nil requests, missing required fields
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Create operations (single department creation)
+//   ✓ Read operations (GetByID, List with pagination)
+//   ✓ List with RSQL filtering (mandatory for RSQL-supported endpoints)
+//   ✓ Update operations (full resource update)
+//   ✓ Delete operations (single delete)
+//   ✓ History operations (add notes, retrieve history)
+//   ✓ Input validation and error handling
+//   ✓ Cleanup and resource management
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • RSQL testing is mandatory because ListV1 supports filtering
+//   • All tests register cleanup handlers to remove test departments
+//   • History operations tested as API provides dedicated endpoints
+//   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
+//   • Departments are organizational units used for device and user categorization
+//   • GetDepartmentHistoryV1 also supports RSQL filtering for history entries
+//   • Comprehensive validation error testing ensures client-side validation works correctly
+//
+// =============================================================================
 // TestAcceptance_Departments_Lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → Update → GetByID (verify) → Delete.
 // =============================================================================

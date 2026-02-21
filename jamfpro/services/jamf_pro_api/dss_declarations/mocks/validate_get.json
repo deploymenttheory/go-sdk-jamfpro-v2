@@ -1,0 +1,10 @@
+{
+  "declarations": [
+    {
+      "uuid": "550e8400-e29b-41d4-a716-446655440000",
+      "payloadJson": "{\"Type\":\"com.apple.configuration.management.status-subscriptions\",\"Identifier\":\"com.example.status\"}",
+      "type": "com.apple.configuration.management.status-subscriptions",
+      "group": "com.example"
+    }
+  ]
+}

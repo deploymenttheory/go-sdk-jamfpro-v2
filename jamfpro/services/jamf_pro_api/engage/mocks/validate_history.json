@@ -1,0 +1,19 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": 1,
+      "username": "admin",
+      "date": "2019-02-04T21:09:31.661Z",
+      "note": "Engage settings updated",
+      "details": "Is Enabled: true"
+    },
+    {
+      "id": 2,
+      "username": "testuser",
+      "date": "2019-02-05T10:15:22.123Z",
+      "note": "Another update",
+      "details": null
+    }
+  ]
+}

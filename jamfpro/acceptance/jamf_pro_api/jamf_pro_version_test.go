@@ -9,6 +9,36 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// =============================================================================
+// Acceptance Tests: Jamf Pro Version
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • GetV1(ctx) - Retrieves the current Jamf Pro server version
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 3: Read-Only Information
+//     -- Reason: Service only provides read access to system version information
+//     -- Tests: TestAcceptance_JamfProVersion_GetV1
+//     -- Flow: Get version → Verify response structure and required fields
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Get version information
+//   ✓ Verify response structure (200 status)
+//   ✓ Validate required fields (Version is present and non-empty)
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • This is a read-only endpoint - no mutations possible
+//   • Version format is typically "X.Y.Z" (e.g., "11.2.0")
+//   • Version information is used by acc.GreaterThanJamfProVersion() helper
+//   • No cleanup needed as this is a read-only operation
+//
+// =============================================================================
+
 func TestAcceptance_JamfProVersion_GetV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.JamfProVersion

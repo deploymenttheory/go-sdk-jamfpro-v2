@@ -9,6 +9,36 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// =============================================================================
+// Acceptance Tests: Startup Status
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • GetV1(ctx) - Retrieves Jamf Pro server startup status
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 3: Read-Only Information
+//     -- Reason: Service only provides read access to server startup status
+//     -- Tests: TestAcceptance_StartupStatus_GetV1
+//     -- Flow: Get status → Verify response structure
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Get startup status
+//   ✓ Verify response structure (200 status)
+//   ✓ Verify Step field is present
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • This is a read-only endpoint - no mutations possible
+//   • Returns server startup status information
+//   • Useful for monitoring server initialization state
+//   • No cleanup needed as this is a read-only operation
+//
+// =============================================================================
+
 func TestAcceptance_StartupStatus_GetV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.StartupStatus

@@ -2,6 +2,7 @@ package jamf_pro_api
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -10,6 +11,61 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+// =============================================================================
+// Acceptance Tests: Computer Extension Attributes
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • ListV1(ctx, rsqlQuery) - Lists computer extension attributes with optional RSQL filtering
+//   • GetByIDV1(ctx, id) - Retrieves a computer extension attribute by ID
+//   • CreateV1(ctx, request) - Creates a new computer extension attribute
+//   • UpdateByIDV1(ctx, id, request) - Updates an existing computer extension attribute
+//   • DeleteByIDV1(ctx, id) - Deletes a computer extension attribute by ID
+//   • DeleteComputerExtensionAttributesByIDV1(ctx, request) - Deletes multiple computer extension attributes by IDs
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 1: Full CRUD Lifecycle
+//     -- Reason: Service supports complete Create, Read, Update, Delete operations
+//     -- Tests: TestAcceptance_ComputerExtensionAttributes_Lifecycle
+//     -- Flow: Create → List → GetByID → Update → Verify → Delete
+//
+//   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]
+//     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
+//     -- Tests: MISSING - Should be added as TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter
+//     -- Flow: Create unique EA → Filter with RSQL → Verify filtered results
+//     -- Status: MANDATORY test not implemented
+//
+//   ✓ Pattern 6: Bulk Operations
+//     -- Reason: Service provides DeleteComputerExtensionAttributesByIDV1 for bulk deletion
+//     -- Tests: TestAcceptance_ComputerExtensionAttributes_DeleteMultiple
+//     -- Flow: Create multiple → Bulk delete → Verify deletion
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Create operations (single EA creation)
+//   ✓ Read operations (GetByID, List with pagination)
+//   ✗ List with RSQL filtering [MANDATORY - MISSING]
+//   ✓ Update operations (full resource update)
+//   ✓ Delete operations (single delete)
+//   ✓ Bulk delete operations (multiple EAs)
+//   ✗ Input validation and error handling (not yet tested)
+//   ✓ Cleanup and resource management
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • RSQL testing is MANDATORY because ListV1 supports filtering - currently missing
+//   • All tests register cleanup handlers to remove test EAs
+//   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
+//   • Computer Extension Attributes extend inventory data collection for devices
+//   • DataType options: String, Integer, Date
+//   • InputType options: TEXT, SCRIPT, POPUP_MENU, LDAP_ATTRIBUTE
+//   • TODO: Add TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter (MANDATORY)
+//   • TODO: Add validation error tests for empty IDs, nil requests, etc.
+//
+// =============================================================================
 
 func TestAcceptance_ComputerExtensionAttributes_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
@@ -140,4 +196,59 @@ func TestAcceptance_ComputerExtensionAttributes_DeleteMultiple(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
+}
+
+// =============================================================================
+// TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter
+// =============================================================================
+
+func TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ComputerExtensionAttributes
+	ctx := context.Background()
+
+	name := acc.UniqueName("acc-rsql-ea")
+	enabled := true
+	createReq := &computer_extension_attributes.RequestComputerExtensionAttribute{
+		Name:                 name,
+		DataType:             "String",
+		InventoryDisplayType: "General",
+		InputType:            "TEXT",
+		Enabled:              &enabled,
+	}
+
+	created, _, err := svc.CreateV1(ctx, createReq)
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	eaID := created.ID
+	acc.LogTestSuccess(t, "Created computer extension attribute ID=%s name=%q", eaID, name)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, eaID)
+		acc.LogCleanupDeleteError(t, "computer extension attribute", eaID, delErr)
+	})
+
+	rsqlQuery := map[string]string{
+		"filter": fmt.Sprintf(`name=="%s"`, name),
+	}
+
+	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
+	require.NoError(t, err)
+	require.NotNil(t, list)
+	assert.Equal(t, 200, listResp.StatusCode)
+
+	found := false
+	for _, ea := range list.Results {
+		if ea.ID == eaID {
+			found = true
+			assert.Equal(t, name, ea.Name)
+			break
+		}
+	}
+	assert.True(t, found, "computer extension attribute should appear in RSQL-filtered results")
+	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target EA found=%v", list.TotalCount, found)
 }

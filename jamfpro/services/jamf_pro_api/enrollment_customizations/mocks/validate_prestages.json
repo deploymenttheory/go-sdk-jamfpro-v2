@@ -1,0 +1,14 @@
+{
+  "dependencies": [
+    {
+      "name": "computer-prestage-1",
+      "humanReadableName": "Computer Prestage 1",
+      "hyperlink": "/api/v2/computer-prestages/1"
+    },
+    {
+      "name": "mobile-device-prestage-1",
+      "humanReadableName": "Mobile Device Prestage 1",
+      "hyperlink": "/api/v2/mobile-device-prestages/1"
+    }
+  ]
+}

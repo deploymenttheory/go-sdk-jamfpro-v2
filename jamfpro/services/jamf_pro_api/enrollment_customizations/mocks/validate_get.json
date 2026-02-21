@@ -1,0 +1,13 @@
+{
+  "id": "1",
+  "siteId": "-1",
+  "displayName": "Test Customization 1",
+  "description": "First test customization",
+  "enrollmentCustomizationBrandingSettings": {
+    "textColor": "#000000",
+    "buttonColor": "#0071CE",
+    "buttonTextColor": "#FFFFFF",
+    "backgroundColor": "#FFFFFF",
+    "iconUrl": "https://example.com/icon1.png"
+  }
+}

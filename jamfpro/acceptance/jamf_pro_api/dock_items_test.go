@@ -12,6 +12,52 @@ import (
 )
 
 // =============================================================================
+// Acceptance Tests: Dock Items
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • GetByIDV1(ctx, id) - Retrieves a dock item by ID
+//   • CreateV1(ctx, request) - Creates a new dock item
+//   • UpdateByIDV1(ctx, id, request) - Updates an existing dock item
+//   • DeleteByIDV1(ctx, id) - Deletes a dock item by ID
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 1: Full CRUD Lifecycle (without List)
+//     -- Reason: Service supports Create, Read (GetByID only), Update, Delete operations
+//     -- Tests: TestAcceptance_DockItems_Lifecycle
+//     -- Flow: Create → GetByID → Update → Verify → Delete
+//     -- Note: No List operation available for this service
+//
+//   ✓ Pattern 7: Validation Errors
+//     -- Reason: Client-side validation prevents invalid API calls
+//     -- Tests: TestAcceptance_DockItems_ValidationErrors
+//     -- Cases: Empty IDs, nil requests, missing required fields
+//
+//   Note: RSQL Filter Testing NOT applicable
+//     -- No List operation available - service only supports individual CRUD operations
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Create operations (single dock item creation)
+//   ✓ Read operations (GetByID only - no list available)
+//   ✓ Update operations (full resource update)
+//   ✓ Delete operations (single delete)
+//   ✓ Input validation and error handling
+//   ✓ Cleanup and resource management
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • No List operation exists for dock items - only individual CRUD
+//   • Dock items define applications/folders displayed in macOS dock
+//   • Type options: "App" (application) or "Folder"
+//   • Path must be valid macOS application or folder path
+//   • All tests register cleanup handlers to remove test dock items
+//   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
+//   • Update response may not include body - verification done via re-fetch
+//
+// =============================================================================
 // TestAcceptance_DockItems_Lifecycle exercises the full write/read/delete
 // lifecycle: Create → GetByID → Update → GetByID (verify) → Delete.
 // =============================================================================

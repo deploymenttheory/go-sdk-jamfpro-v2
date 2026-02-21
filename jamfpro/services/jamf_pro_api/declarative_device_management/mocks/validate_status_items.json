@@ -1,0 +1,14 @@
+{
+  "statusItems": [
+    {
+      "key": "device.model.family",
+      "value": "Mac",
+      "lastUpdateTime": "2024-01-15T10:30:00Z"
+    },
+    {
+      "key": "device.operating-system.version",
+      "value": "14.2.1",
+      "lastUpdateTime": "2024-01-15T10:30:00Z"
+    }
+  ]
+}

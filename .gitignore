@@ -20,6 +20,7 @@
 *.winfile eol=crlf
 
 # Go development
+/test.md
 *.test
 /vendor/
 /bin/

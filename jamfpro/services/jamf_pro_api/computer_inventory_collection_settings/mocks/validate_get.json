@@ -1,0 +1,29 @@
+{
+  "computerInventoryCollectionPreferences": {
+    "monitorApplicationUsage": true,
+    "includePackages": true,
+    "includeSoftwareUpdates": true,
+    "includeSoftwareId": false,
+    "includeAccounts": true,
+    "calculateSizes": false,
+    "includeHiddenAccounts": false,
+    "includePrinters": true,
+    "includeServices": false,
+    "collectSyncedMobileDeviceInfo": true,
+    "updateLdapInfoOnComputerInventorySubmissions": false,
+    "monitorBeacons": true,
+    "allowChangingUserAndLocation": true,
+    "useUnixUserPaths": false,
+    "collectUnmanagedCertificates": true
+  },
+  "applicationPaths": [
+    {
+      "id": "1",
+      "path": "/Applications"
+    },
+    {
+      "id": "2",
+      "path": "/Library/Application Support"
+    }
+  ]
+}

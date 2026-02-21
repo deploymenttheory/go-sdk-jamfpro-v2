@@ -2,6 +2,7 @@ package jamf_pro_api
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -11,6 +12,83 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// =============================================================================
+// Acceptance Tests: Computer Groups
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   Smart Groups:
+//   • ListSmartV2(ctx, rsqlQuery) - Lists smart computer groups with optional RSQL filtering
+//   • GetSmartByIDV2(ctx, id) - Retrieves a smart computer group by ID
+//   • CreateSmartV2(ctx, request) - Creates a new smart computer group
+//   • UpdateSmartV2(ctx, id, request) - Updates an existing smart computer group
+//   • DeleteSmartV2(ctx, id) - Deletes a smart computer group by ID
+//
+//   Static Groups:
+//   • ListStaticV2(ctx, rsqlQuery) - Lists static computer groups with optional RSQL filtering
+//   • GetStaticByIDV2(ctx, id) - Retrieves a static computer group by ID
+//   • CreateStaticV2(ctx, request) - Creates a new static computer group
+//   • UpdateStaticByIDV2(ctx, id, request) - Updates an existing static group (PATCH)
+//   • DeleteStaticByIDV2(ctx, id) - Deletes a static computer group by ID
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 1: Full CRUD Lifecycle (Smart Groups)
+//     -- Reason: Service supports complete Create, Read, Update, Delete operations for smart groups
+//     -- Tests: TestAcceptance_ComputerGroups_Smart_Lifecycle
+//     -- Flow: Create → List → GetByID → Update → Verify → Delete
+//
+//   ✓ Pattern 1: Full CRUD Lifecycle (Static Groups)
+//     -- Reason: Service supports complete Create, Read, Update, Delete operations for static groups
+//     -- Tests: TestAcceptance_ComputerGroups_Static_Lifecycle
+//     -- Flow: Create → List → GetByID → Update (PATCH) → Verify → Delete
+//
+//   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]
+//     -- Reason: Both ListSmartV2 and ListStaticV2 accept rsqlQuery parameter for filtering
+//     -- Tests: MISSING - Should be added as separate tests for both types
+//     -- Flow: Create unique group → Filter with RSQL → Verify filtered results
+//     -- Status: MANDATORY tests not implemented for either smart or static groups
+//
+//   ✓ Pattern 7: Validation Errors
+//     -- Reason: Client-side validation prevents invalid API calls
+//     -- Tests: TestAcceptance_ComputerGroups_ValidationErrors
+//     -- Cases: Empty IDs, nil requests for both smart and static groups
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   Smart Groups:
+//   ✓ Create operations (smart group creation with criteria)
+//   ✓ Read operations (GetByID, List with pagination)
+//   ✗ List with RSQL filtering [MANDATORY - MISSING]
+//   ✓ Update operations (update criteria)
+//   ✓ Delete operations (single delete)
+//   ✓ Input validation and error handling
+//
+//   Static Groups:
+//   ✓ Create operations (static group creation with computer IDs)
+//   ✓ Read operations (GetByID, List with pagination)
+//   ✗ List with RSQL filtering [MANDATORY - MISSING]
+//   ✓ Update operations (PATCH membership)
+//   ✓ Delete operations (single delete)
+//   ✓ Input validation and error handling
+//
+//   General:
+//   ✓ Cleanup and resource management
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • RSQL testing is MANDATORY because both List operations support filtering - currently missing
+//   • Smart groups use criteria-based membership (dynamic)
+//   • Static groups use explicit computer ID lists (manual)
+//   • Static group update uses PATCH (partial update of membership)
+//   • Smart group update uses PUT (full resource replacement)
+//   • All tests register cleanup handlers to remove test groups
+//   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
+//   • Static group creation may return 500 in some environments (test handles gracefully)
+//   • TODO: Add TestAcceptance_ComputerGroups_Smart_ListWithRSQLFilter (MANDATORY)
+//   • TODO: Add TestAcceptance_ComputerGroups_Static_ListWithRSQLFilter (MANDATORY)
+//
 // =============================================================================
 // TestAcceptance_ComputerGroups_Smart_Lifecycle
 // =============================================================================
@@ -210,6 +288,113 @@ func TestAcceptance_ComputerGroups_Static_Lifecycle(t *testing.T) {
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Static group ID=%s deleted", groupID)
+}
+
+// =============================================================================
+// TestAcceptance_ComputerGroups_Smart_ListWithRSQLFilter
+// =============================================================================
+
+func TestAcceptance_ComputerGroups_Smart_ListWithRSQLFilter(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ComputerGroups
+	ctx := context.Background()
+
+	name := acc.UniqueName("acc-rsql-smart")
+	createReq := &computer_groups.RequestSmartGroup{
+		Name: name,
+		Criteria: []computer_groups.Criterion{
+			{Name: "Computer Name", Priority: 0, AndOr: "and", SearchType: "like", Value: "rsql-test-%"},
+		},
+	}
+
+	created, _, err := svc.CreateSmartV2(ctx, createReq)
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	groupID := created.ID
+	acc.LogTestSuccess(t, "Created smart group ID=%s name=%q", groupID, name)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteSmartV2(cleanupCtx, groupID)
+		acc.LogCleanupDeleteError(t, "smart computer group", groupID, delErr)
+	})
+
+	rsqlQuery := map[string]string{
+		"filter": fmt.Sprintf(`name=="%s"`, name),
+	}
+
+	list, listResp, err := svc.ListSmartV2(ctx, rsqlQuery)
+	require.NoError(t, err)
+	require.NotNil(t, list)
+	assert.Equal(t, 200, listResp.StatusCode)
+
+	found := false
+	for _, g := range list.Results {
+		if g.ID == groupID {
+			found = true
+			assert.Equal(t, name, g.Name)
+			break
+		}
+	}
+	assert.True(t, found, "smart group should appear in RSQL-filtered results")
+	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target smart group found=%v", list.TotalCount, found)
+}
+
+// =============================================================================
+// TestAcceptance_ComputerGroups_Static_ListWithRSQLFilter
+// =============================================================================
+
+func TestAcceptance_ComputerGroups_Static_ListWithRSQLFilter(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ComputerGroups
+	ctx := context.Background()
+
+	name := acc.UniqueName("acc-rsql-static")
+	createReq := &computer_groups.RequestStaticGroup{
+		Name:        name,
+		ComputerIds: []string{},
+	}
+
+	created, createResp, err := svc.CreateStaticV2(ctx, createReq)
+	if err != nil && createResp != nil && createResp.StatusCode == 500 {
+		t.Skip("Static computer group create returned 500 in this environment; skipping RSQL filter test")
+	}
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	groupID := created.ID
+	acc.LogTestSuccess(t, "Created static group ID=%s name=%q", groupID, name)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteStaticByIDV2(cleanupCtx, groupID)
+		acc.LogCleanupDeleteError(t, "static computer group", groupID, delErr)
+	})
+
+	rsqlQuery := map[string]string{
+		"filter": fmt.Sprintf(`name=="%s"`, name),
+	}
+
+	list, listResp, err := svc.ListStaticV2(ctx, rsqlQuery)
+	require.NoError(t, err)
+	require.NotNil(t, list)
+	assert.Equal(t, 200, listResp.StatusCode)
+
+	found := false
+	for _, g := range list.Results {
+		if g.ID == groupID {
+			found = true
+			assert.Equal(t, name, g.Name)
+			break
+		}
+	}
+	assert.True(t, found, "static group should appear in RSQL-filtered results")
+	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target static group found=%v", list.TotalCount, found)
 }
 
 // =============================================================================

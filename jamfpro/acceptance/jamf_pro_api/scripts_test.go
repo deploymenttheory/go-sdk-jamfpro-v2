@@ -13,6 +13,63 @@ import (
 )
 
 // =============================================================================
+// Acceptance Tests: Scripts
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • ListScriptsV1(ctx, rsqlQuery) - Lists scripts with optional RSQL filtering
+//   • GetScriptByIDV1(ctx, id) - Retrieves a script by ID
+//   • CreateScriptV1(ctx, request) - Creates a new script
+//   • UpdateScriptByIDV1(ctx, id, request) - Updates an existing script
+//   • DeleteScriptByIDV1(ctx, id) - Deletes a script by ID
+//   • DownloadScriptByIDV1(ctx, id) - Downloads script contents as plain text
+//   • GetScriptHistoryV1(ctx, id, rsqlQuery) - Retrieves script history with RSQL filtering
+//   • AddScriptHistoryNotesV1(ctx, id, request) - Adds notes to script history
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 1: Full CRUD Lifecycle
+//     -- Reason: Service supports complete Create, Read, Update, Delete operations
+//     -- Tests: TestAcceptance_Scripts_Lifecycle
+//     -- Flow: Create → List → GetByID → Update → Verify → History → Delete
+//
+//   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
+//     -- Reason: ListScriptsV1 accepts rsqlQuery parameter for filtering
+//     -- Tests: TestAcceptance_Scripts_ListWithRSQLFilter
+//     -- Flow: Create unique script → Filter with RSQL → Verify filtered results
+//
+//   ✓ Pattern 7: Validation Errors
+//     -- Reason: Client-side validation prevents invalid API calls
+//     -- Tests: TestAcceptance_Scripts_ValidationErrors
+//     -- Cases: Empty IDs, nil requests, missing required fields
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Create operations (single script creation)
+//   ✓ Read operations (GetByID, List with pagination)
+//   ✓ List with RSQL filtering (mandatory for RSQL-supported endpoints)
+//   ✓ Update operations (full resource update)
+//   ✓ Delete operations (single delete)
+//   ✓ Download operations (get script contents as plain text)
+//   ✓ History operations (add notes, retrieve history with RSQL)
+//   ✓ Input validation and error handling
+//   ✓ Cleanup and resource management
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • RSQL testing is mandatory because ListScriptsV1 supports filtering
+//   • All tests register cleanup handlers to remove test scripts
+//   • History operations tested as API provides dedicated endpoints
+//   • GetScriptHistoryV1 also supports RSQL filtering for history entries
+//   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
+//   • Scripts can be used in policies for automated device management
+//   • Priority options: "BEFORE" (runs before reboot), "AFTER" (runs after reboot)
+//   • ScriptContents should include shebang (#!/bin/bash, #!/bin/zsh, etc.)
+//   • DownloadScriptByIDV1 not tested but available for retrieving script text
+//   • Comprehensive validation error testing ensures client-side validation works correctly
+//
+// =============================================================================
 // TestAcceptance_Scripts_Lifecycle exercises the full write/read/delete
 // lifecycle in the order: Create → List → GetByID → Update → GetByID
 // (verify update) → AddHistoryNotes → GetHistory → Delete.

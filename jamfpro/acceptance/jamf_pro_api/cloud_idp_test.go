@@ -4,17 +4,17 @@ import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance/acc"
+	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_idp"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestCloudIdp_List(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := cloud_idp.NewService(client)
+	svc := acc.Client.CloudIdp
+	ctx := context.Background()
 
 	result, _, err := svc.ListV1(ctx, nil)
 	if err != nil {
@@ -27,10 +27,10 @@ func TestCloudIdp_List(t *testing.T) {
 }
 
 func TestCloudIdp_GetByID(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := cloud_idp.NewService(client)
+	svc := acc.Client.CloudIdp
+	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
@@ -48,10 +48,10 @@ func TestCloudIdp_GetByID(t *testing.T) {
 }
 
 func TestCloudIdp_GetByName(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := cloud_idp.NewService(client)
+	svc := acc.Client.CloudIdp
+	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
@@ -67,10 +67,10 @@ func TestCloudIdp_GetByName(t *testing.T) {
 }
 
 func TestCloudIdp_Export(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := cloud_idp.NewService(client)
+	svc := acc.Client.CloudIdp
+	ctx := context.Background()
 
 	request := &cloud_idp.ExportRequest{
 		Fields: []cloud_idp.ExportField{
@@ -89,10 +89,10 @@ func TestCloudIdp_Export(t *testing.T) {
 }
 
 func TestCloudIdp_HistoryOperations(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := cloud_idp.NewService(client)
+	svc := acc.Client.CloudIdp
+	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
@@ -121,10 +121,10 @@ func TestCloudIdp_HistoryOperations(t *testing.T) {
 }
 
 func TestCloudIdp_TestSearches(t *testing.T) {
-	client := acc.RequireClient(t)
-	ctx := context.Background()
+	acc.RequireClient(t)
 
-	svc := cloud_idp.NewService(client)
+	svc := acc.Client.CloudIdp
+	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)
 	if err != nil || len(list.Results) == 0 {

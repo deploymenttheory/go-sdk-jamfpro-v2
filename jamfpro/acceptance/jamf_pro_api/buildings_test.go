@@ -13,6 +13,63 @@ import (
 )
 
 // =============================================================================
+// Acceptance Tests: Buildings
+// =============================================================================
+//
+// Service Operations Available
+// -----------------------------------------------------------------------------
+//   • ListV1(ctx, rsqlQuery) - Lists buildings with optional RSQL filtering
+//   • GetByIDV1(ctx, id) - Retrieves a building by ID
+//   • CreateV1(ctx, request) - Creates a new building
+//   • UpdateByIDV1(ctx, id, request) - Updates an existing building
+//   • DeleteByIDV1(ctx, id) - Deletes a building by ID
+//   • DeleteBuildingsByIDV1(ctx, request) - Deletes multiple buildings by IDs
+//   • GetBuildingHistoryV1(ctx, id, rsqlQuery) - Retrieves building history
+//   • AddBuildingHistoryNotesV1(ctx, id, request) - Adds notes to building history
+//
+// Test Strategies Applied
+// -----------------------------------------------------------------------------
+//   ✓ Pattern 1: Full CRUD Lifecycle
+//     -- Reason: Service supports complete Create, Read, Update, Delete operations
+//     -- Tests: TestAcceptance_Buildings_Lifecycle
+//     -- Flow: Create → List → GetByID → Update → Verify → History → Delete
+//
+//   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
+//     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
+//     -- Tests: TestAcceptance_Buildings_ListWithRSQLFilter
+//     -- Flow: Create unique building → Filter with RSQL → Verify filtered results
+//
+//   ✓ Pattern 6: Bulk Operations
+//     -- Reason: Service provides DeleteBuildingsByIDV1 for bulk deletion
+//     -- Tests: (Included in additional test coverage)
+//     -- Flow: Create multiple → Bulk delete → Verify deletion
+//
+//   ✓ Pattern 7: Validation Errors
+//     -- Reason: Client-side validation prevents invalid API calls
+//     -- Tests: TestAcceptance_Buildings_ValidationErrors
+//     -- Cases: Empty IDs, nil requests, missing required fields
+//
+// Test Coverage
+// -----------------------------------------------------------------------------
+//   ✓ Create operations (single building creation)
+//   ✓ Read operations (GetByID, List with pagination)
+//   ✓ List with RSQL filtering (mandatory for RSQL-supported endpoints)
+//   ✓ Update operations (full resource update)
+//   ✓ Delete operations (single delete)
+//   ✓ Bulk delete operations (multiple buildings)
+//   ✓ History operations (add notes, retrieve history)
+//   ✓ Input validation and error handling
+//   ✓ Cleanup and resource management
+//
+// Notes
+// -----------------------------------------------------------------------------
+//   • RSQL testing is mandatory because ListV1 supports filtering
+//   • All tests register cleanup handlers to remove test buildings
+//   • History operations tested as API provides dedicated endpoints
+//   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
+//   • Bulk delete tested to verify multi-resource deletion functionality
+//
+// =============================================================================
 // TestAcceptance_Buildings_Lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → Update → GetByID (verify) → History → Delete.
 // =============================================================================

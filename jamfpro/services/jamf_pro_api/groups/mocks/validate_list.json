@@ -1,0 +1,32 @@
+{
+  "totalCount": 3,
+  "results": [
+    {
+      "groupPlatformId": "platform-1",
+      "groupJamfProId": "101",
+      "groupName": "Test Computer Group",
+      "groupDescription": "A test computer group",
+      "groupType": "COMPUTER",
+      "smart": false,
+      "membershipCount": 5
+    },
+    {
+      "groupPlatformId": "platform-2",
+      "groupJamfProId": "102",
+      "groupName": "Test Mobile Group",
+      "groupDescription": "A test mobile group",
+      "groupType": "MOBILE",
+      "smart": true,
+      "membershipCount": 10
+    },
+    {
+      "groupPlatformId": "platform-3",
+      "groupJamfProId": "103",
+      "groupName": "Another Computer Group",
+      "groupDescription": "Another computer group",
+      "groupType": "COMPUTER",
+      "smart": true,
+      "membershipCount": 3
+    }
+  ]
+}

@@ -27,6 +27,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/webhooks"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/access_management_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/account_preferences"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/adcs_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/advanced_mobile_device_searches"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_integrations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_role_privileges"
@@ -38,14 +39,28 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/certificate_authority"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/client_checkin"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_azure"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_idp"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_ldap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_ldap_keystore"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_distribution_point"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_extension_attributes"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_inventory"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_inventory_collection_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_prestages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/conditional_access"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/csa"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/declarative_device_management"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_communication_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_enrollments"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dss_declarations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/engage"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customizations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icons"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_information"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_version"
@@ -105,6 +120,7 @@ type Client struct {
 	// Jamf Pro API services
 	AccessManagementSettings        *access_management_settings.Service
 	AccountPreferences              *account_preferences.Service
+	AdcsSettings                    *adcs_settings.Service
 	AdvancedMobileDeviceSearches    *advanced_mobile_device_searches.Service
 	ApiIntegrations                 *api_integrations.Service
 	APIRolePrivileges               *api_role_privileges.Service
@@ -116,14 +132,28 @@ type Client struct {
 	CacheSettings                   *cache_settings.Service
 	Categories                      *categories.Service
 	ClientCheckin                   *client_checkin.Service
+	CloudAzure                      *cloud_azure.Service
+	CloudIdp                        *cloud_idp.Service
+	CloudLdap                       *cloud_ldap.Service
+	CloudLdapKeystore               *cloud_ldap_keystore.Service
 	CloudDistributionPoint          *cloud_distribution_point.Service
-	ComputerExtensionAttributes     *computer_extension_attributes.Service
-	ComputerGroups                  *computer_groups.Service
-	ComputerPrestages                *computer_prestages.Service
-	Departments                     *departments.Service
-	DeviceCommunicationSettings     *device_communication_settings.Service
+	ComputerExtensionAttributes            *computer_extension_attributes.Service
+	ComputerInventory                      *computer_inventory.Service
+	ComputerInventoryCollectionSettings    *computer_inventory_collection_settings.Service
+	ComputerGroups                         *computer_groups.Service
+	ComputerPrestages                      *computer_prestages.Service
+	ConditionalAccess                      *conditional_access.Service
+	Csa                                    *csa.Service
+	DeclarativeDeviceManagement            *declarative_device_management.Service
+	Departments                             *departments.Service
+	DeviceCommunicationSettings             *device_communication_settings.Service
+	DeviceEnrollments                       *device_enrollments.Service
 	DockItems                       *dock_items.Service
+	DSSDeclarations                 *dss_declarations.Service
+	Engage                          *engage.Service
+	EnrollmentCustomizations        *enrollment_customizations.Service
 	EnrollmentSettings              *enrollment_settings.Service
+	Groups                          *groups.Service
 	Icons                           *icons.Service
 	Ldap                            *ldap.Service
 	LoginCustomization              *login_customization.Service
@@ -183,6 +213,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		Webhooks:                        webhooks.NewService(transport),
 		AccessManagementSettings:        access_management_settings.NewService(transport),
 		AccountPreferences:              account_preferences.NewService(transport),
+		AdcsSettings:                    adcs_settings.NewService(transport),
 		AdvancedMobileDeviceSearches:    advanced_mobile_device_searches.NewService(transport),
 		ApiIntegrations:                 api_integrations.NewService(transport),
 		APIRolePrivileges:               api_role_privileges.NewService(transport),
@@ -194,14 +225,28 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		CacheSettings:                   cache_settings.NewService(transport),
 		Categories:                      categories.NewService(transport),
 		ClientCheckin:                   client_checkin.NewService(transport),
+		CloudAzure:                      cloud_azure.NewService(transport),
+		CloudIdp:                        cloud_idp.NewService(transport),
+		CloudLdap:                       cloud_ldap.NewService(transport),
+		CloudLdapKeystore:               cloud_ldap_keystore.NewService(transport),
 		CloudDistributionPoint:          cloud_distribution_point.NewService(transport),
-		ComputerExtensionAttributes:     computer_extension_attributes.NewService(transport),
-		ComputerGroups:                  computer_groups.NewService(transport),
-		ComputerPrestages:               computer_prestages.NewService(transport),
-		Departments:                     departments.NewService(transport),
-		DeviceCommunicationSettings:     device_communication_settings.NewService(transport),
+		ComputerExtensionAttributes:            computer_extension_attributes.NewService(transport),
+		ComputerInventory:                      computer_inventory.NewService(transport),
+		ComputerInventoryCollectionSettings:    computer_inventory_collection_settings.NewService(transport),
+		ComputerGroups:                         computer_groups.NewService(transport),
+		ComputerPrestages:                      computer_prestages.NewService(transport),
+		ConditionalAccess:                      conditional_access.NewService(transport),
+		Csa:                                    csa.NewService(transport),
+		DeclarativeDeviceManagement:            declarative_device_management.NewService(transport),
+		Departments:                             departments.NewService(transport),
+		DeviceCommunicationSettings:             device_communication_settings.NewService(transport),
+		DeviceEnrollments:                       device_enrollments.NewService(transport),
 		DockItems:                       dock_items.NewService(transport),
+		DSSDeclarations:                 dss_declarations.NewService(transport),
+		Engage:                          engage.NewService(transport),
+		EnrollmentCustomizations:        enrollment_customizations.NewService(transport),
 		EnrollmentSettings:              enrollment_settings.NewService(transport),
+		Groups:                          groups.NewService(transport),
 		Icons:                           icons.NewService(transport),
 		Ldap:                            ldap.NewService(transport),
 		LoginCustomization:              login_customization.NewService(transport),
