@@ -37,6 +37,28 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-eligible-policies
 		GetEligiblePoliciesV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *interfaces.Response, error)
+
+		// GetHistoryV1 retrieves the onboarding history.
+		//
+		// Supports optional RSQL filtering and pagination via rsqlQuery
+		// (keys: filter, sort, page, page-size).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-history
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+
+		// AddHistoryNotesV1 adds notes to the onboarding history.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-onboarding-history
+		AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error)
+
+		// ExportHistoryV1 exports the onboarding history in the specified format (JSON or CSV).
+		//
+		// Supports optional RSQL filtering and pagination via rsqlQuery
+		// (keys: filter, sort, page, page-size, export-fields, export-labels).
+		// The Accept header determines the export format (application/json or text/csv).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-onboarding-history-export
+		ExportHistoryV1(ctx context.Context, acceptHeader string, rsqlQuery map[string]string, req *RequestExportHistory) ([]byte, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the onboarding-related methods of the Jamf Pro API.
@@ -123,4 +145,79 @@ func (s *Service) GetEligiblePoliciesV1(ctx context.Context, query map[string]st
 		return nil, resp, err
 	}
 	return &result, resp, nil
+}
+
+// GetHistoryV1 retrieves the onboarding history.
+// URL: GET /api/v1/onboarding/history
+// rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
+// https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-history
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+	endpoint := fmt.Sprintf("%s/history", EndpointOnboardingV1)
+
+	var result HistoryResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// AddHistoryNotesV1 adds notes to the onboarding history.
+// URL: POST /api/v1/onboarding/history
+// https://developer.jamf.com/jamf-pro/reference/post_v1-onboarding-history
+func (s *Service) AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error) {
+	if req == nil {
+		return nil, nil, fmt.Errorf("request body is required")
+	}
+	if req.Note == "" {
+		return nil, nil, fmt.Errorf("note is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/history", EndpointOnboardingV1)
+
+	var result ResponseAddHistoryNotes
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// ExportHistoryV1 exports the onboarding history in the specified format (JSON or CSV).
+// URL: POST /api/v1/onboarding/history/export
+// acceptHeader should be "application/json" or "text/csv".
+// rsqlQuery supports: filter (RSQL), sort, page, page-size, export-fields, export-labels (all optional).
+// https://developer.jamf.com/jamf-pro/reference/post_v1-onboarding-history-export
+func (s *Service) ExportHistoryV1(ctx context.Context, acceptHeader string, rsqlQuery map[string]string, req *RequestExportHistory) ([]byte, *interfaces.Response, error) {
+	endpoint := fmt.Sprintf("%s/history/export", EndpointOnboardingV1)
+
+	if acceptHeader == "" {
+		acceptHeader = mime.ApplicationJSON
+	}
+
+	headers := map[string]string{
+		"Accept":       acceptHeader,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, data, err := s.client.GetBytes(ctx, endpoint, rsqlQuery, headers)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return data, resp, nil
 }

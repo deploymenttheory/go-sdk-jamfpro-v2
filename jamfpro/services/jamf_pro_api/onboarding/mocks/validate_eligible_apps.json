@@ -1,0 +1,17 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "101",
+      "name": "Microsoft Office",
+      "scopeDescription": "All Computers",
+      "siteDescription": "None"
+    },
+    {
+      "id": "102",
+      "name": "Google Chrome",
+      "scopeDescription": "Engineering Department",
+      "siteDescription": "Main Site"
+    }
+  ]
+}

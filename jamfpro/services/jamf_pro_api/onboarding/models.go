@@ -45,3 +45,33 @@ type ResourceEligibilityListItem struct {
 	ScopeDescription string `json:"scopeDescription"`
 	SiteDescription  string `json:"siteDescription"`
 }
+
+type HistoryResponse struct {
+	TotalCount int                    `json:"totalCount"`
+	Results    []ResourceHistoryEntry `json:"results"`
+}
+
+type ResourceHistoryEntry struct {
+	ID       int     `json:"id"`
+	Username string  `json:"username"`
+	Date     string  `json:"date"`
+	Note     string  `json:"note"`
+	Details  *string `json:"details"`
+}
+
+type RequestAddHistoryNotes struct {
+	Note string `json:"note"`
+}
+
+type ResponseAddHistoryNotes struct {
+	ID   string `json:"id"`
+	Href string `json:"href"`
+}
+
+type RequestExportHistory struct {
+	Page     *int     `json:"page,omitempty"`
+	PageSize *int     `json:"pageSize,omitempty"`
+	Sort     []string `json:"sort,omitempty"`
+	Filter   *string  `json:"filter,omitempty"`
+	Fields   []string `json:"fields,omitempty"`
+}

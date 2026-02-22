@@ -307,6 +307,11 @@ func (c *Client) GetLogger() *zap.Logger {
 	return c.transport.GetLogger()
 }
 
+// GetTransport returns the underlying HTTP transport.
+func (c *Client) GetTransport() *client.Transport {
+	return c.transport
+}
+
 // EnableTracing enables OpenTelemetry HTTP tracing on the client's transport.
 // Pass nil to use default OTel config (global tracer, "jamfpro-client" service name).
 func (c *Client) EnableTracing(config *client.OTelConfig) error {

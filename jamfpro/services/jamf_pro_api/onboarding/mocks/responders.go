@@ -2,17 +2,30 @@ package mocks
 
 import (
 	"context"
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
-	"os"
-	"path/filepath"
-	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 )
+
+//go:embed validate_get.json
+var validateGetJSON []byte
+
+//go:embed validate_eligible_apps.json
+var validateEligibleAppsJSON []byte
+
+//go:embed validate_history.json
+var validateHistoryJSON []byte
+
+//go:embed validate_add_history_notes.json
+var validateAddHistoryNotesJSON []byte
+
+//go:embed validate_export_history.csv
+var validateExportHistoryCSV []byte
 
 type registeredResponse struct {
 	statusCode int
@@ -28,16 +41,40 @@ func NewOnboardingMock() *OnboardingMock {
 	return &OnboardingMock{responses: make(map[string]registeredResponse), logger: zap.NewNop()}
 }
 
-func (m *OnboardingMock) register(method, path string, statusCode int, fixture string) {
-	var body []byte
-	if fixture != "" {
-		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
-	}
+func (m *OnboardingMock) register(method, path string, statusCode int, body []byte) {
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
 func (m *OnboardingMock) RegisterGetMock() {
-	m.register("GET", "/api/v1/onboarding", 200, "validate_get.json")
+	m.register("GET", "/api/v1/onboarding", 200, validateGetJSON)
+}
+
+func (m *OnboardingMock) RegisterUpdateMock() {
+	m.register("PUT", "/api/v1/onboarding", 200, validateGetJSON)
+}
+
+func (m *OnboardingMock) RegisterGetEligibleAppsMock() {
+	m.register("GET", "/api/v1/onboarding/eligible-apps", 200, validateEligibleAppsJSON)
+}
+
+func (m *OnboardingMock) RegisterGetEligibleConfigurationProfilesMock() {
+	m.register("GET", "/api/v1/onboarding/eligible-configuration-profiles", 200, validateEligibleAppsJSON)
+}
+
+func (m *OnboardingMock) RegisterGetEligiblePoliciesMock() {
+	m.register("GET", "/api/v1/onboarding/eligible-policies", 200, validateEligibleAppsJSON)
+}
+
+func (m *OnboardingMock) RegisterGetHistoryMock() {
+	m.register("GET", "/api/v1/onboarding/history", 200, validateHistoryJSON)
+}
+
+func (m *OnboardingMock) RegisterAddHistoryNotesMock() {
+	m.register("POST", "/api/v1/onboarding/history", 201, validateAddHistoryNotesJSON)
+}
+
+func (m *OnboardingMock) RegisterExportHistoryMock() {
+	m.register("GET", "/api/v1/onboarding/history/export", 200, validateExportHistoryCSV)
 }
 
 func (m *OnboardingMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
@@ -50,11 +87,6 @@ func (m *OnboardingMock) dispatch(method, path string, result any) (*interfaces.
 		_ = json.Unmarshal(r.rawBody, result)
 	}
 	return resp, nil
-}
-
-func mustMocksDir() string {
-	_, filename, _, _ := runtime.Caller(0)
-	return filepath.Dir(filename)
 }
 
 func (m *OnboardingMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

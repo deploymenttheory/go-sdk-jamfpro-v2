@@ -1,0 +1,19 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": 1,
+      "username": "admin",
+      "date": "2024-01-15T10:30:00Z",
+      "note": "Updated onboarding configuration",
+      "details": "Added new policy to onboarding workflow"
+    },
+    {
+      "id": 2,
+      "username": "jdoe",
+      "date": "2024-01-10T14:20:00Z",
+      "note": "Initial onboarding setup",
+      "details": null
+    }
+  ]
+}

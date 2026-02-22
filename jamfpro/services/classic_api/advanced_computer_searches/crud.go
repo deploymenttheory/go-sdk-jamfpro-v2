@@ -32,7 +32,7 @@ type (
 		//
 		// Returns the created advanced computer search ID only (Classic API behavior).
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createadvancedcomputersearchbyid
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createadvancedcomputersearchgbyid
 		CreateAdvancedComputerSearch(ctx context.Context, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error)
 
 		// UpdateAdvancedComputerSearchByID updates the specified advanced computer search by ID.
@@ -153,7 +153,7 @@ func (s *Service) GetAdvancedComputerSearchByName(ctx context.Context, name stri
 // CreateAdvancedComputerSearch creates a new advanced computer search.
 // URL: POST /JSSResource/advancedcomputersearches/id/0
 // Returns the created advanced computer search ID only.
-// https://developer.jamf.com/jamf-pro/reference/createadvancedcomputersearchbyid
+// https://developer.jamf.com/jamf-pro/reference/createadvancedcomputersearchgbyid
 func (s *Service) CreateAdvancedComputerSearch(ctx context.Context, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
