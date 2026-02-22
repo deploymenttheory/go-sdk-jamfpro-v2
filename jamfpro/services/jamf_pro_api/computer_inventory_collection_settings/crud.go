@@ -10,26 +10,27 @@ import (
 
 type (
 	// ComputerInventoryCollectionSettingsServiceInterface defines the interface for Computer Inventory Collection Settings operations.
-	// Uses v2 API for all operations. Manages settings for computer inventory collection and custom application paths.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
 	ComputerInventoryCollectionSettingsServiceInterface interface {
-		// GetV2 returns the computer inventory collection settings (Get Computer Inventory Collection Settings).
+		// GetV2 retrieves the computer inventory collection settings.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
 		GetV2(ctx context.Context) (*ResourceComputerInventoryCollectionSettings, *interfaces.Response, error)
 
-		// UpdateV2 updates the computer inventory collection settings using merge-patch semantics (Update Computer Inventory Collection Settings).
+		// UpdateV2 updates the computer inventory collection settings.
+		//
+		// Returns 204 No Content on success with no response body.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-computer-inventory-collection-settings
-		UpdateV2(ctx context.Context, request *ResourceComputerInventoryCollectionSettings) (*interfaces.Response, error)
+		UpdateV2(ctx context.Context, settings *ResourceComputerInventoryCollectionSettings) (*interfaces.Response, error)
 
-		// CreateCustomPathV2 creates a custom application path for inventory collection (Create Custom Path).
+		// CreateCustomPathV2 creates a custom path for computer inventory collection settings.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-inventory-collection-settings-custom-path
-		CreateCustomPathV2(ctx context.Context, request *CustomPathRequest) (*CustomPathResponse, *interfaces.Response, error)
+		CreateCustomPathV2(ctx context.Context, req *RequestCustomPath) (*SubsetPathItem, *interfaces.Response, error)
 
-		// DeleteCustomPathByIDV2 deletes a custom application path by ID (Delete Custom Path).
+		// DeleteCustomPathByIDV2 deletes a custom path by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-inventory-collection-settings-custom-path-id
 		DeleteCustomPathByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
@@ -49,10 +50,12 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// GetV2 returns the computer inventory collection settings.
+// GetV2 retrieves the computer inventory collection settings.
 // URL: GET /api/v2/computer-inventory-collection-settings
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
+// https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
 func (s *Service) GetV2(ctx context.Context) (*ResourceComputerInventoryCollectionSettings, *interfaces.Response, error) {
+	endpoint := EndpointComputerInventoryCollectionSettingsV2
+
 	var result ResourceComputerInventoryCollectionSettings
 
 	headers := map[string]string{
@@ -60,7 +63,7 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceComputerInventoryCollecti
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointComputerInventoryCollectionSettingsV2, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -68,20 +71,23 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceComputerInventoryCollecti
 	return &result, resp, nil
 }
 
-// UpdateV2 updates the computer inventory collection settings using merge-patch semantics.
+// UpdateV2 updates the computer inventory collection settings.
 // URL: PATCH /api/v2/computer-inventory-collection-settings
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-computer-inventory-collection-settings
-func (s *Service) UpdateV2(ctx context.Context, request *ResourceComputerInventoryCollectionSettings) (*interfaces.Response, error) {
-	if request == nil {
-		return nil, fmt.Errorf("request is required")
+// Returns 204 No Content on success with no response body.
+// https://developer.jamf.com/jamf-pro/reference/patch_v2-computer-inventory-collection-settings
+func (s *Service) UpdateV2(ctx context.Context, settings *ResourceComputerInventoryCollectionSettings) (*interfaces.Response, error) {
+	if settings == nil {
+		return nil, fmt.Errorf("settings is required")
 	}
+
+	endpoint := EndpointComputerInventoryCollectionSettingsV2
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Patch(ctx, EndpointComputerInventoryCollectionSettingsV2, request, headers, nil)
+	resp, err := s.client.Patch(ctx, endpoint, settings, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -89,24 +95,27 @@ func (s *Service) UpdateV2(ctx context.Context, request *ResourceComputerInvento
 	return resp, nil
 }
 
-// CreateCustomPathV2 creates a custom application path for inventory collection.
+// CreateCustomPathV2 creates a custom path for computer inventory collection settings.
 // URL: POST /api/v2/computer-inventory-collection-settings/custom-path
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-inventory-collection-settings-custom-path
-func (s *Service) CreateCustomPathV2(ctx context.Context, request *CustomPathRequest) (*CustomPathResponse, *interfaces.Response, error) {
-	if request == nil {
-		return nil, nil, fmt.Errorf("request is required")
+// https://developer.jamf.com/jamf-pro/reference/post_v2-computer-inventory-collection-settings-custom-path
+func (s *Service) CreateCustomPathV2(ctx context.Context, req *RequestCustomPath) (*SubsetPathItem, *interfaces.Response, error) {
+	if req == nil {
+		return nil, nil, fmt.Errorf("request body is required")
+	}
+	if req.Path == "" {
+		return nil, nil, fmt.Errorf("path is required")
 	}
 
 	endpoint := fmt.Sprintf("%s/custom-path", EndpointComputerInventoryCollectionSettingsV2)
 
-	var result CustomPathResponse
+	var result SubsetPathItem
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -114,12 +123,12 @@ func (s *Service) CreateCustomPathV2(ctx context.Context, request *CustomPathReq
 	return &result, resp, nil
 }
 
-// DeleteCustomPathByIDV2 deletes a custom application path by ID.
+// DeleteCustomPathByIDV2 deletes a custom path by ID.
 // URL: DELETE /api/v2/computer-inventory-collection-settings/custom-path/{id}
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-inventory-collection-settings-custom-path-id
+// https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-inventory-collection-settings-custom-path-id
 func (s *Service) DeleteCustomPathByIDV2(ctx context.Context, id string) (*interfaces.Response, error) {
 	if id == "" {
-		return nil, fmt.Errorf("id is required")
+		return nil, fmt.Errorf("custom path ID is required")
 	}
 
 	endpoint := fmt.Sprintf("%s/custom-path/%s", EndpointComputerInventoryCollectionSettingsV2, id)

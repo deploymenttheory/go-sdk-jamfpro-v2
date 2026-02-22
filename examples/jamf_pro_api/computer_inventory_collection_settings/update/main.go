@@ -22,7 +22,7 @@ func main() {
 	}
 
 	updateReq := &computer_inventory_collection_settings.ResourceComputerInventoryCollectionSettings{
-		ComputerInventoryCollectionPreferences: computer_inventory_collection_settings.Preferences{
+		ComputerInventoryCollectionPreferences: computer_inventory_collection_settings.SubsetPreferences{
 			MonitorApplicationUsage: true,
 			IncludePackages:         true,
 			IncludePrinters:         true,

@@ -1,13 +1,11 @@
 package computer_inventory_collection_settings
 
-// ResourceComputerInventoryCollectionSettings represents the computer inventory collection settings.
 type ResourceComputerInventoryCollectionSettings struct {
-	ComputerInventoryCollectionPreferences Preferences    `json:"computerInventoryCollectionPreferences"`
-	ApplicationPaths                       []PathResponse `json:"applicationPaths"`
+	ComputerInventoryCollectionPreferences SubsetPreferences    `json:"computerInventoryCollectionPreferences"`
+	ApplicationPaths                       []SubsetPathResponse `json:"applicationPaths"`
 }
 
-// Preferences represents the computer inventory collection preferences.
-type Preferences struct {
+type SubsetPreferences struct {
 	MonitorApplicationUsage                      bool `json:"monitorApplicationUsage"`
 	IncludePackages                              bool `json:"includePackages"`
 	IncludeSoftwareUpdates                       bool `json:"includeSoftwareUpdates"`
@@ -25,20 +23,17 @@ type Preferences struct {
 	CollectUnmanagedCertificates                 bool `json:"collectUnmanagedCertificates"`
 }
 
-// PathResponse represents an application path in the response.
-type PathResponse struct {
+type SubsetPathResponse struct {
 	ID   string `json:"id"`
 	Path string `json:"path"`
 }
 
-// CustomPathRequest represents the request body for creating a custom path.
-type CustomPathRequest struct {
-	Scope string `json:"scope"`
-	Path  string `json:"path"`
-}
-
-// CustomPathResponse represents the response after creating a custom path.
-type CustomPathResponse struct {
+type SubsetPathItem struct {
 	ID   string `json:"id"`
 	Href string `json:"href"`
+}
+
+type RequestCustomPath struct {
+	Scope string `json:"scope"`
+	Path  string `json:"path"`
 }

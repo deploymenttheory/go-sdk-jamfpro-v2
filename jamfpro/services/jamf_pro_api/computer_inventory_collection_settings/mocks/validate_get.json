@@ -11,10 +11,10 @@
     "includeServices": false,
     "collectSyncedMobileDeviceInfo": true,
     "updateLdapInfoOnComputerInventorySubmissions": false,
-    "monitorBeacons": true,
+    "monitorBeacons": false,
     "allowChangingUserAndLocation": true,
     "useUnixUserPaths": false,
-    "collectUnmanagedCertificates": true
+    "collectUnmanagedCertificates": false
   },
   "applicationPaths": [
     {
@@ -23,7 +23,7 @@
     },
     {
       "id": "2",
-      "path": "/Library/Application Support"
+      "path": "/System/Applications"
     }
   ]
 }

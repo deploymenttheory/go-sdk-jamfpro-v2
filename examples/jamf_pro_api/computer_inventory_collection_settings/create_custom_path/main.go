@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	createReq := &computer_inventory_collection_settings.CustomPathRequest{
+	createReq := &computer_inventory_collection_settings.RequestCustomPath{
 		Scope: "USER_LIBRARY",
 		Path:  "/Library/CustomApplications",
 	}
