@@ -227,18 +227,41 @@ func generateReport(results []TestResult) error {
 	fmt.Fprintf(writer, "Successful (200): %d\n", successCount)
 	fmt.Fprintf(writer, "Failed (non-200): %d\n\n", failureCount)
 
-	// Write failures
+	// Write failures grouped by service
 	if len(failures) > 0 {
 		fmt.Fprintf(writer, "\nFAILED DOCUMENTATION URLs (Non-200 Responses)\n")
 		fmt.Fprintf(writer, "%s\n\n", strings.Repeat("=", 80))
 
-		for i, result := range failures {
-			fmt.Fprintf(writer, "%d. URL: %s\n", i+1, result.URL)
-			fmt.Fprintf(writer, "   Service: %s\n", result.ServiceName)
-			fmt.Fprintf(writer, "   File: %s:%d\n", result.FilePath, result.LineNumber)
-			fmt.Fprintf(writer, "   Status Code: %d\n", result.StatusCode)
-			if result.Error != nil {
-				fmt.Fprintf(writer, "   Error: %v\n", result.Error)
+		// Group failures by service name
+		serviceGroups := make(map[string][]TestResult)
+		for _, result := range failures {
+			serviceGroups[result.ServiceName] = append(serviceGroups[result.ServiceName], result)
+		}
+
+		// Get sorted service names
+		serviceNames := make([]string, 0, len(serviceGroups))
+		for serviceName := range serviceGroups {
+			serviceNames = append(serviceNames, serviceName)
+		}
+		sort.Strings(serviceNames)
+
+		// Write failures grouped by service
+		overallCount := 1
+		for _, serviceName := range serviceNames {
+			serviceFailures := serviceGroups[serviceName]
+
+			fmt.Fprintf(writer, "Service: %s (%d failed URLs)\n", serviceName, len(serviceFailures))
+			fmt.Fprintf(writer, "%s\n", strings.Repeat("-", 80))
+
+			for _, result := range serviceFailures {
+				fmt.Fprintf(writer, "%d. URL: %s\n", overallCount, result.URL)
+				fmt.Fprintf(writer, "   File: %s:%d\n", result.FilePath, result.LineNumber)
+				fmt.Fprintf(writer, "   Status Code: %d\n", result.StatusCode)
+				if result.Error != nil {
+					fmt.Fprintf(writer, "   Error: %v\n", result.Error)
+				}
+				fmt.Fprintf(writer, "\n")
+				overallCount++
 			}
 			fmt.Fprintf(writer, "\n")
 		}

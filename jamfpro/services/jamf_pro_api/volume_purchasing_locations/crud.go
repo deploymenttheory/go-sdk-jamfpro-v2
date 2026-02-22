@@ -47,6 +47,21 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id-content
 		GetContentV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ContentListResponse, *interfaces.Response, error)
+
+		// GetHistoryV1 returns the history for the specified volume purchasing location.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id-history
+		GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryListResponse, *interfaces.Response, error)
+
+		// AddHistoryNotesV1 adds history notes to the specified volume purchasing location.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-history
+		AddHistoryNotesV1(ctx context.Context, id string, request *AddHistoryNotesRequest) (*interfaces.Response, error)
+
+		// RevokeVolumePurchasingLocationLicensesByIDV1 revokes licenses for the specified volume purchasing location.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-revoke-licenses
+		RevokeVolumePurchasingLocationLicensesByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the volume purchasing locations-related methods of the Jamf Pro API.
@@ -236,4 +251,79 @@ func (s *Service) GetContentV1(ctx context.Context, id string, rsqlQuery map[str
 	}
 
 	return &result, resp, nil
+}
+
+// GetHistoryV1 returns the history for the specified volume purchasing location.
+// URL: GET /api/v1/volume-purchasing-locations/{id}/history
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id-history
+func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryListResponse, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("volume purchasing location ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/history", EndpointVolumePurchasingLocationsV1, id)
+
+	var result HistoryListResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// AddHistoryNotesV1 adds history notes to the specified volume purchasing location.
+// URL: POST /api/v1/volume-purchasing-locations/{id}/history
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-history
+func (s *Service) AddHistoryNotesV1(ctx context.Context, id string, request *AddHistoryNotesRequest) (*interfaces.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("volume purchasing location ID is required")
+	}
+
+	if request == nil {
+		return nil, fmt.Errorf("request is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/history", EndpointVolumePurchasingLocationsV1, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// RevokeVolumePurchasingLocationLicensesByIDV1 revokes licenses for the specified volume purchasing location.
+// URL: POST /api/v1/volume-purchasing-locations/{id}/revoke-licenses
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-revoke-licenses
+func (s *Service) RevokeVolumePurchasingLocationLicensesByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("volume purchasing location ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/revoke-licenses", EndpointVolumePurchasingLocationsV1, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }

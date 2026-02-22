@@ -63,3 +63,23 @@ type ContentListResponse struct {
 	TotalCount int                           `json:"totalCount"`
 	Results    []VolumePurchasingSubsetContent `json:"results"`
 }
+
+// HistoryListResponse is the response for GetHistoryV1.
+type HistoryListResponse struct {
+	TotalCount int            `json:"totalCount"`
+	Results    []HistoryEntry `json:"results"`
+}
+
+// HistoryEntry represents an individual history record.
+type HistoryEntry struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Date     string `json:"date"`
+	Note     string `json:"note"`
+	Details  string `json:"details"`
+}
+
+// AddHistoryNotesRequest is the request for AddHistoryNotesV1.
+type AddHistoryNotesRequest struct {
+	ObjectHistoryNote string `json:"objectHistoryNote"`
+}

@@ -15,29 +15,29 @@ type (
 	VPPAccountsServiceInterface interface {
 		// ListVPPAccounts returns all VPP accounts.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallvppaccounts
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppadminaccount
 		ListVPPAccounts(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
 		// GetVPPAccountByID returns the specified VPP account by ID.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppaccountsbyid
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppadminaccountbyid
 		GetVPPAccountByID(ctx context.Context, id int) (*ResourceVPPAccount, *interfaces.Response, error)
 
 		// CreateVPPAccount creates a new VPP account.
 		//
 		// Returns the created VPP account with its assigned ID.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createvppaccount
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createvppadminaccountbyid
 		CreateVPPAccount(ctx context.Context, req *RequestVPPAccount) (*ResourceVPPAccount, *interfaces.Response, error)
 
 		// UpdateVPPAccountByID updates the specified VPP account by ID.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatevppaccountbyid
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatevppadminaccountbyid
 		UpdateVPPAccountByID(ctx context.Context, id int, req *RequestVPPAccount) (*ResourceVPPAccount, *interfaces.Response, error)
 
 		// DeleteVPPAccountByID removes the specified VPP account by ID.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletevppaccountbyid
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletevppadminaccountbyid
 		DeleteVPPAccountByID(ctx context.Context, id int) (*interfaces.Response, error)
 	}
 
@@ -62,7 +62,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListVPPAccounts returns all VPP accounts.
 // URL: GET /JSSResource/vppaccounts
-// https://developer.jamf.com/jamf-pro/reference/findallvppaccounts
+// https://developer.jamf.com/jamf-pro/reference/findvppadminaccount
 func (s *Service) ListVPPAccounts(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
@@ -83,7 +83,7 @@ func (s *Service) ListVPPAccounts(ctx context.Context) (*ListResponse, *interfac
 
 // GetVPPAccountByID returns the specified VPP account by ID.
 // URL: GET /JSSResource/vppaccounts/id/{id}
-// https://developer.jamf.com/jamf-pro/reference/findvppaccountsbyid
+// https://developer.jamf.com/jamf-pro/reference/findvppadminaccountbyid
 func (s *Service) GetVPPAccountByID(ctx context.Context, id int) (*ResourceVPPAccount, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("VPP account ID must be a positive integer")
@@ -109,7 +109,7 @@ func (s *Service) GetVPPAccountByID(ctx context.Context, id int) (*ResourceVPPAc
 // CreateVPPAccount creates a new VPP account.
 // URL: POST /JSSResource/vppaccounts/id/0
 // Returns the created VPP account with its assigned ID.
-// https://developer.jamf.com/jamf-pro/reference/createvppaccount
+// https://developer.jamf.com/jamf-pro/reference/createvppadminaccountbyid
 func (s *Service) CreateVPPAccount(ctx context.Context, req *RequestVPPAccount) (*ResourceVPPAccount, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
@@ -134,7 +134,7 @@ func (s *Service) CreateVPPAccount(ctx context.Context, req *RequestVPPAccount) 
 
 // UpdateVPPAccountByID updates the specified VPP account by ID.
 // URL: PUT /JSSResource/vppaccounts/id/{id}
-// https://developer.jamf.com/jamf-pro/reference/updatevppaccountbyid
+// https://developer.jamf.com/jamf-pro/reference/updatevppadminaccountbyid
 func (s *Service) UpdateVPPAccountByID(ctx context.Context, id int, req *RequestVPPAccount) (*ResourceVPPAccount, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("VPP account ID must be a positive integer")
@@ -162,7 +162,7 @@ func (s *Service) UpdateVPPAccountByID(ctx context.Context, id int, req *Request
 
 // DeleteVPPAccountByID removes the specified VPP account by ID.
 // URL: DELETE /JSSResource/vppaccounts/id/{id}
-// https://developer.jamf.com/jamf-pro/reference/deletevppaccountbyid
+// https://developer.jamf.com/jamf-pro/reference/deletevppadminaccountbyid
 func (s *Service) DeleteVPPAccountByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("VPP account ID must be a positive integer")

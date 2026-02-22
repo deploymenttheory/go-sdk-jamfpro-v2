@@ -15,7 +15,7 @@ type (
 	WebhooksServiceInterface interface {
 		// ListWebhooks returns all webhooks.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallwebhooks
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooks
 		ListWebhooks(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
 		// GetWebhookByID returns the specified webhook by ID.
@@ -77,7 +77,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListWebhooks returns all webhooks.
 // URL: GET /JSSResource/webhooks
-// https://developer.jamf.com/jamf-pro/reference/findallwebhooks
+// https://developer.jamf.com/jamf-pro/reference/findwebhooks
 func (s *Service) ListWebhooks(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
