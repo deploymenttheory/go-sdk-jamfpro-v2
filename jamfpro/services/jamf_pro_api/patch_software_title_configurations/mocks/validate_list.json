@@ -1,0 +1,61 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "displayName": "Google Chrome",
+      "softwareTitleId": "101",
+      "categoryId": "1",
+      "siteId": "-1",
+      "uiNotifications": true,
+      "emailNotifications": false,
+      "extensionAttributes": [
+        {
+          "accepted": true,
+          "eaId": "10"
+        }
+      ],
+      "softwareTitleName": "Google Chrome",
+      "softwareTitleNameId": "GoogleChrome",
+      "softwareTitlePublisher": "Google Inc.",
+      "jamfOfficial": true,
+      "patchSourceName": "Jamf",
+      "patchSourceEnabled": true,
+      "packages": [
+        {
+          "packageId": "200",
+          "version": "121.0.6167.85",
+          "displayName": "GoogleChrome-121.0.6167.85.pkg"
+        },
+        {
+          "packageId": "201",
+          "version": "120.0.6099.216",
+          "displayName": "GoogleChrome-120.0.6099.216.pkg"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "displayName": "Mozilla Firefox",
+      "softwareTitleId": "102",
+      "categoryId": "1",
+      "siteId": "-1",
+      "uiNotifications": false,
+      "emailNotifications": true,
+      "extensionAttributes": [],
+      "softwareTitleName": "Mozilla Firefox",
+      "softwareTitleNameId": "MozillaFirefox",
+      "softwareTitlePublisher": "Mozilla",
+      "jamfOfficial": true,
+      "patchSourceName": "Jamf",
+      "patchSourceEnabled": true,
+      "packages": [
+        {
+          "packageId": "202",
+          "version": "122.0",
+          "displayName": "Firefox-122.0.pkg"
+        }
+      ]
+    }
+  ]
+}

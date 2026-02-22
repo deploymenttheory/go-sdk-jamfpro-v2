@@ -1,0 +1,11 @@
+{
+  "httpStatus": 200,
+  "errors": [
+    {
+      "code": "PROCESS_STOPPED",
+      "field": "",
+      "description": "Feature toggle process has been forcefully stopped",
+      "id": "0"
+    }
+  ]
+}

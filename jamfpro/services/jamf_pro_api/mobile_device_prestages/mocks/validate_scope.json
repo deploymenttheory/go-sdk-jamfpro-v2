@@ -1,0 +1,16 @@
+{
+  "prestageId": "1",
+  "assignments": [
+    {
+      "serialNumber": "C02ABCDEFGH",
+      "assignmentDate": "2024-01-15T10:30:00Z",
+      "userAssigned": "admin@example.com"
+    },
+    {
+      "serialNumber": "C02XYZABCDE",
+      "assignmentDate": "2024-01-16T14:20:00Z",
+      "userAssigned": "admin@example.com"
+    }
+  ],
+  "versionLock": 0
+}

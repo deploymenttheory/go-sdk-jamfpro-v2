@@ -65,6 +65,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_information"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_version"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/ldap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/local_admin_password"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/locales"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/login_customization"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/adue_session_token_settings"
@@ -75,11 +76,15 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/service_discovery_enrollment"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_certificate"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/managed_software_updates"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/notifications"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/onboarding"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/patch_policies"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/patch_software_title_configurations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/policy_properties"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smtp_server"
@@ -156,7 +161,9 @@ type Client struct {
 	Groups                          *groups.Service
 	Icons                           *icons.Service
 	Ldap                            *ldap.Service
+	LocalAdminPassword              *local_admin_password.Service
 	LoginCustomization              *login_customization.Service
+	ManagedSoftwareUpdates          *managed_software_updates.Service
 	ServiceDiscoveryEnrollment      *service_discovery_enrollment.Service
 	SelfServiceSettings              *self_service_settings.Service
 	Reenrollment                     *reenrollment.Service
@@ -168,9 +175,12 @@ type Client struct {
 	Locales                         *locales.Service
 	MobileDeviceExtensionAttributes *mobile_device_extension_attributes.Service
 	MobileDeviceGroups              *mobile_device_groups.Service
+	MobileDevicePrestages           *mobile_device_prestages.Service
 	Notifications                   *notifications.Service
 	Onboarding                      *onboarding.Service
 	Packages                        *packages.Service
+	PatchPolicies                   *patch_policies.Service
+	PatchSoftwareTitleConfigurations *patch_software_title_configurations.Service
 	PolicyProperties                *policy_properties.Service
 	ReturnToService                 *return_to_service.Service
 	Scripts                         *scripts.Service
@@ -249,7 +259,9 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		Groups:                          groups.NewService(transport),
 		Icons:                           icons.NewService(transport),
 		Ldap:                            ldap.NewService(transport),
+		LocalAdminPassword:              local_admin_password.NewService(transport),
 		LoginCustomization:              login_customization.NewService(transport),
+		ManagedSoftwareUpdates:          managed_software_updates.NewService(transport),
 		ServiceDiscoveryEnrollment:      service_discovery_enrollment.NewService(transport),
 		SelfServiceSettings:              self_service_settings.NewService(transport),
 		Reenrollment:                     reenrollment.NewService(transport),
@@ -261,9 +273,12 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		Locales:                         locales.NewService(transport),
 		MobileDeviceExtensionAttributes: mobile_device_extension_attributes.NewService(transport),
 		MobileDeviceGroups:              mobile_device_groups.NewService(transport),
+		MobileDevicePrestages:           mobile_device_prestages.NewService(transport),
 		Notifications:                   notifications.NewService(transport),
 		Onboarding:                      onboarding.NewService(transport),
 		Packages:                        packages.NewService(transport),
+		PatchPolicies:                   patch_policies.NewService(transport),
+		PatchSoftwareTitleConfigurations: patch_software_title_configurations.NewService(transport),
 		PolicyProperties:                policy_properties.NewService(transport),
 		ReturnToService:                 return_to_service.NewService(transport),
 		Scripts:                         scripts.NewService(transport),

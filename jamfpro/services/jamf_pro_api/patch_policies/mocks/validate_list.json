@@ -1,0 +1,47 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "name": "Adobe Acrobat Reader DC Patch Policy",
+      "enabled": true,
+      "targetPatchVersion": "24.001.20643",
+      "deploymentMethod": "PROMPT_USERS_TO_SELF_SERVICE",
+      "softwareTitleId": "138",
+      "softwareTitleConfigurationId": "8e9f10a1-2b3c-4d5e-6f7a-8b9c0d1e2f3a",
+      "killAppsDelayMinutes": 5,
+      "killAppsMessage": "Adobe Acrobat Reader will quit in 5 minutes to apply updates. Please save your work.",
+      "downgrade": false,
+      "patchUnknownVersion": false,
+      "notificationHeader": "Adobe Acrobat Reader Update Available",
+      "selfServiceEnforceDeadline": true,
+      "selfServiceDeadline": 7,
+      "installButtonText": "Install Update",
+      "selfServiceDescription": "This update includes security fixes and performance improvements for Adobe Acrobat Reader DC.",
+      "iconId": "101",
+      "reminderFrequency": 1,
+      "reminderEnabled": true
+    },
+    {
+      "id": "2",
+      "name": "Google Chrome Patch Policy",
+      "enabled": true,
+      "targetPatchVersion": "122.0.6261.94",
+      "deploymentMethod": "INSTALL_ASAP",
+      "softwareTitleId": "125",
+      "softwareTitleConfigurationId": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
+      "killAppsDelayMinutes": 0,
+      "killAppsMessage": "",
+      "downgrade": false,
+      "patchUnknownVersion": true,
+      "notificationHeader": "Chrome Update Required",
+      "selfServiceEnforceDeadline": false,
+      "selfServiceDeadline": 0,
+      "installButtonText": "Update Now",
+      "selfServiceDescription": "Chrome security update - install as soon as possible.",
+      "iconId": "102",
+      "reminderFrequency": 0,
+      "reminderEnabled": false
+    }
+  ]
+}

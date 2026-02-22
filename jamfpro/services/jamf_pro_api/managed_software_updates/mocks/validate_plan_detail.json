@@ -1,0 +1,19 @@
+{
+  "planUuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "device": {
+    "deviceId": "12345",
+    "objectType": "COMPUTER",
+    "href": "/api/v1/computers-inventory/12345"
+  },
+  "updateAction": "DOWNLOAD_INSTALL_ALLOW_DEFERRAL",
+  "versionType": "LATEST_MAJOR",
+  "specificVersion": "",
+  "buildVersion": "",
+  "maxDeferrals": 3,
+  "forceInstallLocalDateTime": "2024-03-15T14:00:00",
+  "recipeId": "",
+  "status": {
+    "state": "PENDING",
+    "errorReasons": []
+  }
+}

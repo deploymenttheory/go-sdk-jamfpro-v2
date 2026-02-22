@@ -3,6 +3,7 @@ module github.com/deploymenttheory/go-sdk-jamfpro-v2
 go 1.25.0
 
 require (
+	github.com/mitchellh/mapstructure v1.5.0
 	github.com/stretchr/testify v1.11.1
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.65.0
 	go.opentelemetry.io/otel v1.40.0

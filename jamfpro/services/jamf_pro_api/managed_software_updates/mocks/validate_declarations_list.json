@@ -1,0 +1,16 @@
+{
+  "declarations": [
+    {
+      "uuid": "decl-uuid-1234",
+      "payloadJson": "{\"DeclarationType\":\"com.apple.configuration.softwareupdate.enforcement.specific\",\"PayloadVersion\":1,\"PayloadIdentifier\":\"com.example.update.1\"}",
+      "type": "com.apple.configuration.softwareupdate.enforcement.specific",
+      "group": "updates"
+    },
+    {
+      "uuid": "decl-uuid-5678",
+      "payloadJson": "{\"DeclarationType\":\"com.apple.configuration.softwareupdate.settings\",\"PayloadVersion\":1,\"PayloadIdentifier\":\"com.example.update.settings\"}",
+      "type": "com.apple.configuration.softwareupdate.settings",
+      "group": "updates"
+    }
+  ]
+}

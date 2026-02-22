@@ -1,0 +1,13 @@
+{
+  "plans": [
+    {
+      "device": {
+        "deviceId": "12345",
+        "objectType": "COMPUTER",
+        "href": "/api/v1/computers-inventory/12345"
+      },
+      "planId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "href": "/api/v1/managed-software-updates/plans/a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    }
+  ]
+}

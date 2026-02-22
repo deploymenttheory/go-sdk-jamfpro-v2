@@ -1,0 +1,15 @@
+{
+  "toggleOn": {
+    "startTime": "2024-03-01T10:00:00Z",
+    "endTime": "2024-03-01T10:05:00Z",
+    "elapsedTime": 300000,
+    "state": "COMPLETED",
+    "totalRecords": 1000,
+    "processedRecords": 1000,
+    "percentComplete": 100.0,
+    "formattedPercentComplete": "100%",
+    "exitState": "SUCCESS",
+    "exitMessage": "Feature toggle enabled successfully"
+  },
+  "toggleOff": null
+}

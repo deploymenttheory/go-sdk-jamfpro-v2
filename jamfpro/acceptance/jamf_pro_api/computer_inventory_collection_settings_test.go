@@ -100,7 +100,7 @@ func TestComputerInventoryCollectionSettings_CustomPath(t *testing.T) {
 
 	svc := acc.Client.ComputerInventoryCollectionSettings
 
-	createReq := &computer_inventory_collection_settings.CustomPathRequest{
+	createReq := &computer_inventory_collection_settings.RequestCustomPath{
 		Scope: "USER_LIBRARY",
 		Path:  "/Library/TestPath",
 	}
