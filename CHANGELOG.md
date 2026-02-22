@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.1.0...v0.2.0) (2026-02-22)
+
+
+### Features
+
+* feat:  ([1e28505](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/1e2850586360115921ac8ba0868921226e179de2))
+* enhance onboarding API with history and notes functionality ([3fdd241](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/3fdd2412938ed171b94baeea83ee46579a339af9))
+* update .gitignore and enhance jamfpro API client ([7d9c09f](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/7d9c09fa01f13d41b2c440b5e7bf67531d1a02b7))
+
 ## 0.1.0 (2026-02-20)
 
 
