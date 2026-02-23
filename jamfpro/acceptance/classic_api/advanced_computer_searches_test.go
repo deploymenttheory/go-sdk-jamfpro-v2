@@ -29,7 +29,7 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test advanced computer search")
 
-	searchName := uniqueName("acc-test-search")
+	searchName := acc.UniqueName("acc-test-search")
 	createReq := &advanced_computer_searches.RequestAdvancedComputerSearch{
 		Name:   searchName,
 		ViewAs: "Standard Web Page",
@@ -55,8 +55,8 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateAdvancedComputerSearch(ctx1, createReq)
-	require.NoError(t, err, "CreateAdvancedComputerSearch should not return an error")
+	created, createResp, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
@@ -68,7 +68,7 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteAdvancedComputerSearchByID(cleanupCtx, searchID)
+		_, delErr := svc.DeleteByID(cleanupCtx, searchID)
 		acc.LogCleanupDeleteError(t, "advanced computer search", fmt.Sprintf("%d", searchID), delErr)
 	})
 
@@ -80,8 +80,8 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListAdvancedComputerSearches(ctx2)
-	require.NoError(t, err, "ListAdvancedComputerSearches should not return an error")
+	list, listResp, err := svc.List(ctx2)
+	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.Size, "size should be positive")
@@ -105,8 +105,8 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetAdvancedComputerSearchByID(ctx3, searchID)
-	require.NoError(t, err, "GetAdvancedComputerSearchByID should not return an error")
+	fetched, fetchResp, err := svc.GetByID(ctx3, searchID)
+	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, searchID, fetched.ID)
@@ -125,8 +125,8 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetAdvancedComputerSearchByName(ctx4, searchName)
-	require.NoError(t, err, "GetAdvancedComputerSearchByName should not return an error")
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, searchName)
+	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
 	assert.Equal(t, searchID, fetchedByName.ID)
@@ -136,7 +136,7 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-search-updated")
+	updatedName := acc.UniqueName("acc-test-search-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating search ID=%d to name=%q", searchID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -163,8 +163,8 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 			{Name: "Operating System"},
 		},
 	}
-	updated, updateResp, err := svc.UpdateAdvancedComputerSearchByID(ctx5, searchID, updateReq)
-	require.NoError(t, err, "UpdateAdvancedComputerSearchByID should not return an error")
+	updated, updateResp, err := svc.UpdateByID(ctx5, searchID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
@@ -193,8 +193,8 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 			},
 		},
 	}
-	reverted, revertResp, err := svc.UpdateAdvancedComputerSearchByName(ctx6, updatedName, revertReq)
-	require.NoError(t, err, "UpdateAdvancedComputerSearchByName should not return an error")
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
+	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
@@ -207,7 +207,7 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetAdvancedComputerSearchByID(ctx7, searchID)
+	verified, verifyResp, err := svc.GetByID(ctx7, searchID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -222,8 +222,8 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteAdvancedComputerSearchByID(ctx8, searchID)
-	require.NoError(t, err, "DeleteAdvancedComputerSearchByID should not return an error")
+	deleteResp, err := svc.DeleteByID(ctx8, searchID)
+	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Search ID=%d deleted", searchID)
@@ -239,7 +239,7 @@ func TestAcceptance_AdvancedComputerSearches_DeleteByName(t *testing.T) {
 	svc := acc.Client.AdvancedComputerSearches
 	ctx := context.Background()
 
-	searchName := uniqueName("acc-test-search-del")
+	searchName := acc.UniqueName("acc-test-search-del")
 	createReq := &advanced_computer_searches.RequestAdvancedComputerSearch{
 		Name:   searchName,
 		ViewAs: "Standard Web Page",
@@ -260,7 +260,7 @@ func TestAcceptance_AdvancedComputerSearches_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateAdvancedComputerSearch(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -270,15 +270,15 @@ func TestAcceptance_AdvancedComputerSearches_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteAdvancedComputerSearchByID(cleanupCtx, searchID)
+		_, delErr := svc.DeleteByID(cleanupCtx, searchID)
 		acc.LogCleanupDeleteError(t, "advanced computer search", fmt.Sprintf("%d", searchID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteAdvancedComputerSearchByName(ctx2, searchName)
-	require.NoError(t, err, "DeleteAdvancedComputerSearchByName should not return an error")
+	deleteResp, err := svc.DeleteByName(ctx2, searchName)
+	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Search %q deleted by name", searchName)
@@ -294,44 +294,44 @@ func TestAcceptance_AdvancedComputerSearches_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.AdvancedComputerSearches
 
-	t.Run("GetAdvancedComputerSearchByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetAdvancedComputerSearchByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced computer search ID must be a positive integer")
 	})
 
-	t.Run("GetAdvancedComputerSearchByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetAdvancedComputerSearchByName(context.Background(), "")
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced computer search name is required")
 	})
 
-	t.Run("CreateAdvancedComputerSearch_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateAdvancedComputerSearch(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdateAdvancedComputerSearchByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateAdvancedComputerSearchByID(context.Background(), 0, &advanced_computer_searches.RequestAdvancedComputerSearch{Name: "x"})
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.UpdateByID(context.Background(), 0, &advanced_computer_searches.RequestAdvancedComputerSearch{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced computer search ID must be a positive integer")
 	})
 
-	t.Run("UpdateAdvancedComputerSearchByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateAdvancedComputerSearchByName(context.Background(), "", &advanced_computer_searches.RequestAdvancedComputerSearch{Name: "x"})
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.UpdateByName(context.Background(), "", &advanced_computer_searches.RequestAdvancedComputerSearch{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced computer search name is required")
 	})
 
-	t.Run("DeleteAdvancedComputerSearchByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteAdvancedComputerSearchByID(context.Background(), 0)
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced computer search ID must be a positive integer")
 	})
 
-	t.Run("DeleteAdvancedComputerSearchByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteAdvancedComputerSearchByName(context.Background(), "")
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced computer search name is required")
 	})

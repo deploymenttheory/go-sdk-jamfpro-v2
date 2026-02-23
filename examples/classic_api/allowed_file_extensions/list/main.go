@@ -24,8 +24,8 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Call the ListAllowedFileExtensions function to retrieve the list of allowed file extensions
-	list, _, err := jamfClient.AllowedFileExtensions.ListAllowedFileExtensions(context.Background())
+	// Call the List function to retrieve the list of allowed file extensions
+	list, _, err := jamfClient.AllowedFileExtensions.List(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

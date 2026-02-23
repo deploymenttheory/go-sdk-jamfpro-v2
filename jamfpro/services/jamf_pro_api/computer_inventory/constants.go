@@ -2,8 +2,12 @@ package computer_inventory
 
 // API endpoint constants for Computer Inventory operations.
 const (
-	// EndpointComputerInventoryV1 is the base endpoint for Computer Inventory operations (v1 API).
-	EndpointComputerInventoryV1 = "/api/v1/computers-inventory"
+	// EndpointComputerInventoryV3 is the base endpoint for Computer Inventory operations (v3 API).
+	EndpointComputerInventoryV3 = "/api/v3/computers-inventory"
+
+	// EndpointComputerInventoryV1 is the base endpoint for Computer Inventory command operations (v1 API).
+	// Note: v1 uses singular "computer-inventory" (not plural).
+	EndpointComputerInventoryV1 = "/api/v1/computer-inventory"
 )
 
 // ComputerInventorySections contains all available sections for computer inventory API requests.

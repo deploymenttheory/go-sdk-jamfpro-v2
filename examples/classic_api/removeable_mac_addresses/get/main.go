@@ -1,4 +1,4 @@
-// Package main demonstrates GetRemoveableMacAddressByID — fetches a removeable MAC address by ID via the Classic API.
+// Package main demonstrates GetByID — fetches a removeable MAC address by ID via the Classic API.
 //
 // Run with: go run ./examples/classic_api/removeable_mac_addresses/get
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -33,9 +33,9 @@ func main() {
 
 	ctx := context.Background()
 
-	mac, resp, err := client.RemoveableMacAddresses.GetRemoveableMacAddressByID(ctx, id)
+	mac, resp, err := client.RemoveableMacAddresses.GetByID(ctx, id)
 	if err != nil {
-		log.Fatalf("GetRemoveableMacAddressByID failed: %v", err)
+		log.Fatalf("GetByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

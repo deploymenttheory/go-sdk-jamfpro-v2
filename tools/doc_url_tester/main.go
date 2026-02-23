@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,6 +13,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"golang.org/x/time/rate"
 )
 
 type DocURLInfo struct {
@@ -122,10 +125,16 @@ func extractDocURLs() ([]DocURLInfo, error) {
 func testDocURLs(urls []DocURLInfo) []TestResult {
 	results := make([]TestResult, len(urls))
 	client := &http.Client{
-		Timeout: 10 * time.Second,
+		Timeout: 15 * time.Second,
 	}
 
-	fmt.Printf("\nTesting %d documentation URLs with 20 concurrent workers...\n", len(urls))
+	// Reduce concurrent workers to avoid overwhelming the server
+	numWorkers := 5
+	
+	// Create rate limiter: 10 requests per second with burst of 5
+	limiter := rate.NewLimiter(rate.Limit(10), 5)
+
+	fmt.Printf("\nTesting %d documentation URLs with %d concurrent workers (rate limited)...\n", len(urls), numWorkers)
 
 	// Create channels for work distribution
 	jobs := make(chan struct {
@@ -134,7 +143,6 @@ func testDocURLs(urls []DocURLInfo) []TestResult {
 	}, len(urls))
 
 	// Use a worker pool for concurrent testing
-	numWorkers := 20
 	var wg sync.WaitGroup
 
 	// Start workers
@@ -143,6 +151,9 @@ func testDocURLs(urls []DocURLInfo) []TestResult {
 		go func() {
 			defer wg.Done()
 			for job := range jobs {
+				// Wait for rate limiter
+				limiter.Wait(context.Background())
+
 				result := TestResult{
 					URL:         job.urlInfo.URL,
 					ServiceName: job.urlInfo.ServiceName,
@@ -150,14 +161,39 @@ func testDocURLs(urls []DocURLInfo) []TestResult {
 					LineNumber:  job.urlInfo.LineNumber,
 				}
 
-				// Make HTTP GET request to the documentation URL
-				resp, err := client.Get(job.urlInfo.URL)
-				if err != nil {
-					result.Error = err
-					result.StatusCode = 0
-				} else {
-					result.StatusCode = resp.StatusCode
-					resp.Body.Close()
+				// Retry logic with exponential backoff
+				maxRetries := 3
+				baseDelay := 2 * time.Second
+
+				for attempt := 0; attempt <= maxRetries; attempt++ {
+					resp, err := client.Get(job.urlInfo.URL)
+					
+					if err != nil {
+						// Check if error is rate limiting (ENHANCE_YOUR_CALM or GOAWAY)
+						if isRateLimitError(err) && attempt < maxRetries {
+							delay := baseDelay * time.Duration(1<<uint(attempt))
+							fmt.Printf("[%d/%d] ⏳ Rate limited, retrying %s in %v (attempt %d/%d)\n", 
+								job.index+1, len(urls), job.urlInfo.URL, delay, attempt+1, maxRetries)
+							time.Sleep(delay)
+							continue
+						}
+						result.Error = err
+						result.StatusCode = 0
+					} else {
+						result.StatusCode = resp.StatusCode
+						resp.Body.Close()
+						
+						// Retry on 429 (Too Many Requests) status
+						if resp.StatusCode == 429 && attempt < maxRetries {
+							delay := baseDelay * time.Duration(1<<uint(attempt))
+							fmt.Printf("[%d/%d] ⏳ 429 Too Many Requests, retrying %s in %v (attempt %d/%d)\n", 
+								job.index+1, len(urls), job.urlInfo.URL, delay, attempt+1, maxRetries)
+							time.Sleep(delay)
+							continue
+						}
+					}
+					
+					break
 				}
 
 				results[job.index] = result
@@ -189,6 +225,16 @@ func testDocURLs(urls []DocURLInfo) []TestResult {
 	wg.Wait()
 
 	return results
+}
+
+func isRateLimitError(err error) bool {
+	if err == nil {
+		return false
+	}
+	errStr := err.Error()
+	return strings.Contains(errStr, "ENHANCE_YOUR_CALM") ||
+		strings.Contains(errStr, "GOAWAY") ||
+		strings.Contains(errStr, "server sent GOAWAY")
 }
 
 func generateReport(results []TestResult) error {

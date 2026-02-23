@@ -24,7 +24,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of UpdateWebhookByID — replace with the desired webhook ID and updated request
+	// Example usage of UpdateByID — replace with the desired webhook ID and updated request
 	webhookID := 1
 	updateReq := &webhooks.RequestWebhook{
 		Name:               "go-sdk-v2-Webhook-Updated",
@@ -37,7 +37,7 @@ func main() {
 		AuthenticationType: "NONE",
 	}
 
-	updatedWebhook, _, err := jamfClient.Webhooks.UpdateWebhookByID(context.Background(), webhookID, updateReq)
+	updatedWebhook, _, err := jamfClient.Webhooks.UpdateByID(context.Background(), webhookID, updateReq)
 	if err != nil {
 		fmt.Printf("Error updating webhook by ID: %v\n", err)
 		return

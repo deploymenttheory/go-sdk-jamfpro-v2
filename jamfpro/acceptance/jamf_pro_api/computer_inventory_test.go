@@ -10,13 +10,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestComputerInventory_List(t *testing.T) {
+func TestAcceptance_ComputerInventory_List(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
 	svc := acc.Client.ComputerInventory
 
-	result, _, err := svc.ListV1(ctx, nil)
+	result, _, err := svc.ListV3(ctx, nil)
 	if err != nil {
 		t.Skipf("Failed to list computer inventory (may not have computers enrolled): %v", err)
 		return
@@ -26,13 +26,13 @@ func TestComputerInventory_List(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestComputerInventory_GetByID(t *testing.T) {
+func TestAcceptance_ComputerInventory_GetByID(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
 	svc := acc.Client.ComputerInventory
 
-	list, _, err := svc.ListV1(ctx, nil)
+	list, _, err := svc.ListV3(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
 		t.Skipf("No computers available for testing: %v", err)
 		return
@@ -40,19 +40,19 @@ func TestComputerInventory_GetByID(t *testing.T) {
 
 	computerID := list.Results[0].ID
 
-	result, _, err := svc.GetByIDV1(ctx, computerID)
+	result, _, err := svc.GetByIDV3(ctx, computerID)
 	require.NoError(t, err)
 	assert.Equal(t, computerID, result.ID)
 	assert.NotEmpty(t, result.General.Name)
 }
 
-func TestComputerInventory_Update(t *testing.T) {
+func TestAcceptance_ComputerInventory_Update(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
 	svc := acc.Client.ComputerInventory
 
-	list, _, err := svc.ListV1(ctx, nil)
+	list, _, err := svc.ListV3(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
 		t.Skipf("No computers available for testing: %v", err)
 		return
@@ -60,7 +60,7 @@ func TestComputerInventory_Update(t *testing.T) {
 
 	computerID := list.Results[0].ID
 
-	original, _, err := svc.GetByIDV1(ctx, computerID)
+	original, _, err := svc.GetByIDV3(ctx, computerID)
 	require.NoError(t, err)
 
 	updateReq := &computer_inventory.ResourceComputerInventory{
@@ -69,7 +69,7 @@ func TestComputerInventory_Update(t *testing.T) {
 		},
 	}
 
-	updated, _, err := svc.UpdateByIDV1(ctx, computerID, updateReq)
+	updated, _, err := svc.UpdateByIDV3(ctx, computerID, updateReq)
 	if err != nil {
 		t.Skipf("Failed to update computer inventory (may not have permissions): %v", err)
 		return
@@ -80,16 +80,16 @@ func TestComputerInventory_Update(t *testing.T) {
 	restoreReq := &computer_inventory.ResourceComputerInventory{
 		UserAndLocation: original.UserAndLocation,
 	}
-	_, _, _ = svc.UpdateByIDV1(ctx, computerID, restoreReq)
+	_, _, _ = svc.UpdateByIDV3(ctx, computerID, restoreReq)
 }
 
-func TestComputerInventory_FileVault(t *testing.T) {
+func TestAcceptance_ComputerInventory_FileVault(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
 	svc := acc.Client.ComputerInventory
 
-	result, _, err := svc.ListFileVaultV1(ctx, nil)
+	result, _, err := svc.ListFileVaultV3(ctx)
 	if err != nil {
 		t.Skipf("Failed to list FileVault inventory (may not be configured): %v", err)
 		return
@@ -101,7 +101,7 @@ func TestComputerInventory_FileVault(t *testing.T) {
 	if len(result.Results) > 0 {
 		computerID := result.Results[0].ComputerId
 
-		fvDetails, _, err := svc.GetFileVaultByIDV1(ctx, computerID)
+		fvDetails, _, err := svc.GetFileVaultByIDV3(ctx, computerID)
 		if err != nil {
 			t.Skipf("Failed to get FileVault details: %v", err)
 			return
@@ -112,13 +112,13 @@ func TestComputerInventory_FileVault(t *testing.T) {
 	}
 }
 
-func TestComputerInventory_RecoveryLockPassword(t *testing.T) {
+func TestAcceptance_ComputerInventory_RecoveryLockPassword(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
 	svc := acc.Client.ComputerInventory
 
-	list, _, err := svc.ListV1(ctx, nil)
+	list, _, err := svc.ListV3(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
 		t.Skipf("No computers available for testing: %v", err)
 		return
@@ -126,11 +126,98 @@ func TestComputerInventory_RecoveryLockPassword(t *testing.T) {
 
 	computerID := list.Results[0].ID
 
-	result, _, err := svc.GetRecoveryLockPasswordByIDV1(ctx, computerID)
+	result, _, err := svc.GetRecoveryLockPasswordByIDV3(ctx, computerID)
 	if err != nil {
 		t.Skipf("Failed to get recovery lock password (may not be configured): %v", err)
 		return
 	}
 
 	assert.NotNil(t, result)
+}
+
+func TestAcceptance_ComputerInventory_GetDetailByID(t *testing.T) {
+	acc.RequireClient(t)
+	ctx := context.Background()
+
+	svc := acc.Client.ComputerInventory
+
+	list, _, err := svc.ListV3(ctx, nil)
+	if err != nil || len(list.Results) == 0 {
+		t.Skipf("No computers available for testing: %v", err)
+		return
+	}
+
+	computerID := list.Results[0].ID
+
+	result, _, err := svc.GetDetailByIDV3(ctx, computerID)
+	require.NoError(t, err)
+	assert.Equal(t, computerID, result.ID)
+	assert.NotEmpty(t, result.General.Name)
+}
+
+func TestAcceptance_ComputerInventory_DeviceLockPin(t *testing.T) {
+	acc.RequireClient(t)
+	ctx := context.Background()
+
+	svc := acc.Client.ComputerInventory
+
+	list, _, err := svc.ListV3(ctx, nil)
+	if err != nil || len(list.Results) == 0 {
+		t.Skipf("No computers available for testing: %v", err)
+		return
+	}
+
+	computerID := list.Results[0].ID
+
+	result, _, err := svc.GetDeviceLockPinByIDV3(ctx, computerID)
+	if err != nil {
+		t.Skipf("Failed to get device lock PIN (may not be configured): %v", err)
+		return
+	}
+
+	assert.NotNil(t, result)
+	assert.NotEmpty(t, result.Pin)
+}
+
+func TestAcceptance_ComputerInventory_Attachments(t *testing.T) {
+	acc.RequireClient(t)
+	ctx := context.Background()
+
+	svc := acc.Client.ComputerInventory
+
+	list, _, err := svc.ListV3(ctx, nil)
+	if err != nil || len(list.Results) == 0 {
+		t.Skipf("No computers available for testing: %v", err)
+		return
+	}
+
+	computerID := list.Results[0].ID
+
+	attachment := []byte("Test attachment content")
+
+	_, err = svc.UploadAttachmentByIDV3(ctx, computerID, attachment)
+	if err != nil {
+		t.Skipf("Failed to upload attachment (may not have permissions): %v", err)
+		return
+	}
+
+	computer, _, err := svc.GetByIDV3(ctx, computerID)
+	if err != nil || len(computer.Attachments) == 0 {
+		t.Skipf("No attachments found for computer: %v", err)
+		return
+	}
+
+	attachmentID := computer.Attachments[0].ID
+
+	downloadedData, _, err := svc.GetAttachmentByIDV3(ctx, computerID, attachmentID)
+	if err != nil {
+		t.Skipf("Failed to download attachment: %v", err)
+		return
+	}
+	assert.NotNil(t, downloadedData)
+
+	_, err = svc.DeleteAttachmentByIDV3(ctx, computerID, attachmentID)
+	if err != nil {
+		t.Skipf("Failed to delete attachment: %v", err)
+	}
 }

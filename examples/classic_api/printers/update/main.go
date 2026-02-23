@@ -34,7 +34,7 @@ func main() {
 		Model:    "Updated Printer Model",
 	}
 
-	updatedPrinter, _, err := jamfClient.Printers.UpdatePrinterByID(context.Background(), printerID, updateReq)
+	updatedPrinter, _, err := jamfClient.Printers.UpdateByID(context.Background(), printerID, updateReq)
 	if err != nil {
 		fmt.Printf("Error updating printer by ID: %v\n", err)
 		return

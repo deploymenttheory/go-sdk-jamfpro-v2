@@ -1,4 +1,4 @@
-// Package main demonstrates DeleteRestrictedSoftwareByID — removes restricted software via the Classic API.
+// Package main demonstrates DeleteByID — removes restricted software via the Classic API.
 //
 // Run with: go run ./examples/classic_api/restricted_software/delete
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Creates restricted software then deletes it.
@@ -37,15 +37,15 @@ func main() {
 			AllComputers: true,
 		},
 	}
-	created, _, err := client.RestrictedSoftware.CreateRestrictedSoftware(ctx, createReq)
+	created, _, err := client.RestrictedSoftware.Create(ctx, createReq)
 	if err != nil {
-		log.Fatalf("CreateRestrictedSoftware failed: %v", err)
+		log.Fatalf("Create failed: %v", err)
 	}
 	fmt.Printf("Created restricted software ID: %d\n", created.ID)
 
-	resp, err := client.RestrictedSoftware.DeleteRestrictedSoftwareByID(ctx, created.ID)
+	resp, err := client.RestrictedSoftware.DeleteByID(ctx, created.ID)
 	if err != nil {
-		log.Fatalf("DeleteRestrictedSoftwareByID failed: %v", err)
+		log.Fatalf("DeleteByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d (200 = success)\n", resp.StatusCode)

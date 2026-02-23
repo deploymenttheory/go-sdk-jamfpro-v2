@@ -29,15 +29,13 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration
 //     -- Reason: Singleton settings that cannot be created or deleted, only updated
-//     -- Tests: TestAcceptance_Onboarding_SettingsWorkflow
+//     -- Tests: TestAcceptance_Onboarding_GetV1, TestAcceptance_Onboarding_UpdateV1
 //     -- Flow: Get → Update → Verify → Restore
 //
 // Test Coverage
 // -----------------------------------------------------------------------------
 //   ✓ Get current settings
 //   ✓ Update settings
-//   ✓ Verify updated settings
-//   ✓ Restore original settings
 //   ✓ Get eligible apps
 //   ✓ Get eligible configuration profiles
 //   ✓ Get eligible policies
@@ -53,85 +51,122 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_Onboarding_Get(t *testing.T) {
+func TestAcceptance_Onboarding_GetV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get onboarding settings")
 	result, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	acc.LogTestSuccess(t, "Retrieved onboarding settings successfully")
 }
 
-func TestAcceptance_Onboarding_GetEligibleApps(t *testing.T) {
+func TestAcceptance_Onboarding_UpdateV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get eligible apps for onboarding")
+	current, _, err := svc.GetV1(ctx)
+	require.NoError(t, err)
+	require.NotNil(t, current)
+
+	updateReq := &onboarding.ResourceUpdateOnboardingSettings{
+		Enabled:         !current.Enabled,
+		OnboardingItems: convertToUpdateItems(current.OnboardingItems),
+	}
+	updated, resp, err := svc.UpdateV1(ctx, updateReq)
+	require.NoError(t, err)
+	require.NotNil(t, updated)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+
+	restoreReq := &onboarding.ResourceUpdateOnboardingSettings{
+		Enabled:         current.Enabled,
+		OnboardingItems: convertToUpdateItems(current.OnboardingItems),
+	}
+	_, _, _ = svc.UpdateV1(ctx, restoreReq)
+}
+
+func convertToUpdateItems(items []onboarding.OnboardingItemResponse) []onboarding.SubsetOnboardingItemRequest {
+	result := make([]onboarding.SubsetOnboardingItemRequest, len(items))
+	for i, item := range items {
+		result[i] = onboarding.SubsetOnboardingItemRequest{
+			ID:                    item.ID,
+			EntityID:              item.EntityID,
+			SelfServiceEntityType: item.SelfServiceEntityType,
+			Priority:              item.Priority,
+		}
+	}
+	return result
+}
+
+func TestAcceptance_Onboarding_GetEligibleAppsV1(t *testing.T) {
+	acc.RequireClient(t)
+	svc := acc.Client.Onboarding
+	ctx := context.Background()
+
 	result, resp, err := svc.GetEligibleAppsV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
+	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	acc.LogTestSuccess(t, "Retrieved %d eligible apps", result.TotalCount)
+	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_Onboarding_GetEligibleConfigurationProfiles(t *testing.T) {
+func TestAcceptance_Onboarding_GetEligibleConfigurationProfilesV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get eligible configuration profiles for onboarding")
 	result, resp, err := svc.GetEligibleConfigurationProfilesV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
+	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	acc.LogTestSuccess(t, "Retrieved %d eligible configuration profiles", result.TotalCount)
+	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_Onboarding_GetEligiblePolicies(t *testing.T) {
+func TestAcceptance_Onboarding_GetEligiblePoliciesV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get eligible policies for onboarding")
 	result, resp, err := svc.GetEligiblePoliciesV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
+	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	acc.LogTestSuccess(t, "Retrieved %d eligible policies", result.TotalCount)
+	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_Onboarding_GetHistory(t *testing.T) {
+func TestAcceptance_Onboarding_GetHistoryV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get onboarding history")
 	result, resp, err := svc.GetHistoryV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
+	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	acc.LogTestSuccess(t, "Retrieved onboarding history with %d entries", result.TotalCount)
+	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_Onboarding_AddHistoryNotes(t *testing.T) {
+func TestAcceptance_Onboarding_AddHistoryNotesV1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Add note to onboarding history")
-	req := &onboarding.RequestAddHistoryNotes{
-		Note: "Acceptance test note - automated test run",
+	noteReq := &onboarding.RequestAddHistoryNotes{
+		Note: "Test history note from acceptance test",
 	}
-	result, resp, err := svc.AddHistoryNotesV1(ctx, req)
+
+	result, resp, err := svc.AddHistoryNotesV1(ctx, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, result)
+	require.NotNil(t, resp)
 	assert.Equal(t, 201, resp.StatusCode)
 	assert.NotEmpty(t, result.ID)
-	acc.LogTestSuccess(t, "Added history note with ID: %s", result.ID)
 }

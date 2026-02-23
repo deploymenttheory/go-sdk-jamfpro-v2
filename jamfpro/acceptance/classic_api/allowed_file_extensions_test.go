@@ -41,8 +41,8 @@ func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateAllowedFileExtension(ctx1, createReq)
-	require.NoError(t, err, "CreateAllowedFileExtension should not return an error")
+	created, createResp, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
@@ -58,7 +58,7 @@ func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteAllowedFileExtensionByID(cleanupCtx, extID)
+		_, delErr := svc.DeleteByID(cleanupCtx, extID)
 		acc.LogCleanupDeleteError(t, "allowed file extension", fmt.Sprintf("%d", extID), delErr)
 	})
 
@@ -70,8 +70,8 @@ func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListAllowedFileExtensions(ctx2)
-	require.NoError(t, err, "ListAllowedFileExtensions should not return an error")
+	list, listResp, err := svc.List(ctx2)
+	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.Size, "size should be positive")
@@ -95,8 +95,8 @@ func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetAllowedFileExtensionByID(ctx3, extID)
-	require.NoError(t, err, "GetAllowedFileExtensionByID should not return an error")
+	fetched, fetchResp, err := svc.GetByID(ctx3, extID)
+	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, extID, fetched.ID)
@@ -111,8 +111,8 @@ func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByExt, fetchByExtResp, err := svc.GetAllowedFileExtensionByExtension(ctx4, extension)
-	require.NoError(t, err, "GetAllowedFileExtensionByExtension should not return an error")
+	fetchedByExt, fetchByExtResp, err := svc.GetByExtension(ctx4, extension)
+	require.NoError(t, err, "GetByExtension should not return an error")
 	require.NotNil(t, fetchedByExt)
 	assert.Equal(t, 200, fetchByExtResp.StatusCode)
 	assert.Equal(t, extID, fetchedByExt.ID)
@@ -127,8 +127,8 @@ func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5()
 
-	deleteResp, err := svc.DeleteAllowedFileExtensionByID(ctx5, extID)
-	require.NoError(t, err, "DeleteAllowedFileExtensionByID should not return an error")
+	deleteResp, err := svc.DeleteByID(ctx5, extID)
+	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Allowed file extension ID=%d deleted", extID)
@@ -144,26 +144,26 @@ func TestAcceptance_AllowedFileExtensions_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.AllowedFileExtensions
 
-	t.Run("GetAllowedFileExtensionByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetAllowedFileExtensionByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "allowed file extension ID must be a positive integer")
 	})
 
-	t.Run("GetAllowedFileExtensionByExtension_Empty", func(t *testing.T) {
-		_, _, err := svc.GetAllowedFileExtensionByExtension(context.Background(), "")
+	t.Run("GetByExtension_Empty", func(t *testing.T) {
+		_, _, err := svc.GetByExtension(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "extension is required")
 	})
 
-	t.Run("CreateAllowedFileExtension_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateAllowedFileExtension(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("DeleteAllowedFileExtensionByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteAllowedFileExtensionByID(context.Background(), 0)
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "allowed file extension ID must be a positive integer")
 	})

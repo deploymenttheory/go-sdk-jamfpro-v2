@@ -1,4 +1,4 @@
-// Package main demonstrates UpdateRemoveableMacAddressByID — updates a removeable MAC address by ID via the Classic API.
+// Package main demonstrates UpdateByID — updates a removeable MAC address by ID via the Classic API.
 //
 // Run with: go run ./examples/classic_api/removeable_mac_addresses/update
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -39,9 +39,9 @@ func main() {
 		Name: fmt.Sprintf("Updated-MAC-%d", time.Now().UnixMilli()%1000),
 	}
 
-	updated, resp, err := client.RemoveableMacAddresses.UpdateRemoveableMacAddressByID(ctx, id, req)
+	updated, resp, err := client.RemoveableMacAddresses.UpdateByID(ctx, id, req)
 	if err != nil {
-		log.Fatalf("UpdateRemoveableMacAddressByID failed: %v", err)
+		log.Fatalf("UpdateByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

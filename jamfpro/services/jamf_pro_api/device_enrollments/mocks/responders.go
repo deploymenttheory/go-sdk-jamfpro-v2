@@ -56,7 +56,7 @@ func (m *DeviceEnrollmentsMock) dispatch(method, path string) ([]byte, int, bool
 	return nil, 0, false
 }
 
-func (m *DeviceEnrollmentsMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DeviceEnrollmentsMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
@@ -77,7 +77,7 @@ func (m *DeviceEnrollmentsMock) Get(ctx context.Context, endpoint string, queryP
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *DeviceEnrollmentsMock) Post(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DeviceEnrollmentsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("POST", endpoint)
 	if !found {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
@@ -92,11 +92,11 @@ func (m *DeviceEnrollmentsMock) Post(ctx context.Context, endpoint string, body 
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *DeviceEnrollmentsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DeviceEnrollmentsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return m.Post(ctx, endpoint, body, headers, out)
 }
 
-func (m *DeviceEnrollmentsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DeviceEnrollmentsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
@@ -104,7 +104,7 @@ func (m *DeviceEnrollmentsMock) PostMultipart(ctx context.Context, endpoint stri
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *DeviceEnrollmentsMock) Put(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DeviceEnrollmentsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("PUT", endpoint)
 	if !found {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
@@ -119,11 +119,11 @@ func (m *DeviceEnrollmentsMock) Put(ctx context.Context, endpoint string, body i
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *DeviceEnrollmentsMock) Patch(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DeviceEnrollmentsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *DeviceEnrollmentsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DeviceEnrollmentsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	_, status, found := m.dispatch("DELETE", endpoint)
 	if !found {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
@@ -132,7 +132,7 @@ func (m *DeviceEnrollmentsMock) Delete(ctx context.Context, endpoint string, que
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *DeviceEnrollmentsMock) DeleteWithBody(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DeviceEnrollmentsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	_, status, found := m.dispatch("DELETE", endpoint)
 	if !found {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil

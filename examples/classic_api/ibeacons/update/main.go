@@ -33,7 +33,7 @@ func main() {
 		Minor: 2,
 	}
 
-	updatedIBeacon, _, err := jamfClient.IBeacons.UpdateIBeaconByID(context.Background(), ibeaconID, updateReq)
+	updatedIBeacon, _, err := jamfClient.IBeacons.UpdateByID(context.Background(), ibeaconID, updateReq)
 	if err != nil {
 		fmt.Printf("Error updating iBeacon by ID: %v\n", err)
 		return

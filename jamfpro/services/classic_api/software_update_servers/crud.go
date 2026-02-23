@@ -13,47 +13,47 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/softwareupdateservers
 	SoftwareUpdateServersServiceInterface interface {
-		// ListSoftwareUpdateServers returns all software update servers.
+		// List returns all software update servers.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallsoftwareupdateservers
-		ListSoftwareUpdateServers(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsoftwareupdateservers
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
-		// GetSoftwareUpdateServerByID returns the specified software update server by ID.
+		// GetByID returns the specified software update server by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsoftwareupdateserversbyid
-		GetSoftwareUpdateServerByID(ctx context.Context, id int) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
 
-		// GetSoftwareUpdateServerByName returns the specified software update server by name.
+		// GetByName returns the specified software update server by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsoftwareupdateserversbyname
-		GetSoftwareUpdateServerByName(ctx context.Context, name string) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
 
-		// CreateSoftwareUpdateServer creates a new software update server.
+		// Create creates a new software update server.
 		//
 		// Returns the created software update server with its assigned ID.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createsoftwareupdateserver
-		CreateSoftwareUpdateServer(ctx context.Context, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createsoftwareupdateserverbyid
+		Create(ctx context.Context, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
 
-		// UpdateSoftwareUpdateServerByID updates the specified software update server by ID.
+		// UpdateByID updates the specified software update server by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatesoftwareupdateserverbyid
-		UpdateSoftwareUpdateServerByID(ctx context.Context, id int, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
 
-		// UpdateSoftwareUpdateServerByName updates the specified software update server by name.
+		// UpdateByName updates the specified software update server by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatesoftwareupdateserverbyname
-		UpdateSoftwareUpdateServerByName(ctx context.Context, name string, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error)
 
-		// DeleteSoftwareUpdateServerByID removes the specified software update server by ID.
+		// DeleteByID removes the specified software update server by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletesoftwareupdateserverbyid
-		DeleteSoftwareUpdateServerByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteSoftwareUpdateServerByName removes the specified software update server by name.
+		// DeleteByName removes the specified software update server by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletesoftwareupdateserverbyname
-		DeleteSoftwareUpdateServerByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the software update server-related Classic API methods.
@@ -75,10 +75,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - Software Update Servers CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListSoftwareUpdateServers returns all software update servers.
+// List returns all software update servers.
 // URL: GET /JSSResource/softwareupdateservers
-// https://developer.jamf.com/jamf-pro/reference/findallsoftwareupdateservers
-func (s *Service) ListSoftwareUpdateServers(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+// https://developer.jamf.com/jamf-pro/reference/findsoftwareupdateservers
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicSoftwareUpdateServers
@@ -96,10 +96,10 @@ func (s *Service) ListSoftwareUpdateServers(ctx context.Context) (*ListResponse,
 	return &result, resp, nil
 }
 
-// GetSoftwareUpdateServerByID returns the specified software update server by ID.
+// GetByID returns the specified software update server by ID.
 // URL: GET /JSSResource/softwareupdateservers/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findsoftwareupdateserversbyid
-func (s *Service) GetSoftwareUpdateServerByID(ctx context.Context, id int) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("software update server ID must be a positive integer")
 	}
@@ -121,10 +121,10 @@ func (s *Service) GetSoftwareUpdateServerByID(ctx context.Context, id int) (*Res
 	return &result, resp, nil
 }
 
-// GetSoftwareUpdateServerByName returns the specified software update server by name.
+// GetByName returns the specified software update server by name.
 // URL: GET /JSSResource/softwareupdateservers/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findsoftwareupdateserversbyname
-func (s *Service) GetSoftwareUpdateServerByName(ctx context.Context, name string) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("software update server name is required")
 	}
@@ -146,11 +146,11 @@ func (s *Service) GetSoftwareUpdateServerByName(ctx context.Context, name string
 	return &result, resp, nil
 }
 
-// CreateSoftwareUpdateServer creates a new software update server.
+// Create creates a new software update server.
 // URL: POST /JSSResource/softwareupdateservers/id/0
 // Returns the created software update server with its assigned ID.
-// https://developer.jamf.com/jamf-pro/reference/createsoftwareupdateserver
-func (s *Service) CreateSoftwareUpdateServer(ctx context.Context, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
+// https://developer.jamf.com/jamf-pro/reference/createsoftwareupdateserverbyid
+func (s *Service) Create(ctx context.Context, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -172,10 +172,10 @@ func (s *Service) CreateSoftwareUpdateServer(ctx context.Context, req *RequestSo
 	return &result, resp, nil
 }
 
-// UpdateSoftwareUpdateServerByID updates the specified software update server by ID.
+// UpdateByID updates the specified software update server by ID.
 // URL: PUT /JSSResource/softwareupdateservers/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updatesoftwareupdateserverbyid
-func (s *Service) UpdateSoftwareUpdateServerByID(ctx context.Context, id int, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("software update server ID must be a positive integer")
 	}
@@ -200,10 +200,10 @@ func (s *Service) UpdateSoftwareUpdateServerByID(ctx context.Context, id int, re
 	return &result, resp, nil
 }
 
-// UpdateSoftwareUpdateServerByName updates the specified software update server by name.
+// UpdateByName updates the specified software update server by name.
 // URL: PUT /JSSResource/softwareupdateservers/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updatesoftwareupdateserverbyname
-func (s *Service) UpdateSoftwareUpdateServerByName(ctx context.Context, name string, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("software update server name is required")
 	}
@@ -228,10 +228,10 @@ func (s *Service) UpdateSoftwareUpdateServerByName(ctx context.Context, name str
 	return &result, resp, nil
 }
 
-// DeleteSoftwareUpdateServerByID removes the specified software update server by ID.
+// DeleteByID removes the specified software update server by ID.
 // URL: DELETE /JSSResource/softwareupdateservers/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deletesoftwareupdateserverbyid
-func (s *Service) DeleteSoftwareUpdateServerByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("software update server ID must be a positive integer")
 	}
@@ -251,10 +251,10 @@ func (s *Service) DeleteSoftwareUpdateServerByID(ctx context.Context, id int) (*
 	return resp, nil
 }
 
-// DeleteSoftwareUpdateServerByName removes the specified software update server by name.
+// DeleteByName removes the specified software update server by name.
 // URL: DELETE /JSSResource/softwareupdateservers/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deletesoftwareupdateserverbyname
-func (s *Service) DeleteSoftwareUpdateServerByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("software update server name is required")
 	}

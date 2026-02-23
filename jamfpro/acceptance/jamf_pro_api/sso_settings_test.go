@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_settings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -53,4 +54,34 @@ func TestAcceptance_SsoSettings_UpdateV3(t *testing.T) {
 	// Restore
 	request.SsoBypassAllowed = current.SsoBypassAllowed
 	_, _, _ = svc.UpdateV3(ctx, &request)
+}
+
+func TestAcceptance_SsoSettings_GetHistoryV3(t *testing.T) {
+	acc.RequireClient(t)
+	svc := acc.Client.SsoSettings
+	ctx := context.Background()
+
+	result, resp, err := svc.GetHistoryV3(ctx, nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.GreaterOrEqual(t, result.TotalCount, 0)
+}
+
+func TestAcceptance_SsoSettings_AddHistoryNoteV3(t *testing.T) {
+	acc.RequireClient(t)
+	svc := acc.Client.SsoSettings
+	ctx := context.Background()
+
+	noteReq := &sso_settings.AddHistoryNoteRequest{
+		Note: "Test history note from acceptance test",
+	}
+
+	result, resp, err := svc.AddHistoryNoteV3(ctx, noteReq)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode)
+	assert.NotEmpty(t, result.ID)
 }

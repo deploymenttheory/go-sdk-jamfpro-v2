@@ -11,37 +11,37 @@ import (
 type (
 	// BookmarksServiceInterface defines the interface for bookmark operations.
 	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks
+	// Jamf Pro API docs: Undocumented
 	BookmarksServiceInterface interface {
 		// ListV1 returns all bookmarks. Optional rsqlQuery: filter (RSQL), sort, page, page-size (Get Bookmarks).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks
+		// Jamf Pro API docs: Undocumented
 		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
 
 		// GetByIDV1 returns the specified bookmark by ID (Get Bookmark by ID).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks-id
+		// Jamf Pro API docs: Undocumented-id
 		GetByIDV1(ctx context.Context, id string) (*ResourceBookmark, *interfaces.Response, error)
 
 		// CreateV1 creates a new bookmark (Create Bookmark).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-bookmarks
+		// Jamf Pro API docs: Undocumented
 		CreateV1(ctx context.Context, request *ResourceBookmark) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateByIDV1 updates the specified bookmark by ID (Update Bookmark by ID).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-bookmarks-id
+		// Jamf Pro API docs: Undocumented
 		UpdateByIDV1(ctx context.Context, id string, request *ResourceBookmark) (*ResourceBookmark, *interfaces.Response, error)
 
 		// DeleteByIDV1 removes the specified bookmark by ID (Delete Bookmark by ID).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-bookmarks-id
+		// Jamf Pro API docs: Undocumented
 		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the bookmarks-related methods of the Jamf Pro API.
 	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks
+	// Jamf Pro API docs: Undocumented
 	Service struct {
 		client interfaces.HTTPClient
 	}
@@ -59,7 +59,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListV1 returns all bookmarks. Optional rsqlQuery: filter (RSQL), sort, page, page-size.
 // URL: GET /api/v1/bookmarks
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks
+// Jamf Pro API docs: Undocumented
 func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
@@ -80,7 +80,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 
 // GetByIDV1 returns the specified bookmark by ID.
 // URL: GET /api/v1/bookmarks/{id}
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-bookmarks-id
+// Jamf Pro API docs: Undocumented-id
 func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceBookmark, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
@@ -103,7 +103,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceBookmark, 
 
 // CreateV1 creates a new bookmark.
 // URL: POST /api/v1/bookmarks
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-bookmarks
+// Jamf Pro API docs: Undocumented
 func (s *Service) CreateV1(ctx context.Context, request *ResourceBookmark) (*CreateResponse, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
@@ -128,7 +128,7 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceBookmark) (*Cre
 
 // UpdateByIDV1 updates the specified bookmark by ID.
 // URL: PUT /api/v1/bookmarks/{id}
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-bookmarks-id
+// Jamf Pro API docs: Undocumented
 func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceBookmark) (*ResourceBookmark, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
@@ -157,7 +157,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *Resource
 
 // DeleteByIDV1 removes the specified bookmark by ID.
 // URL: DELETE /api/v1/bookmarks/{id}
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-bookmarks-id
+// Jamf Pro API docs: Undocumented
 func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")

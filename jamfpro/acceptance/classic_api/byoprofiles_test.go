@@ -32,7 +32,7 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test BYO profile")
 
-	profileName := uniqueName("acc-test-byoprofile")
+	profileName := acc.UniqueName("acc-test-byoprofile")
 	createReq := &byoprofiles.RequestBYOProfile{
 		General: byoprofiles.GeneralSettings{
 			Name:        profileName,
@@ -44,13 +44,13 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateBYOProfile(ctx1, createReq)
+	created, createResp, err := svc.Create(ctx1, createReq)
 	if err != nil {
 		var apiErr *client.APIError
 		if errors.As(err, &apiErr) && apiErr.StatusCode == 409 && strings.Contains(apiErr.Message, "Unable to update the database") {
 			t.Skip("BYO profile create returned 409 in this environment; skipping lifecycle")
 		}
-		require.NoError(t, err, "CreateBYOProfile should not return an error")
+		require.NoError(t, err, "Create should not return an error")
 	}
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
@@ -63,7 +63,7 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteBYOProfileByID(cleanupCtx, profileID)
+		_, delErr := svc.DeleteByID(cleanupCtx, profileID)
 		acc.LogCleanupDeleteError(t, "BYO profile", fmt.Sprintf("%d", profileID), delErr)
 	})
 
@@ -75,8 +75,8 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListBYOProfiles(ctx2)
-	require.NoError(t, err, "ListBYOProfiles should not return an error")
+	list, listResp, err := svc.List(ctx2)
+	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.Size, "size should be positive")
@@ -100,8 +100,8 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetBYOProfileByID(ctx3, profileID)
-	require.NoError(t, err, "GetBYOProfileByID should not return an error")
+	fetched, fetchResp, err := svc.GetByID(ctx3, profileID)
+	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, profileID, fetched.ID)
@@ -118,8 +118,8 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetBYOProfileByName(ctx4, profileName)
-	require.NoError(t, err, "GetBYOProfileByName should not return an error")
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, profileName)
+	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
 	assert.Equal(t, profileID, fetchedByName.ID)
@@ -129,7 +129,7 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-byoprofile-updated")
+	updatedName := acc.UniqueName("acc-test-byoprofile-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating BYO profile ID=%d to name=%q", profileID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -142,8 +142,8 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 			Description: "Updated description",
 		},
 	}
-	updated, updateResp, err := svc.UpdateBYOProfileByID(ctx5, profileID, updateReq)
-	require.NoError(t, err, "UpdateBYOProfileByID should not return an error")
+	updated, updateResp, err := svc.UpdateByID(ctx5, profileID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
@@ -163,8 +163,8 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 			Description: "Reverted description",
 		},
 	}
-	reverted, revertResp, err := svc.UpdateBYOProfileByName(ctx6, updatedName, revertReq)
-	require.NoError(t, err, "UpdateBYOProfileByName should not return an error")
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
+	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
@@ -177,7 +177,7 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetBYOProfileByID(ctx7, profileID)
+	verified, verifyResp, err := svc.GetByID(ctx7, profileID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -192,8 +192,8 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteBYOProfileByID(ctx8, profileID)
-	require.NoError(t, err, "DeleteBYOProfileByID should not return an error")
+	deleteResp, err := svc.DeleteByID(ctx8, profileID)
+	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "BYO profile ID=%d deleted", profileID)
@@ -209,7 +209,7 @@ func TestAcceptance_BYOProfiles_DeleteByName(t *testing.T) {
 	svc := acc.Client.BYOProfiles
 	ctx := context.Background()
 
-	profileName := uniqueName("acc-test-byoprofile-del")
+	profileName := acc.UniqueName("acc-test-byoprofile-del")
 	createReq := &byoprofiles.RequestBYOProfile{
 		General: byoprofiles.GeneralSettings{
 			Name:        profileName,
@@ -221,7 +221,7 @@ func TestAcceptance_BYOProfiles_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateBYOProfile(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	if err != nil {
 		var apiErr *client.APIError
 		if errors.As(err, &apiErr) && apiErr.StatusCode == 409 && strings.Contains(apiErr.Message, "Unable to update the database") {
@@ -237,15 +237,15 @@ func TestAcceptance_BYOProfiles_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteBYOProfileByID(cleanupCtx, profileID)
+		_, delErr := svc.DeleteByID(cleanupCtx, profileID)
 		acc.LogCleanupDeleteError(t, "BYO profile", fmt.Sprintf("%d", profileID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteBYOProfileByName(ctx2, profileName)
-	require.NoError(t, err, "DeleteBYOProfileByName should not return an error")
+	deleteResp, err := svc.DeleteByName(ctx2, profileName)
+	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "BYO profile %q deleted by name", profileName)
@@ -261,50 +261,50 @@ func TestAcceptance_BYOProfiles_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.BYOProfiles
 
-	t.Run("GetBYOProfileByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetBYOProfileByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "BYO profile ID must be a positive integer")
 	})
 
-	t.Run("GetBYOProfileByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetBYOProfileByName(context.Background(), "")
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "BYO profile name is required")
 	})
 
-	t.Run("CreateBYOProfile_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateBYOProfile(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdateBYOProfileByID_ZeroID", func(t *testing.T) {
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
 		req := &byoprofiles.RequestBYOProfile{
 			General: byoprofiles.GeneralSettings{Name: "x"},
 		}
-		_, _, err := svc.UpdateBYOProfileByID(context.Background(), 0, req)
+		_, _, err := svc.UpdateByID(context.Background(), 0, req)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "BYO profile ID must be a positive integer")
 	})
 
-	t.Run("UpdateBYOProfileByName_EmptyName", func(t *testing.T) {
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
 		req := &byoprofiles.RequestBYOProfile{
 			General: byoprofiles.GeneralSettings{Name: "x"},
 		}
-		_, _, err := svc.UpdateBYOProfileByName(context.Background(), "", req)
+		_, _, err := svc.UpdateByName(context.Background(), "", req)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "BYO profile name is required")
 	})
 
-	t.Run("DeleteBYOProfileByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteBYOProfileByID(context.Background(), 0)
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "BYO profile ID must be a positive integer")
 	})
 
-	t.Run("DeleteBYOProfileByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteBYOProfileByName(context.Background(), "")
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "BYO profile name is required")
 	})

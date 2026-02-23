@@ -44,14 +44,14 @@ func NewAdvancedUserSearchesMock() *AdvancedUserSearchesMock {
 
 // RegisterMocks registers all standard success responses in one call.
 func (m *AdvancedUserSearchesMock) RegisterMocks() {
-	m.RegisterListAdvancedUserSearchesMock()
-	m.RegisterGetAdvancedUserSearchByIDMock()
-	m.RegisterGetAdvancedUserSearchByNameMock()
-	m.RegisterCreateAdvancedUserSearchMock()
-	m.RegisterUpdateAdvancedUserSearchByIDMock()
-	m.RegisterUpdateAdvancedUserSearchByNameMock()
-	m.RegisterDeleteAdvancedUserSearchByIDMock()
-	m.RegisterDeleteAdvancedUserSearchByNameMock()
+	m.RegisterListMock()
+	m.RegisterGetByIDMock()
+	m.RegisterGetByNameMock()
+	m.RegisterCreateMock()
+	m.RegisterUpdateByIDMock()
+	m.RegisterUpdateByNameMock()
+	m.RegisterDeleteByIDMock()
+	m.RegisterDeleteByNameMock()
 }
 
 // RegisterErrorMocks registers all error responses in one call.
@@ -62,43 +62,43 @@ func (m *AdvancedUserSearchesMock) RegisterErrorMocks() {
 
 // ---- Success responders ----
 
-// RegisterListAdvancedUserSearchesMock registers GET /JSSResource/advancedusersearches → 200.
-func (m *AdvancedUserSearchesMock) RegisterListAdvancedUserSearchesMock() {
+// RegisterListMock registers GET /JSSResource/advancedusersearches → 200.
+func (m *AdvancedUserSearchesMock) RegisterListMock() {
 	m.register("GET", "/JSSResource/advancedusersearches", 200, "validate_list_advanced_user_searches.xml")
 }
 
-// RegisterGetAdvancedUserSearchByIDMock registers GET /JSSResource/advancedusersearches/id/1 → 200.
-func (m *AdvancedUserSearchesMock) RegisterGetAdvancedUserSearchByIDMock() {
+// RegisterGetByIDMock registers GET /JSSResource/advancedusersearches/id/1 → 200.
+func (m *AdvancedUserSearchesMock) RegisterGetByIDMock() {
 	m.register("GET", "/JSSResource/advancedusersearches/id/1", 200, "validate_get_advanced_user_search.xml")
 }
 
-// RegisterGetAdvancedUserSearchByNameMock registers GET /JSSResource/advancedusersearches/name/Test Search → 200.
-func (m *AdvancedUserSearchesMock) RegisterGetAdvancedUserSearchByNameMock() {
+// RegisterGetByNameMock registers GET /JSSResource/advancedusersearches/name/Test Search → 200.
+func (m *AdvancedUserSearchesMock) RegisterGetByNameMock() {
 	m.register("GET", "/JSSResource/advancedusersearches/name/Test Search", 200, "validate_get_advanced_user_search.xml")
 }
 
-// RegisterCreateAdvancedUserSearchMock registers POST /JSSResource/advancedusersearches/id/0 → 201.
-func (m *AdvancedUserSearchesMock) RegisterCreateAdvancedUserSearchMock() {
+// RegisterCreateMock registers POST /JSSResource/advancedusersearches/id/0 → 201.
+func (m *AdvancedUserSearchesMock) RegisterCreateMock() {
 	m.register("POST", "/JSSResource/advancedusersearches/id/0", 201, "validate_create_advanced_user_search.xml")
 }
 
-// RegisterUpdateAdvancedUserSearchByIDMock registers PUT /JSSResource/advancedusersearches/id/1 → 200.
-func (m *AdvancedUserSearchesMock) RegisterUpdateAdvancedUserSearchByIDMock() {
+// RegisterUpdateByIDMock registers PUT /JSSResource/advancedusersearches/id/1 → 200.
+func (m *AdvancedUserSearchesMock) RegisterUpdateByIDMock() {
 	m.register("PUT", "/JSSResource/advancedusersearches/id/1", 200, "validate_update_advanced_user_search.xml")
 }
 
-// RegisterUpdateAdvancedUserSearchByNameMock registers PUT /JSSResource/advancedusersearches/name/Test Search → 200.
-func (m *AdvancedUserSearchesMock) RegisterUpdateAdvancedUserSearchByNameMock() {
+// RegisterUpdateByNameMock registers PUT /JSSResource/advancedusersearches/name/Test Search → 200.
+func (m *AdvancedUserSearchesMock) RegisterUpdateByNameMock() {
 	m.register("PUT", "/JSSResource/advancedusersearches/name/Test Search", 200, "validate_update_advanced_user_search.xml")
 }
 
-// RegisterDeleteAdvancedUserSearchByIDMock registers DELETE /JSSResource/advancedusersearches/id/1 → 200.
-func (m *AdvancedUserSearchesMock) RegisterDeleteAdvancedUserSearchByIDMock() {
+// RegisterDeleteByIDMock registers DELETE /JSSResource/advancedusersearches/id/1 → 200.
+func (m *AdvancedUserSearchesMock) RegisterDeleteByIDMock() {
 	m.register("DELETE", "/JSSResource/advancedusersearches/id/1", 200, "")
 }
 
-// RegisterDeleteAdvancedUserSearchByNameMock registers DELETE /JSSResource/advancedusersearches/name/Test Search → 200.
-func (m *AdvancedUserSearchesMock) RegisterDeleteAdvancedUserSearchByNameMock() {
+// RegisterDeleteByNameMock registers DELETE /JSSResource/advancedusersearches/name/Test Search → 200.
+func (m *AdvancedUserSearchesMock) RegisterDeleteByNameMock() {
 	m.register("DELETE", "/JSSResource/advancedusersearches/name/Test Search", 200, "")
 }
 

@@ -13,47 +13,47 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/networksegments
 	NetworkSegmentsServiceInterface interface {
-		// ListNetworkSegments returns all network segments.
+		// List returns all network segments.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallnetworksegments
-		ListNetworkSegments(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findnetworksegments
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
-		// GetNetworkSegmentByID returns the specified network segment by ID.
+		// GetByID returns the specified network segment by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findnetworksegmentsbyid
-		GetNetworkSegmentByID(ctx context.Context, id int) (*ResourceNetworkSegment, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceNetworkSegment, *interfaces.Response, error)
 
-		// GetNetworkSegmentByName returns the specified network segment by name.
+		// GetByName returns the specified network segment by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findnetworksegmentsbyname
-		GetNetworkSegmentByName(ctx context.Context, name string) (*ResourceNetworkSegment, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceNetworkSegment, *interfaces.Response, error)
 
-		// CreateNetworkSegment creates a new network segment.
+		// Create creates a new network segment.
 		//
 		// Returns the created resource ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createnetworksegmentbyid
-		CreateNetworkSegment(ctx context.Context, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// UpdateNetworkSegmentByID updates the specified network segment by ID.
+		// UpdateByID updates the specified network segment by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatenetworksegmentbyid
-		UpdateNetworkSegmentByID(ctx context.Context, id int, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// UpdateNetworkSegmentByName updates the specified network segment by name.
+		// UpdateByName updates the specified network segment by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatenetworksegmentbyname
-		UpdateNetworkSegmentByName(ctx context.Context, name string, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// DeleteNetworkSegmentByID removes the specified network segment by ID.
+		// DeleteByID removes the specified network segment by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletenetworksegmentbyid
-		DeleteNetworkSegmentByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteNetworkSegmentByName removes the specified network segment by name.
+		// DeleteByName removes the specified network segment by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletenetworksegmentbyname
-		DeleteNetworkSegmentByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the network segment-related Classic API methods.
@@ -75,10 +75,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - Network Segments CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListNetworkSegments returns all network segments.
+// List returns all network segments.
 // URL: GET /JSSResource/networksegments
-// https://developer.jamf.com/jamf-pro/reference/findallnetworksegments
-func (s *Service) ListNetworkSegments(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+// https://developer.jamf.com/jamf-pro/reference/findnetworksegments
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicNetworkSegments
@@ -96,10 +96,10 @@ func (s *Service) ListNetworkSegments(ctx context.Context) (*ListResponse, *inte
 	return &result, resp, nil
 }
 
-// GetNetworkSegmentByID returns the specified network segment by ID.
+// GetByID returns the specified network segment by ID.
 // URL: GET /JSSResource/networksegments/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findnetworksegmentsbyid
-func (s *Service) GetNetworkSegmentByID(ctx context.Context, id int) (*ResourceNetworkSegment, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceNetworkSegment, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("network segment ID must be a positive integer")
 	}
@@ -121,10 +121,10 @@ func (s *Service) GetNetworkSegmentByID(ctx context.Context, id int) (*ResourceN
 	return &result, resp, nil
 }
 
-// GetNetworkSegmentByName returns the specified network segment by name.
+// GetByName returns the specified network segment by name.
 // URL: GET /JSSResource/networksegments/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findnetworksegmentsbyname
-func (s *Service) GetNetworkSegmentByName(ctx context.Context, name string) (*ResourceNetworkSegment, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceNetworkSegment, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("network segment name is required")
 	}
@@ -146,11 +146,11 @@ func (s *Service) GetNetworkSegmentByName(ctx context.Context, name string) (*Re
 	return &result, resp, nil
 }
 
-// CreateNetworkSegment creates a new network segment.
+// Create creates a new network segment.
 // URL: POST /JSSResource/networksegments/id/0
 // Returns the created resource ID.
 // https://developer.jamf.com/jamf-pro/reference/createnetworksegmentbyid
-func (s *Service) CreateNetworkSegment(ctx context.Context, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -172,10 +172,10 @@ func (s *Service) CreateNetworkSegment(ctx context.Context, req *RequestNetworkS
 	return &result, resp, nil
 }
 
-// UpdateNetworkSegmentByID updates the specified network segment by ID.
+// UpdateByID updates the specified network segment by ID.
 // URL: PUT /JSSResource/networksegments/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updatenetworksegmentbyid
-func (s *Service) UpdateNetworkSegmentByID(ctx context.Context, id int, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("network segment ID must be a positive integer")
 	}
@@ -200,10 +200,10 @@ func (s *Service) UpdateNetworkSegmentByID(ctx context.Context, id int, req *Req
 	return &result, resp, nil
 }
 
-// UpdateNetworkSegmentByName updates the specified network segment by name.
+// UpdateByName updates the specified network segment by name.
 // URL: PUT /JSSResource/networksegments/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updatenetworksegmentbyname
-func (s *Service) UpdateNetworkSegmentByName(ctx context.Context, name string, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestNetworkSegment) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("network segment name is required")
 	}
@@ -228,10 +228,10 @@ func (s *Service) UpdateNetworkSegmentByName(ctx context.Context, name string, r
 	return &result, resp, nil
 }
 
-// DeleteNetworkSegmentByID removes the specified network segment by ID.
+// DeleteByID removes the specified network segment by ID.
 // URL: DELETE /JSSResource/networksegments/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deletenetworksegmentbyid
-func (s *Service) DeleteNetworkSegmentByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("network segment ID must be a positive integer")
 	}
@@ -251,10 +251,10 @@ func (s *Service) DeleteNetworkSegmentByID(ctx context.Context, id int) (*interf
 	return resp, nil
 }
 
-// DeleteNetworkSegmentByName removes the specified network segment by name.
+// DeleteByName removes the specified network segment by name.
 // URL: DELETE /JSSResource/networksegments/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deletenetworksegmentbyname
-func (s *Service) DeleteNetworkSegmentByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("network segment name is required")
 	}

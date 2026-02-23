@@ -24,12 +24,12 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of CreateAllowedFileExtension
+	// Example usage of Create
 	createReq := &allowed_file_extensions.RequestAllowedFileExtension{
 		Extension: "example", // Replace with the desired file extension
 	}
 
-	created, _, err := jamfClient.AllowedFileExtensions.CreateAllowedFileExtension(context.Background(), createReq)
+	created, _, err := jamfClient.AllowedFileExtensions.Create(context.Background(), createReq)
 	if err != nil {
 		fmt.Printf("Error creating allowed file extension: %v\n", err)
 		return

@@ -1,4 +1,4 @@
-// Package main demonstrates DeleteRemoveableMacAddressByID — deletes a removeable MAC address by ID via the Classic API.
+// Package main demonstrates DeleteByID — deletes a removeable MAC address by ID via the Classic API.
 //
 // Run with: go run ./examples/classic_api/removeable_mac_addresses/delete
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -33,9 +33,9 @@ func main() {
 
 	ctx := context.Background()
 
-	resp, err := client.RemoveableMacAddresses.DeleteRemoveableMacAddressByID(ctx, id)
+	resp, err := client.RemoveableMacAddresses.DeleteByID(ctx, id)
 	if err != nil {
-		log.Fatalf("DeleteRemoveableMacAddressByID failed: %v", err)
+		log.Fatalf("DeleteByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

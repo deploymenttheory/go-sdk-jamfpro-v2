@@ -29,7 +29,7 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test printer")
 
-	printerName := uniqueName("acc-test-printer")
+	printerName := acc.UniqueName("acc-test-printer")
 	createReq := &printers.RequestPrinter{
 		Name:     printerName,
 		CUPSName: "acc_test_printer",
@@ -41,8 +41,8 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreatePrinter(ctx1, createReq)
-	require.NoError(t, err, "CreatePrinter should not return an error")
+	created, createResp, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
@@ -54,7 +54,7 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeletePrinterByID(cleanupCtx, printerID)
+		_, delErr := svc.DeleteByID(cleanupCtx, printerID)
 		acc.LogCleanupDeleteError(t, "printer", fmt.Sprintf("%d", printerID), delErr)
 	})
 
@@ -66,8 +66,8 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListPrinters(ctx2)
-	require.NoError(t, err, "ListPrinters should not return an error")
+	list, listResp, err := svc.List(ctx2)
+	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.Size, "size should be positive")
@@ -91,8 +91,8 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetPrinterByID(ctx3, printerID)
-	require.NoError(t, err, "GetPrinterByID should not return an error")
+	fetched, fetchResp, err := svc.GetByID(ctx3, printerID)
+	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, printerID, fetched.ID)
@@ -107,8 +107,8 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetPrinterByName(ctx4, printerName)
-	require.NoError(t, err, "GetPrinterByName should not return an error")
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, printerName)
+	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
 	assert.Equal(t, printerID, fetchedByName.ID)
@@ -118,7 +118,7 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-printer-updated")
+	updatedName := acc.UniqueName("acc-test-printer-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating printer ID=%d to name=%q", printerID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -131,8 +131,8 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 		Location: "Test Lab",
 		Model:    "Test Printer Model",
 	}
-	updated, updateResp, err := svc.UpdatePrinterByID(ctx5, printerID, updateReq)
-	require.NoError(t, err, "UpdatePrinterByID should not return an error")
+	updated, updateResp, err := svc.UpdateByID(ctx5, printerID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
@@ -152,8 +152,8 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 		Location: "Test Lab",
 		Model:    "Test Printer Model",
 	}
-	reverted, revertResp, err := svc.UpdatePrinterByName(ctx6, updatedName, revertReq)
-	require.NoError(t, err, "UpdatePrinterByName should not return an error")
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
+	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
@@ -166,7 +166,7 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetPrinterByID(ctx7, printerID)
+	verified, verifyResp, err := svc.GetByID(ctx7, printerID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -181,8 +181,8 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeletePrinterByID(ctx8, printerID)
-	require.NoError(t, err, "DeletePrinterByID should not return an error")
+	deleteResp, err := svc.DeleteByID(ctx8, printerID)
+	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Printer ID=%d deleted", printerID)
@@ -198,7 +198,7 @@ func TestAcceptance_Printers_DeleteByName(t *testing.T) {
 	svc := acc.Client.Printers
 	ctx := context.Background()
 
-	printerName := uniqueName("acc-test-printer-dbn")
+	printerName := acc.UniqueName("acc-test-printer-dbn")
 	createReq := &printers.RequestPrinter{
 		Name:     printerName,
 		CUPSName: "acc_test_printer_dbn",
@@ -208,7 +208,7 @@ func TestAcceptance_Printers_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreatePrinter(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -218,15 +218,15 @@ func TestAcceptance_Printers_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeletePrinterByID(cleanupCtx, printerID)
+		_, delErr := svc.DeleteByID(cleanupCtx, printerID)
 		acc.LogCleanupDeleteError(t, "printer", fmt.Sprintf("%d", printerID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeletePrinterByName(ctx2, printerName)
-	require.NoError(t, err, "DeletePrinterByName should not return an error")
+	deleteResp, err := svc.DeleteByName(ctx2, printerName)
+	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Printer %q deleted by name", printerName)
@@ -242,44 +242,44 @@ func TestAcceptance_Printers_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.Printers
 
-	t.Run("GetPrinterByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetPrinterByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "printer ID must be a positive integer")
 	})
 
-	t.Run("GetPrinterByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetPrinterByName(context.Background(), "")
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "printer name is required")
 	})
 
-	t.Run("CreatePrinter_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreatePrinter(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdatePrinterByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdatePrinterByID(context.Background(), 0, &printers.RequestPrinter{Name: "x"})
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.UpdateByID(context.Background(), 0, &printers.RequestPrinter{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "printer ID must be a positive integer")
 	})
 
 	t.Run("UpdatePrinterByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdatePrinterByName(context.Background(), "", &printers.RequestPrinter{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &printers.RequestPrinter{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "printer name is required")
 	})
 
 	t.Run("DeletePrinterByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeletePrinterByID(context.Background(), 0)
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "printer ID must be a positive integer")
 	})
 
-	t.Run("DeletePrinterByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeletePrinterByName(context.Background(), "")
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "printer name is required")
 	})

@@ -25,9 +25,9 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of GetAllowedFileExtensionByID
+	// Example usage of GetByID
 	extensionID := 1 // Replace with the desired allowed file extension ID
-	ext, _, err := jamfClient.AllowedFileExtensions.GetAllowedFileExtensionByID(context.Background(), extensionID)
+	ext, _, err := jamfClient.AllowedFileExtensions.GetByID(context.Background(), extensionID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

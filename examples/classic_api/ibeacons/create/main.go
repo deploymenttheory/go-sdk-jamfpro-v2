@@ -32,7 +32,7 @@ func main() {
 		Minor: 1,
 	}
 
-	createdIBeacon, _, err := jamfClient.IBeacons.CreateIBeacon(context.Background(), newIBeacon)
+	createdIBeacon, _, err := jamfClient.IBeacons.Create(context.Background(), newIBeacon)
 	if err != nil {
 		fmt.Printf("Error creating iBeacon: %v\n", err)
 		return

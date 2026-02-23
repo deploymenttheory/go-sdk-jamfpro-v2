@@ -25,7 +25,7 @@ func main() {
 	}
 
 	// Call the ListPrinters function to retrieve the list of printers
-	list, _, err := jamfClient.Printers.ListPrinters(context.Background())
+	list, _, err := jamfClient.Printers.List(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

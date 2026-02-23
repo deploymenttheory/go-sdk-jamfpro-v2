@@ -24,7 +24,7 @@ func TestUnitListLDAPServers_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLDAPServersMock()
 
-	result, resp, err := svc.ListLDAPServers(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -46,7 +46,7 @@ func TestUnitGetLDAPServerByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLDAPServerByIDMock()
 
-	result, resp, err := svc.GetLDAPServerByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -61,7 +61,7 @@ func TestUnitGetLDAPServerByID_Success(t *testing.T) {
 func TestUnitGetLDAPServerByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetLDAPServerByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -71,7 +71,7 @@ func TestUnitGetLDAPServerByID_ZeroID(t *testing.T) {
 func TestUnitGetLDAPServerByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetLDAPServerByID(context.Background(), -1)
+	result, resp, err := svc.GetByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -82,7 +82,7 @@ func TestUnitGetLDAPServerByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetLDAPServerByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -97,7 +97,7 @@ func TestUnitGetLDAPServerByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLDAPServerByNameMock()
 
-	result, resp, err := svc.GetLDAPServerByName(context.Background(), "Test LDAP Server")
+	result, resp, err := svc.GetByName(context.Background(), "Test LDAP Server")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -111,7 +111,7 @@ func TestUnitGetLDAPServerByName_Success(t *testing.T) {
 func TestUnitGetLDAPServerByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetLDAPServerByName(context.Background(), "")
+	result, resp, err := svc.GetByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -133,7 +133,7 @@ func TestUnitCreateLDAPServer_Success(t *testing.T) {
 			Port:     389,
 		},
 	}
-	result, resp, err := svc.CreateLDAPServer(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -146,7 +146,7 @@ func TestUnitCreateLDAPServer_Success(t *testing.T) {
 func TestUnitCreateLDAPServer_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateLDAPServer(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -164,7 +164,7 @@ func TestUnitCreateLDAPServer_Conflict(t *testing.T) {
 			Port:     389,
 		},
 	}
-	result, resp, err := svc.CreateLDAPServer(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -186,7 +186,7 @@ func TestUnitUpdateLDAPServerByID_Success(t *testing.T) {
 			Port:     636,
 		},
 	}
-	result, resp, err := svc.UpdateLDAPServerByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -205,7 +205,7 @@ func TestUnitUpdateLDAPServerByID_ZeroID(t *testing.T) {
 			Name: "Updated LDAP Server",
 		},
 	}
-	result, resp, err := svc.UpdateLDAPServerByID(context.Background(), 0, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 0, req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -215,7 +215,7 @@ func TestUnitUpdateLDAPServerByID_ZeroID(t *testing.T) {
 func TestUnitUpdateLDAPServerByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateLDAPServerByID(context.Background(), 1, nil)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -237,7 +237,7 @@ func TestUnitUpdateLDAPServerByName_Success(t *testing.T) {
 			Port:     636,
 		},
 	}
-	result, resp, err := svc.UpdateLDAPServerByName(context.Background(), "Test LDAP Server", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "Test LDAP Server", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -255,7 +255,7 @@ func TestUnitUpdateLDAPServerByName_EmptyName(t *testing.T) {
 			Name: "Updated LDAP Server",
 		},
 	}
-	result, resp, err := svc.UpdateLDAPServerByName(context.Background(), "", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "", req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -265,7 +265,7 @@ func TestUnitUpdateLDAPServerByName_EmptyName(t *testing.T) {
 func TestUnitUpdateLDAPServerByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateLDAPServerByName(context.Background(), "Test LDAP Server", nil)
+	result, resp, err := svc.UpdateByName(context.Background(), "Test LDAP Server", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -280,7 +280,7 @@ func TestUnitDeleteLDAPServerByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteLDAPServerByIDMock()
 
-	resp, err := svc.DeleteLDAPServerByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -289,7 +289,7 @@ func TestUnitDeleteLDAPServerByID_Success(t *testing.T) {
 func TestUnitDeleteLDAPServerByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteLDAPServerByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "LDAP server ID must be a positive integer")
@@ -298,7 +298,7 @@ func TestUnitDeleteLDAPServerByID_ZeroID(t *testing.T) {
 func TestUnitDeleteLDAPServerByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteLDAPServerByID(context.Background(), -1)
+	resp, err := svc.DeleteByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "LDAP server ID must be a positive integer")
@@ -312,7 +312,7 @@ func TestUnitDeleteLDAPServerByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteLDAPServerByNameMock()
 
-	resp, err := svc.DeleteLDAPServerByName(context.Background(), "Test LDAP Server")
+	resp, err := svc.DeleteByName(context.Background(), "Test LDAP Server")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -321,7 +321,7 @@ func TestUnitDeleteLDAPServerByName_Success(t *testing.T) {
 func TestUnitDeleteLDAPServerByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteLDAPServerByName(context.Background(), "")
+	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "LDAP server name is required")

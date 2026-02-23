@@ -1,4 +1,4 @@
-// Package main demonstrates ListSites — returns all sites from the Classic API.
+// Package main demonstrates List — returns all sites from the Classic API.
 //
 // Run with: go run ./examples/classic_api/sites/list
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -18,9 +18,9 @@ func main() {
 		log.Fatalf("failed to create client: %v", err)
 	}
 
-	list, resp, err := client.Sites.ListSites(context.Background())
+	list, resp, err := client.Sites.List(context.Background())
 	if err != nil {
-		log.Fatalf("ListSites failed: %v", err)
+		log.Fatalf("List failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

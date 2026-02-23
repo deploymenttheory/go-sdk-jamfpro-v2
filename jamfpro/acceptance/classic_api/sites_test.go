@@ -12,11 +12,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// uniqueName returns a name unique to the test run to avoid conflicts with
-// existing data and between parallel test runs.
-func uniqueName(prefix string) string {
-	return fmt.Sprintf("%s-%d", prefix, time.Now().UnixMilli())
-}
 
 // =============================================================================
 // TestAcceptance_Sites_Lifecycle exercises the full write/read/delete
@@ -35,13 +30,13 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test site")
 
-	siteName := uniqueName("acc-test-site")
+	siteName := acc.UniqueName("acc-test-site")
 	createReq := &sites.RequestSite{Name: siteName}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateSite(ctx1, createReq)
+	created, createResp, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err, "CreateSite should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
@@ -55,7 +50,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteSiteByID(cleanupCtx, siteID)
+		_, delErr := svc.DeleteByID(cleanupCtx, siteID)
 		acc.LogCleanupDeleteError(t, "site", fmt.Sprintf("%d", siteID), delErr)
 	})
 
@@ -67,7 +62,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListSites(ctx2)
+	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListSites should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -92,7 +87,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetSiteByID(ctx3, siteID)
+	fetched, fetchResp, err := svc.GetByID(ctx3, siteID)
 	require.NoError(t, err, "GetSiteByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -108,7 +103,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetSiteByName(ctx4, siteName)
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, siteName)
 	require.NoError(t, err, "GetSiteByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
@@ -119,14 +114,14 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-site-updated")
+	updatedName := acc.UniqueName("acc-test-site-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating site ID=%d to name=%q", siteID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5()
 
 	updateReq := &sites.RequestSite{Name: updatedName}
-	updated, updateResp, err := svc.UpdateSiteByID(ctx5, siteID, updateReq)
+	updated, updateResp, err := svc.UpdateByID(ctx5, siteID, updateReq)
 	require.NoError(t, err, "UpdateSiteByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
@@ -142,7 +137,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	defer cancel6()
 
 	revertReq := &sites.RequestSite{Name: siteName}
-	reverted, revertResp, err := svc.UpdateSiteByName(ctx6, updatedName, revertReq)
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateSiteByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
@@ -157,7 +152,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetSiteByID(ctx7, siteID)
+	verified, verifyResp, err := svc.GetByID(ctx7, siteID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -172,7 +167,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteSiteByID(ctx8, siteID)
+	deleteResp, err := svc.DeleteByID(ctx8, siteID)
 	require.NoError(t, err, "DeleteSiteByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -189,13 +184,13 @@ func TestAcceptance_Sites_DeleteByName(t *testing.T) {
 	svc := acc.Client.Sites
 	ctx := context.Background()
 
-	siteName := uniqueName("acc-test-site-dbn")
+	siteName := acc.UniqueName("acc-test-site-dbn")
 	createReq := &sites.RequestSite{Name: siteName}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateSite(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -205,14 +200,14 @@ func TestAcceptance_Sites_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteSiteByID(cleanupCtx, siteID)
+		_, delErr := svc.DeleteByID(cleanupCtx, siteID)
 		acc.LogCleanupDeleteError(t, "site", fmt.Sprintf("%d", siteID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteSiteByName(ctx2, siteName)
+	deleteResp, err := svc.DeleteByName(ctx2, siteName)
 	require.NoError(t, err, "DeleteSiteByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -229,44 +224,44 @@ func TestAcceptance_Sites_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.Sites
 
-	t.Run("GetSiteByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetSiteByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site ID must be a positive integer")
 	})
 
-	t.Run("GetSiteByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetSiteByName(context.Background(), "")
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site name is required")
 	})
 
-	t.Run("CreateSite_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateSite(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdateSiteByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateSiteByID(context.Background(), 0, &sites.RequestSite{Name: "x"})
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.UpdateByID(context.Background(), 0, &sites.RequestSite{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site ID must be a positive integer")
 	})
 
-	t.Run("UpdateSiteByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateSiteByName(context.Background(), "", &sites.RequestSite{Name: "x"})
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.UpdateByName(context.Background(), "", &sites.RequestSite{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site name is required")
 	})
 
-	t.Run("DeleteSiteByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteSiteByID(context.Background(), 0)
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site ID must be a positive integer")
 	})
 
-	t.Run("DeleteSiteByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteSiteByName(context.Background(), "")
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site name is required")
 	})

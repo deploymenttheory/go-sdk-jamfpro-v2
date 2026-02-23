@@ -1,4 +1,4 @@
-// Package main demonstrates UpdateRestrictedSoftwareByID — updates an existing restricted software via the Classic API.
+// Package main demonstrates UpdateByID — updates an existing restricted software via the Classic API.
 //
 // Run with: go run ./examples/classic_api/restricted_software/update
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -37,9 +37,9 @@ func main() {
 			AllComputers: true,
 		},
 	}
-	created, _, err := client.RestrictedSoftware.CreateRestrictedSoftware(ctx, createReq)
+	created, _, err := client.RestrictedSoftware.Create(ctx, createReq)
 	if err != nil {
-		log.Fatalf("CreateRestrictedSoftware failed: %v", err)
+		log.Fatalf("Create failed: %v", err)
 	}
 	fmt.Printf("Created restricted software ID: %d\n", created.ID)
 
@@ -57,15 +57,15 @@ func main() {
 			AllComputers: true,
 		},
 	}
-	updated, resp, err := client.RestrictedSoftware.UpdateRestrictedSoftwareByID(ctx, created.ID, updateReq)
+	updated, resp, err := client.RestrictedSoftware.UpdateByID(ctx, created.ID, updateReq)
 	if err != nil {
-		_, _ = client.RestrictedSoftware.DeleteRestrictedSoftwareByID(ctx, created.ID)
-		log.Fatalf("UpdateRestrictedSoftwareByID failed: %v", err)
+		_, _ = client.RestrictedSoftware.DeleteByID(ctx, created.ID)
+		log.Fatalf("UpdateByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
 	fmt.Printf("Updated restricted software ID: %d\n", updated.ID)
 
-	_, _ = client.RestrictedSoftware.DeleteRestrictedSoftwareByID(ctx, created.ID)
+	_, _ = client.RestrictedSoftware.DeleteByID(ctx, created.ID)
 	fmt.Println("Cleanup: restricted software deleted")
 }

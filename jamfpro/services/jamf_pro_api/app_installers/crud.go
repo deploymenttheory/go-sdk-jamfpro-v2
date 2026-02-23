@@ -11,47 +11,47 @@ import (
 type (
 	// AppInstallersServiceInterface defines the interface for app installer operations.
 	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-titles
+	// Jamf Pro API docs: Undocumented
 	AppInstallersServiceInterface interface {
 		// ListTitlesV1 returns all app installer titles (Get App Installer Title objects).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-titles
+		// Jamf Pro API docs: Undocumented
 		ListTitlesV1(ctx context.Context, rsqlQuery map[string]string) (*ListTitlesResponse, *interfaces.Response, error)
 
 		// GetTitleByIDV1 returns the specified app installer title by ID (Get specified App Installer Title object).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-titles-id
+		// Jamf Pro API docs: Undocumented
 		GetTitleByIDV1(ctx context.Context, id string) (*ResourceJamfAppCatalogAppInstaller, *interfaces.Response, error)
 
 		// ListDeploymentsV1 returns all app installer deployments (Get App Installer Deployment objects).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-deployments
+		// Jamf Pro API docs: Undocumented
 		ListDeploymentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListDeploymentsResponse, *interfaces.Response, error)
 
 		// GetDeploymentByIDV1 returns the specified deployment by ID (Get specified App Installer Deployment object).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-deployments-id
+		// Jamf Pro API docs: Undocumented
 		GetDeploymentByIDV1(ctx context.Context, id string) (*ResourceJamfAppCatalogDeployment, *interfaces.Response, error)
 
 		// CreateDeploymentV1 creates a new app installer deployment (Create App Installer Deployment record).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-app-installers-deployments
+		// Jamf Pro API docs: Undocumented
 		CreateDeploymentV1(ctx context.Context, request *RequestDeployment) (*CreateDeploymentResponse, *interfaces.Response, error)
 
 		// UpdateDeploymentByIDV1 updates the specified deployment by ID (Update specified App Installer Deployment object).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-app-installers-deployments-id
+		// Jamf Pro API docs: Undocumented
 		UpdateDeploymentByIDV1(ctx context.Context, id string, request *RequestDeployment) (*ResourceJamfAppCatalogDeployment, *interfaces.Response, error)
 
 		// DeleteDeploymentByIDV1 removes the specified deployment by ID (Remove specified App Installer Deployment record).
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-app-installers-deployments-id
+		// Jamf Pro API docs: Undocumented
 		DeleteDeploymentByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the app installers-related methods of the Jamf Pro API.
 	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-titles
+	// Jamf Pro API docs: Undocumented
 	Service struct {
 		client interfaces.HTTPClient
 	}
@@ -65,7 +65,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListTitlesV1 returns all app installer titles.
 // URL: GET /api/v1/app-installers/titles
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-titles
+// Jamf Pro API docs: Undocumented
 func (s *Service) ListTitlesV1(ctx context.Context, rsqlQuery map[string]string) (*ListTitlesResponse, *interfaces.Response, error) {
 	var result ListTitlesResponse
 
@@ -86,7 +86,7 @@ func (s *Service) ListTitlesV1(ctx context.Context, rsqlQuery map[string]string)
 
 // GetTitleByIDV1 returns the specified app installer title by ID.
 // URL: GET /api/v1/app-installers/titles/{id}
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-titles-id
+// Jamf Pro API docs: Undocumented-id
 func (s *Service) GetTitleByIDV1(ctx context.Context, id string) (*ResourceJamfAppCatalogAppInstaller, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("title ID is required")
@@ -109,7 +109,7 @@ func (s *Service) GetTitleByIDV1(ctx context.Context, id string) (*ResourceJamfA
 
 // ListDeploymentsV1 returns all app installer deployments.
 // URL: GET /api/v1/app-installers/deployments
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-deployments
+// Jamf Pro API docs: Undocumented
 func (s *Service) ListDeploymentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListDeploymentsResponse, *interfaces.Response, error) {
 	var result ListDeploymentsResponse
 
@@ -130,7 +130,7 @@ func (s *Service) ListDeploymentsV1(ctx context.Context, rsqlQuery map[string]st
 
 // GetDeploymentByIDV1 returns the specified deployment by ID.
 // URL: GET /api/v1/app-installers/deployments/{id}
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers-deployments-id
+// Jamf Pro API docs: Undocumented-id
 func (s *Service) GetDeploymentByIDV1(ctx context.Context, id string) (*ResourceJamfAppCatalogDeployment, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("deployment ID is required")
@@ -153,7 +153,7 @@ func (s *Service) GetDeploymentByIDV1(ctx context.Context, id string) (*Resource
 
 // CreateDeploymentV1 creates a new app installer deployment.
 // URL: POST /api/v1/app-installers/deployments
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-app-installers-deployments
+// Jamf Pro API docs: Undocumented
 func (s *Service) CreateDeploymentV1(ctx context.Context, request *RequestDeployment) (*CreateDeploymentResponse, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
@@ -178,7 +178,7 @@ func (s *Service) CreateDeploymentV1(ctx context.Context, request *RequestDeploy
 
 // UpdateDeploymentByIDV1 updates the specified deployment by ID.
 // URL: PUT /api/v1/app-installers/deployments/{id}
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-app-installers-deployments-id
+// Jamf Pro API docs: Undocumented
 func (s *Service) UpdateDeploymentByIDV1(ctx context.Context, id string, request *RequestDeployment) (*ResourceJamfAppCatalogDeployment, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
@@ -207,7 +207,7 @@ func (s *Service) UpdateDeploymentByIDV1(ctx context.Context, id string, request
 
 // DeleteDeploymentByIDV1 removes the specified deployment by ID.
 // URL: DELETE /api/v1/app-installers/deployments/{id}
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-app-installers-deployments-id
+// Jamf Pro API docs: Undocumented
 func (s *Service) DeleteDeploymentByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("deployment ID is required")

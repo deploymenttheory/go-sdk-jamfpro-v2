@@ -35,7 +35,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test account")
 
-	accountName := uniqueName("test-account")
+	accountName := acc.UniqueName("test-account")
 	createReq := &accounts.RequestAccount{
 		Name:         accountName,
 		FullName:     "Test Account User",
@@ -50,8 +50,8 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateAccount(ctx1, createReq)
-	require.NoError(t, err, "CreateAccount should not return an error")
+	created, createResp, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
@@ -63,7 +63,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteAccountByID(cleanupCtx, accountID)
+		_, delErr := svc.DeleteByID(cleanupCtx, accountID)
 		acc.LogCleanupDeleteError(t, "account", fmt.Sprintf("%d", accountID), delErr)
 	})
 
@@ -75,7 +75,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListAccounts(ctx2)
+	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListAccounts should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -108,8 +108,8 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetAccountByID(ctx3, accountID)
-	require.NoError(t, err, "GetAccountByID should not return an error")
+	fetched, fetchResp, err := svc.GetByID(ctx3, accountID)
+	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, accountID, fetched.ID)
@@ -124,7 +124,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetAccountByName(ctx4, accountName)
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, accountName)
 	require.NoError(t, err, "GetAccountByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
@@ -135,7 +135,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("updated-account")
+	updatedName := acc.UniqueName("updated-account")
 	acc.LogTestStage(t, "UpdateByID", "Updating account ID=%d to name=%q", accountID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -150,8 +150,8 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 		PrivilegeSet: "Administrator",
 		Enabled:      "Enabled",
 	}
-	updated, updateResp, err := svc.UpdateAccountByID(ctx5, accountID, updateReq)
-	require.NoError(t, err, "UpdateAccountByID should not return an error")
+	updated, updateResp, err := svc.UpdateByID(ctx5, accountID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
@@ -173,7 +173,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 		PrivilegeSet: "Administrator",
 		Enabled:      "Enabled",
 	}
-	reverted, revertResp, err := svc.UpdateAccountByName(ctx6, updatedName, revertReq)
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateAccountByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
@@ -187,7 +187,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetAccountByID(ctx7, accountID)
+	verified, verifyResp, err := svc.GetByID(ctx7, accountID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -202,7 +202,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteAccountByID(ctx8, accountID)
+	deleteResp, err := svc.DeleteByID(ctx8, accountID)
 	require.NoError(t, err, "DeleteAccountByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -219,7 +219,7 @@ func TestAcceptance_Accounts_DeleteByName(t *testing.T) {
 	svc := acc.Client.Accounts
 	ctx := context.Background()
 
-	accountName := uniqueName("test-delete-account")
+	accountName := acc.UniqueName("test-delete-account")
 	createReq := &accounts.RequestAccount{
 		Name:         accountName,
 		FullName:     "Test Delete Account User",
@@ -234,7 +234,7 @@ func TestAcceptance_Accounts_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateAccount(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -244,14 +244,14 @@ func TestAcceptance_Accounts_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteAccountByID(cleanupCtx, accountID)
+		_, delErr := svc.DeleteByID(cleanupCtx, accountID)
 		acc.LogCleanupDeleteError(t, "account", fmt.Sprintf("%d", accountID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteAccountByName(ctx2, accountName)
+	deleteResp, err := svc.DeleteByName(ctx2, accountName)
 	require.NoError(t, err, "DeleteAccountByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -269,43 +269,43 @@ func TestAcceptance_Accounts_ValidationErrors(t *testing.T) {
 	svc := acc.Client.Accounts
 
 	t.Run("GetAccountByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetAccountByID(context.Background(), 0)
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account ID must be a positive integer")
 	})
 
 	t.Run("GetAccountByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetAccountByName(context.Background(), "")
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account name is required")
 	})
 
 	t.Run("CreateAccount_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateAccount(context.Background(), nil)
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateAccountByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateAccountByID(context.Background(), 0, &accounts.RequestAccount{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &accounts.RequestAccount{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account ID must be a positive integer")
 	})
 
 	t.Run("UpdateAccountByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateAccountByName(context.Background(), "", &accounts.RequestAccount{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &accounts.RequestAccount{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account name is required")
 	})
 
 	t.Run("DeleteAccountByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteAccountByID(context.Background(), 0)
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account ID must be a positive integer")
 	})
 
 	t.Run("DeleteAccountByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteAccountByName(context.Background(), "")
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account name is required")
 	})

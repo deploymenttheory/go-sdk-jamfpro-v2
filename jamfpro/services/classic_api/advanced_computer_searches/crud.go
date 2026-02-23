@@ -13,51 +13,51 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearches
 	AdvancedComputerSearchesServiceInterface interface {
-		// ListAdvancedComputerSearches returns all advanced computer searches.
+		// List returns all advanced computer searches.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearches
-		ListAdvancedComputerSearches(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
-		// GetAdvancedComputerSearchByID returns the specified advanced computer search by ID.
+		// GetByID returns the specified advanced computer search by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearchesbyid
-		GetAdvancedComputerSearchByID(ctx context.Context, id int) (*ResourceAdvancedComputerSearch, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceAdvancedComputerSearch, *interfaces.Response, error)
 
-		// GetAdvancedComputerSearchByName returns the specified advanced computer search by name.
+		// GetByName returns the specified advanced computer search by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearchesbyname
-		GetAdvancedComputerSearchByName(ctx context.Context, name string) (*ResourceAdvancedComputerSearch, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceAdvancedComputerSearch, *interfaces.Response, error)
 
-		// CreateAdvancedComputerSearch creates a new advanced computer search.
+		// Create creates a new advanced computer search.
 		//
 		// Returns the created advanced computer search ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createadvancedcomputersearchgbyid
-		CreateAdvancedComputerSearch(ctx context.Context, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// UpdateAdvancedComputerSearchByID updates the specified advanced computer search by ID.
+		// UpdateByID updates the specified advanced computer search by ID.
 		//
 		// Returns the updated advanced computer search ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateadvancedcomputersearchbyid
-		UpdateAdvancedComputerSearchByID(ctx context.Context, id int, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// UpdateAdvancedComputerSearchByName updates the specified advanced computer search by name.
+		// UpdateByName updates the specified advanced computer search by name.
 		//
 		// Returns the updated advanced computer search ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateadvancedcomputersearchbyname
-		UpdateAdvancedComputerSearchByName(ctx context.Context, name string, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// DeleteAdvancedComputerSearchByID removes the specified advanced computer search by ID.
+		// DeleteByID removes the specified advanced computer search by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteadvancedcomputersearchbyid
-		DeleteAdvancedComputerSearchByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteAdvancedComputerSearchByName removes the specified advanced computer search by name.
+		// DeleteByName removes the specified advanced computer search by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteadvancedcomputersearchbyname
-		DeleteAdvancedComputerSearchByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the advanced computer searches-related Classic API methods.
@@ -79,10 +79,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - Advanced Computer Searches CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListAdvancedComputerSearches returns all advanced computer searches.
+// List returns all advanced computer searches.
 // URL: GET /JSSResource/advancedcomputersearches
 // https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearches
-func (s *Service) ListAdvancedComputerSearches(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicAdvancedComputerSearches
@@ -100,10 +100,10 @@ func (s *Service) ListAdvancedComputerSearches(ctx context.Context) (*ListRespon
 	return &result, resp, nil
 }
 
-// GetAdvancedComputerSearchByID returns the specified advanced computer search by ID.
+// GetByID returns the specified advanced computer search by ID.
 // URL: GET /JSSResource/advancedcomputersearches/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearchesbyid
-func (s *Service) GetAdvancedComputerSearchByID(ctx context.Context, id int) (*ResourceAdvancedComputerSearch, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAdvancedComputerSearch, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("advanced computer search ID must be a positive integer")
 	}
@@ -125,10 +125,10 @@ func (s *Service) GetAdvancedComputerSearchByID(ctx context.Context, id int) (*R
 	return &result, resp, nil
 }
 
-// GetAdvancedComputerSearchByName returns the specified advanced computer search by name.
+// GetByName returns the specified advanced computer search by name.
 // URL: GET /JSSResource/advancedcomputersearches/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearchesbyname
-func (s *Service) GetAdvancedComputerSearchByName(ctx context.Context, name string) (*ResourceAdvancedComputerSearch, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceAdvancedComputerSearch, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("advanced computer search name is required")
 	}
@@ -150,11 +150,11 @@ func (s *Service) GetAdvancedComputerSearchByName(ctx context.Context, name stri
 	return &result, resp, nil
 }
 
-// CreateAdvancedComputerSearch creates a new advanced computer search.
+// Create creates a new advanced computer search.
 // URL: POST /JSSResource/advancedcomputersearches/id/0
 // Returns the created advanced computer search ID only.
 // https://developer.jamf.com/jamf-pro/reference/createadvancedcomputersearchgbyid
-func (s *Service) CreateAdvancedComputerSearch(ctx context.Context, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -176,11 +176,11 @@ func (s *Service) CreateAdvancedComputerSearch(ctx context.Context, req *Request
 	return &result, resp, nil
 }
 
-// UpdateAdvancedComputerSearchByID updates the specified advanced computer search by ID.
+// UpdateByID updates the specified advanced computer search by ID.
 // URL: PUT /JSSResource/advancedcomputersearches/id/{id}
 // Returns the updated advanced computer search ID only.
 // https://developer.jamf.com/jamf-pro/reference/updateadvancedcomputersearchbyid
-func (s *Service) UpdateAdvancedComputerSearchByID(ctx context.Context, id int, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("advanced computer search ID must be a positive integer")
 	}
@@ -205,11 +205,11 @@ func (s *Service) UpdateAdvancedComputerSearchByID(ctx context.Context, id int, 
 	return &result, resp, nil
 }
 
-// UpdateAdvancedComputerSearchByName updates the specified advanced computer search by name.
+// UpdateByName updates the specified advanced computer search by name.
 // URL: PUT /JSSResource/advancedcomputersearches/name/{name}
 // Returns the updated advanced computer search ID only.
 // https://developer.jamf.com/jamf-pro/reference/updateadvancedcomputersearchbyname
-func (s *Service) UpdateAdvancedComputerSearchByName(ctx context.Context, name string, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("advanced computer search name is required")
 	}
@@ -234,10 +234,10 @@ func (s *Service) UpdateAdvancedComputerSearchByName(ctx context.Context, name s
 	return &result, resp, nil
 }
 
-// DeleteAdvancedComputerSearchByID removes the specified advanced computer search by ID.
+// DeleteByID removes the specified advanced computer search by ID.
 // URL: DELETE /JSSResource/advancedcomputersearches/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleteadvancedcomputersearchbyid
-func (s *Service) DeleteAdvancedComputerSearchByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("advanced computer search ID must be a positive integer")
 	}
@@ -257,10 +257,10 @@ func (s *Service) DeleteAdvancedComputerSearchByID(ctx context.Context, id int) 
 	return resp, nil
 }
 
-// DeleteAdvancedComputerSearchByName removes the specified advanced computer search by name.
+// DeleteByName removes the specified advanced computer search by name.
 // URL: DELETE /JSSResource/advancedcomputersearches/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deleteadvancedcomputersearchbyname
-func (s *Service) DeleteAdvancedComputerSearchByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("advanced computer search name is required")
 	}

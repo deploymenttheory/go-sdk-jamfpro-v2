@@ -50,7 +50,7 @@ type (
 
 		// GetPlansByGroupID retrieves managed software update plans for a specific group ID.
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-group-groupid
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-group-id
 		GetPlansByGroupID(ctx context.Context, groupID string, groupType string) (*ResponsePlanList, *interfaces.Response, error)
 
 		// GetFeatureToggle retrieves the current managed software update feature toggle settings.
@@ -138,13 +138,13 @@ func (s *Service) GetPlans(ctx context.Context, params url.Values) (*ResponsePla
 	var result ResponsePlanList
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]interface{}
+		var rawData map[string]any
 		if err := json.Unmarshal(pageData, &rawData); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
 
 		// Extract results array from the response
-		if results, ok := rawData["results"].([]interface{}); ok {
+		if results, ok := rawData["results"].([]any); ok {
 			for _, item := range results {
 				var plan ResourcePlan
 				if err := mapstructure.Decode(item, &plan); err != nil {
@@ -268,7 +268,7 @@ func (s *Service) CreatePlanByGroupID(ctx context.Context, plan *RequestPlanCrea
 
 // GetPlansByGroupID retrieves managed software update plans for a specific group ID.
 // URL: GET /api/v1/managed-software-updates/plans/group/{groupId}
-// https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-group-groupid
+// https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-group-id
 func (s *Service) GetPlansByGroupID(ctx context.Context, groupID string, groupType string) (*ResponsePlanList, *interfaces.Response, error) {
 	if groupID == "" {
 		return nil, nil, fmt.Errorf("groupID is required")

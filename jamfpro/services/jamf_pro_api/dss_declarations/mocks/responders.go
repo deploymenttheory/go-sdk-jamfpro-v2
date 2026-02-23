@@ -41,7 +41,7 @@ func (m *DSSDeclarationsMock) dispatch(method, path string) ([]byte, int, bool) 
 	return nil, 0, false
 }
 
-func (m *DSSDeclarationsMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DSSDeclarationsMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
@@ -56,15 +56,15 @@ func (m *DSSDeclarationsMock) Get(ctx context.Context, endpoint string, queryPar
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *DSSDeclarationsMock) Post(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DSSDeclarationsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *DSSDeclarationsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DSSDeclarationsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *DSSDeclarationsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DSSDeclarationsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
@@ -72,19 +72,19 @@ func (m *DSSDeclarationsMock) PostMultipart(ctx context.Context, endpoint string
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *DSSDeclarationsMock) Put(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DSSDeclarationsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *DSSDeclarationsMock) Patch(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DSSDeclarationsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *DSSDeclarationsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DSSDeclarationsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *DSSDeclarationsMock) DeleteWithBody(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *DSSDeclarationsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 

@@ -22,9 +22,9 @@ func setupMockService(t *testing.T) (*Service, *mocks.SitesMock) {
 
 func TestUnitListSites_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterListSitesMock()
+	mock.RegisterListMock()
 
-	result, resp, err := svc.ListSites(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -44,9 +44,9 @@ func TestUnitListSites_Success(t *testing.T) {
 
 func TestUnitGetSiteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetSiteByIDMock()
+	mock.RegisterGetByIDMock()
 
-	result, resp, err := svc.GetSiteByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -59,7 +59,7 @@ func TestUnitGetSiteByID_Success(t *testing.T) {
 func TestUnitGetSiteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetSiteByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -69,7 +69,7 @@ func TestUnitGetSiteByID_ZeroID(t *testing.T) {
 func TestUnitGetSiteByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetSiteByID(context.Background(), -1)
+	result, resp, err := svc.GetByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -80,7 +80,7 @@ func TestUnitGetSiteByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetSiteByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -93,9 +93,9 @@ func TestUnitGetSiteByID_NotFound(t *testing.T) {
 
 func TestUnitGetSiteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetSiteByNameMock()
+	mock.RegisterGetByNameMock()
 
-	result, resp, err := svc.GetSiteByName(context.Background(), "Main Campus")
+	result, resp, err := svc.GetByName(context.Background(), "Main Campus")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -108,7 +108,7 @@ func TestUnitGetSiteByName_Success(t *testing.T) {
 func TestUnitGetSiteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetSiteByName(context.Background(), "")
+	result, resp, err := svc.GetByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -121,10 +121,10 @@ func TestUnitGetSiteByName_EmptyName(t *testing.T) {
 
 func TestUnitCreateSite_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterCreateSiteMock()
+	mock.RegisterCreateMock()
 
 	req := &RequestSite{Name: "New Site"}
-	result, resp, err := svc.CreateSite(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -137,7 +137,7 @@ func TestUnitCreateSite_Success(t *testing.T) {
 func TestUnitCreateSite_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateSite(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -149,7 +149,7 @@ func TestUnitCreateSite_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestSite{Name: "Main Campus"}
-	result, resp, err := svc.CreateSite(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -162,10 +162,10 @@ func TestUnitCreateSite_Conflict(t *testing.T) {
 
 func TestUnitUpdateSiteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateSiteByIDMock()
+	mock.RegisterUpdateByIDMock()
 
 	req := &RequestSite{Name: "Main Campus Updated"}
-	result, resp, err := svc.UpdateSiteByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -178,7 +178,7 @@ func TestUnitUpdateSiteByID_Success(t *testing.T) {
 func TestUnitUpdateSiteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateSiteByID(context.Background(), 0, &RequestSite{Name: "x"})
+	result, resp, err := svc.UpdateByID(context.Background(), 0, &RequestSite{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -188,7 +188,7 @@ func TestUnitUpdateSiteByID_ZeroID(t *testing.T) {
 func TestUnitUpdateSiteByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateSiteByID(context.Background(), 1, nil)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -201,10 +201,10 @@ func TestUnitUpdateSiteByID_NilRequest(t *testing.T) {
 
 func TestUnitUpdateSiteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateSiteByNameMock()
+	mock.RegisterUpdateByNameMock()
 
 	req := &RequestSite{Name: "Main Campus Updated"}
-	result, resp, err := svc.UpdateSiteByName(context.Background(), "Main Campus", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "Main Campus", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -217,7 +217,7 @@ func TestUnitUpdateSiteByName_Success(t *testing.T) {
 func TestUnitUpdateSiteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateSiteByName(context.Background(), "", &RequestSite{Name: "x"})
+	result, resp, err := svc.UpdateByName(context.Background(), "", &RequestSite{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -227,7 +227,7 @@ func TestUnitUpdateSiteByName_EmptyName(t *testing.T) {
 func TestUnitUpdateSiteByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateSiteByName(context.Background(), "Main Campus", nil)
+	result, resp, err := svc.UpdateByName(context.Background(), "Main Campus", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -240,9 +240,9 @@ func TestUnitUpdateSiteByName_NilRequest(t *testing.T) {
 
 func TestUnitDeleteSiteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteSiteByIDMock()
+	mock.RegisterDeleteByIDMock()
 
-	resp, err := svc.DeleteSiteByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -251,7 +251,7 @@ func TestUnitDeleteSiteByID_Success(t *testing.T) {
 func TestUnitDeleteSiteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteSiteByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "site ID must be a positive integer")
@@ -263,9 +263,9 @@ func TestUnitDeleteSiteByID_ZeroID(t *testing.T) {
 
 func TestUnitDeleteSiteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteSiteByNameMock()
+	mock.RegisterDeleteByNameMock()
 
-	resp, err := svc.DeleteSiteByName(context.Background(), "Main Campus")
+	resp, err := svc.DeleteByName(context.Background(), "Main Campus")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -274,7 +274,7 @@ func TestUnitDeleteSiteByName_Success(t *testing.T) {
 func TestUnitDeleteSiteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteSiteByName(context.Background(), "")
+	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "site name is required")

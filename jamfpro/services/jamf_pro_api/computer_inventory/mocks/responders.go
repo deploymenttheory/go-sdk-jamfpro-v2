@@ -37,43 +37,63 @@ func (m *ComputerInventoryMock) register(method, path string, statusCode int, fi
 }
 
 func (m *ComputerInventoryMock) RegisterListMock() {
-	m.register("GET", "/api/v1/computers-inventory", 200, "validate_list.json")
+	m.register("GET", "/api/v3/computers-inventory", 200, "validate_list.json")
+}
+
+func (m *ComputerInventoryMock) RegisterCreateMock() {
+	m.register("POST", "/api/v3/computers-inventory", 201, "validate_create.json")
 }
 
 func (m *ComputerInventoryMock) RegisterGetByIDMock(id string) {
-	m.register("GET", "/api/v1/computers-inventory/"+id, 200, "validate_get.json")
+	m.register("GET", "/api/v3/computers-inventory/"+id, 200, "validate_get.json")
+}
+
+func (m *ComputerInventoryMock) RegisterGetDetailByIDMock(id string) {
+	m.register("GET", "/api/v3/computers-inventory-detail/"+id, 200, "validate_get.json")
 }
 
 func (m *ComputerInventoryMock) RegisterUpdateByIDMock(id string) {
-	m.register("PATCH", "/api/v1/computers-inventory/"+id, 200, "validate_get.json")
+	m.register("PATCH", "/api/v3/computers-inventory-detail/"+id, 200, "validate_get.json")
 }
 
 func (m *ComputerInventoryMock) RegisterDeleteByIDMock(id string) {
-	m.register("DELETE", "/api/v1/computers-inventory/"+id, 204, "")
+	m.register("DELETE", "/api/v3/computers-inventory/"+id, 204, "")
 }
 
 func (m *ComputerInventoryMock) RegisterListFileVaultMock() {
-	m.register("GET", "/api/v1/computers-inventory/filevault", 200, "validate_filevault_list.json")
+	m.register("GET", "/api/v3/computers-inventory/filevault", 200, "validate_filevault_list.json")
 }
 
 func (m *ComputerInventoryMock) RegisterGetFileVaultByIDMock(id string) {
-	m.register("GET", "/api/v1/computers-inventory/"+id+"/filevault", 200, "validate_filevault.json")
+	m.register("GET", "/api/v3/computers-inventory/"+id+"/filevault", 200, "validate_filevault.json")
 }
 
 func (m *ComputerInventoryMock) RegisterGetRecoveryLockPasswordByIDMock(id string) {
-	m.register("GET", "/api/v1/computers-inventory/"+id+"/view-recovery-lock-password", 200, "validate_recovery_lock.json")
+	m.register("GET", "/api/v3/computers-inventory/"+id+"/view-recovery-lock-password", 200, "validate_recovery_lock.json")
+}
+
+func (m *ComputerInventoryMock) RegisterUploadAttachmentMock(computerID string) {
+	m.register("POST", "/api/v3/computers-inventory/"+computerID+"/attachments", 201, "validate_attachment.json")
+}
+
+func (m *ComputerInventoryMock) RegisterGetAttachmentMock(computerID, attachmentID string) {
+	m.register("GET", "/api/v3/computers-inventory/"+computerID+"/attachments/"+attachmentID, 200, "")
 }
 
 func (m *ComputerInventoryMock) RegisterDeleteAttachmentMock(computerID, attachmentID string) {
-	m.register("DELETE", "/api/v1/computers-inventory/"+computerID+"/attachments/"+attachmentID, 204, "")
+	m.register("DELETE", "/api/v3/computers-inventory/"+computerID+"/attachments/"+attachmentID, 204, "")
+}
+
+func (m *ComputerInventoryMock) RegisterGetDeviceLockPinMock(id string) {
+	m.register("GET", "/api/v3/computers-inventory/"+id+"/view-device-lock-pin", 200, "validate_device_lock_pin.json")
 }
 
 func (m *ComputerInventoryMock) RegisterRemoveMDMProfileMock(id string) {
-	m.register("POST", "/api/v1/computers-inventory/"+id+"/remove-mdm-profile", 200, "validate_remove_mdm.json")
+	m.register("POST", "/api/v1/computer-inventory/"+id+"/remove-mdm-profile", 200, "validate_remove_mdm.json")
 }
 
 func (m *ComputerInventoryMock) RegisterEraseMock(id string) {
-	m.register("POST", "/api/v1/computers-inventory/"+id+"/erase", 204, "")
+	m.register("POST", "/api/v1/computer-inventory/"+id+"/erase", 204, "")
 }
 
 func (m *ComputerInventoryMock) dispatch(method, path string, result any) (*interfaces.Response, error) {

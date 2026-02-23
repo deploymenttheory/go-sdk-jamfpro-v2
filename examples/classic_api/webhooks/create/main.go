@@ -24,7 +24,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of CreateWebhook
+	// Example usage of Create
 	newWebhook := &webhooks.RequestWebhook{
 		Name:               "go-sdk-v2-Webhook",
 		Enabled:            true,
@@ -36,7 +36,7 @@ func main() {
 		AuthenticationType: "NONE",
 	}
 
-	createdWebhook, _, err := jamfClient.Webhooks.CreateWebhook(context.Background(), newWebhook)
+	createdWebhook, _, err := jamfClient.Webhooks.Create(context.Background(), newWebhook)
 	if err != nil {
 		fmt.Printf("Error creating webhook: %v\n", err)
 		return

@@ -43,14 +43,14 @@ func NewSitesMock() *SitesMock {
 
 // RegisterMocks registers all standard success responses in one call.
 func (m *SitesMock) RegisterMocks() {
-	m.RegisterListSitesMock()
-	m.RegisterGetSiteByIDMock()
-	m.RegisterGetSiteByNameMock()
-	m.RegisterCreateSiteMock()
-	m.RegisterUpdateSiteByIDMock()
-	m.RegisterUpdateSiteByNameMock()
-	m.RegisterDeleteSiteByIDMock()
-	m.RegisterDeleteSiteByNameMock()
+	m.RegisterListMock()
+	m.RegisterGetByIDMock()
+	m.RegisterGetByNameMock()
+	m.RegisterCreateMock()
+	m.RegisterUpdateByIDMock()
+	m.RegisterUpdateByNameMock()
+	m.RegisterDeleteByIDMock()
+	m.RegisterDeleteByNameMock()
 }
 
 // RegisterErrorMocks registers all error responses in one call.
@@ -61,43 +61,43 @@ func (m *SitesMock) RegisterErrorMocks() {
 
 // ---- Success responders ----
 
-// RegisterListSitesMock registers GET /JSSResource/sites → 200.
-func (m *SitesMock) RegisterListSitesMock() {
+// RegisterListMock registers GET /JSSResource/sites → 200.
+func (m *SitesMock) RegisterListMock() {
 	m.register("GET", "/JSSResource/sites", 200, "validate_list_sites.xml")
 }
 
-// RegisterGetSiteByIDMock registers GET /JSSResource/sites/id/1 → 200.
-func (m *SitesMock) RegisterGetSiteByIDMock() {
+// RegisterGetByIDMock registers GET /JSSResource/sites/id/1 → 200.
+func (m *SitesMock) RegisterGetByIDMock() {
 	m.register("GET", "/JSSResource/sites/id/1", 200, "validate_get_site.xml")
 }
 
-// RegisterGetSiteByNameMock registers GET /JSSResource/sites/name/Main%20Campus → 200.
-func (m *SitesMock) RegisterGetSiteByNameMock() {
+// RegisterGetByNameMock registers GET /JSSResource/sites/name/Main%20Campus → 200.
+func (m *SitesMock) RegisterGetByNameMock() {
 	m.register("GET", "/JSSResource/sites/name/Main Campus", 200, "validate_get_site.xml")
 }
 
-// RegisterCreateSiteMock registers POST /JSSResource/sites/id/0 → 201.
-func (m *SitesMock) RegisterCreateSiteMock() {
+// RegisterCreateMock registers POST /JSSResource/sites/id/0 → 201.
+func (m *SitesMock) RegisterCreateMock() {
 	m.register("POST", "/JSSResource/sites/id/0", 201, "validate_create_site.xml")
 }
 
-// RegisterUpdateSiteByIDMock registers PUT /JSSResource/sites/id/1 → 200.
-func (m *SitesMock) RegisterUpdateSiteByIDMock() {
+// RegisterUpdateByIDMock registers PUT /JSSResource/sites/id/1 → 200.
+func (m *SitesMock) RegisterUpdateByIDMock() {
 	m.register("PUT", "/JSSResource/sites/id/1", 200, "validate_update_site.xml")
 }
 
-// RegisterUpdateSiteByNameMock registers PUT /JSSResource/sites/name/Main Campus → 200.
-func (m *SitesMock) RegisterUpdateSiteByNameMock() {
+// RegisterUpdateByNameMock registers PUT /JSSResource/sites/name/Main Campus → 200.
+func (m *SitesMock) RegisterUpdateByNameMock() {
 	m.register("PUT", "/JSSResource/sites/name/Main Campus", 200, "validate_update_site.xml")
 }
 
-// RegisterDeleteSiteByIDMock registers DELETE /JSSResource/sites/id/1 → 200.
-func (m *SitesMock) RegisterDeleteSiteByIDMock() {
+// RegisterDeleteByIDMock registers DELETE /JSSResource/sites/id/1 → 200.
+func (m *SitesMock) RegisterDeleteByIDMock() {
 	m.register("DELETE", "/JSSResource/sites/id/1", 200, "")
 }
 
-// RegisterDeleteSiteByNameMock registers DELETE /JSSResource/sites/name/Main Campus → 200.
-func (m *SitesMock) RegisterDeleteSiteByNameMock() {
+// RegisterDeleteByNameMock registers DELETE /JSSResource/sites/name/Main Campus → 200.
+func (m *SitesMock) RegisterDeleteByNameMock() {
 	m.register("DELETE", "/JSSResource/sites/name/Main Campus", 200, "")
 }
 

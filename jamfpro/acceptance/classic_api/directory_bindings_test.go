@@ -30,7 +30,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test directory binding")
 
-	bindingName := uniqueName("acc-test-dirbinding")
+	bindingName := acc.UniqueName("acc-test-dirbinding")
 	createReq := &directory_bindings.RequestDirectoryBinding{
 		Name:       bindingName,
 		Priority:   1,
@@ -44,7 +44,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateDirectoryBinding(ctx1, createReq)
+	created, createResp, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err, "CreateDirectoryBinding should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
@@ -57,7 +57,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteDirectoryBindingByID(cleanupCtx, bindingID)
+		_, delErr := svc.DeleteByID(cleanupCtx, bindingID)
 		acc.LogCleanupDeleteError(t, "directory binding", fmt.Sprintf("%d", bindingID), delErr)
 	})
 
@@ -69,7 +69,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListDirectoryBindings(ctx2)
+	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListDirectoryBindings should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -94,7 +94,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetDirectoryBindingByID(ctx3, bindingID)
+	fetched, fetchResp, err := svc.GetByID(ctx3, bindingID)
 	require.NoError(t, err, "GetDirectoryBindingByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -110,7 +110,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetDirectoryBindingByName(ctx4, bindingName)
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, bindingName)
 	if err != nil && client.IsServerError(err) {
 		t.Skipf("GetDirectoryBindingByName returned 500 in this environment; skipping GetByName portion")
 	} else {
@@ -125,7 +125,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-dirbinding-updated")
+	updatedName := acc.UniqueName("acc-test-dirbinding-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating directory binding ID=%d to name=%q", bindingID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -140,8 +140,8 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 		ComputerOU: "CN=Computers,DC=example,DC=com",
 		Type:       "Active Directory",
 	}
-	updated, updateResp, err := svc.UpdateDirectoryBindingByID(ctx5, bindingID, updateReq)
-	require.NoError(t, err, "UpdateDirectoryBindingByID should not return an error")
+	updated, updateResp, err := svc.UpdateByID(ctx5, bindingID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
@@ -163,8 +163,8 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 		ComputerOU: "CN=Computers,DC=example,DC=com",
 		Type:       "Active Directory",
 	}
-	reverted, revertResp, err := svc.UpdateDirectoryBindingByName(ctx6, updatedName, revertReq)
-	require.NoError(t, err, "UpdateDirectoryBindingByName should not return an error")
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
+	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
@@ -177,7 +177,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetDirectoryBindingByID(ctx7, bindingID)
+	verified, verifyResp, err := svc.GetByID(ctx7, bindingID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -192,7 +192,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteDirectoryBindingByID(ctx8, bindingID)
+	deleteResp, err := svc.DeleteByID(ctx8, bindingID)
 	require.NoError(t, err, "DeleteDirectoryBindingByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -209,7 +209,7 @@ func TestAcceptance_DirectoryBindings_DeleteByName(t *testing.T) {
 	svc := acc.Client.DirectoryBindings
 	ctx := context.Background()
 
-	bindingName := uniqueName("acc-test-dirbinding-dbn")
+	bindingName := acc.UniqueName("acc-test-dirbinding-dbn")
 	createReq := &directory_bindings.RequestDirectoryBinding{
 		Name:       bindingName,
 		Priority:   1,
@@ -223,7 +223,7 @@ func TestAcceptance_DirectoryBindings_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateDirectoryBinding(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -233,18 +233,18 @@ func TestAcceptance_DirectoryBindings_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteDirectoryBindingByID(cleanupCtx, bindingID)
+		_, delErr := svc.DeleteByID(cleanupCtx, bindingID)
 		acc.LogCleanupDeleteError(t, "directory binding", fmt.Sprintf("%d", bindingID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteDirectoryBindingByName(ctx2, bindingName)
+	deleteResp, err := svc.DeleteByName(ctx2, bindingName)
 	if err != nil && client.IsServerError(err) {
-		t.Skipf("DeleteDirectoryBindingByName returned 500 in this environment; skipping")
+		t.Skipf("DeleteByName returned 500 in this environment; skipping")
 	} else {
-		require.NoError(t, err, "DeleteDirectoryBindingByName should not return an error")
+		require.NoError(t, err, "DeleteByName should not return an error")
 		require.NotNil(t, deleteResp)
 		assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 		acc.LogTestSuccess(t, "Directory binding %q deleted by name", bindingName)
@@ -261,43 +261,43 @@ func TestAcceptance_DirectoryBindings_ValidationErrors(t *testing.T) {
 	svc := acc.Client.DirectoryBindings
 
 	t.Run("GetDirectoryBindingByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetDirectoryBindingByID(context.Background(), 0)
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding ID must be a positive integer")
 	})
 
 	t.Run("GetDirectoryBindingByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetDirectoryBindingByName(context.Background(), "")
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding name is required")
 	})
 
 	t.Run("CreateDirectoryBinding_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateDirectoryBinding(context.Background(), nil)
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateDirectoryBindingByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateDirectoryBindingByID(context.Background(), 0, &directory_bindings.RequestDirectoryBinding{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &directory_bindings.RequestDirectoryBinding{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding ID must be a positive integer")
 	})
 
 	t.Run("UpdateDirectoryBindingByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateDirectoryBindingByName(context.Background(), "", &directory_bindings.RequestDirectoryBinding{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &directory_bindings.RequestDirectoryBinding{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding name is required")
 	})
 
 	t.Run("DeleteDirectoryBindingByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteDirectoryBindingByID(context.Background(), 0)
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding ID must be a positive integer")
 	})
 
 	t.Run("DeleteDirectoryBindingByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteDirectoryBindingByName(context.Background(), "")
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding name is required")
 	})

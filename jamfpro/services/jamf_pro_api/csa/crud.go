@@ -21,7 +21,7 @@ type (
 
 		// GetTenantIDV1 returns the CSA tenant ID.
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-csa-token-tenant-id
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-csa-tenant-id
 		GetTenantIDV1(ctx context.Context) (*ResourceTenantID, *interfaces.Response, error)
 
 		// DeleteTokenExchangeV1 deletes the CSA token exchange, disabling Jamf Pro's ability to authenticate with cloud-hosted services.
@@ -65,7 +65,7 @@ func (s *Service) GetTokenExchangeDetailsV1(ctx context.Context) (*ResourceToken
 
 // GetTenantIDV1 returns the CSA tenant ID.
 // URL: GET /api/v1/csa/token/tenant-id
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-csa-token-tenant-id
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-csa-tenant-id
 func (s *Service) GetTenantIDV1(ctx context.Context) (*ResourceTenantID, *interfaces.Response, error) {
 	endpoint := fmt.Sprintf("%s/tenant-id", EndpointCSAV1)
 

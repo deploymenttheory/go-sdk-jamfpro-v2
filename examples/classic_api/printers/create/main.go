@@ -33,7 +33,7 @@ func main() {
 		Model:    "Example Printer Model",
 	}
 
-	createdPrinter, _, err := jamfClient.Printers.CreatePrinter(context.Background(), newPrinter)
+	createdPrinter, _, err := jamfClient.Printers.Create(context.Background(), newPrinter)
 	if err != nil {
 		fmt.Printf("Error creating printer: %v\n", err)
 		return

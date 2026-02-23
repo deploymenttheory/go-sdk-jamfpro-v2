@@ -13,47 +13,47 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/diskencryptionconfigurations
 	DiskEncryptionConfigurationsServiceInterface interface {
-		// ListDiskEncryptionConfigurations returns all disk encryption configurations.
+		// List returns all disk encryption configurations.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findalldiskencryptionconfigurations
-		ListDiskEncryptionConfigurations(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddiskencryptionconfigurations
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
-		// GetDiskEncryptionConfigurationByID returns the specified disk encryption configuration by ID.
+		// GetByID returns the specified disk encryption configuration by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddiskencryptionconfigurationsbyid
-		GetDiskEncryptionConfigurationByID(ctx context.Context, id int) (*ResourceDiskEncryptionConfiguration, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceDiskEncryptionConfiguration, *interfaces.Response, error)
 
-		// GetDiskEncryptionConfigurationByName returns the specified disk encryption configuration by name.
+		// GetByName returns the specified disk encryption configuration by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddiskencryptionconfigurationsbyname
-		GetDiskEncryptionConfigurationByName(ctx context.Context, name string) (*ResourceDiskEncryptionConfiguration, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceDiskEncryptionConfiguration, *interfaces.Response, error)
 
-		// CreateDiskEncryptionConfiguration creates a new disk encryption configuration.
+		// Create creates a new disk encryption configuration.
 		//
 		// Returns the created resource ID.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/creatediskencryptionconfiguration
-		CreateDiskEncryptionConfiguration(ctx context.Context, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/creatediskencryptionconfigurationbyid
+		Create(ctx context.Context, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// UpdateDiskEncryptionConfigurationByID updates the specified disk encryption configuration by ID.
+		// UpdateByID updates the specified disk encryption configuration by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatediskencryptionconfigurationbyid
-		UpdateDiskEncryptionConfigurationByID(ctx context.Context, id int, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// UpdateDiskEncryptionConfigurationByName updates the specified disk encryption configuration by name.
+		// UpdateByName updates the specified disk encryption configuration by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatediskencryptionconfigurationbyname
-		UpdateDiskEncryptionConfigurationByName(ctx context.Context, name string, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// DeleteDiskEncryptionConfigurationByID removes the specified disk encryption configuration by ID.
+		// DeleteByID removes the specified disk encryption configuration by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletediskencryptionconfigurationbyid
-		DeleteDiskEncryptionConfigurationByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteDiskEncryptionConfigurationByName removes the specified disk encryption configuration by name.
+		// DeleteByName removes the specified disk encryption configuration by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletediskencryptionconfigurationbyname
-		DeleteDiskEncryptionConfigurationByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the disk encryption configuration-related Classic API methods.
@@ -75,10 +75,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - Disk Encryption Configurations CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListDiskEncryptionConfigurations returns all disk encryption configurations.
+// List returns all disk encryption configurations.
 // URL: GET /JSSResource/diskencryptionconfigurations
 // https://developer.jamf.com/jamf-pro/reference/findalldiskencryptionconfigurations
-func (s *Service) ListDiskEncryptionConfigurations(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicDiskEncryptionConfigurations
@@ -96,10 +96,10 @@ func (s *Service) ListDiskEncryptionConfigurations(ctx context.Context) (*ListRe
 	return &result, resp, nil
 }
 
-// GetDiskEncryptionConfigurationByID returns the specified disk encryption configuration by ID.
+// GetByID returns the specified disk encryption configuration by ID.
 // URL: GET /JSSResource/diskencryptionconfigurations/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/finddiskencryptionconfigurationsbyid
-func (s *Service) GetDiskEncryptionConfigurationByID(ctx context.Context, id int) (*ResourceDiskEncryptionConfiguration, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceDiskEncryptionConfiguration, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("disk encryption configuration ID must be a positive integer")
 	}
@@ -121,10 +121,10 @@ func (s *Service) GetDiskEncryptionConfigurationByID(ctx context.Context, id int
 	return &result, resp, nil
 }
 
-// GetDiskEncryptionConfigurationByName returns the specified disk encryption configuration by name.
+// GetByName returns the specified disk encryption configuration by name.
 // URL: GET /JSSResource/diskencryptionconfigurations/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/finddiskencryptionconfigurationsbyname
-func (s *Service) GetDiskEncryptionConfigurationByName(ctx context.Context, name string) (*ResourceDiskEncryptionConfiguration, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceDiskEncryptionConfiguration, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("disk encryption configuration name is required")
 	}
@@ -146,11 +146,11 @@ func (s *Service) GetDiskEncryptionConfigurationByName(ctx context.Context, name
 	return &result, resp, nil
 }
 
-// CreateDiskEncryptionConfiguration creates a new disk encryption configuration.
+// Create creates a new disk encryption configuration.
 // URL: POST /JSSResource/diskencryptionconfigurations/id/0
 // Returns the created resource ID.
-// https://developer.jamf.com/jamf-pro/reference/creatediskencryptionconfiguration
-func (s *Service) CreateDiskEncryptionConfiguration(ctx context.Context, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error) {
+// https://developer.jamf.com/jamf-pro/reference/creatediskencryptionconfigurationbyid
+func (s *Service) Create(ctx context.Context, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -172,10 +172,10 @@ func (s *Service) CreateDiskEncryptionConfiguration(ctx context.Context, req *Re
 	return &result, resp, nil
 }
 
-// UpdateDiskEncryptionConfigurationByID updates the specified disk encryption configuration by ID.
+// UpdateByID updates the specified disk encryption configuration by ID.
 // URL: PUT /JSSResource/diskencryptionconfigurations/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updatediskencryptionconfigurationbyid
-func (s *Service) UpdateDiskEncryptionConfigurationByID(ctx context.Context, id int, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("disk encryption configuration ID must be a positive integer")
 	}
@@ -200,10 +200,10 @@ func (s *Service) UpdateDiskEncryptionConfigurationByID(ctx context.Context, id 
 	return &result, resp, nil
 }
 
-// UpdateDiskEncryptionConfigurationByName updates the specified disk encryption configuration by name.
+// UpdateByName updates the specified disk encryption configuration by name.
 // URL: PUT /JSSResource/diskencryptionconfigurations/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updatediskencryptionconfigurationbyname
-func (s *Service) UpdateDiskEncryptionConfigurationByName(ctx context.Context, name string, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("disk encryption configuration name is required")
 	}
@@ -228,10 +228,10 @@ func (s *Service) UpdateDiskEncryptionConfigurationByName(ctx context.Context, n
 	return &result, resp, nil
 }
 
-// DeleteDiskEncryptionConfigurationByID removes the specified disk encryption configuration by ID.
+// DeleteByID removes the specified disk encryption configuration by ID.
 // URL: DELETE /JSSResource/diskencryptionconfigurations/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deletediskencryptionconfigurationbyid
-func (s *Service) DeleteDiskEncryptionConfigurationByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("disk encryption configuration ID must be a positive integer")
 	}
@@ -251,10 +251,10 @@ func (s *Service) DeleteDiskEncryptionConfigurationByID(ctx context.Context, id 
 	return resp, nil
 }
 
-// DeleteDiskEncryptionConfigurationByName removes the specified disk encryption configuration by name.
+// DeleteByName removes the specified disk encryption configuration by name.
 // URL: DELETE /JSSResource/diskencryptionconfigurations/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deletediskencryptionconfigurationbyname
-func (s *Service) DeleteDiskEncryptionConfigurationByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("disk encryption configuration name is required")
 	}

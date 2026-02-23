@@ -29,7 +29,7 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test class")
 
-	className := uniqueName("acc-test-class")
+	className := acc.UniqueName("acc-test-class")
 	createReq := &classes.RequestClass{
 		Name:        className,
 		Description: "Acceptance test class",
@@ -49,8 +49,8 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateClass(ctx1, createReq)
-	require.NoError(t, err, "CreateClass should not return an error")
+	created, createResp, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
@@ -62,7 +62,7 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteClassByID(cleanupCtx, classID)
+		_, delErr := svc.DeleteByID(cleanupCtx, classID)
 		acc.LogCleanupDeleteError(t, "class", fmt.Sprintf("%d", classID), delErr)
 	})
 
@@ -74,8 +74,8 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListClasses(ctx2)
-	require.NoError(t, err, "ListClasses should not return an error")
+	list, listResp, err := svc.List(ctx2)
+	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.Size, "size should be positive")
@@ -99,8 +99,8 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetClassByID(ctx3, classID)
-	require.NoError(t, err, "GetClassByID should not return an error")
+	fetched, fetchResp, err := svc.GetByID(ctx3, classID)
+	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, classID, fetched.ID)
@@ -116,8 +116,8 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetClassByName(ctx4, className)
-	require.NoError(t, err, "GetClassByName should not return an error")
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, className)
+	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
 	assert.Equal(t, classID, fetchedByName.ID)
@@ -127,7 +127,7 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-class-updated")
+	updatedName := acc.UniqueName("acc-test-class-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating class ID=%d to name=%q", classID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -140,8 +140,8 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 			{Student: "student3@example.com"},
 		},
 	}
-	updated, updateResp, err := svc.UpdateClassByID(ctx5, classID, updateReq)
-	require.NoError(t, err, "UpdateClassByID should not return an error")
+	updated, updateResp, err := svc.UpdateByID(ctx5, classID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
@@ -158,8 +158,8 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 		Name:        className,
 		Description: "Reverted description",
 	}
-	reverted, revertResp, err := svc.UpdateClassByName(ctx6, updatedName, revertReq)
-	require.NoError(t, err, "UpdateClassByName should not return an error")
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
+	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
@@ -172,7 +172,7 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetClassByID(ctx7, classID)
+	verified, verifyResp, err := svc.GetByID(ctx7, classID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -187,8 +187,8 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteClassByID(ctx8, classID)
-	require.NoError(t, err, "DeleteClassByID should not return an error")
+	deleteResp, err := svc.DeleteByID(ctx8, classID)
+	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Class ID=%d deleted", classID)
@@ -204,7 +204,7 @@ func TestAcceptance_Classes_DeleteByName(t *testing.T) {
 	svc := acc.Client.Classes
 	ctx := context.Background()
 
-	className := uniqueName("acc-test-class-del")
+	className := acc.UniqueName("acc-test-class-del")
 	createReq := &classes.RequestClass{
 		Name:        className,
 		Description: "Test class for delete by name",
@@ -213,7 +213,7 @@ func TestAcceptance_Classes_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateClass(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -223,15 +223,15 @@ func TestAcceptance_Classes_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteClassByID(cleanupCtx, classID)
+		_, delErr := svc.DeleteByID(cleanupCtx, classID)
 		acc.LogCleanupDeleteError(t, "class", fmt.Sprintf("%d", classID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteClassByName(ctx2, className)
-	require.NoError(t, err, "DeleteClassByName should not return an error")
+	deleteResp, err := svc.DeleteByName(ctx2, className)
+	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Class %q deleted by name", className)
@@ -247,44 +247,44 @@ func TestAcceptance_Classes_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.Classes
 
-	t.Run("GetClassByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetClassByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class ID must be a positive integer")
 	})
 
-	t.Run("GetClassByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetClassByName(context.Background(), "")
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class name is required")
 	})
 
-	t.Run("CreateClass_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateClass(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdateClassByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateClassByID(context.Background(), 0, &classes.RequestClass{Name: "x"})
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.UpdateByID(context.Background(), 0, &classes.RequestClass{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class ID must be a positive integer")
 	})
 
-	t.Run("UpdateClassByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateClassByName(context.Background(), "", &classes.RequestClass{Name: "x"})
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.UpdateByName(context.Background(), "", &classes.RequestClass{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class name is required")
 	})
 
-	t.Run("DeleteClassByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteClassByID(context.Background(), 0)
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class ID must be a positive integer")
 	})
 
-	t.Run("DeleteClassByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteClassByName(context.Background(), "")
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class name is required")
 	})

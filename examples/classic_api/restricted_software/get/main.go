@@ -1,4 +1,4 @@
-// Package main demonstrates GetRestrictedSoftwareByID — retrieves a single restricted software by ID.
+// Package main demonstrates GetByID — retrieves a single restricted software by ID.
 //
 // Run with: go run ./examples/classic_api/restricted_software/get
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set RESTRICTED_SOFTWARE_ID or uses first from list.
@@ -29,7 +29,7 @@ func main() {
 			log.Fatalf("invalid RESTRICTED_SOFTWARE_ID %q: %v", raw, err)
 		}
 	} else {
-		list, _, err := client.RestrictedSoftware.ListRestrictedSoftware(ctx)
+		list, _, err := client.RestrictedSoftware.List(ctx)
 		if err != nil || len(list.Results) == 0 {
 			log.Fatal("Set RESTRICTED_SOFTWARE_ID or ensure at least one restricted software item exists")
 		}
@@ -37,9 +37,9 @@ func main() {
 		fmt.Printf("Using first restricted software ID: %d\n", id)
 	}
 
-	software, resp, err := client.RestrictedSoftware.GetRestrictedSoftwareByID(ctx, id)
+	software, resp, err := client.RestrictedSoftware.GetByID(ctx, id)
 	if err != nil {
-		log.Fatalf("GetRestrictedSoftwareByID failed: %v", err)
+		log.Fatalf("GetByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

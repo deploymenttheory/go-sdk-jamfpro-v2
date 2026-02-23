@@ -21,9 +21,9 @@ func setupMockService(t *testing.T) (*Service, *mocks.DiskEncryptionConfiguratio
 
 func TestUnitListDiskEncryptionConfigurations_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterListDiskEncryptionConfigurationsMock()
+	mock.RegisterListMock()
 
-	result, resp, err := svc.ListDiskEncryptionConfigurations(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -41,9 +41,9 @@ func TestUnitListDiskEncryptionConfigurations_Success(t *testing.T) {
 
 func TestUnitGetDiskEncryptionConfigurationByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetDiskEncryptionConfigurationByIDMock()
+	mock.RegisterGetByIDMock()
 
-	result, resp, err := svc.GetDiskEncryptionConfigurationByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -56,14 +56,14 @@ func TestUnitGetDiskEncryptionConfigurationByID_Success(t *testing.T) {
 
 func TestUnitGetDiskEncryptionConfigurationByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.GetDiskEncryptionConfigurationByID(context.Background(), 0)
+	_, _, err := svc.GetByID(context.Background(), 0)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 }
 
 func TestUnitGetDiskEncryptionConfigurationByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.GetDiskEncryptionConfigurationByID(context.Background(), -1)
+	_, _, err := svc.GetByID(context.Background(), -1)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 }
@@ -72,7 +72,7 @@ func TestUnitGetDiskEncryptionConfigurationByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	_, _, err := svc.GetDiskEncryptionConfigurationByID(context.Background(), 999)
+	_, _, err := svc.GetByID(context.Background(), 999)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "404")
 }
@@ -83,9 +83,9 @@ func TestUnitGetDiskEncryptionConfigurationByID_NotFound(t *testing.T) {
 
 func TestUnitGetDiskEncryptionConfigurationByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetDiskEncryptionConfigurationByNameMock()
+	mock.RegisterGetByNameMock()
 
-	result, resp, err := svc.GetDiskEncryptionConfigurationByName(context.Background(), "FileVault Config")
+	result, resp, err := svc.GetByName(context.Background(), "FileVault Config")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -96,7 +96,7 @@ func TestUnitGetDiskEncryptionConfigurationByName_Success(t *testing.T) {
 
 func TestUnitGetDiskEncryptionConfigurationByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.GetDiskEncryptionConfigurationByName(context.Background(), "")
+	_, _, err := svc.GetByName(context.Background(), "")
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration name is required")
 }
@@ -107,14 +107,14 @@ func TestUnitGetDiskEncryptionConfigurationByName_EmptyName(t *testing.T) {
 
 func TestUnitCreateDiskEncryptionConfiguration_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterCreateDiskEncryptionConfigurationMock()
+	mock.RegisterCreateMock()
 
 	req := &RequestDiskEncryptionConfiguration{
 		Name:                  "FileVault Config",
 		KeyType:               "Individual",
 		FileVaultEnabledUsers: "Management Account",
 	}
-	result, resp, err := svc.CreateDiskEncryptionConfiguration(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -124,7 +124,7 @@ func TestUnitCreateDiskEncryptionConfiguration_Success(t *testing.T) {
 
 func TestUnitCreateDiskEncryptionConfiguration_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.CreateDiskEncryptionConfiguration(context.Background(), nil)
+	_, _, err := svc.Create(context.Background(), nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
@@ -134,7 +134,7 @@ func TestUnitCreateDiskEncryptionConfiguration_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestDiskEncryptionConfiguration{Name: "FileVault Config"}
-	_, _, err := svc.CreateDiskEncryptionConfiguration(context.Background(), req)
+	_, _, err := svc.Create(context.Background(), req)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "409")
 }
@@ -145,10 +145,10 @@ func TestUnitCreateDiskEncryptionConfiguration_Conflict(t *testing.T) {
 
 func TestUnitUpdateDiskEncryptionConfigurationByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateDiskEncryptionConfigurationByIDMock()
+	mock.RegisterUpdateByIDMock()
 
 	req := &RequestDiskEncryptionConfiguration{Name: "FileVault Config"}
-	result, resp, err := svc.UpdateDiskEncryptionConfigurationByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -158,14 +158,14 @@ func TestUnitUpdateDiskEncryptionConfigurationByID_Success(t *testing.T) {
 
 func TestUnitUpdateDiskEncryptionConfigurationByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateDiskEncryptionConfigurationByID(context.Background(), 0, &RequestDiskEncryptionConfiguration{Name: "x"})
+	_, _, err := svc.UpdateByID(context.Background(), 0, &RequestDiskEncryptionConfiguration{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 }
 
 func TestUnitUpdateDiskEncryptionConfigurationByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateDiskEncryptionConfigurationByID(context.Background(), 1, nil)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
@@ -176,10 +176,10 @@ func TestUnitUpdateDiskEncryptionConfigurationByID_NilRequest(t *testing.T) {
 
 func TestUnitUpdateDiskEncryptionConfigurationByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateDiskEncryptionConfigurationByNameMock()
+	mock.RegisterUpdateByNameMock()
 
 	req := &RequestDiskEncryptionConfiguration{Name: "FileVault Config"}
-	result, resp, err := svc.UpdateDiskEncryptionConfigurationByName(context.Background(), "FileVault Config", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "FileVault Config", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -189,14 +189,14 @@ func TestUnitUpdateDiskEncryptionConfigurationByName_Success(t *testing.T) {
 
 func TestUnitUpdateDiskEncryptionConfigurationByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateDiskEncryptionConfigurationByName(context.Background(), "", &RequestDiskEncryptionConfiguration{Name: "x"})
+	_, _, err := svc.UpdateByName(context.Background(), "", &RequestDiskEncryptionConfiguration{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration name is required")
 }
 
 func TestUnitUpdateDiskEncryptionConfigurationByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateDiskEncryptionConfigurationByName(context.Background(), "FileVault Config", nil)
+	_, _, err := svc.UpdateByName(context.Background(), "FileVault Config", nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
@@ -207,16 +207,16 @@ func TestUnitUpdateDiskEncryptionConfigurationByName_NilRequest(t *testing.T) {
 
 func TestUnitDeleteDiskEncryptionConfigurationByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteDiskEncryptionConfigurationByIDMock()
+	mock.RegisterDeleteByIDMock()
 
-	resp, err := svc.DeleteDiskEncryptionConfigurationByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
 func TestUnitDeleteDiskEncryptionConfigurationByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, err := svc.DeleteDiskEncryptionConfigurationByID(context.Background(), 0)
+	_, err := svc.DeleteByID(context.Background(), 0)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 }
@@ -227,16 +227,16 @@ func TestUnitDeleteDiskEncryptionConfigurationByID_ZeroID(t *testing.T) {
 
 func TestUnitDeleteDiskEncryptionConfigurationByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteDiskEncryptionConfigurationByNameMock()
+	mock.RegisterDeleteByNameMock()
 
-	resp, err := svc.DeleteDiskEncryptionConfigurationByName(context.Background(), "FileVault Config")
+	resp, err := svc.DeleteByName(context.Background(), "FileVault Config")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
 func TestUnitDeleteDiskEncryptionConfigurationByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, err := svc.DeleteDiskEncryptionConfigurationByName(context.Background(), "")
+	_, err := svc.DeleteByName(context.Background(), "")
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration name is required")
 }

@@ -18,6 +18,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ldap_servers"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/network_segments"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/patch_external_sources"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/policies"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/printers"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/removeable_mac_addresses"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/restricted_software"
@@ -73,8 +74,10 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/return_to_service"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_plus_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/oauth2_session_tokens"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/service_discovery_enrollment"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_certificate"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_failover"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/managed_software_updates"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
@@ -114,6 +117,7 @@ type Client struct {
 	LdapServers                  *ldap_servers.Service
 	NetworkSegments              *network_segments.Service
 	PatchExternalSources         *patch_external_sources.Service
+	Policies                     *policies.Service
 	Printers                     *printers.Service
 	RemoveableMacAddresses       *removeable_mac_addresses.Service
 	RestrictedSoftware           *restricted_software.Service
@@ -169,6 +173,7 @@ type Client struct {
 	Reenrollment                     *reenrollment.Service
 	AdueSessionTokenSettings         *adue_session_token_settings.Service
 	SsoCertificate                   *sso_certificate.Service
+	SsoFailover                      *sso_failover.Service
 	SsoSettings                      *sso_settings.Service
 	JamfProInformation               *jamf_pro_information.Service
 	JamfProVersion                  *jamf_pro_version.Service
@@ -177,6 +182,7 @@ type Client struct {
 	MobileDeviceGroups              *mobile_device_groups.Service
 	MobileDevicePrestages           *mobile_device_prestages.Service
 	Notifications                   *notifications.Service
+	OAuth2SessionTokens             *oauth2_session_tokens.Service
 	Onboarding                      *onboarding.Service
 	Packages                        *packages.Service
 	PatchPolicies                   *patch_policies.Service
@@ -214,6 +220,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		LdapServers:                     ldap_servers.NewService(transport),
 		NetworkSegments:                 network_segments.NewService(transport),
 		PatchExternalSources:            patch_external_sources.NewService(transport),
+		Policies:                        policies.NewService(transport),
 		Printers:                        printers.NewService(transport),
 		RemoveableMacAddresses:          removeable_mac_addresses.NewService(transport),
 		RestrictedSoftware:              restricted_software.NewService(transport),
@@ -267,6 +274,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		Reenrollment:                     reenrollment.NewService(transport),
 		AdueSessionTokenSettings:         adue_session_token_settings.NewService(transport),
 		SsoCertificate:                  sso_certificate.NewService(transport),
+		SsoFailover:                     sso_failover.NewService(transport),
 		SsoSettings:                     sso_settings.NewService(transport),
 		JamfProInformation:              jamf_pro_information.NewService(transport),
 		JamfProVersion:                  jamf_pro_version.NewService(transport),
@@ -275,6 +283,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		MobileDeviceGroups:              mobile_device_groups.NewService(transport),
 		MobileDevicePrestages:           mobile_device_prestages.NewService(transport),
 		Notifications:                   notifications.NewService(transport),
+		OAuth2SessionTokens:             oauth2_session_tokens.NewService(transport),
 		Onboarding:                      onboarding.NewService(transport),
 		Packages:                        packages.NewService(transport),
 		PatchPolicies:                   patch_policies.NewService(transport),

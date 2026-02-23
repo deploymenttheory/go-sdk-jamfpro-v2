@@ -29,7 +29,7 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test network segment")
 
-	segmentName := uniqueName("acc-test-netseg")
+	segmentName := acc.UniqueName("acc-test-netseg")
 	createReq := &network_segments.RequestNetworkSegment{
 		Name:            segmentName,
 		StartingAddress: "192.168.100.0",
@@ -39,8 +39,8 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateNetworkSegment(ctx1, createReq)
-	require.NoError(t, err, "CreateNetworkSegment should not return an error")
+	created, createResp, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
@@ -52,7 +52,7 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteNetworkSegmentByID(cleanupCtx, segmentID)
+		_, delErr := svc.DeleteByID(cleanupCtx, segmentID)
 		acc.LogCleanupDeleteError(t, "network segment", fmt.Sprintf("%d", segmentID), delErr)
 	})
 
@@ -64,8 +64,8 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListNetworkSegments(ctx2)
-	require.NoError(t, err, "ListNetworkSegments should not return an error")
+	list, listResp, err := svc.List(ctx2)
+	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.Size, "size should be positive")
@@ -89,8 +89,8 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetNetworkSegmentByID(ctx3, segmentID)
-	require.NoError(t, err, "GetNetworkSegmentByID should not return an error")
+	fetched, fetchResp, err := svc.GetByID(ctx3, segmentID)
+	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, segmentID, fetched.ID)
@@ -107,8 +107,8 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetNetworkSegmentByName(ctx4, segmentName)
-	require.NoError(t, err, "GetNetworkSegmentByName should not return an error")
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, segmentName)
+	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
 	assert.Equal(t, segmentID, fetchedByName.ID)
@@ -118,7 +118,7 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-netseg-updated")
+	updatedName := acc.UniqueName("acc-test-netseg-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating network segment ID=%d to name=%q", segmentID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -129,8 +129,8 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 		StartingAddress: "192.168.100.0",
 		EndingAddress:   "192.168.100.255",
 	}
-	updated, updateResp, err := svc.UpdateNetworkSegmentByID(ctx5, segmentID, updateReq)
-	require.NoError(t, err, "UpdateNetworkSegmentByID should not return an error")
+	updated, updateResp, err := svc.UpdateByID(ctx5, segmentID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
@@ -148,8 +148,8 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 		StartingAddress: "192.168.100.0",
 		EndingAddress:   "192.168.100.255",
 	}
-	reverted, revertResp, err := svc.UpdateNetworkSegmentByName(ctx6, updatedName, revertReq)
-	require.NoError(t, err, "UpdateNetworkSegmentByName should not return an error")
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
+	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
@@ -162,7 +162,7 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetNetworkSegmentByID(ctx7, segmentID)
+	verified, verifyResp, err := svc.GetByID(ctx7, segmentID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -177,8 +177,8 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteNetworkSegmentByID(ctx8, segmentID)
-	require.NoError(t, err, "DeleteNetworkSegmentByID should not return an error")
+	deleteResp, err := svc.DeleteByID(ctx8, segmentID)
+	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Network segment ID=%d deleted", segmentID)
@@ -194,7 +194,7 @@ func TestAcceptance_NetworkSegments_DeleteByName(t *testing.T) {
 	svc := acc.Client.NetworkSegments
 	ctx := context.Background()
 
-	segmentName := uniqueName("acc-test-netseg-dbn")
+	segmentName := acc.UniqueName("acc-test-netseg-dbn")
 	createReq := &network_segments.RequestNetworkSegment{
 		Name:            segmentName,
 		StartingAddress: "172.16.50.0",
@@ -204,7 +204,7 @@ func TestAcceptance_NetworkSegments_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateNetworkSegment(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -214,15 +214,15 @@ func TestAcceptance_NetworkSegments_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteNetworkSegmentByID(cleanupCtx, segmentID)
+		_, delErr := svc.DeleteByID(cleanupCtx, segmentID)
 		acc.LogCleanupDeleteError(t, "network segment", fmt.Sprintf("%d", segmentID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteNetworkSegmentByName(ctx2, segmentName)
-	require.NoError(t, err, "DeleteNetworkSegmentByName should not return an error")
+	deleteResp, err := svc.DeleteByName(ctx2, segmentName)
+	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Network segment %q deleted by name", segmentName)
@@ -239,43 +239,43 @@ func TestAcceptance_NetworkSegments_ValidationErrors(t *testing.T) {
 	svc := acc.Client.NetworkSegments
 
 	t.Run("GetNetworkSegmentByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetNetworkSegmentByID(context.Background(), 0)
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment ID must be a positive integer")
 	})
 
 	t.Run("GetNetworkSegmentByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetNetworkSegmentByName(context.Background(), "")
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment name is required")
 	})
 
 	t.Run("CreateNetworkSegment_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateNetworkSegment(context.Background(), nil)
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateNetworkSegmentByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateNetworkSegmentByID(context.Background(), 0, &network_segments.RequestNetworkSegment{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &network_segments.RequestNetworkSegment{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment ID must be a positive integer")
 	})
 
 	t.Run("UpdateNetworkSegmentByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateNetworkSegmentByName(context.Background(), "", &network_segments.RequestNetworkSegment{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &network_segments.RequestNetworkSegment{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment name is required")
 	})
 
 	t.Run("DeleteNetworkSegmentByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteNetworkSegmentByID(context.Background(), 0)
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment ID must be a positive integer")
 	})
 
 	t.Run("DeleteNetworkSegmentByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteNetworkSegmentByName(context.Background(), "")
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment name is required")
 	})

@@ -24,7 +24,7 @@ func TestUnitListClasses_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListClassesMock()
 
-	result, resp, err := svc.ListClasses(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -46,7 +46,7 @@ func TestUnitGetClassByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetClassByIDMock()
 
-	result, resp, err := svc.GetClassByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -60,7 +60,7 @@ func TestUnitGetClassByID_Success(t *testing.T) {
 func TestUnitGetClassByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetClassByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -70,7 +70,7 @@ func TestUnitGetClassByID_ZeroID(t *testing.T) {
 func TestUnitGetClassByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetClassByID(context.Background(), -1)
+	result, resp, err := svc.GetByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -81,7 +81,7 @@ func TestUnitGetClassByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetClassByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -96,7 +96,7 @@ func TestUnitGetClassByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetClassByNameMock()
 
-	result, resp, err := svc.GetClassByName(context.Background(), "Test Class 1")
+	result, resp, err := svc.GetByName(context.Background(), "Test Class 1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -109,7 +109,7 @@ func TestUnitGetClassByName_Success(t *testing.T) {
 func TestUnitGetClassByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetClassByName(context.Background(), "")
+	result, resp, err := svc.GetByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -125,7 +125,7 @@ func TestUnitCreateClass_Success(t *testing.T) {
 	mock.RegisterCreateClassMock()
 
 	req := &RequestClass{Name: "New Test Class"}
-	result, resp, err := svc.CreateClass(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -137,7 +137,7 @@ func TestUnitCreateClass_Success(t *testing.T) {
 func TestUnitCreateClass_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateClass(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -149,7 +149,7 @@ func TestUnitCreateClass_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestClass{Name: "Duplicate Class"}
-	result, resp, err := svc.CreateClass(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -165,7 +165,7 @@ func TestUnitUpdateClassByID_Success(t *testing.T) {
 	mock.RegisterUpdateClassByIDMock()
 
 	req := &RequestClass{Name: "Updated Class Name"}
-	result, resp, err := svc.UpdateClassByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -178,7 +178,7 @@ func TestUnitUpdateClassByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestClass{Name: "Updated Class Name"}
-	result, resp, err := svc.UpdateClassByID(context.Background(), 0, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 0, req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -188,7 +188,7 @@ func TestUnitUpdateClassByID_ZeroID(t *testing.T) {
 func TestUnitUpdateClassByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateClassByID(context.Background(), 1, nil)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -204,7 +204,7 @@ func TestUnitUpdateClassByName_Success(t *testing.T) {
 	mock.RegisterUpdateClassByNameMock()
 
 	req := &RequestClass{Name: "Updated Class Name"}
-	result, resp, err := svc.UpdateClassByName(context.Background(), "Test Class 1", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "Test Class 1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -217,7 +217,7 @@ func TestUnitUpdateClassByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestClass{Name: "Updated Class Name"}
-	result, resp, err := svc.UpdateClassByName(context.Background(), "", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "", req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -227,7 +227,7 @@ func TestUnitUpdateClassByName_EmptyName(t *testing.T) {
 func TestUnitUpdateClassByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateClassByName(context.Background(), "Test Class 1", nil)
+	result, resp, err := svc.UpdateByName(context.Background(), "Test Class 1", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -242,7 +242,7 @@ func TestUnitDeleteClassByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteClassByIDMock()
 
-	resp, err := svc.DeleteClassByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -251,7 +251,7 @@ func TestUnitDeleteClassByID_Success(t *testing.T) {
 func TestUnitDeleteClassByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteClassByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "class ID must be a positive integer")
@@ -260,7 +260,7 @@ func TestUnitDeleteClassByID_ZeroID(t *testing.T) {
 func TestUnitDeleteClassByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteClassByID(context.Background(), -1)
+	resp, err := svc.DeleteByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "class ID must be a positive integer")
@@ -274,7 +274,7 @@ func TestUnitDeleteClassByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteClassByNameMock()
 
-	resp, err := svc.DeleteClassByName(context.Background(), "Test Class 1")
+	resp, err := svc.DeleteByName(context.Background(), "Test Class 1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -283,7 +283,7 @@ func TestUnitDeleteClassByName_Success(t *testing.T) {
 func TestUnitDeleteClassByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteClassByName(context.Background(), "")
+	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "class name is required")

@@ -29,7 +29,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test disk encryption configuration")
 
-	configName := uniqueName("acc-test-diskenc")
+	configName := acc.UniqueName("acc-test-diskenc")
 	createReq := &disk_encryption_configurations.RequestDiskEncryptionConfiguration{
 		Name:                  configName,
 		KeyType:               "Individual",
@@ -39,7 +39,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateDiskEncryptionConfiguration(ctx1, createReq)
+	created, createResp, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err, "CreateDiskEncryptionConfiguration should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
@@ -52,7 +52,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteDiskEncryptionConfigurationByID(cleanupCtx, configID)
+		_, delErr := svc.DeleteByID(cleanupCtx, configID)
 		acc.LogCleanupDeleteError(t, "disk encryption configuration", fmt.Sprintf("%d", configID), delErr)
 	})
 
@@ -64,8 +64,8 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListDiskEncryptionConfigurations(ctx2)
-	require.NoError(t, err, "ListDiskEncryptionConfigurations should not return an error")
+	list, listResp, err := svc.List(ctx2)
+	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.Size, "size should be positive")
@@ -89,7 +89,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetDiskEncryptionConfigurationByID(ctx3, configID)
+	fetched, fetchResp, err := svc.GetByID(ctx3, configID)
 	require.NoError(t, err, "GetDiskEncryptionConfigurationByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -105,7 +105,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetDiskEncryptionConfigurationByName(ctx4, configName)
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, configName)
 	require.NoError(t, err, "GetDiskEncryptionConfigurationByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
@@ -116,7 +116,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-diskenc-updated")
+	updatedName := acc.UniqueName("acc-test-diskenc-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating disk encryption configuration ID=%d to name=%q", configID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -127,7 +127,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 		KeyType:               "Individual",
 		FileVaultEnabledUsers: "Management Account",
 	}
-	updated, updateResp, err := svc.UpdateDiskEncryptionConfigurationByID(ctx5, configID, updateReq)
+	updated, updateResp, err := svc.UpdateByID(ctx5, configID, updateReq)
 	require.NoError(t, err, "UpdateDiskEncryptionConfigurationByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
@@ -146,7 +146,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 		KeyType:               "Individual",
 		FileVaultEnabledUsers: "Management Account",
 	}
-	reverted, revertResp, err := svc.UpdateDiskEncryptionConfigurationByName(ctx6, updatedName, revertReq)
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateDiskEncryptionConfigurationByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
@@ -160,7 +160,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetDiskEncryptionConfigurationByID(ctx7, configID)
+	verified, verifyResp, err := svc.GetByID(ctx7, configID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -175,7 +175,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteDiskEncryptionConfigurationByID(ctx8, configID)
+	deleteResp, err := svc.DeleteByID(ctx8, configID)
 	require.NoError(t, err, "DeleteDiskEncryptionConfigurationByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -192,7 +192,7 @@ func TestAcceptance_DiskEncryptionConfigurations_DeleteByName(t *testing.T) {
 	svc := acc.Client.DiskEncryptionConfigurations
 	ctx := context.Background()
 
-	configName := uniqueName("acc-test-diskenc-dbn")
+	configName := acc.UniqueName("acc-test-diskenc-dbn")
 	createReq := &disk_encryption_configurations.RequestDiskEncryptionConfiguration{
 		Name:    configName,
 		KeyType: "Individual",
@@ -201,7 +201,7 @@ func TestAcceptance_DiskEncryptionConfigurations_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateDiskEncryptionConfiguration(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -211,14 +211,14 @@ func TestAcceptance_DiskEncryptionConfigurations_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteDiskEncryptionConfigurationByID(cleanupCtx, configID)
+		_, delErr := svc.DeleteByID(cleanupCtx, configID)
 		acc.LogCleanupDeleteError(t, "disk encryption configuration", fmt.Sprintf("%d", configID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteDiskEncryptionConfigurationByName(ctx2, configName)
+	deleteResp, err := svc.DeleteByName(ctx2, configName)
 	require.NoError(t, err, "DeleteDiskEncryptionConfigurationByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -234,44 +234,44 @@ func TestAcceptance_DiskEncryptionConfigurations_ValidationErrors(t *testing.T) 
 
 	svc := acc.Client.DiskEncryptionConfigurations
 
-	t.Run("GetDiskEncryptionConfigurationByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetDiskEncryptionConfigurationByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 	})
 
-	t.Run("GetDiskEncryptionConfigurationByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetDiskEncryptionConfigurationByName(context.Background(), "")
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "disk encryption configuration name is required")
 	})
 
-	t.Run("CreateDiskEncryptionConfiguration_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateDiskEncryptionConfiguration(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdateDiskEncryptionConfigurationByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateDiskEncryptionConfigurationByID(context.Background(), 0, &disk_encryption_configurations.RequestDiskEncryptionConfiguration{Name: "x"})
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.UpdateByID(context.Background(), 0, &disk_encryption_configurations.RequestDiskEncryptionConfiguration{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 	})
 
-	t.Run("UpdateDiskEncryptionConfigurationByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateDiskEncryptionConfigurationByName(context.Background(), "", &disk_encryption_configurations.RequestDiskEncryptionConfiguration{Name: "x"})
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.UpdateByName(context.Background(), "", &disk_encryption_configurations.RequestDiskEncryptionConfiguration{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "disk encryption configuration name is required")
 	})
 
-	t.Run("DeleteDiskEncryptionConfigurationByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteDiskEncryptionConfigurationByID(context.Background(), 0)
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 	})
 
-	t.Run("DeleteDiskEncryptionConfigurationByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteDiskEncryptionConfigurationByName(context.Background(), "")
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "disk encryption configuration name is required")
 	})

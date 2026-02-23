@@ -13,47 +13,47 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/sites
 	SitesServiceInterface interface {
-		// ListSites returns all sites.
+		// List returns all sites.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallsites
-		ListSites(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsites
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
-		// GetSiteByID returns the specified site by ID.
+		// GetByID returns the specified site by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsitesbyid
-		GetSiteByID(ctx context.Context, id int) (*ResourceSite, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceSite, *interfaces.Response, error)
 
-		// GetSiteByName returns the specified site by name.
+		// GetByName returns the specified site by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsitesbyname
-		GetSiteByName(ctx context.Context, name string) (*ResourceSite, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceSite, *interfaces.Response, error)
 
-		// CreateSite creates a new site.
+		// Create creates a new site.
 		//
 		// Returns the created site with its assigned ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createsitebyid
-		CreateSite(ctx context.Context, req *RequestSite) (*ResourceSite, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestSite) (*ResourceSite, *interfaces.Response, error)
 
-		// UpdateSiteByID updates the specified site by ID.
+		// UpdateByID updates the specified site by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatesitebyid
-		UpdateSiteByID(ctx context.Context, id int, req *RequestSite) (*ResourceSite, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestSite) (*ResourceSite, *interfaces.Response, error)
 
-		// UpdateSiteByName updates the specified site by name.
+		// UpdateByName updates the specified site by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatesitebyname
-		UpdateSiteByName(ctx context.Context, name string, req *RequestSite) (*ResourceSite, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestSite) (*ResourceSite, *interfaces.Response, error)
 
-		// DeleteSiteByID removes the specified site by ID.
+		// DeleteByID removes the specified site by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletesitebyid
-		DeleteSiteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteSiteByName removes the specified site by name.
+		// DeleteByName removes the specified site by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletesitebyname
-		DeleteSiteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the sites-related Classic API methods.
@@ -75,10 +75,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - Sites CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListSites returns all sites.
+// List returns all sites.
 // URL: GET /JSSResource/sites
-// https://developer.jamf.com/jamf-pro/reference/findallsites
-func (s *Service) ListSites(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+// https://developer.jamf.com/jamf-pro/reference/findsites
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicSites
@@ -96,10 +96,10 @@ func (s *Service) ListSites(ctx context.Context) (*ListResponse, *interfaces.Res
 	return &result, resp, nil
 }
 
-// GetSiteByID returns the specified site by ID.
+// GetByID returns the specified site by ID.
 // URL: GET /JSSResource/sites/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findsitesbyid
-func (s *Service) GetSiteByID(ctx context.Context, id int) (*ResourceSite, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceSite, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("site ID must be a positive integer")
 	}
@@ -121,10 +121,10 @@ func (s *Service) GetSiteByID(ctx context.Context, id int) (*ResourceSite, *inte
 	return &result, resp, nil
 }
 
-// GetSiteByName returns the specified site by name.
+// GetByName returns the specified site by name.
 // URL: GET /JSSResource/sites/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findsitesbyname
-func (s *Service) GetSiteByName(ctx context.Context, name string) (*ResourceSite, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceSite, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("site name is required")
 	}
@@ -146,11 +146,11 @@ func (s *Service) GetSiteByName(ctx context.Context, name string) (*ResourceSite
 	return &result, resp, nil
 }
 
-// CreateSite creates a new site.
+// Create creates a new site.
 // URL: POST /JSSResource/sites/id/0
 // Returns the created site with its assigned ID.
 // https://developer.jamf.com/jamf-pro/reference/createsitebyid
-func (s *Service) CreateSite(ctx context.Context, req *RequestSite) (*ResourceSite, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestSite) (*ResourceSite, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -172,10 +172,10 @@ func (s *Service) CreateSite(ctx context.Context, req *RequestSite) (*ResourceSi
 	return &result, resp, nil
 }
 
-// UpdateSiteByID updates the specified site by ID.
+// UpdateByID updates the specified site by ID.
 // URL: PUT /JSSResource/sites/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updatesitebyid
-func (s *Service) UpdateSiteByID(ctx context.Context, id int, req *RequestSite) (*ResourceSite, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestSite) (*ResourceSite, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("site ID must be a positive integer")
 	}
@@ -200,10 +200,10 @@ func (s *Service) UpdateSiteByID(ctx context.Context, id int, req *RequestSite) 
 	return &result, resp, nil
 }
 
-// UpdateSiteByName updates the specified site by name.
+// UpdateByName updates the specified site by name.
 // URL: PUT /JSSResource/sites/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updatesitebyname
-func (s *Service) UpdateSiteByName(ctx context.Context, name string, req *RequestSite) (*ResourceSite, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestSite) (*ResourceSite, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("site name is required")
 	}
@@ -228,10 +228,10 @@ func (s *Service) UpdateSiteByName(ctx context.Context, name string, req *Reques
 	return &result, resp, nil
 }
 
-// DeleteSiteByID removes the specified site by ID.
+// DeleteByID removes the specified site by ID.
 // URL: DELETE /JSSResource/sites/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deletesitebyid
-func (s *Service) DeleteSiteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("site ID must be a positive integer")
 	}
@@ -251,10 +251,10 @@ func (s *Service) DeleteSiteByID(ctx context.Context, id int) (*interfaces.Respo
 	return resp, nil
 }
 
-// DeleteSiteByName removes the specified site by name.
+// DeleteByName removes the specified site by name.
 // URL: DELETE /JSSResource/sites/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deletesitebyname
-func (s *Service) DeleteSiteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("site name is required")
 	}

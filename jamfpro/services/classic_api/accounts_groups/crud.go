@@ -13,42 +13,42 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/accounts
 	AccountGroupsServiceInterface interface {
-		// GetAccountGroupByID returns the specified account group by ID.
+		// GetByID returns the specified account group by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findaccountsbyid
-		GetAccountGroupByID(ctx context.Context, id int) (*ResourceAccountGroup, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceAccountGroup, *interfaces.Response, error)
 
-		// GetAccountGroupByName returns the specified account group by name.
+		// GetByName returns the specified account group by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findaccountsbyname
-		GetAccountGroupByName(ctx context.Context, name string) (*ResourceAccountGroup, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceAccountGroup, *interfaces.Response, error)
 
-		// CreateAccountGroup creates a new account group.
+		// Create creates a new account group.
 		//
 		// Returns only the created account group's ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createaccountbyid
-		CreateAccountGroup(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *interfaces.Response, error)
 
-		// UpdateAccountGroupByID updates the specified account group by ID.
+		// UpdateByID updates the specified account group by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyid
-		UpdateAccountGroupByID(ctx context.Context, id int, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error)
 
-		// UpdateAccountGroupByName updates the specified account group by name.
+		// UpdateByName updates the specified account group by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyname
-		UpdateAccountGroupByName(ctx context.Context, name string, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error)
 
-		// DeleteAccountGroupByID removes the specified account group by ID.
+		// DeleteByID removes the specified account group by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteaccountbyid
-		DeleteAccountGroupByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteAccountGroupByName removes the specified account group by name.
+		// DeleteByName removes the specified account group by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteaccountbyname
-		DeleteAccountGroupByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the account groups-related Classic API methods.
@@ -70,10 +70,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - Account Groups CRUD Operations
 // -----------------------------------------------------------------------------
 
-// GetAccountGroupByID returns the specified account group by ID.
+// GetByID returns the specified account group by ID.
 // URL: GET /JSSResource/accounts/groupid/{id}
 // https://developer.jamf.com/jamf-pro/reference/findaccountsbyid
-func (s *Service) GetAccountGroupByID(ctx context.Context, id int) (*ResourceAccountGroup, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAccountGroup, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("account group ID must be a positive integer")
 	}
@@ -95,10 +95,10 @@ func (s *Service) GetAccountGroupByID(ctx context.Context, id int) (*ResourceAcc
 	return &result, resp, nil
 }
 
-// GetAccountGroupByName returns the specified account group by name.
+// GetByName returns the specified account group by name.
 // URL: GET /JSSResource/accounts/groupname/{name}
 // https://developer.jamf.com/jamf-pro/reference/findaccountsbyname
-func (s *Service) GetAccountGroupByName(ctx context.Context, name string) (*ResourceAccountGroup, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceAccountGroup, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("account group name is required")
 	}
@@ -120,11 +120,11 @@ func (s *Service) GetAccountGroupByName(ctx context.Context, name string) (*Reso
 	return &result, resp, nil
 }
 
-// CreateAccountGroup creates a new account group.
+// Create creates a new account group.
 // URL: POST /JSSResource/accounts/groupid/0
 // Returns only the created account group's ID.
 // https://developer.jamf.com/jamf-pro/reference/createaccountbyid
-func (s *Service) CreateAccountGroup(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -146,10 +146,10 @@ func (s *Service) CreateAccountGroup(ctx context.Context, req *RequestAccountGro
 	return &result, resp, nil
 }
 
-// UpdateAccountGroupByID updates the specified account group by ID.
+// UpdateByID updates the specified account group by ID.
 // URL: PUT /JSSResource/accounts/groupid/{id}
 // https://developer.jamf.com/jamf-pro/reference/updateaccountbyid
-func (s *Service) UpdateAccountGroupByID(ctx context.Context, id int, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("account group ID must be a positive integer")
 	}
@@ -174,10 +174,10 @@ func (s *Service) UpdateAccountGroupByID(ctx context.Context, id int, req *Reque
 	return &result, resp, nil
 }
 
-// UpdateAccountGroupByName updates the specified account group by name.
+// UpdateByName updates the specified account group by name.
 // URL: PUT /JSSResource/accounts/groupname/{name}
 // https://developer.jamf.com/jamf-pro/reference/updateaccountbyname
-func (s *Service) UpdateAccountGroupByName(ctx context.Context, name string, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("account group name is required")
 	}
@@ -202,10 +202,10 @@ func (s *Service) UpdateAccountGroupByName(ctx context.Context, name string, req
 	return &result, resp, nil
 }
 
-// DeleteAccountGroupByID removes the specified account group by ID.
+// DeleteByID removes the specified account group by ID.
 // URL: DELETE /JSSResource/accounts/groupid/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleteaccountbyid
-func (s *Service) DeleteAccountGroupByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("account group ID must be a positive integer")
 	}
@@ -225,10 +225,10 @@ func (s *Service) DeleteAccountGroupByID(ctx context.Context, id int) (*interfac
 	return resp, nil
 }
 
-// DeleteAccountGroupByName removes the specified account group by name.
+// DeleteByName removes the specified account group by name.
 // URL: DELETE /JSSResource/accounts/groupname/{name}
 // https://developer.jamf.com/jamf-pro/reference/deleteaccountbyname
-func (s *Service) DeleteAccountGroupByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("account group name is required")
 	}

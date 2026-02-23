@@ -57,3 +57,29 @@ type EnrollmentCustomizationDependency struct {
 	Hyperlink         string `json:"hyperlink"`
 	HumanReadableName string `json:"humanReadableName"`
 }
+
+// HistoryListResponse represents the paginated history for SSO settings.
+type HistoryListResponse struct {
+	TotalCount int            `json:"totalCount"`
+	Results    []HistoryEntry `json:"results"`
+}
+
+// HistoryEntry represents a single history entry.
+type HistoryEntry struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Date     string `json:"date"`
+	Note     string `json:"note"`
+	Details  string `json:"details"`
+}
+
+// AddHistoryNoteRequest represents the request for adding a history note.
+type AddHistoryNoteRequest struct {
+	Note string `json:"note"`
+}
+
+// CreateResponse captures the identifier returned after creating a resource.
+type CreateResponse struct {
+	ID   string `json:"id"`
+	Href string `json:"href"`
+}

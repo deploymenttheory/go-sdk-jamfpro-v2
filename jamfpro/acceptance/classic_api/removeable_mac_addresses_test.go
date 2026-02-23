@@ -29,14 +29,14 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test removeable MAC address")
 
-	macAddress := uniqueName("AA:BB:CC:DD:EE")
+	macAddress := acc.UniqueName("AA:BB:CC:DD:EE")
 	createReq := &removeable_mac_addresses.RequestRemoveableMacAddress{Name: macAddress}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateRemoveableMacAddress(ctx1, createReq)
-	require.NoError(t, err, "CreateRemoveableMacAddress should not return an error")
+	created, createResp, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
@@ -48,7 +48,7 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteRemoveableMacAddressByID(cleanupCtx, macID)
+		_, delErr := svc.DeleteByID(cleanupCtx, macID)
 		acc.LogCleanupDeleteError(t, "removeable MAC address", fmt.Sprintf("%d", macID), delErr)
 	})
 
@@ -60,8 +60,8 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListRemoveableMacAddresses(ctx2)
-	require.NoError(t, err, "ListRemoveableMacAddresses should not return an error")
+	list, listResp, err := svc.List(ctx2)
+	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.Size, "size should be positive")
@@ -85,8 +85,8 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetRemoveableMacAddressByID(ctx3, macID)
-	require.NoError(t, err, "GetRemoveableMacAddressByID should not return an error")
+	fetched, fetchResp, err := svc.GetByID(ctx3, macID)
+	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, macID, fetched.ID)
@@ -101,8 +101,8 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetRemoveableMacAddressByName(ctx4, macAddress)
-	require.NoError(t, err, "GetRemoveableMacAddressByName should not return an error")
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, macAddress)
+	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
 	assert.Equal(t, macID, fetchedByName.ID)
@@ -112,15 +112,15 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("AA:BB:CC:DD:FF")
+	updatedName := acc.UniqueName("AA:BB:CC:DD:FF")
 	acc.LogTestStage(t, "UpdateByID", "Updating removeable MAC address ID=%d to name=%q", macID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5()
 
 	updateReq := &removeable_mac_addresses.RequestRemoveableMacAddress{Name: updatedName}
-	updated, updateResp, err := svc.UpdateRemoveableMacAddressByID(ctx5, macID, updateReq)
-	require.NoError(t, err, "UpdateRemoveableMacAddressByID should not return an error")
+	updated, updateResp, err := svc.UpdateByID(ctx5, macID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
@@ -134,8 +134,8 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	defer cancel6()
 
 	revertReq := &removeable_mac_addresses.RequestRemoveableMacAddress{Name: macAddress}
-	reverted, revertResp, err := svc.UpdateRemoveableMacAddressByName(ctx6, updatedName, revertReq)
-	require.NoError(t, err, "UpdateRemoveableMacAddressByName should not return an error")
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
+	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
@@ -148,7 +148,7 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetRemoveableMacAddressByID(ctx7, macID)
+	verified, verifyResp, err := svc.GetByID(ctx7, macID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -163,8 +163,8 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteRemoveableMacAddressByID(ctx8, macID)
-	require.NoError(t, err, "DeleteRemoveableMacAddressByID should not return an error")
+	deleteResp, err := svc.DeleteByID(ctx8, macID)
+	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Removeable MAC address ID=%d deleted", macID)
@@ -180,13 +180,13 @@ func TestAcceptance_RemoveableMacAddresses_DeleteByName(t *testing.T) {
 	svc := acc.Client.RemoveableMacAddresses
 	ctx := context.Background()
 
-	macAddress := uniqueName("AA:BB:CC:DD:EE")
+	macAddress := acc.UniqueName("AA:BB:CC:DD:EE")
 	createReq := &removeable_mac_addresses.RequestRemoveableMacAddress{Name: macAddress}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateRemoveableMacAddress(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -196,15 +196,15 @@ func TestAcceptance_RemoveableMacAddresses_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteRemoveableMacAddressByID(cleanupCtx, macID)
+		_, delErr := svc.DeleteByID(cleanupCtx, macID)
 		acc.LogCleanupDeleteError(t, "removeable MAC address", fmt.Sprintf("%d", macID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteRemoveableMacAddressByName(ctx2, macAddress)
-	require.NoError(t, err, "DeleteRemoveableMacAddressByName should not return an error")
+	deleteResp, err := svc.DeleteByName(ctx2, macAddress)
+	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Removeable MAC address %q deleted by name", macAddress)
@@ -220,44 +220,44 @@ func TestAcceptance_RemoveableMacAddresses_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.RemoveableMacAddresses
 
-	t.Run("GetRemoveableMacAddressByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetRemoveableMacAddressByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "removeable MAC address ID must be a positive integer")
 	})
 
-	t.Run("GetRemoveableMacAddressByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetRemoveableMacAddressByName(context.Background(), "")
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "removeable MAC address name is required")
 	})
 
-	t.Run("CreateRemoveableMacAddress_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateRemoveableMacAddress(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdateRemoveableMacAddressByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateRemoveableMacAddressByID(context.Background(), 0, &removeable_mac_addresses.RequestRemoveableMacAddress{Name: "x"})
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.UpdateByID(context.Background(), 0, &removeable_mac_addresses.RequestRemoveableMacAddress{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "removeable MAC address ID must be a positive integer")
 	})
 
-	t.Run("UpdateRemoveableMacAddressByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateRemoveableMacAddressByName(context.Background(), "", &removeable_mac_addresses.RequestRemoveableMacAddress{Name: "x"})
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.UpdateByName(context.Background(), "", &removeable_mac_addresses.RequestRemoveableMacAddress{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "removeable MAC address name is required")
 	})
 
-	t.Run("DeleteRemoveableMacAddressByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteRemoveableMacAddressByID(context.Background(), 0)
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "removeable MAC address ID must be a positive integer")
 	})
 
-	t.Run("DeleteRemoveableMacAddressByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteRemoveableMacAddressByName(context.Background(), "")
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "removeable MAC address name is required")
 	})

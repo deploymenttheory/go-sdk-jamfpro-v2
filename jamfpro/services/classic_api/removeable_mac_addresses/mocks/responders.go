@@ -43,14 +43,14 @@ func NewRemoveableMacAddressesMock() *RemoveableMacAddressesMock {
 
 // RegisterMocks registers all standard success responses in one call.
 func (m *RemoveableMacAddressesMock) RegisterMocks() {
-	m.RegisterListRemoveableMacAddressesMock()
-	m.RegisterGetRemoveableMacAddressByIDMock()
-	m.RegisterGetRemoveableMacAddressByNameMock()
-	m.RegisterCreateRemoveableMacAddressMock()
-	m.RegisterUpdateRemoveableMacAddressByIDMock()
-	m.RegisterUpdateRemoveableMacAddressByNameMock()
-	m.RegisterDeleteRemoveableMacAddressByIDMock()
-	m.RegisterDeleteRemoveableMacAddressByNameMock()
+	m.RegisterListMock()
+	m.RegisterGetByIDMock()
+	m.RegisterGetByNameMock()
+	m.RegisterCreateMock()
+	m.RegisterUpdateByIDMock()
+	m.RegisterUpdateByNameMock()
+	m.RegisterDeleteByIDMock()
+	m.RegisterDeleteByNameMock()
 }
 
 // RegisterErrorMocks registers all error responses in one call.
@@ -61,43 +61,43 @@ func (m *RemoveableMacAddressesMock) RegisterErrorMocks() {
 
 // ---- Success responders ----
 
-// RegisterListRemoveableMacAddressesMock registers GET /JSSResource/removablemacaddresses → 200.
-func (m *RemoveableMacAddressesMock) RegisterListRemoveableMacAddressesMock() {
+// RegisterListMock registers GET /JSSResource/removablemacaddresses → 200.
+func (m *RemoveableMacAddressesMock) RegisterListMock() {
 	m.register("GET", "/JSSResource/removablemacaddresses", 200, "validate_list_removeable_mac_addresses.xml")
 }
 
-// RegisterGetRemoveableMacAddressByIDMock registers GET /JSSResource/removablemacaddresses/id/1 → 200.
-func (m *RemoveableMacAddressesMock) RegisterGetRemoveableMacAddressByIDMock() {
+// RegisterGetByIDMock registers GET /JSSResource/removablemacaddresses/id/1 → 200.
+func (m *RemoveableMacAddressesMock) RegisterGetByIDMock() {
 	m.register("GET", "/JSSResource/removablemacaddresses/id/1", 200, "validate_get_removeable_mac_address.xml")
 }
 
-// RegisterGetRemoveableMacAddressByNameMock registers GET /JSSResource/removablemacaddresses/name/AA:BB:CC:DD:EE:FF → 200.
-func (m *RemoveableMacAddressesMock) RegisterGetRemoveableMacAddressByNameMock() {
+// RegisterGetByNameMock registers GET /JSSResource/removablemacaddresses/name/AA:BB:CC:DD:EE:FF → 200.
+func (m *RemoveableMacAddressesMock) RegisterGetByNameMock() {
 	m.register("GET", "/JSSResource/removablemacaddresses/name/AA:BB:CC:DD:EE:FF", 200, "validate_get_removeable_mac_address.xml")
 }
 
-// RegisterCreateRemoveableMacAddressMock registers POST /JSSResource/removablemacaddresses/id/0 → 201.
-func (m *RemoveableMacAddressesMock) RegisterCreateRemoveableMacAddressMock() {
+// RegisterCreateMock registers POST /JSSResource/removablemacaddresses/id/0 → 201.
+func (m *RemoveableMacAddressesMock) RegisterCreateMock() {
 	m.register("POST", "/JSSResource/removablemacaddresses/id/0", 201, "validate_create_removeable_mac_address.xml")
 }
 
-// RegisterUpdateRemoveableMacAddressByIDMock registers PUT /JSSResource/removablemacaddresses/id/1 → 200.
-func (m *RemoveableMacAddressesMock) RegisterUpdateRemoveableMacAddressByIDMock() {
+// RegisterUpdateByIDMock registers PUT /JSSResource/removablemacaddresses/id/1 → 200.
+func (m *RemoveableMacAddressesMock) RegisterUpdateByIDMock() {
 	m.register("PUT", "/JSSResource/removablemacaddresses/id/1", 200, "validate_update_removeable_mac_address.xml")
 }
 
-// RegisterUpdateRemoveableMacAddressByNameMock registers PUT /JSSResource/removablemacaddresses/name/AA:BB:CC:DD:EE:FF → 200.
-func (m *RemoveableMacAddressesMock) RegisterUpdateRemoveableMacAddressByNameMock() {
+// RegisterUpdateByNameMock registers PUT /JSSResource/removablemacaddresses/name/AA:BB:CC:DD:EE:FF → 200.
+func (m *RemoveableMacAddressesMock) RegisterUpdateByNameMock() {
 	m.register("PUT", "/JSSResource/removablemacaddresses/name/AA:BB:CC:DD:EE:FF", 200, "validate_update_removeable_mac_address.xml")
 }
 
-// RegisterDeleteRemoveableMacAddressByIDMock registers DELETE /JSSResource/removablemacaddresses/id/1 → 200.
-func (m *RemoveableMacAddressesMock) RegisterDeleteRemoveableMacAddressByIDMock() {
+// RegisterDeleteByIDMock registers DELETE /JSSResource/removablemacaddresses/id/1 → 200.
+func (m *RemoveableMacAddressesMock) RegisterDeleteByIDMock() {
 	m.register("DELETE", "/JSSResource/removablemacaddresses/id/1", 200, "")
 }
 
-// RegisterDeleteRemoveableMacAddressByNameMock registers DELETE /JSSResource/removablemacaddresses/name/AA:BB:CC:DD:EE:FF → 200.
-func (m *RemoveableMacAddressesMock) RegisterDeleteRemoveableMacAddressByNameMock() {
+// RegisterDeleteByNameMock registers DELETE /JSSResource/removablemacaddresses/name/AA:BB:CC:DD:EE:FF → 200.
+func (m *RemoveableMacAddressesMock) RegisterDeleteByNameMock() {
 	m.register("DELETE", "/JSSResource/removablemacaddresses/name/AA:BB:CC:DD:EE:FF", 200, "")
 }
 

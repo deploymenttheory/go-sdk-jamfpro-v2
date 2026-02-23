@@ -13,47 +13,47 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/ldapservers
 	LDAPServersServiceInterface interface {
-		// ListLDAPServers returns all LDAP servers.
+		// List returns all LDAP servers.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findldapservers
-		ListLDAPServers(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
-		// GetLDAPServerByID returns the specified LDAP server by ID.
+		// GetByID returns the specified LDAP server by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findldapserversbyid
-		GetLDAPServerByID(ctx context.Context, id int) (*ResourceLDAPServer, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceLDAPServer, *interfaces.Response, error)
 
-		// GetLDAPServerByName returns the specified LDAP server by name.
+		// GetByName returns the specified LDAP server by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findldapserversbyname
-		GetLDAPServerByName(ctx context.Context, name string) (*ResourceLDAPServer, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceLDAPServer, *interfaces.Response, error)
 
-		// CreateLDAPServer creates a new LDAP server.
+		// Create creates a new LDAP server.
 		//
 		// Returns a ListItem with the created server's ID and name (not the full resource).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createldapserverbyid
-		CreateLDAPServer(ctx context.Context, request *RequestLDAPServer) (*ListItem, *interfaces.Response, error)
+		Create(ctx context.Context, request *RequestLDAPServer) (*ListItem, *interfaces.Response, error)
 
-		// UpdateLDAPServerByID updates the specified LDAP server by ID.
+		// UpdateByID updates the specified LDAP server by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateldapserverbyid
-		UpdateLDAPServerByID(ctx context.Context, id int, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error)
 
-		// UpdateLDAPServerByName updates the specified LDAP server by name.
+		// UpdateByName updates the specified LDAP server by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateldapserverbyname
-		UpdateLDAPServerByName(ctx context.Context, name string, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error)
 
-		// DeleteLDAPServerByID removes the specified LDAP server by ID.
+		// DeleteByID removes the specified LDAP server by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteldapserverbyid
-		DeleteLDAPServerByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteLDAPServerByName removes the specified LDAP server by name.
+		// DeleteByName removes the specified LDAP server by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteldapserverbyname
-		DeleteLDAPServerByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the LDAP servers-related Classic API methods.
@@ -75,10 +75,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - LDAP Servers CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListLDAPServers returns all LDAP servers.
+// List returns all LDAP servers.
 // URL: GET /JSSResource/ldapservers
 // https://developer.jamf.com/jamf-pro/reference/findldapservers
-func (s *Service) ListLDAPServers(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicLDAPServers
@@ -96,10 +96,10 @@ func (s *Service) ListLDAPServers(ctx context.Context) (*ListResponse, *interfac
 	return &result, resp, nil
 }
 
-// GetLDAPServerByID returns the specified LDAP server by ID.
+// GetByID returns the specified LDAP server by ID.
 // URL: GET /JSSResource/ldapservers/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findldapserversbyid
-func (s *Service) GetLDAPServerByID(ctx context.Context, id int) (*ResourceLDAPServer, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceLDAPServer, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("LDAP server ID must be a positive integer")
 	}
@@ -121,10 +121,10 @@ func (s *Service) GetLDAPServerByID(ctx context.Context, id int) (*ResourceLDAPS
 	return &result, resp, nil
 }
 
-// GetLDAPServerByName returns the specified LDAP server by name.
+// GetByName returns the specified LDAP server by name.
 // URL: GET /JSSResource/ldapservers/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findldapserversbyname
-func (s *Service) GetLDAPServerByName(ctx context.Context, name string) (*ResourceLDAPServer, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceLDAPServer, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("LDAP server name is required")
 	}
@@ -146,11 +146,11 @@ func (s *Service) GetLDAPServerByName(ctx context.Context, name string) (*Resour
 	return &result, resp, nil
 }
 
-// CreateLDAPServer creates a new LDAP server.
+// Create creates a new LDAP server.
 // URL: POST /JSSResource/ldapservers/id/0
 // Returns a ListItem with the created server's ID and name (not the full resource).
 // https://developer.jamf.com/jamf-pro/reference/createldapserverbyid
-func (s *Service) CreateLDAPServer(ctx context.Context, request *RequestLDAPServer) (*ListItem, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, request *RequestLDAPServer) (*ListItem, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -179,10 +179,10 @@ func (s *Service) CreateLDAPServer(ctx context.Context, request *RequestLDAPServ
 	return result, resp, nil
 }
 
-// UpdateLDAPServerByID updates the specified LDAP server by ID.
+// UpdateByID updates the specified LDAP server by ID.
 // URL: PUT /JSSResource/ldapservers/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updateldapserverbyid
-func (s *Service) UpdateLDAPServerByID(ctx context.Context, id int, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("LDAP server ID must be a positive integer")
 	}
@@ -208,10 +208,10 @@ func (s *Service) UpdateLDAPServerByID(ctx context.Context, id int, request *Req
 	return &result, resp, nil
 }
 
-// UpdateLDAPServerByName updates the specified LDAP server by name.
+// UpdateByName updates the specified LDAP server by name.
 // URL: PUT /JSSResource/ldapservers/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updateldapserverbyname
-func (s *Service) UpdateLDAPServerByName(ctx context.Context, name string, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, request *RequestLDAPServer) (*ResourceLDAPServer, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("LDAP server name is required")
 	}
@@ -237,10 +237,10 @@ func (s *Service) UpdateLDAPServerByName(ctx context.Context, name string, reque
 	return &result, resp, nil
 }
 
-// DeleteLDAPServerByID removes the specified LDAP server by ID.
+// DeleteByID removes the specified LDAP server by ID.
 // URL: DELETE /JSSResource/ldapservers/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleteldapserverbyid
-func (s *Service) DeleteLDAPServerByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("LDAP server ID must be a positive integer")
 	}
@@ -260,10 +260,10 @@ func (s *Service) DeleteLDAPServerByID(ctx context.Context, id int) (*interfaces
 	return resp, nil
 }
 
-// DeleteLDAPServerByName removes the specified LDAP server by name.
+// DeleteByName removes the specified LDAP server by name.
 // URL: DELETE /JSSResource/ldapservers/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deleteldapserverbyname
-func (s *Service) DeleteLDAPServerByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("LDAP server name is required")
 	}

@@ -13,47 +13,47 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
 	RemoveableMacAddressesServiceInterface interface {
-		// ListRemoveableMacAddresses returns all removeable MAC addresses.
+		// List returns all removeable MAC addresses.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
-		ListRemoveableMacAddresses(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
-		// GetRemoveableMacAddressByID returns the specified removeable MAC address by ID.
+		// GetByID returns the specified removeable MAC address by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddressesbyid
-		GetRemoveableMacAddressByID(ctx context.Context, id int) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
 
-		// GetRemoveableMacAddressByName returns the specified removeable MAC address by name.
+		// GetByName returns the specified removeable MAC address by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddressesbyname
-		GetRemoveableMacAddressByName(ctx context.Context, name string) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
 
-		// CreateRemoveableMacAddress creates a new removeable MAC address.
+		// Create creates a new removeable MAC address.
 		//
 		// Returns the created removeable MAC address with its assigned ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createremovablemacaddressbyid
-		CreateRemoveableMacAddress(ctx context.Context, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
 
-		// UpdateRemoveableMacAddressByID updates the specified removeable MAC address by ID.
+		// UpdateByID updates the specified removeable MAC address by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateremovablemacaddressbyid
-		UpdateRemoveableMacAddressByID(ctx context.Context, id int, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
 
-		// UpdateRemoveableMacAddressByName updates the specified removeable MAC address by name.
+		// UpdateByName updates the specified removeable MAC address by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateremovablemacaddressbyname
-		UpdateRemoveableMacAddressByName(ctx context.Context, name string, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error)
 
-		// DeleteRemoveableMacAddressByID removes the specified removeable MAC address by ID.
+		// DeleteByID removes the specified removeable MAC address by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteremovablemacaddressbyid
-		DeleteRemoveableMacAddressByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteRemoveableMacAddressByName removes the specified removeable MAC address by name.
+		// DeleteByName removes the specified removeable MAC address by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteremovablemacaddressbyname
-		DeleteRemoveableMacAddressByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the removeable MAC addresses-related Classic API methods.
@@ -75,10 +75,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - Removeable MAC Addresses CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListRemoveableMacAddresses returns all removeable MAC addresses.
+// List returns all removeable MAC addresses.
 // URL: GET /JSSResource/removablemacaddresses
 // https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
-func (s *Service) ListRemoveableMacAddresses(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicRemoveableMacAddresses
@@ -96,10 +96,10 @@ func (s *Service) ListRemoveableMacAddresses(ctx context.Context) (*ListResponse
 	return &result, resp, nil
 }
 
-// GetRemoveableMacAddressByID returns the specified removeable MAC address by ID.
+// GetByID returns the specified removeable MAC address by ID.
 // URL: GET /JSSResource/removablemacaddresses/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findremovablemacaddressesbyid
-func (s *Service) GetRemoveableMacAddressByID(ctx context.Context, id int) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("removeable MAC address ID must be a positive integer")
 	}
@@ -121,10 +121,10 @@ func (s *Service) GetRemoveableMacAddressByID(ctx context.Context, id int) (*Res
 	return &result, resp, nil
 }
 
-// GetRemoveableMacAddressByName returns the specified removeable MAC address by name.
+// GetByName returns the specified removeable MAC address by name.
 // URL: GET /JSSResource/removablemacaddresses/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findremovablemacaddressesbyname
-func (s *Service) GetRemoveableMacAddressByName(ctx context.Context, name string) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("removeable MAC address name is required")
 	}
@@ -146,11 +146,11 @@ func (s *Service) GetRemoveableMacAddressByName(ctx context.Context, name string
 	return &result, resp, nil
 }
 
-// CreateRemoveableMacAddress creates a new removeable MAC address.
+// Create creates a new removeable MAC address.
 // URL: POST /JSSResource/removablemacaddresses/id/0
 // Returns the created removeable MAC address with its assigned ID.
 // https://developer.jamf.com/jamf-pro/reference/createremovablemacaddressbyid
-func (s *Service) CreateRemoveableMacAddress(ctx context.Context, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -172,10 +172,10 @@ func (s *Service) CreateRemoveableMacAddress(ctx context.Context, req *RequestRe
 	return &result, resp, nil
 }
 
-// UpdateRemoveableMacAddressByID updates the specified removeable MAC address by ID.
+// UpdateByID updates the specified removeable MAC address by ID.
 // URL: PUT /JSSResource/removablemacaddresses/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updateremovablemacaddressbyid
-func (s *Service) UpdateRemoveableMacAddressByID(ctx context.Context, id int, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("removeable MAC address ID must be a positive integer")
 	}
@@ -200,10 +200,10 @@ func (s *Service) UpdateRemoveableMacAddressByID(ctx context.Context, id int, re
 	return &result, resp, nil
 }
 
-// UpdateRemoveableMacAddressByName updates the specified removeable MAC address by name.
+// UpdateByName updates the specified removeable MAC address by name.
 // URL: PUT /JSSResource/removablemacaddresses/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updateremovablemacaddressbyname
-func (s *Service) UpdateRemoveableMacAddressByName(ctx context.Context, name string, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("removeable MAC address name is required")
 	}
@@ -228,10 +228,10 @@ func (s *Service) UpdateRemoveableMacAddressByName(ctx context.Context, name str
 	return &result, resp, nil
 }
 
-// DeleteRemoveableMacAddressByID removes the specified removeable MAC address by ID.
+// DeleteByID removes the specified removeable MAC address by ID.
 // URL: DELETE /JSSResource/removablemacaddresses/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleteremovablemacaddressbyid
-func (s *Service) DeleteRemoveableMacAddressByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("removeable MAC address ID must be a positive integer")
 	}
@@ -251,10 +251,10 @@ func (s *Service) DeleteRemoveableMacAddressByID(ctx context.Context, id int) (*
 	return resp, nil
 }
 
-// DeleteRemoveableMacAddressByName removes the specified removeable MAC address by name.
+// DeleteByName removes the specified removeable MAC address by name.
 // URL: DELETE /JSSResource/removablemacaddresses/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deleteremovablemacaddressbyname
-func (s *Service) DeleteRemoveableMacAddressByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("removeable MAC address name is required")
 	}

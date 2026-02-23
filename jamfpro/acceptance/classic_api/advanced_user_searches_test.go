@@ -58,7 +58,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateAdvancedUserSearch(ctx1, createReq)
+	created, createResp, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err, "CreateAdvancedUserSearch should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
@@ -71,7 +71,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteAdvancedUserSearchByID(cleanupCtx, searchID)
+		_, delErr := svc.DeleteByID(cleanupCtx, searchID)
 		acc.LogCleanupDeleteError(t, "advanced user search", fmt.Sprintf("%d", searchID), delErr)
 	})
 
@@ -83,7 +83,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListAdvancedUserSearches(ctx2)
+	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListAdvancedUserSearches should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -108,7 +108,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetAdvancedUserSearchByID(ctx3, searchID)
+	fetched, fetchResp, err := svc.GetByID(ctx3, searchID)
 	require.NoError(t, err, "GetAdvancedUserSearchByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -127,7 +127,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetAdvancedUserSearchByName(ctx4, searchName)
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, searchName)
 	require.NoError(t, err, "GetAdvancedUserSearchByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
@@ -163,7 +163,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 			{Name: "Full Name"},
 		},
 	}
-	updated, updateResp, err := svc.UpdateAdvancedUserSearchByID(ctx5, searchID, updateReq)
+	updated, updateResp, err := svc.UpdateByID(ctx5, searchID, updateReq)
 	require.NoError(t, err, "UpdateAdvancedUserSearchByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
@@ -192,7 +192,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 			},
 		},
 	}
-	reverted, revertResp, err := svc.UpdateAdvancedUserSearchByName(ctx6, updatedName, revertReq)
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateAdvancedUserSearchByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
@@ -206,7 +206,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetAdvancedUserSearchByID(ctx7, searchID)
+	verified, verifyResp, err := svc.GetByID(ctx7, searchID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -221,7 +221,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteAdvancedUserSearchByID(ctx8, searchID)
+	deleteResp, err := svc.DeleteByID(ctx8, searchID)
 	require.NoError(t, err, "DeleteAdvancedUserSearchByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -258,7 +258,7 @@ func TestAcceptance_AdvancedUserSearches_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateAdvancedUserSearch(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -268,14 +268,14 @@ func TestAcceptance_AdvancedUserSearches_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteAdvancedUserSearchByID(cleanupCtx, searchID)
+		_, delErr := svc.DeleteByID(cleanupCtx, searchID)
 		acc.LogCleanupDeleteError(t, "advanced user search", fmt.Sprintf("%d", searchID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteAdvancedUserSearchByName(ctx2, searchName)
+	deleteResp, err := svc.DeleteByName(ctx2, searchName)
 	require.NoError(t, err, "DeleteAdvancedUserSearchByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -293,43 +293,43 @@ func TestAcceptance_AdvancedUserSearches_ValidationErrors(t *testing.T) {
 	svc := acc.Client.AdvancedUserSearches
 
 	t.Run("GetAdvancedUserSearchByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetAdvancedUserSearchByID(context.Background(), 0)
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
 	})
 
 	t.Run("GetAdvancedUserSearchByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetAdvancedUserSearchByName(context.Background(), "")
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced user search name is required")
 	})
 
 	t.Run("CreateAdvancedUserSearch_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateAdvancedUserSearch(context.Background(), nil)
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateAdvancedUserSearchByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateAdvancedUserSearchByID(context.Background(), 0, &advanced_user_searches.RequestAdvancedUserSearch{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &advanced_user_searches.RequestAdvancedUserSearch{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
 	})
 
 	t.Run("UpdateAdvancedUserSearchByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateAdvancedUserSearchByName(context.Background(), "", &advanced_user_searches.RequestAdvancedUserSearch{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &advanced_user_searches.RequestAdvancedUserSearch{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced user search name is required")
 	})
 
 	t.Run("DeleteAdvancedUserSearchByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteAdvancedUserSearchByID(context.Background(), 0)
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
 	})
 
 	t.Run("DeleteAdvancedUserSearchByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteAdvancedUserSearchByName(context.Background(), "")
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced user search name is required")
 	})

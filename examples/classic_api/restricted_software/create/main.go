@@ -1,4 +1,4 @@
-// Package main demonstrates CreateRestrictedSoftware — creates new restricted software via the Classic API.
+// Package main demonstrates Create — creates new restricted software via the Classic API.
 //
 // Run with: go run ./examples/classic_api/restricted_software/create
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Creates restricted software then deletes it.
@@ -37,16 +37,16 @@ func main() {
 		},
 	}
 
-	created, resp, err := client.RestrictedSoftware.CreateRestrictedSoftware(ctx, req)
+	created, resp, err := client.RestrictedSoftware.Create(ctx, req)
 	if err != nil {
-		log.Fatalf("CreateRestrictedSoftware failed: %v", err)
+		log.Fatalf("Create failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
 	fmt.Printf("Created restricted software ID: %d\n", created.ID)
 
 	// Cleanup: delete the created restricted software
-	if _, err := client.RestrictedSoftware.DeleteRestrictedSoftwareByID(ctx, created.ID); err != nil {
+	if _, err := client.RestrictedSoftware.DeleteByID(ctx, created.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: restricted software deleted")

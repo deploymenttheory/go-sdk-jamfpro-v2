@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy>
+  <general>
+    <id>1</id>
+    <name>Test Policy</name>
+    <enabled>true</enabled>
+    <trigger>EVENT</trigger>
+    <trigger_checkin>false</trigger_checkin>
+    <trigger_enrollment_complete>false</trigger_enrollment_complete>
+    <trigger_login>false</trigger_login>
+    <trigger_logout>false</trigger_logout>
+    <trigger_network_state_changed>false</trigger_network_state_changed>
+    <trigger_startup>false</trigger_startup>
+    <trigger_other>startup</trigger_other>
+    <frequency>Once per computer</frequency>
+    <retry_event>none</retry_event>
+    <retry_attempts>-1</retry_attempts>
+    <notify_on_each_failed_retry>false</notify_on_each_failed_retry>
+    <location_user_only>false</location_user_only>
+    <target_drive>/</target_drive>
+    <offline>false</offline>
+    <category>
+      <id>-1</id>
+      <name>No category assigned</name>
+    </category>
+    <network_requirements>Any</network_requirements>
+    <site>
+      <id>-1</id>
+      <name>None</name>
+    </site>
+  </general>
+</policy>

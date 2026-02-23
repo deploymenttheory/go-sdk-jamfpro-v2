@@ -29,3 +29,27 @@ type ResourceSSOKeystoreResponse struct {
 	Keystore        ResourceSSOCertKeystore     `json:"keystore,omitempty"`
 	KeystoreDetails *ResourceSSOKeystoreDetails `json:"keystoreDetails,omitempty"`
 }
+
+// UpdateKeystoreRequest is the request body for updating the SSO keystore.
+type UpdateKeystoreRequest struct {
+	KeystorePassword  string              `json:"keystorePassword,omitempty"`
+	KeystoreFile      string              `json:"keystoreFile,omitempty"`
+	KeystoreFileName  string              `json:"keystoreFileName,omitempty"`
+	Keys              []ResourceCertKey   `json:"keys,omitempty"`
+	Type              string              `json:"type,omitempty"`              // Allowed values: PKCS12, JKS, NONE
+	KeystoreSetupType string              `json:"keystoreSetupType,omitempty"` // Allowed values: NONE, UPLOADED, GENERATED
+}
+
+// ParseKeystoreRequest is the request body for parsing a keystore file.
+type ParseKeystoreRequest struct {
+	KeystoreFile     string `json:"keystoreFile"`
+	KeystorePassword string `json:"keystorePassword,omitempty"`
+	KeystoreFileName string `json:"keystoreFileName,omitempty"`
+}
+
+// ParseKeystoreResponse is the response from parsing a keystore file.
+type ParseKeystoreResponse struct {
+	Keys              []ResourceCertKey `json:"keys,omitempty"`
+	Type              string            `json:"type,omitempty"`              // Values: PKCS12, JKS, NONE
+	KeystoreSetupType string            `json:"keystoreSetupType,omitempty"` // Values: NONE, UPLOADED, GENERATED
+}

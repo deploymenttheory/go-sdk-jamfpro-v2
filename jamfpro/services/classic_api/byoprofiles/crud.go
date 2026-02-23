@@ -13,51 +13,51 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/byoprofiles
 	BYOProfilesServiceInterface interface {
-		// ListBYOProfiles returns all BYO profiles.
+		// List returns all BYO profiles.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findbyoprofiles
-		ListBYOProfiles(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
-		// GetBYOProfileByID returns the specified BYO profile by ID.
+		// GetByID returns the specified BYO profile by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findbyoprofilesbyid
-		GetBYOProfileByID(ctx context.Context, id int) (*ResourceBYOProfile, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceBYOProfile, *interfaces.Response, error)
 
-		// GetBYOProfileByName returns the specified BYO profile by name.
+		// GetByName returns the specified BYO profile by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findbyoprofilesbyname
-		GetBYOProfileByName(ctx context.Context, name string) (*ResourceBYOProfile, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceBYOProfile, *interfaces.Response, error)
 
-		// CreateBYOProfile creates a new BYO profile.
+		// Create creates a new BYO profile.
 		//
 		// Returns the created BYO profile ID only (Classic API behavior).
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createbyoprofilebyid
-		CreateBYOProfile(ctx context.Context, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createbyoprofilesbyid
+		Create(ctx context.Context, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// UpdateBYOProfileByID updates the specified BYO profile by ID.
+		// UpdateByID updates the specified BYO profile by ID.
 		//
 		// Returns the updated BYO profile ID only (Classic API behavior).
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatebyoprofilebyid
-		UpdateBYOProfileByID(ctx context.Context, id int, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatebyoprofilesbyid
+		UpdateByID(ctx context.Context, id int, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// UpdateBYOProfileByName updates the specified BYO profile by name.
+		// UpdateByName updates the specified BYO profile by name.
 		//
 		// Returns the updated BYO profile ID only (Classic API behavior).
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatebyoprofilebyname
-		UpdateBYOProfileByName(ctx context.Context, name string, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatebyoprofilesbyname
+		UpdateByName(ctx context.Context, name string, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error)
 
-		// DeleteBYOProfileByID removes the specified BYO profile by ID.
+		// DeleteByID removes the specified BYO profile by ID.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletebyoprofilebyid
-		DeleteBYOProfileByID(ctx context.Context, id int) (*interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletebyoprofilesbyid
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteBYOProfileByName removes the specified BYO profile by name.
+		// DeleteByName removes the specified BYO profile by name.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletebyoprofilebyname
-		DeleteBYOProfileByName(ctx context.Context, name string) (*interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletebyoprofilesbyname
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the BYO profiles-related Classic API methods.
@@ -79,10 +79,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - BYO Profiles CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListBYOProfiles returns all BYO profiles.
+// List returns all BYO profiles.
 // URL: GET /JSSResource/byoprofiles
-// https://developer.jamf.com/jamf-pro/reference/findbyoprofiles
-func (s *Service) ListBYOProfiles(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findbyoprofiles
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicBYOProfiles
@@ -100,10 +100,10 @@ func (s *Service) ListBYOProfiles(ctx context.Context) (*ListResponse, *interfac
 	return &result, resp, nil
 }
 
-// GetBYOProfileByID returns the specified BYO profile by ID.
+// GetByID returns the specified BYO profile by ID.
 // URL: GET /JSSResource/byoprofiles/id/{id}
-// https://developer.jamf.com/jamf-pro/reference/findbyoprofilesbyid
-func (s *Service) GetBYOProfileByID(ctx context.Context, id int) (*ResourceBYOProfile, *interfaces.Response, error) {
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findbyoprofilesbyid
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceBYOProfile, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("BYO profile ID must be a positive integer")
 	}
@@ -125,10 +125,10 @@ func (s *Service) GetBYOProfileByID(ctx context.Context, id int) (*ResourceBYOPr
 	return &result, resp, nil
 }
 
-// GetBYOProfileByName returns the specified BYO profile by name.
+// GetByName returns the specified BYO profile by name.
 // URL: GET /JSSResource/byoprofiles/name/{name}
-// https://developer.jamf.com/jamf-pro/reference/findbyoprofilesbyname
-func (s *Service) GetBYOProfileByName(ctx context.Context, name string) (*ResourceBYOProfile, *interfaces.Response, error) {
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findbyoprofilesbyname
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceBYOProfile, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("BYO profile name is required")
 	}
@@ -150,11 +150,11 @@ func (s *Service) GetBYOProfileByName(ctx context.Context, name string) (*Resour
 	return &result, resp, nil
 }
 
-// CreateBYOProfile creates a new BYO profile.
+// Create creates a new BYO profile.
 // URL: POST /JSSResource/byoprofiles/id/0
 // Returns the created BYO profile ID only.
-// https://developer.jamf.com/jamf-pro/reference/createbyoprofilebyid
-func (s *Service) CreateBYOProfile(ctx context.Context, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error) {
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createbyoprofilesbyid
+func (s *Service) Create(ctx context.Context, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -176,11 +176,11 @@ func (s *Service) CreateBYOProfile(ctx context.Context, req *RequestBYOProfile) 
 	return &result, resp, nil
 }
 
-// UpdateBYOProfileByID updates the specified BYO profile by ID.
+// UpdateByID updates the specified BYO profile by ID.
 // URL: PUT /JSSResource/byoprofiles/id/{id}
 // Returns the updated BYO profile ID only.
-// https://developer.jamf.com/jamf-pro/reference/updatebyoprofilebyid
-func (s *Service) UpdateBYOProfileByID(ctx context.Context, id int, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error) {
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatebyoprofilesbyid
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("BYO profile ID must be a positive integer")
 	}
@@ -205,11 +205,11 @@ func (s *Service) UpdateBYOProfileByID(ctx context.Context, id int, req *Request
 	return &result, resp, nil
 }
 
-// UpdateBYOProfileByName updates the specified BYO profile by name.
+// UpdateByName updates the specified BYO profile by name.
 // URL: PUT /JSSResource/byoprofiles/name/{name}
 // Returns the updated BYO profile ID only.
-// https://developer.jamf.com/jamf-pro/reference/updatebyoprofilebyname
-func (s *Service) UpdateBYOProfileByName(ctx context.Context, name string, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error) {
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatebyoprofilesbyname
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestBYOProfile) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("BYO profile name is required")
 	}
@@ -234,10 +234,10 @@ func (s *Service) UpdateBYOProfileByName(ctx context.Context, name string, req *
 	return &result, resp, nil
 }
 
-// DeleteBYOProfileByID removes the specified BYO profile by ID.
+// DeleteByID removes the specified BYO profile by ID.
 // URL: DELETE /JSSResource/byoprofiles/id/{id}
-// https://developer.jamf.com/jamf-pro/reference/deletebyoprofilebyid
-func (s *Service) DeleteBYOProfileByID(ctx context.Context, id int) (*interfaces.Response, error) {
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletebyoprofilesbyid
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("BYO profile ID must be a positive integer")
 	}
@@ -257,10 +257,10 @@ func (s *Service) DeleteBYOProfileByID(ctx context.Context, id int) (*interfaces
 	return resp, nil
 }
 
-// DeleteBYOProfileByName removes the specified BYO profile by name.
+// DeleteByName removes the specified BYO profile by name.
 // URL: DELETE /JSSResource/byoprofiles/name/{name}
-// https://developer.jamf.com/jamf-pro/reference/deletebyoprofilebyname
-func (s *Service) DeleteBYOProfileByName(ctx context.Context, name string) (*interfaces.Response, error) {
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletebyoprofilesbyname
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("BYO profile name is required")
 	}

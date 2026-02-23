@@ -33,7 +33,7 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.ComputerInventory.UpdateByIDV1(context.Background(), computerID, updateReq)
+	result, _, err := jamfClient.ComputerInventory.UpdateByIDV3(context.Background(), computerID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

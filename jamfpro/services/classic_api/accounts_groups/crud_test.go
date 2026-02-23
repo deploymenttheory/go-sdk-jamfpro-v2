@@ -24,7 +24,7 @@ func TestUnitGetAccountGroupByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetAccountGroupByIDMock()
 
-	result, resp, err := svc.GetAccountGroupByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -42,7 +42,7 @@ func TestUnitGetAccountGroupByID_Success(t *testing.T) {
 func TestUnitGetAccountGroupByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetAccountGroupByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -52,7 +52,7 @@ func TestUnitGetAccountGroupByID_ZeroID(t *testing.T) {
 func TestUnitGetAccountGroupByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetAccountGroupByID(context.Background(), -1)
+	result, resp, err := svc.GetByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -63,7 +63,7 @@ func TestUnitGetAccountGroupByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetAccountGroupByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -78,7 +78,7 @@ func TestUnitGetAccountGroupByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetAccountGroupByNameMock()
 
-	result, resp, err := svc.GetAccountGroupByName(context.Background(), "testgroup1")
+	result, resp, err := svc.GetByName(context.Background(), "testgroup1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -92,7 +92,7 @@ func TestUnitGetAccountGroupByName_Success(t *testing.T) {
 func TestUnitGetAccountGroupByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetAccountGroupByName(context.Background(), "")
+	result, resp, err := svc.GetByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -112,7 +112,7 @@ func TestUnitCreateAccountGroup_Success(t *testing.T) {
 		AccessLevel:  "Full Access",
 		PrivilegeSet: "Administrator",
 	}
-	result, resp, err := svc.CreateAccountGroup(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -124,7 +124,7 @@ func TestUnitCreateAccountGroup_Success(t *testing.T) {
 func TestUnitCreateAccountGroup_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateAccountGroup(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -136,7 +136,7 @@ func TestUnitCreateAccountGroup_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestAccountGroup{Name: "testgroup1"}
-	result, resp, err := svc.CreateAccountGroup(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -156,7 +156,7 @@ func TestUnitUpdateAccountGroupByID_Success(t *testing.T) {
 		AccessLevel:  "Full Access",
 		PrivilegeSet: "Administrator",
 	}
-	result, resp, err := svc.UpdateAccountGroupByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -170,7 +170,7 @@ func TestUnitUpdateAccountGroupByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestAccountGroup{Name: "updatedgroup"}
-	result, resp, err := svc.UpdateAccountGroupByID(context.Background(), 0, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 0, req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -180,7 +180,7 @@ func TestUnitUpdateAccountGroupByID_ZeroID(t *testing.T) {
 func TestUnitUpdateAccountGroupByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateAccountGroupByID(context.Background(), 1, nil)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -200,7 +200,7 @@ func TestUnitUpdateAccountGroupByName_Success(t *testing.T) {
 		AccessLevel:  "Full Access",
 		PrivilegeSet: "Administrator",
 	}
-	result, resp, err := svc.UpdateAccountGroupByName(context.Background(), "testgroup1", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "testgroup1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -214,7 +214,7 @@ func TestUnitUpdateAccountGroupByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestAccountGroup{Name: "updatedgroup"}
-	result, resp, err := svc.UpdateAccountGroupByName(context.Background(), "", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "", req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -224,7 +224,7 @@ func TestUnitUpdateAccountGroupByName_EmptyName(t *testing.T) {
 func TestUnitUpdateAccountGroupByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateAccountGroupByName(context.Background(), "testgroup1", nil)
+	result, resp, err := svc.UpdateByName(context.Background(), "testgroup1", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -239,7 +239,7 @@ func TestUnitDeleteAccountGroupByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteAccountGroupByIDMock()
 
-	resp, err := svc.DeleteAccountGroupByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -248,7 +248,7 @@ func TestUnitDeleteAccountGroupByID_Success(t *testing.T) {
 func TestUnitDeleteAccountGroupByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteAccountGroupByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "account group ID must be a positive integer")
@@ -257,7 +257,7 @@ func TestUnitDeleteAccountGroupByID_ZeroID(t *testing.T) {
 func TestUnitDeleteAccountGroupByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteAccountGroupByID(context.Background(), -1)
+	resp, err := svc.DeleteByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "account group ID must be a positive integer")
@@ -271,7 +271,7 @@ func TestUnitDeleteAccountGroupByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteAccountGroupByNameMock()
 
-	resp, err := svc.DeleteAccountGroupByName(context.Background(), "testgroup1")
+	resp, err := svc.DeleteByName(context.Background(), "testgroup1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -280,7 +280,7 @@ func TestUnitDeleteAccountGroupByName_Success(t *testing.T) {
 func TestUnitDeleteAccountGroupByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteAccountGroupByName(context.Background(), "")
+	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "account group name is required")

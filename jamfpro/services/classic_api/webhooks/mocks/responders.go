@@ -43,14 +43,14 @@ func NewWebhooksMock() *WebhooksMock {
 
 // RegisterMocks registers all standard success responses in one call.
 func (m *WebhooksMock) RegisterMocks() {
-	m.RegisterListWebhooksMock()
-	m.RegisterGetWebhookByIDMock()
-	m.RegisterGetWebhookByNameMock()
-	m.RegisterCreateWebhookMock()
-	m.RegisterUpdateWebhookByIDMock()
-	m.RegisterUpdateWebhookByNameMock()
-	m.RegisterDeleteWebhookByIDMock()
-	m.RegisterDeleteWebhookByNameMock()
+	m.RegisterListMock()
+	m.RegisterGetByIDMock()
+	m.RegisterGetByNameMock()
+	m.RegisterCreateMock()
+	m.RegisterUpdateByIDMock()
+	m.RegisterUpdateByNameMock()
+	m.RegisterDeleteByIDMock()
+	m.RegisterDeleteByNameMock()
 }
 
 // RegisterErrorMocks registers all error responses in one call.
@@ -61,43 +61,43 @@ func (m *WebhooksMock) RegisterErrorMocks() {
 
 // ---- Success responders ----
 
-// RegisterListWebhooksMock registers GET /JSSResource/webhooks → 200.
-func (m *WebhooksMock) RegisterListWebhooksMock() {
+// RegisterListMock registers GET /JSSResource/webhooks → 200.
+func (m *WebhooksMock) RegisterListMock() {
 	m.register("GET", "/JSSResource/webhooks", 200, "validate_list_webhooks.xml")
 }
 
-// RegisterGetWebhookByIDMock registers GET /JSSResource/webhooks/id/1 → 200.
-func (m *WebhooksMock) RegisterGetWebhookByIDMock() {
+// RegisterGetByIDMock registers GET /JSSResource/webhooks/id/1 → 200.
+func (m *WebhooksMock) RegisterGetByIDMock() {
 	m.register("GET", "/JSSResource/webhooks/id/1", 200, "validate_get_webhook.xml")
 }
 
-// RegisterGetWebhookByNameMock registers GET /JSSResource/webhooks/name/Computer Enrolled → 200.
-func (m *WebhooksMock) RegisterGetWebhookByNameMock() {
+// RegisterGetByNameMock registers GET /JSSResource/webhooks/name/Computer Enrolled → 200.
+func (m *WebhooksMock) RegisterGetByNameMock() {
 	m.register("GET", "/JSSResource/webhooks/name/Computer Enrolled", 200, "validate_get_webhook.xml")
 }
 
-// RegisterCreateWebhookMock registers POST /JSSResource/webhooks/id/0 → 201.
-func (m *WebhooksMock) RegisterCreateWebhookMock() {
+// RegisterCreateMock registers POST /JSSResource/webhooks/id/0 → 201.
+func (m *WebhooksMock) RegisterCreateMock() {
 	m.register("POST", "/JSSResource/webhooks/id/0", 201, "validate_create_webhook.xml")
 }
 
-// RegisterUpdateWebhookByIDMock registers PUT /JSSResource/webhooks/id/1 → 200.
-func (m *WebhooksMock) RegisterUpdateWebhookByIDMock() {
+// RegisterUpdateByIDMock registers PUT /JSSResource/webhooks/id/1 → 200.
+func (m *WebhooksMock) RegisterUpdateByIDMock() {
 	m.register("PUT", "/JSSResource/webhooks/id/1", 200, "validate_update_webhook.xml")
 }
 
-// RegisterUpdateWebhookByNameMock registers PUT /JSSResource/webhooks/name/Computer Enrolled → 200.
-func (m *WebhooksMock) RegisterUpdateWebhookByNameMock() {
+// RegisterUpdateByNameMock registers PUT /JSSResource/webhooks/name/Computer Enrolled → 200.
+func (m *WebhooksMock) RegisterUpdateByNameMock() {
 	m.register("PUT", "/JSSResource/webhooks/name/Computer Enrolled", 200, "validate_update_webhook.xml")
 }
 
-// RegisterDeleteWebhookByIDMock registers DELETE /JSSResource/webhooks/id/1 → 200.
-func (m *WebhooksMock) RegisterDeleteWebhookByIDMock() {
+// RegisterDeleteByIDMock registers DELETE /JSSResource/webhooks/id/1 → 200.
+func (m *WebhooksMock) RegisterDeleteByIDMock() {
 	m.register("DELETE", "/JSSResource/webhooks/id/1", 200, "")
 }
 
-// RegisterDeleteWebhookByNameMock registers DELETE /JSSResource/webhooks/name/Computer Enrolled → 200.
-func (m *WebhooksMock) RegisterDeleteWebhookByNameMock() {
+// RegisterDeleteByNameMock registers DELETE /JSSResource/webhooks/name/Computer Enrolled → 200.
+func (m *WebhooksMock) RegisterDeleteByNameMock() {
 	m.register("DELETE", "/JSSResource/webhooks/name/Computer Enrolled", 200, "")
 }
 

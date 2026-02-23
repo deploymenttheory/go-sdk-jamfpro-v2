@@ -29,7 +29,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test VPP account")
 
-	accountName := uniqueName("acc-test-vpp")
+	accountName := acc.UniqueName("acc-test-vpp")
 	createReq := &vpp_accounts.RequestVPPAccount{
 		Name:    accountName,
 		Country: "US",
@@ -38,7 +38,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateVPPAccount(ctx1, createReq)
+	created, createResp, err := svc.Create(ctx1, createReq)
 	if err != nil && createResp != nil && createResp.StatusCode == 409 {
 		t.Skip("VPP create requires service token in this environment; skipping lifecycle")
 	}
@@ -54,7 +54,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteVPPAccountByID(cleanupCtx, accountID)
+		_, delErr := svc.DeleteByID(cleanupCtx, accountID)
 		acc.LogCleanupDeleteError(t, "VPP account", fmt.Sprintf("%d", accountID), delErr)
 	})
 
@@ -66,7 +66,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListVPPAccounts(ctx2)
+	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListVPPAccounts should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -91,7 +91,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetVPPAccountByID(ctx3, accountID)
+	fetched, fetchResp, err := svc.GetByID(ctx3, accountID)
 	require.NoError(t, err, "GetVPPAccountByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -102,7 +102,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-vpp-updated")
+	updatedName := acc.UniqueName("acc-test-vpp-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating VPP account ID=%d to name=%q", accountID, updatedName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -112,7 +112,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 		Name:    updatedName,
 		Country: "US",
 	}
-	updated, updateResp, err := svc.UpdateVPPAccountByID(ctx4, accountID, updateReq)
+	updated, updateResp, err := svc.UpdateByID(ctx4, accountID, updateReq)
 	require.NoError(t, err, "UpdateVPPAccountByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
@@ -126,7 +126,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5()
 
-	deleteResp, err := svc.DeleteVPPAccountByID(ctx5, accountID)
+	deleteResp, err := svc.DeleteByID(ctx5, accountID)
 	require.NoError(t, err, "DeleteVPPAccountByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -143,25 +143,25 @@ func TestAcceptance_VPPAccounts_ValidationErrors(t *testing.T) {
 	svc := acc.Client.VPPAccounts
 
 	t.Run("GetVPPAccountByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetVPPAccountByID(context.Background(), 0)
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "VPP account ID must be a positive integer")
 	})
 
 	t.Run("CreateVPPAccount_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateVPPAccount(context.Background(), nil)
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateVPPAccountByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateVPPAccountByID(context.Background(), 0, &vpp_accounts.RequestVPPAccount{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &vpp_accounts.RequestVPPAccount{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "VPP account ID must be a positive integer")
 	})
 
 	t.Run("DeleteVPPAccountByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteVPPAccountByID(context.Background(), 0)
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "VPP account ID must be a positive integer")
 	})

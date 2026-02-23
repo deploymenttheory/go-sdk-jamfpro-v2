@@ -29,7 +29,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test webhook")
 
-	webhookName := uniqueName("acc-test-webhook")
+	webhookName := acc.UniqueName("acc-test-webhook")
 	createReq := &webhooks.RequestWebhook{
 		Name:               webhookName,
 		Enabled:            true,
@@ -44,7 +44,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateWebhook(ctx1, createReq)
+	created, createResp, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err, "CreateWebhook should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
@@ -57,7 +57,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteWebhookByID(cleanupCtx, webhookID)
+		_, delErr := svc.DeleteByID(cleanupCtx, webhookID)
 		acc.LogCleanupDeleteError(t, "webhook", fmt.Sprintf("%d", webhookID), delErr)
 	})
 
@@ -69,7 +69,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListWebhooks(ctx2)
+	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListWebhooks should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -94,7 +94,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetWebhookByID(ctx3, webhookID)
+	fetched, fetchResp, err := svc.GetByID(ctx3, webhookID)
 	require.NoError(t, err, "GetWebhookByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -111,7 +111,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetWebhookByName(ctx4, webhookName)
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, webhookName)
 	require.NoError(t, err, "GetWebhookByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
@@ -122,7 +122,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-webhook-updated")
+	updatedName := acc.UniqueName("acc-test-webhook-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating webhook ID=%d to name=%q", webhookID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -138,7 +138,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 		ReadTimeout:        2,
 		AuthenticationType: "NONE",
 	}
-	updated, updateResp, err := svc.UpdateWebhookByID(ctx5, webhookID, updateReq)
+	updated, updateResp, err := svc.UpdateByID(ctx5, webhookID, updateReq)
 	require.NoError(t, err, "UpdateWebhookByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
@@ -162,7 +162,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 		ReadTimeout:        2,
 		AuthenticationType: "NONE",
 	}
-	reverted, revertResp, err := svc.UpdateWebhookByName(ctx6, updatedName, revertReq)
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateWebhookByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
@@ -176,7 +176,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetWebhookByID(ctx7, webhookID)
+	verified, verifyResp, err := svc.GetByID(ctx7, webhookID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -191,7 +191,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteWebhookByID(ctx8, webhookID)
+	deleteResp, err := svc.DeleteByID(ctx8, webhookID)
 	require.NoError(t, err, "DeleteWebhookByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -208,7 +208,7 @@ func TestAcceptance_Webhooks_DeleteByName(t *testing.T) {
 	svc := acc.Client.Webhooks
 	ctx := context.Background()
 
-	webhookName := uniqueName("acc-test-webhook-dbn")
+	webhookName := acc.UniqueName("acc-test-webhook-dbn")
 	createReq := &webhooks.RequestWebhook{
 		Name:               webhookName,
 		Enabled:            false,
@@ -223,7 +223,7 @@ func TestAcceptance_Webhooks_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateWebhook(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -233,14 +233,14 @@ func TestAcceptance_Webhooks_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteWebhookByID(cleanupCtx, webhookID)
+		_, delErr := svc.DeleteByID(cleanupCtx, webhookID)
 		acc.LogCleanupDeleteError(t, "webhook", fmt.Sprintf("%d", webhookID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteWebhookByName(ctx2, webhookName)
+	deleteResp, err := svc.DeleteByName(ctx2, webhookName)
 	require.NoError(t, err, "DeleteWebhookByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -258,43 +258,43 @@ func TestAcceptance_Webhooks_ValidationErrors(t *testing.T) {
 	svc := acc.Client.Webhooks
 
 	t.Run("GetWebhookByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetWebhookByID(context.Background(), 0)
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "webhook ID must be a positive integer")
 	})
 
 	t.Run("GetWebhookByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetWebhookByName(context.Background(), "")
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "webhook name is required")
 	})
 
 	t.Run("CreateWebhook_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateWebhook(context.Background(), nil)
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateWebhookByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateWebhookByID(context.Background(), 0, &webhooks.RequestWebhook{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &webhooks.RequestWebhook{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "webhook ID must be a positive integer")
 	})
 
 	t.Run("UpdateWebhookByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateWebhookByName(context.Background(), "", &webhooks.RequestWebhook{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &webhooks.RequestWebhook{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "webhook name is required")
 	})
 
 	t.Run("DeleteWebhookByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteWebhookByID(context.Background(), 0)
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "webhook ID must be a positive integer")
 	})
 
 	t.Run("DeleteWebhookByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteWebhookByName(context.Background(), "")
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "webhook name is required")
 	})

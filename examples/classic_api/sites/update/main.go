@@ -1,4 +1,4 @@
-// Package main demonstrates UpdateSiteByID — updates an existing site via the Classic API.
+// Package main demonstrates UpdateByID — updates an existing site via the Classic API.
 //
 // Run with: go run ./examples/classic_api/sites/update
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -26,9 +26,9 @@ func main() {
 	createReq := &sites.RequestSite{
 		Name: fmt.Sprintf("example-update-%d", time.Now().UnixMilli()),
 	}
-	created, _, err := client.Sites.CreateSite(ctx, createReq)
+	created, _, err := client.Sites.Create(ctx, createReq)
 	if err != nil {
-		log.Fatalf("CreateSite failed: %v", err)
+		log.Fatalf("Create failed: %v", err)
 	}
 	fmt.Printf("Created site ID: %d name: %s\n", created.ID, created.Name)
 
@@ -36,16 +36,16 @@ func main() {
 	updateReq := &sites.RequestSite{
 		Name: fmt.Sprintf("example-updated-%d", time.Now().UnixMilli()),
 	}
-	updated, resp, err := client.Sites.UpdateSiteByID(ctx, created.ID, updateReq)
+	updated, resp, err := client.Sites.UpdateByID(ctx, created.ID, updateReq)
 	if err != nil {
-		_, _ = client.Sites.DeleteSiteByID(ctx, created.ID)
-		log.Fatalf("UpdateSiteByID failed: %v", err)
+		_, _ = client.Sites.DeleteByID(ctx, created.ID)
+		log.Fatalf("UpdateByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
 	fmt.Printf("Updated site ID: %d\n", updated.ID)
 	fmt.Printf("New name: %s\n", updated.Name)
 
-	_, _ = client.Sites.DeleteSiteByID(ctx, created.ID)
+	_, _ = client.Sites.DeleteByID(ctx, created.ID)
 	fmt.Println("Cleanup: site deleted")
 }

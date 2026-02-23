@@ -22,9 +22,9 @@ func setupMockService(t *testing.T) (*Service, *mocks.WebhooksMock) {
 
 func TestUnitListWebhooks_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterListWebhooksMock()
+	mock.RegisterListMock()
 
-	result, resp, err := svc.ListWebhooks(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -44,9 +44,9 @@ func TestUnitListWebhooks_Success(t *testing.T) {
 
 func TestUnitGetWebhookByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetWebhookByIDMock()
+	mock.RegisterGetByIDMock()
 
-	result, resp, err := svc.GetWebhookByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -62,7 +62,7 @@ func TestUnitGetWebhookByID_Success(t *testing.T) {
 func TestUnitGetWebhookByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetWebhookByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -72,7 +72,7 @@ func TestUnitGetWebhookByID_ZeroID(t *testing.T) {
 func TestUnitGetWebhookByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetWebhookByID(context.Background(), -1)
+	result, resp, err := svc.GetByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -83,7 +83,7 @@ func TestUnitGetWebhookByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetWebhookByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -96,9 +96,9 @@ func TestUnitGetWebhookByID_NotFound(t *testing.T) {
 
 func TestUnitGetWebhookByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetWebhookByNameMock()
+	mock.RegisterGetByNameMock()
 
-	result, resp, err := svc.GetWebhookByName(context.Background(), "Computer Enrolled")
+	result, resp, err := svc.GetByName(context.Background(), "Computer Enrolled")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -111,7 +111,7 @@ func TestUnitGetWebhookByName_Success(t *testing.T) {
 func TestUnitGetWebhookByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetWebhookByName(context.Background(), "")
+	result, resp, err := svc.GetByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -124,7 +124,7 @@ func TestUnitGetWebhookByName_EmptyName(t *testing.T) {
 
 func TestUnitCreateWebhook_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterCreateWebhookMock()
+	mock.RegisterCreateMock()
 
 	req := &RequestWebhook{
 		Name:    "New Webhook",
@@ -132,7 +132,7 @@ func TestUnitCreateWebhook_Success(t *testing.T) {
 		URL:     "https://hooks.example.com/new",
 		Event:   "ComputerAdded",
 	}
-	result, resp, err := svc.CreateWebhook(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -145,7 +145,7 @@ func TestUnitCreateWebhook_Success(t *testing.T) {
 func TestUnitCreateWebhook_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateWebhook(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -157,7 +157,7 @@ func TestUnitCreateWebhook_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestWebhook{Name: "Computer Enrolled", Enabled: true}
-	result, resp, err := svc.CreateWebhook(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -170,10 +170,10 @@ func TestUnitCreateWebhook_Conflict(t *testing.T) {
 
 func TestUnitUpdateWebhookByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateWebhookByIDMock()
+	mock.RegisterUpdateByIDMock()
 
 	req := &RequestWebhook{Name: "Computer Enrolled Updated", Enabled: true}
-	result, resp, err := svc.UpdateWebhookByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -186,7 +186,7 @@ func TestUnitUpdateWebhookByID_Success(t *testing.T) {
 func TestUnitUpdateWebhookByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateWebhookByID(context.Background(), 0, &RequestWebhook{Name: "x"})
+	result, resp, err := svc.UpdateByID(context.Background(), 0, &RequestWebhook{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -196,7 +196,7 @@ func TestUnitUpdateWebhookByID_ZeroID(t *testing.T) {
 func TestUnitUpdateWebhookByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateWebhookByID(context.Background(), 1, nil)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -209,10 +209,10 @@ func TestUnitUpdateWebhookByID_NilRequest(t *testing.T) {
 
 func TestUnitUpdateWebhookByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateWebhookByNameMock()
+	mock.RegisterUpdateByNameMock()
 
 	req := &RequestWebhook{Name: "Computer Enrolled Updated", Enabled: true}
-	result, resp, err := svc.UpdateWebhookByName(context.Background(), "Computer Enrolled", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "Computer Enrolled", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -225,7 +225,7 @@ func TestUnitUpdateWebhookByName_Success(t *testing.T) {
 func TestUnitUpdateWebhookByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateWebhookByName(context.Background(), "", &RequestWebhook{Name: "x"})
+	result, resp, err := svc.UpdateByName(context.Background(), "", &RequestWebhook{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -235,7 +235,7 @@ func TestUnitUpdateWebhookByName_EmptyName(t *testing.T) {
 func TestUnitUpdateWebhookByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateWebhookByName(context.Background(), "Computer Enrolled", nil)
+	result, resp, err := svc.UpdateByName(context.Background(), "Computer Enrolled", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -248,9 +248,9 @@ func TestUnitUpdateWebhookByName_NilRequest(t *testing.T) {
 
 func TestUnitDeleteWebhookByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteWebhookByIDMock()
+	mock.RegisterDeleteByIDMock()
 
-	resp, err := svc.DeleteWebhookByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -259,7 +259,7 @@ func TestUnitDeleteWebhookByID_Success(t *testing.T) {
 func TestUnitDeleteWebhookByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteWebhookByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "webhook ID must be a positive integer")
@@ -271,9 +271,9 @@ func TestUnitDeleteWebhookByID_ZeroID(t *testing.T) {
 
 func TestUnitDeleteWebhookByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteWebhookByNameMock()
+	mock.RegisterDeleteByNameMock()
 
-	resp, err := svc.DeleteWebhookByName(context.Background(), "Computer Enrolled")
+	resp, err := svc.DeleteByName(context.Background(), "Computer Enrolled")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -282,7 +282,7 @@ func TestUnitDeleteWebhookByName_Success(t *testing.T) {
 func TestUnitDeleteWebhookByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteWebhookByName(context.Background(), "")
+	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "webhook name is required")

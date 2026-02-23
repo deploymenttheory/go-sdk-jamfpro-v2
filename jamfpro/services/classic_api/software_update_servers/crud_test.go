@@ -23,7 +23,7 @@ func TestUnitListSoftwareUpdateServers_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListSoftwareUpdateServersMock()
 
-	result, resp, err := svc.ListSoftwareUpdateServers(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -45,7 +45,7 @@ func TestUnitGetSoftwareUpdateServerByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetSoftwareUpdateServerByIDMock()
 
-	result, resp, err := svc.GetSoftwareUpdateServerByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -59,14 +59,14 @@ func TestUnitGetSoftwareUpdateServerByID_Success(t *testing.T) {
 
 func TestUnitGetSoftwareUpdateServerByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.GetSoftwareUpdateServerByID(context.Background(), 0)
+	_, _, err := svc.GetByID(context.Background(), 0)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "software update server ID must be a positive integer")
 }
 
 func TestUnitGetSoftwareUpdateServerByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.GetSoftwareUpdateServerByID(context.Background(), -1)
+	_, _, err := svc.GetByID(context.Background(), -1)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "software update server ID must be a positive integer")
 }
@@ -75,7 +75,7 @@ func TestUnitGetSoftwareUpdateServerByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	_, _, err := svc.GetSoftwareUpdateServerByID(context.Background(), 999)
+	_, _, err := svc.GetByID(context.Background(), 999)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "404")
 }
@@ -88,7 +88,7 @@ func TestUnitGetSoftwareUpdateServerByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetSoftwareUpdateServerByNameMock()
 
-	result, resp, err := svc.GetSoftwareUpdateServerByName(context.Background(), "Primary SUS")
+	result, resp, err := svc.GetByName(context.Background(), "Primary SUS")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -99,7 +99,7 @@ func TestUnitGetSoftwareUpdateServerByName_Success(t *testing.T) {
 
 func TestUnitGetSoftwareUpdateServerByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.GetSoftwareUpdateServerByName(context.Background(), "")
+	_, _, err := svc.GetByName(context.Background(), "")
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "software update server name is required")
 }
@@ -118,7 +118,7 @@ func TestUnitCreateSoftwareUpdateServer_Success(t *testing.T) {
 		Port:          8088,
 		SetSystemWide: true,
 	}
-	result, resp, err := svc.CreateSoftwareUpdateServer(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -129,7 +129,7 @@ func TestUnitCreateSoftwareUpdateServer_Success(t *testing.T) {
 
 func TestUnitCreateSoftwareUpdateServer_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.CreateSoftwareUpdateServer(context.Background(), nil)
+	_, _, err := svc.Create(context.Background(), nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
@@ -139,7 +139,7 @@ func TestUnitCreateSoftwareUpdateServer_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestSoftwareUpdateServer{Name: "Primary SUS"}
-	_, _, err := svc.CreateSoftwareUpdateServer(context.Background(), req)
+	_, _, err := svc.Create(context.Background(), req)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "409")
 }
@@ -153,7 +153,7 @@ func TestUnitUpdateSoftwareUpdateServerByID_Success(t *testing.T) {
 	mock.RegisterUpdateSoftwareUpdateServerByIDMock()
 
 	req := &RequestSoftwareUpdateServer{Name: "Primary SUS Updated"}
-	result, resp, err := svc.UpdateSoftwareUpdateServerByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -164,14 +164,14 @@ func TestUnitUpdateSoftwareUpdateServerByID_Success(t *testing.T) {
 
 func TestUnitUpdateSoftwareUpdateServerByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateSoftwareUpdateServerByID(context.Background(), 0, &RequestSoftwareUpdateServer{Name: "x"})
+	_, _, err := svc.UpdateByID(context.Background(), 0, &RequestSoftwareUpdateServer{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "software update server ID must be a positive integer")
 }
 
 func TestUnitUpdateSoftwareUpdateServerByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateSoftwareUpdateServerByID(context.Background(), 1, nil)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
@@ -185,7 +185,7 @@ func TestUnitUpdateSoftwareUpdateServerByName_Success(t *testing.T) {
 	mock.RegisterUpdateSoftwareUpdateServerByNameMock()
 
 	req := &RequestSoftwareUpdateServer{Name: "Primary SUS Updated"}
-	result, resp, err := svc.UpdateSoftwareUpdateServerByName(context.Background(), "Primary SUS", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "Primary SUS", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
@@ -195,14 +195,14 @@ func TestUnitUpdateSoftwareUpdateServerByName_Success(t *testing.T) {
 
 func TestUnitUpdateSoftwareUpdateServerByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateSoftwareUpdateServerByName(context.Background(), "", &RequestSoftwareUpdateServer{Name: "x"})
+	_, _, err := svc.UpdateByName(context.Background(), "", &RequestSoftwareUpdateServer{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "software update server name is required")
 }
 
 func TestUnitUpdateSoftwareUpdateServerByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateSoftwareUpdateServerByName(context.Background(), "Primary SUS", nil)
+	_, _, err := svc.UpdateByName(context.Background(), "Primary SUS", nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
@@ -215,14 +215,14 @@ func TestUnitDeleteSoftwareUpdateServerByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteSoftwareUpdateServerByIDMock()
 
-	resp, err := svc.DeleteSoftwareUpdateServerByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
 func TestUnitDeleteSoftwareUpdateServerByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, err := svc.DeleteSoftwareUpdateServerByID(context.Background(), 0)
+	_, err := svc.DeleteByID(context.Background(), 0)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "software update server ID must be a positive integer")
 }
@@ -235,14 +235,14 @@ func TestUnitDeleteSoftwareUpdateServerByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteSoftwareUpdateServerByNameMock()
 
-	resp, err := svc.DeleteSoftwareUpdateServerByName(context.Background(), "Primary SUS")
+	resp, err := svc.DeleteByName(context.Background(), "Primary SUS")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
 func TestUnitDeleteSoftwareUpdateServerByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, err := svc.DeleteSoftwareUpdateServerByName(context.Background(), "")
+	_, err := svc.DeleteByName(context.Background(), "")
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "software update server name is required")
 }

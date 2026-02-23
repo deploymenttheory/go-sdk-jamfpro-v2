@@ -24,7 +24,7 @@ func TestUnitListNetworkSegments_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListNetworkSegmentsMock()
 
-	result, resp, err := svc.ListNetworkSegments(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -46,7 +46,7 @@ func TestUnitGetNetworkSegmentByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetNetworkSegmentByIDMock()
 
-	result, resp, err := svc.GetNetworkSegmentByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -61,7 +61,7 @@ func TestUnitGetNetworkSegmentByID_Success(t *testing.T) {
 func TestUnitGetNetworkSegmentByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetNetworkSegmentByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -71,7 +71,7 @@ func TestUnitGetNetworkSegmentByID_ZeroID(t *testing.T) {
 func TestUnitGetNetworkSegmentByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetNetworkSegmentByID(context.Background(), -1)
+	result, resp, err := svc.GetByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -82,7 +82,7 @@ func TestUnitGetNetworkSegmentByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetNetworkSegmentByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -97,7 +97,7 @@ func TestUnitGetNetworkSegmentByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetNetworkSegmentByNameMock()
 
-	result, resp, err := svc.GetNetworkSegmentByName(context.Background(), "HQ Network")
+	result, resp, err := svc.GetByName(context.Background(), "HQ Network")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -110,7 +110,7 @@ func TestUnitGetNetworkSegmentByName_Success(t *testing.T) {
 func TestUnitGetNetworkSegmentByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetNetworkSegmentByName(context.Background(), "")
+	result, resp, err := svc.GetByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -130,7 +130,7 @@ func TestUnitCreateNetworkSegment_Success(t *testing.T) {
 		StartingAddress: "172.16.0.0",
 		EndingAddress:   "172.16.0.255",
 	}
-	result, resp, err := svc.CreateNetworkSegment(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -142,7 +142,7 @@ func TestUnitCreateNetworkSegment_Success(t *testing.T) {
 func TestUnitCreateNetworkSegment_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateNetworkSegment(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -154,7 +154,7 @@ func TestUnitCreateNetworkSegment_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestNetworkSegment{Name: "HQ Network", StartingAddress: "10.0.0.0", EndingAddress: "10.0.0.255"}
-	result, resp, err := svc.CreateNetworkSegment(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -174,7 +174,7 @@ func TestUnitUpdateNetworkSegmentByID_Success(t *testing.T) {
 		StartingAddress: "10.0.0.0",
 		EndingAddress:   "10.0.0.255",
 	}
-	result, resp, err := svc.UpdateNetworkSegmentByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -186,7 +186,7 @@ func TestUnitUpdateNetworkSegmentByID_Success(t *testing.T) {
 func TestUnitUpdateNetworkSegmentByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateNetworkSegmentByID(context.Background(), 0, &RequestNetworkSegment{Name: "x"})
+	result, resp, err := svc.UpdateByID(context.Background(), 0, &RequestNetworkSegment{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -196,7 +196,7 @@ func TestUnitUpdateNetworkSegmentByID_ZeroID(t *testing.T) {
 func TestUnitUpdateNetworkSegmentByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateNetworkSegmentByID(context.Background(), 1, nil)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -216,7 +216,7 @@ func TestUnitUpdateNetworkSegmentByName_Success(t *testing.T) {
 		StartingAddress: "10.0.0.0",
 		EndingAddress:   "10.0.0.255",
 	}
-	result, resp, err := svc.UpdateNetworkSegmentByName(context.Background(), "HQ Network", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "HQ Network", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -228,7 +228,7 @@ func TestUnitUpdateNetworkSegmentByName_Success(t *testing.T) {
 func TestUnitUpdateNetworkSegmentByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateNetworkSegmentByName(context.Background(), "", &RequestNetworkSegment{Name: "x"})
+	result, resp, err := svc.UpdateByName(context.Background(), "", &RequestNetworkSegment{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -238,7 +238,7 @@ func TestUnitUpdateNetworkSegmentByName_EmptyName(t *testing.T) {
 func TestUnitUpdateNetworkSegmentByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateNetworkSegmentByName(context.Background(), "HQ Network", nil)
+	result, resp, err := svc.UpdateByName(context.Background(), "HQ Network", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -253,7 +253,7 @@ func TestUnitDeleteNetworkSegmentByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteNetworkSegmentByIDMock()
 
-	resp, err := svc.DeleteNetworkSegmentByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -262,7 +262,7 @@ func TestUnitDeleteNetworkSegmentByID_Success(t *testing.T) {
 func TestUnitDeleteNetworkSegmentByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteNetworkSegmentByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "network segment ID must be a positive integer")
@@ -276,7 +276,7 @@ func TestUnitDeleteNetworkSegmentByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteNetworkSegmentByNameMock()
 
-	resp, err := svc.DeleteNetworkSegmentByName(context.Background(), "HQ Network")
+	resp, err := svc.DeleteByName(context.Background(), "HQ Network")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -285,7 +285,7 @@ func TestUnitDeleteNetworkSegmentByName_Success(t *testing.T) {
 func TestUnitDeleteNetworkSegmentByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteNetworkSegmentByName(context.Background(), "")
+	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "network segment name is required")

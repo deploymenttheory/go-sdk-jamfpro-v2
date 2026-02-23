@@ -536,6 +536,11 @@ type ResponseRecoveryLockPassword struct {
 	RecoveryLockPassword string `json:"recoveryLockPassword"`
 }
 
+// ResponseDeviceLockPin represents the response structure for a device lock PIN.
+type ResponseDeviceLockPin struct {
+	Pin string `json:"pin"`
+}
+
 // ResponseUploadAttachment represents the response structure for uploading an attachment.
 type ResponseUploadAttachment struct {
 	ID   string `json:"id"`

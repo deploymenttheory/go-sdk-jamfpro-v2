@@ -56,7 +56,7 @@ func (m *ComputerInventoryCollectionSettingsMock) dispatch(method, path string) 
 	return nil, 0, false
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) Get(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, result interface{}) (*interfaces.Response, error) {
+func (m *ComputerInventoryCollectionSettingsMock) Get(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
 	data, status, ok := m.dispatch("GET", endpoint)
 	if !ok {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for GET %s", endpoint)
@@ -71,7 +71,7 @@ func (m *ComputerInventoryCollectionSettingsMock) Get(ctx context.Context, endpo
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) Post(ctx context.Context, endpoint string, body interface{}, headers map[string]string, result interface{}) (*interfaces.Response, error) {
+func (m *ComputerInventoryCollectionSettingsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	data, status, ok := m.dispatch("POST", endpoint)
 	if !ok {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for POST %s", endpoint)
@@ -86,7 +86,7 @@ func (m *ComputerInventoryCollectionSettingsMock) Post(ctx context.Context, endp
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) Put(ctx context.Context, endpoint string, body interface{}, headers map[string]string, result interface{}) (*interfaces.Response, error) {
+func (m *ComputerInventoryCollectionSettingsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	data, status, ok := m.dispatch("PUT", endpoint)
 	if !ok {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for PUT %s", endpoint)
@@ -101,7 +101,7 @@ func (m *ComputerInventoryCollectionSettingsMock) Put(ctx context.Context, endpo
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) Patch(ctx context.Context, endpoint string, body interface{}, headers map[string]string, result interface{}) (*interfaces.Response, error) {
+func (m *ComputerInventoryCollectionSettingsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	_, status, ok := m.dispatch("PATCH", endpoint)
 	if !ok {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for PATCH %s", endpoint)
@@ -110,7 +110,7 @@ func (m *ComputerInventoryCollectionSettingsMock) Patch(ctx context.Context, end
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) Delete(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, result interface{}) (*interfaces.Response, error) {
+func (m *ComputerInventoryCollectionSettingsMock) Delete(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
 	_, status, ok := m.dispatch("DELETE", endpoint)
 	if !ok {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for DELETE %s", endpoint)
@@ -119,7 +119,7 @@ func (m *ComputerInventoryCollectionSettingsMock) Delete(ctx context.Context, en
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) DeleteWithBody(ctx context.Context, endpoint string, body interface{}, headers map[string]string, result interface{}) (*interfaces.Response, error) {
+func (m *ComputerInventoryCollectionSettingsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusNotImplemented}, fmt.Errorf("DeleteWithBody not implemented in mock")
 }
 
@@ -140,11 +140,11 @@ func (m *ComputerInventoryCollectionSettingsMock) PostMultipart(ctx context.Cont
 	return &interfaces.Response{StatusCode: http.StatusNotImplemented}, fmt.Errorf("PostMultipart not implemented in mock")
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *ComputerInventoryCollectionSettingsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusNotImplemented}, fmt.Errorf("PostWithQuery not implemented in mock")
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *ComputerInventoryCollectionSettingsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusNotImplemented}, fmt.Errorf("PostForm not implemented in mock")
 }
 

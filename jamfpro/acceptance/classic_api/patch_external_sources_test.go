@@ -29,7 +29,7 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test patch external source")
 
-	sourceName := uniqueName("acc-test-patchsrc")
+	sourceName := acc.UniqueName("acc-test-patchsrc")
 	createReq := &patch_external_sources.RequestPatchExternalSource{
 		Name:       sourceName,
 		HostName:   "patches.example.com",
@@ -40,8 +40,8 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreatePatchExternalSource(ctx1, createReq)
-	require.NoError(t, err, "CreatePatchExternalSource should not return an error")
+	created, createResp, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
@@ -53,7 +53,7 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeletePatchExternalSourceByID(cleanupCtx, sourceID)
+		_, delErr := svc.DeleteByID(cleanupCtx, sourceID)
 		acc.LogCleanupDeleteError(t, "patch external source", fmt.Sprintf("%d", sourceID), delErr)
 	})
 
@@ -65,8 +65,8 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListPatchExternalSources(ctx2)
-	require.NoError(t, err, "ListPatchExternalSources should not return an error")
+	list, listResp, err := svc.List(ctx2)
+	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
 	assert.Positive(t, list.Size, "size should be positive")
@@ -90,8 +90,8 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetPatchExternalSourceByID(ctx3, sourceID)
-	require.NoError(t, err, "GetPatchExternalSourceByID should not return an error")
+	fetched, fetchResp, err := svc.GetByID(ctx3, sourceID)
+	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, sourceID, fetched.ID)
@@ -106,8 +106,8 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetPatchExternalSourceByName(ctx4, sourceName)
-	require.NoError(t, err, "GetPatchExternalSourceByName should not return an error")
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, sourceName)
+	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
 	assert.Equal(t, sourceID, fetchedByName.ID)
@@ -117,7 +117,7 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-patchsrc-updated")
+	updatedName := acc.UniqueName("acc-test-patchsrc-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating patch external source ID=%d to name=%q", sourceID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -129,8 +129,8 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 		SSLEnabled: true,
 		Port:       443,
 	}
-	updated, updateResp, err := svc.UpdatePatchExternalSourceByID(ctx5, sourceID, updateReq)
-	require.NoError(t, err, "UpdatePatchExternalSourceByID should not return an error")
+	updated, updateResp, err := svc.UpdateByID(ctx5, sourceID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
@@ -149,8 +149,8 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 		SSLEnabled: true,
 		Port:       443,
 	}
-	reverted, revertResp, err := svc.UpdatePatchExternalSourceByName(ctx6, updatedName, revertReq)
-	require.NoError(t, err, "UpdatePatchExternalSourceByName should not return an error")
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
+	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
@@ -163,7 +163,7 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetPatchExternalSourceByID(ctx7, sourceID)
+	verified, verifyResp, err := svc.GetByID(ctx7, sourceID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -178,8 +178,8 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeletePatchExternalSourceByID(ctx8, sourceID)
-	require.NoError(t, err, "DeletePatchExternalSourceByID should not return an error")
+	deleteResp, err := svc.DeleteByID(ctx8, sourceID)
+	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Patch external source ID=%d deleted", sourceID)
@@ -194,38 +194,38 @@ func TestAcceptance_PatchExternalSources_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.PatchExternalSources
 
-	t.Run("GetPatchExternalSourceByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetPatchExternalSourceByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "patch external source ID must be a positive integer")
 	})
 
-	t.Run("GetPatchExternalSourceByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetPatchExternalSourceByName(context.Background(), "")
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "patch external source name is required")
 	})
 
-	t.Run("CreatePatchExternalSource_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreatePatchExternalSource(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdatePatchExternalSourceByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdatePatchExternalSourceByID(context.Background(), 0, &patch_external_sources.RequestPatchExternalSource{Name: "x"})
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.UpdateByID(context.Background(), 0, &patch_external_sources.RequestPatchExternalSource{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "patch external source ID must be a positive integer")
 	})
 
-	t.Run("UpdatePatchExternalSourceByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdatePatchExternalSourceByName(context.Background(), "", &patch_external_sources.RequestPatchExternalSource{Name: "x"})
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.UpdateByName(context.Background(), "", &patch_external_sources.RequestPatchExternalSource{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "patch external source name is required")
 	})
 
-	t.Run("DeletePatchExternalSourceByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeletePatchExternalSourceByID(context.Background(), 0)
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "patch external source ID must be a positive integer")
 	})

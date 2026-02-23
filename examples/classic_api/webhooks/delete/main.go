@@ -23,9 +23,9 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of DeleteWebhookByID
+	// Example usage of DeleteByID
 	webhookID := 1 // Replace with the desired webhook ID to delete
-	_, err = jamfClient.Webhooks.DeleteWebhookByID(context.Background(), webhookID)
+	_, err = jamfClient.Webhooks.DeleteByID(context.Background(), webhookID)
 	if err != nil {
 		fmt.Printf("Error deleting webhook by ID: %v\n", err)
 		return

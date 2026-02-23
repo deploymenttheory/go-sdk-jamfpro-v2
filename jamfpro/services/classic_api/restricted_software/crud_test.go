@@ -23,9 +23,9 @@ func setupMockService(t *testing.T) (*Service, *mocks.RestrictedSoftwareMock) {
 
 func TestUnitListRestrictedSoftware_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterListRestrictedSoftwareMock()
+	mock.RegisterListMock()
 
-	result, resp, err := svc.ListRestrictedSoftware(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -43,9 +43,9 @@ func TestUnitListRestrictedSoftware_Success(t *testing.T) {
 
 func TestUnitGetRestrictedSoftwareByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetRestrictedSoftwareByIDMock()
+	mock.RegisterGetByIDMock()
 
-	result, resp, err := svc.GetRestrictedSoftwareByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -60,7 +60,7 @@ func TestUnitGetRestrictedSoftwareByID_Success(t *testing.T) {
 func TestUnitGetRestrictedSoftwareByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetRestrictedSoftwareByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -71,7 +71,7 @@ func TestUnitGetRestrictedSoftwareByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetRestrictedSoftwareByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -84,9 +84,9 @@ func TestUnitGetRestrictedSoftwareByID_NotFound(t *testing.T) {
 
 func TestUnitGetRestrictedSoftwareByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetRestrictedSoftwareByNameMock()
+	mock.RegisterGetByNameMock()
 
-	result, resp, err := svc.GetRestrictedSoftwareByName(context.Background(), "Calculator")
+	result, resp, err := svc.GetByName(context.Background(), "Calculator")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -98,7 +98,7 @@ func TestUnitGetRestrictedSoftwareByName_Success(t *testing.T) {
 func TestUnitGetRestrictedSoftwareByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetRestrictedSoftwareByName(context.Background(), "")
+	result, resp, err := svc.GetByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -111,7 +111,7 @@ func TestUnitGetRestrictedSoftwareByName_EmptyName(t *testing.T) {
 
 func TestUnitCreateRestrictedSoftware_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterCreateRestrictedSoftwareMock()
+	mock.RegisterCreateMock()
 
 	req := &RequestRestrictedSoftware{
 		General: RequestGeneral{
@@ -128,7 +128,7 @@ func TestUnitCreateRestrictedSoftware_Success(t *testing.T) {
 			AllComputers: false,
 		},
 	}
-	result, resp, err := svc.CreateRestrictedSoftware(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -140,7 +140,7 @@ func TestUnitCreateRestrictedSoftware_Success(t *testing.T) {
 func TestUnitCreateRestrictedSoftware_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateRestrictedSoftware(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -153,7 +153,7 @@ func TestUnitCreateRestrictedSoftware_NilRequest(t *testing.T) {
 
 func TestUnitUpdateRestrictedSoftwareByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateRestrictedSoftwareByIDMock()
+	mock.RegisterUpdateByIDMock()
 
 	req := &RequestRestrictedSoftware{
 		General: RequestGeneral{
@@ -162,7 +162,7 @@ func TestUnitUpdateRestrictedSoftwareByID_Success(t *testing.T) {
 		},
 		Scope: Scope{AllComputers: true},
 	}
-	result, resp, err := svc.UpdateRestrictedSoftwareByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -175,7 +175,7 @@ func TestUnitUpdateRestrictedSoftwareByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestRestrictedSoftware{}
-	result, resp, err := svc.UpdateRestrictedSoftwareByID(context.Background(), 0, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 0, req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -188,12 +188,12 @@ func TestUnitUpdateRestrictedSoftwareByID_ZeroID(t *testing.T) {
 
 func TestUnitUpdateRestrictedSoftwareByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateRestrictedSoftwareByNameMock()
+	mock.RegisterUpdateByNameMock()
 
 	req := &RequestRestrictedSoftware{
 		General: RequestGeneral{Name: "Updated"},
 	}
-	result, resp, err := svc.UpdateRestrictedSoftwareByName(context.Background(), "Calculator", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "Calculator", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -205,7 +205,7 @@ func TestUnitUpdateRestrictedSoftwareByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestRestrictedSoftware{}
-	result, resp, err := svc.UpdateRestrictedSoftwareByName(context.Background(), "", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "", req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -218,9 +218,9 @@ func TestUnitUpdateRestrictedSoftwareByName_EmptyName(t *testing.T) {
 
 func TestUnitDeleteRestrictedSoftwareByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteRestrictedSoftwareByIDMock()
+	mock.RegisterDeleteByIDMock()
 
-	resp, err := svc.DeleteRestrictedSoftwareByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -229,7 +229,7 @@ func TestUnitDeleteRestrictedSoftwareByID_Success(t *testing.T) {
 func TestUnitDeleteRestrictedSoftwareByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteRestrictedSoftwareByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "restricted software ID must be a positive integer")
@@ -241,9 +241,9 @@ func TestUnitDeleteRestrictedSoftwareByID_ZeroID(t *testing.T) {
 
 func TestUnitDeleteRestrictedSoftwareByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteRestrictedSoftwareByNameMock()
+	mock.RegisterDeleteByNameMock()
 
-	resp, err := svc.DeleteRestrictedSoftwareByName(context.Background(), "Calculator")
+	resp, err := svc.DeleteByName(context.Background(), "Calculator")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -252,7 +252,7 @@ func TestUnitDeleteRestrictedSoftwareByName_Success(t *testing.T) {
 func TestUnitDeleteRestrictedSoftwareByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteRestrictedSoftwareByName(context.Background(), "")
+	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "restricted software name is required")

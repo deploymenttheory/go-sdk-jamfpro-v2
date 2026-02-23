@@ -1,4 +1,4 @@
-// Package main demonstrates CreateRemoveableMacAddress — creates a new removeable MAC address via the Classic API.
+// Package main demonstrates Create — creates a new removeable MAC address via the Classic API.
 //
 // Run with: go run ./examples/classic_api/removeable_mac_addresses/create
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Creates a removeable MAC address then deletes it.
@@ -26,9 +26,9 @@ func main() {
 		Name: fmt.Sprintf("AA:BB:CC:DD:EE:%d", time.Now().UnixMilli()%1000),
 	}
 
-	created, resp, err := client.RemoveableMacAddresses.CreateRemoveableMacAddress(ctx, req)
+	created, resp, err := client.RemoveableMacAddresses.Create(ctx, req)
 	if err != nil {
-		log.Fatalf("CreateRemoveableMacAddress failed: %v", err)
+		log.Fatalf("Create failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
@@ -36,7 +36,7 @@ func main() {
 	fmt.Printf("Name: %s\n", created.Name)
 
 	// Cleanup: delete the created removeable MAC address
-	if _, err := client.RemoveableMacAddresses.DeleteRemoveableMacAddressByID(ctx, created.ID); err != nil {
+	if _, err := client.RemoveableMacAddresses.DeleteByID(ctx, created.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: removeable MAC address deleted")

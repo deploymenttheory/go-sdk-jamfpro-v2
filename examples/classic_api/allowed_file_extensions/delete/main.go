@@ -23,9 +23,9 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of DeleteAllowedFileExtensionByID
+	// Example usage of DeleteByID
 	extensionID := 1 // Replace with the desired allowed file extension ID to delete
-	_, err = jamfClient.AllowedFileExtensions.DeleteAllowedFileExtensionByID(context.Background(), extensionID)
+	_, err = jamfClient.AllowedFileExtensions.DeleteByID(context.Background(), extensionID)
 	if err != nil {
 		fmt.Printf("Error deleting allowed file extension by ID: %v\n", err)
 		return

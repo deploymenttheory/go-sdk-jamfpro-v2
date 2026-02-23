@@ -50,7 +50,7 @@ func (m *EngageMock) dispatch(method, path string) ([]byte, int, bool) {
 	return nil, 0, false
 }
 
-func (m *EngageMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *EngageMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
@@ -69,7 +69,7 @@ func (m *EngageMock) Get(ctx context.Context, endpoint string, queryParams map[s
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *EngageMock) Post(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *EngageMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("POST", endpoint)
 	if !found {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
@@ -88,19 +88,19 @@ func (m *EngageMock) Post(ctx context.Context, endpoint string, body interface{}
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *EngageMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *EngageMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *EngageMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *EngageMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *EngageMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out interface{}) (*interfaces.Response, error) {
+func (m *EngageMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *EngageMock) Put(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *EngageMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("PUT", endpoint)
 	if !found {
 		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
@@ -119,15 +119,15 @@ func (m *EngageMock) Put(ctx context.Context, endpoint string, body interface{},
 	return &interfaces.Response{StatusCode: status}, nil
 }
 
-func (m *EngageMock) Patch(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *EngageMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *EngageMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *EngageMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 
-func (m *EngageMock) DeleteWithBody(ctx context.Context, endpoint string, body interface{}, headers map[string]string, out interface{}) (*interfaces.Response, error) {
+func (m *EngageMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
 }
 

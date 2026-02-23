@@ -43,11 +43,11 @@ func NewAllowedFileExtensionsMock() *AllowedFileExtensionsMock {
 
 // RegisterMocks registers all standard success responses in one call.
 func (m *AllowedFileExtensionsMock) RegisterMocks() {
-	m.RegisterListAllowedFileExtensionsMock()
-	m.RegisterGetAllowedFileExtensionByIDMock()
-	m.RegisterGetAllowedFileExtensionByExtensionMock()
-	m.RegisterCreateAllowedFileExtensionMock()
-	m.RegisterDeleteAllowedFileExtensionByIDMock()
+	m.RegisterListMock()
+	m.RegisterGetByIDMock()
+	m.RegisterGetByExtensionMock()
+	m.RegisterCreateMock()
+	m.RegisterDeleteByIDMock()
 }
 
 // RegisterErrorMocks registers all error responses in one call.
@@ -58,28 +58,28 @@ func (m *AllowedFileExtensionsMock) RegisterErrorMocks() {
 
 // ---- Success responders ----
 
-// RegisterListAllowedFileExtensionsMock registers GET /JSSResource/allowedfileextensions → 200.
-func (m *AllowedFileExtensionsMock) RegisterListAllowedFileExtensionsMock() {
+// RegisterListMock registers GET /JSSResource/allowedfileextensions → 200.
+func (m *AllowedFileExtensionsMock) RegisterListMock() {
 	m.register("GET", "/JSSResource/allowedfileextensions", 200, "validate_list_allowed_file_extensions.xml")
 }
 
-// RegisterGetAllowedFileExtensionByIDMock registers GET /JSSResource/allowedfileextensions/id/1 → 200.
-func (m *AllowedFileExtensionsMock) RegisterGetAllowedFileExtensionByIDMock() {
+// RegisterGetByIDMock registers GET /JSSResource/allowedfileextensions/id/1 → 200.
+func (m *AllowedFileExtensionsMock) RegisterGetByIDMock() {
 	m.register("GET", "/JSSResource/allowedfileextensions/id/1", 200, "validate_get_allowed_file_extension.xml")
 }
 
-// RegisterGetAllowedFileExtensionByExtensionMock registers GET /JSSResource/allowedfileextensions/extension/dmg → 200.
-func (m *AllowedFileExtensionsMock) RegisterGetAllowedFileExtensionByExtensionMock() {
+// RegisterGetByExtensionMock registers GET /JSSResource/allowedfileextensions/extension/dmg → 200.
+func (m *AllowedFileExtensionsMock) RegisterGetByExtensionMock() {
 	m.register("GET", "/JSSResource/allowedfileextensions/extension/dmg", 200, "validate_get_allowed_file_extension.xml")
 }
 
-// RegisterCreateAllowedFileExtensionMock registers POST /JSSResource/allowedfileextensions/id/0 → 201.
-func (m *AllowedFileExtensionsMock) RegisterCreateAllowedFileExtensionMock() {
+// RegisterCreateMock registers POST /JSSResource/allowedfileextensions/id/0 → 201.
+func (m *AllowedFileExtensionsMock) RegisterCreateMock() {
 	m.register("POST", "/JSSResource/allowedfileextensions/id/0", 201, "validate_create_allowed_file_extension.xml")
 }
 
-// RegisterDeleteAllowedFileExtensionByIDMock registers DELETE /JSSResource/allowedfileextensions/id/1 → 200.
-func (m *AllowedFileExtensionsMock) RegisterDeleteAllowedFileExtensionByIDMock() {
+// RegisterDeleteByIDMock registers DELETE /JSSResource/allowedfileextensions/id/1 → 200.
+func (m *AllowedFileExtensionsMock) RegisterDeleteByIDMock() {
 	m.register("DELETE", "/JSSResource/allowedfileextensions/id/1", 200, "")
 }
 

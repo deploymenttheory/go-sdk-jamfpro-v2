@@ -24,7 +24,7 @@ func TestUnitListIBeacons_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListIBeaconsMock()
 
-	result, resp, err := svc.ListIBeacons(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -46,7 +46,7 @@ func TestUnitGetIBeaconByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetIBeaconByIDMock()
 
-	result, resp, err := svc.GetIBeaconByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -62,7 +62,7 @@ func TestUnitGetIBeaconByID_Success(t *testing.T) {
 func TestUnitGetIBeaconByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetIBeaconByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -72,7 +72,7 @@ func TestUnitGetIBeaconByID_ZeroID(t *testing.T) {
 func TestUnitGetIBeaconByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetIBeaconByID(context.Background(), -1)
+	result, resp, err := svc.GetByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -83,7 +83,7 @@ func TestUnitGetIBeaconByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetIBeaconByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -98,7 +98,7 @@ func TestUnitGetIBeaconByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetIBeaconByNameMock()
 
-	result, resp, err := svc.GetIBeaconByName(context.Background(), "Lobby Beacon")
+	result, resp, err := svc.GetByName(context.Background(), "Lobby Beacon")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -111,7 +111,7 @@ func TestUnitGetIBeaconByName_Success(t *testing.T) {
 func TestUnitGetIBeaconByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetIBeaconByName(context.Background(), "")
+	result, resp, err := svc.GetByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -132,7 +132,7 @@ func TestUnitCreateIBeacon_Success(t *testing.T) {
 		Major: 1,
 		Minor: 3,
 	}
-	result, resp, err := svc.CreateIBeacon(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -145,7 +145,7 @@ func TestUnitCreateIBeacon_Success(t *testing.T) {
 func TestUnitCreateIBeacon_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateIBeacon(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -157,7 +157,7 @@ func TestUnitCreateIBeacon_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestIBeacon{Name: "Lobby Beacon", UUID: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0"}
-	result, resp, err := svc.CreateIBeacon(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -178,7 +178,7 @@ func TestUnitUpdateIBeaconByID_Success(t *testing.T) {
 		Major: 1,
 		Minor: 2,
 	}
-	result, resp, err := svc.UpdateIBeaconByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -191,7 +191,7 @@ func TestUnitUpdateIBeaconByID_Success(t *testing.T) {
 func TestUnitUpdateIBeaconByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateIBeaconByID(context.Background(), 0, &RequestIBeacon{Name: "x"})
+	result, resp, err := svc.UpdateByID(context.Background(), 0, &RequestIBeacon{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -201,7 +201,7 @@ func TestUnitUpdateIBeaconByID_ZeroID(t *testing.T) {
 func TestUnitUpdateIBeaconByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateIBeaconByID(context.Background(), 1, nil)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -222,7 +222,7 @@ func TestUnitUpdateIBeaconByName_Success(t *testing.T) {
 		Major: 1,
 		Minor: 2,
 	}
-	result, resp, err := svc.UpdateIBeaconByName(context.Background(), "Lobby Beacon", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "Lobby Beacon", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -235,7 +235,7 @@ func TestUnitUpdateIBeaconByName_Success(t *testing.T) {
 func TestUnitUpdateIBeaconByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateIBeaconByName(context.Background(), "", &RequestIBeacon{Name: "x"})
+	result, resp, err := svc.UpdateByName(context.Background(), "", &RequestIBeacon{Name: "x"})
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -245,7 +245,7 @@ func TestUnitUpdateIBeaconByName_EmptyName(t *testing.T) {
 func TestUnitUpdateIBeaconByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateIBeaconByName(context.Background(), "Lobby Beacon", nil)
+	result, resp, err := svc.UpdateByName(context.Background(), "Lobby Beacon", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -260,7 +260,7 @@ func TestUnitDeleteIBeaconByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteIBeaconByIDMock()
 
-	resp, err := svc.DeleteIBeaconByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -269,7 +269,7 @@ func TestUnitDeleteIBeaconByID_Success(t *testing.T) {
 func TestUnitDeleteIBeaconByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteIBeaconByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "iBeacon ID must be a positive integer")
@@ -283,7 +283,7 @@ func TestUnitDeleteIBeaconByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteIBeaconByNameMock()
 
-	resp, err := svc.DeleteIBeaconByName(context.Background(), "Lobby Beacon")
+	resp, err := svc.DeleteByName(context.Background(), "Lobby Beacon")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -292,7 +292,7 @@ func TestUnitDeleteIBeaconByName_Success(t *testing.T) {
 func TestUnitDeleteIBeaconByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteIBeaconByName(context.Background(), "")
+	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "iBeacon name is required")

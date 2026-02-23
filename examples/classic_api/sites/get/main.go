@@ -1,4 +1,4 @@
-// Package main demonstrates GetSiteByID — retrieves a single site by ID.
+// Package main demonstrates GetByID — retrieves a single site by ID.
 //
 // Run with: go run ./examples/classic_api/sites/get
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars. Set SITE_ID or uses first from list.
@@ -29,7 +29,7 @@ func main() {
 			log.Fatalf("invalid SITE_ID %q: %v", raw, err)
 		}
 	} else {
-		list, _, err := client.Sites.ListSites(ctx)
+		list, _, err := client.Sites.List(ctx)
 		if err != nil || len(list.Results) == 0 {
 			log.Fatal("Set SITE_ID or ensure at least one site exists")
 		}
@@ -37,9 +37,9 @@ func main() {
 		fmt.Printf("Using first site ID: %d\n", id)
 	}
 
-	site, resp, err := client.Sites.GetSiteByID(ctx, id)
+	site, resp, err := client.Sites.GetByID(ctx, id)
 	if err != nil {
-		log.Fatalf("GetSiteByID failed: %v", err)
+		log.Fatalf("GetByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

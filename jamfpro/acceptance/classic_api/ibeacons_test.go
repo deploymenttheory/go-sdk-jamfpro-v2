@@ -30,7 +30,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test iBeacon")
 
-	beaconName := uniqueName("acc-test-ibeacon")
+	beaconName := acc.UniqueName("acc-test-ibeacon")
 	createReq := &ibeacons.RequestIBeacon{
 		Name:  beaconName,
 		UUID:  "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0",
@@ -41,7 +41,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateIBeacon(ctx1, createReq)
+	created, createResp, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err, "CreateIBeacon should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
@@ -54,7 +54,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteIBeaconByID(cleanupCtx, beaconID)
+		_, delErr := svc.DeleteByID(cleanupCtx, beaconID)
 		acc.LogCleanupDeleteError(t, "iBeacon", fmt.Sprintf("%d", beaconID), delErr)
 	})
 
@@ -66,7 +66,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListIBeacons(ctx2)
+	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListIBeacons should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -91,7 +91,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetIBeaconByID(ctx3, beaconID)
+	fetched, fetchResp, err := svc.GetByID(ctx3, beaconID)
 	require.NoError(t, err, "GetIBeaconByID should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -108,7 +108,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetIBeaconByName(ctx4, beaconName)
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, beaconName)
 	require.NoError(t, err, "GetIBeaconByName should not return an error")
 	require.NotNil(t, fetchedByName)
 	assert.Equal(t, 200, fetchByNameResp.StatusCode)
@@ -119,7 +119,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-ibeacon-updated")
+	updatedName := acc.UniqueName("acc-test-ibeacon-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating iBeacon ID=%d to name=%q", beaconID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -131,7 +131,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 		Major: 1,
 		Minor: 2,
 	}
-	updated, updateResp, err := svc.UpdateIBeaconByID(ctx5, beaconID, updateReq)
+	updated, updateResp, err := svc.UpdateByID(ctx5, beaconID, updateReq)
 	require.NoError(t, err, "UpdateIBeaconByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
@@ -151,7 +151,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 		Major: 1,
 		Minor: 1,
 	}
-	reverted, revertResp, err := svc.UpdateIBeaconByName(ctx6, updatedName, revertReq)
+	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateIBeaconByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
@@ -165,7 +165,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	verified, verifyResp, err := svc.GetIBeaconByID(ctx7, beaconID)
+	verified, verifyResp, err := svc.GetByID(ctx7, beaconID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode)
@@ -180,7 +180,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel8()
 
-	deleteResp, err := svc.DeleteIBeaconByID(ctx8, beaconID)
+	deleteResp, err := svc.DeleteByID(ctx8, beaconID)
 	require.NoError(t, err, "DeleteIBeaconByID should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -197,7 +197,7 @@ func TestAcceptance_IBeacons_DeleteByName(t *testing.T) {
 	svc := acc.Client.IBeacons
 	ctx := context.Background()
 
-	beaconName := uniqueName("acc-test-ibeacon-dbn")
+	beaconName := acc.UniqueName("acc-test-ibeacon-dbn")
 	createReq := &ibeacons.RequestIBeacon{
 		Name:  beaconName,
 		UUID:  "F7826DA6-4FA2-4E98-8024-BC5B71E0893E",
@@ -208,7 +208,7 @@ func TestAcceptance_IBeacons_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateIBeacon(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -218,14 +218,14 @@ func TestAcceptance_IBeacons_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteIBeaconByID(cleanupCtx, beaconID)
+		_, delErr := svc.DeleteByID(cleanupCtx, beaconID)
 		acc.LogCleanupDeleteError(t, "iBeacon", fmt.Sprintf("%d", beaconID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteIBeaconByName(ctx2, beaconName)
+	deleteResp, err := svc.DeleteByName(ctx2, beaconName)
 	require.NoError(t, err, "DeleteIBeaconByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
@@ -243,43 +243,43 @@ func TestAcceptance_IBeacons_ValidationErrors(t *testing.T) {
 	svc := acc.Client.IBeacons
 
 	t.Run("GetIBeaconByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetIBeaconByID(context.Background(), 0)
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "iBeacon ID must be a positive integer")
 	})
 
 	t.Run("GetIBeaconByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetIBeaconByName(context.Background(), "")
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "iBeacon name is required")
 	})
 
 	t.Run("CreateIBeacon_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateIBeacon(context.Background(), nil)
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateIBeaconByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateIBeaconByID(context.Background(), 0, &ibeacons.RequestIBeacon{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &ibeacons.RequestIBeacon{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "iBeacon ID must be a positive integer")
 	})
 
 	t.Run("UpdateIBeaconByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateIBeaconByName(context.Background(), "", &ibeacons.RequestIBeacon{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &ibeacons.RequestIBeacon{Name: "x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "iBeacon name is required")
 	})
 
 	t.Run("DeleteIBeaconByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteIBeaconByID(context.Background(), 0)
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "iBeacon ID must be a positive integer")
 	})
 
 	t.Run("DeleteIBeaconByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteIBeaconByName(context.Background(), "")
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "iBeacon name is required")
 	})

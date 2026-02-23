@@ -13,47 +13,47 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/accounts
 	AccountsServiceInterface interface {
-		// ListAccounts returns all accounts (both users and groups).
+		// List returns all accounts (both users and groups).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findaccounts
-		ListAccounts(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
 
-		// GetAccountByID returns the specified account by ID.
+		// GetByID returns the specified account by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findaccountsbyid
-		GetAccountByID(ctx context.Context, id int) (*ResourceAccount, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceAccount, *interfaces.Response, error)
 
-		// GetAccountByName returns the specified account by name.
+		// GetByName returns the specified account by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findaccountsbyname
-		GetAccountByName(ctx context.Context, name string) (*ResourceAccount, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceAccount, *interfaces.Response, error)
 
-		// CreateAccount creates a new account.
+		// Create creates a new account.
 		//
 		// Returns the created account with its assigned ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createaccountbyid
-		CreateAccount(ctx context.Context, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error)
 
-		// UpdateAccountByID updates the specified account by ID.
+		// UpdateByID updates the specified account by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyid
-		UpdateAccountByID(ctx context.Context, id int, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error)
 
-		// UpdateAccountByName updates the specified account by name.
+		// UpdateByName updates the specified account by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyname
-		UpdateAccountByName(ctx context.Context, name string, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error)
 
-		// DeleteAccountByID removes the specified account by ID.
+		// DeleteByID removes the specified account by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteaccountbyid
-		DeleteAccountByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
 
-		// DeleteAccountByName removes the specified account by name.
+		// DeleteByName removes the specified account by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteaccountbyname
-		DeleteAccountByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the accounts-related Classic API methods.
@@ -75,10 +75,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Classic API - Accounts CRUD Operations
 // -----------------------------------------------------------------------------
 
-// ListAccounts returns all accounts (both users and groups).
+// List returns all accounts (both users and groups).
 // URL: GET /JSSResource/accounts
 // https://developer.jamf.com/jamf-pro/reference/findaccounts
-func (s *Service) ListAccounts(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicAccounts
@@ -96,10 +96,10 @@ func (s *Service) ListAccounts(ctx context.Context) (*ListResponse, *interfaces.
 	return &result, resp, nil
 }
 
-// GetAccountByID returns the specified account by ID.
+// GetByID returns the specified account by ID.
 // URL: GET /JSSResource/accounts/userid/{id}
 // https://developer.jamf.com/jamf-pro/reference/findaccountsbyid
-func (s *Service) GetAccountByID(ctx context.Context, id int) (*ResourceAccount, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAccount, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("account ID must be a positive integer")
 	}
@@ -121,10 +121,10 @@ func (s *Service) GetAccountByID(ctx context.Context, id int) (*ResourceAccount,
 	return &result, resp, nil
 }
 
-// GetAccountByName returns the specified account by name.
+// GetByName returns the specified account by name.
 // URL: GET /JSSResource/accounts/username/{name}
 // https://developer.jamf.com/jamf-pro/reference/findaccountsbyname
-func (s *Service) GetAccountByName(ctx context.Context, name string) (*ResourceAccount, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceAccount, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("account name is required")
 	}
@@ -146,11 +146,11 @@ func (s *Service) GetAccountByName(ctx context.Context, name string) (*ResourceA
 	return &result, resp, nil
 }
 
-// CreateAccount creates a new account.
+// Create creates a new account.
 // URL: POST /JSSResource/accounts/userid/0
 // Returns the created account with its assigned ID.
 // https://developer.jamf.com/jamf-pro/reference/createaccountbyid
-func (s *Service) CreateAccount(ctx context.Context, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -172,10 +172,10 @@ func (s *Service) CreateAccount(ctx context.Context, req *RequestAccount) (*Reso
 	return &result, resp, nil
 }
 
-// UpdateAccountByID updates the specified account by ID.
+// UpdateByID updates the specified account by ID.
 // URL: PUT /JSSResource/accounts/userid/{id}
 // https://developer.jamf.com/jamf-pro/reference/updateaccountbyid
-func (s *Service) UpdateAccountByID(ctx context.Context, id int, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("account ID must be a positive integer")
 	}
@@ -200,10 +200,10 @@ func (s *Service) UpdateAccountByID(ctx context.Context, id int, req *RequestAcc
 	return &result, resp, nil
 }
 
-// UpdateAccountByName updates the specified account by name.
+// UpdateByName updates the specified account by name.
 // URL: PUT /JSSResource/accounts/username/{name}
 // https://developer.jamf.com/jamf-pro/reference/updateaccountbyname
-func (s *Service) UpdateAccountByName(ctx context.Context, name string, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAccount) (*ResourceAccount, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("account name is required")
 	}
@@ -228,10 +228,10 @@ func (s *Service) UpdateAccountByName(ctx context.Context, name string, req *Req
 	return &result, resp, nil
 }
 
-// DeleteAccountByID removes the specified account by ID.
+// DeleteByID removes the specified account by ID.
 // URL: DELETE /JSSResource/accounts/userid/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleteaccountbyid
-func (s *Service) DeleteAccountByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("account ID must be a positive integer")
 	}
@@ -251,10 +251,10 @@ func (s *Service) DeleteAccountByID(ctx context.Context, id int) (*interfaces.Re
 	return resp, nil
 }
 
-// DeleteAccountByName removes the specified account by name.
+// DeleteByName removes the specified account by name.
 // URL: DELETE /JSSResource/accounts/username/{name}
 // https://developer.jamf.com/jamf-pro/reference/deleteaccountbyname
-func (s *Service) DeleteAccountByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("account name is required")
 	}

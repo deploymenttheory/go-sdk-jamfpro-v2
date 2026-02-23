@@ -43,14 +43,14 @@ func NewRestrictedSoftwareMock() *RestrictedSoftwareMock {
 
 // RegisterMocks registers all standard success responses in one call.
 func (m *RestrictedSoftwareMock) RegisterMocks() {
-	m.RegisterListRestrictedSoftwareMock()
-	m.RegisterGetRestrictedSoftwareByIDMock()
-	m.RegisterGetRestrictedSoftwareByNameMock()
-	m.RegisterCreateRestrictedSoftwareMock()
-	m.RegisterUpdateRestrictedSoftwareByIDMock()
-	m.RegisterUpdateRestrictedSoftwareByNameMock()
-	m.RegisterDeleteRestrictedSoftwareByIDMock()
-	m.RegisterDeleteRestrictedSoftwareByNameMock()
+	m.RegisterListMock()
+	m.RegisterGetByIDMock()
+	m.RegisterGetByNameMock()
+	m.RegisterCreateMock()
+	m.RegisterUpdateByIDMock()
+	m.RegisterUpdateByNameMock()
+	m.RegisterDeleteByIDMock()
+	m.RegisterDeleteByNameMock()
 }
 
 // RegisterErrorMocks registers all error responses in one call.
@@ -61,43 +61,43 @@ func (m *RestrictedSoftwareMock) RegisterErrorMocks() {
 
 // ---- Success responders ----
 
-// RegisterListRestrictedSoftwareMock registers GET /JSSResource/restrictedsoftware → 200.
-func (m *RestrictedSoftwareMock) RegisterListRestrictedSoftwareMock() {
+// RegisterListMock registers GET /JSSResource/restrictedsoftware → 200.
+func (m *RestrictedSoftwareMock) RegisterListMock() {
 	m.register("GET", "/JSSResource/restrictedsoftware", 200, "validate_list_restricted_software.xml")
 }
 
-// RegisterGetRestrictedSoftwareByIDMock registers GET /JSSResource/restrictedsoftware/id/1 → 200.
-func (m *RestrictedSoftwareMock) RegisterGetRestrictedSoftwareByIDMock() {
+// RegisterGetByIDMock registers GET /JSSResource/restrictedsoftware/id/1 → 200.
+func (m *RestrictedSoftwareMock) RegisterGetByIDMock() {
 	m.register("GET", "/JSSResource/restrictedsoftware/id/1", 200, "validate_get_restricted_software.xml")
 }
 
-// RegisterGetRestrictedSoftwareByNameMock registers GET /JSSResource/restrictedsoftware/name/Calculator → 200.
-func (m *RestrictedSoftwareMock) RegisterGetRestrictedSoftwareByNameMock() {
+// RegisterGetByNameMock registers GET /JSSResource/restrictedsoftware/name/Calculator → 200.
+func (m *RestrictedSoftwareMock) RegisterGetByNameMock() {
 	m.register("GET", "/JSSResource/restrictedsoftware/name/Calculator", 200, "validate_get_restricted_software.xml")
 }
 
-// RegisterCreateRestrictedSoftwareMock registers POST /JSSResource/restrictedsoftware/id/0 → 201.
-func (m *RestrictedSoftwareMock) RegisterCreateRestrictedSoftwareMock() {
+// RegisterCreateMock registers POST /JSSResource/restrictedsoftware/id/0 → 201.
+func (m *RestrictedSoftwareMock) RegisterCreateMock() {
 	m.register("POST", "/JSSResource/restrictedsoftware/id/0", 201, "validate_create_restricted_software.xml")
 }
 
-// RegisterUpdateRestrictedSoftwareByIDMock registers PUT /JSSResource/restrictedsoftware/id/1 → 200.
-func (m *RestrictedSoftwareMock) RegisterUpdateRestrictedSoftwareByIDMock() {
+// RegisterUpdateByIDMock registers PUT /JSSResource/restrictedsoftware/id/1 → 200.
+func (m *RestrictedSoftwareMock) RegisterUpdateByIDMock() {
 	m.register("PUT", "/JSSResource/restrictedsoftware/id/1", 200, "validate_update_restricted_software.xml")
 }
 
-// RegisterUpdateRestrictedSoftwareByNameMock registers PUT /JSSResource/restrictedsoftware/name/Calculator → 200.
-func (m *RestrictedSoftwareMock) RegisterUpdateRestrictedSoftwareByNameMock() {
+// RegisterUpdateByNameMock registers PUT /JSSResource/restrictedsoftware/name/Calculator → 200.
+func (m *RestrictedSoftwareMock) RegisterUpdateByNameMock() {
 	m.register("PUT", "/JSSResource/restrictedsoftware/name/Calculator", 200, "validate_update_restricted_software.xml")
 }
 
-// RegisterDeleteRestrictedSoftwareByIDMock registers DELETE /JSSResource/restrictedsoftware/id/1 → 200.
-func (m *RestrictedSoftwareMock) RegisterDeleteRestrictedSoftwareByIDMock() {
+// RegisterDeleteByIDMock registers DELETE /JSSResource/restrictedsoftware/id/1 → 200.
+func (m *RestrictedSoftwareMock) RegisterDeleteByIDMock() {
 	m.register("DELETE", "/JSSResource/restrictedsoftware/id/1", 200, "")
 }
 
-// RegisterDeleteRestrictedSoftwareByNameMock registers DELETE /JSSResource/restrictedsoftware/name/Calculator → 200.
-func (m *RestrictedSoftwareMock) RegisterDeleteRestrictedSoftwareByNameMock() {
+// RegisterDeleteByNameMock registers DELETE /JSSResource/restrictedsoftware/name/Calculator → 200.
+func (m *RestrictedSoftwareMock) RegisterDeleteByNameMock() {
 	m.register("DELETE", "/JSSResource/restrictedsoftware/name/Calculator", 200, "")
 }
 

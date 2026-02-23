@@ -29,7 +29,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test restricted software")
 
-	swName := uniqueName("acc-test-restricted-sw")
+	swName := acc.UniqueName("acc-test-restricted-sw")
 	createReq := &restricted_software.RequestRestrictedSoftware{
 		General: restricted_software.RequestGeneral{
 			Name:                  swName,
@@ -49,7 +49,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, createResp, err := svc.CreateRestrictedSoftware(ctx1, createReq)
+	created, createResp, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err, "Create: %v", err)
 	require.NotNil(t, created, "Create: created is nil")
 	require.NotNil(t, createResp, "Create: createResp is nil")
@@ -63,7 +63,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteRestrictedSoftwareByID(cleanupCtx, swID)
+		_, delErr := svc.DeleteByID(cleanupCtx, swID)
 		acc.LogCleanupDeleteError(t, "restricted software", fmt.Sprintf("%d", swID), delErr)
 	})
 
@@ -75,7 +75,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.ListRestrictedSoftware(ctx2)
+	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "List: %v", err)
 	require.NotNil(t, list, "List: list is nil")
 	require.Equal(t, 200, listResp.StatusCode, "List: status code")
@@ -100,7 +100,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetRestrictedSoftwareByID(ctx3, swID)
+	fetched, fetchResp, err := svc.GetByID(ctx3, swID)
 	require.NoError(t, err, "GetByID: %v", err)
 	require.NotNil(t, fetched, "GetByID: fetched is nil")
 	require.Equal(t, 200, fetchResp.StatusCode, "GetByID: status code")
@@ -122,7 +122,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
 
-	fetchedByName, fetchByNameResp, err := svc.GetRestrictedSoftwareByName(ctx4, swName)
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, swName)
 	require.NoError(t, err, "GetByName: %v", err)
 	require.NotNil(t, fetchedByName, "GetByName: fetched is nil")
 	require.Equal(t, 200, fetchByNameResp.StatusCode, "GetByName: status code")
@@ -133,7 +133,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := uniqueName("acc-test-restricted-sw-updated")
+	updatedName := acc.UniqueName("acc-test-restricted-sw-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating restricted software ID=%d to name=%q", swID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -155,7 +155,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 		},
 	}
 
-	updated, updateResp, err := svc.UpdateRestrictedSoftwareByID(ctx5, swID, updateReq)
+	updated, updateResp, err := svc.UpdateByID(ctx5, swID, updateReq)
 	require.NoError(t, err, "UpdateByID: %v", err)
 	require.NotNil(t, updated, "UpdateByID: updated is nil")
 	require.Contains(t, []int{200, 201}, updateResp.StatusCode, "UpdateByID: expected status 200 or 201, got %d", updateResp.StatusCode)
@@ -170,7 +170,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	ctx6, cancel6 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel6()
 
-	verified, verifyResp, err := svc.GetRestrictedSoftwareByID(ctx6, swID)
+	verified, verifyResp, err := svc.GetByID(ctx6, swID)
 	require.NoError(t, err, "GetByID (post-update): %v", err)
 	require.NotNil(t, verified, "GetByID (post-update): verified is nil")
 	require.Equal(t, 200, verifyResp.StatusCode, "GetByID (post-update): status code")
@@ -190,7 +190,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()
 
-	deleteResp, err := svc.DeleteRestrictedSoftwareByID(ctx7, swID)
+	deleteResp, err := svc.DeleteByID(ctx7, swID)
 	require.NoError(t, err, "DeleteByID: %v", err)
 	require.NotNil(t, deleteResp, "DeleteByID: deleteResp is nil")
 	require.Contains(t, []int{200, 204}, deleteResp.StatusCode, "DeleteByID: expected status 200 or 204, got %d", deleteResp.StatusCode)
@@ -208,7 +208,7 @@ func TestAcceptance_RestrictedSoftware_DeleteByName(t *testing.T) {
 	svc := acc.Client.RestrictedSoftware
 	ctx := context.Background()
 
-	swName := uniqueName("acc-test-restricted-sw-dbn")
+	swName := acc.UniqueName("acc-test-restricted-sw-dbn")
 	createReq := &restricted_software.RequestRestrictedSoftware{
 		General: restricted_software.RequestGeneral{
 			Name:                  swName,
@@ -228,7 +228,7 @@ func TestAcceptance_RestrictedSoftware_DeleteByName(t *testing.T) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	created, _, err := svc.CreateRestrictedSoftware(ctx1, createReq)
+	created, _, err := svc.Create(ctx1, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
@@ -238,15 +238,15 @@ func TestAcceptance_RestrictedSoftware_DeleteByName(t *testing.T) {
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		_, delErr := svc.DeleteRestrictedSoftwareByID(cleanupCtx, swID)
+		_, delErr := svc.DeleteByID(cleanupCtx, swID)
 		acc.LogCleanupDeleteError(t, "restricted software", fmt.Sprintf("%d", swID), delErr)
 	})
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	deleteResp, err := svc.DeleteRestrictedSoftwareByName(ctx2, swName)
-	require.NoError(t, err, "DeleteRestrictedSoftwareByName should not return an error")
+	deleteResp, err := svc.DeleteByName(ctx2, swName)
+	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Restricted software %q deleted by name", swName)
@@ -262,56 +262,56 @@ func TestAcceptance_RestrictedSoftware_ValidationErrors(t *testing.T) {
 
 	svc := acc.Client.RestrictedSoftware
 
-	t.Run("GetRestrictedSoftwareByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetRestrictedSoftwareByID(context.Background(), 0)
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "restricted software ID must be a positive integer")
 	})
 
-	t.Run("GetRestrictedSoftwareByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetRestrictedSoftwareByName(context.Background(), "")
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "restricted software name is required")
 	})
 
-	t.Run("CreateRestrictedSoftware_NilRequest", func(t *testing.T) {
-		_, _, err := svc.CreateRestrictedSoftware(context.Background(), nil)
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdateRestrictedSoftwareByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateRestrictedSoftwareByID(context.Background(), 0, &restricted_software.RequestRestrictedSoftware{})
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.UpdateByID(context.Background(), 0, &restricted_software.RequestRestrictedSoftware{})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "restricted software ID must be a positive integer")
 	})
 
-	t.Run("UpdateRestrictedSoftwareByID_NilRequest", func(t *testing.T) {
-		_, _, err := svc.UpdateRestrictedSoftwareByID(context.Background(), 1, nil)
+	t.Run("UpdateByID_NilRequest", func(t *testing.T) {
+		_, _, err := svc.UpdateByID(context.Background(), 1, nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("UpdateRestrictedSoftwareByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateRestrictedSoftwareByName(context.Background(), "", &restricted_software.RequestRestrictedSoftware{})
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.UpdateByName(context.Background(), "", &restricted_software.RequestRestrictedSoftware{})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "restricted software name is required")
 	})
 
-	t.Run("UpdateRestrictedSoftwareByName_NilRequest", func(t *testing.T) {
-		_, _, err := svc.UpdateRestrictedSoftwareByName(context.Background(), "test", nil)
+	t.Run("UpdateByName_NilRequest", func(t *testing.T) {
+		_, _, err := svc.UpdateByName(context.Background(), "test", nil)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request is required")
 	})
 
-	t.Run("DeleteRestrictedSoftwareByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteRestrictedSoftwareByID(context.Background(), 0)
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "restricted software ID must be a positive integer")
 	})
 
-	t.Run("DeleteRestrictedSoftwareByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteRestrictedSoftwareByName(context.Background(), "")
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "restricted software name is required")
 	})

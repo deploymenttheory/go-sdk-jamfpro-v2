@@ -22,9 +22,9 @@ func setupMockService(t *testing.T) (*Service, *mocks.AdvancedUserSearchesMock) 
 
 func TestUnitListAdvancedUserSearches_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterListAdvancedUserSearchesMock()
+	mock.RegisterListMock()
 
-	result, resp, err := svc.ListAdvancedUserSearches(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -44,9 +44,9 @@ func TestUnitListAdvancedUserSearches_Success(t *testing.T) {
 
 func TestUnitGetAdvancedUserSearchByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetAdvancedUserSearchByIDMock()
+	mock.RegisterGetByIDMock()
 
-	result, resp, err := svc.GetAdvancedUserSearchByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -69,7 +69,7 @@ func TestUnitGetAdvancedUserSearchByID_Success(t *testing.T) {
 func TestUnitGetAdvancedUserSearchByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetAdvancedUserSearchByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -79,7 +79,7 @@ func TestUnitGetAdvancedUserSearchByID_ZeroID(t *testing.T) {
 func TestUnitGetAdvancedUserSearchByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetAdvancedUserSearchByID(context.Background(), -1)
+	result, resp, err := svc.GetByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -90,7 +90,7 @@ func TestUnitGetAdvancedUserSearchByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetAdvancedUserSearchByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -103,9 +103,9 @@ func TestUnitGetAdvancedUserSearchByID_NotFound(t *testing.T) {
 
 func TestUnitGetAdvancedUserSearchByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetAdvancedUserSearchByNameMock()
+	mock.RegisterGetByNameMock()
 
-	result, resp, err := svc.GetAdvancedUserSearchByName(context.Background(), "Test Search")
+	result, resp, err := svc.GetByName(context.Background(), "Test Search")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -118,7 +118,7 @@ func TestUnitGetAdvancedUserSearchByName_Success(t *testing.T) {
 func TestUnitGetAdvancedUserSearchByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetAdvancedUserSearchByName(context.Background(), "")
+	result, resp, err := svc.GetByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -131,7 +131,7 @@ func TestUnitGetAdvancedUserSearchByName_EmptyName(t *testing.T) {
 
 func TestUnitCreateAdvancedUserSearch_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterCreateAdvancedUserSearchMock()
+	mock.RegisterCreateMock()
 
 	req := &RequestAdvancedUserSearch{
 		Name: "New Test Search",
@@ -147,7 +147,7 @@ func TestUnitCreateAdvancedUserSearch_Success(t *testing.T) {
 			},
 		},
 	}
-	result, resp, err := svc.CreateAdvancedUserSearch(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -159,7 +159,7 @@ func TestUnitCreateAdvancedUserSearch_Success(t *testing.T) {
 func TestUnitCreateAdvancedUserSearch_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateAdvancedUserSearch(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -171,7 +171,7 @@ func TestUnitCreateAdvancedUserSearch_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestAdvancedUserSearch{Name: "Duplicate Search"}
-	result, resp, err := svc.CreateAdvancedUserSearch(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -184,10 +184,10 @@ func TestUnitCreateAdvancedUserSearch_Conflict(t *testing.T) {
 
 func TestUnitUpdateAdvancedUserSearchByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateAdvancedUserSearchByIDMock()
+	mock.RegisterUpdateByIDMock()
 
 	req := &RequestAdvancedUserSearch{Name: "Updated Search Name"}
-	result, resp, err := svc.UpdateAdvancedUserSearchByID(context.Background(), 1, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -200,7 +200,7 @@ func TestUnitUpdateAdvancedUserSearchByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestAdvancedUserSearch{Name: "Updated Search Name"}
-	result, resp, err := svc.UpdateAdvancedUserSearchByID(context.Background(), 0, req)
+	result, resp, err := svc.UpdateByID(context.Background(), 0, req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -210,7 +210,7 @@ func TestUnitUpdateAdvancedUserSearchByID_ZeroID(t *testing.T) {
 func TestUnitUpdateAdvancedUserSearchByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateAdvancedUserSearchByID(context.Background(), 1, nil)
+	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -223,10 +223,10 @@ func TestUnitUpdateAdvancedUserSearchByID_NilRequest(t *testing.T) {
 
 func TestUnitUpdateAdvancedUserSearchByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateAdvancedUserSearchByNameMock()
+	mock.RegisterUpdateByNameMock()
 
 	req := &RequestAdvancedUserSearch{Name: "Updated Search Name"}
-	result, resp, err := svc.UpdateAdvancedUserSearchByName(context.Background(), "Test Search", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "Test Search", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -239,7 +239,7 @@ func TestUnitUpdateAdvancedUserSearchByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestAdvancedUserSearch{Name: "Updated Search Name"}
-	result, resp, err := svc.UpdateAdvancedUserSearchByName(context.Background(), "", req)
+	result, resp, err := svc.UpdateByName(context.Background(), "", req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -249,7 +249,7 @@ func TestUnitUpdateAdvancedUserSearchByName_EmptyName(t *testing.T) {
 func TestUnitUpdateAdvancedUserSearchByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateAdvancedUserSearchByName(context.Background(), "Test Search", nil)
+	result, resp, err := svc.UpdateByName(context.Background(), "Test Search", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -262,9 +262,9 @@ func TestUnitUpdateAdvancedUserSearchByName_NilRequest(t *testing.T) {
 
 func TestUnitDeleteAdvancedUserSearchByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteAdvancedUserSearchByIDMock()
+	mock.RegisterDeleteByIDMock()
 
-	resp, err := svc.DeleteAdvancedUserSearchByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -273,7 +273,7 @@ func TestUnitDeleteAdvancedUserSearchByID_Success(t *testing.T) {
 func TestUnitDeleteAdvancedUserSearchByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteAdvancedUserSearchByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
@@ -282,7 +282,7 @@ func TestUnitDeleteAdvancedUserSearchByID_ZeroID(t *testing.T) {
 func TestUnitDeleteAdvancedUserSearchByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteAdvancedUserSearchByID(context.Background(), -1)
+	resp, err := svc.DeleteByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
@@ -294,9 +294,9 @@ func TestUnitDeleteAdvancedUserSearchByID_NegativeID(t *testing.T) {
 
 func TestUnitDeleteAdvancedUserSearchByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteAdvancedUserSearchByNameMock()
+	mock.RegisterDeleteByNameMock()
 
-	resp, err := svc.DeleteAdvancedUserSearchByName(context.Background(), "Test Search")
+	resp, err := svc.DeleteByName(context.Background(), "Test Search")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -305,7 +305,7 @@ func TestUnitDeleteAdvancedUserSearchByName_Success(t *testing.T) {
 func TestUnitDeleteAdvancedUserSearchByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteAdvancedUserSearchByName(context.Background(), "")
+	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "advanced user search name is required")

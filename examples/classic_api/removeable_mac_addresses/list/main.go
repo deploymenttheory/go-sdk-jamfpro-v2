@@ -1,4 +1,4 @@
-// Package main demonstrates ListRemoveableMacAddresses — lists all removeable MAC addresses via the Classic API.
+// Package main demonstrates List — lists all removeable MAC addresses via the Classic API.
 //
 // Run with: go run ./examples/classic_api/removeable_mac_addresses/list
 // Requires: INSTANCE_DOMAIN, AUTH_METHOD, and auth env vars.
@@ -20,9 +20,9 @@ func main() {
 
 	ctx := context.Background()
 
-	list, resp, err := client.RemoveableMacAddresses.ListRemoveableMacAddresses(ctx)
+	list, resp, err := client.RemoveableMacAddresses.List(ctx)
 	if err != nil {
-		log.Fatalf("ListRemoveableMacAddresses failed: %v", err)
+		log.Fatalf("List failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)

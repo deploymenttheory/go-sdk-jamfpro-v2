@@ -22,9 +22,9 @@ func setupMockService(t *testing.T) (*Service, *mocks.AllowedFileExtensionsMock)
 
 func TestUnitListAllowedFileExtensions_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterListAllowedFileExtensionsMock()
+	mock.RegisterListMock()
 
-	result, resp, err := svc.ListAllowedFileExtensions(context.Background())
+	result, resp, err := svc.List(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -44,9 +44,9 @@ func TestUnitListAllowedFileExtensions_Success(t *testing.T) {
 
 func TestUnitGetAllowedFileExtensionByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetAllowedFileExtensionByIDMock()
+	mock.RegisterGetByIDMock()
 
-	result, resp, err := svc.GetAllowedFileExtensionByID(context.Background(), 1)
+	result, resp, err := svc.GetByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -59,7 +59,7 @@ func TestUnitGetAllowedFileExtensionByID_Success(t *testing.T) {
 func TestUnitGetAllowedFileExtensionByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetAllowedFileExtensionByID(context.Background(), 0)
+	result, resp, err := svc.GetByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -69,7 +69,7 @@ func TestUnitGetAllowedFileExtensionByID_ZeroID(t *testing.T) {
 func TestUnitGetAllowedFileExtensionByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetAllowedFileExtensionByID(context.Background(), -1)
+	result, resp, err := svc.GetByID(context.Background(), -1)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -80,7 +80,7 @@ func TestUnitGetAllowedFileExtensionByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
-	result, resp, err := svc.GetAllowedFileExtensionByID(context.Background(), 999)
+	result, resp, err := svc.GetByID(context.Background(), 999)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -93,9 +93,9 @@ func TestUnitGetAllowedFileExtensionByID_NotFound(t *testing.T) {
 
 func TestUnitGetAllowedFileExtensionByExtension_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterGetAllowedFileExtensionByExtensionMock()
+	mock.RegisterGetByExtensionMock()
 
-	result, resp, err := svc.GetAllowedFileExtensionByExtension(context.Background(), "dmg")
+	result, resp, err := svc.GetByExtension(context.Background(), "dmg")
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -108,7 +108,7 @@ func TestUnitGetAllowedFileExtensionByExtension_Success(t *testing.T) {
 func TestUnitGetAllowedFileExtensionByExtension_Empty(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetAllowedFileExtensionByExtension(context.Background(), "")
+	result, resp, err := svc.GetByExtension(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -121,10 +121,10 @@ func TestUnitGetAllowedFileExtensionByExtension_Empty(t *testing.T) {
 
 func TestUnitCreateAllowedFileExtension_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterCreateAllowedFileExtensionMock()
+	mock.RegisterCreateMock()
 
 	req := &RequestAllowedFileExtension{Extension: "zip"}
-	result, resp, err := svc.CreateAllowedFileExtension(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -137,7 +137,7 @@ func TestUnitCreateAllowedFileExtension_Success(t *testing.T) {
 func TestUnitCreateAllowedFileExtension_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.CreateAllowedFileExtension(context.Background(), nil)
+	result, resp, err := svc.Create(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -149,7 +149,7 @@ func TestUnitCreateAllowedFileExtension_Conflict(t *testing.T) {
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestAllowedFileExtension{Extension: "dmg"}
-	result, resp, err := svc.CreateAllowedFileExtension(context.Background(), req)
+	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -162,9 +162,9 @@ func TestUnitCreateAllowedFileExtension_Conflict(t *testing.T) {
 
 func TestUnitDeleteAllowedFileExtensionByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterDeleteAllowedFileExtensionByIDMock()
+	mock.RegisterDeleteByIDMock()
 
-	resp, err := svc.DeleteAllowedFileExtensionByID(context.Background(), 1)
+	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
@@ -173,7 +173,7 @@ func TestUnitDeleteAllowedFileExtensionByID_Success(t *testing.T) {
 func TestUnitDeleteAllowedFileExtensionByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	resp, err := svc.DeleteAllowedFileExtensionByID(context.Background(), 0)
+	resp, err := svc.DeleteByID(context.Background(), 0)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "allowed file extension ID must be a positive integer")

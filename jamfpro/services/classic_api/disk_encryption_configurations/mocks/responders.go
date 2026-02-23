@@ -34,14 +34,14 @@ func NewDiskEncryptionConfigurationsMock() *DiskEncryptionConfigurationsMock {
 }
 
 func (m *DiskEncryptionConfigurationsMock) RegisterMocks() {
-	m.RegisterListDiskEncryptionConfigurationsMock()
-	m.RegisterGetDiskEncryptionConfigurationByIDMock()
-	m.RegisterGetDiskEncryptionConfigurationByNameMock()
-	m.RegisterCreateDiskEncryptionConfigurationMock()
-	m.RegisterUpdateDiskEncryptionConfigurationByIDMock()
-	m.RegisterUpdateDiskEncryptionConfigurationByNameMock()
-	m.RegisterDeleteDiskEncryptionConfigurationByIDMock()
-	m.RegisterDeleteDiskEncryptionConfigurationByNameMock()
+	m.RegisterListMock()
+	m.RegisterGetByIDMock()
+	m.RegisterGetByNameMock()
+	m.RegisterCreateMock()
+	m.RegisterUpdateByIDMock()
+	m.RegisterUpdateByNameMock()
+	m.RegisterDeleteByIDMock()
+	m.RegisterDeleteByNameMock()
 }
 
 func (m *DiskEncryptionConfigurationsMock) RegisterErrorMocks() {
@@ -49,28 +49,28 @@ func (m *DiskEncryptionConfigurationsMock) RegisterErrorMocks() {
 	m.RegisterConflictErrorMock()
 }
 
-func (m *DiskEncryptionConfigurationsMock) RegisterListDiskEncryptionConfigurationsMock() {
+func (m *DiskEncryptionConfigurationsMock) RegisterListMock() {
 	m.register("GET", "/JSSResource/diskencryptionconfigurations", 200, "validate_list_disk_encryption_configurations.xml")
 }
-func (m *DiskEncryptionConfigurationsMock) RegisterGetDiskEncryptionConfigurationByIDMock() {
+func (m *DiskEncryptionConfigurationsMock) RegisterGetByIDMock() {
 	m.register("GET", "/JSSResource/diskencryptionconfigurations/id/1", 200, "validate_get_disk_encryption_configuration.xml")
 }
-func (m *DiskEncryptionConfigurationsMock) RegisterGetDiskEncryptionConfigurationByNameMock() {
+func (m *DiskEncryptionConfigurationsMock) RegisterGetByNameMock() {
 	m.register("GET", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "validate_get_disk_encryption_configuration.xml")
 }
-func (m *DiskEncryptionConfigurationsMock) RegisterCreateDiskEncryptionConfigurationMock() {
+func (m *DiskEncryptionConfigurationsMock) RegisterCreateMock() {
 	m.register("POST", "/JSSResource/diskencryptionconfigurations/id/0", 201, "validate_create_disk_encryption_configuration.xml")
 }
-func (m *DiskEncryptionConfigurationsMock) RegisterUpdateDiskEncryptionConfigurationByIDMock() {
+func (m *DiskEncryptionConfigurationsMock) RegisterUpdateByIDMock() {
 	m.register("PUT", "/JSSResource/diskencryptionconfigurations/id/1", 200, "validate_update_disk_encryption_configuration.xml")
 }
-func (m *DiskEncryptionConfigurationsMock) RegisterUpdateDiskEncryptionConfigurationByNameMock() {
+func (m *DiskEncryptionConfigurationsMock) RegisterUpdateByNameMock() {
 	m.register("PUT", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "validate_update_disk_encryption_configuration.xml")
 }
-func (m *DiskEncryptionConfigurationsMock) RegisterDeleteDiskEncryptionConfigurationByIDMock() {
+func (m *DiskEncryptionConfigurationsMock) RegisterDeleteByIDMock() {
 	m.register("DELETE", "/JSSResource/diskencryptionconfigurations/id/1", 200, "")
 }
-func (m *DiskEncryptionConfigurationsMock) RegisterDeleteDiskEncryptionConfigurationByNameMock() {
+func (m *DiskEncryptionConfigurationsMock) RegisterDeleteByNameMock() {
 	m.register("DELETE", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "")
 }
 func (m *DiskEncryptionConfigurationsMock) RegisterNotFoundErrorMock() {

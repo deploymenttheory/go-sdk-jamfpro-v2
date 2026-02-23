@@ -22,6 +22,21 @@ type (
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert
 		CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *interfaces.Response, error)
 
+		// UpdateV2 updates the certificate used for signing SSO requests (Update SSO Certificate).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-sso-cert
+		UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *interfaces.Response, error)
+
+		// DownloadV2 downloads the certificate used for signing SSO requests (Download SSO Certificate).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert-download
+		DownloadV2(ctx context.Context) ([]byte, *interfaces.Response, error)
+
+		// ParseV2 parses the provided keystore file and returns keystore information (Parse SSO Certificate).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert-parse
+		ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *interfaces.Response, error)
+
 		// DeleteV2 removes the currently configured SSO certificate (Delete SSO Certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-sso-cert
@@ -72,6 +87,53 @@ func (s *Service) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *
 		"Content-Type": mime.ApplicationJSON,
 	}
 	resp, err := s.client.Post(ctx, EndpointSSOCertV2, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &result, resp, nil
+}
+
+// UpdateV2 updates the certificate used for signing SSO requests.
+// URL: PUT /api/v2/sso/cert
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-sso-cert
+func (s *Service) UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *interfaces.Response, error) {
+	var result ResourceSSOKeystoreResponse
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+	resp, err := s.client.Put(ctx, EndpointSSOCertV2, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &result, resp, nil
+}
+
+// DownloadV2 downloads the certificate used for signing SSO requests.
+// URL: GET /api/v2/sso/cert/download
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert-download
+func (s *Service) DownloadV2(ctx context.Context) ([]byte, *interfaces.Response, error) {
+	var result []byte
+	headers := map[string]string{
+		"Accept": mime.ApplicationOctetStream,
+	}
+	resp, err := s.client.Get(ctx, EndpointSSOCertDownloadV2, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+	return result, resp, nil
+}
+
+// ParseV2 parses the provided keystore file and returns keystore information.
+// URL: POST /api/v2/sso/cert/parse
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert-parse
+func (s *Service) ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *interfaces.Response, error) {
+	var result ParseKeystoreResponse
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+	resp, err := s.client.Post(ctx, EndpointSSOCertParseV2, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
