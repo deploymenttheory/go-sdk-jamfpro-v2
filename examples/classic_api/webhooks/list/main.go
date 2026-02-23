@@ -24,8 +24,8 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Call the ListWebhooks function to retrieve the list of webhooks
-	webhooks, _, err := jamfClient.Webhooks.ListWebhooks(context.Background())
+	// Call the List function to retrieve the list of webhooks
+	webhooks, _, err := jamfClient.Webhooks.List(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -23,9 +23,9 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	// Example usage of DeletePrinterByID
+	// Example usage of DeleteByID
 	printerID := 1 // Replace with the desired printer ID to delete
-	_, err = jamfClient.Printers.DeletePrinterByID(context.Background(), printerID)
+	_, err = jamfClient.Printers.DeleteByID(context.Background(), printerID)
 	if err != nil {
 		fmt.Printf("Error deleting printer by ID: %v\n", err)
 		return
