@@ -1,0 +1,167 @@
+package classic_api
+
+import (
+	"context"
+	"testing"
+	"time"
+
+	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/command_flush"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
+
+// =============================================================================
+// TestAcceptance_CommandFlush_FlushByIDAndStatus tests the FlushByIDAndStatus
+// operation for clearing MDM commands on individual devices or groups.
+// =============================================================================
+
+func TestAcceptance_CommandFlush_FlushByIDAndStatus(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ClassicCommandFlush
+	ctx := context.Background()
+
+	// ------------------------------------------------------------------
+	// 1. Flush Failed commands for a computer
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "FlushByIDAndStatus", "Flushing failed computer commands")
+
+	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel1()
+
+	resp, err := svc.FlushByIDAndStatus(ctx1, "computers", "1", "Failed")
+	require.NoError(t, err, "FlushByIDAndStatus should not return an error")
+	require.NotNil(t, resp)
+	assert.Contains(t, []int{200, 204}, resp.StatusCode, "expected 200 or 204")
+
+	acc.LogTestSuccess(t, "Successfully flushed failed commands for computer 1")
+
+	// ------------------------------------------------------------------
+	// 2. Flush Pending commands for a mobile device
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "FlushByIDAndStatus", "Flushing pending mobile device commands")
+
+	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel2()
+
+	resp2, err := svc.FlushByIDAndStatus(ctx2, "mobiledevices", "1", "Pending")
+	require.NoError(t, err, "FlushByIDAndStatus should not return an error")
+	require.NotNil(t, resp2)
+	assert.Contains(t, []int{200, 204}, resp2.StatusCode, "expected 200 or 204")
+
+	acc.LogTestSuccess(t, "Successfully flushed pending commands for mobile device 1")
+
+	// ------------------------------------------------------------------
+	// 3. Flush Pending+Failed commands for a computer group
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "FlushByIDAndStatus", "Flushing pending+failed commands for computer group")
+
+	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel3()
+
+	resp3, err := svc.FlushByIDAndStatus(ctx3, "computergroups", "1", "Pending+Failed")
+	require.NoError(t, err, "FlushByIDAndStatus should not return an error")
+	require.NotNil(t, resp3)
+	assert.Contains(t, []int{200, 204}, resp3.StatusCode, "expected 200 or 204")
+
+	acc.LogTestSuccess(t, "Successfully flushed pending+failed commands for computer group 1")
+}
+
+// =============================================================================
+// TestAcceptance_CommandFlush_FlushWithXML tests the FlushWithXML operation
+// for batch clearing MDM commands using XML request body.
+// =============================================================================
+
+func TestAcceptance_CommandFlush_FlushWithXML(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ClassicCommandFlush
+	ctx := context.Background()
+
+	// ------------------------------------------------------------------
+	// 1. Flush Pending commands for multiple mobile devices
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "FlushWithXML", "Flushing pending commands for multiple mobile devices")
+
+	req := &command_flush.RequestCommandFlush{
+		Status: "Pending",
+		MobileDevices: &command_flush.MobileDevices{
+			MobileDevice: []command_flush.DeviceID{
+				{ID: 1},
+				{ID: 2},
+			},
+		},
+	}
+
+	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel1()
+
+	resp, err := svc.FlushWithXML(ctx1, req)
+	require.NoError(t, err, "FlushWithXML should not return an error")
+	require.NotNil(t, resp)
+	assert.Contains(t, []int{200, 204}, resp.StatusCode, "expected 200 or 204")
+
+	acc.LogTestSuccess(t, "Successfully flushed pending commands for batch of mobile devices")
+
+	// ------------------------------------------------------------------
+	// 2. Flush Failed commands for multiple computers
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "FlushWithXML", "Flushing failed commands for multiple computers")
+
+	req2 := &command_flush.RequestCommandFlush{
+		Status: "Failed",
+		Computers: &command_flush.Computers{
+			Computer: []command_flush.DeviceID{
+				{ID: 1},
+				{ID: 2},
+			},
+		},
+	}
+
+	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel2()
+
+	resp2, err := svc.FlushWithXML(ctx2, req2)
+	require.NoError(t, err, "FlushWithXML should not return an error")
+	require.NotNil(t, resp2)
+	assert.Contains(t, []int{200, 204}, resp2.StatusCode, "expected 200 or 204")
+
+	acc.LogTestSuccess(t, "Successfully flushed failed commands for batch of computers")
+}
+
+// =============================================================================
+// TestAcceptance_CommandFlush_ValidationErrors tests validation error handling.
+// =============================================================================
+
+func TestAcceptance_CommandFlush_ValidationErrors(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ClassicCommandFlush
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Test invalid idType
+	acc.LogTestStage(t, "ValidationErrors", "Testing invalid idType")
+	_, err := svc.FlushByIDAndStatus(ctx, "invalidtype", "1", "Pending")
+	require.Error(t, err, "should return error for invalid idType")
+	assert.Contains(t, err.Error(), "invalid idType")
+	acc.LogTestSuccess(t, "Validation correctly rejected invalid idType")
+
+	// Test invalid status
+	acc.LogTestStage(t, "ValidationErrors", "Testing invalid status")
+	_, err = svc.FlushByIDAndStatus(ctx, "computers", "1", "InvalidStatus")
+	require.Error(t, err, "should return error for invalid status")
+	assert.Contains(t, err.Error(), "invalid status")
+	acc.LogTestSuccess(t, "Validation correctly rejected invalid status")
+
+	// Test XML request with no devices
+	acc.LogTestStage(t, "ValidationErrors", "Testing XML request with no devices")
+	req := &command_flush.RequestCommandFlush{
+		Status: "Pending",
+	}
+	_, err = svc.FlushWithXML(ctx, req)
+	require.Error(t, err, "should return error for request with no devices")
+	assert.Contains(t, err.Error(), "at least one device list")
+	acc.LogTestSuccess(t, "Validation correctly rejected empty device list")
+}

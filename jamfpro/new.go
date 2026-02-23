@@ -12,6 +12,7 @@ import (
 	classic_allowed_file_extensions "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/allowed_file_extensions"
 	classic_byoprofiles "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/byoprofiles"
 	classic_classes "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/classes"
+	classic_command_flush "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/command_flush"
 	classic_computer_groups "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_groups"
 	classic_directory_bindings "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/directory_bindings"
 	classic_disk_encryption_configurations "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/disk_encryption_configurations"
@@ -112,6 +113,7 @@ type Client struct {
 	ClassicAllowedFileExtensions        *classic_allowed_file_extensions.Service
 	ClassicBYOProfiles                  *classic_byoprofiles.Service
 	ClassicClasses                      *classic_classes.Service
+	ClassicCommandFlush                 *classic_command_flush.Service
 	ClassicComputerGroups               *classic_computer_groups.Service
 	ClassicDirectoryBindings            *classic_directory_bindings.Service
 	ClassicDiskEncryptionConfigurations *classic_disk_encryption_configurations.Service
@@ -218,6 +220,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		ClassicAllowedFileExtensions:        classic_allowed_file_extensions.NewService(transport),
 		ClassicBYOProfiles:                  classic_byoprofiles.NewService(transport),
 		ClassicClasses:                      classic_classes.NewService(transport),
+		ClassicCommandFlush:                 classic_command_flush.NewService(transport),
 		ClassicComputerGroups:               classic_computer_groups.NewService(transport),
 		ClassicDirectoryBindings:            classic_directory_bindings.NewService(transport),
 		ClassicDiskEncryptionConfigurations: classic_disk_encryption_configurations.NewService(transport),

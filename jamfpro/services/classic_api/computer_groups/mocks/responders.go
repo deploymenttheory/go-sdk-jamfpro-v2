@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 
@@ -102,174 +103,147 @@ func (m *ComputerGroupsMock) RegisterDeleteComputerGroupByNameMock() {
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/computergroups/id/999 → 404.
 func (m *ComputerGroupsMock) RegisterNotFoundErrorMock() {
-	m.registerError("GET", "/JSSResource/computergroups/id/999", 404, "Computer group not found")
+	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
+	m.responses["GET:/JSSResource/computergroups/id/999"] = registeredResponse{
+		statusCode: 404,
+		rawBody:    body,
+		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
+	}
 }
 
 // RegisterConflictErrorMock registers POST /JSSResource/computergroups/id/0 → 409.
 func (m *ComputerGroupsMock) RegisterConflictErrorMock() {
-	m.registerError("POST", "/JSSResource/computergroups/id/0", 409, "Computer group name already exists")
-}
-
-// ---- Implementation ----
-
-func (m *ComputerGroupsMock) register(method, path string, statusCode int, filename string) {
-	key := method + ":" + path
-	var body []byte
-	if filename != "" {
-		body = m.readFixture(filename)
-	}
-	m.responses[key] = registeredResponse{
-		statusCode: statusCode,
+	body := []byte("<br>An error has occurred.<br>A computer group with that name already exists.<br><br>")
+	m.responses["POST:/JSSResource/computergroups/id/0"] = registeredResponse{
+		statusCode: 409,
 		rawBody:    body,
+		errMsg:     "Jamf Pro Classic API error (409): A computer group with that name already exists",
 	}
 }
 
-func (m *ComputerGroupsMock) registerError(method, path string, statusCode int, errMsg string) {
-	key := method + ":" + path
-	m.responses[key] = registeredResponse{
-		statusCode: statusCode,
-		errMsg:     errMsg,
-	}
-}
+// ---- interfaces.HTTPClient implementation ----
 
-func (m *ComputerGroupsMock) readFixture(filename string) []byte {
-	cwd, err := os.Getwd()
-	if err != nil {
-		panic(fmt.Sprintf("cannot determine working directory: %v", err))
-	}
-
-	path := filepath.Join(cwd, "mocks", filename)
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		path = filepath.Join(cwd, filename)
-	}
-
-	data, err := os.ReadFile(path)
-	if err != nil {
-		panic(fmt.Sprintf("failed to read fixture %q: %v", filename, err))
-	}
-	return data
-}
-
-// Get implements interfaces.HTTPClient.Get for the mock.
-func (m *ComputerGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
+	return m.dispatch("GET", path, result)
+}
 
-	key := "GET:" + path
-	reg, found := m.responses[key]
-	if !found {
-		return nil, fmt.Errorf("no mock registered for GET %s", path)
+func (m *ComputerGroupsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+	return m.dispatch("POST", path, result)
+}
+
+func (m *ComputerGroupsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+	return m.dispatch("POST", path, result)
+}
+
+func (m *ComputerGroupsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+	return m.dispatch("POST", path, result)
+}
+
+func (m *ComputerGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+	return m.dispatch("POST", path, result)
+}
+
+func (m *ComputerGroupsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+	return m.dispatch("PUT", path, result)
+}
+
+func (m *ComputerGroupsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+	return m.dispatch("PATCH", path, result)
+}
+
+func (m *ComputerGroupsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+	return m.dispatch("DELETE", path, result)
+}
+
+func (m *ComputerGroupsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+	return m.dispatch("DELETE", path, result)
+}
+
+func (m *ComputerGroupsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+	resp, err := m.dispatch("GET", path, nil)
+	if err != nil {
+		return resp, nil, err
 	}
-	if reg.errMsg != "" {
-		return &interfaces.Response{StatusCode: reg.statusCode}, fmt.Errorf(reg.errMsg)
+	return resp, resp.Body, nil
+}
+
+func (m *ComputerGroupsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+	resp, err := m.dispatch("GET", path, nil)
+	if err != nil {
+		return resp, err
 	}
-	if out != nil && len(reg.rawBody) > 0 {
-		if err := xml.Unmarshal(reg.rawBody, out); err != nil {
-			return nil, fmt.Errorf("unmarshal error for GET %s: %w", path, err)
+	if mergePage != nil {
+		if err := mergePage(resp.Body); err != nil {
+			return resp, err
 		}
 	}
-	return &interfaces.Response{StatusCode: reg.statusCode}, nil
+	return resp, nil
 }
 
-// Post implements interfaces.HTTPClient.Post for the mock.
-func (m *ComputerGroupsMock) Post(ctx context.Context, path string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
-	key := "POST:" + path
-	reg, found := m.responses[key]
-	if !found {
-		return nil, fmt.Errorf("no mock registered for POST %s", path)
+func (m *ComputerGroupsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *ComputerGroupsMock) InvalidateToken() error                     { return nil }
+func (m *ComputerGroupsMock) KeepAliveToken() error                      { return nil }
+func (m *ComputerGroupsMock) GetLogger() *zap.Logger                     { return m.logger }
+
+// ---- Internal helpers ----
+
+// register stores a success response keyed by "METHOD:path".
+// If fixture is empty, the body is empty (used for 200/204 No Content responses).
+func (m *ComputerGroupsMock) register(method, path string, statusCode int, fixture string) {
+	var body []byte
+	if fixture != "" {
+		data, err := loadMockResponse(fixture)
+		if err != nil {
+			panic(fmt.Sprintf("ComputerGroupsMock: failed to load fixture %q: %v", fixture, err))
+		}
+		body = data
 	}
-	if reg.errMsg != "" {
-		return &interfaces.Response{StatusCode: reg.statusCode}, fmt.Errorf(reg.errMsg)
+	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+// dispatch looks up the registered response and either unmarshals the XML body
+// into result or returns an error depending on the registration type.
+func (m *ComputerGroupsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+	r, ok := m.responses[method+":"+path]
+	if !ok {
+		return &interfaces.Response{
+			StatusCode: http.StatusNotFound,
+			Status:     "404 Not Found",
+			Headers:    http.Header{"Content-Type": {"application/xml"}},
+			Body:       []byte(`<error>no mock registered</error>`),
+		}, fmt.Errorf("ComputerGroupsMock: no response registered for %s %s", method, path)
 	}
-	if out != nil && len(reg.rawBody) > 0 {
-		if err := xml.Unmarshal(reg.rawBody, out); err != nil {
-			return nil, fmt.Errorf("unmarshal error for POST %s: %w", path, err)
+
+	resp := &interfaces.Response{
+		StatusCode: r.statusCode,
+		Status:     fmt.Sprintf("%d", r.statusCode),
+		Headers:    http.Header{"Content-Type": {"application/xml"}},
+		Body:       r.rawBody,
+	}
+
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
+
+	if result != nil && len(r.rawBody) > 0 {
+		if err := xml.Unmarshal(r.rawBody, result); err != nil {
+			return resp, fmt.Errorf("ComputerGroupsMock: unmarshal into result: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: reg.statusCode}, nil
+	return resp, nil
 }
 
-// Put implements interfaces.HTTPClient.Put for the mock.
-func (m *ComputerGroupsMock) Put(ctx context.Context, path string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
-	key := "PUT:" + path
-	reg, found := m.responses[key]
-	if !found {
-		return nil, fmt.Errorf("no mock registered for PUT %s", path)
+// loadMockResponse reads an XML fixture file from the mocks/ directory
+// adjacent to the test being run.
+func loadMockResponse(filename string) ([]byte, error) {
+	dir, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("get working directory: %w", err)
 	}
-	if reg.errMsg != "" {
-		return &interfaces.Response{StatusCode: reg.statusCode}, fmt.Errorf(reg.errMsg)
+	data, err := os.ReadFile(filepath.Join(dir, "mocks", filename))
+	if err != nil {
+		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
 	}
-	if out != nil && len(reg.rawBody) > 0 {
-		if err := xml.Unmarshal(reg.rawBody, out); err != nil {
-			return nil, fmt.Errorf("unmarshal error for PUT %s: %w", path, err)
-		}
-	}
-	return &interfaces.Response{StatusCode: reg.statusCode}, nil
-}
-
-// Delete implements interfaces.HTTPClient.Delete for the mock.
-func (m *ComputerGroupsMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
-	key := "DELETE:" + path
-	reg, found := m.responses[key]
-	if !found {
-		return nil, fmt.Errorf("no mock registered for DELETE %s", path)
-	}
-	if reg.errMsg != "" {
-		return &interfaces.Response{StatusCode: reg.statusCode}, fmt.Errorf(reg.errMsg)
-	}
-	return &interfaces.Response{StatusCode: reg.statusCode}, nil
-}
-
-// PostWithQuery is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
-	return nil, fmt.Errorf("PostWithQuery not implemented for Classic API mock")
-}
-
-// PostForm is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
-	return nil, fmt.Errorf("PostForm not implemented for Classic API mock")
-}
-
-// PostMultipart is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out any) (*interfaces.Response, error) {
-	return nil, fmt.Errorf("PostMultipart not implemented for Classic API mock")
-}
-
-// Patch is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) Patch(ctx context.Context, path string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
-	return nil, fmt.Errorf("Patch not implemented for Classic API mock")
-}
-
-// DeleteWithBody is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
-	return nil, fmt.Errorf("DeleteWithBody not implemented for Classic API mock")
-}
-
-// GetBytes is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
-	return nil, nil, fmt.Errorf("GetBytes not implemented for Classic API mock")
-}
-
-// GetPaginated is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
-	return nil, fmt.Errorf("GetPaginated not implemented for Classic API mock")
-}
-
-// RSQLBuilder is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) RSQLBuilder() interfaces.RSQLFilterBuilder {
-	return nil
-}
-
-// InvalidateToken is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) InvalidateToken() error {
-	return fmt.Errorf("InvalidateToken not implemented for mock")
-}
-
-// KeepAliveToken is a placeholder for interfaces.HTTPClient compliance (not used in Classic API).
-func (m *ComputerGroupsMock) KeepAliveToken() error {
-	return fmt.Errorf("KeepAliveToken not implemented for mock")
-}
-
-// GetLogger is a placeholder for interfaces.HTTPClient compliance.
-func (m *ComputerGroupsMock) GetLogger() *zap.Logger {
-	return m.logger
+	return data, nil
 }
