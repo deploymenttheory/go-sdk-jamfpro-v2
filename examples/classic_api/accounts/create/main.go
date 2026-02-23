@@ -33,7 +33,7 @@ func main() {
 		Enabled:      "Enabled",
 	}
 
-	created, _, err := jamfClient.Accounts.Create(context.Background(), createReq)
+	created, _, err := jamfClient.ClassicAccounts.Create(context.Background(), createReq)
 	if err != nil {
 		fmt.Printf("Error creating account: %v\n", err)
 		return

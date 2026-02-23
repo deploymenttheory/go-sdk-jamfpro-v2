@@ -18,7 +18,7 @@ import (
 func TestAcceptance_ActivationCode_GetActivationCode(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ActivationCode
+	svc := acc.Client.ClassicActivationCode
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Fetching current activation code")
@@ -44,7 +44,7 @@ func TestAcceptance_ActivationCode_GetActivationCode(t *testing.T) {
 func TestAcceptance_ActivationCode_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ActivationCode
+	svc := acc.Client.ClassicActivationCode
 
 	t.Run("UpdateActivationCode_NilRequest", func(t *testing.T) {
 		_, err := svc.UpdateActivationCode(context.Background(), nil)

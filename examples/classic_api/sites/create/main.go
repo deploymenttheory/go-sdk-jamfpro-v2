@@ -26,7 +26,7 @@ func main() {
 		Name: fmt.Sprintf("example-site-%d", time.Now().UnixMilli()),
 	}
 
-	created, resp, err := client.Sites.Create(ctx, req)
+	created, resp, err := client.ClassicSites.Create(ctx, req)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -36,7 +36,7 @@ func main() {
 	fmt.Printf("Name: %s\n", created.Name)
 
 	// Cleanup: delete the created site
-	if _, err := client.Sites.DeleteByID(ctx, created.ID); err != nil {
+	if _, err := client.ClassicSites.DeleteByID(ctx, created.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: site deleted")

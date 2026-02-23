@@ -26,7 +26,7 @@ func uniqueUserSearchName(prefix string) string {
 func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdvancedUserSearches
+	svc := acc.Client.ClassicAdvancedUserSearches
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -235,7 +235,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 func TestAcceptance_AdvancedUserSearches_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdvancedUserSearches
+	svc := acc.Client.ClassicAdvancedUserSearches
 	ctx := context.Background()
 
 	searchName := uniqueUserSearchName("acc-test-user-search-del")
@@ -290,7 +290,7 @@ func TestAcceptance_AdvancedUserSearches_DeleteByName(t *testing.T) {
 func TestAcceptance_AdvancedUserSearches_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdvancedUserSearches
+	svc := acc.Client.ClassicAdvancedUserSearches
 
 	t.Run("GetAdvancedUserSearchByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

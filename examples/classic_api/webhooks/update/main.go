@@ -37,7 +37,7 @@ func main() {
 		AuthenticationType: "NONE",
 	}
 
-	updatedWebhook, _, err := jamfClient.Webhooks.UpdateByID(context.Background(), webhookID, updateReq)
+	updatedWebhook, _, err := jamfClient.ClassicWebhooks.UpdateByID(context.Background(), webhookID, updateReq)
 	if err != nil {
 		fmt.Printf("Error updating webhook by ID: %v\n", err)
 		return

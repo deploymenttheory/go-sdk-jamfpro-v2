@@ -37,7 +37,7 @@ func main() {
 		},
 	}
 
-	created, resp, err := client.Policies.Create(ctx, req)
+	created, resp, err := client.ClassicPolicies.Create(ctx, req)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -46,7 +46,7 @@ func main() {
 	fmt.Printf("Created policy ID: %d\n", created.ID)
 
 	// Cleanup: delete the created policy
-	if _, err := client.Policies.DeleteByID(ctx, created.ID); err != nil {
+	if _, err := client.ClassicPolicies.DeleteByID(ctx, created.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: policy deleted")

@@ -18,7 +18,7 @@ func main() {
 		log.Fatalf("failed to create client: %v", err)
 	}
 
-	list, resp, err := client.Sites.List(context.Background())
+	list, resp, err := client.ClassicSites.List(context.Background())
 	if err != nil {
 		log.Fatalf("List failed: %v", err)
 	}

@@ -33,13 +33,13 @@ func main() {
 			AllComputers: true,
 		},
 	}
-	created, _, err := client.Policies.Create(ctx, createReq)
+	created, _, err := client.ClassicPolicies.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
 	fmt.Printf("Created policy ID: %d\n", created.ID)
 
-	resp, err := client.Policies.DeleteByID(ctx, created.ID)
+	resp, err := client.ClassicPolicies.DeleteByID(ctx, created.ID)
 	if err != nil {
 		log.Fatalf("DeleteByID failed: %v", err)
 	}

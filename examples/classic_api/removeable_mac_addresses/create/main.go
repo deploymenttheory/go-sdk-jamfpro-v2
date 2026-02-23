@@ -26,7 +26,7 @@ func main() {
 		Name: fmt.Sprintf("AA:BB:CC:DD:EE:%d", time.Now().UnixMilli()%1000),
 	}
 
-	created, resp, err := client.RemoveableMacAddresses.Create(ctx, req)
+	created, resp, err := client.ClassicRemoveableMacAddresses.Create(ctx, req)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -36,7 +36,7 @@ func main() {
 	fmt.Printf("Name: %s\n", created.Name)
 
 	// Cleanup: delete the created removeable MAC address
-	if _, err := client.RemoveableMacAddresses.DeleteByID(ctx, created.ID); err != nil {
+	if _, err := client.ClassicRemoveableMacAddresses.DeleteByID(ctx, created.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: removeable MAC address deleted")

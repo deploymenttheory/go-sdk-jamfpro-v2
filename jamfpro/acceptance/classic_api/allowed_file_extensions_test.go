@@ -22,7 +22,7 @@ import (
 func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AllowedFileExtensions
+	svc := acc.Client.ClassicAllowedFileExtensions
 	ctx := context.Background()
 
 	// Use a unique extension suffix so we don't conflict with existing entries.
@@ -142,7 +142,7 @@ func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
 func TestAcceptance_AllowedFileExtensions_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AllowedFileExtensions
+	svc := acc.Client.ClassicAllowedFileExtensions
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

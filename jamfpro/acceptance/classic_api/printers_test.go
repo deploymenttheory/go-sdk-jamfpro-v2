@@ -21,7 +21,7 @@ import (
 func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Printers
+	svc := acc.Client.ClassicPrinters
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -195,7 +195,7 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 func TestAcceptance_Printers_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Printers
+	svc := acc.Client.ClassicPrinters
 	ctx := context.Background()
 
 	printerName := acc.UniqueName("acc-test-printer-dbn")
@@ -240,7 +240,7 @@ func TestAcceptance_Printers_DeleteByName(t *testing.T) {
 func TestAcceptance_Printers_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Printers
+	svc := acc.Client.ClassicPrinters
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

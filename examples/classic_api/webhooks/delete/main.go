@@ -25,7 +25,7 @@ func main() {
 
 	// Example usage of DeleteByID
 	webhookID := 1 // Replace with the desired webhook ID to delete
-	_, err = jamfClient.Webhooks.DeleteByID(context.Background(), webhookID)
+	_, err = jamfClient.ClassicWebhooks.DeleteByID(context.Background(), webhookID)
 	if err != nil {
 		fmt.Printf("Error deleting webhook by ID: %v\n", err)
 		return

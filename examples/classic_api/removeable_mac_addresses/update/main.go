@@ -39,7 +39,7 @@ func main() {
 		Name: fmt.Sprintf("Updated-MAC-%d", time.Now().UnixMilli()%1000),
 	}
 
-	updated, resp, err := client.RemoveableMacAddresses.UpdateByID(ctx, id, req)
+	updated, resp, err := client.ClassicRemoveableMacAddresses.UpdateByID(ctx, id, req)
 	if err != nil {
 		log.Fatalf("UpdateByID failed: %v", err)
 	}

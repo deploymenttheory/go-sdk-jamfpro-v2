@@ -21,7 +21,7 @@ import (
 func TestAcceptance_SoftwareUpdateServers_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SoftwareUpdateServers
+	svc := acc.Client.ClassicSoftwareUpdateServers
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -189,7 +189,7 @@ func TestAcceptance_SoftwareUpdateServers_Lifecycle(t *testing.T) {
 func TestAcceptance_SoftwareUpdateServers_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SoftwareUpdateServers
+	svc := acc.Client.ClassicSoftwareUpdateServers
 	ctx := context.Background()
 
 	serverName := acc.UniqueName("acc-test-sus-dbn")
@@ -233,7 +233,7 @@ func TestAcceptance_SoftwareUpdateServers_DeleteByName(t *testing.T) {
 func TestAcceptance_SoftwareUpdateServers_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SoftwareUpdateServers
+	svc := acc.Client.ClassicSoftwareUpdateServers
 
 	t.Run("GetSoftwareUpdateServerByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

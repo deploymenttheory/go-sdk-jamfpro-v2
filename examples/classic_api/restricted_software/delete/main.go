@@ -37,13 +37,13 @@ func main() {
 			AllComputers: true,
 		},
 	}
-	created, _, err := client.RestrictedSoftware.Create(ctx, createReq)
+	created, _, err := client.ClassicRestrictedSoftware.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
 	fmt.Printf("Created restricted software ID: %d\n", created.ID)
 
-	resp, err := client.RestrictedSoftware.DeleteByID(ctx, created.ID)
+	resp, err := client.ClassicRestrictedSoftware.DeleteByID(ctx, created.ID)
 	if err != nil {
 		log.Fatalf("DeleteByID failed: %v", err)
 	}

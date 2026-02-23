@@ -27,7 +27,7 @@ func main() {
 
 	// Example usage of GetIBeaconByID
 	ibeaconID := 1 // Replace with the desired iBeacon ID
-	ibeaconByID, _, err := jamfClient.IBeacons.GetByID(context.Background(), ibeaconID)
+	ibeaconByID, _, err := jamfClient.ClassicIBeacons.GetByID(context.Background(), ibeaconID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -26,13 +26,13 @@ func main() {
 	createReq := &sites.RequestSite{
 		Name: fmt.Sprintf("example-delete-%d", time.Now().UnixMilli()),
 	}
-	created, _, err := client.Sites.Create(ctx, createReq)
+	created, _, err := client.ClassicSites.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
 	fmt.Printf("Created site ID: %d\n", created.ID)
 
-	resp, err := client.Sites.DeleteByID(ctx, created.ID)
+	resp, err := client.ClassicSites.DeleteByID(ctx, created.ID)
 	if err != nil {
 		log.Fatalf("DeleteByID failed: %v", err)
 	}

@@ -33,7 +33,7 @@ func main() {
 
 	ctx := context.Background()
 
-	mac, resp, err := client.RemoveableMacAddresses.GetByID(ctx, id)
+	mac, resp, err := client.ClassicRemoveableMacAddresses.GetByID(ctx, id)
 	if err != nil {
 		log.Fatalf("GetByID failed: %v", err)
 	}

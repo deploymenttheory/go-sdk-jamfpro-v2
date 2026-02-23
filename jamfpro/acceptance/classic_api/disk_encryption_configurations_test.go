@@ -21,7 +21,7 @@ import (
 func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DiskEncryptionConfigurations
+	svc := acc.Client.ClassicDiskEncryptionConfigurations
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -189,7 +189,7 @@ func TestAcceptance_DiskEncryptionConfigurations_Lifecycle(t *testing.T) {
 func TestAcceptance_DiskEncryptionConfigurations_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DiskEncryptionConfigurations
+	svc := acc.Client.ClassicDiskEncryptionConfigurations
 	ctx := context.Background()
 
 	configName := acc.UniqueName("acc-test-diskenc-dbn")
@@ -232,7 +232,7 @@ func TestAcceptance_DiskEncryptionConfigurations_DeleteByName(t *testing.T) {
 func TestAcceptance_DiskEncryptionConfigurations_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DiskEncryptionConfigurations
+	svc := acc.Client.ClassicDiskEncryptionConfigurations
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

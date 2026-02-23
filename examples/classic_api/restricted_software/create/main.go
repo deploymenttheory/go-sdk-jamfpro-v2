@@ -37,7 +37,7 @@ func main() {
 		},
 	}
 
-	created, resp, err := client.RestrictedSoftware.Create(ctx, req)
+	created, resp, err := client.ClassicRestrictedSoftware.Create(ctx, req)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -46,7 +46,7 @@ func main() {
 	fmt.Printf("Created restricted software ID: %d\n", created.ID)
 
 	// Cleanup: delete the created restricted software
-	if _, err := client.RestrictedSoftware.DeleteByID(ctx, created.ID); err != nil {
+	if _, err := client.ClassicRestrictedSoftware.DeleteByID(ctx, created.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: restricted software deleted")

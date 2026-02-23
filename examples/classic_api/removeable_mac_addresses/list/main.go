@@ -20,7 +20,7 @@ func main() {
 
 	ctx := context.Background()
 
-	list, resp, err := client.RemoveableMacAddresses.List(ctx)
+	list, resp, err := client.ClassicRemoveableMacAddresses.List(ctx)
 	if err != nil {
 		log.Fatalf("List failed: %v", err)
 	}

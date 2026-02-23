@@ -25,7 +25,7 @@ func main() {
 
 	// Example usage of DeleteIBeaconByID
 	ibeaconID := 1 // Replace with the desired iBeacon ID to delete
-	_, err = jamfClient.IBeacons.DeleteByID(context.Background(), ibeaconID)
+	_, err = jamfClient.ClassicIBeacons.DeleteByID(context.Background(), ibeaconID)
 	if err != nil {
 		fmt.Printf("Error deleting iBeacon by ID: %v\n", err)
 		return

@@ -21,7 +21,7 @@ import (
 func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Classes
+	svc := acc.Client.ClassicClasses
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -201,7 +201,7 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 func TestAcceptance_Classes_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Classes
+	svc := acc.Client.ClassicClasses
 	ctx := context.Background()
 
 	className := acc.UniqueName("acc-test-class-del")
@@ -245,7 +245,7 @@ func TestAcceptance_Classes_DeleteByName(t *testing.T) {
 func TestAcceptance_Classes_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Classes
+	svc := acc.Client.ClassicClasses
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

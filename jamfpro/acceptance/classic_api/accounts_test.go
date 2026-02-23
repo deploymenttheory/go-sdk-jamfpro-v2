@@ -27,7 +27,7 @@ func uniqueAccountName(prefix string) string {
 func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Accounts
+	svc := acc.Client.ClassicAccounts
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -216,7 +216,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 func TestAcceptance_Accounts_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Accounts
+	svc := acc.Client.ClassicAccounts
 	ctx := context.Background()
 
 	accountName := acc.UniqueName("test-delete-account")
@@ -266,7 +266,7 @@ func TestAcceptance_Accounts_DeleteByName(t *testing.T) {
 func TestAcceptance_Accounts_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Accounts
+	svc := acc.Client.ClassicAccounts
 
 	t.Run("GetAccountByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

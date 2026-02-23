@@ -29,7 +29,7 @@ func main() {
 		PrivilegeSet: "Administrator",
 		Enabled:      "Enabled",
 	}
-	created, _, err := client.Accounts.Create(ctx, createReq)
+	created, _, err := client.ClassicAccounts.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -45,9 +45,9 @@ func main() {
 		PrivilegeSet: "Administrator",
 		Enabled:      "Enabled",
 	}
-	updated, resp, err := client.Accounts.UpdateByName(ctx, originalName, updateReq)
+	updated, resp, err := client.ClassicAccounts.UpdateByName(ctx, originalName, updateReq)
 	if err != nil {
-		_, _ = client.Accounts.DeleteByID(ctx, created.ID)
+		_, _ = client.ClassicAccounts.DeleteByID(ctx, created.ID)
 		log.Fatalf("UpdateByName failed: %v", err)
 	}
 
@@ -55,6 +55,6 @@ func main() {
 	fmt.Printf("Updated account ID: %d\n", updated.ID)
 	fmt.Printf("New name: %s\n", updated.Name)
 
-	_, _ = client.Accounts.DeleteByID(ctx, created.ID)
+	_, _ = client.ClassicAccounts.DeleteByID(ctx, created.ID)
 	fmt.Println("Cleanup: account deleted")
 }

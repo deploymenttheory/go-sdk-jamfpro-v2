@@ -24,7 +24,7 @@ import (
 func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.BYOProfiles
+	svc := acc.Client.ClassicBYOProfiles
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -206,7 +206,7 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 func TestAcceptance_BYOProfiles_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.BYOProfiles
+	svc := acc.Client.ClassicBYOProfiles
 	ctx := context.Background()
 
 	profileName := acc.UniqueName("acc-test-byoprofile-del")
@@ -259,7 +259,7 @@ func TestAcceptance_BYOProfiles_DeleteByName(t *testing.T) {
 func TestAcceptance_BYOProfiles_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.BYOProfiles
+	svc := acc.Client.ClassicBYOProfiles
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

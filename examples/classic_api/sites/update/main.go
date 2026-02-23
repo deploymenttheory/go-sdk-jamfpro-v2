@@ -26,7 +26,7 @@ func main() {
 	createReq := &sites.RequestSite{
 		Name: fmt.Sprintf("example-update-%d", time.Now().UnixMilli()),
 	}
-	created, _, err := client.Sites.Create(ctx, createReq)
+	created, _, err := client.ClassicSites.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -36,9 +36,9 @@ func main() {
 	updateReq := &sites.RequestSite{
 		Name: fmt.Sprintf("example-updated-%d", time.Now().UnixMilli()),
 	}
-	updated, resp, err := client.Sites.UpdateByID(ctx, created.ID, updateReq)
+	updated, resp, err := client.ClassicSites.UpdateByID(ctx, created.ID, updateReq)
 	if err != nil {
-		_, _ = client.Sites.DeleteByID(ctx, created.ID)
+		_, _ = client.ClassicSites.DeleteByID(ctx, created.ID)
 		log.Fatalf("UpdateByID failed: %v", err)
 	}
 
@@ -46,6 +46,6 @@ func main() {
 	fmt.Printf("Updated site ID: %d\n", updated.ID)
 	fmt.Printf("New name: %s\n", updated.Name)
 
-	_, _ = client.Sites.DeleteByID(ctx, created.ID)
+	_, _ = client.ClassicSites.DeleteByID(ctx, created.ID)
 	fmt.Println("Cleanup: site deleted")
 }

@@ -18,7 +18,7 @@ func main() {
 		log.Fatalf("failed to create client: %v", err)
 	}
 
-	list, resp, err := client.Policies.List(context.Background())
+	list, resp, err := client.ClassicPolicies.List(context.Background())
 	if err != nil {
 		log.Fatalf("List failed: %v", err)
 	}

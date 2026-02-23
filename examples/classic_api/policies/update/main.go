@@ -36,7 +36,7 @@ func main() {
 			Recon: true,
 		},
 	}
-	created, _, err := client.Policies.Create(ctx, createReq)
+	created, _, err := client.ClassicPolicies.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -57,15 +57,15 @@ func main() {
 			Permissions: true,
 		},
 	}
-	updated, resp, err := client.Policies.UpdateByID(ctx, created.ID, updateReq)
+	updated, resp, err := client.ClassicPolicies.UpdateByID(ctx, created.ID, updateReq)
 	if err != nil {
-		_, _ = client.Policies.DeleteByID(ctx, created.ID)
+		_, _ = client.ClassicPolicies.DeleteByID(ctx, created.ID)
 		log.Fatalf("UpdateByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
 	fmt.Printf("Updated policy ID: %d\n", updated.ID)
 
-	_, _ = client.Policies.DeleteByID(ctx, created.ID)
+	_, _ = client.ClassicPolicies.DeleteByID(ctx, created.ID)
 	fmt.Println("Cleanup: policy deleted")
 }

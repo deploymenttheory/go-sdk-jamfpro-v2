@@ -21,7 +21,7 @@ import (
 func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Webhooks
+	svc := acc.Client.ClassicWebhooks
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -205,7 +205,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 func TestAcceptance_Webhooks_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Webhooks
+	svc := acc.Client.ClassicWebhooks
 	ctx := context.Background()
 
 	webhookName := acc.UniqueName("acc-test-webhook-dbn")
@@ -255,7 +255,7 @@ func TestAcceptance_Webhooks_DeleteByName(t *testing.T) {
 func TestAcceptance_Webhooks_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Webhooks
+	svc := acc.Client.ClassicWebhooks
 
 	t.Run("GetWebhookByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

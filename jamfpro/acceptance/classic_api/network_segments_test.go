@@ -21,7 +21,7 @@ import (
 func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.NetworkSegments
+	svc := acc.Client.ClassicNetworkSegments
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -191,7 +191,7 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 func TestAcceptance_NetworkSegments_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.NetworkSegments
+	svc := acc.Client.ClassicNetworkSegments
 	ctx := context.Background()
 
 	segmentName := acc.UniqueName("acc-test-netseg-dbn")
@@ -236,7 +236,7 @@ func TestAcceptance_NetworkSegments_DeleteByName(t *testing.T) {
 func TestAcceptance_NetworkSegments_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.NetworkSegments
+	svc := acc.Client.ClassicNetworkSegments
 
 	t.Run("GetNetworkSegmentByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

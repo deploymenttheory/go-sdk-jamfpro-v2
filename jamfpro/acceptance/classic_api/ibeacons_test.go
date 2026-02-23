@@ -22,7 +22,7 @@ import (
 func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.IBeacons
+	svc := acc.Client.ClassicIBeacons
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -194,7 +194,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 func TestAcceptance_IBeacons_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.IBeacons
+	svc := acc.Client.ClassicIBeacons
 	ctx := context.Background()
 
 	beaconName := acc.UniqueName("acc-test-ibeacon-dbn")
@@ -240,7 +240,7 @@ func TestAcceptance_IBeacons_DeleteByName(t *testing.T) {
 func TestAcceptance_IBeacons_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.IBeacons
+	svc := acc.Client.ClassicIBeacons
 
 	t.Run("GetIBeaconByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

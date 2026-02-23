@@ -32,7 +32,7 @@ func main() {
 		EndingAddress:   "10.20.20.128",
 	}
 
-	updatedSegment, _, err := jamfClient.NetworkSegments.UpdateByID(context.Background(), segmentID, updateReq)
+	updatedSegment, _, err := jamfClient.ClassicNetworkSegments.UpdateByID(context.Background(), segmentID, updateReq)
 	if err != nil {
 		fmt.Printf("Error updating network segment by ID: %v\n", err)
 		return

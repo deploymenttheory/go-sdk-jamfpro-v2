@@ -25,7 +25,7 @@ func main() {
 	}
 
 	// Call the List function to retrieve the list of webhooks
-	webhooks, _, err := jamfClient.Webhooks.List(context.Background())
+	webhooks, _, err := jamfClient.ClassicWebhooks.List(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

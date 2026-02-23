@@ -33,7 +33,7 @@ func main() {
 
 	ctx := context.Background()
 
-	resp, err := client.RemoveableMacAddresses.DeleteByID(ctx, id)
+	resp, err := client.ClassicRemoveableMacAddresses.DeleteByID(ctx, id)
 	if err != nil {
 		log.Fatalf("DeleteByID failed: %v", err)
 	}

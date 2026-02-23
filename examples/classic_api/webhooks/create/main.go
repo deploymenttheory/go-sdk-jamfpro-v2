@@ -36,7 +36,7 @@ func main() {
 		AuthenticationType: "NONE",
 	}
 
-	createdWebhook, _, err := jamfClient.Webhooks.Create(context.Background(), newWebhook)
+	createdWebhook, _, err := jamfClient.ClassicWebhooks.Create(context.Background(), newWebhook)
 	if err != nil {
 		fmt.Printf("Error creating webhook: %v\n", err)
 		return

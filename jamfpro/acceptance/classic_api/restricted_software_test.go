@@ -21,7 +21,7 @@ import (
 func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.RestrictedSoftware
+	svc := acc.Client.ClassicRestrictedSoftware
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -205,7 +205,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 func TestAcceptance_RestrictedSoftware_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.RestrictedSoftware
+	svc := acc.Client.ClassicRestrictedSoftware
 	ctx := context.Background()
 
 	swName := acc.UniqueName("acc-test-restricted-sw-dbn")
@@ -260,7 +260,7 @@ func TestAcceptance_RestrictedSoftware_DeleteByName(t *testing.T) {
 func TestAcceptance_RestrictedSoftware_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.RestrictedSoftware
+	svc := acc.Client.ClassicRestrictedSoftware
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

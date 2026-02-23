@@ -31,7 +31,7 @@ func main() {
 		EndingAddress:   "10.10.10.255",
 	}
 
-	createdSegment, _, err := jamfClient.NetworkSegments.Create(context.Background(), newSegment)
+	createdSegment, _, err := jamfClient.ClassicNetworkSegments.Create(context.Background(), newSegment)
 	if err != nil {
 		fmt.Printf("Error creating network segment: %v\n", err)
 		return

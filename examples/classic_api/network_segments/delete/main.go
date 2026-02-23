@@ -25,7 +25,7 @@ func main() {
 
 	// Example usage of DeleteByID
 	segmentID := 1 // Replace with the desired network segment ID to delete
-	_, err = jamfClient.NetworkSegments.DeleteByID(context.Background(), segmentID)
+	_, err = jamfClient.ClassicNetworkSegments.DeleteByID(context.Background(), segmentID)
 	if err != nil {
 		fmt.Printf("Error deleting network segment by ID: %v\n", err)
 		return

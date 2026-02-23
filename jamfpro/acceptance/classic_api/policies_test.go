@@ -22,7 +22,7 @@ import (
 func TestAcceptance_Policies_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Policies
+	svc := acc.Client.ClassicPolicies
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -208,7 +208,7 @@ func TestAcceptance_Policies_Lifecycle(t *testing.T) {
 func TestAcceptance_Policies_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Policies
+	svc := acc.Client.ClassicPolicies
 	ctx := context.Background()
 
 	policyName := acc.UniqueName("acc-test-policy-del")
@@ -258,7 +258,7 @@ func TestAcceptance_Policies_DeleteByName(t *testing.T) {
 func TestAcceptance_Policies_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Policies
+	svc := acc.Client.ClassicPolicies
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

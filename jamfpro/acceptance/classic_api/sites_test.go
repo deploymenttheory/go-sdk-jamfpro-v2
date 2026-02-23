@@ -22,7 +22,7 @@ import (
 func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Sites
+	svc := acc.Client.ClassicSites
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -181,7 +181,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 func TestAcceptance_Sites_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Sites
+	svc := acc.Client.ClassicSites
 	ctx := context.Background()
 
 	siteName := acc.UniqueName("acc-test-site-dbn")
@@ -222,7 +222,7 @@ func TestAcceptance_Sites_DeleteByName(t *testing.T) {
 func TestAcceptance_Sites_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Sites
+	svc := acc.Client.ClassicSites
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

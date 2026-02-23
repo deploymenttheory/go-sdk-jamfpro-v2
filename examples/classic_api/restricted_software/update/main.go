@@ -37,7 +37,7 @@ func main() {
 			AllComputers: true,
 		},
 	}
-	created, _, err := client.RestrictedSoftware.Create(ctx, createReq)
+	created, _, err := client.ClassicRestrictedSoftware.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -57,15 +57,15 @@ func main() {
 			AllComputers: true,
 		},
 	}
-	updated, resp, err := client.RestrictedSoftware.UpdateByID(ctx, created.ID, updateReq)
+	updated, resp, err := client.ClassicRestrictedSoftware.UpdateByID(ctx, created.ID, updateReq)
 	if err != nil {
-		_, _ = client.RestrictedSoftware.DeleteByID(ctx, created.ID)
+		_, _ = client.ClassicRestrictedSoftware.DeleteByID(ctx, created.ID)
 		log.Fatalf("UpdateByID failed: %v", err)
 	}
 
 	fmt.Printf("Status: %d\n", resp.StatusCode)
 	fmt.Printf("Updated restricted software ID: %d\n", updated.ID)
 
-	_, _ = client.RestrictedSoftware.DeleteByID(ctx, created.ID)
+	_, _ = client.ClassicRestrictedSoftware.DeleteByID(ctx, created.ID)
 	fmt.Println("Cleanup: restricted software deleted")
 }

@@ -21,7 +21,7 @@ import (
 func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.RemoveableMacAddresses
+	svc := acc.Client.ClassicRemoveableMacAddresses
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -177,7 +177,7 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 func TestAcceptance_RemoveableMacAddresses_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.RemoveableMacAddresses
+	svc := acc.Client.ClassicRemoveableMacAddresses
 	ctx := context.Background()
 
 	macAddress := acc.UniqueName("AA:BB:CC:DD:EE")
@@ -218,7 +218,7 @@ func TestAcceptance_RemoveableMacAddresses_DeleteByName(t *testing.T) {
 func TestAcceptance_RemoveableMacAddresses_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.RemoveableMacAddresses
+	svc := acc.Client.ClassicRemoveableMacAddresses
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

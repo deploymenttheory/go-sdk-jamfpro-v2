@@ -29,7 +29,7 @@ func main() {
 		Extension: "example", // Replace with the desired file extension
 	}
 
-	created, _, err := jamfClient.AllowedFileExtensions.Create(context.Background(), createReq)
+	created, _, err := jamfClient.ClassicAllowedFileExtensions.Create(context.Background(), createReq)
 	if err != nil {
 		fmt.Printf("Error creating allowed file extension: %v\n", err)
 		return

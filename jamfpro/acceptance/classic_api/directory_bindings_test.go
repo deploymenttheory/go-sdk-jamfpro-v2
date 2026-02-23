@@ -22,7 +22,7 @@ import (
 func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DirectoryBindings
+	svc := acc.Client.ClassicDirectoryBindings
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -206,7 +206,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 func TestAcceptance_DirectoryBindings_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DirectoryBindings
+	svc := acc.Client.ClassicDirectoryBindings
 	ctx := context.Background()
 
 	bindingName := acc.UniqueName("acc-test-dirbinding-dbn")
@@ -258,7 +258,7 @@ func TestAcceptance_DirectoryBindings_DeleteByName(t *testing.T) {
 func TestAcceptance_DirectoryBindings_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DirectoryBindings
+	svc := acc.Client.ClassicDirectoryBindings
 
 	t.Run("GetDirectoryBindingByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

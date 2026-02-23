@@ -27,7 +27,7 @@ func main() {
 
 	// Example usage of GetPrinterByID
 	printerID := 1 // Replace with the desired printer ID
-	printer, _, err := jamfClient.Printers.GetByID(context.Background(), printerID)
+	printer, _, err := jamfClient.ClassicPrinters.GetByID(context.Background(), printerID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

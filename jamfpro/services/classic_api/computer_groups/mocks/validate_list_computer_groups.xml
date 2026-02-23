@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<computer_groups>
+  <size>2</size>
+  <computer_group>
+    <id>1</id>
+    <name>All Managed Clients</name>
+    <is_smart>true</is_smart>
+  </computer_group>
+  <computer_group>
+    <id>2</id>
+    <name>Static Test Group</name>
+    <is_smart>false</is_smart>
+  </computer_group>
+</computer_groups>

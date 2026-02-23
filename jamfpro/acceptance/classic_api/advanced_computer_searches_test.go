@@ -21,7 +21,7 @@ import (
 func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdvancedComputerSearches
+	svc := acc.Client.ClassicAdvancedComputerSearches
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -236,7 +236,7 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 func TestAcceptance_AdvancedComputerSearches_DeleteByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdvancedComputerSearches
+	svc := acc.Client.ClassicAdvancedComputerSearches
 	ctx := context.Background()
 
 	searchName := acc.UniqueName("acc-test-search-del")
@@ -292,7 +292,7 @@ func TestAcceptance_AdvancedComputerSearches_DeleteByName(t *testing.T) {
 func TestAcceptance_AdvancedComputerSearches_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdvancedComputerSearches
+	svc := acc.Client.ClassicAdvancedComputerSearches
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

@@ -27,7 +27,7 @@ func main() {
 
 	// Example usage of GetByID
 	webhookID := 4 // Replace with the desired webhook ID
-	webhookByID, _, err := jamfClient.Webhooks.GetByID(context.Background(), webhookID)
+	webhookByID, _, err := jamfClient.ClassicWebhooks.GetByID(context.Background(), webhookID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

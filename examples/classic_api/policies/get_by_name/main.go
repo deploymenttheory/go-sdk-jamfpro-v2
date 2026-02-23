@@ -24,7 +24,7 @@ func main() {
 
 	var name string
 	if name = os.Getenv("POLICY_NAME"); name == "" {
-		list, _, err := client.Policies.List(ctx)
+		list, _, err := client.ClassicPolicies.List(ctx)
 		if err != nil || len(list.Results) == 0 {
 			log.Fatal("Set POLICY_NAME or ensure at least one policy exists")
 		}
@@ -32,7 +32,7 @@ func main() {
 		fmt.Printf("Using first policy name: %s\n", name)
 	}
 
-	policy, resp, err := client.Policies.GetByName(ctx, name)
+	policy, resp, err := client.ClassicPolicies.GetByName(ctx, name)
 	if err != nil {
 		log.Fatalf("GetByName failed: %v", err)
 	}
