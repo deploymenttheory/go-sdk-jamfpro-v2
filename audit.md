@@ -5,7 +5,7 @@ doc url.
 4. ensure that all acceptance tests are named TestAcceptance_<ServiceName>_<FunctionName>
 5. ensure that all List functions that support pagination use the GetPagination transport method
 6. ensure that jamf pro api functions that support rsqlQuery have implementation
-7. Ensure that all unit tests for List and Get use externised json for mock
+7. Ensure that all unit tests for List and Get and errors use externised json for mocks
 responses (jamf pro api) and xml (classic api) and are maximal in field definition to validate the full data model
 8. ensure that all services are registered in new.go
 9. ensure that all classic api endpoint constants are named EndpointClassic<Service_Name>
@@ -17,3 +17,4 @@ responses (jamf pro api) and xml (classic api) and are maximal in field definiti
 strategies.
 15. Ensure that all jamf pro api fuction describe the http method verb with
 the api version. e.g GetByIDV1 Or CreateV2. Classic api doesnt have versions so just a verb is okay. when there's multipe functions that don't fix this patten. use concise naming aligned with the api endpoint.
+16. ensure that each example matches the name of the crud function.

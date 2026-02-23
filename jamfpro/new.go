@@ -107,6 +107,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mdm"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/notifications"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/oauth2_session_tokens"
@@ -120,6 +121,9 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/reenrollment"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/return_to_service"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_upload"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_macos"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_mobile"
@@ -259,6 +263,7 @@ type Client struct {
 	Locales                             *locales.Service
 	MobileDeviceExtensionAttributes     *mobile_device_extension_attributes.Service
 	MobileDeviceGroups                  *mobile_device_groups.Service
+	StaticMobileDeviceGroups           *static_mobile_device_groups.Service
 	MobileDevicePrestages               *mobile_device_prestages.Service
 	Notifications                       *notifications.Service
 	OAuth2SessionTokens                 *oauth2_session_tokens.Service
@@ -271,6 +276,9 @@ type Client struct {
 	PolicyProperties                    *policy_properties.Service
 	ReturnToService                     *return_to_service.Service
 	Scripts                             *scripts.Service
+	SmartComputerGroups                 *smart_computer_groups.Service
+	SmartMobileDeviceGroups             *smart_mobile_device_groups.Service
+	StaticComputerGroups                *static_computer_groups.Service
 	SelfServicePlusSettings             *self_service_plus_settings.Service
 	SMTPServer                          *smtp_server.Service
 	StartupStatus                       *startup_status.Service
@@ -405,6 +413,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		Locales:                             locales.NewService(transport),
 		MobileDeviceExtensionAttributes:     mobile_device_extension_attributes.NewService(transport),
 		MobileDeviceGroups:                  mobile_device_groups.NewService(transport),
+		StaticMobileDeviceGroups:           static_mobile_device_groups.NewService(transport),
 		MobileDevicePrestages:               mobile_device_prestages.NewService(transport),
 		Notifications:                       notifications.NewService(transport),
 		OAuth2SessionTokens:                 oauth2_session_tokens.NewService(transport),
@@ -417,6 +426,9 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		PolicyProperties:                    policy_properties.NewService(transport),
 		ReturnToService:                     return_to_service.NewService(transport),
 		Scripts:                             scripts.NewService(transport),
+		SmartComputerGroups:                 smart_computer_groups.NewService(transport),
+		SmartMobileDeviceGroups:             smart_mobile_device_groups.NewService(transport),
+		StaticComputerGroups:                static_computer_groups.NewService(transport),
 		SelfServicePlusSettings:             self_service_plus_settings.NewService(transport),
 		SMTPServer:                          smtp_server.NewService(transport),
 		StartupStatus:                       startup_status.NewService(transport),

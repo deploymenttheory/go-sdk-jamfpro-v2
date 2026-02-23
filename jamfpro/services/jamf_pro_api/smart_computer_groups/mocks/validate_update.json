@@ -1,0 +1,16 @@
+{
+  "id": "1",
+  "siteId": "-1",
+  "name": "All Macs Updated",
+  "description": "Updated description",
+  "membershipCount": 42,
+  "criteria": [
+    {
+      "name": "Computer Name",
+      "priority": 1,
+      "andOr": "and",
+      "searchType": "is",
+      "value": "*"
+    }
+  ]
+}

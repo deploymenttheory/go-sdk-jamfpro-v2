@@ -182,7 +182,7 @@ func TestAcceptance_Engage_AddHistoryNotes(t *testing.T) {
 
 	acc.LogTestStage(t, "AddHistoryNotes", "Adding note to Engage history")
 	noteReq := &engage.RequestAddHistoryNotes{
-		Note: fmt.Sprintf("Acceptance test note - automated testing"),
+		Note: "Acceptance test note - automated testing",
 	}
 
 	result, resp, err := svc.AddHistoryNotesV2(ctx, noteReq)

@@ -1,0 +1,19 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "name": "All Macs",
+      "description": "All managed Mac computers",
+      "siteId": "-1",
+      "membershipCount": 42
+    },
+    {
+      "id": "2",
+      "name": "Test Smart Group",
+      "description": "Test group for API",
+      "siteId": "1",
+      "membershipCount": 5
+    }
+  ]
+}
