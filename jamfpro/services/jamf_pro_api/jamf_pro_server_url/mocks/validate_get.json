@@ -1,0 +1,4 @@
+{
+  "url": "https://jamf.example.com",
+  "unsecuredEnrollmentUrl": "http://jamf.example.com:8080"
+}

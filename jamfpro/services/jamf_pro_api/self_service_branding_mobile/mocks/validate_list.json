@@ -1,0 +1,22 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "brandingName": "Corporate Branding",
+      "iconId": 5,
+      "headerBackgroundColorCode": "#FFFFFF",
+      "menuIconColorCode": "#000000",
+      "brandingNameColorCode": "#333333",
+      "statusBarTextColor": "light"
+    },
+    {
+      "id": "2",
+      "brandingName": "Test Branding",
+      "headerBackgroundColorCode": "#F5F5F5",
+      "menuIconColorCode": "#0066CC",
+      "brandingNameColorCode": "#000000",
+      "statusBarTextColor": "dark"
+    }
+  ]
+}

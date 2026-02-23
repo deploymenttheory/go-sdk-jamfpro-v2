@@ -1,0 +1,10 @@
+{
+  "id": "3",
+  "applicationName": "Self Service",
+  "brandingName": "New Branding",
+  "brandingNameSecondary": "Created via API",
+  "iconId": null,
+  "brandingHeaderImageId": null,
+  "homeHeading": "Welcome",
+  "homeSubheading": "Select an option"
+}

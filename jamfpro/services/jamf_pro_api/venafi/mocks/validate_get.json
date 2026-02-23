@@ -1,0 +1,1 @@
+{"id":1,"name":"Venafi Certificate Authority","proxyAddress":"localhost:9443","revocationEnabled":true,"clientId":"jamf-pro","refreshTokenConfigured":true}

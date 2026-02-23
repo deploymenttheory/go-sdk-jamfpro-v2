@@ -1,0 +1,15 @@
+{
+  "payloadUUID": "test-uuid-12345",
+  "payloadContent": [
+    {
+      "payloadType": "com.apple.ManagedClient.preferences",
+      "payloadVersion": 1,
+      "payloadIdentifier": "com.example.app",
+      "payloadUUID": "payload-uuid-1",
+      "payloadOrganization": "Example Org",
+      "preferenceDomain": "com.example.app",
+      "payloadDisplayName": "Example Settings"
+    }
+  ],
+  "level": "System"
+}

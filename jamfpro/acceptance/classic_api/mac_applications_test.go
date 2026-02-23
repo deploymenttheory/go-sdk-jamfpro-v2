@@ -48,7 +48,7 @@ func TestAcceptance_MacApplications_Lifecycle(t *testing.T) {
 		},
 		Scope: mac_applications.SubsetScope{
 			AllComputers: boolPtr(true),
-			AllJSSUsers:   boolPtr(false),
+			AllJSSUsers:  boolPtr(false),
 		},
 		SelfService: mac_applications.SubsetSelfService{
 			InstallButtonText:      "Install",
@@ -171,7 +171,7 @@ func TestAcceptance_MacApplications_Lifecycle(t *testing.T) {
 		},
 		Scope: mac_applications.SubsetScope{
 			AllComputers: boolPtr(true),
-			AllJSSUsers:   boolPtr(false),
+			AllJSSUsers:  boolPtr(false),
 		},
 		SelfService: mac_applications.SubsetSelfService{
 			InstallButtonText:      "Install",
@@ -206,7 +206,7 @@ func TestAcceptance_MacApplications_Lifecycle(t *testing.T) {
 		},
 		Scope: mac_applications.SubsetScope{
 			AllComputers: boolPtr(true),
-			AllJSSUsers:   boolPtr(false),
+			AllJSSUsers:  boolPtr(false),
 		},
 		SelfService: mac_applications.SubsetSelfService{
 			InstallButtonText:      "Install",
@@ -274,7 +274,7 @@ func TestAcceptance_MacApplications_DeleteByName(t *testing.T) {
 		},
 		Scope: mac_applications.SubsetScope{
 			AllComputers: boolPtr(true),
-			AllJSSUsers:   boolPtr(false),
+			AllJSSUsers:  boolPtr(false),
 		},
 		SelfService: mac_applications.SubsetSelfService{
 			InstallButtonText: "Install",
@@ -356,8 +356,4 @@ func TestAcceptance_MacApplications_ValidationErrors(t *testing.T) {
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mac application ID must be a positive integer")
 	})
-}
-
-func boolPtr(b bool) *bool {
-	return &b
 }

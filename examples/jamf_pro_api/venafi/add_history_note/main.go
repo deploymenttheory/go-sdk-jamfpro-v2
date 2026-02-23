@@ -1,0 +1,35 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/venafi"
+)
+
+func main() {
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
+	}
+
+	venafiID := "1" // Replace with actual Venafi configuration ID
+	req := &venafi.HistoryNoteRequest{
+		Note: "Configuration updated via SDK",
+	}
+
+	result, _, err := jamfClient.Venafi.AddHistoryNote(context.Background(), venafiID, req)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	fmt.Printf("Added history note: %+v\n", result)
+}

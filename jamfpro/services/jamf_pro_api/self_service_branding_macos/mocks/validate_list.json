@@ -1,0 +1,25 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "applicationName": "Self Service",
+      "brandingName": "Corporate Branding",
+      "brandingNameSecondary": "IT Department",
+      "iconId": 1,
+      "brandingHeaderImageId": 2,
+      "homeHeading": "Welcome",
+      "homeSubheading": "Choose an item below"
+    },
+    {
+      "id": "2",
+      "applicationName": "Self Service",
+      "brandingName": "Test Branding",
+      "brandingNameSecondary": "",
+      "iconId": null,
+      "brandingHeaderImageId": null,
+      "homeHeading": "Home",
+      "homeSubheading": "Available items"
+    }
+  ]
+}

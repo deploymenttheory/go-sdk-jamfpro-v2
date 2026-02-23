@@ -94,13 +94,17 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jcds"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_information"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_notifications"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_server_url"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_system_initialization"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_version"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/ldap"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/local_admin_password"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/locales"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/log_flushing"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/login_customization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/macos_configuration_profile_custom_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/managed_software_updates"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mdm"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages"
@@ -109,21 +113,27 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/oidc"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/onboarding"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/patch_management"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/patch_policies"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/patch_software_title_configurations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/policy_properties"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/reenrollment"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/return_to_service"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_upload"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_macos"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_mobile"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_plus_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/service_discovery_enrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/slasa"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smtp_server"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_certificate"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_failover"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/startup_status"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/time_zones"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/venafi"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/volume_purchasing_locations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/volume_purchasing_subscriptions"
 	"go.uber.org/zap"
@@ -227,9 +237,15 @@ type Client struct {
 	LocalAdminPassword                  *local_admin_password.Service
 	LoginCustomization                  *login_customization.Service
 	LogFlushing                         *log_flushing.Service
+	MacOSConfigProfileCustomSettings    *macos_configuration_profile_custom_settings.Service
 	ManagedSoftwareUpdates              *managed_software_updates.Service
+	MDM                                 *mdm.Service
 	ServiceDiscoveryEnrollment          *service_discovery_enrollment.Service
-	SelfServiceSettings                 *self_service_settings.Service
+	SelfServiceBrandingMacOS             *self_service_branding_macos.Service
+	SelfServiceBrandingMobile            *self_service_branding_mobile.Service
+	SelfServiceBrandingUpload            *self_service_branding_upload.Service
+	SelfServiceSettings                  *self_service_settings.Service
+	SLASA                               *slasa.Service
 	Reenrollment                        *reenrollment.Service
 	AdueSessionTokenSettings            *adue_session_token_settings.Service
 	SsoCertificate                      *sso_certificate.Service
@@ -237,6 +253,8 @@ type Client struct {
 	SsoSettings                         *sso_settings.Service
 	JamfProInformation                  *jamf_pro_information.Service
 	JamfProNotifications                *jamf_pro_notifications.Service
+	JamfProServerURL                    *jamf_pro_server_url.Service
+	JamfProSystemInitialization         *jamf_pro_system_initialization.Service
 	JamfProVersion                      *jamf_pro_version.Service
 	Locales                             *locales.Service
 	MobileDeviceExtensionAttributes     *mobile_device_extension_attributes.Service
@@ -247,6 +265,7 @@ type Client struct {
 	OIDC                                *oidc.Service
 	Onboarding                          *onboarding.Service
 	Packages                            *packages.Service
+	PatchManagement                     *patch_management.Service
 	PatchPolicies                       *patch_policies.Service
 	PatchSoftwareTitleConfigurations    *patch_software_title_configurations.Service
 	PolicyProperties                    *policy_properties.Service
@@ -256,6 +275,7 @@ type Client struct {
 	SMTPServer                          *smtp_server.Service
 	StartupStatus                       *startup_status.Service
 	TimeZones                           *time_zones.Service
+	Venafi                              *venafi.Service
 	VolumePurchasingLocations           *volume_purchasing_locations.Service
 	VolumePurchasingSubscriptions       *volume_purchasing_subscriptions.Service
 }
@@ -363,9 +383,15 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		LocalAdminPassword:                  local_admin_password.NewService(transport),
 		LoginCustomization:                  login_customization.NewService(transport),
 		LogFlushing:                         log_flushing.NewService(transport),
+		MacOSConfigProfileCustomSettings:    macos_configuration_profile_custom_settings.NewService(transport),
 		ManagedSoftwareUpdates:              managed_software_updates.NewService(transport),
+		MDM:                                 mdm.NewService(transport),
 		ServiceDiscoveryEnrollment:          service_discovery_enrollment.NewService(transport),
+		SelfServiceBrandingMacOS:            self_service_branding_macos.NewService(transport),
+		SelfServiceBrandingMobile:           self_service_branding_mobile.NewService(transport),
+		SelfServiceBrandingUpload:           self_service_branding_upload.NewService(transport),
 		SelfServiceSettings:                 self_service_settings.NewService(transport),
+		SLASA:                               slasa.NewService(transport),
 		Reenrollment:                        reenrollment.NewService(transport),
 		AdueSessionTokenSettings:            adue_session_token_settings.NewService(transport),
 		SsoCertificate:                      sso_certificate.NewService(transport),
@@ -373,6 +399,8 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		SsoSettings:                         sso_settings.NewService(transport),
 		JamfProInformation:                  jamf_pro_information.NewService(transport),
 		JamfProNotifications:                jamf_pro_notifications.NewService(transport),
+		JamfProServerURL:                    jamf_pro_server_url.NewService(transport),
+		JamfProSystemInitialization:         jamf_pro_system_initialization.NewService(transport),
 		JamfProVersion:                      jamf_pro_version.NewService(transport),
 		Locales:                             locales.NewService(transport),
 		MobileDeviceExtensionAttributes:     mobile_device_extension_attributes.NewService(transport),
@@ -383,6 +411,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		OIDC:                                oidc.NewService(transport),
 		Onboarding:                          onboarding.NewService(transport),
 		Packages:                            packages.NewService(transport),
+		PatchManagement:                     patch_management.NewService(transport),
 		PatchPolicies:                       patch_policies.NewService(transport),
 		PatchSoftwareTitleConfigurations:    patch_software_title_configurations.NewService(transport),
 		PolicyProperties:                    policy_properties.NewService(transport),
@@ -392,6 +421,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		SMTPServer:                          smtp_server.NewService(transport),
 		StartupStatus:                       startup_status.NewService(transport),
 		TimeZones:                           time_zones.NewService(transport),
+		Venafi:                              venafi.NewService(transport),
 		VolumePurchasingLocations:           volume_purchasing_locations.NewService(transport),
 		VolumePurchasingSubscriptions:       volume_purchasing_subscriptions.NewService(transport),
 	}
