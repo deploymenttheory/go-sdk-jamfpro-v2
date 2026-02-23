@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<computer_invitations>
+  <size>2</size>
+  <computer_invitation>
+    <id>1</id>
+    <invitation>1234567890</invitation>
+    <invitation_type>USER_INITIATED_ENROLLMENT</invitation_type>
+    <expiration_date>2025-12-31 23:59:59</expiration_date>
+    <expiration_date_utc>2025-12-31T23:59:59.000+0000</expiration_date_utc>
+    <expiration_date_epoch>1767225599</expiration_date_epoch>
+  </computer_invitation>
+  <computer_invitation>
+    <id>2</id>
+    <invitation>9876543210</invitation>
+    <invitation_type>USER_INITIATED_ENROLLMENT</invitation_type>
+    <expiration_date>2025-12-30 12:00:00</expiration_date>
+    <expiration_date_utc>2025-12-30T12:00:00.000+0000</expiration_date_utc>
+    <expiration_date_epoch>1767096000</expiration_date_epoch>
+  </computer_invitation>
+</computer_invitations>

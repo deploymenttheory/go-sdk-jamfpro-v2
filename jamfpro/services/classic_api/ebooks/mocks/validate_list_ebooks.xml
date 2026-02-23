@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ebooks>
+  <size>2</size>
+  <ebook>
+    <id>1</id>
+    <name>Sample Ebook 1</name>
+  </ebook>
+  <ebook>
+    <id>2</id>
+    <name>Sample Ebook 2</name>
+  </ebook>
+</ebooks>

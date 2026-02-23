@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mobile_devices>
+  <size>2</size>
+  <mobile_device>
+    <id>1</id>
+    <name>iPhone-01</name>
+    <device_name>John's iPhone</device_name>
+    <udid>00008030-001234567890001E</udid>
+    <serial_number>DNQPX1234567</serial_number>
+    <managed>true</managed>
+    <supervised>true</supervised>
+    <model>iPhone</model>
+    <model_identifier>iPhone14,2</model_identifier>
+    <model_display>iPhone 13 Pro</model_display>
+    <username>jdoe</username>
+  </mobile_device>
+  <mobile_device>
+    <id>2</id>
+    <name>iPad-01</name>
+    <device_name>Corporate iPad</device_name>
+    <udid>00008110-001234567890002E</udid>
+    <serial_number>F2LQPX1234567</serial_number>
+    <managed>true</managed>
+    <supervised>false</supervised>
+    <model>iPad</model>
+    <model_identifier>iPad13,4</model_identifier>
+    <model_display>iPad Pro 12.9-inch</model_display>
+    <username>jdoe</username>
+  </mobile_device>
+</mobile_devices>

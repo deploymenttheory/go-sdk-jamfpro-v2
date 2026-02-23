@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<os_x_configuration_profile>
+  <general>
+    <id>1</id>
+    <name>Wi-Fi Profile</name>
+    <description>Corporate Wi-Fi configuration</description>
+    <distribution_method>Install Automatically</distribution_method>
+    <user_removable>false</user_removable>
+    <level>System</level>
+    <site>
+      <id>-1</id>
+      <name>None</name>
+    </site>
+    <category>
+      <id>1</id>
+      <name>Configuration Profiles</name>
+    </category>
+  </general>
+  <scope>
+    <all_computers>true</all_computers>
+    <all_jss_users>false</all_jss_users>
+  </scope>
+  <self_service>
+    <self_service_display_name>Install Wi-Fi</self_service_display_name>
+    <install_button_text>Install</install_button_text>
+    <force_users_to_view_description>false</force_users_to_view_description>
+    <feature_on_main_page>false</feature_on_main_page>
+  </self_service>
+</os_x_configuration_profile>

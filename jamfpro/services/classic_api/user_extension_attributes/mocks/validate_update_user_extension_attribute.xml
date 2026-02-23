@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user_extension_attribute>
+  <id>1</id>
+  <name>Department Updated</name>
+  <description>Updated user department</description>
+  <data_type>String</data_type>
+  <input_type>
+    <type>Text Field</type>
+  </input_type>
+</user_extension_attribute>

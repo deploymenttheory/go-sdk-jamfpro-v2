@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<computer_invitation>
+  <id>1</id>
+  <invitation>1234567890</invitation>
+  <invitation_status>PENDING</invitation_status>
+  <invitation_type>USER_INITIATED_ENROLLMENT</invitation_type>
+  <expiration_date>2025-12-31 23:59:59</expiration_date>
+  <expiration_date_utc>2025-12-31T23:59:59.000+0000</expiration_date_utc>
+  <expiration_date_epoch>1767225599</expiration_date_epoch>
+  <multiple_users_allowed>false</multiple_users_allowed>
+  <times_used>0</times_used>
+  <create_account_if_does_not_exist>true</create_account_if_does_not_exist>
+  <hide_account>false</hide_account>
+  <lock_down_ssh>false</lock_down_ssh>
+  <keep_existing_site_membership>true</keep_existing_site_membership>
+  <site>
+    <id>-1</id>
+    <name>None</name>
+  </site>
+  <enroll_into_site>
+    <id>-1</id>
+    <name>None</name>
+  </enroll_into_site>
+</computer_invitation>

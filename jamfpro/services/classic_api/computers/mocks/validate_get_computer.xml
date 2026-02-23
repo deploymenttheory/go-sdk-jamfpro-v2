@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<computer>
+  <general>
+    <id>1</id>
+    <name>MacBook-Pro-01</name>
+    <mac_address>00:11:22:33:44:55</mac_address>
+    <serial_number>C02XYZ123456</serial_number>
+    <site>
+      <id>-1</id>
+      <name>None</name>
+    </site>
+  </general>
+  <location>
+    <username>testuser</username>
+    <realname>Test User</realname>
+    <department>IT</department>
+  </location>
+  <purchasing/>
+  <peripherals>
+    <size>0</size>
+  </peripherals>
+  <hardware>
+    <make>Apple Inc.</make>
+    <model>MacBook Pro</model>
+    <os_name>macOS</os_name>
+    <os_version>14.0</os_version>
+  </hardware>
+  <security/>
+  <software/>
+  <groups_accounts/>
+</computer>

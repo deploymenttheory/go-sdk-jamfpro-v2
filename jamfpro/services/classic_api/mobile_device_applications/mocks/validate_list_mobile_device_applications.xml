@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mobile_device_applications>
+  <size>2</size>
+  <mobile_device_application>
+    <id>1</id>
+    <name>Sample iOS App 1</name>
+    <display_name>Sample iOS App 1</display_name>
+    <bundle_id>com.example.app1</bundle_id>
+    <version>1.0</version>
+    <internal_app>false</internal_app>
+  </mobile_device_application>
+  <mobile_device_application>
+    <id>2</id>
+    <name>Sample iOS App 2</name>
+    <display_name>Sample iOS App 2</display_name>
+    <bundle_id>com.example.app2</bundle_id>
+    <version>2.0</version>
+    <internal_app>true</internal_app>
+  </mobile_device_application>
+</mobile_device_applications>

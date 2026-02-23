@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dock_items>
+  <size>2</size>
+  <dock_item>
+    <id>1</id>
+    <name>Safari</name>
+  </dock_item>
+  <dock_item>
+    <id>2</id>
+    <name>Finder</name>
+  </dock_item>
+</dock_items>

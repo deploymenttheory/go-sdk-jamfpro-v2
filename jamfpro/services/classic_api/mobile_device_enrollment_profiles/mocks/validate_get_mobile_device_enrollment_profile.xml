@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mobile_device_enrollment_profile>
+  <general>
+    <id>1</id>
+    <name>Test Enrollment Profile</name>
+    <invitation>1234567890.123456</invitation>
+    <udid></udid>
+    <description>Test profile for mobile device enrollment</description>
+  </general>
+  <location>
+    <username>jdoe</username>
+    <realname>John Doe</realname>
+    <real_name>John Doe</real_name>
+    <email_address>jdoe@example.com</email_address>
+    <position>Engineer</position>
+    <phone>555-1234</phone>
+    <phone_number>555-1234</phone_number>
+    <department>IT</department>
+    <building>Main</building>
+    <room>101</room>
+  </location>
+  <purchasing>
+    <is_purchased>true</is_purchased>
+    <is_leased>false</is_leased>
+    <po_number>PO-001</po_number>
+    <vendor>Apple</vendor>
+    <applecare_id>AC-123</applecare_id>
+    <purchase_price>999.99</purchase_price>
+    <purchasing_account>IT Budget</purchasing_account>
+    <po_date>2024-01-15</po_date>
+    <po_date_epoch>1705305600</po_date_epoch>
+    <po_date_utc>2024-01-15T00:00:00Z</po_date_utc>
+    <warranty_expires>2027-01-15</warranty_expires>
+    <warranty_expires_epoch>1736899200</warranty_expires_epoch>
+    <warranty_expires_utc>2027-01-15T00:00:00Z</warranty_expires_utc>
+    <lease_expires></lease_expires>
+    <lease_expires_epoch>0</lease_expires_epoch>
+    <lease_expires_utc></lease_expires_utc>
+    <life_expectancy>36</life_expectancy>
+    <purchasing_contact>procurement@example.com</purchasing_contact>
+  </purchasing>
+  <attachments>
+    <attachment>
+      <id>1</id>
+      <filename>profile.mobileconfig</filename>
+      <uri>https://jamf.example.com/attachment/1</uri>
+    </attachment>
+  </attachments>
+</mobile_device_enrollment_profile>

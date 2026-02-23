@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mobile_device_groups>
+  <size>2</size>
+  <mobile_device_group>
+    <id>1</id>
+    <name>All Mobile Devices</name>
+    <is_smart>true</is_smart>
+  </mobile_device_group>
+  <mobile_device_group>
+    <id>2</id>
+    <name>Static Mobile Group</name>
+    <is_smart>false</is_smart>
+  </mobile_device_group>
+</mobile_device_groups>

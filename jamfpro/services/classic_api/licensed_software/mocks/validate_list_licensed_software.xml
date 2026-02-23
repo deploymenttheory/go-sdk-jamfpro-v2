@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<licensed_software>
+  <size>2</size>
+  <licensed_software>
+    <id>1</id>
+    <name>Sample Licensed Software 1</name>
+  </licensed_software>
+  <licensed_software>
+    <id>2</id>
+    <name>Sample Licensed Software 2</name>
+  </licensed_software>
+</licensed_software>

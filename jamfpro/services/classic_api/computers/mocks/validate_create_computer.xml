@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<computer>
+  <general>
+    <id>123</id>
+    <name>test-computer-01</name>
+    <mac_address>00:11:22:33:44:55</mac_address>
+    <serial_number>C02XYZ123456</serial_number>
+    <site>
+      <id>-1</id>
+      <name>none</name>
+    </site>
+  </general>
+  <location/>
+  <purchasing/>
+  <peripherals>
+    <size>0</size>
+  </peripherals>
+  <hardware/>
+  <security/>
+  <software/>
+  <groups_accounts/>
+</computer>

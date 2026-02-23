@@ -1,0 +1,42 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/user_extension_attributes"
+)
+
+func main() {
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
+	}
+
+	attrName := "Department" // Replace with the desired user extension attribute name
+	updateReq := &user_extension_attributes.RequestUserExtensionAttribute{
+		Name:        "Department",
+		Description: "Updated user department",
+		DataType:    "String",
+		InputType: user_extension_attributes.ResourceUserExtensionAttributeInputType{
+			Type: "Text Field",
+		},
+	}
+
+	updated, _, err := jamfClient.ClassicUserExtensionAttributes.UpdateByName(context.Background(), attrName, updateReq)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	fmt.Printf("User Extension Attribute Updated: ID=%d name=%q\n", updated.ID, updated.Name)
+}

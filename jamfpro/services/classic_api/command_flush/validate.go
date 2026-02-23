@@ -15,15 +15,6 @@ func validateIDType(idType string) error {
 	return nil
 }
 
-// validateStatus validates the command status.
-func validateStatus(status string) error {
-	validStatuses := []string{"Pending", "Failed", "Pending+Failed"}
-	if !slices.Contains(validStatuses, status) {
-		return fmt.Errorf("invalid status: %s (must be one of: %s)", status, strings.Join(validStatuses, ", "))
-	}
-	return nil
-}
-
 // validateCommandFlushRequest validates the XML-based command flush request.
 func validateCommandFlushRequest(req *RequestCommandFlush) error {
 	if req == nil {
@@ -38,5 +29,14 @@ func validateCommandFlushRequest(req *RequestCommandFlush) error {
 		return fmt.Errorf("at least one device list (mobile_devices or computers) must be provided")
 	}
 
+	return nil
+}
+
+// validateStatus validates the command status.
+func validateStatus(status string) error {
+	validStatuses := []string{"Pending", "Failed", "Pending+Failed"}
+	if !slices.Contains(validStatuses, status) {
+		return fmt.Errorf("invalid status: %s (must be one of: %s)", status, strings.Join(validStatuses, ", "))
+	}
 	return nil
 }

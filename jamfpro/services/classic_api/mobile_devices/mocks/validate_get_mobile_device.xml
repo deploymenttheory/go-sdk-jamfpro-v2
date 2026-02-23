@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mobile_device>
+  <general>
+    <id>1</id>
+    <display_name>iPhone-01</display_name>
+    <device_name>John's iPhone</device_name>
+    <name>iPhone-01</name>
+    <serial_number>DNQPX1234567</serial_number>
+    <udid>00008030-001234567890001E</udid>
+    <os_type>iOS</os_type>
+    <os_version>17.0</os_version>
+    <os_build>21A328</os_build>
+    <model>iPhone</model>
+    <model_identifier>iPhone14,2</model_identifier>
+    <model_display>iPhone 13 Pro</model_display>
+    <managed>true</managed>
+    <supervised>true</supervised>
+    <wifi_mac_address>00:11:22:33:44:55</wifi_mac_address>
+  </general>
+  <location>
+    <username>jdoe</username>
+    <realname>John Doe</realname>
+    <email_address>jdoe@example.com</email_address>
+    <department>IT</department>
+  </location>
+  <purchasing/>
+  <security_object/>
+  <network/>
+  <mobile_device_groups/>
+  <extension_attributes/>
+</mobile_device>

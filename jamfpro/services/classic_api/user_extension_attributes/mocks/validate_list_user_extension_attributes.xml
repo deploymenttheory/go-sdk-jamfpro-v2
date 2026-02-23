@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user_extension_attributes>
+  <size>2</size>
+  <user_extension_attribute>
+    <id>1</id>
+    <name>Department</name>
+  </user_extension_attribute>
+  <user_extension_attribute>
+    <id>2</id>
+    <name>Employee ID</name>
+  </user_extension_attribute>
+</user_extension_attributes>

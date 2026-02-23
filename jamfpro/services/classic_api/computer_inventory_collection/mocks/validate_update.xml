@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<computer_inventory_collection>
+    <local_user_accounts>true</local_user_accounts>
+    <home_directory_sizes>true</home_directory_sizes>
+    <hidden_accounts>true</hidden_accounts>
+    <printers>true</printers>
+    <active_services>true</active_services>
+    <mobile_device_app_purchasing_info>false</mobile_device_app_purchasing_info>
+    <computer_location_information>true</computer_location_information>
+    <package_receipts>true</package_receipts>
+    <available_software_updates>true</available_software_updates>
+    <inclue_applications>true</inclue_applications>
+    <inclue_fonts>true</inclue_fonts>
+    <inclue_plugins>true</inclue_plugins>
+    <applications/>
+    <fonts/>
+    <plugins/>
+</computer_inventory_collection>

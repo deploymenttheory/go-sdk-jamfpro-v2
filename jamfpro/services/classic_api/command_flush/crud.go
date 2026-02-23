@@ -10,35 +10,52 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
-// CommandFlushServiceInterface defines the operations available in the command flush service.
-// Doc: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
-// Doc: https://developer.jamf.com/jamf-pro/reference/commandflush-1
-type CommandFlushServiceInterface interface {
-	// FlushByIDAndStatus clears MDM commands for a specific device or group by ID and status.
-	// idType: computers, computergroups, mobiledevices, or mobiledevicegroups
-	// status: Pending, Failed, or Pending+Failed
-	FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*interfaces.Response, error)
+type (
+	// CommandFlushServiceInterface defines the interface for Classic API command flush operations.
+	//
+	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
+	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
+	CommandFlushServiceInterface interface {
+		// FlushByIDAndStatus clears MDM commands for a specific device or group by ID and status.
+		//
+		// Valid idType values: computers, computergroups, mobiledevices, or mobiledevicegroups
+		// Valid status values: Pending, Failed, or Pending+Failed
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
+		FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*interfaces.Response, error)
 
-	// FlushWithXML clears MDM commands using an XML request body for batch operations.
-	FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*interfaces.Response, error)
-}
+		// FlushWithXML clears MDM commands using an XML request body for batch operations.
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
+		FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*interfaces.Response, error)
+	}
 
-// Service provides access to command flush operations.
-// Doc: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
-// Doc: https://developer.jamf.com/jamf-pro/reference/commandflush-1
-type Service struct {
-	client interfaces.HTTPClient
-}
+	// Service handles communication with the command-flush-related Classic API methods.
+	//
+	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
+	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
+	Service struct {
+		client interfaces.HTTPClient
+	}
+)
 
-// NewService creates a new command flush service.
+var _ CommandFlushServiceInterface = (*Service)(nil)
+
+// NewService returns a new command flush Service backed by the provided HTTP client.
 func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
+// -----------------------------------------------------------------------------
+// Classic API - Command Flush Operations
+// -----------------------------------------------------------------------------
+
 // FlushByIDAndStatus clears MDM commands for a specific device or group by ID and status.
-// idType: computers, computergroups, mobiledevices, or mobiledevicegroups
-// status: Pending, Failed, or Pending+Failed
-// Doc: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
+//
+// Valid idType values: computers, computergroups, mobiledevices, or mobiledevicegroups
+// Valid status values: Pending, Failed, or Pending+Failed
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
 func (s *Service) FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*interfaces.Response, error) {
 	if err := validateIDType(idType); err != nil {
 		return nil, err
@@ -67,7 +84,8 @@ func (s *Service) FlushByIDAndStatus(ctx context.Context, idType string, id stri
 }
 
 // FlushWithXML clears MDM commands using an XML request body for batch operations.
-// Doc: https://developer.jamf.com/jamf-pro/reference/commandflush-1
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
 func (s *Service) FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*interfaces.Response, error) {
 	if err := validateCommandFlushRequest(req); err != nil {
 		return nil, err

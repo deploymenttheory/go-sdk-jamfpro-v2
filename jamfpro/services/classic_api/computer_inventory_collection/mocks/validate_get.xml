@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<computer_inventory_collection>
+    <local_user_accounts>true</local_user_accounts>
+    <home_directory_sizes>false</home_directory_sizes>
+    <hidden_accounts>true</hidden_accounts>
+    <printers>true</printers>
+    <active_services>false</active_services>
+    <mobile_device_app_purchasing_info>false</mobile_device_app_purchasing_info>
+    <computer_location_information>true</computer_location_information>
+    <package_receipts>true</package_receipts>
+    <available_software_updates>true</available_software_updates>
+    <inclue_applications>true</inclue_applications>
+    <inclue_fonts>false</inclue_fonts>
+    <inclue_plugins>false</inclue_plugins>
+    <applications>
+        <application>
+            <path>/Applications/Safari.app</path>
+            <platform>Mac</platform>
+        </application>
+        <application>
+            <path>/Applications/Utilities/Terminal.app</path>
+            <platform>Mac</platform>
+        </application>
+    </applications>
+    <fonts/>
+    <plugins/>
+</computer_inventory_collection>

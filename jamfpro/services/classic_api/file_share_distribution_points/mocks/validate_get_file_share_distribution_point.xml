@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<distribution_point>
+  <id>1</id>
+  <name>Main File Share DP</name>
+  <ip_address>192.168.1.100</ip_address>
+  <is_master>true</is_master>
+  <enable_load_balancing>false</enable_load_balancing>
+  <local_path>/path/to/share</local_path>
+  <connection_type>SMB</connection_type>
+  <share_name>JamfShare</share_name>
+  <share_port>445</share_port>
+  <http_downloads_enabled>true</http_downloads_enabled>
+  <http_url>http://192.168.1.100:8080</http_url>
+  <no_authentication_required>false</no_authentication_required>
+  <username_password_required>true</username_password_required>
+</distribution_point>

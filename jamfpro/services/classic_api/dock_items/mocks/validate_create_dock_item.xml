@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dock_item>
+  <id>123</id>
+  <name>Test Dock Item</name>
+  <type>App</type>
+  <path>/Applications/Test.app</path>
+  <contents></contents>
+</dock_item>

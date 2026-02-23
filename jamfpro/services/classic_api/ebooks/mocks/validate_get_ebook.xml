@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ebook>
+  <general>
+    <id>1</id>
+    <name>Sample Ebook</name>
+    <author>Test Author</author>
+    <version>1.0</version>
+    <free>true</free>
+    <url>https://example.com/ebook.pdf</url>
+    <deployment_type>Install Automatically/Prompt Users to Install</deployment_type>
+    <file_type>PDF</file_type>
+    <deploy_as_managed>false</deploy_as_managed>
+    <category>
+      <id>1</id>
+      <name>Ebooks</name>
+    </category>
+    <self_service_icon>
+      <id>0</id>
+      <uri/>
+      <data/>
+      <filename/>
+    </self_service_icon>
+    <site>
+      <id>-1</id>
+      <name>None</name>
+    </site>
+  </general>
+  <scope>
+    <all_computers>true</all_computers>
+    <all_mobile_devices>false</all_mobile_devices>
+    <all_jss_users>false</all_jss_users>
+    <limitations/>
+    <exclusions/>
+  </scope>
+  <self_service>
+    <self_service_display_name>Sample Ebook</self_service_display_name>
+    <install_button_text>Install</install_button_text>
+    <self_service_description/>
+    <force_users_to_view_description>false</force_users_to_view_description>
+    <self_service_icon>
+      <id>0</id>
+      <uri/>
+      <data/>
+      <filename/>
+    </self_service_icon>
+    <feature_on_main_page>false</feature_on_main_page>
+    <self_service_categories/>
+    <notification>false</notification>
+    <notification_subject/>
+    <notification_message/>
+  </self_service>
+</ebook>

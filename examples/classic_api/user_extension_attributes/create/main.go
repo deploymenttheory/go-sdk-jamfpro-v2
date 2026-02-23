@@ -1,0 +1,41 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/user_extension_attributes"
+)
+
+func main() {
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
+	}
+
+	createReq := &user_extension_attributes.RequestUserExtensionAttribute{
+		Name:        "Department",
+		Description: "User department",
+		DataType:    "String",
+		InputType: user_extension_attributes.ResourceUserExtensionAttributeInputType{
+			Type: "Text Field",
+		},
+	}
+
+	created, _, err := jamfClient.ClassicUserExtensionAttributes.Create(context.Background(), createReq)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	fmt.Printf("User Extension Attribute Created: ID=%d name=%q\n", created.ID, created.Name)
+}

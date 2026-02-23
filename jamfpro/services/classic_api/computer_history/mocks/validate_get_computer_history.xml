@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<computer_history>
+  <general>
+    <id>1</id>
+    <name>Test-MacBook-Pro</name>
+    <udid>00000000-0000-0000-0000-000000000001</udid>
+    <serial_number>C02XYZ123456</serial_number>
+    <mac_address>00:11:22:33:44:55</mac_address>
+  </general>
+  <computer_usage_logs>
+    <usage_log>
+      <event>Login</event>
+      <username>admin</username>
+      <date_time>2024-01-15 10:30:00</date_time>
+      <date_time_epoch>1705312200</date_time_epoch>
+      <date_time_utc>2024-01-15T10:30:00Z</date_time_utc>
+    </usage_log>
+  </computer_usage_logs>
+  <audits>
+    <audit>
+      <event>Policy executed</event>
+      <username>jamfadmin</username>
+      <date_time>2024-01-15 09:00:00</date_time>
+      <date_time_epoch>1705308000</date_time_epoch>
+      <date_time_utc>2024-01-15T09:00:00Z</date_time_utc>
+    </audit>
+  </audits>
+  <policy_logs>
+    <policy_log>
+      <policy_id>1</policy_id>
+      <policy_name>Test Policy</policy_name>
+      <username>jamfadmin</username>
+      <date_time>2024-01-15 09:00:00</date_time>
+      <date_time_epoch>1705308000</date_time_epoch>
+      <date_time_utc>2024-01-15T09:00:00Z</date_time_utc>
+      <status>Completed</status>
+    </policy_log>
+  </policy_logs>
+  <commands>
+    <completed>
+      <command>
+        <name>Update Inventory</name>
+        <status>Completed</status>
+        <issued>2024-01-15 08:00:00</issued>
+        <issued_epoch>1705304400</issued_epoch>
+        <completed>2024-01-15 08:01:00</completed>
+        <completed_epoch>1705304460</completed_epoch>
+      </command>
+    </completed>
+  </commands>
+</computer_history>

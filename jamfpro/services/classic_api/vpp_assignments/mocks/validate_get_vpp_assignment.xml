@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vpp_assignment>
+  <general>
+    <id>1</id>
+    <name>Test VPP Assignment</name>
+    <vpp_admin_account_id>1</vpp_admin_account_id>
+    <vpp_admin_account_name>Test VPP Account</vpp_admin_account_name>
+  </general>
+  <ios_apps>
+    <ios_app>
+      <adam_id>123456789</adam_id>
+      <name>Test iOS App</name>
+    </ios_app>
+  </ios_apps>
+  <mac_apps>
+    <mac_app>
+      <adam_id>987654321</adam_id>
+      <name>Test Mac App</name>
+    </mac_app>
+  </mac_apps>
+  <ebooks/>
+  <scope>
+    <all_jss_users>false</all_jss_users>
+    <jss_users>
+      <user>
+        <id>1</id>
+        <name>testuser</name>
+      </user>
+    </jss_users>
+    <jss_user_groups/>
+    <limitations>
+      <user_groups/>
+    </limitations>
+    <exclusions>
+      <jss_users/>
+      <user_groups/>
+      <jss_user_groups/>
+    </exclusions>
+  </scope>
+</vpp_assignment>

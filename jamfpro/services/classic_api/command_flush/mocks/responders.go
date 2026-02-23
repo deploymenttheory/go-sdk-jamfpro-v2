@@ -40,34 +40,99 @@ func NewCommandFlushMock() *CommandFlushMock {
 
 // RegisterMocks registers all standard success responses in one call.
 func (m *CommandFlushMock) RegisterMocks() {
-	m.RegisterFlushByIDAndStatusComputersMock()
-	m.RegisterFlushByIDAndStatusComputerGroupsMock()
-	m.RegisterFlushByIDAndStatusMobileDevicesMock()
-	m.RegisterFlushByIDAndStatusMobileDeviceGroupsMock()
+	// Computers - all status combinations
+	m.RegisterFlushComputersPendingMock()
+	m.RegisterFlushComputersFailedMock()
+	m.RegisterFlushComputersPendingAndFailedMock()
+
+	// Computer groups - all status combinations
+	m.RegisterFlushComputerGroupsPendingMock()
+	m.RegisterFlushComputerGroupsFailedMock()
+	m.RegisterFlushComputerGroupsPendingAndFailedMock()
+
+	// Mobile devices - all status combinations
+	m.RegisterFlushMobileDevicesPendingMock()
+	m.RegisterFlushMobileDevicesFailedMock()
+	m.RegisterFlushMobileDevicesPendingAndFailedMock()
+
+	// Mobile device groups - all status combinations
+	m.RegisterFlushMobileDeviceGroupsPendingMock()
+	m.RegisterFlushMobileDeviceGroupsFailedMock()
+	m.RegisterFlushMobileDeviceGroupsPendingAndFailedMock()
+
+	// XML batch operation
 	m.RegisterFlushWithXMLMock()
 }
 
-// ---- Success responders ----
+// ---- Success responders - Computers ----
 
-// RegisterFlushByIDAndStatusComputersMock registers DELETE /JSSResource/commandflush/computers/id/123/status/Pending → 204.
-func (m *CommandFlushMock) RegisterFlushByIDAndStatusComputersMock() {
+// RegisterFlushComputersPendingMock registers DELETE /JSSResource/commandflush/computers/id/123/status/Pending → 204.
+func (m *CommandFlushMock) RegisterFlushComputersPendingMock() {
 	m.register("DELETE", "/JSSResource/commandflush/computers/id/123/status/Pending", 204, "")
 }
 
-// RegisterFlushByIDAndStatusComputerGroupsMock registers DELETE /JSSResource/commandflush/computergroups/id/456/status/Failed → 204.
-func (m *CommandFlushMock) RegisterFlushByIDAndStatusComputerGroupsMock() {
+// RegisterFlushComputersFailedMock registers DELETE /JSSResource/commandflush/computers/id/123/status/Failed → 204.
+func (m *CommandFlushMock) RegisterFlushComputersFailedMock() {
+	m.register("DELETE", "/JSSResource/commandflush/computers/id/123/status/Failed", 204, "")
+}
+
+// RegisterFlushComputersPendingAndFailedMock registers DELETE /JSSResource/commandflush/computers/id/123/status/Pending%2BFailed → 204.
+func (m *CommandFlushMock) RegisterFlushComputersPendingAndFailedMock() {
+	m.register("DELETE", "/JSSResource/commandflush/computers/id/123/status/Pending%2BFailed", 204, "")
+}
+
+// ---- Success responders - Computer Groups ----
+
+// RegisterFlushComputerGroupsPendingMock registers DELETE /JSSResource/commandflush/computergroups/id/456/status/Pending → 204.
+func (m *CommandFlushMock) RegisterFlushComputerGroupsPendingMock() {
+	m.register("DELETE", "/JSSResource/commandflush/computergroups/id/456/status/Pending", 204, "")
+}
+
+// RegisterFlushComputerGroupsFailedMock registers DELETE /JSSResource/commandflush/computergroups/id/456/status/Failed → 204.
+func (m *CommandFlushMock) RegisterFlushComputerGroupsFailedMock() {
 	m.register("DELETE", "/JSSResource/commandflush/computergroups/id/456/status/Failed", 204, "")
 }
 
-// RegisterFlushByIDAndStatusMobileDevicesMock registers DELETE /JSSResource/commandflush/mobiledevices/id/789/status/Pending%2BFailed → 204.
-func (m *CommandFlushMock) RegisterFlushByIDAndStatusMobileDevicesMock() {
+// RegisterFlushComputerGroupsPendingAndFailedMock registers DELETE /JSSResource/commandflush/computergroups/id/456/status/Pending%2BFailed → 204.
+func (m *CommandFlushMock) RegisterFlushComputerGroupsPendingAndFailedMock() {
+	m.register("DELETE", "/JSSResource/commandflush/computergroups/id/456/status/Pending%2BFailed", 204, "")
+}
+
+// ---- Success responders - Mobile Devices ----
+
+// RegisterFlushMobileDevicesPendingMock registers DELETE /JSSResource/commandflush/mobiledevices/id/789/status/Pending → 204.
+func (m *CommandFlushMock) RegisterFlushMobileDevicesPendingMock() {
+	m.register("DELETE", "/JSSResource/commandflush/mobiledevices/id/789/status/Pending", 204, "")
+}
+
+// RegisterFlushMobileDevicesFailedMock registers DELETE /JSSResource/commandflush/mobiledevices/id/789/status/Failed → 204.
+func (m *CommandFlushMock) RegisterFlushMobileDevicesFailedMock() {
+	m.register("DELETE", "/JSSResource/commandflush/mobiledevices/id/789/status/Failed", 204, "")
+}
+
+// RegisterFlushMobileDevicesPendingAndFailedMock registers DELETE /JSSResource/commandflush/mobiledevices/id/789/status/Pending%2BFailed → 204.
+func (m *CommandFlushMock) RegisterFlushMobileDevicesPendingAndFailedMock() {
 	m.register("DELETE", "/JSSResource/commandflush/mobiledevices/id/789/status/Pending%2BFailed", 204, "")
 }
 
-// RegisterFlushByIDAndStatusMobileDeviceGroupsMock registers DELETE /JSSResource/commandflush/mobiledevicegroups/id/101112/status/Pending → 204.
-func (m *CommandFlushMock) RegisterFlushByIDAndStatusMobileDeviceGroupsMock() {
+// ---- Success responders - Mobile Device Groups ----
+
+// RegisterFlushMobileDeviceGroupsPendingMock registers DELETE /JSSResource/commandflush/mobiledevicegroups/id/101112/status/Pending → 204.
+func (m *CommandFlushMock) RegisterFlushMobileDeviceGroupsPendingMock() {
 	m.register("DELETE", "/JSSResource/commandflush/mobiledevicegroups/id/101112/status/Pending", 204, "")
 }
+
+// RegisterFlushMobileDeviceGroupsFailedMock registers DELETE /JSSResource/commandflush/mobiledevicegroups/id/101112/status/Failed → 204.
+func (m *CommandFlushMock) RegisterFlushMobileDeviceGroupsFailedMock() {
+	m.register("DELETE", "/JSSResource/commandflush/mobiledevicegroups/id/101112/status/Failed", 204, "")
+}
+
+// RegisterFlushMobileDeviceGroupsPendingAndFailedMock registers DELETE /JSSResource/commandflush/mobiledevicegroups/id/101112/status/Pending%2BFailed → 204.
+func (m *CommandFlushMock) RegisterFlushMobileDeviceGroupsPendingAndFailedMock() {
+	m.register("DELETE", "/JSSResource/commandflush/mobiledevicegroups/id/101112/status/Pending%2BFailed", 204, "")
+}
+
+// ---- Success responders - XML Batch ----
 
 // RegisterFlushWithXMLMock registers DELETE /JSSResource/commandflush → 204.
 func (m *CommandFlushMock) RegisterFlushWithXMLMock() {

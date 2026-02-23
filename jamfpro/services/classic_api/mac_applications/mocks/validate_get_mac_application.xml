@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mac_application>
+  <general>
+    <id>1</id>
+    <name>Sample Mac App</name>
+    <version>1.0</version>
+    <is_free>true</is_free>
+    <bundle_id>com.example.app</bundle_id>
+    <url>https://example.com</url>
+    <category>
+      <id>1</id>
+      <name>Productivity</name>
+    </category>
+    <site>
+      <id>-1</id>
+      <name>None</name>
+    </site>
+    <deployment_type>Install Automatically/Prompt Users to Install</deployment_type>
+  </general>
+  <scope>
+    <all_computers>true</all_computers>
+    <all_jss_users>false</all_jss_users>
+    <limitations/>
+    <exclusions/>
+  </scope>
+  <self_service>
+    <install_button_text>Install</install_button_text>
+    <self_service_description>Sample Mac application</self_service_description>
+    <force_users_to_view_description>false</force_users_to_view_description>
+    <self_service_icon>
+      <id>0</id>
+      <uri/>
+      <data/>
+      <filename/>
+    </self_service_icon>
+    <feature_on_main_page>false</feature_on_main_page>
+    <notification/>
+    <notification_subject/>
+    <notification_message/>
+  </self_service>
+</mac_application>

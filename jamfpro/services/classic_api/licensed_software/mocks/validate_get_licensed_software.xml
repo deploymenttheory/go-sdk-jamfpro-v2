@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<licensed_software>
+  <general>
+    <id>1</id>
+    <name>Sample Licensed Software</name>
+    <publisher>Test Publisher</publisher>
+    <platform>Mac</platform>
+    <send_email_on_violation>false</send_email_on_violation>
+    <remove_titles_from_inventory_reports>false</remove_titles_from_inventory_reports>
+    <exclude_titles_purchased_from_app_store>false</exclude_titles_purchased_from_app_store>
+    <notes>Test notes</notes>
+    <site>
+      <id>-1</id>
+      <name>None</name>
+    </site>
+  </general>
+  <software_definitions/>
+  <font_definitions/>
+  <plugin_definitions/>
+  <licenses/>
+</licensed_software>

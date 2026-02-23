@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vpp_assignments>
+  <vpp_assignment>
+    <id>1</id>
+    <vpp_admin_account_id>1</vpp_admin_account_id>
+    <name>Test VPP Assignment 1</name>
+  </vpp_assignment>
+  <vpp_assignment>
+    <id>2</id>
+    <vpp_admin_account_id>1</vpp_admin_account_id>
+    <name>Test VPP Assignment 2</name>
+  </vpp_assignment>
+</vpp_assignments>

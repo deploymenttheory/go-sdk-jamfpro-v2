@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mobile_device_application>
+  <general>
+    <id>1</id>
+    <name>Sample iOS App Updated</name>
+    <display_name>Sample iOS App Updated</display_name>
+    <bundle_id>com.example.app</bundle_id>
+    <version>1.1</version>
+    <site>
+      <id>-1</id>
+      <name>None</name>
+    </site>
+  </general>
+  <scope>
+    <all_mobile_devices>true</all_mobile_devices>
+    <all_jss_users>false</all_jss_users>
+    <limitations/>
+    <exclusions/>
+  </scope>
+  <self_service>
+    <self_service_description>Updated description</self_service_description>
+    <self_service_icon>
+      <id>0</id>
+      <name/>
+      <uri/>
+      <data/>
+    </self_service_icon>
+  </self_service>
+</mobile_device_application>

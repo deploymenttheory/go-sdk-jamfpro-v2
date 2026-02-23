@@ -1,0 +1,345 @@
+package mobile_device_configuration_profiles
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+)
+
+type (
+	// ServiceInterface defines the interface for Classic API mobile device configuration profile operations.
+	//
+	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceconfigurationprofiles
+	ServiceInterface interface {
+		// List returns all mobile device configuration profiles.
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofiles
+		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+
+		// GetByID returns the specified mobile device configuration profile by ID.
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyid
+		GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error)
+
+		// GetByName returns the specified mobile device configuration profile by name.
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyname
+		GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error)
+
+		// GetByIDWithSubset returns the specified mobile device configuration profile by ID with a data subset.
+		// Subset values: General, Scope, SelfService.
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyiddatasubset
+		GetByIDWithSubset(ctx context.Context, id int, subset string) (*Resource, *interfaces.Response, error)
+
+		// GetByNameWithSubset returns the specified mobile device configuration profile by name with a data subset.
+		// Subset values: General, Scope, SelfService.
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbynamedatasubset
+		GetByNameWithSubset(ctx context.Context, name, subset string) (*Resource, *interfaces.Response, error)
+
+		// Create creates a new mobile device configuration profile.
+		//
+		// Returns the created profile ID only (Classic API behavior).
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceconfigurationprofilebyid
+		Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
+
+		// UpdateByID updates the specified mobile device configuration profile by ID.
+		//
+		// Returns the updated profile ID only (Classic API behavior).
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceconfigurationprofilebyid
+		UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
+
+		// UpdateByName updates the specified mobile device configuration profile by name.
+		//
+		// Returns the updated profile ID only (Classic API behavior).
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceconfigurationprofilebyname
+		UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
+
+		// DeleteByID removes the specified mobile device configuration profile by ID.
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceconfigurationprofilebyid
+		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+
+		// DeleteByName removes the specified mobile device configuration profile by name.
+		//
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceconfigurationprofilebyname
+		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+	}
+
+	// Service handles communication with the mobile device configuration profiles Classic API methods.
+	//
+	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceconfigurationprofiles
+	Service struct {
+		client interfaces.HTTPClient
+	}
+)
+
+var _ ServiceInterface = (*Service)(nil)
+
+// NewService returns a new mobile device configuration profiles Service backed by the provided HTTP client.
+func NewService(client interfaces.HTTPClient) *Service {
+	return &Service{client: client}
+}
+
+// -----------------------------------------------------------------------------
+// Classic API - Mobile Device Configuration Profiles CRUD Operations
+// -----------------------------------------------------------------------------
+
+// List returns all mobile device configuration profiles.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofiles
+func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+	endpoint := EndpointMobileDeviceConfigurationProfiles
+
+	var out ListResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &out, resp, nil
+}
+
+// GetByID returns the specified mobile device configuration profile by ID.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyid
+func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
+	if id <= 0 {
+		return nil, nil, fmt.Errorf("mobile device configuration profile ID must be a positive integer")
+	}
+
+	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceConfigurationProfiles, id)
+
+	var out Resource
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &out, resp, nil
+}
+
+// GetByName returns the specified mobile device configuration profile by name.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyname
+func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
+	if name == "" {
+		return nil, nil, fmt.Errorf("mobile device configuration profile name cannot be empty")
+	}
+
+	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceConfigurationProfiles, name)
+
+	var out Resource
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &out, resp, nil
+}
+
+// GetByIDWithSubset returns the specified mobile device configuration profile by ID with a data subset.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyiddatasubset
+func (s *Service) GetByIDWithSubset(ctx context.Context, id int, subset string) (*Resource, *interfaces.Response, error) {
+	if id <= 0 {
+		return nil, nil, fmt.Errorf("mobile device configuration profile ID must be a positive integer")
+	}
+	if subset == "" {
+		return nil, nil, fmt.Errorf("subset cannot be empty")
+	}
+
+	endpoint := fmt.Sprintf("%s/id/%d/subset/%s", EndpointMobileDeviceConfigurationProfiles, id, subset)
+
+	var out Resource
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &out, resp, nil
+}
+
+// GetByNameWithSubset returns the specified mobile device configuration profile by name with a data subset.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbynamedatasubset
+func (s *Service) GetByNameWithSubset(ctx context.Context, name, subset string) (*Resource, *interfaces.Response, error) {
+	if name == "" {
+		return nil, nil, fmt.Errorf("mobile device configuration profile name cannot be empty")
+	}
+	if subset == "" {
+		return nil, nil, fmt.Errorf("subset cannot be empty")
+	}
+
+	endpoint := fmt.Sprintf("%s/name/%s/subset/%s", EndpointMobileDeviceConfigurationProfiles, name, subset)
+
+	var out Resource
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &out, resp, nil
+}
+
+// Create creates a new mobile device configuration profile.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceconfigurationprofilebyid
+func (s *Service) Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+	if req.General.Name == "" {
+		return nil, nil, fmt.Errorf("mobile device configuration profile name is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/id/0", EndpointMobileDeviceConfigurationProfiles)
+
+	var out CreateUpdateResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &out, resp, nil
+}
+
+// UpdateByID updates the specified mobile device configuration profile by ID.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceconfigurationprofilebyid
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
+	if id <= 0 {
+		return nil, nil, fmt.Errorf("mobile device configuration profile ID must be a positive integer")
+	}
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+	if req.General.Name == "" {
+		return nil, nil, fmt.Errorf("mobile device configuration profile name is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceConfigurationProfiles, id)
+
+	var out CreateUpdateResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &out, resp, nil
+}
+
+// UpdateByName updates the specified mobile device configuration profile by name.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceconfigurationprofilebyname
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
+	if name == "" {
+		return nil, nil, fmt.Errorf("mobile device configuration profile name cannot be empty")
+	}
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+	if req.General.Name == "" {
+		return nil, nil, fmt.Errorf("mobile device configuration profile name is required in request")
+	}
+
+	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceConfigurationProfiles, name)
+
+	var out CreateUpdateResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &out, resp, nil
+}
+
+// DeleteByID removes the specified mobile device configuration profile by ID.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceconfigurationprofilebyid
+func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+	if id <= 0 {
+		return nil, fmt.Errorf("mobile device configuration profile ID must be a positive integer")
+	}
+
+	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceConfigurationProfiles, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
+}
+
+// DeleteByName removes the specified mobile device configuration profile by name.
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceconfigurationprofilebyname
+func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+	if name == "" {
+		return nil, fmt.Errorf("mobile device configuration profile name cannot be empty")
+	}
+
+	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceConfigurationProfiles, name)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationXML,
+		"Content-Type": mime.ApplicationXML,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
+}

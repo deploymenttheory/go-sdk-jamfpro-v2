@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user>
+  <id>1</id>
+  <name>admin</name>
+  <full_name>Administrator</full_name>
+  <email>admin@example.com</email>
+  <email_address>admin@example.com</email_address>
+  <phone_number></phone_number>
+  <position>IT Admin</position>
+  <enable_custom_photo_url>false</enable_custom_photo_url>
+  <custom_photo_url></custom_photo_url>
+  <ldap_server>
+    <id>-1</id>
+    <name>None</name>
+  </ldap_server>
+  <extension_attributes/>
+  <sites>
+    <site>
+      <id>-1</id>
+      <name>None</name>
+    </site>
+  </sites>
+  <links>
+    <computers/>
+    <peripherals/>
+    <mobile_devices/>
+    <vpp_assignments/>
+    <total_vpp_code_count>0</total_vpp_code_count>
+  </links>
+</user>

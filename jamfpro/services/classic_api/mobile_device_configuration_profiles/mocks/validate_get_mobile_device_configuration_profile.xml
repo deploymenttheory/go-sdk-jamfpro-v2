@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration_profile>
+  <general>
+    <id>1</id>
+    <name>Wi-Fi Profile</name>
+    <description>Test Wi-Fi configuration</description>
+    <level>device</level>
+    <site>
+      <id>-1</id>
+      <name>None</name>
+    </site>
+    <category>
+      <id>1</id>
+      <name>Network</name>
+    </category>
+    <uuid>550e8400-e29b-41d4-a716-446655440000</uuid>
+    <deployment_method>Install Automatically</deployment_method>
+    <redeploy_on_update>true</redeploy_on_update>
+    <redeploy_days_before_certificate_expires>14</redeploy_days_before_certificate_expires>
+    <payloads>Wi-Fi</payloads>
+  </general>
+  <scope>
+    <all_mobile_devices>true</all_mobile_devices>
+    <all_jss_users>false</all_jss_users>
+  </scope>
+  <self_service>
+    <self_service_description>Install this Wi-Fi profile from Self Service</self_service_description>
+    <feature_on_main_page>true</feature_on_main_page>
+  </self_service>
+</configuration_profile>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mobile_device>
+  <general>
+    <id>123</id>
+    <display_name>test-device-01</display_name>
+    <device_name>Test iPhone</device_name>
+    <name>test-device-01</name>
+    <serial_number>TEST1234567</serial_number>
+    <udid>00008030-001234567890001E</udid>
+    <os_type>iOS</os_type>
+    <os_version>17.0</os_version>
+    <model>iPhone</model>
+    <model_identifier>iPhone14,2</model_identifier>
+    <model_display>iPhone 13 Pro</model_display>
+    <managed>true</managed>
+    <supervised>false</supervised>
+  </general>
+  <location/>
+  <purchasing/>
+  <security_object/>
+  <network/>
+  <mobile_device_groups/>
+  <extension_attributes/>
+</mobile_device>

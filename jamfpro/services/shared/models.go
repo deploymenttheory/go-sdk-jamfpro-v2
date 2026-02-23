@@ -12,6 +12,21 @@ type SharedResourceCategory struct {
 	Name string `xml:"name,omitempty"`
 }
 
+// SharedResourceSelfServiceIcon represents a self-service icon used across Classic API resources.
+type SharedResourceSelfServiceIcon struct {
+	ID       int    `xml:"id,omitempty"`
+	URI      string `xml:"uri,omitempty"`
+	Data     string `xml:"data,omitempty"`
+	Filename string `xml:"filename,omitempty"`
+}
+
+// SharedResourceSelfServiceCategory represents a self-service category used across Classic API resources.
+type SharedResourceSelfServiceCategory struct {
+	ID       int    `xml:"id,omitempty"`
+	Name     string `xml:"name,omitempty"`
+	Priority int    `xml:"priority,omitempty"`
+}
+
 // SharedSubsetCriteria represents search criteria used across Classic API resources.
 // Used by computer groups, mobile device groups, and other smart group resources.
 type SharedSubsetCriteria struct {

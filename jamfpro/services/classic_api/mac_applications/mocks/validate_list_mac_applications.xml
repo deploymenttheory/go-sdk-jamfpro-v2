@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mac_applications>
+  <size>2</size>
+  <mac_application>
+    <id>1</id>
+    <name>Sample Mac App 1</name>
+  </mac_application>
+  <mac_application>
+    <id>2</id>
+    <name>Sample Mac App 2</name>
+  </mac_application>
+</mac_applications>
