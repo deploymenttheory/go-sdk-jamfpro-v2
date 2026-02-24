@@ -6,14 +6,14 @@ import (
 
 // ResourceBuilding represents a building resource.
 type ResourceBuilding struct {
-	ID               string `json:"id"`
-	Name             string `json:"name"`
-	StreetAddress1   string `json:"streetAddress1"`
-	StreetAddress2   string `json:"streetAddress2"`
-	City             string `json:"city"`
-	StateProvince    string `json:"stateProvince"`
-	ZipPostalCode    string `json:"zipPostalCode"`
-	Country          string `json:"country"`
+	ID               string `json:"id,omitempty"`
+	Name             string `json:"name"` // required
+	StreetAddress1   string `json:"streetAddress1,omitempty"`
+	StreetAddress2   string `json:"streetAddress2,omitempty"`
+	City             string `json:"city,omitempty"`
+	StateProvince    string `json:"stateProvince,omitempty"`
+	ZipPostalCode    string `json:"zipPostalCode,omitempty"`
+	Country          string `json:"country,omitempty"`
 }
 
 // ListResponse is the response for ListBuildings.
@@ -24,13 +24,13 @@ type ListResponse struct {
 
 // RequestBuilding is the body for creating and updating buildings.
 type RequestBuilding struct {
-	Name             string `json:"name"`
-	StreetAddress1   string `json:"streetAddress1"`
-	StreetAddress2   string `json:"streetAddress2"`
-	City             string `json:"city"`
-	StateProvince    string `json:"stateProvince"`
-	ZipPostalCode    string `json:"zipPostalCode"`
-	Country          string `json:"country"`
+	Name             string `json:"name"` // required
+	StreetAddress1   string `json:"streetAddress1,omitempty"`
+	StreetAddress2   string `json:"streetAddress2,omitempty"`
+	City             string `json:"city,omitempty"`
+	StateProvince    string `json:"stateProvince,omitempty"`
+	ZipPostalCode    string `json:"zipPostalCode,omitempty"`
+	Country          string `json:"country,omitempty"`
 }
 
 // CreateResponse is the response for CreateBuilding.

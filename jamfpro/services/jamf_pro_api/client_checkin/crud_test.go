@@ -44,7 +44,7 @@ func TestUnitUpdateV3_NilSettings(t *testing.T) {
 
 func TestUnitGetHistoryV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
-	result, resp, err := svc.GetHistoryV3(context.Background())
+	result, resp, err := svc.GetHistoryV3(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.Equal(t, 200, resp.StatusCode)

@@ -18,7 +18,7 @@ type ResourceAdvancedMobileDeviceSearch struct {
 	ID            string               `json:"id,omitempty"`
 	Name          string               `json:"name"`
 	Criteria      []CriteriaJamfProAPI `json:"criteria"`
-	DisplayFields []string             `json:"displayFields"`
+	DisplayFields []string             `json:"displayFields,omitempty"` // optional
 	SiteId        *string              `json:"siteId,omitempty"`
 }
 

@@ -108,7 +108,7 @@ func (m *AccountsMock) Get(ctx context.Context, path string, query map[string]st
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf(resp.errMsg)
+		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -130,7 +130,7 @@ func (m *AccountsMock) GetPaginated(ctx context.Context, path string, query map[
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf(resp.errMsg)
+		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if len(resp.rawBody) > 0 {
@@ -151,7 +151,7 @@ func (m *AccountsMock) Post(ctx context.Context, path string, body any, headers 
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf(resp.errMsg)
+		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -172,7 +172,7 @@ func (m *AccountsMock) Delete(ctx context.Context, path string, query map[string
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf(resp.errMsg)
+		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
 	}
 
 	return &interfaces.Response{StatusCode: resp.statusCode}, nil

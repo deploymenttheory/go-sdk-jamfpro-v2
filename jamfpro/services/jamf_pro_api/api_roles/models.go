@@ -4,9 +4,9 @@ package api_roles
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-roles-id
 type ResourceAPIRole struct {
-	ID          string   `json:"id,omitempty"`
-	DisplayName string   `json:"displayName,omitempty"`
-	Privileges  []string `json:"privileges,omitempty"`
+	ID          string   `json:"id"`
+	DisplayName string   `json:"displayName"`
+	Privileges  []string `json:"privileges"`
 }
 
 // ListResponse is the response for ListAPIRolesV1.
@@ -17,6 +17,6 @@ type ListResponse struct {
 
 // RequestAPIRole is the body for creating and updating API roles.
 type RequestAPIRole struct {
-	DisplayName string   `json:"displayName,omitempty"`
-	Privileges  []string `json:"privileges,omitempty"`
+	DisplayName string   `json:"displayName"`
+	Privileges  []string `json:"privileges"`
 }

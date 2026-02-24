@@ -8,13 +8,13 @@ type ListResponse struct {
 
 // ResourceApiIntegration represents an API integration resource.
 type ResourceApiIntegration struct {
-	ID                         int      `json:"id,omitempty"`
-	AuthorizationScopes        []string `json:"authorizationScopes,omitempty"`
-	DisplayName                string   `json:"displayName,omitempty"`
-	Enabled                    bool     `json:"enabled,omitempty"`
-	AccessTokenLifetimeSeconds int      `json:"accessTokenLifetimeSeconds,omitempty"`
-	AppType                    string   `json:"appType,omitempty"`
-	ClientID                   string   `json:"clientId,omitempty"`
+	ID                         int      `json:"id"`
+	AuthorizationScopes        []string `json:"authorizationScopes"`
+	DisplayName                string   `json:"displayName"`
+	Enabled                    bool     `json:"enabled"`
+	AccessTokenLifetimeSeconds int      `json:"accessTokenLifetimeSeconds,omitempty"` // optional
+	AppType                    string   `json:"appType"`
+	ClientID                   string   `json:"clientId"`
 }
 
 // ResourceClientCredentials represents API client credentials returned by RefreshClientCredentials.

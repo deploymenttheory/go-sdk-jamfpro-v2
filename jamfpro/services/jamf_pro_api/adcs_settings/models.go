@@ -16,8 +16,8 @@ type ResourceAdcsSettings struct {
 
 // ResourceAdcsCert bundles the file metadata and base64-encoded certificate.
 type ResourceAdcsCert struct {
-	Filename string `json:"filename,omitempty"`
-	Data     []byte `json:"data,omitempty"`
+	Filename string `json:"filename"`
+	Data     []byte `json:"data"`
 	Password string `json:"password,omitempty"`
 }
 
@@ -88,5 +88,5 @@ type HistoryItem struct {
 
 // HistoryNoteRequest represents the request for adding a history note.
 type HistoryNoteRequest struct {
-	Note string `json:"note"`
+	Note string `json:"note"` // required
 }

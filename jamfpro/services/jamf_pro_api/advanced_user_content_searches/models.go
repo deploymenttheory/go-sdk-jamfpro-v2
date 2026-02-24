@@ -3,7 +3,7 @@ package advanced_user_content_searches
 // CriteriaJamfProAPI represents a criterion for an advanced user content search (Jamf Pro API shape).
 type CriteriaJamfProAPI struct {
 	Name         string `json:"name"`
-	Priority     int    `json:"priority"`
+	Priority     int    `json:"priority,omitempty"` // optional
 	AndOr        string `json:"andOr"`
 	SearchType   string `json:"searchType"`
 	Value        string `json:"value"`
@@ -17,8 +17,8 @@ type CriteriaJamfProAPI struct {
 type ResourceAdvancedUserContentSearch struct {
 	ID            string               `json:"id,omitempty"`
 	Name          string               `json:"name"`
-	Criteria      []CriteriaJamfProAPI `json:"criteria"`
-	DisplayFields []string             `json:"displayFields"`
+	Criteria      []CriteriaJamfProAPI `json:"criteria,omitempty"`      // optional
+	DisplayFields []string             `json:"displayFields,omitempty"` // optional
 	SiteId        *string              `json:"siteId,omitempty"`
 }
 
