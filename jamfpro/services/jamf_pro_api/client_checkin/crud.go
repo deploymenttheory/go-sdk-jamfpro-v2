@@ -2,10 +2,12 @@ package client_checkin
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -25,8 +27,10 @@ type (
 
 		// GetHistoryV3 returns the client check-in history object (Get Client Check-In history object).
 		//
+		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
+		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in-history
-		GetHistoryV3(ctx context.Context) (*ResourceClientCheckinHistory, *interfaces.Response, error)
+		GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*ResourceClientCheckinHistory, *interfaces.Response, error)
 
 		// AddHistoryNoteV3 adds a note to the client check-in history (Add a Note to Client Check-In History).
 		//
@@ -75,14 +79,39 @@ func (s *Service) GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *i
 
 // GetHistoryV3 returns the client check-in history object.
 // URL: GET /api/v3/check-in/history
+// Query params (optional): page, page-size, sort, filter (RSQL).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in-history
-func (s *Service) GetHistoryV3(ctx context.Context) (*ResourceClientCheckinHistory, *interfaces.Response, error) {
+func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*ResourceClientCheckinHistory, *interfaces.Response, error) {
 	var result ResourceClientCheckinHistory
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, EndpointClientCheckinHistoryV3, nil, headers, &result)
-	if err != nil {
-		return nil, resp, err
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var entry ResourceClientCheckinHistoryEntry
+				if err := mapstructure.Decode(item, &entry); err != nil {
+					return fmt.Errorf("failed to decode client check-in history entry: %w", err)
+				}
+				result.Results = append(result.Results, entry)
+			}
+		}
+
+		return nil
 	}
+
+	resp, err := s.client.GetPaginated(ctx, EndpointClientCheckinHistoryV3, rsqlQuery, nil, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get client check-in history: %w", err)
+	}
+
 	return &result, resp, nil
 }
 

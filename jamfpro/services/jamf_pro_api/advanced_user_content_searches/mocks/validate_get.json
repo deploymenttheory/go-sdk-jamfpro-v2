@@ -1,0 +1,1 @@
+{"id":"1","name":"Andy's Search","criteria":[{"name":"Account","priority":0,"andOr":"and","searchType":"is","value":"test","openingParen":false,"closingParen":false}],"displayFields":["Content Name","Price"],"siteId":"-1"}

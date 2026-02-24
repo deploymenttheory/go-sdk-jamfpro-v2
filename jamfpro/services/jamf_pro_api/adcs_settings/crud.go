@@ -2,10 +2,12 @@ package adcs_settings
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -244,9 +246,11 @@ func (s *Service) GetDependenciesByIDV1(ctx context.Context, id string) (*Depend
 	return &result, resp, nil
 }
 
-// GetHistoryByIDV1 returns the history for an AD CS Settings configuration.
+// GetHistoryByIDV1 returns the history for an AD CS Settings configuration with automatic pagination.
 // URL: GET /api/v1/pki/adcs-settings/{id}/history
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id-history
+// query supports: filter (RSQL), sort, page, page-size (all optional).
+// Note: page and page-size are managed internally by GetPaginated.
+// https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id-history
 func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
@@ -261,7 +265,30 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var entry HistoryItem
+				if err := mapstructure.Decode(item, &entry); err != nil {
+					return fmt.Errorf("failed to decode history item: %w", err)
+				}
+				result.Results = append(result.Results, entry)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}

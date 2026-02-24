@@ -1,6 +1,6 @@
 package account_preferences
 
-// Endpoint for the account preferences API (Jamf Pro API v2).
+// Endpoint for the account preferences API (Jamf Pro API v3).
 const (
-	EndpointAccountPreferencesV2 = "/api/v2/account-preferences"
+	EndpointAccountPreferencesV3 = "/api/v3/account-preferences"
 )

@@ -38,3 +38,8 @@ type CreateResponse struct {
 type ChoicesResponse struct {
 	Choices []string `json:"choices"`
 }
+
+// DeleteAdvancedMobileDeviceSearchesByIDRequest is the body for DeleteMultipleV1 (delete multiple).
+type DeleteAdvancedMobileDeviceSearchesByIDRequest struct {
+	IDs []string `json:"ids"`
+}

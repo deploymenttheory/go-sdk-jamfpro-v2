@@ -2,10 +2,12 @@ package jamf_connect
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -44,6 +46,21 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-jamf-connect-config-profiles-uuid
 		UpdateConfigProfileByUUIDV1(ctx context.Context, uuid string, request *ResourceJamfConnectConfigProfileUpdate) (*ResourceJamfConnectConfigProfile, *interfaces.Response, error)
+
+		// GetDeploymentTasksByIDV1 retrieves deployment tasks for a specific Jamf Connect deployment.
+		//
+		// Supports optional RSQL filtering, pagination and sorting via rsqlQuery
+		// (keys: filter, sort, page, page-size).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-deployments-id-tasks
+		GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*DeploymentTasksResponse, *interfaces.Response, error)
+
+		// GetHistoryV1 retrieves the history for Jamf Connect.
+		//
+		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-history
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
 
 		// RetryDeploymentTasksByUUIDV1 retries Connect install tasks for specified computers.
 		//
@@ -92,14 +109,32 @@ func (s *Service) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string
 
 	var result ListResponse
 
-	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var profile ResourceJamfConnectConfigProfile
+				if err := mapstructure.Decode(item, &profile); err != nil {
+					return fmt.Errorf("failed to decode config profile: %w", err)
+				}
+				result.Results = append(result.Results, profile)
+			}
+		}
+
+		return nil
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
-		return nil, resp, err
+		return nil, resp, fmt.Errorf("failed to list jamf connect config profiles: %w", err)
 	}
 
 	return &result, resp, nil
@@ -195,6 +230,90 @@ func (s *Service) UpdateConfigProfileByUUIDV1(ctx context.Context, uuid string, 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetDeploymentTasksByIDV1 retrieves deployment tasks for a specific Jamf Connect deployment.
+// URL: GET /api/v1/jamf-connect/deployments/{id}/tasks
+// rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
+// https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-deployments-id-tasks
+func (s *Service) GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*DeploymentTasksResponse, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("deployment ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/deployments/%s/tasks", EndpointJamfConnectV1, id)
+
+	var result DeploymentTasksResponse
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var task DeploymentTask
+				if err := mapstructure.Decode(item, &task); err != nil {
+					return fmt.Errorf("failed to decode deployment task: %w", err)
+				}
+				result.Results = append(result.Results, task)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get deployment tasks: %w", err)
+	}
+
+	return &result, resp, nil
+}
+
+// GetHistoryV1 retrieves the history for Jamf Connect.
+// URL: GET /api/v1/jamf-connect/history
+// Query params (optional): page, page-size, sort, filter (RSQL).
+// https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-history
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+	endpoint := fmt.Sprintf("%s/history", EndpointJamfConnectV1)
+
+	var result HistoryResponse
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var history HistoryItem
+				if err := mapstructure.Decode(item, &history); err != nil {
+					return fmt.Errorf("failed to decode history item: %w", err)
+				}
+				result.Results = append(result.Results, history)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get jamf connect history: %w", err)
 	}
 
 	return &result, resp, nil

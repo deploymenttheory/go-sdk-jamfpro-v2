@@ -2,11 +2,13 @@ package api_integrations
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -73,9 +75,11 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// ListV1 returns a page of API integrations (Get API Integrations; supports page, page-size, sort, filter).
+// ListV1 returns all API integrations with automatic pagination.
 // URL: GET /api/v1/api-integrations
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-integrations
+// rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
+// Note: page and page-size are managed internally by GetPaginated.
+// https://developer.jamf.com/jamf-pro/reference/get_v1-api-integrations
 func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
@@ -84,7 +88,30 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointApiIntegrationsV1, rsqlQuery, headers, &result)
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var integration ResourceApiIntegration
+				if err := mapstructure.Decode(item, &integration); err != nil {
+					return fmt.Errorf("failed to decode api integration: %w", err)
+				}
+				result.Results = append(result.Results, integration)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, EndpointApiIntegrationsV1, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}

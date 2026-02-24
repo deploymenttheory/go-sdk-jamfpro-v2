@@ -44,3 +44,23 @@ type CreateResponse struct {
 type DeleteMobileDeviceExtensionAttributesByIDRequest struct {
 	IDs []string `json:"ids"`
 }
+
+// HistoryItem represents a single mobile device extension attribute history entry.
+type HistoryItem struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Date     string `json:"date"`
+	Note     string `json:"note"`
+	Details  string `json:"details"`
+}
+
+// HistoryResponse is the response for GetHistoryByIDV1.
+type HistoryResponse struct {
+	TotalCount int           `json:"totalCount"`
+	Results    []HistoryItem `json:"results"`
+}
+
+// AddHistoryNoteRequest is the body for AddHistoryNoteByIDV1.
+type AddHistoryNoteRequest struct {
+	Note string `json:"note"`
+}

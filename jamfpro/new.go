@@ -51,18 +51,27 @@ import (
 	classic_webhooks "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/webhooks"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/access_management_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/account_preferences"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/accounts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/activation_code"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/apns_client_push_status"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/adcs_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/adue_session_token_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/advanced_mobile_device_searches"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/advanced_user_content_searches"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_integrations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_authorization"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_role_privileges"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_request"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_store_country_codes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_installers"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/bookmarks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/branding"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cache_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/certificate_authority"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/classic_ldap"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/client_checkin"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_azure"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_distribution_point"
@@ -80,6 +89,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_communication_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_enrollments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/distribution_point"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dss_declarations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/engage"
@@ -97,6 +107,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_server_url"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_system_initialization"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_version"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_remote_assist"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/ldap"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/local_admin_password"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/locales"
@@ -197,14 +208,23 @@ type Client struct {
 	// Jamf Pro API services
 	AccessManagementSettings            *access_management_settings.Service
 	AccountPreferences                  *account_preferences.Service
+	Accounts                            *accounts.Service
+	ActivationCode                      *activation_code.Service
+	APNSClientPushStatus                *apns_client_push_status.Service
 	AdcsSettings                        *adcs_settings.Service
 	AdvancedMobileDeviceSearches        *advanced_mobile_device_searches.Service
+	AdvancedUserContentSearches         *advanced_user_content_searches.Service
 	ApiIntegrations                     *api_integrations.Service
 	APIRolePrivileges                   *api_role_privileges.Service
-	CertificateAuthority                *certificate_authority.Service
 	APIRoles                            *api_roles.Service
+	ApiAuthorization                    *api_authorization.Service
+	AppRequest                          *app_request.Service
+	AppStoreCountryCodes                *app_store_country_codes.Service
+	CertificateAuthority                *certificate_authority.Service
+	ClassicLdap                         *classic_ldap.Service
 	AppInstallers                       *app_installers.Service
 	Bookmarks                           *bookmarks.Service
+	Branding                            *branding.Service
 	Buildings                           *buildings.Service
 	CacheSettings                       *cache_settings.Service
 	Categories                          *categories.Service
@@ -225,6 +245,7 @@ type Client struct {
 	Departments                         *departments.Service
 	DeviceCommunicationSettings         *device_communication_settings.Service
 	DeviceEnrollments                   *device_enrollments.Service
+	DistributionPoint                   *distribution_point.Service
 	DockItems                           *dock_items.Service
 	DSSDeclarations                     *dss_declarations.Service
 	Engage                              *engage.Service
@@ -260,6 +281,7 @@ type Client struct {
 	JamfProServerURL                    *jamf_pro_server_url.Service
 	JamfProSystemInitialization         *jamf_pro_system_initialization.Service
 	JamfProVersion                      *jamf_pro_version.Service
+	JamfRemoteAssist                    *jamf_remote_assist.Service
 	Locales                             *locales.Service
 	MobileDeviceExtensionAttributes     *mobile_device_extension_attributes.Service
 	MobileDeviceGroups                  *mobile_device_groups.Service
@@ -347,14 +369,22 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		// Jamf Pro API services
 		AccessManagementSettings:            access_management_settings.NewService(transport),
 		AccountPreferences:                  account_preferences.NewService(transport),
+		Accounts:                            accounts.NewService(transport),
+		ActivationCode:                      activation_code.NewService(transport),
+		APNSClientPushStatus:                apns_client_push_status.NewService(transport),
 		AdcsSettings:                        adcs_settings.NewService(transport),
 		AdvancedMobileDeviceSearches:        advanced_mobile_device_searches.NewService(transport),
+		AdvancedUserContentSearches:         advanced_user_content_searches.NewService(transport),
 		ApiIntegrations:                     api_integrations.NewService(transport),
 		APIRolePrivileges:                   api_role_privileges.NewService(transport),
-		CertificateAuthority:                certificate_authority.NewService(transport),
 		APIRoles:                            api_roles.NewService(transport),
+		AppRequest:                          app_request.NewService(transport),
+		AppStoreCountryCodes:                app_store_country_codes.NewService(transport),
+		CertificateAuthority:                certificate_authority.NewService(transport),
+		ClassicLdap:                         classic_ldap.NewService(transport),
 		AppInstallers:                       app_installers.NewService(transport),
 		Bookmarks:                           bookmarks.NewService(transport),
+		Branding:                            branding.NewService(transport),
 		Buildings:                           buildings.NewService(transport),
 		CacheSettings:                       cache_settings.NewService(transport),
 		Categories:                          categories.NewService(transport),
@@ -375,6 +405,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		Departments:                         departments.NewService(transport),
 		DeviceCommunicationSettings:         device_communication_settings.NewService(transport),
 		DeviceEnrollments:                   device_enrollments.NewService(transport),
+		DistributionPoint:                   distribution_point.NewService(transport),
 		DockItems:                           dock_items.NewService(transport),
 		DSSDeclarations:                     dss_declarations.NewService(transport),
 		Engage:                              engage.NewService(transport),
@@ -410,6 +441,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		JamfProServerURL:                    jamf_pro_server_url.NewService(transport),
 		JamfProSystemInitialization:         jamf_pro_system_initialization.NewService(transport),
 		JamfProVersion:                      jamf_pro_version.NewService(transport),
+		JamfRemoteAssist:                    jamf_remote_assist.NewService(transport),
 		Locales:                             locales.NewService(transport),
 		MobileDeviceExtensionAttributes:     mobile_device_extension_attributes.NewService(transport),
 		MobileDeviceGroups:                  mobile_device_groups.NewService(transport),

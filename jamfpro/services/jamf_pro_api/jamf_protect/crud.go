@@ -2,10 +2,12 @@ package jamf_protect
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 // ServiceInterface defines the interface for Jamf Protect operations.
@@ -247,13 +249,32 @@ func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string
 
 	endpoint := fmt.Sprintf("%s/%s/tasks", EndpointJamfProtectDeploymentsV1, deploymentID)
 
-	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+	var result ListResponseJamfProtectDeploymentTasks
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var task ResourceJamfProtectDeploymentTask
+				if err := mapstructure.Decode(item, &task); err != nil {
+					return fmt.Errorf("failed to decode deployment task: %w", err)
+				}
+				result.Results = append(result.Results, task)
+			}
+		}
+
+		return nil
 	}
 
-	var result ListResponseJamfProtectDeploymentTasks
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect deployment tasks: %w", err)
 	}
@@ -290,13 +311,32 @@ func (s *Service) RetryDeploymentTasksV1(ctx context.Context, deploymentID strin
 func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectHistory, *interfaces.Response, error) {
 	endpoint := EndpointJamfProtectHistoryV1
 
-	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+	var result ListResponseJamfProtectHistory
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var history ResourceJamfProtectHistory
+				if err := mapstructure.Decode(item, &history); err != nil {
+					return fmt.Errorf("failed to decode history item: %w", err)
+				}
+				result.Results = append(result.Results, history)
+			}
+		}
+
+		return nil
 	}
 
-	var result ListResponseJamfProtectHistory
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect history: %w", err)
 	}
@@ -334,13 +374,32 @@ func (s *Service) CreateHistoryNoteV1(ctx context.Context, request *RequestJamfP
 func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectPlans, *interfaces.Response, error) {
 	endpoint := EndpointJamfProtectPlansV1
 
-	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+	var result ListResponseJamfProtectPlans
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var plan ResourceJamfProtectPlan
+				if err := mapstructure.Decode(item, &plan); err != nil {
+					return fmt.Errorf("failed to decode plan: %w", err)
+				}
+				result.Results = append(result.Results, plan)
+			}
+		}
+
+		return nil
 	}
 
-	var result ListResponseJamfProtectPlans
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect plans: %w", err)
 	}

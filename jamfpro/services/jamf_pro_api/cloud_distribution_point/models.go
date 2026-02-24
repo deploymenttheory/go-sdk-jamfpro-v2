@@ -52,3 +52,33 @@ type TestConnectionV1 struct {
 	HasConnectionSucceeded bool   `json:"hasConnectionSucceeded"`
 	Message                string `json:"message"`
 }
+
+// HistoryItem represents a single cloud distribution point history entry.
+type HistoryItem struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Date     string `json:"date"`
+	Note     string `json:"note"`
+	Details  string `json:"details"`
+}
+
+// HistoryResponse is the response for GetHistoryV1.
+type HistoryResponse struct {
+	TotalCount int           `json:"totalCount"`
+	Results    []HistoryItem `json:"results"`
+}
+
+// FileItem represents a single cloud distribution point inventory file.
+type FileItem struct {
+	ID          string `json:"id"`
+	FileName    string `json:"fileName"`
+	InventoryID string `json:"inventoryId"`
+	Type        string `json:"type"`
+	Status      string `json:"status"`
+}
+
+// FilesResponse is the response for GetFilesV1.
+type FilesResponse struct {
+	TotalCount int        `json:"totalCount"`
+	Results    []FileItem `json:"results"`
+}

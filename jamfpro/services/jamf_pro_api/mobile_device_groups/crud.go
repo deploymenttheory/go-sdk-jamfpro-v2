@@ -2,10 +2,12 @@ package mobile_device_groups
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -90,14 +92,32 @@ func (s *Service) ListSmartV1(ctx context.Context, rsqlQuery map[string]string) 
 
 	endpoint := EndpointSmartGroupsV1
 
-	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var group ResourceSmartMobileDeviceGroup
+				if err := mapstructure.Decode(item, &group); err != nil {
+					return fmt.Errorf("failed to decode smart mobile device group: %w", err)
+				}
+				result.Results = append(result.Results, group)
+			}
+		}
+
+		return nil
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
-		return nil, resp, err
+		return nil, resp, fmt.Errorf("failed to list smart mobile device groups: %w", err)
 	}
 
 	return &result, resp, nil
@@ -217,14 +237,32 @@ func (s *Service) ListStaticV1(ctx context.Context, rsqlQuery map[string]string)
 
 	endpoint := EndpointStaticGroupsV1
 
-	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var group ResourceStaticMobileDeviceGroup
+				if err := mapstructure.Decode(item, &group); err != nil {
+					return fmt.Errorf("failed to decode static mobile device group: %w", err)
+				}
+				result.Results = append(result.Results, group)
+			}
+		}
+
+		return nil
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
-		return nil, resp, err
+		return nil, resp, fmt.Errorf("failed to list static mobile device groups: %w", err)
 	}
 
 	return &result, resp, nil

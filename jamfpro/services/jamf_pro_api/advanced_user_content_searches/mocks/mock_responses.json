@@ -1,0 +1,6 @@
+{
+  "validate_list": {"totalCount":1,"results":[{"id":"1","name":"Andy's Search","criteria":[{"name":"Account","priority":0,"andOr":"and","searchType":"is","value":"test","openingParen":false,"closingParen":false}],"displayFields":["Content Name","Price"],"siteId":"-1"}]},
+  "validate_get": {"id":"1","name":"Andy's Search","criteria":[{"name":"Account","priority":0,"andOr":"and","searchType":"is","value":"test","openingParen":false,"closingParen":false}],"displayFields":["Content Name","Price"],"siteId":"-1"},
+  "validate_create": {"id":"2","href":"/api/v1/advanced-user-content-searches/2"},
+  "error_not_found": {"code":"NOT_FOUND","message":"Advanced User Content Search with id 999 not found"}
+}

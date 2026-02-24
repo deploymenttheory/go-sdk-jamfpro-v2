@@ -2,10 +2,12 @@ package departments
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -81,14 +83,32 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 
 	endpoint := EndpointDepartmentsV1
 
-	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var dept ResourceDepartment
+				if err := mapstructure.Decode(item, &dept); err != nil {
+					return fmt.Errorf("failed to decode department: %w", err)
+				}
+				result.Results = append(result.Results, dept)
+			}
+		}
+
+		return nil
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
-		return nil, resp, err
+		return nil, resp, fmt.Errorf("failed to list departments: %w", err)
 	}
 
 	return &result, resp, nil
@@ -211,14 +231,32 @@ func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQue
 
 	var result HistoryResponse
 
-	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var history HistoryObject
+				if err := mapstructure.Decode(item, &history); err != nil {
+					return fmt.Errorf("failed to decode history object: %w", err)
+				}
+				result.Results = append(result.Results, history)
+			}
+		}
+
+		return nil
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
-		return nil, resp, err
+		return nil, resp, fmt.Errorf("failed to get department history: %w", err)
 	}
 
 	return &result, resp, nil

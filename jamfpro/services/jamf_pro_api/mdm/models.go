@@ -167,3 +167,17 @@ type RenewProfileResponse struct {
 		UDIDs []string `json:"udids"`
 	} `json:"udidsNotProcessed"`
 }
+
+// CommandInfo represents a single MDM command entry.
+type CommandInfo struct {
+	UUID        string `json:"uuid"`
+	CommandType string `json:"commandType"`
+	DateSent    string `json:"dateSent"`
+	Status      string `json:"status"`
+}
+
+// ListCommandsResponse is the response for ListCommandsV2.
+type ListCommandsResponse struct {
+	TotalCount int           `json:"totalCount"`
+	Results    []CommandInfo `json:"results"`
+}

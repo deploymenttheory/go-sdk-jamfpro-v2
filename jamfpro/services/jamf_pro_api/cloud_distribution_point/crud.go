@@ -2,10 +2,12 @@ package cloud_distribution_point
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -42,6 +44,20 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-test-connection
 		GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *interfaces.Response, error)
+
+		// GetHistoryV1 returns the history for the cloud distribution point.
+		//
+		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-history
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+
+		// GetFilesV1 returns the inventory files for the cloud distribution point.
+		//
+		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-files
+		GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (*FilesResponse, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the cloud distribution point methods of the Jamf Pro API.
@@ -183,6 +199,82 @@ func (s *Service) GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetHistoryV1 returns the history for the cloud distribution point.
+// URL: GET /api/v1/cloud-distribution-point/history
+// Query params (optional): page, page-size, sort, filter (RSQL).
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-history
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+	var result HistoryResponse
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var history HistoryItem
+				if err := mapstructure.Decode(item, &history); err != nil {
+					return fmt.Errorf("failed to decode history item: %w", err)
+				}
+				result.Results = append(result.Results, history)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, EndpointCloudDistributionPointHistoryV1, rsqlQuery, nil, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get cloud distribution point history: %w", err)
+	}
+
+	return &result, resp, nil
+}
+
+// GetFilesV1 returns the inventory files for the cloud distribution point.
+// URL: GET /api/v1/cloud-distribution-point/files
+// Query params (optional): page, page-size, sort, filter (RSQL).
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-files
+func (s *Service) GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (*FilesResponse, *interfaces.Response, error) {
+	var result FilesResponse
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var file FileItem
+				if err := mapstructure.Decode(item, &file); err != nil {
+					return fmt.Errorf("failed to decode file item: %w", err)
+				}
+				result.Results = append(result.Results, file)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, EndpointCloudDistributionPointFilesV1, rsqlQuery, nil, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get cloud distribution point files: %w", err)
 	}
 
 	return &result, resp, nil

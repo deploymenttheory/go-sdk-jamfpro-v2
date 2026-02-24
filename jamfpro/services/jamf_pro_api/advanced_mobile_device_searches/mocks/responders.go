@@ -59,6 +59,7 @@ func (m *AdvancedMobileDeviceSearchesMock) RegisterMocks() {
 	m.register("POST", "/api/v1/advanced-mobile-device-searches", 201, "validate_create.json")
 	m.register("PUT", "/api/v1/advanced-mobile-device-searches/1", 200, "validate_get.json")
 	m.register("DELETE", "/api/v1/advanced-mobile-device-searches/1", 204, "")
+	m.register("POST", "/api/v1/advanced-mobile-device-searches/delete-multiple", 204, "")
 	m.register("GET", "/api/v1/advanced-mobile-device-searches/choices?criteria=Device%20Name&site=-1&contains=", 200, "validate_choices.json")
 	m.register("GET", "/api/v1/advanced-mobile-device-searches/choices?criteria=Device+Name&site=-1&contains=", 200, "validate_choices.json")
 }

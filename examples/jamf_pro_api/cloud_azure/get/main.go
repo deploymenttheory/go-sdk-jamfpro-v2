@@ -1,0 +1,34 @@
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+)
+
+func main() {
+	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
+	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	jamfClient, err := jamfpro.NewClient(authConfig)
+	if err != nil {
+		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
+	}
+
+	// Replace "1" with the actual Azure Cloud IDP ID
+	cloudAzureID := "1"
+
+	result, _, err := jamfClient.CloudAzure.GetByIDV1(context.Background(), cloudAzureID)
+	if err != nil {
+		fmt.Printf("Error retrieving Azure Cloud IDP: %v\n", err)
+		return
+	}
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Printf("Azure Cloud IDP configuration:\n%s\n", string(out))
+}

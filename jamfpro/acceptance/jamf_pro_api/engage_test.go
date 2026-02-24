@@ -2,7 +2,6 @@ package jamf_pro_api
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"

@@ -1,0 +1,15 @@
+{
+  "list_success": {
+    "totalCount": 3,
+    "results": [
+      {"deviceType": "MOBILE_DEVICE", "managementId": "101", "pushDisabledTime": "2024-01-15T10:30:00Z", "deviceRecordLink": "/api/v1/mobile-devices/101"},
+      {"deviceType": "COMPUTER", "managementId": "202", "pushDisabledTime": "2024-01-16T14:20:00Z", "deviceRecordLink": "/api/v1/computers/202"},
+      {"deviceType": "MOBILE_DEVICE", "managementId": "103", "pushDisabledTime": "2024-01-17T09:15:00Z", "deviceRecordLink": "/api/v1/mobile-devices/103"}
+    ]
+  },
+  "get_enable_all_clients_status_success": {
+    "requestedTime": "2024-11-06T14:30:00Z",
+    "status": "QUEUED",
+    "processedTime": "2024-11-06T15:30:00Z"
+  }
+}

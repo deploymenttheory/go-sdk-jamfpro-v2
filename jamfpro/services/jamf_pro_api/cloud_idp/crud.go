@@ -2,10 +2,12 @@ package cloud_idp
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -79,8 +81,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
-// ListV1 returns all Cloud Identity Provider configurations.
+// ListV1 returns all Cloud Identity Provider configurations with automatic pagination.
 // URL: GET /api/v1/cloud-idp
+// query supports: filter (RSQL), sort, page, page-size (all optional).
+// Note: page and page-size are managed internally by GetPaginated.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp
 func (s *Service) ListV1(ctx context.Context, query map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
@@ -90,7 +94,30 @@ func (s *Service) ListV1(ctx context.Context, query map[string]string) (*ListRes
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointCloudIdpV1, query, headers, &result)
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var provider ResourceCloudIdProvider
+				if err := mapstructure.Decode(item, &provider); err != nil {
+					return fmt.Errorf("failed to decode cloud IDP provider: %w", err)
+				}
+				result.Results = append(result.Results, provider)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, EndpointCloudIdpV1, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -125,6 +152,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCloudIdPro
 
 // GetByNameV1 returns the Cloud Identity Provider configuration by display name.
 // URL: GET /api/v1/cloud-idp (searches first page)
+// Undocumented
 func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudIdProviderDetails, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
@@ -183,14 +211,32 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 
 	var result HistoryResponse
 
-	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var history HistoryItem
+				if err := mapstructure.Decode(item, &history); err != nil {
+					return fmt.Errorf("failed to decode history item: %w", err)
+				}
+				result.Results = append(result.Results, history)
+			}
+		}
+
+		return nil
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, query, nil, mergePage)
 	if err != nil {
-		return nil, resp, err
+		return nil, resp, fmt.Errorf("failed to get cloud IDP history: %w", err)
 	}
 
 	return &result, resp, nil

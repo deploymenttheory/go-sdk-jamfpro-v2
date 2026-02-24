@@ -75,6 +75,31 @@ func TestUnitDeleteByIDV1_Success(t *testing.T) {
 	require.Equal(t, 204, resp.StatusCode)
 }
 
+func TestUnitDeleteMultipleV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &DeleteAdvancedMobileDeviceSearchesByIDRequest{IDs: []string{"1", "2"}}
+	resp, err := svc.DeleteMultipleV1(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.Equal(t, 204, resp.StatusCode)
+}
+
+func TestUnitDeleteMultipleV1_EmptyIDs(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteMultipleV1(context.Background(), &DeleteAdvancedMobileDeviceSearchesByIDRequest{IDs: []string{}})
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "ids are required")
+}
+
+func TestUnitDeleteMultipleV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteMultipleV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "ids are required")
+}
+
 func TestUnitGetChoicesV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetChoicesV1(context.Background(), "Device Name", "-1", "")

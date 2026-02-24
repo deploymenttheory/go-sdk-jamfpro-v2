@@ -1,0 +1,35 @@
+{
+  "get_history_success": {
+    "totalCount": 3,
+    "results": [
+      {
+        "id": "1",
+        "username": "admin",
+        "date": "2024-01-15T10:30:00Z",
+        "note": "Activation code generated",
+        "details": "enabled"
+      },
+      {
+        "id": "2",
+        "username": "testuser",
+        "date": "2024-01-16T14:20:00Z",
+        "note": "Activation code renewed",
+        "details": "enabled"
+      },
+      {
+        "id": "3",
+        "username": "admin",
+        "date": "2024-01-17T09:15:00Z",
+        "note": "Activation code disabled",
+        "details": "disabled"
+      }
+    ]
+  },
+  "add_history_note_success": {
+    "id": "4",
+    "username": "admin",
+    "date": "2024-01-18T10:00:00Z",
+    "note": "Test history note",
+    "details": "added"
+  }
+}

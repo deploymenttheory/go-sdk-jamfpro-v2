@@ -2,10 +2,12 @@ package mdm
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -13,6 +15,14 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
 	MDMServiceInterface interface {
+		// ListCommandsV2 retrieves information about MDM commands made by Jamf Pro.
+		//
+		// Supports optional RSQL filtering, pagination and sorting via rsqlQuery
+		// (keys: filter, sort, page, page-size).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mdm-commands
+		ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (*ListCommandsResponse, *interfaces.Response, error)
+
 		// BlankPush sends an MDM blank push command to the specified devices.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-blank-push
@@ -52,6 +62,46 @@ func NewService(client interfaces.HTTPClient) *Service {
 // -----------------------------------------------------------------------------
 // Jamf Pro API - MDM Commands
 // -----------------------------------------------------------------------------
+
+// ListCommandsV2 retrieves information about MDM commands made by Jamf Pro.
+// URL: GET /api/v2/mdm/commands
+// rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
+// https://developer.jamf.com/jamf-pro/reference/get_v2-mdm-commands
+func (s *Service) ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (*ListCommandsResponse, *interfaces.Response, error) {
+	endpoint := EndpointCommands
+
+	var result ListCommandsResponse
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var cmd CommandInfo
+				if err := mapstructure.Decode(item, &cmd); err != nil {
+					return fmt.Errorf("failed to decode command info: %w", err)
+				}
+				result.Results = append(result.Results, cmd)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to list MDM commands: %w", err)
+	}
+
+	return &result, resp, nil
+}
 
 // BlankPush sends an MDM blank push command to the specified devices.
 // URL: POST /api/v2/mdm/blank-push

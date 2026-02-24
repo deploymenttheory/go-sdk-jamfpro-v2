@@ -1,0 +1,15 @@
+{
+  "userObjectMapIdTo": "mail",
+  "userObjectMapUsernameTo": "uid",
+  "userObjectMapRealNameTo": "displayName",
+  "userObjectMapEmailTo": "mail",
+  "userObjectMapDepartmentTo": "departmentNumber",
+  "userObjectMapBuildingTo": "",
+  "userObjectMapRoomTo": "",
+  "userObjectMapPhoneTo": "",
+  "userObjectMapPositionTo": "title",
+  "userObjectMapUuidTo": "uid",
+  "userGroupObjectMapIdTo": "name",
+  "userGroupObjectMapGroupNameTo": "name",
+  "userGroupObjectMapUuidTo": "uid"
+}

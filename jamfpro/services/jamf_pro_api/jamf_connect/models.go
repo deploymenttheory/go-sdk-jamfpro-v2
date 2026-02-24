@@ -53,3 +53,31 @@ type ErrorResponse struct {
 	HTTPStatus int                `json:"httpStatus"`
 	Errors     []JamfConnectError `json:"errors"`
 }
+
+// DeploymentTask represents a single Jamf Connect deployment task.
+type DeploymentTask struct {
+	Status  string `json:"status"`
+	Updated string `json:"updated"`
+	Version string `json:"version"`
+}
+
+// DeploymentTasksResponse is the response for GetDeploymentTasksByIDV1.
+type DeploymentTasksResponse struct {
+	TotalCount int              `json:"totalCount"`
+	Results    []DeploymentTask `json:"results"`
+}
+
+// HistoryItem represents a single Jamf Connect history entry.
+type HistoryItem struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Date     string `json:"date"`
+	Note     string `json:"note"`
+	Details  string `json:"details"`
+}
+
+// HistoryResponse is the response for GetHistoryV1.
+type HistoryResponse struct {
+	TotalCount int           `json:"totalCount"`
+	Results    []HistoryItem `json:"results"`
+}

@@ -200,7 +200,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestRestricted
 	return &result, resp, nil
 }
 
-// UpdateRestrictedSoftwareByName updates the specified restricted software by name.
+// UpdateByName updates the specified restricted software by name.
 // URL: PUT /JSSResource/restrictedsoftware/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updaterestrictedsoftwarebyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -228,7 +228,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 	return &result, resp, nil
 }
 
-// DeleteRestrictedSoftwareByID removes the specified restricted software by ID.
+// DeleteByID removes the specified restricted software by ID.
 // URL: DELETE /JSSResource/restrictedsoftware/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleterestrictedsoftwarebyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {

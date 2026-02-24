@@ -21,12 +21,14 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	roleID := "1" // Replace with the desired API role ID
+	// Replace "1" with the actual API role ID
+	roleID := "1"
+
 	result, _, err := jamfClient.APIRoles.GetByIDV1(context.Background(), roleID)
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
+		fmt.Printf("Error retrieving API role: %v\n", err)
 		return
 	}
 	out, _ := json.MarshalIndent(result, "", "    ")
-	fmt.Println("API role details:\n" + string(out))
+	fmt.Printf("API role details:\n%s\n", string(out))
 }

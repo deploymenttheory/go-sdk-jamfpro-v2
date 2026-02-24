@@ -39,6 +39,13 @@ type (
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-advanced-mobile-device-searches-id
 		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 
+		// DeleteMultipleV1 deletes multiple advanced mobile device searches by their IDs (Delete multiple Advanced Mobile Device Searches by their IDs).
+		//
+		// Sends a POST to /api/v1/advanced-mobile-device-searches/delete-multiple with a body containing search IDs.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches-delete-multiple
+		DeleteMultipleV1(ctx context.Context, req *DeleteAdvancedMobileDeviceSearchesByIDRequest) (*interfaces.Response, error)
+
 		// GetChoicesV1 returns criteria choices for advanced mobile device searches (Get Advanced Mobile Device Search Choices).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches-choices
@@ -170,6 +177,30 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// DeleteMultipleV1 deletes multiple advanced mobile device searches by their IDs (Delete multiple Advanced Mobile Device Searches by their IDs).
+// URL: POST /api/v1/advanced-mobile-device-searches/delete-multiple
+// Body: JSON with ids (array of search IDs)
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches-delete-multiple
+func (s *Service) DeleteMultipleV1(ctx context.Context, req *DeleteAdvancedMobileDeviceSearchesByIDRequest) (*interfaces.Response, error) {
+	if req == nil || len(req.IDs) == 0 {
+		return nil, fmt.Errorf("ids are required")
+	}
+
+	endpoint := EndpointAdvancedMobileDeviceSearchesV1 + "/delete-multiple"
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}

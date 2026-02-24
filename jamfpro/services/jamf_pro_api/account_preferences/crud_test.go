@@ -15,11 +15,11 @@ func setupMockService(t *testing.T) (*Service, *mocks.AccountPreferencesMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV2_Success(t *testing.T) {
+func TestUnitGetV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetAccountPreferencesMock()
 
-	result, resp, err := svc.GetV2(context.Background())
+	result, resp, err := svc.GetV3(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -28,7 +28,7 @@ func TestUnitGetV2_Success(t *testing.T) {
 	assert.Equal(t, "DARK", result.UserInterfaceDisplayTheme)
 }
 
-func TestUnitUpdateV2_Success(t *testing.T) {
+func TestUnitUpdateV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateAccountPreferencesMock()
 
@@ -39,7 +39,7 @@ func TestUnitUpdateV2_Success(t *testing.T) {
 		UserInterfaceDisplayTheme: "DARK",
 		ResultsPerPage:            20,
 	}
-	result, resp, err := svc.UpdateV2(context.Background(), request)
+	result, resp, err := svc.UpdateV3(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
