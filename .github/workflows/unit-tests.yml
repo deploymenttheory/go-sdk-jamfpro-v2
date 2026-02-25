@@ -55,7 +55,7 @@ jobs:
           echo "::endgroup::"
           echo ""
 
-          go test -v -race -coverprofile=coverage.out -covermode=atomic $(go list ./... | grep -v '/acceptance')
+          go test -v -race -coverprofile=coverage.out -covermode=atomic $(go list ./... | grep -v '/acceptance' | grep -v '/examples')
 
           echo ""
           echo "::group::📊 Coverage Summary"
