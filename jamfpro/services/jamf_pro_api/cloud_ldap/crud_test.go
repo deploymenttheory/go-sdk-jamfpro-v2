@@ -277,7 +277,7 @@ func TestTestConnectionByIDV2(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	assert.Equal(t, "SUCCESSFUL", result.Status)
+	assert.Equal(t, "Successfully connected", result.Status)
 }
 
 func TestTestConnectionByIDV2_EmptyID(t *testing.T) {
