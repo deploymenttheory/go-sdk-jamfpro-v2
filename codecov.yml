@@ -69,14 +69,24 @@ flags:
       - "jamfpro/client/"
     carryforward: false
 
+  crypto:
+    paths:
+      - "jamfpro/crypto/"
+    carryforward: false
+
   interfaces:
     paths:
       - "jamfpro/interfaces/"
     carryforward: false
 
-  validators:
+  normalization:
     paths:
-      - "jamfpro/services/validators/"
+      - "jamfpro/normalization/"
+    carryforward: false
+
+  version_locking:
+    paths:
+      - "jamfpro/version_locking/"
     carryforward: false
 
   shared:
