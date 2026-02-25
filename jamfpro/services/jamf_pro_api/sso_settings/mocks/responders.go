@@ -53,6 +53,26 @@ func (m *SsoSettingsMock) RegisterGetDependenciesMock() {
 	m.register("GET", "/api/v3/sso/dependencies", 200, "validate_dependencies.json")
 }
 
+// RegisterDisableMock registers a successful POST /api/v3/sso/disable response.
+func (m *SsoSettingsMock) RegisterDisableMock() {
+	m.register("POST", "/api/v3/sso/disable", 204, "")
+}
+
+// RegisterGetHistoryMock registers a successful GET /api/v3/sso/history response.
+func (m *SsoSettingsMock) RegisterGetHistoryMock() {
+	m.register("GET", "/api/v3/sso/history", 200, "validate_history.json")
+}
+
+// RegisterAddHistoryNoteMock registers a successful POST /api/v3/sso/history response.
+func (m *SsoSettingsMock) RegisterAddHistoryNoteMock() {
+	m.register("POST", "/api/v3/sso/history", 201, "validate_add_history_note.json")
+}
+
+// RegisterDownloadMetadataMock registers a successful GET /api/v3/sso/metadata/download response.
+func (m *SsoSettingsMock) RegisterDownloadMetadataMock() {
+	m.register("GET", "/api/v3/sso/metadata/download", 200, "")
+}
+
 func (m *SsoSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

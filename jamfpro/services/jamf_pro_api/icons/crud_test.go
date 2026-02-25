@@ -53,3 +53,12 @@ func TestUnitDownloadV1_Defaults(t *testing.T) {
 	require.Equal(t, 200, resp.StatusCode)
 	require.NotNil(t, body)
 }
+
+func TestUnit_Icons_UploadV1FromFile_FileNotFound(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.UploadV1FromFile(context.Background(), "/nonexistent/path/icon.png")
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "open icon file")
+}

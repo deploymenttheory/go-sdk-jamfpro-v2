@@ -42,3 +42,13 @@ func TestUnitUpdate_NilRequest(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
 }
+
+func TestUnit_SelfServicePlusSettings_GetFeatureToggleEnabledV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterFeatureToggleMock()
+	enabled, resp, err := svc.GetFeatureToggleEnabledV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.True(t, enabled)
+}

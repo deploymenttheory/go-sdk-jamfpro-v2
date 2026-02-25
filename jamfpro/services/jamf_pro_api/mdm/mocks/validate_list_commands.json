@@ -1,0 +1,17 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "uuid": "cmd-uuid-001",
+      "commandType": "DeviceLock",
+      "dateSent": "2024-01-15T10:00:00Z",
+      "status": "Completed"
+    },
+    {
+      "uuid": "cmd-uuid-002",
+      "commandType": "BlankPush",
+      "dateSent": "2024-01-15T11:00:00Z",
+      "status": "Pending"
+    }
+  ]
+}

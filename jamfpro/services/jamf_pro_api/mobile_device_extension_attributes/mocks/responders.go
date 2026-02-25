@@ -103,6 +103,14 @@ func (m *MobileDeviceExtensionAttributesMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v1/mobile-device-extension-attributes/999", 404, "error_not_found.json")
 }
 
+func (m *MobileDeviceExtensionAttributesMock) RegisterGetHistoryMock() {
+	m.register("GET", "/api/v1/mobile-device-extension-attributes/1/history", 200, "validate_history.json")
+}
+
+func (m *MobileDeviceExtensionAttributesMock) RegisterAddHistoryNoteMock() {
+	m.register("POST", "/api/v1/mobile-device-extension-attributes/1/history", 201, "")
+}
+
 func (m *MobileDeviceExtensionAttributesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)

@@ -40,6 +40,10 @@ func (m *SelfServicePlusSettingsMock) RegisterGetMock() {
 	m.register("GET", "/api/v1/self-service-plus/settings", 200, "validate_get.json")
 }
 
+func (m *SelfServicePlusSettingsMock) RegisterFeatureToggleMock() {
+	m.register("GET", "/api/v1/self-service-plus/feature-toggle/enabled", 200, "validate_feature_toggle.json")
+}
+
 func (m *SelfServicePlusSettingsMock) RegisterUpdateMock() {
 	m.register("PUT", "/api/v1/self-service-plus/settings", 204, "")
 }

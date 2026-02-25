@@ -37,6 +37,7 @@ func NewMDMMock() *MDMMock {
 
 // RegisterMocks registers all standard success responses in one call.
 func (m *MDMMock) RegisterMocks() {
+	m.RegisterListCommandsMock()
 	m.RegisterBlankPushMock()
 	m.RegisterSendCommandMock()
 	m.RegisterDeployPackageMock()
@@ -115,6 +116,10 @@ func loadMockResponse(filename string) ([]byte, error) {
 		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
 	}
 	return data, nil
+}
+
+func (m *MDMMock) RegisterListCommandsMock() {
+	m.register("GET", "/api/v2/mdm/commands", 200, "validate_list_commands.json")
 }
 
 func (m *MDMMock) RegisterBlankPushMock() {

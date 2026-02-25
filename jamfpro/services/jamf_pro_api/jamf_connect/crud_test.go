@@ -192,3 +192,45 @@ func TestUnitRetryDeploymentTasksByUUID_EmptyComputerIDs(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "at least one computer ID is required")
 }
+
+func TestUnit_JamfConnect_GetDeploymentTasksByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetDeploymentTasksMock()
+
+	result, resp, err := svc.GetDeploymentTasksByIDV1(context.Background(), "dep-123", nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	assert.Equal(t, "COMPLETED", result.Results[0].Status)
+	assert.Equal(t, "2.0.0", result.Results[0].Version)
+}
+
+func TestUnit_JamfConnect_GetDeploymentTasksByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetDeploymentTasksByIDV1(context.Background(), "", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "deployment ID is required")
+}
+
+func TestUnit_JamfConnect_GetHistoryV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryMock()
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].ID)
+	assert.Equal(t, "admin", result.Results[0].Username)
+}

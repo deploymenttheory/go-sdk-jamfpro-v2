@@ -144,3 +144,56 @@ func TestUnitDeleteMobileDeviceExtensionAttributesByID_NilRequest(t *testing.T) 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 }
+
+func TestUnit_MobileDeviceExtensionAttributes_GetHistoryByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryMock()
+
+	result, resp, err := svc.GetHistoryByIDV1(context.Background(), "1", nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].ID)
+	assert.Equal(t, "admin", result.Results[0].Username)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_GetHistoryByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryByIDV1(context.Background(), "", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_AddHistoryNoteByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNoteMock()
+
+	req := &AddHistoryNoteRequest{Note: "Test note"}
+	resp, err := svc.AddHistoryNoteByIDV1(context.Background(), "1", req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_AddHistoryNoteByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &AddHistoryNoteRequest{Note: "Test note"}
+	resp, err := svc.AddHistoryNoteByIDV1(context.Background(), "", req)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_AddHistoryNoteByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.AddHistoryNoteByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+}

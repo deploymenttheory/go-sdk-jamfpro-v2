@@ -127,3 +127,57 @@ func TestUnitGetContentV1_Success(t *testing.T) {
 	assert.Equal(t, 0, result.TotalCount)
 	assert.NotNil(t, result.Results)
 }
+
+func TestUnit_VolumePurchasingLocations_GetHistoryV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryMock()
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), "1", nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].ID)
+	assert.Equal(t, "admin", result.Results[0].Username)
+}
+
+func TestUnit_VolumePurchasingLocations_AddHistoryNotesV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNotesMock()
+
+	req := &AddHistoryNotesRequest{ObjectHistoryNote: "Test note"}
+	resp, err := svc.AddHistoryNotesV1(context.Background(), "1", req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode)
+}
+
+func TestUnit_VolumePurchasingLocations_AddHistoryNotesV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &AddHistoryNotesRequest{ObjectHistoryNote: "Test note"}
+	resp, err := svc.AddHistoryNotesV1(context.Background(), "", req)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_AddHistoryNotesV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.AddHistoryNotesV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_RevokeVolumePurchasingLocationLicensesByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterRevokeLicensesMock()
+
+	resp, err := svc.RevokeVolumePurchasingLocationLicensesByIDV1(context.Background(), "1")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+}

@@ -161,3 +161,20 @@ func TestUnitRenewProfile_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
 }
+
+func TestUnit_MDM_ListCommandsV2_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListCommandsMock()
+
+	result, resp, err := svc.ListCommandsV2(context.Background(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	assert.Equal(t, "cmd-uuid-001", result.Results[0].UUID)
+	assert.Equal(t, "DeviceLock", result.Results[0].CommandType)
+	assert.Equal(t, "Completed", result.Results[0].Status)
+}
