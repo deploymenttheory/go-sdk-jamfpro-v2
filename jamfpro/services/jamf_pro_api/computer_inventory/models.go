@@ -138,20 +138,22 @@ type ComputerInventorySubsetPurchasing struct {
 // Applications
 
 type ComputerInventorySubsetApplication struct {
-	Name              string `json:"name"`
-	Path              string `json:"path"`
-	Version           string `json:"version"`
-	MacAppStore       bool   `json:"macAppStore"`
-	SizeMegabytes     int    `json:"sizeMegabytes"`
-	BundleId          string `json:"bundleId"`
-	UpdateAvailable   bool   `json:"updateAvailable"`
-	ExternalVersionId string `json:"externalVersionId"`
+	Name                       string `json:"name"`
+	Path                       string `json:"path"`
+	Version                    string `json:"version"`
+	CfBundleShortVersionString string `json:"cfBundleShortVersionString"`
+	CfBundleVersion            string `json:"cfBundleVersion"`
+	MacAppStore                bool   `json:"macAppStore"`
+	SizeMegabytes              int    `json:"sizeMegabytes"`
+	BundleId                   string `json:"bundleId"`
+	UpdateAvailable            bool   `json:"updateAvailable"`
+	ExternalVersionId          string `json:"externalVersionId"`
 }
 
 // Storage
 
 type ComputerInventorySubsetStorage struct {
-	BootDriveAvailableSpaceMegabytes int                                  `json:"bootDriveAvailableSpaceMegabytes"`
+	BootDriveAvailableSpaceMegabytes int64                                `json:"bootDriveAvailableSpaceMegabytes"`
 	Disks                            []ComputerInventorySubsetStorageDisk `json:"disks"`
 }
 
@@ -161,7 +163,7 @@ type ComputerInventorySubsetStorageDisk struct {
 	Model         string                                        `json:"model"`
 	Revision      string                                        `json:"revision"`
 	SerialNumber  string                                        `json:"serialNumber"`
-	SizeMegabytes int                                           `json:"sizeMegabytes"`
+	SizeMegabytes int64                                         `json:"sizeMegabytes"`
 	SmartStatus   string                                        `json:"smartStatus"`
 	Type          string                                        `json:"type"`
 	Partitions    []ComputerInventorySubsetStorageDiskPartition `json:"partitions"`
@@ -169,8 +171,8 @@ type ComputerInventorySubsetStorageDisk struct {
 
 type ComputerInventorySubsetStorageDiskPartition struct {
 	Name                      string `json:"name"`
-	SizeMegabytes             int    `json:"sizeMegabytes"`
-	AvailableMegabytes        int    `json:"availableMegabytes"`
+	SizeMegabytes             int64  `json:"sizeMegabytes"`
+	AvailableMegabytes        int64  `json:"availableMegabytes"`
 	PartitionType             string `json:"partitionType"`
 	PercentUsed               int    `json:"percentUsed"`
 	FileVault2State           string `json:"fileVault2State"`
@@ -225,18 +227,18 @@ type ComputerInventorySubsetHardware struct {
 	Model                  string                                      `json:"model"`
 	ModelIdentifier        string                                      `json:"modelIdentifier"`
 	SerialNumber           string                                      `json:"serialNumber"`
-	ProcessorSpeedMhz      int                                         `json:"processorSpeedMhz"`
+	ProcessorSpeedMhz      int64                                       `json:"processorSpeedMhz"`
 	ProcessorCount         int                                         `json:"processorCount"`
 	CoreCount              int                                         `json:"coreCount"`
 	ProcessorType          string                                      `json:"processorType"`
 	ProcessorArchitecture  string                                      `json:"processorArchitecture"`
-	BusSpeedMhz            int                                         `json:"busSpeedMhz"`
-	CacheSizeKilobytes     int                                         `json:"cacheSizeKilobytes"`
+	BusSpeedMhz            int64                                       `json:"busSpeedMhz"`
+	CacheSizeKilobytes     int64                                       `json:"cacheSizeKilobytes"`
 	NetworkAdapterType     string                                      `json:"networkAdapterType"`
 	MacAddress             string                                      `json:"macAddress"`
 	AltNetworkAdapterType  string                                      `json:"altNetworkAdapterType"`
 	AltMacAddress          string                                      `json:"altMacAddress"`
-	TotalRamMegabytes      int                                         `json:"totalRamMegabytes"`
+	TotalRamMegabytes      int64                                       `json:"totalRamMegabytes"`
 	OpenRamSlots           int                                         `json:"openRamSlots"`
 	BatteryCapacityPercent int                                         `json:"batteryCapacityPercent"`
 	BatteryHealth          string                                      `json:"batteryHealth"`
@@ -260,7 +262,7 @@ type ComputerInventorySubsetLocalUserAccount struct {
 	FullName                       string `json:"fullName"`
 	Admin                          bool   `json:"admin"`
 	HomeDirectory                  string `json:"homeDirectory"`
-	HomeDirectorySizeMb            int    `json:"homeDirectorySizeMb"`
+	HomeDirectorySizeMb            int64  `json:"homeDirectorySizeMb"`
 	FileVault2Enabled              bool   `json:"fileVault2Enabled"`
 	UserAccountType                string `json:"userAccountType"`
 	PasswordMinLength              int    `json:"passwordMinLength"`
@@ -294,7 +296,7 @@ type ComputerInventorySubsetAttachment struct {
 	ID        string `json:"id"`
 	Name      string `json:"name"`
 	FileType  string `json:"fileType"`
-	SizeBytes int    `json:"sizeBytes"`
+	SizeBytes int64  `json:"sizeBytes"`
 }
 
 // Plugins
@@ -384,23 +386,23 @@ type ComputerInventorySubsetContentCaching struct {
 	Alerts                              []ComputerInventorySubsetContentCachingAlert            `json:"alerts"`
 	Activated                           bool                                                    `json:"activated"`
 	Active                              bool                                                    `json:"active"`
-	ActualCacheBytesUsed                int                                                     `json:"actualCacheBytesUsed"`
+	ActualCacheBytesUsed                int64                                                   `json:"actualCacheBytesUsed"`
 	CacheDetails                        []ComputerInventorySubsetContentCachingCacheDetail      `json:"cacheDetails"`
-	CacheBytesFree                      int                                                     `json:"cacheBytesFree"`
-	CacheBytesLimit                     int                                                     `json:"cacheBytesLimit"`
+	CacheBytesFree                      int64                                                   `json:"cacheBytesFree"`
+	CacheBytesLimit                     int64                                                   `json:"cacheBytesLimit"`
 	CacheStatus                         string                                                  `json:"cacheStatus"`
-	CacheBytesUsed                      int                                                     `json:"cacheBytesUsed"`
+	CacheBytesUsed                      int64                                                   `json:"cacheBytesUsed"`
 	DataMigrationCompleted              bool                                                    `json:"dataMigrationCompleted"`
 	DataMigrationProgressPercentage     int                                                     `json:"dataMigrationProgressPercentage"`
 	DataMigrationError                  ComputerInventorySubsetContentCachingDataMigrationError `json:"dataMigrationError"`
 	MaxCachePressureLast1HourPercentage int                                                     `json:"maxCachePressureLast1HourPercentage"`
-	PersonalCacheBytesFree              int                                                     `json:"personalCacheBytesFree"`
-	PersonalCacheBytesLimit             int                                                     `json:"personalCacheBytesLimit"`
-	PersonalCacheBytesUsed              int                                                     `json:"personalCacheBytesUsed"`
-	Port                                int                                                     `json:"port"`
+	PersonalCacheBytesFree              int64                                                   `json:"personalCacheBytesFree"`
+	PersonalCacheBytesLimit             int64                                                   `json:"personalCacheBytesLimit"`
+	PersonalCacheBytesUsed              int64                                                   `json:"personalCacheBytesUsed"`
+	Port                                int64                                                   `json:"port"`
 	PublicAddress                       string                                                  `json:"publicAddress"`
 	RegistrationError                   string                                                  `json:"registrationError"`
-	RegistrationResponseCode            int                                                     `json:"registrationResponseCode"`
+	RegistrationResponseCode            int64                                                   `json:"registrationResponseCode"`
 	RegistrationStarted                 string                                                  `json:"registrationStarted"`
 	RegistrationStatus                  string                                                  `json:"registrationStatus"`
 	RestrictedMedia                     bool                                                    `json:"restrictedMedia"`
@@ -425,7 +427,7 @@ type ComputerInventorySubsetContentCachingParent struct {
 	Details                ComputerInventorySubsetContentCachingParentDetails `json:"details"`
 	Guid                   string                                             `json:"guid"`
 	Healthy                bool                                               `json:"healthy"`
-	Port                   int                                                `json:"port"`
+	Port                   int64                                              `json:"port"`
 	Version                string                                             `json:"version"`
 }
 
@@ -450,7 +452,7 @@ type ComputerInventorySubsetContentCachingParentDetailsCapabilities struct {
 
 type ComputerInventorySubsetContentCachingParentDetailsLocalNetwork struct {
 	ContentCachingParentLocalNetworkId string `json:"contentCachingParentLocalNetworkId"`
-	Speed                              int    `json:"speed"`
+	Speed                              int64  `json:"speed"`
 	Wired                              bool   `json:"wired"`
 }
 
@@ -461,7 +463,7 @@ type ComputerInventorySubsetContentCachingCacheDetail struct {
 }
 
 type ComputerInventorySubsetContentCachingDataMigrationError struct {
-	Code     int                                                               `json:"code"`
+	Code     int64                                                             `json:"code"`
 	Domain   string                                                            `json:"domain"`
 	UserInfo []ComputerInventorySubsetContentCachingDataMigrationErrorUserInfo `json:"userInfo"`
 }
@@ -508,9 +510,9 @@ type ComputerInventorySubsetContentCachingAlert struct {
 	Addresses                   []string `json:"addresses"`
 	ClassName                   string   `json:"className"`
 	PostDate                    string   `json:"postDate"`
-	CacheBytesLimit             int      `json:"cacheBytesLimit"`
+	CacheBytesLimit             int64    `json:"cacheBytesLimit"`
 	PathPreventingAccess        string   `json:"pathPreventingAccess"`
-	ReservedVolumeBytes         int      `json:"reservedVolumeBytes"`
+	ReservedVolumeBytes         int64    `json:"reservedVolumeBytes"`
 	Resource                    string   `json:"resource"`
 }
 
