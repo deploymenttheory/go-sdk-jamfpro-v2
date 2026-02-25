@@ -116,6 +116,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all mobile device applications.
 //
+// URL: GET /JSSResource/mobiledeviceapplications
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplications
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointMobileDeviceApplications
@@ -135,6 +137,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified mobile device application by ID.
+//
+// URL: GET /JSSResource/mobiledeviceapplications/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplicationsbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
@@ -183,6 +187,8 @@ func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *inter
 }
 
 // GetByBundleID returns the specified mobile device application by bundle ID.
+//
+// URL: GET /JSSResource/mobiledeviceapplications/bundleid/{bundleid}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplicationsbybundleid
 func (s *Service) GetByBundleID(ctx context.Context, bundleID string) (*Resource, *interfaces.Response, error) {
@@ -376,6 +382,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) 
 
 // UpdateByBundleID updates the specified mobile device application by bundle ID.
 //
+// URL: PUT /JSSResource/mobiledeviceapplications/bundleid/{bundleid}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceapplicationbybundleid
 func (s *Service) UpdateByBundleID(ctx context.Context, bundleID string, req *Resource) (*Resource, *interfaces.Response, error) {
 	if bundleID == "" {
@@ -405,6 +413,8 @@ func (s *Service) UpdateByBundleID(ctx context.Context, bundleID string, req *Re
 }
 
 // UpdateByIDAndVersion updates the specified mobile device application by ID and version.
+//
+// URL: PUT /JSSResource/mobiledeviceapplications/id/{id}/version/{version}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceapplicationbyidandversion
 func (s *Service) UpdateByIDAndVersion(ctx context.Context, id int, version string, req *Resource) (*Resource, *interfaces.Response, error) {
@@ -439,6 +449,8 @@ func (s *Service) UpdateByIDAndVersion(ctx context.Context, id int, version stri
 
 // DeleteByID removes the specified mobile device application by ID.
 //
+// URL: DELETE /JSSResource/mobiledeviceapplications/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceapplicationbyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -460,6 +472,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified mobile device application by name.
+//
+// URL: DELETE /JSSResource/mobiledeviceapplications/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceapplicationbyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
@@ -483,6 +497,8 @@ func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Re
 
 // DeleteByBundleID removes the specified mobile device application by bundle ID.
 //
+// URL: DELETE /JSSResource/mobiledeviceapplications/bundleid/{bundleid}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceapplicationbybundleid
 func (s *Service) DeleteByBundleID(ctx context.Context, bundleID string) (*interfaces.Response, error) {
 	if bundleID == "" {
@@ -504,6 +520,8 @@ func (s *Service) DeleteByBundleID(ctx context.Context, bundleID string) (*inter
 }
 
 // DeleteByBundleIDAndVersion removes the specified mobile device application by bundle ID and version.
+//
+// URL: DELETE /JSSResource/mobiledeviceapplications/bundleid/{bundleid}/version/{version}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceapplicationbybundleidandversion
 func (s *Service) DeleteByBundleIDAndVersion(ctx context.Context, bundleID, version string) (*interfaces.Response, error) {

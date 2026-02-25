@@ -74,18 +74,10 @@ func (m *SoftwareUpdateServersMock) RegisterDeleteSoftwareUpdateServerByNameMock
 	m.register("DELETE", "/JSSResource/softwareupdateservers/name/Primary SUS", 200, "")
 }
 func (m *SoftwareUpdateServersMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/softwareupdateservers/id/999"] = registeredResponse{
-		statusCode: 404, rawBody: body,
-		errMsg: "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/softwareupdateservers/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 func (m *SoftwareUpdateServersMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>A software update server with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/softwareupdateservers/id/0"] = registeredResponse{
-		statusCode: 409, rawBody: body,
-		errMsg: "Jamf Pro Classic API error (409): A software update server with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/softwareupdateservers/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A software update server with that name already exists")
 }
 
 func (m *SoftwareUpdateServersMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -150,6 +142,18 @@ func (m *SoftwareUpdateServersMock) register(method, path string, statusCode int
 		body = data
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+func (m *SoftwareUpdateServersMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("SoftwareUpdateServersMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
 }
 
 func (m *SoftwareUpdateServersMock) dispatch(method, path string, result any) (*interfaces.Response, error) {

@@ -66,22 +66,12 @@ func (m *FileUploadsMock) RegisterCreateAttachmentMockForPath(path string) {
 
 // RegisterInvalidResourceErrorMock registers POST with invalid resource → 400.
 func (m *FileUploadsMock) RegisterInvalidResourceErrorMock() {
-	path := "/JSSResource/fileuploads/invalidresource/id/1"
-	m.responses["POST:"+path] = registeredResponse{
-		statusCode: 400,
-		rawBody:    []byte("<br>An error has occurred.<br>Invalid resource type<br><br>"),
-		errMsg:     "Jamf Pro Classic API error (400): Invalid resource type",
-	}
+	m.registerError("POST", "/JSSResource/fileuploads/invalidresource/id/1", 400, "error_invalid_resource.xml", "Jamf Pro Classic API error (400): Invalid resource type")
 }
 
 // RegisterPeripheralsNameErrorMock registers an error for peripherals with name type.
 func (m *FileUploadsMock) RegisterPeripheralsNameErrorMock() {
-	path := "/JSSResource/fileuploads/peripherals/name/somename"
-	m.responses["POST:"+path] = registeredResponse{
-		statusCode: 400,
-		rawBody:    []byte("<br>An error has occurred.<br>Peripherals only support ID type<br><br>"),
-		errMsg:     "Jamf Pro Classic API error (400): Peripherals only support ID type",
-	}
+	m.registerError("POST", "/JSSResource/fileuploads/peripherals/name/somename", 400, "error_peripherals_name_type.xml", "Jamf Pro Classic API error (400): Peripherals only support ID type")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -162,6 +152,19 @@ func (m *FileUploadsMock) register(method, path string, statusCode int, fixture 
 		body = data
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+// registerError stores an error response with externalized XML body.
+func (m *FileUploadsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("FileUploadsMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
 }
 
 func (m *FileUploadsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {

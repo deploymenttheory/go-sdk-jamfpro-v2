@@ -70,18 +70,10 @@ func (m *PatchExternalSourcesMock) RegisterDeletePatchExternalSourceByIDMock() {
 	m.register("DELETE", "/JSSResource/patchexternalsources/id/1", 200, "")
 }
 func (m *PatchExternalSourcesMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/patchexternalsources/id/999"] = registeredResponse{
-		statusCode: 404, rawBody: body,
-		errMsg: "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/patchexternalsources/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 func (m *PatchExternalSourcesMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>A patch external source with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/patchexternalsources/id/0"] = registeredResponse{
-		statusCode: 409, rawBody: body,
-		errMsg: "Jamf Pro Classic API error (409): A patch external source with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/patchexternalsources/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A patch external source with that name already exists")
 }
 
 func (m *PatchExternalSourcesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -135,6 +127,18 @@ func (m *PatchExternalSourcesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { 
 func (m *PatchExternalSourcesMock) InvalidateToken() error                    { return nil }
 func (m *PatchExternalSourcesMock) KeepAliveToken() error                     { return nil }
 func (m *PatchExternalSourcesMock) GetLogger() *zap.Logger                    { return m.logger }
+
+func (m *PatchExternalSourcesMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("PatchExternalSourcesMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
+}
 
 func (m *PatchExternalSourcesMock) register(method, path string, statusCode int, fixture string) {
 	var body []byte

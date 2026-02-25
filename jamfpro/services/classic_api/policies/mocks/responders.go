@@ -215,6 +215,19 @@ func (m *PoliciesMock) GetLogger() *zap.Logger                    { return m.log
 
 // ---- Internal helpers ----
 
+// registerError stores an error response with externalized XML body.
+func (m *PoliciesMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("PoliciesMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
+}
+
 // Register stores a success response keyed by "METHOD:path".
 // If fixture is empty, the body is empty (used for 200/204 No Content responses).
 // This method is exported so tests can register custom mock responses.

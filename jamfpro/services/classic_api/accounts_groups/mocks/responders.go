@@ -100,23 +100,13 @@ func (m *AccountGroupsMock) RegisterDeleteAccountGroupByNameMock() {
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/accounts/groupid/999 → 404.
 func (m *AccountGroupsMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/accounts/groupid/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/accounts/groupid/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // RegisterConflictErrorMock registers POST /JSSResource/accounts/groupid/0 → 409
 // when the caller wishes to simulate a duplicate-name conflict.
 func (m *AccountGroupsMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>An account group with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/accounts/groupid/0"] = registeredResponse{
-		statusCode: 409,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (409): An account group with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/accounts/groupid/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): An account group with that name already exists")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -198,6 +188,19 @@ func (m *AccountGroupsMock) register(method, path string, statusCode int, fixtur
 		body = data
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+// registerError stores an error response with externalized XML body.
+func (m *AccountGroupsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("AccountGroupsMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
 }
 
 // dispatch looks up the registered response and either unmarshals the XML body

@@ -103,22 +103,12 @@ func (m *LicensedSoftwareMock) RegisterDeleteLicensedSoftwareByNameMock() {
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/licensedsoftware/id/999 → 404.
 func (m *LicensedSoftwareMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/licensedsoftware/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/licensedsoftware/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // RegisterConflictErrorMock registers POST /JSSResource/licensedsoftware/id/0 → 409.
 func (m *LicensedSoftwareMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Licensed software with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/licensedsoftware/id/0"] = registeredResponse{
-		statusCode: 409,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (409): Licensed software with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/licensedsoftware/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): Licensed software with that name already exists")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -189,6 +179,19 @@ func (m *LicensedSoftwareMock) KeepAliveToken() error                      { ret
 func (m *LicensedSoftwareMock) GetLogger() *zap.Logger                     { return m.logger }
 
 // ---- Internal helpers ----
+
+// registerError stores an error response with externalized XML body.
+func (m *LicensedSoftwareMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("LicensedSoftwareMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
+}
 
 // register stores a success response keyed by "METHOD:path".
 // If fixture is empty, the body is empty (used for 200/204 No Content responses).

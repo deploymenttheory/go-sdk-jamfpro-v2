@@ -92,6 +92,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all users.
 //
+// URL: GET /JSSResource/users
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusers
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointUsers
@@ -111,6 +113,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified user by ID.
+//
+// URL: GET /JSSResource/users/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUser, *interfaces.Response, error) {
@@ -136,6 +140,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUser, *interfac
 
 // GetByName returns the specified user by name.
 //
+// URL: GET /JSSResource/users/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUser, *interfaces.Response, error) {
 	if name == "" {
@@ -160,6 +166,8 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUser, *i
 
 // GetByEmail returns the specified user by email.
 //
+// URL: GET /JSSResource/users/email/{email}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyemail
 func (s *Service) GetByEmail(ctx context.Context, email string) (*ResourceUser, *interfaces.Response, error) {
 	if email == "" {
@@ -183,6 +191,8 @@ func (s *Service) GetByEmail(ctx context.Context, email string) (*ResourceUser, 
 }
 
 // Create creates a new user.
+//
+// URL: POST /JSSResource/users/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createuserbyid
 func (s *Service) Create(ctx context.Context, req *RequestUser) (*ResourceUser, *interfaces.Response, error) {
@@ -217,6 +227,8 @@ func (s *Service) Create(ctx context.Context, req *RequestUser) (*ResourceUser, 
 }
 
 // UpdateByID updates the specified user by ID.
+//
+// URL: PUT /JSSResource/users/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUser) (*ResourceUser, *interfaces.Response, error) {
@@ -255,6 +267,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUser) (*Re
 
 // UpdateByName updates the specified user by name.
 //
+// URL: PUT /JSSResource/users/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUser) (*ResourceUser, *interfaces.Response, error) {
 	if name == "" {
@@ -291,6 +305,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUse
 }
 
 // UpdateByEmail updates the specified user by email.
+//
+// URL: PUT /JSSResource/users/email/{email}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyemail
 func (s *Service) UpdateByEmail(ctx context.Context, email string, req *RequestUser) (*ResourceUser, *interfaces.Response, error) {
@@ -329,6 +345,8 @@ func (s *Service) UpdateByEmail(ctx context.Context, email string, req *RequestU
 
 // DeleteByID removes the specified user by ID.
 //
+// URL: DELETE /JSSResource/users/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -351,6 +369,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 
 // DeleteByName removes the specified user by name.
 //
+// URL: DELETE /JSSResource/users/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
@@ -372,6 +392,8 @@ func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Re
 }
 
 // DeleteByEmail removes the specified user by email.
+//
+// URL: DELETE /JSSResource/users/email/{email}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyemail
 func (s *Service) DeleteByEmail(ctx context.Context, email string) (*interfaces.Response, error) {

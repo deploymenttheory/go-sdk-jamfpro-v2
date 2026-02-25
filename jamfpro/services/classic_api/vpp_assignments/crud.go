@@ -60,6 +60,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all VPP assignments.
 //
+// URL: GET /JSSResource/vppassignments
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignments
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointVPPAssignments
@@ -79,6 +81,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified VPP assignment by ID.
+//
+// URL: GET /JSSResource/vppassignments/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignmentbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
@@ -103,6 +107,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 }
 
 // Create creates a new VPP assignment.
+//
+// URL: POST /JSSResource/vppassignments/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createvppassignmentbyid
 func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -132,6 +138,8 @@ func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateRespo
 }
 
 // UpdateByID updates the specified VPP assignment by ID.
+//
+// URL: PUT /JSSResource/vppassignments/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatevppassignmentbyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -164,6 +172,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Creat
 }
 
 // DeleteByID removes the specified VPP assignment by ID.
+//
+// URL: DELETE /JSSResource/vppassignments/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletevppassignmentbyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {

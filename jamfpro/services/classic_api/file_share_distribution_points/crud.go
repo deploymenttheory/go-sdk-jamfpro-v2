@@ -80,6 +80,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // -----------------------------------------------------------------------------
 
 // List returns all file share distribution points.
+// URL: GET /JSSResource/distributionpoints
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
@@ -100,6 +101,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified file share distribution point by ID.
+// URL: GET /JSSResource/distributionpoints/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*ResourceFileShareDistributionPoint, *interfaces.Response, error) {
@@ -124,6 +126,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceFileShareDistri
 }
 
 // GetByName returns the specified file share distribution point by name.
+// URL: GET /JSSResource/distributionpoints/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*ResourceFileShareDistributionPoint, *interfaces.Response, error) {
@@ -150,6 +153,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceFileShar
 // Create creates a new file share distribution point.
 //
 // Returns the created distribution point ID only (Classic API behavior).
+// URL: POST /JSSResource/distributionpoints/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdistributionpointbyid
 func (s *Service) Create(ctx context.Context, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -179,6 +183,7 @@ func (s *Service) Create(ctx context.Context, req *RequestFileShareDistributionP
 // UpdateByID updates the specified file share distribution point by ID.
 //
 // Returns the updated distribution point ID only (Classic API behavior).
+// URL: PUT /JSSResource/distributionpoints/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -211,6 +216,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestFileShareD
 // UpdateByName updates the specified file share distribution point by name.
 //
 // Returns the updated distribution point ID only (Classic API behavior).
+// URL: PUT /JSSResource/distributionpoints/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -241,6 +247,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestFil
 }
 
 // DeleteByID removes the specified file share distribution point by ID.
+// URL: DELETE /JSSResource/distributionpoints/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedistributionpointbyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {

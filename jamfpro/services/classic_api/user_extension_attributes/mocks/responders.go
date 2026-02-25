@@ -103,22 +103,12 @@ func (m *UserExtensionAttributesMock) RegisterDeleteUserExtensionAttributeByName
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/userextensionattributes/id/999 → 404.
 func (m *UserExtensionAttributesMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/userextensionattributes/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/userextensionattributes/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // RegisterConflictErrorMock registers POST /JSSResource/userextensionattributes/id/0 → 409.
 func (m *UserExtensionAttributesMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>A user extension attribute with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/userextensionattributes/id/0"] = registeredResponse{
-		statusCode: 409,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (409): A user extension attribute with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/userextensionattributes/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A user extension attribute with that name already exists")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -200,6 +190,19 @@ func (m *UserExtensionAttributesMock) register(method, path string, statusCode i
 		body = data
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+// registerError stores an error response with externalized XML body.
+func (m *UserExtensionAttributesMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("UserExtensionAttributesMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
 }
 
 // dispatch looks up the registered response and either unmarshals the XML body

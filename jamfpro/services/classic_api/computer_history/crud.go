@@ -46,6 +46,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // -----------------------------------------------------------------------------
 
 // GetByID retrieves computer history by ID.
+// URL: GET /JSSResource/computerhistory/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
 func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerHistory, *interfaces.Response, error) {
@@ -56,6 +57,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerHist
 }
 
 // GetByIDAndSubset retrieves a subset of computer history by ID.
+// URL: GET /JSSResource/computerhistory/id/{id}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
 func (s *Service) GetByIDAndSubset(ctx context.Context, id string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {
@@ -69,6 +71,7 @@ func (s *Service) GetByIDAndSubset(ctx context.Context, id string, subset string
 }
 
 // GetByName retrieves computer history by computer name.
+// URL: GET /JSSResource/computerhistory/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
 func (s *Service) GetByName(ctx context.Context, name string) (*ResourceComputerHistory, *interfaces.Response, error) {
@@ -79,6 +82,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceComputer
 }
 
 // GetByNameAndSubset retrieves a subset of computer history by name.
+// URL: GET /JSSResource/computerhistory/name/{name}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
 func (s *Service) GetByNameAndSubset(ctx context.Context, name string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {
@@ -92,6 +96,7 @@ func (s *Service) GetByNameAndSubset(ctx context.Context, name string, subset st
 }
 
 // GetByUDID retrieves computer history by UDID.
+// URL: GET /JSSResource/computerhistory/udid/{udid}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
 func (s *Service) GetByUDID(ctx context.Context, udid string) (*ResourceComputerHistory, *interfaces.Response, error) {
@@ -102,6 +107,7 @@ func (s *Service) GetByUDID(ctx context.Context, udid string) (*ResourceComputer
 }
 
 // GetByUDIDAndSubset retrieves a subset of computer history by UDID.
+// URL: GET /JSSResource/computerhistory/udid/{udid}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
 func (s *Service) GetByUDIDAndSubset(ctx context.Context, udid string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {
@@ -115,6 +121,7 @@ func (s *Service) GetByUDIDAndSubset(ctx context.Context, udid string, subset st
 }
 
 // GetBySerialNumber retrieves computer history by serial number.
+// URL: GET /JSSResource/computerhistory/serialnumber/{serialNumber}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
 func (s *Service) GetBySerialNumber(ctx context.Context, serialNumber string) (*ResourceComputerHistory, *interfaces.Response, error) {
@@ -125,6 +132,7 @@ func (s *Service) GetBySerialNumber(ctx context.Context, serialNumber string) (*
 }
 
 // GetBySerialNumberAndSubset retrieves a subset of computer history by serial number.
+// URL: GET /JSSResource/computerhistory/serialnumber/{serialNumber}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
 func (s *Service) GetBySerialNumberAndSubset(ctx context.Context, serialNumber string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {
@@ -138,6 +146,7 @@ func (s *Service) GetBySerialNumberAndSubset(ctx context.Context, serialNumber s
 }
 
 // GetByMACAddress retrieves computer history by MAC address.
+// URL: GET /JSSResource/computerhistory/macaddress/{macAddress}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
 func (s *Service) GetByMACAddress(ctx context.Context, macAddress string) (*ResourceComputerHistory, *interfaces.Response, error) {
@@ -148,6 +157,7 @@ func (s *Service) GetByMACAddress(ctx context.Context, macAddress string) (*Reso
 }
 
 // GetByMACAddressAndSubset retrieves a subset of computer history by MAC address.
+// URL: GET /JSSResource/computerhistory/macaddress/{macAddress}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
 func (s *Service) GetByMACAddressAndSubset(ctx context.Context, macAddress string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {

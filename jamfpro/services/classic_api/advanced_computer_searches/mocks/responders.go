@@ -106,23 +106,13 @@ func (m *AdvancedComputerSearchesMock) RegisterDeleteAdvancedComputerSearchByNam
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/advancedcomputersearches/id/999 → 404.
 func (m *AdvancedComputerSearchesMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/advancedcomputersearches/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/advancedcomputersearches/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // RegisterConflictErrorMock registers POST /JSSResource/advancedcomputersearches/id/0 → 409
 // when the caller wishes to simulate a duplicate-name conflict.
 func (m *AdvancedComputerSearchesMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>An advanced computer search with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/advancedcomputersearches/id/0"] = registeredResponse{
-		statusCode: 409,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (409): An advanced computer search with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/advancedcomputersearches/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): An advanced computer search with that name already exists")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -204,6 +194,19 @@ func (m *AdvancedComputerSearchesMock) register(method, path string, statusCode 
 		body = data
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+// registerError stores an error response with externalized XML body.
+func (m *AdvancedComputerSearchesMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("AdvancedComputerSearchesMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
 }
 
 // dispatch looks up the registered response and either unmarshals the XML body

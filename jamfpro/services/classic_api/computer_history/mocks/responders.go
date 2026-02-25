@@ -7,6 +7,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
+	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -96,26 +99,21 @@ func (m *ComputerHistoryMock) RegisterGetBySerialNumberAndSubsetMock() {
 	m.register("GET", "/JSSResource/computerhistory/serialnumber/C02XYZ123456/subset/General", 200, "validate_get_computer_history.xml")
 }
 
-// RegisterGetByMACAddressMock registers GET /JSSResource/computerhistory/macaddress/00%3A11%3A22%3A33%3A44%3A55 → 200.
+// RegisterGetByMACAddressMock registers GET /JSSResource/computerhistory/macaddress/00:11:22:33:44:55 → 200.
 func (m *ComputerHistoryMock) RegisterGetByMACAddressMock() {
-	m.register("GET", "/JSSResource/computerhistory/macaddress/00%3A11%3A22%3A33%3A44%3A55", 200, "validate_get_computer_history.xml")
+	m.register("GET", "/JSSResource/computerhistory/macaddress/00:11:22:33:44:55", 200, "validate_get_computer_history.xml")
 }
 
 // RegisterGetByMACAddressAndSubsetMock registers GET /JSSResource/computerhistory/macaddress/.../subset/General → 200.
 func (m *ComputerHistoryMock) RegisterGetByMACAddressAndSubsetMock() {
-	m.register("GET", "/JSSResource/computerhistory/macaddress/00%3A11%3A22%3A33%3A44%3A55/subset/General", 200, "validate_get_computer_history.xml")
+	m.register("GET", "/JSSResource/computerhistory/macaddress/00:11:22:33:44:55/subset/General", 200, "validate_get_computer_history.xml")
 }
 
 // ---- Error responders ----
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/computerhistory/id/999 → 404.
 func (m *ComputerHistoryMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/computerhistory/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/computerhistory/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -184,6 +182,19 @@ func (m *ComputerHistoryMock) GetLogger() *zap.Logger                     { retu
 
 // ---- Internal helpers ----
 
+// registerError stores an error response with externalized XML body.
+func (m *ComputerHistoryMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("ComputerHistoryMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
+}
+
 func (m *ComputerHistoryMock) register(method, path string, statusCode int, fixture string) {
 	var body []byte
 	if fixture == "validate_get_computer_history.xml" {
@@ -220,4 +231,18 @@ func (m *ComputerHistoryMock) dispatch(method, path string, result any) (*interf
 		}
 	}
 	return resp, nil
+}
+
+// loadMockResponse reads an XML fixture file from the mocks package directory.
+func loadMockResponse(filename string) ([]byte, error) {
+	_, callerFile, _, ok := runtime.Caller(1)
+	if !ok {
+		return nil, fmt.Errorf("could not get caller path")
+	}
+	dir := filepath.Dir(callerFile)
+	data, err := os.ReadFile(filepath.Join(dir, filename))
+	if err != nil {
+		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
+	}
+	return data, nil
 }

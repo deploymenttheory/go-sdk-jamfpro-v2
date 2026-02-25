@@ -86,21 +86,11 @@ func (m *DirectoryBindingsMock) RegisterDeleteDirectoryBindingByNameMock() {
 }
 
 func (m *DirectoryBindingsMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/directorybindings/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/directorybindings/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 func (m *DirectoryBindingsMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>A directory binding with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/directorybindings/id/0"] = registeredResponse{
-		statusCode: 409,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (409): A directory binding with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/directorybindings/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A directory binding with that name already exists")
 }
 
 func (m *DirectoryBindingsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -154,6 +144,19 @@ func (m *DirectoryBindingsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { ret
 func (m *DirectoryBindingsMock) InvalidateToken() error                    { return nil }
 func (m *DirectoryBindingsMock) KeepAliveToken() error                     { return nil }
 func (m *DirectoryBindingsMock) GetLogger() *zap.Logger                    { return m.logger }
+
+// registerError stores an error response with externalized XML body.
+func (m *DirectoryBindingsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("DirectoryBindingsMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
+}
 
 func (m *DirectoryBindingsMock) register(method, path string, statusCode int, fixture string) {
 	var body []byte

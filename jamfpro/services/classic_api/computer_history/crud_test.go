@@ -198,9 +198,11 @@ func TestUnit_ComputerHistory_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "Resource not found")
 }
 
-// Verify url.PathEscape produces the path the mock expects for MAC address.
+// Verify url.PathEscape behavior for MAC address.
+// Note: colons are valid in URL paths and are not escaped by PathEscape.
 func TestUnit_ComputerHistory_MACAddressPathEscape(t *testing.T) {
 	macAddr := "00:11:22:33:44:55"
 	escaped := url.PathEscape(macAddr)
-	assert.Equal(t, "00%3A11%3A22%3A33%3A44%3A55", escaped)
+	// PathEscape does not escape colons in paths - they are valid path characters
+	assert.Equal(t, "00:11:22:33:44:55", escaped)
 }

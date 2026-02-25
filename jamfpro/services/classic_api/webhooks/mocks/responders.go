@@ -105,22 +105,12 @@ func (m *WebhooksMock) RegisterDeleteByNameMock() {
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/webhooks/id/999 → 404.
 func (m *WebhooksMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/webhooks/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/webhooks/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // RegisterConflictErrorMock registers POST /JSSResource/webhooks/id/0 → 409.
 func (m *WebhooksMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>A webhook with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/webhooks/id/0"] = registeredResponse{
-		statusCode: 409,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (409): A webhook with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/webhooks/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A webhook with that name already exists")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -200,6 +190,18 @@ func (m *WebhooksMock) register(method, path string, statusCode int, fixture str
 		body = data
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+func (m *WebhooksMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("WebhooksMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
 }
 
 func (m *WebhooksMock) dispatch(method, path string, result any) (*interfaces.Response, error) {

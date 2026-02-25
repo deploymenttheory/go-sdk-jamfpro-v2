@@ -250,7 +250,7 @@ func TestUnit_ComputerGroups_NotFound(t *testing.T) {
 	_, _, err := svc.GetByID(context.Background(), 999)
 
 	require.Error(t, err)
-	assert.Contains(t, err.Error(), "Computer group not found")
+	assert.Contains(t, err.Error(), "Resource not found")
 }
 
 func TestUnit_ComputerGroups_Conflict(t *testing.T) {
@@ -266,5 +266,5 @@ func TestUnit_ComputerGroups_Conflict(t *testing.T) {
 	_, _, err := svc.Create(context.Background(), req)
 
 	require.Error(t, err)
-	assert.Contains(t, err.Error(), "Computer group name already exists")
+	assert.Contains(t, err.Error(), "A computer group with that name already exists")
 }

@@ -81,6 +81,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all user groups.
 //
+// URL: GET /JSSResource/usergroups
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroups
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointUserGroups
@@ -100,6 +102,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified user group by ID.
+//
+// URL: GET /JSSResource/usergroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUserGroup, *interfaces.Response, error) {
@@ -124,6 +128,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUserGroup, *int
 }
 
 // GetByName returns the specified user group by name.
+//
+// URL: GET /JSSResource/usergroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUserGroup, *interfaces.Response, error) {
@@ -150,6 +156,8 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUserGrou
 // Create creates a new user group.
 //
 // Returns the created user group ID only (Classic API behavior).
+//
+// URL: POST /JSSResource/usergroups/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createusergroupbyid
 func (s *Service) Create(ctx context.Context, req *RequestUserGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -179,6 +187,8 @@ func (s *Service) Create(ctx context.Context, req *RequestUserGroup) (*CreateUpd
 // UpdateByID updates the specified user group by ID.
 //
 // Returns the updated user group ID only (Classic API behavior).
+//
+// URL: PUT /JSSResource/usergroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUserGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -212,6 +222,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUserGroup)
 //
 // Returns the updated user group ID only (Classic API behavior).
 //
+// URL: PUT /JSSResource/usergroups/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUserGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
@@ -242,6 +254,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUse
 
 // DeleteByID removes the specified user group by ID.
 //
+// URL: DELETE /JSSResource/usergroups/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -263,6 +277,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified user group by name.
+//
+// URL: DELETE /JSSResource/usergroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

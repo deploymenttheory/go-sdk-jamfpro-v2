@@ -76,6 +76,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_azure"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_distribution_point"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_idp"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_information"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_ldap"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_ldap_keystore"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_extension_attributes"
@@ -231,6 +232,7 @@ type Client struct {
 	ClientCheckin                       *client_checkin.Service
 	CloudAzure                          *cloud_azure.Service
 	CloudIdp                            *cloud_idp.Service
+	CloudInformation                    *cloud_information.Service
 	CloudLdap                           *cloud_ldap.Service
 	CloudLdapKeystore                   *cloud_ldap_keystore.Service
 	CloudDistributionPoint              *cloud_distribution_point.Service
@@ -391,6 +393,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		ClientCheckin:                       client_checkin.NewService(transport),
 		CloudAzure:                          cloud_azure.NewService(transport),
 		CloudIdp:                            cloud_idp.NewService(transport),
+		CloudInformation:                    cloud_information.NewService(transport),
 		CloudLdap:                           cloud_ldap.NewService(transport),
 		CloudLdapKeystore:                   cloud_ldap_keystore.NewService(transport),
 		CloudDistributionPoint:              cloud_distribution_point.NewService(transport),

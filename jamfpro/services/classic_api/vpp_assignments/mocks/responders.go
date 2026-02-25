@@ -85,22 +85,12 @@ func (m *VPPAssignmentsMock) RegisterDeleteVPPAssignmentByIDMock() {
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/vppassignments/id/999 → 404.
 func (m *VPPAssignmentsMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/vppassignments/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/vppassignments/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // RegisterConflictErrorMock registers POST /JSSResource/vppassignments/id/0 → 409.
 func (m *VPPAssignmentsMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>A VPP assignment with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/vppassignments/id/0"] = registeredResponse{
-		statusCode: 409,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (409): A VPP assignment with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/vppassignments/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A VPP assignment with that name already exists")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -181,6 +171,19 @@ func (m *VPPAssignmentsMock) register(method, path string, statusCode int, fixtu
 		body = data
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+// registerError stores an error response with externalized XML body.
+func (m *VPPAssignmentsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("VPPAssignmentsMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
 }
 
 // dispatch looks up the registered response and either unmarshals the XML body

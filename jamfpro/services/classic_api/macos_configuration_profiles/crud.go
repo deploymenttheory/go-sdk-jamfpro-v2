@@ -81,6 +81,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all macOS configuration profiles.
 //
+// URL: GET /JSSResource/osxconfigurationprofiles
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofiles
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointMacOSConfigurationProfiles
@@ -100,6 +102,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified macOS configuration profile by ID.
+//
+// URL: GET /JSSResource/osxconfigurationprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
@@ -125,6 +129,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 
 // GetByName returns the specified macOS configuration profile by name.
 //
+// URL: GET /JSSResource/osxconfigurationprofiles/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
 	if name == "" {
@@ -148,6 +154,8 @@ func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *inter
 }
 
 // Create creates a new macOS configuration profile.
+//
+// URL: POST /JSSResource/osxconfigurationprofiles/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createosxconfigurationprofilebyid
 func (s *Service) Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -175,6 +183,8 @@ func (s *Service) Create(ctx context.Context, req *RequestResource) (*CreateUpda
 }
 
 // UpdateByID updates the specified macOS configuration profile by ID.
+//
+// URL: PUT /JSSResource/osxconfigurationprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -206,6 +216,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) 
 
 // UpdateByName updates the specified macOS configuration profile by name.
 //
+// URL: PUT /JSSResource/osxconfigurationprofiles/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
@@ -236,6 +248,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 
 // DeleteByID removes the specified macOS configuration profile by ID.
 //
+// URL: DELETE /JSSResource/osxconfigurationprofiles/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -257,6 +271,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified macOS configuration profile by name.
+//
+// URL: DELETE /JSSResource/osxconfigurationprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

@@ -103,6 +103,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all mobile device provisioning profiles.
 //
+// URL: GET /JSSResource/mobiledeviceprovisioningprofiles
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofiles
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointMobileDeviceProvisioningProfiles
@@ -285,6 +287,8 @@ func (s *Service) CreateByUUID(ctx context.Context, uuid string, req *RequestRes
 
 // UpdateByID updates the specified mobile device provisioning profile by ID.
 //
+// URL: PUT /JSSResource/mobiledeviceprovisioningprofiles/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) (*Resource, *interfaces.Response, error) {
 	if id <= 0 {
@@ -314,6 +318,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) 
 }
 
 // UpdateByName updates the specified mobile device provisioning profile by name.
+//
+// URL: PUT /JSSResource/mobiledeviceprovisioningprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestResource) (*Resource, *interfaces.Response, error) {
@@ -345,6 +351,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 
 // UpdateByUUID updates the specified mobile device provisioning profile by UUID.
 //
+// URL: PUT /JSSResource/mobiledeviceprovisioningprofiles/uuid/{uuid}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyuuid
 func (s *Service) UpdateByUUID(ctx context.Context, uuid string, req *RequestResource) (*Resource, *interfaces.Response, error) {
 	if uuid == "" {
@@ -375,6 +383,8 @@ func (s *Service) UpdateByUUID(ctx context.Context, uuid string, req *RequestRes
 
 // DeleteByID removes the specified mobile device provisioning profile by ID.
 //
+// URL: DELETE /JSSResource/mobiledeviceprovisioningprofiles/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceprovisioningprofilebyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -397,6 +407,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 
 // DeleteByName removes the specified mobile device provisioning profile by name.
 //
+// URL: DELETE /JSSResource/mobiledeviceprovisioningprofiles/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceprovisioningprofilebyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
@@ -418,6 +430,8 @@ func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Re
 }
 
 // DeleteByUUID removes the specified mobile device provisioning profile by UUID.
+//
+// URL: DELETE /JSSResource/mobiledeviceprovisioningprofiles/uuid/{uuid}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceprovisioningprofilebyuuid
 func (s *Service) DeleteByUUID(ctx context.Context, uuid string) (*interfaces.Response, error) {

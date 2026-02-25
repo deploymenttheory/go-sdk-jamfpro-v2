@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 )
 
 // fileUploadFormFieldName is the form field name expected by the Classic API file uploads endpoint.
@@ -49,6 +50,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 }
 
 // CreateAttachment uploads a file to a specific resource in Jamf Pro.
+// URL: POST /JSSResource/fileuploads/{resource}/{idType}/{identifier}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/fileuploads
 func (s *Service) CreateAttachment(ctx context.Context, resource string, idType ResourceIDType, identifier string, filePath string, forceIpaUpload bool) (*interfaces.Response, error) {
@@ -110,7 +112,7 @@ func (s *Service) CreateAttachment(ctx context.Context, resource string, idType 
 	}
 
 	headers := map[string]string{
-		"Accept": "application/xml",
+		"Accept": mime.ApplicationXML,
 	}
 
 	var result any

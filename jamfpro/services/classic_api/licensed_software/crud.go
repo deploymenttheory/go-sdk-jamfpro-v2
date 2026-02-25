@@ -75,6 +75,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all licensed software.
 //
+// URL: GET /JSSResource/licensedsoftware
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findlicensedsoftware
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointLicensedSoftware
@@ -94,6 +96,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified licensed software by ID.
+//
+// URL: GET /JSSResource/licensedsoftware/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findlicensedsoftwarebyid
 func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
@@ -118,6 +122,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 }
 
 // GetByName returns the specified licensed software by name.
+//
+// URL: GET /JSSResource/licensedsoftware/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findlicensedsoftwarebyname
 func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
@@ -169,6 +175,8 @@ func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateRespo
 }
 
 // UpdateByID updates the specified licensed software by ID.
+//
+// URL: PUT /JSSResource/licensedsoftware/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatelicensedsoftwarebyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -230,6 +238,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) 
 
 // DeleteByID removes the specified licensed software by ID.
 //
+// URL: DELETE /JSSResource/licensedsoftware/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletelicensedsoftwarebyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -251,6 +261,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified licensed software by name.
+//
+// URL: DELETE /JSSResource/licensedsoftware/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletelicensedsoftwarebyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

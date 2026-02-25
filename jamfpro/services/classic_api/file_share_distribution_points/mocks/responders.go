@@ -103,22 +103,12 @@ func (m *FileShareDistributionPointsMock) RegisterDeleteFileShareDistributionPoi
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/distributionpoints/id/999 → 404.
 func (m *FileShareDistributionPointsMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/distributionpoints/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/distributionpoints/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // RegisterConflictErrorMock registers POST /JSSResource/distributionpoints/id/0 → 409.
 func (m *FileShareDistributionPointsMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>A distribution point with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/distributionpoints/id/0"] = registeredResponse{
-		statusCode: 409,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (409): A distribution point with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/distributionpoints/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A distribution point with that name already exists")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -187,6 +177,19 @@ func (m *FileShareDistributionPointsMock) KeepAliveToken() error                
 func (m *FileShareDistributionPointsMock) GetLogger() *zap.Logger                    { return m.logger }
 
 // ---- Internal helpers ----
+
+// registerError stores an error response with externalized XML body.
+func (m *FileShareDistributionPointsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("FileShareDistributionPointsMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
+}
 
 // register stores a success response keyed by "METHOD:path".
 // If fixture is empty, the body is empty (used for 200/204 No Content responses).

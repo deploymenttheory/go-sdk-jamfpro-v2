@@ -81,6 +81,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all mobile device groups.
 //
+// URL: GET /JSSResource/mobiledevicegroups
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicegroups
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointMobileDeviceGroups
@@ -100,6 +102,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified mobile device group by ID.
+//
+// URL: GET /JSSResource/mobiledevicegroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicegroupsbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*ResourceMobileDeviceGroup, *interfaces.Response, error) {
@@ -124,6 +128,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceMobileDeviceGro
 }
 
 // GetByName returns the specified mobile device group by name.
+//
+// URL: GET /JSSResource/mobiledevicegroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicegroupsbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*ResourceMobileDeviceGroup, *interfaces.Response, error) {
@@ -150,6 +156,8 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceMobileDe
 // Create creates a new mobile device group.
 //
 // Returns the created mobile device group ID only (Classic API behavior).
+//
+// URL: POST /JSSResource/mobiledevicegroups/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledevicegroupbyid
 func (s *Service) Create(ctx context.Context, req *RequestMobileDeviceGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -179,6 +187,8 @@ func (s *Service) Create(ctx context.Context, req *RequestMobileDeviceGroup) (*C
 // UpdateByID updates the specified mobile device group by ID.
 //
 // Returns the updated mobile device group ID only (Classic API behavior).
+//
+// URL: PUT /JSSResource/mobiledevicegroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicegroupbyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestMobileDeviceGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -212,6 +222,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestMobileDevi
 //
 // Returns the updated mobile device group ID only (Classic API behavior).
 //
+// URL: PUT /JSSResource/mobiledevicegroups/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicegroupbyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestMobileDeviceGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
@@ -242,6 +254,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestMob
 
 // DeleteByID removes the specified mobile device group by ID.
 //
+// URL: DELETE /JSSResource/mobiledevicegroups/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicegroupbyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -263,6 +277,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified mobile device group by name.
+//
+// URL: DELETE /JSSResource/mobiledevicegroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicegroupbyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

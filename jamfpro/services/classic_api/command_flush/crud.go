@@ -54,6 +54,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 //
 // Valid idType values: computers, computergroups, mobiledevices, or mobiledevicegroups
 // Valid status values: Pending, Failed, or Pending+Failed
+// URL: DELETE /JSSResource/commandflush/{idType}/id/{id}/status/{status}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
 func (s *Service) FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*interfaces.Response, error) {
@@ -75,7 +76,7 @@ func (s *Service) FlushByIDAndStatus(ctx context.Context, idType string, id stri
 		"Content-Type": mime.ApplicationXML,
 	}
 
-	resp, err := s.client.Delete(ctx, endpoint, headers, nil, nil)
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to clear %s MDM commands for %s %s: %w", status, idType, id, err)
 	}
@@ -84,6 +85,7 @@ func (s *Service) FlushByIDAndStatus(ctx context.Context, idType string, id stri
 }
 
 // FlushWithXML clears MDM commands using an XML request body for batch operations.
+// URL: DELETE /JSSResource/commandflush
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
 func (s *Service) FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*interfaces.Response, error) {
@@ -107,7 +109,7 @@ func (s *Service) FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*
 		"body": string(xmlData),
 	}
 
-	resp, err := s.client.Delete(ctx, endpoint, headers, bodyMap, nil)
+	resp, err := s.client.Delete(ctx, endpoint, bodyMap, headers, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to flush commands with XML request: %w", err)
 	}

@@ -74,18 +74,10 @@ func (m *DiskEncryptionConfigurationsMock) RegisterDeleteByNameMock() {
 	m.register("DELETE", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "")
 }
 func (m *DiskEncryptionConfigurationsMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/diskencryptionconfigurations/id/999"] = registeredResponse{
-		statusCode: 404, rawBody: body,
-		errMsg: "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/diskencryptionconfigurations/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 func (m *DiskEncryptionConfigurationsMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>A disk encryption configuration with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/diskencryptionconfigurations/id/0"] = registeredResponse{
-		statusCode: 409, rawBody: body,
-		errMsg: "Jamf Pro Classic API error (409): A disk encryption configuration with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/diskencryptionconfigurations/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A disk encryption configuration with that name already exists")
 }
 
 func (m *DiskEncryptionConfigurationsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -139,6 +131,19 @@ func (m *DiskEncryptionConfigurationsMock) RSQLBuilder() interfaces.RSQLFilterBu
 func (m *DiskEncryptionConfigurationsMock) InvalidateToken() error                    { return nil }
 func (m *DiskEncryptionConfigurationsMock) KeepAliveToken() error                     { return nil }
 func (m *DiskEncryptionConfigurationsMock) GetLogger() *zap.Logger                    { return m.logger }
+
+// registerError stores an error response with externalized XML body.
+func (m *DiskEncryptionConfigurationsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("DiskEncryptionConfigurationsMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
+}
 
 func (m *DiskEncryptionConfigurationsMock) register(method, path string, statusCode int, fixture string) {
 	var body []byte

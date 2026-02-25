@@ -93,6 +93,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all mobile device configuration profiles.
 //
+// URL: GET /JSSResource/mobiledeviceconfigurationprofiles
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofiles
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointMobileDeviceConfigurationProfiles
@@ -112,6 +114,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified mobile device configuration profile by ID.
+//
+// URL: GET /JSSResource/mobiledeviceconfigurationprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
@@ -137,6 +141,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 
 // GetByName returns the specified mobile device configuration profile by name.
 //
+// URL: GET /JSSResource/mobiledeviceconfigurationprofiles/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
 	if name == "" {
@@ -160,6 +166,8 @@ func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *inter
 }
 
 // GetByIDWithSubset returns the specified mobile device configuration profile by ID with a data subset.
+//
+// URL: GET /JSSResource/mobiledeviceconfigurationprofiles/id/{id}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyiddatasubset
 func (s *Service) GetByIDWithSubset(ctx context.Context, id int, subset string) (*Resource, *interfaces.Response, error) {
@@ -188,6 +196,8 @@ func (s *Service) GetByIDWithSubset(ctx context.Context, id int, subset string) 
 
 // GetByNameWithSubset returns the specified mobile device configuration profile by name with a data subset.
 //
+// URL: GET /JSSResource/mobiledeviceconfigurationprofiles/name/{name}/subset/{subset}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbynamedatasubset
 func (s *Service) GetByNameWithSubset(ctx context.Context, name, subset string) (*Resource, *interfaces.Response, error) {
 	if name == "" {
@@ -215,6 +225,8 @@ func (s *Service) GetByNameWithSubset(ctx context.Context, name, subset string) 
 
 // Create creates a new mobile device configuration profile.
 //
+// URL: POST /JSSResource/mobiledeviceconfigurationprofiles/id/0
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceconfigurationprofilebyid
 func (s *Service) Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if req == nil {
@@ -241,6 +253,8 @@ func (s *Service) Create(ctx context.Context, req *RequestResource) (*CreateUpda
 }
 
 // UpdateByID updates the specified mobile device configuration profile by ID.
+//
+// URL: PUT /JSSResource/mobiledeviceconfigurationprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceconfigurationprofilebyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -272,6 +286,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) 
 
 // UpdateByName updates the specified mobile device configuration profile by name.
 //
+// URL: PUT /JSSResource/mobiledeviceconfigurationprofiles/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceconfigurationprofilebyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
@@ -302,6 +318,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 
 // DeleteByID removes the specified mobile device configuration profile by ID.
 //
+// URL: DELETE /JSSResource/mobiledeviceconfigurationprofiles/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceconfigurationprofilebyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -323,6 +341,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified mobile device configuration profile by name.
+//
+// URL: DELETE /JSSResource/mobiledeviceconfigurationprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceconfigurationprofilebyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

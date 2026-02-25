@@ -80,6 +80,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // -----------------------------------------------------------------------------
 
 // List returns all computer groups.
+// URL: GET /JSSResource/computergroups
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputergroups
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
@@ -100,6 +101,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified computer group by ID.
+// URL: GET /JSSResource/computergroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputergroupsbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*ResourceComputerGroup, *interfaces.Response, error) {
@@ -124,6 +126,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceComputerGroup, 
 }
 
 // GetByName returns the specified computer group by name.
+// URL: GET /JSSResource/computergroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputergroupsbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*ResourceComputerGroup, *interfaces.Response, error) {
@@ -150,6 +153,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceComputer
 // Create creates a new computer group.
 //
 // Returns the created computer group ID only (Classic API behavior).
+// URL: POST /JSSResource/computergroups/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputergroupbyid
 func (s *Service) Create(ctx context.Context, req *RequestComputerGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -179,6 +183,7 @@ func (s *Service) Create(ctx context.Context, req *RequestComputerGroup) (*Creat
 // UpdateByID updates the specified computer group by ID.
 //
 // Returns the updated computer group ID only (Classic API behavior).
+// URL: PUT /JSSResource/computergroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatecomputergroupbyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestComputerGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -211,6 +216,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestComputerGr
 // UpdateByName updates the specified computer group by name.
 //
 // Returns the updated computer group ID only (Classic API behavior).
+// URL: PUT /JSSResource/computergroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatecomputergroupbyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestComputerGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -241,6 +247,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestCom
 }
 
 // DeleteByID removes the specified computer group by ID.
+// URL: DELETE /JSSResource/computergroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputergroupbyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
@@ -263,6 +270,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified computer group by name.
+// URL: DELETE /JSSResource/computergroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputergroupbyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

@@ -79,6 +79,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // -----------------------------------------------------------------------------
 
 // List returns all ebooks.
+// URL: GET /JSSResource/ebooks
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findebooks
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
@@ -99,6 +100,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified ebook by ID.
+// URL: GET /JSSResource/ebooks/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findebooksbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
@@ -123,6 +125,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 }
 
 // GetByName returns the specified ebook by name.
+// URL: GET /JSSResource/ebooks/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findebooksbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
@@ -147,6 +150,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *inter
 }
 
 // GetByNameAndSubset returns a specific subset of an ebook by name.
+// URL: GET /JSSResource/ebooks/name/{name}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findebooksbynamedatasubset
 func (s *Service) GetByNameAndSubset(ctx context.Context, name, subset string) (*Resource, *interfaces.Response, error) {
@@ -174,6 +178,7 @@ func (s *Service) GetByNameAndSubset(ctx context.Context, name, subset string) (
 }
 
 // Create creates a new ebook.
+// URL: POST /JSSResource/ebooks/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createebookbyid
 func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -201,6 +206,7 @@ func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateRespo
 }
 
 // UpdateByID updates the specified ebook by ID.
+// URL: PUT /JSSResource/ebooks/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateebookbyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -231,6 +237,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Creat
 }
 
 // UpdateByName updates the specified ebook by name.
+// URL: PUT /JSSResource/ebooks/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateebookbyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error) {
@@ -261,6 +268,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) 
 }
 
 // DeleteByID removes the specified ebook by ID.
+// URL: DELETE /JSSResource/ebooks/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteebookbyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
@@ -283,6 +291,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified ebook by name.
+// URL: DELETE /JSSResource/ebooks/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteebookbyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

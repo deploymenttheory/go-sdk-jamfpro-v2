@@ -74,6 +74,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // -----------------------------------------------------------------------------
 
 // List returns all dock items.
+// URL: GET /JSSResource/dockitems
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddockitems
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
@@ -94,6 +95,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified dock item by ID.
+// URL: GET /JSSResource/dockitems/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddockitemsbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
@@ -118,6 +120,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 }
 
 // GetByName returns the specified dock item by name.
+// URL: GET /JSSResource/dockitems/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddockitemsbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
@@ -142,6 +145,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *inter
 }
 
 // Create creates a new dock item.
+// URL: POST /JSSResource/dockitems/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdockitembyid
 func (s *Service) Create(ctx context.Context, req *Request) (*Resource, *interfaces.Response, error) {
@@ -169,6 +173,7 @@ func (s *Service) Create(ctx context.Context, req *Request) (*Resource, *interfa
 }
 
 // UpdateByID updates the specified dock item by ID.
+// URL: PUT /JSSResource/dockitems/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedockitembyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *Request) (*Resource, *interfaces.Response, error) {
@@ -199,6 +204,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *Request) (*Resour
 }
 
 // UpdateByName updates the specified dock item by name.
+// URL: PUT /JSSResource/dockitems/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedockitembyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *Request) (*Resource, *interfaces.Response, error) {
@@ -229,6 +235,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *Request) (
 }
 
 // DeleteByID removes the specified dock item by ID.
+// URL: DELETE /JSSResource/dockitems/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedockitembyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
@@ -251,6 +258,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified dock item by name.
+// URL: DELETE /JSSResource/dockitems/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedockitembyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

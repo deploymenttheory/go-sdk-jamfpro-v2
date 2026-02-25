@@ -84,6 +84,7 @@ func applySiteDefault(computer *ResponseComputer) {
 // -----------------------------------------------------------------------------
 
 // List returns all computers.
+// URL: GET /JSSResource/computers
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputers
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
@@ -104,6 +105,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified computer by ID.
+// URL: GET /JSSResource/computers/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputersbyid
 func (s *Service) GetByID(ctx context.Context, id string) (*ResponseComputer, *interfaces.Response, error) {
@@ -128,6 +130,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResponseComputer, *i
 }
 
 // GetByName returns the specified computer by name.
+// URL: GET /JSSResource/computers/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputersbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*ResponseComputer, *interfaces.Response, error) {
@@ -152,6 +155,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResponseComputer
 }
 
 // Create creates a new computer.
+// URL: POST /JSSResource/computers
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputerbyid
 func (s *Service) Create(ctx context.Context, computer *ResponseComputer) (*ResponseComputer, *interfaces.Response, error) {
@@ -179,6 +183,7 @@ func (s *Service) Create(ctx context.Context, computer *ResponseComputer) (*Resp
 }
 
 // UpdateByID updates the specified computer by ID.
+// URL: PUT /JSSResource/computers/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatecomputerbyid
 func (s *Service) UpdateByID(ctx context.Context, id string, computer *ResponseComputer) (*ResponseComputer, *interfaces.Response, error) {
@@ -208,6 +213,7 @@ func (s *Service) UpdateByID(ctx context.Context, id string, computer *ResponseC
 }
 
 // UpdateByName updates the specified computer by name.
+// URL: PUT /JSSResource/computers/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatecomputerbyname
 func (s *Service) UpdateByName(ctx context.Context, name string, computer *ResponseComputer) (*ResponseComputer, *interfaces.Response, error) {
@@ -237,6 +243,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, computer *Respo
 }
 
 // DeleteByID removes the specified computer by ID.
+// URL: DELETE /JSSResource/computers/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerbyid
 func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Response, error) {
@@ -259,6 +266,7 @@ func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Respon
 }
 
 // DeleteByName removes the specified computer by name.
+// URL: DELETE /JSSResource/computers/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerbyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

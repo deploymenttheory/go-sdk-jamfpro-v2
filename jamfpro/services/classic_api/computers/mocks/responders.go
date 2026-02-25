@@ -102,12 +102,7 @@ func (m *ComputersMock) RegisterDeleteComputerByNameMock() {
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/computers/id/999 → 404.
 func (m *ComputersMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/computers/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/computers/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -176,6 +171,19 @@ func (m *ComputersMock) KeepAliveToken() error                      { return nil
 func (m *ComputersMock) GetLogger() *zap.Logger                     { return m.logger }
 
 // ---- Internal helpers ----
+
+// registerError stores an error response with externalized XML body.
+func (m *ComputersMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("ComputersMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
+}
 
 // register stores a success response keyed by "METHOD:path".
 // If fixture is empty, the body is empty (used for 200/204 No Content responses).

@@ -151,22 +151,12 @@ func (m *MobileDeviceApplicationsMock) RegisterDeleteMobileDeviceApplicationByBu
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/mobiledeviceapplications/id/999 → 404.
 func (m *MobileDeviceApplicationsMock) RegisterNotFoundErrorMock() {
-	body := []byte("<br>An error has occurred.<br>Resource not found<br><br>")
-	m.responses["GET:/JSSResource/mobiledeviceapplications/id/999"] = registeredResponse{
-		statusCode: 404,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (404): Resource not found",
-	}
+	m.registerError("GET", "/JSSResource/mobiledeviceapplications/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 // RegisterConflictErrorMock registers POST /JSSResource/mobiledeviceapplications/id/0 → 409.
 func (m *MobileDeviceApplicationsMock) RegisterConflictErrorMock() {
-	body := []byte("<br>An error has occurred.<br>A mobile device application with that name already exists.<br><br>")
-	m.responses["POST:/JSSResource/mobiledeviceapplications/id/0"] = registeredResponse{
-		statusCode: 409,
-		rawBody:    body,
-		errMsg:     "Jamf Pro Classic API error (409): A mobile device application with that name already exists",
-	}
+	m.registerError("POST", "/JSSResource/mobiledeviceapplications/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A mobile device application with that name already exists")
 }
 
 // ---- interfaces.HTTPClient implementation ----
@@ -250,6 +240,19 @@ func (m *MobileDeviceApplicationsMock) register(method, path string, statusCode 
 		body = data
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+// registerError stores an error response with externalized XML body.
+func (m *MobileDeviceApplicationsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("MobileDeviceApplicationsMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	m.responses[method+":"+path] = registeredResponse{
+		statusCode: statusCode,
+		rawBody:    body,
+		errMsg:     errMsg,
+	}
 }
 
 // dispatch looks up the registered response and either unmarshals the XML body

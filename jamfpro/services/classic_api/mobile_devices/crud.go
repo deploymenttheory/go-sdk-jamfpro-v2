@@ -85,6 +85,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all mobile devices.
 //
+// URL: GET /JSSResource/mobiledevices
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevices
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointMobileDevices
@@ -104,6 +106,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified mobile device by ID.
+//
+// URL: GET /JSSResource/mobiledevices/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyid
 func (s *Service) GetByID(ctx context.Context, id string) (*ResponseMobileDevice, *interfaces.Response, error) {
@@ -231,6 +235,8 @@ func (s *Service) Create(ctx context.Context, device *ResponseMobileDevice) (*Re
 
 // UpdateByID updates the specified mobile device by ID.
 //
+// URL: PUT /JSSResource/mobiledevices/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicebyid
 func (s *Service) UpdateByID(ctx context.Context, id string, device *ResponseMobileDevice) (*ResponseMobileDevice, *interfaces.Response, error) {
 	if id == "" {
@@ -257,6 +263,8 @@ func (s *Service) UpdateByID(ctx context.Context, id string, device *ResponseMob
 }
 
 // UpdateByName updates the specified mobile device by name.
+//
+// URL: PUT /JSSResource/mobiledevices/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicebyname
 func (s *Service) UpdateByName(ctx context.Context, name string, device *ResponseMobileDevice) (*ResponseMobileDevice, *interfaces.Response, error) {
@@ -285,6 +293,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, device *Respons
 
 // DeleteByID removes the specified mobile device by ID.
 //
+// URL: DELETE /JSSResource/mobiledevices/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicebyid
 func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Response, error) {
 	if id == "" {
@@ -306,6 +316,8 @@ func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Respon
 }
 
 // DeleteByName removes the specified mobile device by name.
+//
+// URL: DELETE /JSSResource/mobiledevices/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicebyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

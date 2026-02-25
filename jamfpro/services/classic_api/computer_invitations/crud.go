@@ -59,6 +59,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // -----------------------------------------------------------------------------
 
 // List returns all computer invitations.
+// URL: GET /JSSResource/computerinvitations
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
@@ -79,6 +80,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified computer invitation by ID.
+// URL: GET /JSSResource/computerinvitations/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyid
 func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerInvitation, *interfaces.Response, error) {
@@ -103,6 +105,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerInvi
 }
 
 // GetByInvitationID returns the specified computer invitation by invitation ID.
+// URL: GET /JSSResource/computerinvitations/invitation/{invitationID}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyinvitation
 func (s *Service) GetByInvitationID(ctx context.Context, invitationID string) (*ResourceComputerInvitation, *interfaces.Response, error) {
@@ -127,6 +130,7 @@ func (s *Service) GetByInvitationID(ctx context.Context, invitationID string) (*
 }
 
 // Create creates a new computer invitation.
+// URL: POST /JSSResource/computerinvitations/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputerinvitationbyid
 func (s *Service) Create(ctx context.Context, req *ResourceComputerInvitation) (*ResourceComputerInvitation, *interfaces.Response, error) {
@@ -151,6 +155,7 @@ func (s *Service) Create(ctx context.Context, req *ResourceComputerInvitation) (
 }
 
 // DeleteByID removes the specified computer invitation by ID.
+// URL: DELETE /JSSResource/computerinvitations/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerinvitationbyid
 func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Response, error) {

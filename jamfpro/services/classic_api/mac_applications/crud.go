@@ -28,16 +28,20 @@ type (
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbyname
 		GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error)
 
-		// GetByIDAndSubset returns a specific subset of a Mac application by ID.
-		// Subset values: General, Scope, SelfService, VPPCodes, VPP.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbyiddatasubset
+// GetByIDAndSubset returns a specific subset of a Mac application by ID.
+// Subset values: General, Scope, SelfService, VPPCodes, VPP.
+//
+// URL: GET /JSSResource/macapplications/id/{id}/subset/{subset}
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbyiddatasubset
 		GetByIDAndSubset(ctx context.Context, id int, subset string) (*Resource, *interfaces.Response, error)
 
-		// GetByNameAndSubset returns a specific subset of a Mac application by name.
-		// Subset values: General, Scope, SelfService, VPPCodes, VPP.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbynamedatasubset
+// GetByNameAndSubset returns a specific subset of a Mac application by name.
+// Subset values: General, Scope, SelfService, VPPCodes, VPP.
+//
+// URL: GET /JSSResource/macapplications/name/{name}/subset/{subset}
+//
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbynamedatasubset
 		GetByNameAndSubset(ctx context.Context, name, subset string) (*Resource, *interfaces.Response, error)
 
 		// Create creates a new Mac application.
@@ -87,6 +91,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all Mac applications.
 //
+// URL: GET /JSSResource/macapplications
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplications
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointMacApplications
@@ -106,6 +112,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified Mac application by ID.
+//
+// URL: GET /JSSResource/macapplications/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
@@ -130,6 +138,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 }
 
 // GetByName returns the specified Mac application by name.
+//
+// URL: GET /JSSResource/macapplications/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
@@ -209,6 +219,8 @@ func (s *Service) GetByNameAndSubset(ctx context.Context, name, subset string) (
 
 // Create creates a new Mac application.
 //
+// URL: POST /JSSResource/macapplications/id/0
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmacapplicationbyid
 func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if req == nil {
@@ -235,6 +247,8 @@ func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateRespo
 }
 
 // UpdateByID updates the specified Mac application by ID.
+//
+// URL: PUT /JSSResource/macapplications/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemacapplicationbyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Resource, *interfaces.Response, error) {
@@ -266,6 +280,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Resou
 
 // UpdateByName updates the specified Mac application by name.
 //
+// URL: PUT /JSSResource/macapplications/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemacapplicationbyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) (*Resource, *interfaces.Response, error) {
 	if name == "" {
@@ -296,6 +312,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) 
 
 // DeleteByID removes the specified Mac application by ID.
 //
+// URL: DELETE /JSSResource/macapplications/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemacapplicationbyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -317,6 +335,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified Mac application by name.
+//
+// URL: DELETE /JSSResource/macapplications/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemacapplicationbyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {

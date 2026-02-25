@@ -101,6 +101,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all mobile device enrollment profiles.
 //
+// URL: GET /JSSResource/mobiledeviceenrollmentprofiles
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofiles
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointMobileDeviceEnrollmentProfiles
@@ -120,6 +122,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified mobile device enrollment profile by ID.
+//
+// URL: GET /JSSResource/mobiledeviceenrollmentprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
@@ -145,6 +149,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 
 // GetByName returns the specified mobile device enrollment profile by name.
 //
+// URL: GET /JSSResource/mobiledeviceenrollmentprofiles/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
 	if name == "" {
@@ -169,6 +175,8 @@ func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *inter
 
 // GetByInvitation returns the specified mobile device enrollment profile by invitation.
 //
+// URL: GET /JSSResource/mobiledeviceenrollmentprofiles/invitation/{invitation}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyinvitation
 func (s *Service) GetByInvitation(ctx context.Context, invitation string) (*Resource, *interfaces.Response, error) {
 	if invitation == "" {
@@ -192,6 +200,8 @@ func (s *Service) GetByInvitation(ctx context.Context, invitation string) (*Reso
 }
 
 // GetByIDWithSubset returns a specific subset of a mobile device enrollment profile by ID.
+//
+// URL: GET /JSSResource/mobiledeviceenrollmentprofiles/id/{id}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyiddatasubset
 func (s *Service) GetByIDWithSubset(ctx context.Context, id int, subset string) (*Resource, *interfaces.Response, error) {
@@ -220,6 +230,8 @@ func (s *Service) GetByIDWithSubset(ctx context.Context, id int, subset string) 
 
 // GetByNameWithSubset returns a specific subset of a mobile device enrollment profile by name.
 //
+// URL: GET /JSSResource/mobiledeviceenrollmentprofiles/name/{name}/subset/{subset}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbynamedatasubset
 func (s *Service) GetByNameWithSubset(ctx context.Context, name, subset string) (*Resource, *interfaces.Response, error) {
 	if name == "" {
@@ -247,6 +259,8 @@ func (s *Service) GetByNameWithSubset(ctx context.Context, name, subset string) 
 
 // Create creates a new mobile device enrollment profile.
 //
+// URL: POST /JSSResource/mobiledeviceenrollmentprofiles/id/0
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceenrollmentprofilebyid
 func (s *Service) Create(ctx context.Context, req *Resource) (*Resource, *interfaces.Response, error) {
 	if req == nil {
@@ -273,6 +287,8 @@ func (s *Service) Create(ctx context.Context, req *Resource) (*Resource, *interf
 }
 
 // UpdateByID updates the specified mobile device enrollment profile by ID.
+//
+// URL: PUT /JSSResource/mobiledeviceenrollmentprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceenrollmentprofilebyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Resource, *interfaces.Response, error) {
@@ -304,6 +320,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Resou
 
 // UpdateByName updates the specified mobile device enrollment profile by name.
 //
+// URL: PUT /JSSResource/mobiledeviceenrollmentprofiles/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceenrollmentprofilebyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) (*Resource, *interfaces.Response, error) {
 	if name == "" {
@@ -333,6 +351,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) 
 }
 
 // UpdateByInvitation updates the specified mobile device enrollment profile by invitation.
+//
+// URL: PUT /JSSResource/mobiledeviceenrollmentprofiles/invitation/{invitation}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceenrollmentprofilebyinvitation
 func (s *Service) UpdateByInvitation(ctx context.Context, invitation string, req *Resource) (*Resource, *interfaces.Response, error) {
@@ -364,6 +384,8 @@ func (s *Service) UpdateByInvitation(ctx context.Context, invitation string, req
 
 // DeleteByID removes the specified mobile device enrollment profile by ID.
 //
+// URL: DELETE /JSSResource/mobiledeviceenrollmentprofiles/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceenrollmentprofilebyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -386,6 +408,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 
 // DeleteByName removes the specified mobile device enrollment profile by name.
 //
+// URL: DELETE /JSSResource/mobiledeviceenrollmentprofiles/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceenrollmentprofilebyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
 	if name == "" {
@@ -407,6 +431,8 @@ func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Re
 }
 
 // DeleteByInvitation removes the specified mobile device enrollment profile by invitation.
+//
+// URL: DELETE /JSSResource/mobiledeviceenrollmentprofiles/invitation/{invitation}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceenrollmentprofilebyinvitation
 func (s *Service) DeleteByInvitation(ctx context.Context, invitation string) (*interfaces.Response, error) {

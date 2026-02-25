@@ -81,6 +81,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all user extension attributes.
 //
+// URL: GET /JSSResource/userextensionattributes
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributes
 func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointUserExtensionAttributes
@@ -100,6 +102,8 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 }
 
 // GetByID returns the specified user extension attribute by ID.
+//
+// URL: GET /JSSResource/userextensionattributes/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyid
 func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
@@ -124,6 +128,8 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUserExtensionAt
 }
 
 // GetByName returns the specified user extension attribute by name.
+//
+// URL: GET /JSSResource/userextensionattributes/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyname
 func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
@@ -150,6 +156,8 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUserExte
 // Create creates a new user extension attribute.
 //
 // Returns the created user extension attribute (full resource).
+//
+// URL: POST /JSSResource/userextensionattributes/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createuserextensionattributebyid
 func (s *Service) Create(ctx context.Context, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
@@ -179,6 +187,8 @@ func (s *Service) Create(ctx context.Context, req *RequestUserExtensionAttribute
 // UpdateByID updates the specified user extension attribute by ID.
 //
 // Returns the updated user extension attribute (full resource).
+//
+// URL: PUT /JSSResource/userextensionattributes/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyid
 func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
@@ -212,6 +222,8 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUserExtens
 //
 // Returns the updated user extension attribute (full resource).
 //
+// URL: PUT /JSSResource/userextensionattributes/name/{name}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyname
 func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
 	if name == "" {
@@ -242,6 +254,8 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUse
 
 // DeleteByID removes the specified user extension attribute by ID.
 //
+// URL: DELETE /JSSResource/userextensionattributes/id/{id}
+//
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyid
 func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
 	if id <= 0 {
@@ -263,6 +277,8 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 }
 
 // DeleteByName removes the specified user extension attribute by name.
+//
+// URL: DELETE /JSSResource/userextensionattributes/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyname
 func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
