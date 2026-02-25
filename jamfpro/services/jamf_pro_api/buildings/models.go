@@ -45,7 +45,7 @@ type HistoryObject struct {
 	Username string                   `json:"username"`
 	Date     string                   `json:"date"`
 	Note     string                   `json:"note"`
-	Details  string                   `json:"details"`
+	Details  *string                  `json:"details"`
 }
 
 // HistoryResponse is the response for GetBuildingHistoryV1.

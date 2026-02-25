@@ -57,7 +57,7 @@ func (m *APNSClientPushStatusMock) register(method, path string, statusCode int,
 
 // RegisterListMock registers the list APNS client push status response.
 func (m *APNSClientPushStatusMock) RegisterListMock() {
-	m.register("GET", "/api/v1/apns-client-push-status", 200, "list_success")
+	m.register("GET", "/api/v1/apns-client-push-status", 200, "validate_list.json")
 }
 
 // RegisterEnableAllClientsMock registers the enable-all-clients POST response (no content).
@@ -67,7 +67,7 @@ func (m *APNSClientPushStatusMock) RegisterEnableAllClientsMock() {
 
 // RegisterGetEnableAllClientsStatusMock registers the enable-all-clients status GET response.
 func (m *APNSClientPushStatusMock) RegisterGetEnableAllClientsStatusMock() {
-	m.register("GET", "/api/v1/apns-client-push-status/enable-all-clients/status", 200, "get_enable_all_clients_status_success")
+	m.register("GET", "/api/v1/apns-client-push-status/enable-all-clients/status", 200, "validate_get_enable_all_clients_status.json")
 }
 
 // RegisterEnableClientMock registers the enable-client POST response (204 No Content).
@@ -75,27 +75,10 @@ func (m *APNSClientPushStatusMock) RegisterEnableClientMock() {
 	m.register("POST", "/api/v1/apns-client-push-status/enable-client", 204, "")
 }
 
-// loadMockResponse loads a JSON fixture from the mocks/mock_responses.json file.
-func loadMockResponse(key string) ([]byte, error) {
+// loadMockResponse loads a JSON fixture from the mocks directory.
+func loadMockResponse(filename string) ([]byte, error) {
 	wd, _ := os.Getwd()
-	jsonPath := filepath.Join(wd, "mocks", "mock_responses.json")
-
-	data, err := os.ReadFile(jsonPath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read mock_responses.json: %w", err)
-	}
-
-	var allResponses map[string]json.RawMessage
-	if err := json.Unmarshal(data, &allResponses); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal mock_responses.json: %w", err)
-	}
-
-	response, ok := allResponses[key]
-	if !ok {
-		return nil, fmt.Errorf("mock response key %q not found", key)
-	}
-
-	return response, nil
+	return os.ReadFile(filepath.Join(wd, "mocks", filename))
 }
 
 // Get implements interfaces.HTTPClient.Get.

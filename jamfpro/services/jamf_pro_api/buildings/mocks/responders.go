@@ -161,6 +161,10 @@ func (m *BuildingsMock) RegisterGetBuildingHistoryMock() {
 	m.register("GET", "/api/v1/buildings/1/history", 200, "validate_get_history.json")
 }
 
+func (m *BuildingsMock) RegisterGetBuildingHistoryNullDetailsMock() {
+	m.register("GET", "/api/v1/buildings/1/history", 200, "validate_get_history_null_details.json")
+}
+
 func (m *BuildingsMock) RegisterAddBuildingHistoryNotesMock() {
 	m.register("POST", "/api/v1/buildings/1/history", 201, "")
 }

@@ -118,19 +118,19 @@ func loadMockResponse(filename string) ([]byte, error) {
 }
 
 func (m *MDMMock) RegisterBlankPushMock() {
-	m.register("POST", "/api/v2/mdm/blank-push", 200, "blank_push.json")
+	m.register("POST", "/api/v2/mdm/blank-push", 200, "validate_blank_push.json")
 }
 
 func (m *MDMMock) RegisterSendCommandMock() {
-	m.register("POST", "/api/v2/mdm/commands", 200, "send_command.json")
+	m.register("POST", "/api/v2/mdm/commands", 200, "validate_send_command.json")
 }
 
 func (m *MDMMock) RegisterDeployPackageMock() {
-	m.register("POST", "/api/v1/deploy-package?verbose=true", 200, "deploy_package.json")
+	m.register("POST", "/api/v1/deploy-package?verbose=true", 200, "validate_deploy_package.json")
 }
 
 func (m *MDMMock) RegisterRenewProfileMock() {
-	m.register("POST", "/api/v1/mdm/renew-profile", 200, "renew_profile.json")
+	m.register("POST", "/api/v1/mdm/renew-profile", 200, "validate_renew_profile.json")
 }
 
 func (m *MDMMock) RegisterNotFoundErrorMock() {

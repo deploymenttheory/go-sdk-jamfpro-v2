@@ -55,12 +55,12 @@ func (m *SLASAMock) register(method, path string, statusCode int, fixtureFile st
 
 // RegisterGetStatusAcceptedMock registers GET /api/v1/managed-software-updates/slasa → 200 with ACCEPTED status.
 func (m *SLASAMock) RegisterGetStatusAcceptedMock() {
-	m.register("GET", "/api/v1/managed-software-updates/slasa", 200, "status_accepted.json")
+	m.register("GET", "/api/v1/managed-software-updates/slasa", 200, "validate_get_status_accepted.json")
 }
 
 // RegisterGetStatusNotAcceptedMock registers GET /api/v1/managed-software-updates/slasa → 200 with NOT_ACCEPTED status.
 func (m *SLASAMock) RegisterGetStatusNotAcceptedMock() {
-	m.register("GET", "/api/v1/managed-software-updates/slasa", 200, "status_not_accepted.json")
+	m.register("GET", "/api/v1/managed-software-updates/slasa", 200, "validate_get_status_not_accepted.json")
 }
 
 // RegisterAcceptMock registers POST /api/v1/managed-software-updates/slasa → 200 (no body).

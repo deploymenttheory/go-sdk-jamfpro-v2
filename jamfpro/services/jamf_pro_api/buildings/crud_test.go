@@ -247,6 +247,23 @@ func TestUnitGetBuildingHistoryV1_Success(t *testing.T) {
 	assert.Equal(t, "1", string(result.Results[0].ID))
 	assert.Equal(t, "admin", result.Results[0].Username)
 	assert.Equal(t, "Building created", result.Results[0].Note)
+	require.NotNil(t, result.Results[0].Details)
+	assert.Equal(t, "Initial creation", *result.Results[0].Details)
+}
+
+func TestUnitGetBuildingHistoryV1_NullDetails(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetBuildingHistoryNullDetailsMock()
+
+	result, resp, err := svc.GetBuildingHistoryV1(context.Background(), "1", nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Nil(t, result.Results[0].Details)
 }
 
 func TestUnitGetBuildingHistoryV1_EmptyID(t *testing.T) {

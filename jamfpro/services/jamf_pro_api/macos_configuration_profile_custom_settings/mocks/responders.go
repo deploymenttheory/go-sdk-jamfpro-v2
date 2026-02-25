@@ -57,19 +57,19 @@ func (m *MacOSConfigProfileCustomSettingsMock) register(method, path string, sta
 
 // RegisterGetSchemaListMock registers GET /api/config-profiles/macos/custom-settings/v1/schema-list → 200.
 func (m *MacOSConfigProfileCustomSettingsMock) RegisterGetSchemaListMock() {
-	m.register("GET", "/api/config-profiles/macos/custom-settings/v1/schema-list", 200, "schema_list.json")
+	m.register("GET", "/api/config-profiles/macos/custom-settings/v1/schema-list", 200, "validate_list_schema.json")
 }
 
 // RegisterGetByPayloadUUIDMock registers GET /api/config-profiles/macos/{id} → 200.
 // Use the same id in tests as passed here (e.g. "test-uuid-12345").
 func (m *MacOSConfigProfileCustomSettingsMock) RegisterGetByPayloadUUIDMock(id string) {
 	path := "/api/config-profiles/macos/" + id
-	m.register("GET", path, 200, "config_profile_get.json")
+	m.register("GET", path, 200, "validate_get.json")
 }
 
 // RegisterCreateMock registers POST /api/config-profiles/macos → 200.
 func (m *MacOSConfigProfileCustomSettingsMock) RegisterCreateMock() {
-	m.register("POST", "/api/config-profiles/macos", 200, "config_profile_create.json")
+	m.register("POST", "/api/config-profiles/macos", 200, "validate_create.json")
 }
 
 // RegisterGetSchemaListErrorMock registers GET schema-list with a 500 error.

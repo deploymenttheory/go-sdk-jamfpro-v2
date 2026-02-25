@@ -2,10 +2,10 @@ package apns_client_push_status
 
 // PushStatusEntry represents an MDM client with push notifications disabled.
 type PushStatusEntry struct {
-	DeviceType         string `json:"deviceType"`         // MOBILE_DEVICE or COMPUTER
-	ManagementID       string `json:"managementId"`       // ID of the device
-	PushDisabledTime   string `json:"pushDisabledTime"`   // ISO 8601 timestamp when push was disabled
-	DeviceRecordLink   string `json:"deviceRecordLink"`   // Link to the device record
+	DeviceType   string `json:"deviceType"`   // MOBILE_DEVICE or COMPUTER
+	ClientID     string `json:"clientId"`     // Id of the Computer or Device record in Jamf Pro
+	DisabledAt   string `json:"disabledAt"`   // ISO 8601 timestamp when push was disabled
+	ManagementID string `json:"managementId"` // Unique identifier for the device management record
 }
 
 // ListResponse is the response for listing clients with push notifications disabled.

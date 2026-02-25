@@ -50,3 +50,43 @@ func TestUnitDeleteV1_Success(t *testing.T) {
 	require.NotNil(t, resp)
 	require.Equal(t, 204, resp.StatusCode)
 }
+
+func TestUnitCreateV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestCloudDistributionPointV1{
+		CdnType: "JAMF_CLOUD",
+		Master:  true,
+	}
+	result, resp, err := svc.CreateV1(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 201, resp.StatusCode)
+	require.True(t, result.HasConnectionSucceeded)
+	require.Equal(t, "JCDS", result.CdnType)
+}
+
+func TestUnitUpdateV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestCloudDistributionPointV1{
+		CdnType: "JAMF_CLOUD",
+		Master:  true,
+	}
+	result, resp, err := svc.UpdateV1(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode)
+	require.True(t, result.HasConnectionSucceeded)
+}
+
+func TestUnitGetHistoryV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	require.Equal(t, 1, result.Results[0].ID)
+	require.Equal(t, "admin", result.Results[0].Username)
+	require.Equal(t, "Sso settings update", result.Results[0].Note)
+}

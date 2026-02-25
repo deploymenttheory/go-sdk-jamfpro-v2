@@ -1,0 +1,17 @@
+{
+  "id": "1",
+  "username": "testuser1",
+  "realname": "Test User One",
+  "email": "testuser1@example.com",
+  "phone": "555-0001",
+  "ldapServerId": -1,
+  "distinguishedName": "",
+  "siteId": -1,
+  "accessLevel": "FullAccess",
+  "privilegeLevel": "ADMINISTRATOR",
+  "lastPasswordChange": "2024-01-15T10:30:00Z",
+  "changePasswordOnNextLogin": false,
+  "failedLoginAttempts": 0,
+  "accountStatus": "Enabled",
+  "accountType": "DEFAULT"
+}

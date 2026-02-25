@@ -272,8 +272,8 @@ func (s *Service) CreateStaticV2(ctx context.Context, request *RequestStaticGrou
 	return &result, resp, nil
 }
 
-// UpdateStaticByIDV2 updates the membership of the specified static group (PATCH).
-// URL: PATCH /api/v2/computer-groups/static-groups/{id}
+// UpdateStaticByIDV2 updates the specified static group by ID.
+// URL: PUT /api/v2/computer-groups/static-groups/{id}
 func (s *Service) UpdateStaticByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*ResourceStaticGroup, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
@@ -292,7 +292,7 @@ func (s *Service) UpdateStaticByIDV2(ctx context.Context, id string, request *Re
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

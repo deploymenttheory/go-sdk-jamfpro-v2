@@ -44,7 +44,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetV1(ctx context.Context) (*ResourceCacheSettings, *interfaces.Response, error) {
 	var result ResourceCacheSettings
 	endpoint := EndpointCacheSettingsV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	headers := map[string]string{"Accept": mime.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err

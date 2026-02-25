@@ -28,7 +28,7 @@ type (
 		// CreateV3 creates a new computer inventory record (Create Computer Inventory record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-computers-inventory
-		CreateV3(ctx context.Context, request *ResourceComputerInventory) (*ResourceComputerInventory, *interfaces.Response, error)
+		CreateV3(ctx context.Context, request *ResourceComputerInventory) (*CreateComputerResponse, *interfaces.Response, error)
 
 		// GetByIDV3 returns the specified computer inventory by ID (Get Computer Inventory by ID).
 		//
@@ -116,14 +116,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 // CreateV3 creates a new computer inventory record.
 // URL: POST /api/v3/computers-inventory
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-computers-inventory
-func (s *Service) CreateV3(ctx context.Context, request *ResourceComputerInventory) (*ResourceComputerInventory, *interfaces.Response, error) {
+func (s *Service) CreateV3(ctx context.Context, request *ResourceComputerInventory) (*CreateComputerResponse, *interfaces.Response, error) {
 	endpoint := EndpointComputerInventoryV3
 
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	var result ResourceComputerInventory
+	var result CreateComputerResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,

@@ -8,10 +8,11 @@ type ListResponse struct {
 
 // ResourceCloudIdProvider represents a Cloud Identity Provider.
 type ResourceCloudIdProvider struct {
-	ID           string `json:"id"`
-	DisplayName  string `json:"displayName"`
-	Enabled      bool   `json:"enabled"`
-	ProviderName string `json:"providerName"`
+	ID                   string `json:"id"`
+	DisplayName          string `json:"displayName"`
+	Enabled              bool   `json:"enabled"`
+	ProviderName         string `json:"providerName"`
+	ProviderDescription  string `json:"providerDescription"`
 }
 
 // ResourceCloudIdProviderDetails represents detailed Cloud Identity Provider configuration.
@@ -115,6 +116,6 @@ type TestUserMembershipRequest struct {
 
 // TestUserMembershipResponse represents the response from testing user membership.
 type TestUserMembershipResponse struct {
-	TotalCount int              `json:"totalCount"`
-	Results    []TestGroupResult `json:"results"`
+	Username  string `json:"username"`
+	IsMember  bool   `json:"isMember"`
 }

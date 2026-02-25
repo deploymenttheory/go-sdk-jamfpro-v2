@@ -56,7 +56,7 @@ func TestUnitGetComputerExtensionAttributeByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "EA One", result.Name)
-	assert.Equal(t, "String", result.DataType)
+	assert.Equal(t, "STRING", result.DataType)
 	assert.NotNil(t, result.Enabled)
 	assert.True(t, *result.Enabled)
 }
@@ -87,9 +87,9 @@ func TestUnitCreateComputerExtensionAttribute_Success(t *testing.T) {
 
 	req := &RequestComputerExtensionAttribute{
 		Name:                 "New EA",
-		DataType:             "String",
-		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		DataType:             "STRING",
+		InventoryDisplayType: "GENERAL",
+		InputType:            "TEXT",
 	}
 	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
@@ -117,9 +117,9 @@ func TestUnitUpdateComputerExtensionAttributeByID_Success(t *testing.T) {
 	req := &RequestComputerExtensionAttribute{
 		Name:                 "EA One Updated",
 		Description:          "Updated",
-		DataType:             "String",
-		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		DataType:             "STRING",
+		InventoryDisplayType: "GENERAL",
+		InputType:            "TEXT",
 	}
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
@@ -134,7 +134,7 @@ func TestUnitUpdateComputerExtensionAttributeByID_Success(t *testing.T) {
 
 func TestUnitUpdateComputerExtensionAttributeByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
-	req := &RequestComputerExtensionAttribute{Name: "x", DataType: "String", InventoryDisplayType: "General", InputType: "Text Field"}
+	req := &RequestComputerExtensionAttribute{Name: "x", DataType: "STRING", InventoryDisplayType: "GENERAL", InputType: "TEXT"}
 
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "", req)
 	assert.Error(t, err)
@@ -194,4 +194,22 @@ func TestUnitDeleteComputerExtensionAttributesByID_EmptyIDs(t *testing.T) {
 	resp, err := svc.DeleteComputerExtensionAttributesByIDV1(context.Background(), &DeleteComputerExtensionAttributesByIDRequest{IDs: nil})
 	assert.Error(t, err)
 	assert.Nil(t, resp)
+}
+
+func TestUnitGetHistoryByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterHistoryMock()
+
+	result, resp, err := svc.GetHistoryByIDV1(context.Background(), "1", nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	assert.Equal(t, 1, result.Results[0].ID)
+	assert.Equal(t, "admin", result.Results[0].Username)
+	assert.Equal(t, 2, result.Results[1].ID)
+	assert.Equal(t, "Updated script", result.Results[1].Note)
 }

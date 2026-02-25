@@ -133,7 +133,8 @@ func TestCreateV3(t *testing.T) {
 // TestUpdateByIDV3 tests updating a mobile device prestage by ID.
 func TestUpdateByIDV3(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
-	mock.RegisterUpdateByIDMock("1")
+	mock.RegisterGetByIDMock("1")    // internal GET for version lock
+	mock.RegisterUpdateByIDMock("1") // PUT
 
 	svc := NewService(mock)
 
@@ -155,7 +156,6 @@ func TestUpdateByIDV3(t *testing.T) {
 		Names: SubsetNames{
 			AssignNamesUsing: "STATIC",
 		},
-		VersionLock: 1,
 	}
 
 	result, resp, err := svc.UpdateByIDV3(context.Background(), "1", prestage)
@@ -168,10 +168,11 @@ func TestUpdateByIDV3(t *testing.T) {
 }
 
 // TestUpdateByNameV3 tests updating a mobile device prestage by display name.
+// The list response provides the version lock – no separate GET is needed.
 func TestUpdateByNameV3(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
-	mock.RegisterListMock()
-	mock.RegisterUpdateByIDMock("1")
+	mock.RegisterListMock()       // GetByNameV3 (also provides version lock)
+	mock.RegisterUpdateByIDMock("1") // PUT
 
 	svc := NewService(mock)
 

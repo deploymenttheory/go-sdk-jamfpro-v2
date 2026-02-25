@@ -169,7 +169,8 @@ func TestUnitUpdateCategoryByID_Success(t *testing.T) {
 
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, "1", result.ID)
-	assert.Contains(t, result.Href, "/api/v1/categories/1")
+	assert.Equal(t, "Updated Category", result.Name)
+	assert.Equal(t, 5, result.Priority)
 }
 
 func TestUnitUpdateCategoryByID_EmptyID(t *testing.T) {

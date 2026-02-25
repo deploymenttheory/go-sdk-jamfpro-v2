@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
 )
 
 type (
@@ -39,7 +40,8 @@ type (
 		CreateV3(ctx context.Context, prestage *ResourceMobileDevicePrestage) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateByIDV3 updates the mobile device prestage by ID.
-		// Include versionLock from the current resource for optimistic locking.
+		// The current resource is fetched first so that all versionLock values
+		// are injected transparently. Callers do not need to supply versionLock.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-mobile-device-prestages-id
 		UpdateByIDV3(ctx context.Context, id string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *interfaces.Response, error)
@@ -184,8 +186,10 @@ func (s *Service) CreateV3(ctx context.Context, prestage *ResourceMobileDevicePr
 }
 
 // UpdateByIDV3 updates the mobile device prestage by ID.
+// The current resource is fetched first to obtain all versionLock values
+// (top-level, locationInformation, purchasingInformation) and inject them
+// transparently. Callers do not need to supply versionLock.
 // URL: PUT /api/v3/mobile-device-prestages/{id}
-// Include versionLock from the current resource for optimistic locking.
 // https://developer.jamf.com/jamf-pro/reference/put_v3-mobile-device-prestages-id
 func (s *Service) UpdateByIDV3(ctx context.Context, id string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *interfaces.Response, error) {
 	if id == "" {
@@ -199,6 +203,15 @@ func (s *Service) UpdateByIDV3(ctx context.Context, id string, prestage *Resourc
 	if prestage.DisplayName == "" {
 		return nil, nil, fmt.Errorf("display name is required")
 	}
+
+	current, _, err := s.GetByIDV3(ctx, id)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch current prestage for version locking: %w", err)
+	}
+
+	version_locking.EnsureVersionLock(current, prestage)
+	version_locking.EnsureVersionLock(&current.LocationInformation, &prestage.LocationInformation)
+	version_locking.EnsureVersionLock(&current.PurchasingInformation, &prestage.PurchasingInformation)
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDevicePrestagesV3, id)
 
@@ -218,17 +231,45 @@ func (s *Service) UpdateByIDV3(ctx context.Context, id string, prestage *Resourc
 }
 
 // UpdateByNameV3 updates the mobile device prestage by display name.
+// The resource fetched during the name lookup is reused directly for version
+// lock injection, avoiding a second round-trip to the API.
 func (s *Service) UpdateByNameV3(ctx context.Context, name string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
 
-	target, resp, err := s.GetByNameV3(ctx, name)
+	if prestage == nil {
+		return nil, nil, fmt.Errorf("prestage is required")
+	}
+
+	if prestage.DisplayName == "" {
+		return nil, nil, fmt.Errorf("display name is required")
+	}
+
+	existing, resp, err := s.GetByNameV3(ctx, name)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get mobile device prestage by name: %w", err)
 	}
 
-	return s.UpdateByIDV3(ctx, target.ID, prestage)
+	version_locking.EnsureVersionLock(existing, prestage)
+	version_locking.EnsureVersionLock(&existing.LocationInformation, &prestage.LocationInformation)
+	version_locking.EnsureVersionLock(&existing.PurchasingInformation, &prestage.PurchasingInformation)
+
+	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDevicePrestagesV3, existing.ID)
+
+	var result ResourceMobileDevicePrestage
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err = s.client.Put(ctx, endpoint, prestage, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
 }
 
 // DeleteByIDV3 deletes the mobile device prestage by ID.

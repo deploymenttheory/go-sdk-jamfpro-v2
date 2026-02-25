@@ -69,7 +69,7 @@ func (m *AdcsSettingsMock) RegisterGetHistoryByIDMock(id string) {
 }
 
 func (m *AdcsSettingsMock) RegisterAddHistoryNoteMock(id string) {
-	m.register("POST", "/api/v1/pki/adcs-settings/"+id+"/history", 201, "")
+	m.register("POST", "/api/v1/pki/adcs-settings/"+id+"/history", 201, "validate_add_history_note.json")
 }
 
 func (m *AdcsSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {

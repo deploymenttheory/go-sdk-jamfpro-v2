@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
 )
 
 type (
@@ -166,6 +167,9 @@ func (s *Service) CreateV3(ctx context.Context, request *ResourceComputerPrestag
 }
 
 // UpdateByIDV3 updates the computer prestage by ID.
+// The current resource is fetched first so that all versionLock values
+// (top-level, locationInformation, purchasingInformation, accountSettings)
+// are injected transparently. Callers do not need to supply versionLock.
 // URL: PUT /api/v3/computer-prestages/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-computer-prestages-id
 func (s *Service) UpdateByIDV3(ctx context.Context, id string, request *ResourceComputerPrestage) (*ResourceComputerPrestage, *interfaces.Response, error) {
@@ -178,6 +182,18 @@ func (s *Service) UpdateByIDV3(ctx context.Context, id string, request *Resource
 
 	if err := validateRequest(request); err != nil {
 		return nil, nil, fmt.Errorf("request validation failed: %w", err)
+	}
+
+	current, _, err := s.GetByIDV3(ctx, id)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch current prestage for version locking: %w", err)
+	}
+
+	version_locking.EnsureVersionLock(current, request)
+	version_locking.EnsureVersionLock(&current.LocationInformation, &request.LocationInformation)
+	version_locking.EnsureVersionLock(&current.PurchasingInformation, &request.PurchasingInformation)
+	if current.AccountSettings != nil && request.AccountSettings != nil {
+		version_locking.EnsureVersionLock(current.AccountSettings, request.AccountSettings)
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointComputerPrestagesV3, id)
@@ -196,12 +212,42 @@ func (s *Service) UpdateByIDV3(ctx context.Context, id string, request *Resource
 }
 
 // UpdateByNameV3 updates the computer prestage by display name.
+// The resource fetched during the name lookup is reused directly for version
+// lock injection, avoiding a second round-trip to the API.
 func (s *Service) UpdateByNameV3(ctx context.Context, name string, request *ResourceComputerPrestage) (*ResourceComputerPrestage, *interfaces.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
 	existing, resp, err := s.GetByNameV3(ctx, name)
 	if err != nil {
 		return nil, resp, err
 	}
-	return s.UpdateByIDV3(ctx, existing.ID, request)
+
+	if err := validateRequest(request); err != nil {
+		return nil, nil, fmt.Errorf("request validation failed: %w", err)
+	}
+
+	version_locking.EnsureVersionLock(existing, request)
+	version_locking.EnsureVersionLock(&existing.LocationInformation, &request.LocationInformation)
+	version_locking.EnsureVersionLock(&existing.PurchasingInformation, &request.PurchasingInformation)
+	if existing.AccountSettings != nil && request.AccountSettings != nil {
+		version_locking.EnsureVersionLock(existing.AccountSettings, request.AccountSettings)
+	}
+
+	endpoint := fmt.Sprintf("%s/%s", EndpointComputerPrestagesV3, existing.ID)
+	var result ResourceComputerPrestage
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err = s.client.Put(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &result, resp, nil
 }
 
 // DeleteByIDV3 deletes the computer prestage by ID.
@@ -262,6 +308,8 @@ func (s *Service) GetDeviceScopeByIDV2(ctx context.Context, id string) (*Resourc
 }
 
 // ReplaceDeviceScopeByIDV2 replaces the device scope for the computer prestage by ID (v2 API).
+// It fetches the current scope first to obtain its versionLock and injects it
+// transparently – callers only need to supply the desired serial numbers.
 // URL: PUT /api/v2/computer-prestages/{id}/scope
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-prestages-id-scope
 func (s *Service) ReplaceDeviceScopeByIDV2(ctx context.Context, id string, request *ReplaceDeviceScopeRequest) (*ResourceDeviceScope, *interfaces.Response, error) {
@@ -271,6 +319,13 @@ func (s *Service) ReplaceDeviceScopeByIDV2(ctx context.Context, id string, reque
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
+	currentScope, _, err := s.GetDeviceScopeByIDV2(ctx, id)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch current device scope for version locking: %w", err)
+	}
+
+	version_locking.EnsureVersionLock(currentScope, request)
 
 	endpoint := fmt.Sprintf("%s/%s/scope", EndpointComputerPrestagesV2, id)
 

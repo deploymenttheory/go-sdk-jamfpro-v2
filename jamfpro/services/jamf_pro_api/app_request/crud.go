@@ -105,7 +105,10 @@ func (s *Service) ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[strin
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list form input fields: %w", err)
 	}
@@ -172,8 +175,7 @@ func (s *Service) GetFormInputFieldByIDV1(ctx context.Context, id int) (*Resourc
 	var result ResourceFormInputField
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -216,8 +218,7 @@ func (s *Service) DeleteFormInputFieldByIDV1(ctx context.Context, id int) (*inte
 	endpoint := fmt.Sprintf("%s/%d", EndpointFormInputFieldsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -241,8 +242,7 @@ func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceAppRequestSetting
 	endpoint := EndpointSettingsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

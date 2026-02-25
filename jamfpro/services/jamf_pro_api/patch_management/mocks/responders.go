@@ -52,9 +52,9 @@ func (m *PatchManagementMock) register(method, path string, statusCode int, fixt
 	}
 }
 
-// RegisterAcceptDisclaimerMock registers POST /api/v2/patch-management-accept-disclaimer → 200 (no body).
+// RegisterAcceptDisclaimerMock registers POST /api/v2/patch-management-accept-disclaimer → 200 (empty JSON body).
 func (m *PatchManagementMock) RegisterAcceptDisclaimerMock() {
-	m.register("POST", "/api/v2/patch-management-accept-disclaimer", 200, "")
+	m.register("POST", "/api/v2/patch-management-accept-disclaimer", 200, "validate_accept_disclaimer.json")
 }
 
 // RegisterAcceptDisclaimerErrorMock registers POST with a 500 error.

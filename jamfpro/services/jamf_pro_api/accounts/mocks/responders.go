@@ -57,17 +57,17 @@ func (m *AccountsMock) register(method, path string, statusCode int, fixture str
 
 // RegisterListAccountsMock registers the list accounts response.
 func (m *AccountsMock) RegisterListAccountsMock() {
-	m.register("GET", "/api/v1/accounts", 200, "list_success")
+	m.register("GET", "/api/v1/accounts", 200, "validate_list.json")
 }
 
 // RegisterGetAccountMock registers the get account by ID response.
 func (m *AccountsMock) RegisterGetAccountMock() {
-	m.register("GET", "/api/v1/accounts/1", 200, "get_by_id_success")
+	m.register("GET", "/api/v1/accounts/1", 200, "validate_get.json")
 }
 
 // RegisterCreateAccountMock registers the create account response.
 func (m *AccountsMock) RegisterCreateAccountMock() {
-	m.register("POST", "/api/v1/accounts", 201, "create_success")
+	m.register("POST", "/api/v1/accounts", 201, "validate_create.json")
 }
 
 // RegisterDeleteAccountMock registers the delete account response.
@@ -75,27 +75,10 @@ func (m *AccountsMock) RegisterDeleteAccountMock() {
 	m.register("DELETE", "/api/v1/accounts/1", 204, "")
 }
 
-// loadMockResponse loads a JSON fixture from the mocks/mock_responses.json file.
-func loadMockResponse(key string) ([]byte, error) {
+// loadMockResponse loads a JSON fixture from the mocks directory.
+func loadMockResponse(filename string) ([]byte, error) {
 	wd, _ := os.Getwd()
-	jsonPath := filepath.Join(wd, "mocks", "mock_responses.json")
-
-	data, err := os.ReadFile(jsonPath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read mock_responses.json: %w", err)
-	}
-
-	var allResponses map[string]json.RawMessage
-	if err := json.Unmarshal(data, &allResponses); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal mock_responses.json: %w", err)
-	}
-
-	response, ok := allResponses[key]
-	if !ok {
-		return nil, fmt.Errorf("mock response key %q not found", key)
-	}
-
-	return response, nil
+	return os.ReadFile(filepath.Join(wd, "mocks", filename))
 }
 
 // Get implements interfaces.HTTPClient.Get.

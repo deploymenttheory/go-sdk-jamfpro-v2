@@ -30,13 +30,20 @@ func NewApiAuthorizationMock() *ApiAuthorizationMock {
 }
 
 func (m *ApiAuthorizationMock) register(method, path string, statusCode int, fixture string) {
-	body, _ := os.ReadFile(filepath.Join(mustGetwd(), "mocks", fixture))
+	var body []byte
+	if fixture != "" {
+		data, err := os.ReadFile(filepath.Join(mustGetwd(), "mocks", fixture))
+		if err != nil {
+			panic(fmt.Sprintf("ApiAuthorizationMock: failed to load fixture %q: %v", fixture, err))
+		}
+		body = data
+	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
 // RegisterGetV1Mock registers a successful GET response for /api/v1/auth.
 func (m *ApiAuthorizationMock) RegisterGetV1Mock() {
-	m.register("GET", "/api/v1/auth", 200, "mock_responses.json")
+	m.register("GET", "/api/v1/auth", 200, "validate_get.json")
 }
 
 func (m *ApiAuthorizationMock) dispatch(method, path string, result any) (*interfaces.Response, error) {

@@ -35,9 +35,10 @@ type (
 		//
 		// Query params (optional, pass via query): export-fields, export-labels, page, page-size, sort, filter.
 		// Request body can override query parameters to avoid URI length limits.
+		// Accept (optional): pass mime.TextCSV for CSV export, mime.ApplicationJSON or empty for JSON (default).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-export
-		ExportV1(ctx context.Context, query map[string]string, request *ExportRequest) (*interfaces.Response, []byte, error)
+		ExportV1(ctx context.Context, query map[string]string, request *ExportRequest, accept ...string) (*interfaces.Response, []byte, error)
 
 		// GetHistoryByIDV1 returns the history for a Cloud Identity Provider configuration (Get History).
 		//
@@ -174,12 +175,18 @@ func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudI
 
 // ExportV1 exports Cloud Identity Providers collection.
 // URL: POST /api/v1/cloud-idp/export
+// Accept header: pass mime.TextCSV for CSV export, mime.ApplicationJSON or omit for JSON (default).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-export
-func (s *Service) ExportV1(ctx context.Context, query map[string]string, request *ExportRequest) (*interfaces.Response, []byte, error) {
+func (s *Service) ExportV1(ctx context.Context, query map[string]string, request *ExportRequest, accept ...string) (*interfaces.Response, []byte, error) {
 	endpoint := fmt.Sprintf("%s/export", EndpointCloudIdpV1)
 
+	acceptHeader := mime.ApplicationJSON
+	if len(accept) > 0 && accept[0] != "" {
+		acceptHeader = accept[0]
+	}
+
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
+		"Accept":       acceptHeader,
 		"Content-Type": mime.ApplicationJSON,
 	}
 

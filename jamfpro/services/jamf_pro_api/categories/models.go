@@ -24,9 +24,12 @@ type RequestCategory struct {
 }
 
 // CreateUpdateResponse is the response for CreateCategory and UpdateCategoryByID.
+// PUT update returns {id, name, priority}; POST create may return {id, href} or {id, name, priority}.
 type CreateUpdateResponse struct {
-	ID   string `json:"id"`
-	Href string `json:"href"`
+	ID       string `json:"id"`
+	Name     string `json:"name,omitempty"`
+	Priority int    `json:"priority,omitempty"`
+	Href     string `json:"href,omitempty"`
 }
 
 // DeleteCategoriesByIDRequest is the body for DeleteCategoriesByID (delete multiple).

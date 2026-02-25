@@ -5,6 +5,8 @@ package mime
 
 const (
 	ApplicationJSON                = "application/json"
+	ApplicationMergePatchJSON      = "application/merge-patch+json"
+	TextCSV                        = "text/csv"
 	ApplicationXML                 = "application/xml"
 	ApplicationPKIXCert            = "application/pkix-cert"
 	ApplicationPEMCertificateChain = "application/pem-certificate-chain"

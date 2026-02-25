@@ -28,9 +28,9 @@ func TestUnit_APNSClientPushStatus_ListV1_Success(t *testing.T) {
 	assert.Equal(t, 3, result.TotalCount)
 	assert.Len(t, result.Results, 3)
 	assert.Equal(t, "MOBILE_DEVICE", result.Results[0].DeviceType)
+	assert.Equal(t, "101", result.Results[0].ClientID)
+	assert.Equal(t, "2024-01-15T10:30:00Z", result.Results[0].DisabledAt)
 	assert.Equal(t, "101", result.Results[0].ManagementID)
-	assert.Equal(t, "2024-01-15T10:30:00Z", result.Results[0].PushDisabledTime)
-	assert.Equal(t, "/api/v1/mobile-devices/101", result.Results[0].DeviceRecordLink)
 }
 
 // Test ListV1 with RSQL filter query for device type

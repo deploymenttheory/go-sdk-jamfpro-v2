@@ -46,11 +46,12 @@ func (m *CloudDistributionPointMock) register(method, path string, statusCode in
 
 func (m *CloudDistributionPointMock) RegisterMocks() {
 	m.register("GET", "/api/v1/cloud-distribution-point", 200, "validate_get.json")
-	m.register("POST", "/api/v1/cloud-distribution-point", 200, "validate_get.json")
+	m.register("POST", "/api/v1/cloud-distribution-point", 201, "validate_get.json")
 	m.register("PATCH", "/api/v1/cloud-distribution-point", 200, "validate_get.json")
 	m.register("DELETE", "/api/v1/cloud-distribution-point", 204, "")
 	m.register("GET", "/api/v1/cloud-distribution-point/upload-capability", 200, "validate_upload_capability.json")
 	m.register("GET", "/api/v1/cloud-distribution-point/test-connection", 200, "validate_test_connection.json")
+	m.register("GET", "/api/v1/cloud-distribution-point/history", 200, "validate_history.json")
 }
 
 func (m *CloudDistributionPointMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -88,7 +89,14 @@ func (m *CloudDistributionPointMock) GetBytes(ctx context.Context, path string, 
 	return resp, resp.Body, nil
 }
 func (m *CloudDistributionPointMock) GetPaginated(ctx context.Context, path string, q map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
-	return m.dispatch("GET", path, nil)
+	resp, err := m.dispatch("GET", path, nil)
+	if err != nil {
+		return resp, err
+	}
+	if mergePage != nil && len(resp.Body) > 0 {
+		_ = mergePage(resp.Body)
+	}
+	return resp, nil
 }
 func (m *CloudDistributionPointMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
 func (m *CloudDistributionPointMock) InvalidateToken() error                    { return nil }

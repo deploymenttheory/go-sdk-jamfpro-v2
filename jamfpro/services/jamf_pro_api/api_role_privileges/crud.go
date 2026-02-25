@@ -64,8 +64,11 @@ func (s *Service) ListV1(ctx context.Context) (*ListResponse, *interfaces.Respon
 // URL: GET /api/v1/api-role-privileges/search?name=...&limit=...
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges-search
 func (s *Service) SearchPrivilegesByNameV1(ctx context.Context, name string, limit int) (*ListResponse, *interfaces.Response, error) {
+	if name == "" {
+		return nil, nil, fmt.Errorf("name parameter is required")
+	}
 	if limit <= 0 {
-		limit = 100
+		limit = 15
 	}
 	endpoint := fmt.Sprintf("%s/search?name=%s&limit=%d", EndpointAPIRolePrivilegesV1, url.QueryEscape(name), limit)
 	var result ListResponse

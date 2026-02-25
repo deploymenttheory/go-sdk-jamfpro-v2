@@ -94,9 +94,10 @@ func TestUnitUpdateByIDV3_EmptyID(t *testing.T) {
 
 func TestUnitUpdateByIDV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterUpdateByIDMock("1")
+	mock.RegisterGetByIDMock("1")    // internal GET for version lock
+	mock.RegisterUpdateByIDMock("1") // PUT
 
-	request := &ResourceComputerPrestage{DisplayName: "Updated", VersionLock: 1}
+	request := &ResourceComputerPrestage{DisplayName: "Updated"}
 	result, resp, err := svc.UpdateByIDV3(context.Background(), "1", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -123,10 +124,10 @@ func TestUnitDeleteByIDV3_Success(t *testing.T) {
 
 func TestUnitUpdateByNameV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterListMock()
-	mock.RegisterUpdateByIDMock("1")
+	mock.RegisterListMock()       // GetByNameV3 (also provides version lock)
+	mock.RegisterUpdateByIDMock("1") // PUT
 
-	request := &ResourceComputerPrestage{DisplayName: "Updated", VersionLock: 1}
+	request := &ResourceComputerPrestage{DisplayName: "Updated"}
 	result, resp, err := svc.UpdateByNameV3(context.Background(), "Test Prestage", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -208,9 +209,10 @@ func TestUnitReplaceDeviceScopeByIDV2_NilRequest(t *testing.T) {
 
 func TestUnitReplaceDeviceScopeByIDV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
-	mock.RegisterReplaceDeviceScopeMock("1")
+	mock.RegisterGetDeviceScopeMock("1")     // internal GET for version lock
+	mock.RegisterReplaceDeviceScopeMock("1") // PUT
 
-	request := &ReplaceDeviceScopeRequest{SerialNumbers: []string{"XYZ"}, VersionLock: 1}
+	request := &ReplaceDeviceScopeRequest{SerialNumbers: []string{"XYZ"}}
 	result, resp, err := svc.ReplaceDeviceScopeByIDV2(context.Background(), "1", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)

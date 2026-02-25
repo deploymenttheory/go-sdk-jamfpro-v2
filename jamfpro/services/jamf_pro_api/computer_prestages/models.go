@@ -182,3 +182,26 @@ type OnboardingItem struct {
 	EntityId              string `json:"entityId,omitempty"`
 	Priority              int    `json:"priority,omitempty"`
 }
+
+// VersionLocker implementations for version_locking.VersionLocker interface.
+// These allow the version_locking helpers to propagate versionLock values
+// across GET → PUT/DELETE workflows without requiring callers to manage locks
+// manually in "by name" and similar convenience flows.
+
+func (r *ResourceComputerPrestage) GetVersionLock() int    { return r.VersionLock }
+func (r *ResourceComputerPrestage) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (r *ResourceDeviceScope) GetVersionLock() int    { return r.VersionLock }
+func (r *ResourceDeviceScope) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (r *ReplaceDeviceScopeRequest) GetVersionLock() int    { return r.VersionLock }
+func (r *ReplaceDeviceScopeRequest) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (l *LocationInformation) GetVersionLock() int    { return l.VersionLock }
+func (l *LocationInformation) SetVersionLock(lock int) { l.VersionLock = lock }
+
+func (p *PurchasingInformation) GetVersionLock() int    { return p.VersionLock }
+func (p *PurchasingInformation) SetVersionLock(lock int) { p.VersionLock = lock }
+
+func (a *AccountSettings) GetVersionLock() int    { return a.VersionLock }
+func (a *AccountSettings) SetVersionLock(lock int) { a.VersionLock = lock }
