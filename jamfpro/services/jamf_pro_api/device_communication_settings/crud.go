@@ -52,8 +52,9 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings
 func (s *Service) GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *interfaces.Response, error) {
 	var result ResourceDeviceCommunicationSettings
+	endpoint := EndpointDeviceCommunicationSettingsV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, EndpointDeviceCommunicationSettingsV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -68,8 +69,9 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceDeviceCommunica
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourceDeviceCommunicationSettings
+	endpoint := EndpointDeviceCommunicationSettingsV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Put(ctx, EndpointDeviceCommunicationSettingsV1, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -106,7 +108,8 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, EndpointDeviceCommunicationSettingsHistoryV1, rsqlQuery, nil, mergePage)
+	endpoint := EndpointDeviceCommunicationSettingsHistoryV1
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device communication settings history: %w", err)
 	}

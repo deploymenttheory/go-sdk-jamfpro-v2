@@ -84,6 +84,8 @@ func (s *Service) GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *i
 func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*ResourceClientCheckinHistory, *interfaces.Response, error) {
 	var result ResourceClientCheckinHistory
 
+	endpoint := EndpointClientCheckinHistoryV3
+
 	mergePage := func(pageData []byte) error {
 		var rawData map[string]any
 		if err := json.Unmarshal(pageData, &rawData); err != nil {
@@ -107,7 +109,7 @@ func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string)
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, EndpointClientCheckinHistoryV3, rsqlQuery, nil, mergePage)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get client check-in history: %w", err)
 	}
@@ -122,8 +124,11 @@ func (s *Service) AddHistoryNoteV3(ctx context.Context, request *RequestClientCh
 	if request == nil {
 		return nil, fmt.Errorf("request is required")
 	}
+
+	endpoint := EndpointClientCheckinHistoryV3
+
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Post(ctx, EndpointClientCheckinHistoryV3, request, headers, nil)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
 	if err != nil {
 		return resp, err
 	}

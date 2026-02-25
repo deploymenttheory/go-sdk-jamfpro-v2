@@ -271,6 +271,7 @@ func (s *Service) GetContentV1(ctx context.Context, id string, rsqlQuery map[str
 		}
 
 		if results, ok := rawData["results"].([]any); ok {
+			result.Results = make([]VolumePurchasingSubsetContent, 0)
 			for _, item := range results {
 				var content VolumePurchasingSubsetContent
 				if err := mapstructure.Decode(item, &content); err != nil {

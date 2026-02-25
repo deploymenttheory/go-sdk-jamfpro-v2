@@ -121,6 +121,8 @@ func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudA
 		return nil, nil, fmt.Errorf("name is required")
 	}
 
+	endpoint := EndpointCloudAzureV1
+
 	var providers []ResourceCloudAzure
 
 	headers := map[string]string{
@@ -128,7 +130,7 @@ func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudA
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointCloudAzureV1, nil, headers, &providers)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &providers)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -150,6 +152,8 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceCloudAzure) (*R
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	endpoint := EndpointCloudAzureV1
+
 	var result ResponseCloudAzureCreated
 
 	headers := map[string]string{
@@ -157,7 +161,7 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceCloudAzure) (*R
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointCloudAzureV1, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

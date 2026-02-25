@@ -14,21 +14,21 @@ type CriteriaJamfProAPI struct {
 
 // ResourceSmartMobileDeviceGroup represents a smart mobile device group resource.
 type ResourceSmartMobileDeviceGroup struct {
-	ID          string              `json:"groupId"`
-	Name        string              `json:"groupName"`
-	Description string              `json:"groupDescription"`
-	SiteId      string              `json:"siteId"`
-	Count       int                 `json:"count"`
-	Criteria    []CriteriaJamfProAPI `json:"criteria,omitempty"`
+	ID          string               `json:"groupId" mapstructure:"groupId"`
+	Name        string               `json:"groupName" mapstructure:"groupName"`
+	Description string               `json:"groupDescription" mapstructure:"groupDescription"`
+	SiteId      string               `json:"siteId" mapstructure:"siteId"`
+	Count       int                  `json:"count" mapstructure:"count"`
+	Criteria    []CriteriaJamfProAPI `json:"criteria,omitempty" mapstructure:"criteria"`
 }
 
 // ResourceStaticMobileDeviceGroup represents a static mobile device group resource.
 type ResourceStaticMobileDeviceGroup struct {
-	ID          string `json:"groupId"`
-	Name        string `json:"groupName"`
-	Description string `json:"groupDescription"`
-	SiteId      string `json:"siteId"`
-	Count       int    `json:"count"`
+	ID          string `json:"groupId" mapstructure:"groupId"`
+	Name        string `json:"groupName" mapstructure:"groupName"`
+	Description string `json:"groupDescription" mapstructure:"groupDescription"`
+	SiteId      string `json:"siteId" mapstructure:"siteId"`
+	Count       int    `json:"count" mapstructure:"count"`
 }
 
 // ListSmartResponse is the response for ListSmartV1.

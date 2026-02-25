@@ -83,6 +83,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
+	endpoint := EndpointApiIntegrationsV1
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
@@ -111,7 +113,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, EndpointApiIntegrationsV1, rsqlQuery, headers, mergePage)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -166,12 +168,14 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceApiIntegration)
 	}
 	var result ResourceApiIntegration
 
+	endpoint := EndpointApiIntegrationsV1
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointApiIntegrationsV1, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

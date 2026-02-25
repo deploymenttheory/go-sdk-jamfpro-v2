@@ -61,9 +61,10 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/return-to-service
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-return-to-service
 func (s *Service) ListV1(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+	endpoint := EndpointReturnToServiceV1
 	var result ListResponse
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, EndpointReturnToServiceV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -94,9 +95,10 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceReturnToService
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+	endpoint := EndpointReturnToServiceV1
 	var result CreateResponse
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Post(ctx, EndpointReturnToServiceV1, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

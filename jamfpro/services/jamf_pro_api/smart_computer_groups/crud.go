@@ -95,7 +95,8 @@ func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListR
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, EndpointSmartGroupsV2, rsqlQuery, nil, mergePage)
+	endpoint := EndpointSmartGroupsV2
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list smart computer groups: %w", err)
 	}
@@ -182,12 +183,13 @@ func (s *Service) Create(ctx context.Context, request *RequestSmartGroup) (*Crea
 
 	var result CreateResponse
 
+	endpoint := EndpointSmartGroupsV2
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointSmartGroupsV2, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

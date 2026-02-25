@@ -57,12 +57,13 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) Get(ctx context.Context) (*ResourceReenrollmentSettings, *interfaces.Response, error) {
 	var result ResourceReenrollmentSettings
 
+	endpoint := EndpointReenrollmentV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointReenrollmentV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -79,12 +80,13 @@ func (s *Service) Update(ctx context.Context, request *ResourceReenrollmentSetti
 
 	var result ResourceReenrollmentSettings
 
+	endpoint := EndpointReenrollmentV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, EndpointReenrollmentV1, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -97,11 +99,12 @@ func (s *Service) Update(ctx context.Context, request *ResourceReenrollmentSetti
 func (s *Service) GetHistory(ctx context.Context, query map[string]string) (*ReenrollmentHistoryResponse, *interfaces.Response, error) {
 	var result ReenrollmentHistoryResponse
 
+	endpoint := EndpointReenrollmentHistoryV1
 	headers := map[string]string{
 		"Accept": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointReenrollmentHistoryV1, query, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -116,11 +119,12 @@ func (s *Service) AddHistoryNotes(ctx context.Context, request *AddReenrollmentH
 	}
 	var result ReenrollmentHistoryObject
 
+	endpoint := EndpointReenrollmentHistoryV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
-	resp, err := s.client.Post(ctx, EndpointReenrollmentHistoryV1, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -130,13 +134,14 @@ func (s *Service) AddHistoryNotes(ctx context.Context, request *AddReenrollmentH
 // ExportHistory exports re-enrollment history. query: page, page-size, sort, filter, export-fields, export-labels. body optional (overrides query when URI would exceed ~2k chars; use page, pageSize, sort, filter, fields). Uses Accept: text/csv,application/json and Content-Type: application/json when body is sent.
 // URL: POST /api/v1/reenrollment/history/export
 func (s *Service) ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*interfaces.Response, []byte, error) {
+	endpoint := EndpointReenrollmentHistoryExport
 	headers := map[string]string{"Accept": "text/csv,application/json"}
 	var sendBody any
 	if body != nil {
 		sendBody = body
 		headers["Content-Type"] = mime.ApplicationJSON
 	}
-	resp, err := s.client.PostWithQuery(ctx, EndpointReenrollmentHistoryExport, query, sendBody, headers, nil)
+	resp, err := s.client.PostWithQuery(ctx, endpoint, query, sendBody, headers, nil)
 	if err != nil {
 		return nil, nil, err
 	}

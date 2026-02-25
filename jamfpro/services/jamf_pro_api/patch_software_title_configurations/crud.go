@@ -79,6 +79,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
+	endpoint := EndpointPatchSoftwareTitleConfigurationsV2
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
@@ -93,7 +95,7 @@ func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Respon
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, EndpointPatchSoftwareTitleConfigurationsV2, nil, headers, mergePage)
+	resp, err := s.client.GetPaginated(ctx, endpoint, nil, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -165,12 +167,14 @@ func (s *Service) CreateV2(ctx context.Context, config *ResourcePatchSoftwareTit
 
 	var result CreateResponse
 
+	endpoint := EndpointPatchSoftwareTitleConfigurationsV2
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointPatchSoftwareTitleConfigurationsV2, config, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, config, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

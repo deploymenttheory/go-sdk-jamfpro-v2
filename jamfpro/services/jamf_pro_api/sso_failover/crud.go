@@ -47,12 +47,13 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetV1(ctx context.Context) (*FailoverSettings, *interfaces.Response, error) {
 	var result FailoverSettings
 
+	endpoint := EndpointSSOFailoverV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointSSOFailoverV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -66,12 +67,13 @@ func (s *Service) GetV1(ctx context.Context) (*FailoverSettings, *interfaces.Res
 func (s *Service) RegenerateV1(ctx context.Context) (*FailoverSettings, *interfaces.Response, error) {
 	var result FailoverSettings
 
+	endpoint := EndpointSSOFailoverGenerateV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointSSOFailoverGenerateV1, nil, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

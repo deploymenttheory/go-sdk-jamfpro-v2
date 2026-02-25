@@ -238,12 +238,14 @@ func (s *Service) DeleteFormInputFieldByIDV1(ctx context.Context, id int) (*inte
 func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceAppRequestSettings, *interfaces.Response, error) {
 	var result ResourceAppRequestSettings
 
+	endpoint := EndpointSettingsV1
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointSettingsV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -261,12 +263,14 @@ func (s *Service) UpdateSettingsV1(ctx context.Context, request *ResourceAppRequ
 
 	var result ResourceAppRequestSettings
 
+	endpoint := EndpointSettingsV1
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, EndpointSettingsV1, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

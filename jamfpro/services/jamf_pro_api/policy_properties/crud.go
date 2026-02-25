@@ -47,8 +47,9 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
 func (s *Service) Get(ctx context.Context) (*ResourcePolicyProperties, *interfaces.Response, error) {
 	var result ResourcePolicyProperties
+	endpoint := EndpointPolicyPropertiesV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, EndpointPolicyPropertiesV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -63,8 +64,9 @@ func (s *Service) Update(ctx context.Context, request *ResourcePolicyProperties)
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourcePolicyProperties
+	endpoint := EndpointPolicyPropertiesV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Put(ctx, EndpointPolicyPropertiesV1, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

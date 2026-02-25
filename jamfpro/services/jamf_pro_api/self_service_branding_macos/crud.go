@@ -78,12 +78,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
+	endpoint := EndpointSelfServiceBrandingMacOSV1
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointSelfServiceBrandingMacOSV1, rsqlQuery, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -144,12 +146,14 @@ func (s *Service) Create(ctx context.Context, request *ResourceSelfServiceBrandi
 
 	var result ResourceSelfServiceBrandingMacOS
 
+	endpoint := EndpointSelfServiceBrandingMacOSV1
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointSelfServiceBrandingMacOSV1, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

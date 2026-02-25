@@ -271,6 +271,17 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 ### CRUD Operations
 
+**Endpoint Variable Pattern:**
+
+All CRUD operations must follow this pattern:
+1. Declare result variable (`var result ResultType`)
+2. Assign endpoint constant to local variable (`endpoint := EndpointConstantName` or `endpoint := fmt.Sprintf(...)`)
+3. Define headers map
+4. Use the `endpoint` variable (not the constant directly) in HTTP client calls
+
+This pattern ensures consistency and makes endpoints easy to trace during debugging.
+
+
 **Get Operation:**
 ```go
 // GetV1 retrieves a resource by ID.

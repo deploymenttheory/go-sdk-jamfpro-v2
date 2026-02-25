@@ -47,12 +47,13 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) Get(ctx context.Context) (*ResourceSelfServiceSettings, *interfaces.Response, error) {
 	var result ResourceSelfServiceSettings
 
+	endpoint := EndpointSelfServiceSettingsV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointSelfServiceSettingsV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -69,12 +70,13 @@ func (s *Service) Update(ctx context.Context, request *ResourceSelfServiceSettin
 
 	var result ResourceSelfServiceSettings
 
+	endpoint := EndpointSelfServiceSettingsV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, EndpointSelfServiceSettingsV1, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

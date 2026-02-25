@@ -114,12 +114,13 @@ func (s *Service) BlankPush(ctx context.Context, clientManagementIDs []string) (
 	reqBody := map[string][]string{"clientManagementIds": clientManagementIDs}
 	var result BlankPushResponse
 
+	endpoint := EndpointBlankPush
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointBlankPush, reqBody, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, reqBody, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -137,12 +138,13 @@ func (s *Service) SendCommand(ctx context.Context, req *CommandRequest) (*Comman
 
 	var result CommandResponse
 
+	endpoint := EndpointCommands
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointCommands, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -184,12 +186,13 @@ func (s *Service) RenewProfile(ctx context.Context, req *RenewProfileRequest) (*
 
 	var result RenewProfileResponse
 
+	endpoint := EndpointProfileRenewal
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointProfileRenewal, req, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

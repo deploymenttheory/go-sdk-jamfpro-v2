@@ -18,7 +18,7 @@ func TestValidateV1(t *testing.T) {
 
 	request := &ValidateKeystoreRequest{
 		Password:  "test-password",
-		FileBytes: "base64encodeddata",
+		FileBytes: "SGVsbG8gV29ybGQ=",
 		FileName:  "keystore.p12",
 	}
 

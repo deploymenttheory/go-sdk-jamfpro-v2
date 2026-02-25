@@ -34,14 +34,14 @@ func (m *AccountPreferencesMock) register(method, path string, statusCode int, f
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
-// RegisterGetAccountPreferencesMock registers a successful GET /api/v2/account-preferences response.
+// RegisterGetAccountPreferencesMock registers a successful GET /api/v3/account-preferences response.
 func (m *AccountPreferencesMock) RegisterGetAccountPreferencesMock() {
-	m.register("GET", "/api/v2/account-preferences", 200, "validate_get.json")
+	m.register("GET", "/api/v3/account-preferences", 200, "validate_get.json")
 }
 
-// RegisterUpdateAccountPreferencesMock registers a successful PATCH /api/v2/account-preferences response.
+// RegisterUpdateAccountPreferencesMock registers a successful PATCH /api/v3/account-preferences response.
 func (m *AccountPreferencesMock) RegisterUpdateAccountPreferencesMock() {
-	m.register("PATCH", "/api/v2/account-preferences", 200, "validate_get.json")
+	m.register("PATCH", "/api/v3/account-preferences", 200, "validate_get.json")
 }
 
 func (m *AccountPreferencesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {

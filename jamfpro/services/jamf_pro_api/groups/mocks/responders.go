@@ -139,7 +139,16 @@ func (m *GroupsMock) GetBytes(ctx context.Context, endpoint string, params map[s
 }
 
 func (m *GroupsMock) GetPaginated(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, mergePage func(page []byte) error) (*interfaces.Response, error) {
-	return &interfaces.Response{StatusCode: http.StatusNotImplemented}, fmt.Errorf("GetPaginated not implemented in mock")
+	data, status, ok := m.dispatch("GET", endpoint)
+	if !ok {
+		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for GET %s", endpoint)
+	}
+	if mergePage != nil && data != nil {
+		if err := mergePage(data); err != nil {
+			return &interfaces.Response{StatusCode: http.StatusInternalServerError}, err
+		}
+	}
+	return &interfaces.Response{StatusCode: status}, nil
 }
 
 func (m *GroupsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out any) (*interfaces.Response, error) {

@@ -196,6 +196,7 @@ func (m *GSXConnectionMock) GetBytes(ctx context.Context, path string, rsqlQuery
 }
 
 func (m *GSXConnectionMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+	m.LastRSQLQuery = rsqlQuery
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err

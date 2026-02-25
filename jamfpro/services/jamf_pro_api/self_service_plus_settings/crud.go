@@ -53,8 +53,9 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getselfserviceplusfeaturetoggleenabled
 func (s *Service) GetFeatureToggleEnabledV1(ctx context.Context) (bool, *interfaces.Response, error) {
 	var result ResourceFeatureToggleEnabled
+	endpoint := EndpointSelfServicePlusFeatureToggleEnabledV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, EndpointSelfServicePlusFeatureToggleEnabledV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return false, resp, err
 	}
@@ -66,8 +67,9 @@ func (s *Service) GetFeatureToggleEnabledV1(ctx context.Context) (bool, *interfa
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getselfserviceplussettings
 func (s *Service) GetV1(ctx context.Context) (*ResourceSelfServicePlusSettings, *interfaces.Response, error) {
 	var result ResourceSelfServicePlusSettings
+	endpoint := EndpointSelfServicePlusSettingsV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, EndpointSelfServicePlusSettingsV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -81,8 +83,9 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceSelfServicePlus
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+	endpoint := EndpointSelfServicePlusSettingsV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Put(ctx, EndpointSelfServicePlusSettingsV1, request, headers, nil)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, nil)
 	if err != nil {
 		return nil, resp, err
 	}

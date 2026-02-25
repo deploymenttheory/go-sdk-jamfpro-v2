@@ -48,6 +48,8 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/csa/token
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-csa-token
 func (s *Service) GetTokenExchangeDetailsV1(ctx context.Context) (*ResourceTokenExchangeDetails, *interfaces.Response, error) {
+	endpoint := EndpointCSAV1
+
 	var result ResourceTokenExchangeDetails
 
 	headers := map[string]string{
@@ -55,7 +57,7 @@ func (s *Service) GetTokenExchangeDetailsV1(ctx context.Context) (*ResourceToken
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointCSAV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -88,12 +90,14 @@ func (s *Service) GetTenantIDV1(ctx context.Context) (*ResourceTenantID, *interf
 // URL: DELETE /api/v1/csa/token
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-csa-token
 func (s *Service) DeleteTokenExchangeV1(ctx context.Context) (*interfaces.Response, error) {
+	endpoint := EndpointCSAV1
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Delete(ctx, EndpointCSAV1, nil, headers, nil)
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

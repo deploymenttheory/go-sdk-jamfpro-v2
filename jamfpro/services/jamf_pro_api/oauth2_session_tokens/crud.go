@@ -42,12 +42,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetV1(ctx context.Context) (*SessionTokenResponse, *interfaces.Response, error) {
 	var result SessionTokenResponse
 
+	endpoint := EndpointOAuth2SessionTokensV1
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointOAuth2SessionTokensV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

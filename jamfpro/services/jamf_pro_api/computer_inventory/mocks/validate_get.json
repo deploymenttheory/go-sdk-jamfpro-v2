@@ -2,7 +2,7 @@
   "id": "1",
   "udid": "123",
   "general": {
-    "name": "Boalime",
+    "name": "Test-Mac-001",
     "lastIpAddress": "247.185.82.186",
     "lastReportedIpV4": "247.185.82.186",
     "lastReportedIpV6": "2001:0db8:85a3:0000:0000:8a2e:0370:7335",
@@ -165,7 +165,7 @@
     ]
   },
   "userAndLocation": {
-    "username": "Madison Anderson",
+    "username": "testuser",
     "realname": "13-inch MacBook",
     "email": "email@com.pl",
     "position": "IT Team Lead",
@@ -218,9 +218,9 @@
   ],
   "hardware": {
     "make": "Apple",
-    "model": "13-inch MacBook Pro (Mid 2012)",
+    "model": "MacBook Pro",
     "modelIdentifier": "MacBookPro9,2",
-    "serialNumber": "C02ZC2QYLVDL",
+    "serialNumber": "C02ABC123DEF",
     "processorSpeedMhz": 2100,
     "processorCount": 2,
     "coreCount": 2,

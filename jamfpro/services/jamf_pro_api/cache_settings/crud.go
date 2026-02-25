@@ -43,8 +43,9 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cache-settings
 func (s *Service) GetV1(ctx context.Context) (*ResourceCacheSettings, *interfaces.Response, error) {
 	var result ResourceCacheSettings
+	endpoint := EndpointCacheSettingsV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, EndpointCacheSettingsV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -59,8 +60,9 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceCacheSettings) 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourceCacheSettings
+	endpoint := EndpointCacheSettingsV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Put(ctx, EndpointCacheSettingsV1, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

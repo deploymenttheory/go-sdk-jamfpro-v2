@@ -48,12 +48,13 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetV1(ctx context.Context) (*ResourceJamfProServerURL, *interfaces.Response, error) {
 	var result ResourceJamfProServerURL
 
+	endpoint := EndpointJamfProServerURLV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointJamfProServerURLV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get Jamf Pro server URL settings: %w", err)
 	}
@@ -71,12 +72,13 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceJamfProServerUR
 
 	var result ResourceJamfProServerURL
 
+	endpoint := EndpointJamfProServerURLV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, EndpointJamfProServerURLV1, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to update Jamf Pro server URL settings: %w", err)
 	}

@@ -165,6 +165,7 @@ func (m *CategoriesMock) GetBytes(ctx context.Context, path string, rsqlQuery ma
 }
 
 func (m *CategoriesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+	m.LastRSQLQuery = rsqlQuery
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err

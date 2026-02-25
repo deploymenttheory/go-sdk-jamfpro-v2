@@ -77,7 +77,9 @@ func (m *ComputerInventoryMock) RegisterUploadAttachmentMock(computerID string) 
 }
 
 func (m *ComputerInventoryMock) RegisterGetAttachmentMock(computerID, attachmentID string) {
-	m.register("GET", "/api/v3/computers-inventory/"+computerID+"/attachments/"+attachmentID, 200, "")
+	// Provide a JSON base64-encoded byte slice so json.Unmarshal into *[]byte returns non-nil bytes.
+	path := "/api/v3/computers-inventory/" + computerID + "/attachments/" + attachmentID
+	m.responses["GET:"+path] = registeredResponse{statusCode: 200, rawBody: []byte(`"dGVzdGF0dGFjaG1lbnQ="`)}
 }
 
 func (m *ComputerInventoryMock) RegisterDeleteAttachmentMock(computerID, attachmentID string) {

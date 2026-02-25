@@ -86,6 +86,8 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceAdcsSettings) (
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	endpoint := EndpointAdcsSettingsV1
+
 	var result ResponseAdcsSettingsCreated
 
 	headers := map[string]string{
@@ -93,7 +95,7 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceAdcsSettings) (
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointAdcsSettingsV1, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

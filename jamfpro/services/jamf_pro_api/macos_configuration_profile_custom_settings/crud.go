@@ -49,13 +49,15 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetSchemaList retrieves the list of custom settings schemas.
 // URL: GET /api/config-profiles/macos/custom-settings/v1/schema-list
 func (s *Service) GetSchemaList(ctx context.Context) (*ResponseCustomSettingsSchemaList, *interfaces.Response, error) {
+	endpoint := EndpointCustomSettingsSchemaList
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
 	var result ResponseCustomSettingsSchemaList
-	resp, err := s.client.Get(ctx, EndpointCustomSettingsSchemaList, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get custom settings schema list: %w", err)
 	}
@@ -93,13 +95,15 @@ func (s *Service) Create(ctx context.Context, profile *ResourceConfigProfile) (*
 		return nil, nil, fmt.Errorf("profile is required")
 	}
 
+	endpoint := EndpointConfigProfilesMacOS
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
 	var result ResponseConfigProfileCreate
-	resp, err := s.client.Post(ctx, EndpointConfigProfilesMacOS, profile, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, profile, headers, &result)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to create macOS configuration profile: %w", err)
 	}

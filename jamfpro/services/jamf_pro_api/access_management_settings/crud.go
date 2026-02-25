@@ -43,8 +43,9 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment-access-management
 func (s *Service) GetV4(ctx context.Context) (*ResourceAccessManagementSettings, *interfaces.Response, error) {
 	var result ResourceAccessManagementSettings
+	endpoint := EndpointAccessManagementSettingsV4
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, EndpointAccessManagementSettingsV4, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -59,8 +60,9 @@ func (s *Service) CreateV4(ctx context.Context, request *ResourceAccessManagemen
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourceAccessManagementSettings
+	endpoint := EndpointAccessManagementSettingsV4
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Post(ctx, EndpointAccessManagementSettingsV4, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

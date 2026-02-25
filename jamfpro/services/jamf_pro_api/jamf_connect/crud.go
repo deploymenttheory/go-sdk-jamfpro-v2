@@ -88,12 +88,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *interfaces.Response, error) {
 	var result ResourceJamfConnect
 
+	endpoint := EndpointJamfConnectV1
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointJamfConnectV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

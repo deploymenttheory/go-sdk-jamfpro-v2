@@ -37,12 +37,13 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
 func (s *Service) GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *interfaces.Response, error) {
 	var result ResourceEnrollmentSettingsV4
+	endpoint := EndpointEnrollmentSettingsV4
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointEnrollmentSettingsV4, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

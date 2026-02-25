@@ -151,7 +151,16 @@ func (m *DeviceEnrollmentsMock) GetBytes(ctx context.Context, endpoint string, q
 }
 
 func (m *DeviceEnrollmentsMock) GetPaginated(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
-	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
+	body, status, found := m.dispatch("GET", endpoint)
+	if !found {
+		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+	}
+	if mergePage != nil && body != nil {
+		if err := mergePage(body); err != nil {
+			return &interfaces.Response{StatusCode: http.StatusInternalServerError}, err
+		}
+	}
+	return &interfaces.Response{StatusCode: status}, nil
 }
 
 func (m *DeviceEnrollmentsMock) RSQLBuilder() interfaces.RSQLFilterBuilder {

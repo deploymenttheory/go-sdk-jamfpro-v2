@@ -48,12 +48,13 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetV1(ctx context.Context) (*ResourceADUETokenSettings, *interfaces.Response, error) {
 	var result ResourceADUETokenSettings
 
+	endpoint := EndpointADUESessionTokenSettingsV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointADUESessionTokenSettingsV1, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -71,12 +72,13 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceADUETokenSettin
 
 	var result ResourceADUETokenSettings
 
+	endpoint := EndpointADUESessionTokenSettingsV1
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, EndpointADUESessionTokenSettingsV1, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

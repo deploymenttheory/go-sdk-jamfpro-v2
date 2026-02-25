@@ -75,12 +75,13 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetV3(ctx context.Context) (*ResourceSsoSettings, *interfaces.Response, error) {
 	var result ResourceSsoSettings
 
+	endpoint := EndpointSsoV3
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointSsoV3, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -98,12 +99,13 @@ func (s *Service) UpdateV3(ctx context.Context, request *ResourceSsoSettings) (*
 
 	var result ResourceSsoSettings
 
+	endpoint := EndpointSsoV3
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, EndpointSsoV3, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -117,12 +119,13 @@ func (s *Service) UpdateV3(ctx context.Context, request *ResourceSsoSettings) (*
 func (s *Service) GetEnrollmentCustomizationDependenciesV3(ctx context.Context) (*ResponseSsoEnrollmentCustomizationDependencies, *interfaces.Response, error) {
 	var result ResponseSsoEnrollmentCustomizationDependencies
 
+	endpoint := EndpointDependenciesV3
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointDependenciesV3, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -134,12 +137,13 @@ func (s *Service) GetEnrollmentCustomizationDependenciesV3(ctx context.Context) 
 // URL: POST /api/v3/sso/disable
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-disable
 func (s *Service) DisableV3(ctx context.Context) (*interfaces.Response, error) {
+	endpoint := EndpointDisableV3
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointDisableV3, nil, headers, nil)
+	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -153,12 +157,13 @@ func (s *Service) DisableV3(ctx context.Context) (*interfaces.Response, error) {
 func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*HistoryListResponse, *interfaces.Response, error) {
 	var result HistoryListResponse
 
+	endpoint := EndpointHistoryV3
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointHistoryV3, rsqlQuery, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -176,12 +181,13 @@ func (s *Service) AddHistoryNoteV3(ctx context.Context, request *AddHistoryNoteR
 
 	var result CreateResponse
 
+	endpoint := EndpointHistoryV3
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointHistoryV3, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -195,11 +201,12 @@ func (s *Service) AddHistoryNoteV3(ctx context.Context, request *AddHistoryNoteR
 func (s *Service) DownloadMetadataV3(ctx context.Context) ([]byte, *interfaces.Response, error) {
 	var result []byte
 
+	endpoint := EndpointMetadataDownloadV3
 	headers := map[string]string{
 		"Accept": mime.ApplicationXML,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointMetadataDownloadV3, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

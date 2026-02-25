@@ -437,6 +437,8 @@ func (s *Service) ListLanguageCodesV3(ctx context.Context) ([]ResourceLanguageCo
 // URL: GET /api/v4/enrollment
 // https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
 func (s *Service) GetV4(ctx context.Context) (*ResourceEnrollment, *interfaces.Response, error) {
+	endpoint := EndpointEnrollmentV4
+
 	var result ResourceEnrollment
 
 	headers := map[string]string{
@@ -444,7 +446,7 @@ func (s *Service) GetV4(ctx context.Context) (*ResourceEnrollment, *interfaces.R
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointEnrollmentV4, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -460,6 +462,8 @@ func (s *Service) UpdateV4(ctx context.Context, request *ResourceEnrollment) (*R
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	endpoint := EndpointEnrollmentV4
+
 	var result ResourceEnrollment
 
 	headers := map[string]string{
@@ -467,7 +471,7 @@ func (s *Service) UpdateV4(ctx context.Context, request *ResourceEnrollment) (*R
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Put(ctx, EndpointEnrollmentV4, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

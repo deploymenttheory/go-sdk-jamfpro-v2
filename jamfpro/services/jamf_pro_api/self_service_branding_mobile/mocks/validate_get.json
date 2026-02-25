@@ -1,0 +1,9 @@
+{
+  "id": "1",
+  "brandingName": "Corporate Branding",
+  "iconId": 5,
+  "headerBackgroundColorCode": "#FFFFFF",
+  "menuIconColorCode": "#000000",
+  "brandingNameColorCode": "#333333",
+  "statusBarTextColor": "light"
+}

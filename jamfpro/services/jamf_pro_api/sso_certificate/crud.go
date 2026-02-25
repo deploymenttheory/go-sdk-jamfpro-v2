@@ -66,11 +66,12 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert
 func (s *Service) GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *interfaces.Response, error) {
 	var result ResourceSSOKeystoreResponse
+	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
-	resp, err := s.client.Get(ctx, EndpointSSOCertV2, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -82,11 +83,12 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *int
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert
 func (s *Service) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *interfaces.Response, error) {
 	var result ResourceSSOKeystoreResponse
+	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
-	resp, err := s.client.Post(ctx, EndpointSSOCertV2, nil, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -98,11 +100,12 @@ func (s *Service) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-sso-cert
 func (s *Service) UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *interfaces.Response, error) {
 	var result ResourceSSOKeystoreResponse
+	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
-	resp, err := s.client.Put(ctx, EndpointSSOCertV2, request, headers, &result)
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -114,10 +117,11 @@ func (s *Service) UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) 
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert-download
 func (s *Service) DownloadV2(ctx context.Context) ([]byte, *interfaces.Response, error) {
 	var result []byte
+	endpoint := EndpointSSOCertDownloadV2
 	headers := map[string]string{
 		"Accept": mime.ApplicationOctetStream,
 	}
-	resp, err := s.client.Get(ctx, EndpointSSOCertDownloadV2, nil, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -129,11 +133,12 @@ func (s *Service) DownloadV2(ctx context.Context) ([]byte, *interfaces.Response,
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert-parse
 func (s *Service) ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *interfaces.Response, error) {
 	var result ParseKeystoreResponse
+	endpoint := EndpointSSOCertParseV2
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
-	resp, err := s.client.Post(ctx, EndpointSSOCertParseV2, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -144,11 +149,12 @@ func (s *Service) ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*
 // URL: DELETE /api/v2/sso/cert
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-sso-cert
 func (s *Service) DeleteV2(ctx context.Context) (*interfaces.Response, error) {
+	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
-	resp, err := s.client.Delete(ctx, EndpointSSOCertV2, nil, headers, nil)
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return nil, err
 	}

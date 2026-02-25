@@ -83,12 +83,14 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListV3(ctx context.Context, query map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
+	endpoint := EndpointComputerPrestagesV3
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointComputerPrestagesV3, query, headers, &result)
+	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -148,12 +150,14 @@ func (s *Service) CreateV3(ctx context.Context, request *ResourceComputerPrestag
 
 	var result CreateResponse
 
+	endpoint := EndpointComputerPrestagesV3
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointComputerPrestagesV3, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

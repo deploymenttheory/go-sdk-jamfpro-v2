@@ -146,6 +146,8 @@ func (s *Service) CreateV2(ctx context.Context, request *ResourceCloudLdap) (*Re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	endpoint := EndpointCloudLdapV2
+
 	var result ResponseCloudLdapCreated
 
 	headers := map[string]string{
@@ -153,7 +155,7 @@ func (s *Service) CreateV2(ctx context.Context, request *ResourceCloudLdap) (*Re
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointCloudLdapV2, request, headers, &result)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

@@ -42,14 +42,20 @@ func (s *Service) ValidateV1(ctx context.Context, request *ValidateKeystoreReque
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if err := validateKeystoreRequest(request); err != nil {
+		return nil, nil, err
+	}
+
 	var result ResponseValidateKeystore
+
+	Endpoint := EndpointCloudLdapKeystoreV1
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Post(ctx, EndpointCloudLdapKeystoreV1, request, headers, &result)
+	resp, err := s.client.Post(ctx, Endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
