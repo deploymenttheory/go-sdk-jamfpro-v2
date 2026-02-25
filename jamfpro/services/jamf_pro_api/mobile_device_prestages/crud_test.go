@@ -417,3 +417,70 @@ func TestGetByNameV3_EmptyName(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "name is required")
 }
+
+// Optimistic locking tests
+
+// TestUnit_MobileDevicePrestages_UpdateByIDV3_VersionLockPropagated verifies that
+// UpdateByIDV3 fetches the current resource and injects the versionLock (and
+// sub-resource locks) into the caller-supplied prestage before issuing the PUT.
+func TestUnit_MobileDevicePrestages_UpdateByIDV3_VersionLockPropagated(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterGetByIDMock("1")    // returns versionLock=1
+	mock.RegisterUpdateByIDMock("1") // PUT
+
+	svc := NewService(mock)
+	prestage := &ResourceMobileDevicePrestage{DisplayName: "Updated Prestage"}
+	_, _, err := svc.UpdateByIDV3(context.Background(), "1", prestage)
+	require.NoError(t, err)
+	// EnsureVersionLock must have copied versionLock=1 from the GET response.
+	assert.Equal(t, 1, prestage.VersionLock)
+	// Sub-resource locks are propagated from the current resource (0 in fixture).
+	assert.Equal(t, 0, prestage.LocationInformation.VersionLock)
+	assert.Equal(t, 0, prestage.PurchasingInformation.VersionLock)
+}
+
+// TestUnit_MobileDevicePrestages_UpdateByNameV3_VersionLockPropagated verifies that
+// UpdateByNameV3 reuses the versionLock obtained from the list response during
+// the name lookup, avoiding a second round-trip.
+func TestUnit_MobileDevicePrestages_UpdateByNameV3_VersionLockPropagated(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterListMock()          // "Test iPad Prestage" carries versionLock=1
+	mock.RegisterUpdateByIDMock("1") // PUT
+
+	svc := NewService(mock)
+	prestage := &ResourceMobileDevicePrestage{DisplayName: "Updated Prestage"}
+	_, _, err := svc.UpdateByNameV3(context.Background(), "Test iPad Prestage", prestage)
+	require.NoError(t, err)
+	assert.Equal(t, 1, prestage.VersionLock)
+}
+
+// TestUnit_MobileDevicePrestages_UpdateByIDV3_FetchVersionLockError verifies that
+// UpdateByIDV3 returns an error when the internal GET (for version locking) fails.
+func TestUnit_MobileDevicePrestages_UpdateByIDV3_FetchVersionLockError(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	// No GET mock registered – the internal fetch will fail.
+
+	svc := NewService(mock)
+	prestage := &ResourceMobileDevicePrestage{DisplayName: "Updated Prestage"}
+	result, resp, err := svc.UpdateByIDV3(context.Background(), "1", prestage)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to fetch current prestage for version locking")
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+// TestUnit_MobileDevicePrestages_UpdateByNameV3_FetchVersionLockError verifies that
+// UpdateByNameV3 returns an error when the list call (used for name lookup and
+// version lock retrieval) fails.
+func TestUnit_MobileDevicePrestages_UpdateByNameV3_FetchVersionLockError(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	// No list mock registered – GetByNameV3 will fail.
+
+	svc := NewService(mock)
+	prestage := &ResourceMobileDevicePrestage{DisplayName: "Updated Prestage"}
+	result, resp, err := svc.UpdateByNameV3(context.Background(), "Test iPad Prestage", prestage)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to get mobile device prestage by name")
+	assert.Nil(t, result)
+	_ = resp // resp carries the 404 from the failed list call; content not asserted
+}
