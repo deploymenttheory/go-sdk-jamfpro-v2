@@ -222,3 +222,79 @@ func TestUnitReplaceDeviceScopeByIDV2_Success(t *testing.T) {
 	require.Len(t, result.Assignments, 1)
 	assert.Equal(t, "XYZ", result.Assignments[0].SerialNumber)
 }
+
+// Optimistic locking tests
+
+// TestUnit_ComputerPrestages_UpdateByIDV3_VersionLockPropagated verifies that
+// UpdateByIDV3 fetches the current resource and injects the versionLock (and
+// sub-resource locks) into the caller-supplied request before issuing the PUT.
+func TestUnit_ComputerPrestages_UpdateByIDV3_VersionLockPropagated(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetByIDMock("1")    // returns versionLock=1
+	mock.RegisterUpdateByIDMock("1") // PUT
+
+	request := &ResourceComputerPrestage{DisplayName: "Updated"}
+	_, _, err := svc.UpdateByIDV3(context.Background(), "1", request)
+	require.NoError(t, err)
+	// EnsureVersionLock must have copied versionLock=1 from the GET response.
+	assert.Equal(t, 1, request.VersionLock)
+	// Sub-resource locks are propagated from the current resource (0 when absent in fixture).
+	assert.Equal(t, 0, request.LocationInformation.VersionLock)
+	assert.Equal(t, 0, request.PurchasingInformation.VersionLock)
+}
+
+// TestUnit_ComputerPrestages_UpdateByNameV3_VersionLockPropagated verifies that
+// UpdateByNameV3 reuses the versionLock obtained via the name-lookup list call.
+func TestUnit_ComputerPrestages_UpdateByNameV3_VersionLockPropagated(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()          // "Test Prestage" carries versionLock=1
+	mock.RegisterUpdateByIDMock("1") // PUT
+
+	request := &ResourceComputerPrestage{DisplayName: "Updated"}
+	_, _, err := svc.UpdateByNameV3(context.Background(), "Test Prestage", request)
+	require.NoError(t, err)
+	assert.Equal(t, 1, request.VersionLock)
+}
+
+// TestUnit_ComputerPrestages_ReplaceDeviceScopeByIDV2_VersionLockPropagated
+// verifies that ReplaceDeviceScopeByIDV2 fetches the current scope and injects
+// its versionLock into the request before issuing the PUT.
+func TestUnit_ComputerPrestages_ReplaceDeviceScopeByIDV2_VersionLockPropagated(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetDeviceScopeMock("1")     // returns versionLock=1
+	mock.RegisterReplaceDeviceScopeMock("1") // PUT
+
+	request := &ReplaceDeviceScopeRequest{SerialNumbers: []string{"XYZ"}}
+	_, _, err := svc.ReplaceDeviceScopeByIDV2(context.Background(), "1", request)
+	require.NoError(t, err)
+	assert.Equal(t, 1, request.VersionLock)
+}
+
+// TestUnit_ComputerPrestages_UpdateByIDV3_FetchVersionLockError verifies that
+// UpdateByIDV3 returns an error when the internal GET (for version locking) fails.
+func TestUnit_ComputerPrestages_UpdateByIDV3_FetchVersionLockError(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No GET mock registered – the internal fetch will fail.
+
+	request := &ResourceComputerPrestage{DisplayName: "Updated"}
+	result, resp, err := svc.UpdateByIDV3(context.Background(), "1", request)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to fetch current prestage for version locking")
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+// TestUnit_ComputerPrestages_ReplaceDeviceScopeByIDV2_FetchVersionLockError verifies
+// that ReplaceDeviceScopeByIDV2 returns an error when the scope GET (for version
+// locking) fails.
+func TestUnit_ComputerPrestages_ReplaceDeviceScopeByIDV2_FetchVersionLockError(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No scope GET mock registered – the internal fetch will fail.
+
+	request := &ReplaceDeviceScopeRequest{SerialNumbers: []string{"XYZ"}}
+	result, resp, err := svc.ReplaceDeviceScopeByIDV2(context.Background(), "1", request)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to fetch current device scope for version locking")
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
