@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.2.0...v0.3.0) (2026-02-25)
+
+
+### Features
+
+* feat:  ([65eba71](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/65eba7111ba2aba053472af17a25de24fe61b698))
+* enhance API client with new services and refactor structure ([b1c1e61](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/b1c1e616c9164ce55c3964bc11616411e36655d2))
+* enhance ClassicCommandFlush service with additional status handling ([a66b525](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/a66b5256e2e253db5e34e653feef1553bdcf9d21))
+* expand computer inventory API documentation and models ([f004ae8](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/f004ae89f1362af854a2c5a2b46f7f57e8512897))
+* update account preferences API to v3 and enhance examples ([74231ad](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/74231ad98c7c7b47c4d97d218b75dc1582440a9b))
+
+
+### Bug Fixes
+
+* standardize endpoint usage across services ([51a4c27](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/51a4c27f1163d553c609bb6733d53d8dc5787b0e))
+
 ## [0.2.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.1.0...v0.2.0) (2026-02-23)
 
 
