@@ -17,6 +17,7 @@ type CloudAzureServer struct {
 	ID                                       string                  `json:"id"`
 	TenantId                                 string                  `json:"tenantId"`
 	Enabled                                  bool                    `json:"enabled"`
+	DeprecatedConsent                        bool                    `json:"deprecatedConsent"`
 	Migrated                                 bool                    `json:"migrated"`
 	Mappings                                 CloudAzureServerMappings `json:"mappings"`
 	SearchTimeout                            int                     `json:"searchTimeout"`
@@ -24,7 +25,7 @@ type CloudAzureServer struct {
 	TransitiveMembershipUserField            string                  `json:"transitiveMembershipUserField"`
 	TransitiveDirectoryMembershipEnabled     bool                    `json:"transitiveDirectoryMembershipEnabled"`
 	MembershipCalculationOptimizationEnabled bool                    `json:"membershipCalculationOptimizationEnabled"`
-	Code                                     string                  `json:"code"`
+	Type                                     string                  `json:"type"`
 }
 
 // CloudAzureServerMappings defines field mappings for Azure Cloud IDP.

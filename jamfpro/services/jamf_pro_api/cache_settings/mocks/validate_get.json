@@ -1,1 +1,12 @@
-{"id":"1","cacheType":"ehcache","timeToLiveSeconds":3600,"timeToIdleSeconds":1800,"cacheUniqueId":"abc123","memcachedEndpoints":[]}
+{
+  "id": "1",
+  "name": "cache configuration",
+  "cacheType": "ehcache",
+  "timeToLiveSeconds": 3600,
+  "timeToIdleSeconds": 1800,
+  "directoryTimeToLiveSeconds": 3600,
+  "ehcacheMaxBytesLocalHeap": "512m",
+  "cacheUniqueId": "abc123",
+  "elasticache": false,
+  "memcachedEndpoints": []
+}

@@ -50,7 +50,7 @@ type DeleteComputerExtensionAttributesByIDRequest struct {
 
 // HistoryItem represents a single computer extension attribute history entry.
 type HistoryItem struct {
-	ID       string `json:"id"`
+	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Date     string `json:"date"`
 	Note     string `json:"note"`

@@ -35,7 +35,7 @@ type (
 		// AddHistoryNoteV3 adds a note to the client check-in history (Add a Note to Client Check-In History).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-check-in-history
-		AddHistoryNoteV3(ctx context.Context, request *RequestClientCheckinHistoryNote) (*interfaces.Response, error)
+		AddHistoryNoteV3(ctx context.Context, request *RequestClientCheckinHistoryNote) (*CreateHistoryResponse, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the client check-in-related methods of the Jamf Pro API.
@@ -120,19 +120,20 @@ func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string)
 // AddHistoryNoteV3 adds a note to the client check-in history.
 // URL: POST /api/v3/check-in/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-check-in-history
-func (s *Service) AddHistoryNoteV3(ctx context.Context, request *RequestClientCheckinHistoryNote) (*interfaces.Response, error) {
+func (s *Service) AddHistoryNoteV3(ctx context.Context, request *RequestClientCheckinHistoryNote) (*CreateHistoryResponse, *interfaces.Response, error) {
 	if request == nil {
-		return nil, fmt.Errorf("request is required")
+		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	var result CreateHistoryResponse
 	endpoint := EndpointClientCheckinHistoryV3
 
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
-		return resp, err
+		return nil, resp, err
 	}
-	return resp, nil
+	return &result, resp, nil
 }
 
 // UpdateV3 updates the client check-in settings.

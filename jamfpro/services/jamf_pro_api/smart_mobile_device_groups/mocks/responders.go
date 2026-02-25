@@ -76,27 +76,27 @@ func (m *SmartMobileDeviceGroupsMock) registerError(method, path string, statusC
 }
 
 func (m *SmartMobileDeviceGroupsMock) RegisterListMock() {
-	m.register("GET", "/api/v2/mobile-device-groups/smart-groups", 200, "list.json")
+	m.register("GET", "/api/v2/mobile-device-groups/smart-groups", 200, "validate_list.json")
 }
 
 func (m *SmartMobileDeviceGroupsMock) RegisterListEmptyMock() {
-	m.register("GET", "/api/v2/mobile-device-groups/smart-groups", 200, "list_empty.json")
+	m.register("GET", "/api/v2/mobile-device-groups/smart-groups", 200, "validate_list_empty.json")
 }
 
 func (m *SmartMobileDeviceGroupsMock) RegisterGetMock() {
-	m.register("GET", "/api/v2/mobile-device-groups/smart-groups/1", 200, "get.json")
+	m.register("GET", "/api/v2/mobile-device-groups/smart-groups/1", 200, "validate_get.json")
 }
 
 func (m *SmartMobileDeviceGroupsMock) RegisterGetMembershipMock() {
-	m.register("GET", "/api/v2/mobile-device-groups/smart-group-membership/1", 200, "membership.json")
+	m.register("GET", "/api/v2/mobile-device-groups/smart-group-membership/1", 200, "validate_get_membership.json")
 }
 
 func (m *SmartMobileDeviceGroupsMock) RegisterCreateMock() {
-	m.register("POST", "/api/v2/mobile-device-groups/smart-groups", 201, "create.json")
+	m.register("POST", "/api/v2/mobile-device-groups/smart-groups", 201, "validate_create.json")
 }
 
 func (m *SmartMobileDeviceGroupsMock) RegisterUpdateMock() {
-	m.register("PUT", "/api/v2/mobile-device-groups/smart-groups/1", 200, "update.json")
+	m.register("PUT", "/api/v2/mobile-device-groups/smart-groups/1", 200, "validate_update.json")
 }
 
 func (m *SmartMobileDeviceGroupsMock) RegisterDeleteMock() {

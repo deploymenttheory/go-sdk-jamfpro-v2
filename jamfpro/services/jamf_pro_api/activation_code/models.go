@@ -12,11 +12,11 @@ type OrganizationNameRequest struct {
 
 // HistoryEntry represents a single activation code history record.
 type HistoryEntry struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`    // ISO 8601 timestamp
-	Note     string `json:"note"`
-	Details  string `json:"details"`
+	ID       int     `json:"id"`       // Integer ≥ 1
+	Username string  `json:"username"`
+	Date     string  `json:"date"`     // ISO 8601 timestamp
+	Note     string  `json:"note"`
+	Details  *string `json:"details"`  // Nullable; may be null in API response
 }
 
 // HistoryResponse is the response for listing activation code history.

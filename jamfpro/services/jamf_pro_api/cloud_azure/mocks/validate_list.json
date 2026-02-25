@@ -27,7 +27,7 @@
       "transitiveMembershipUserField": "userPrincipalName",
       "transitiveDirectoryMembershipEnabled": false,
       "membershipCalculationOptimizationEnabled": true,
-      "code": "test-code"
+      "type": "PUBLIC"
     }
   }
 ]

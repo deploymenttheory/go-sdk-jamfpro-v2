@@ -14,11 +14,11 @@ type ResourceAdcsSettings struct {
 	Outbound          *bool                 `json:"outbound,omitempty"`
 }
 
-// ResourceAdcsCert bundles the file metadata and base64-encoded certificate.
+// ResourceAdcsCert bundles the file metadata and certificate data.
 type ResourceAdcsCert struct {
-	Filename string `json:"filename"`
-	Data     []byte `json:"data"`
-	Password string `json:"password,omitempty"`
+	Filename string   `json:"filename"`
+	Data     []string `json:"data"`
+	Password string   `json:"password,omitempty"`
 }
 
 // ResponseAdcsSettingsCreated captures the identifier returned after creating a configuration.

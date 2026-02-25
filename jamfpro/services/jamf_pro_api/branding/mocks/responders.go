@@ -39,7 +39,7 @@ func (m *BrandingMock) register(method, path string, statusCode int, fixture str
 }
 
 func (m *BrandingMock) RegisterMocks() {
-	m.register("GET", "/api/v1/branding-images/download/test-id", 200, "download_branding_image.bin")
+	m.register("GET", "/api/v1/branding-images/download/test-id", 200, "validate_download.bin")
 }
 
 func (m *BrandingMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

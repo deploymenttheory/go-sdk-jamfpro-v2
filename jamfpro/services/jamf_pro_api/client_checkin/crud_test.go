@@ -50,7 +50,7 @@ func TestUnitGetHistoryV3_Success(t *testing.T) {
 	require.Equal(t, 200, resp.StatusCode)
 	require.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
-	require.Equal(t, 1, result.Results[0].ID)
+	require.Equal(t, "1", result.Results[0].ID)
 	require.Equal(t, "admin", result.Results[0].Username)
 	require.Equal(t, "Initial config", result.Results[0].Note)
 }
@@ -58,15 +58,19 @@ func TestUnitGetHistoryV3_Success(t *testing.T) {
 func TestUnitAddHistoryNoteV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestClientCheckinHistoryNote{Note: "Test note"}
-	resp, err := svc.AddHistoryNoteV3(context.Background(), req)
+	result, resp, err := svc.AddHistoryNoteV3(context.Background(), req)
 	require.NoError(t, err)
+	require.NotNil(t, result)
 	require.NotNil(t, resp)
 	require.Equal(t, 201, resp.StatusCode)
+	require.Equal(t, "1", result.ID)
+	require.NotEmpty(t, result.HREF)
 }
 
 func TestUnitAddHistoryNoteV3_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
-	resp, err := svc.AddHistoryNoteV3(context.Background(), nil)
+	result, resp, err := svc.AddHistoryNoteV3(context.Background(), nil)
 	require.Error(t, err)
+	require.Nil(t, result)
 	require.Nil(t, resp)
 }

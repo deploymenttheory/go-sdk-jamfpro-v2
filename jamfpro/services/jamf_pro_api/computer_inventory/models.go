@@ -549,6 +549,13 @@ type ResponseUploadAttachment struct {
 	Href string `json:"href"`
 }
 
+// CreateComputerResponse represents the response structure for CreateV3 (POST computers-inventory).
+// The API returns only id and href, not the full ResourceComputerInventory.
+type CreateComputerResponse struct {
+	ID   string `json:"id"`
+	HREF string `json:"href"`
+}
+
 // ResponseRemoveMDMProfile represents the response structure for removing an MDM profile.
 type ResponseRemoveMDMProfile struct {
 	DeviceID    string `json:"deviceId"`

@@ -1,1 +1,1 @@
-{"totalCount":1,"results":[{"id":"1","name":"All iPhones","criteria":[{"name":"Device Name","priority":1,"andOr":"and","searchType":"like","value":"iPhone"}],"displayFields":["Device Name","Model"],"siteId":null}]}
+{"totalCount":1,"results":[{"id":"1","name":"All iPhones","criteria":[{"name":"Device Name","priority":1,"andOr":"and","searchType":"like","value":"iPhone","openingParen":false,"closingParen":false}],"displayFields":["Device Name","Model"],"siteId":null}]}

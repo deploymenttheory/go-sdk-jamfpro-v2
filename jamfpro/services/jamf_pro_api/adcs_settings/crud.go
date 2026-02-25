@@ -143,7 +143,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *Resource
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationMergePatchJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, nil)

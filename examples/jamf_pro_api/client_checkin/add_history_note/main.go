@@ -25,10 +25,10 @@ func main() {
 		Note: "Manual note added via API - client check-in configuration change",
 	}
 
-	resp, err := jamfClient.ClientCheckin.AddHistoryNoteV3(context.Background(), noteRequest)
+	result, resp, err := jamfClient.ClientCheckin.AddHistoryNoteV3(context.Background(), noteRequest)
 	if err != nil {
 		fmt.Printf("Error adding history note: %v\n", err)
 		return
 	}
-	fmt.Printf("History note added successfully (Status: %d)\n", resp.StatusCode)
+	fmt.Printf("History note added successfully (ID: %s, Status: %d)\n", result.ID, resp.StatusCode)
 }

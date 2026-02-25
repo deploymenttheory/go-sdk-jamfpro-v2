@@ -17,11 +17,17 @@ type ResourceClientCheckinSettings struct {
 
 // ResourceClientCheckinHistoryEntry represents a single client check-in history entry.
 type ResourceClientCheckinHistoryEntry struct {
-	ID       int    `json:"id"`
+	ID       string `json:"id"`
 	Username string `json:"username"`
 	Date     string `json:"date"`
 	Note     string `json:"note"`
 	Details  string `json:"details"`
+}
+
+// CreateHistoryResponse is the response for AddHistoryNoteV3 (POST history).
+type CreateHistoryResponse struct {
+	ID   string `json:"id"`
+	HREF string `json:"href"`
 }
 
 // ResourceClientCheckinHistory is the response for GetHistoryV3.

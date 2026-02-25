@@ -346,7 +346,7 @@ func TestUnit_ComputerInventory_CreateV3(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Equal(t, 201, resp.StatusCode)
 	assert.Equal(t, "1", result.ID)
-	assert.Equal(t, "Test-Mac-001", result.General.Name)
+	assert.Equal(t, "/api/v3/computers-inventory/1", result.HREF)
 }
 
 func TestUnit_ComputerInventory_CreateV3_NilRequest(t *testing.T) {

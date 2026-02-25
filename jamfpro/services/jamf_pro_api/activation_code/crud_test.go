@@ -27,11 +27,12 @@ func TestUnit_ActivationCode_GetHistoryV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, 3, result.TotalCount)
 	assert.Len(t, result.Results, 3)
-	assert.Equal(t, "1", result.Results[0].ID)
+	assert.Equal(t, 1, result.Results[0].ID)
 	assert.Equal(t, "admin", result.Results[0].Username)
 	assert.Equal(t, "2024-01-15T10:30:00Z", result.Results[0].Date)
 	assert.Equal(t, "Activation code generated", result.Results[0].Note)
-	assert.Equal(t, "enabled", result.Results[0].Details)
+	require.NotNil(t, result.Results[0].Details)
+	assert.Equal(t, "enabled", *result.Results[0].Details)
 }
 
 // Test GetHistoryV1 with RSQL filter query

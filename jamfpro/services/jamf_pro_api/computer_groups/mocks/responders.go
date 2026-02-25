@@ -158,7 +158,7 @@ func (m *ComputerGroupsMock) RegisterCreateStaticGroupMock() {
 }
 
 func (m *ComputerGroupsMock) RegisterUpdateStaticGroupMock() {
-	m.register("PATCH", "/api/v2/computer-groups/static-groups/10", 200, "validate_update_static_group.json")
+	m.register("PUT", "/api/v2/computer-groups/static-groups/10", 200, "validate_update_static_group.json")
 }
 
 func (m *ComputerGroupsMock) RegisterDeleteStaticGroupMock() {

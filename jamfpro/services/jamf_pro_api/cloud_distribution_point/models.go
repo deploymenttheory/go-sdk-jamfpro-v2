@@ -55,7 +55,7 @@ type TestConnectionV1 struct {
 
 // HistoryItem represents a single cloud distribution point history entry.
 type HistoryItem struct {
-	ID       string `json:"id"`
+	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Date     string `json:"date"`
 	Note     string `json:"note"`

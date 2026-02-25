@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_idp/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -136,6 +137,28 @@ func TestExportV1_QueryOnly(t *testing.T) {
 	}
 
 	resp, data, err := svc.ExportV1(ctx, query, nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.NotEmpty(t, data)
+}
+
+func TestExportV1_CSV(t *testing.T) {
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterExportMock()
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	request := &ExportRequest{
+		Fields: []ExportField{
+			{Name: "id"},
+			{Name: "displayName"},
+		},
+	}
+
+	resp, data, err := svc.ExportV1(ctx, nil, request, mime.TextCSV)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
@@ -341,9 +364,8 @@ func TestTestUserMembershipByIDV1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	assert.Equal(t, 1, result.TotalCount)
-	assert.Len(t, result.Results, 1)
-	assert.Equal(t, "TestGroup", result.Results[0].Name)
+	assert.Equal(t, "testuser", result.Username)
+	assert.True(t, result.IsMember)
 }
 
 func TestTestUserMembershipByIDV1_EmptyID(t *testing.T) {

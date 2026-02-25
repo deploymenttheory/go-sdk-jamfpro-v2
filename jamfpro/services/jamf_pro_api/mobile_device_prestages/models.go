@@ -177,3 +177,19 @@ type SubsetAssignmentItem struct {
 	AssignmentDate string `json:"assignmentDate"`
 	UserAssigned   string `json:"userAssigned"`
 }
+
+// VersionLocker implementations for version_locking.VersionLocker interface.
+// These allow the version_locking helpers to propagate versionLock values
+// across GET → PUT workflows without requiring callers to manage locks manually.
+
+func (r *ResourceMobileDevicePrestage) GetVersionLock() int    { return r.VersionLock }
+func (r *ResourceMobileDevicePrestage) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (r *ResourceDeviceScope) GetVersionLock() int    { return r.VersionLock }
+func (r *ResourceDeviceScope) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (l *SubsetLocationInformation) GetVersionLock() int    { return l.VersionLock }
+func (l *SubsetLocationInformation) SetVersionLock(lock int) { l.VersionLock = lock }
+
+func (p *SubsetPurchasingInformation) GetVersionLock() int    { return p.VersionLock }
+func (p *SubsetPurchasingInformation) SetVersionLock(lock int) { p.VersionLock = lock }

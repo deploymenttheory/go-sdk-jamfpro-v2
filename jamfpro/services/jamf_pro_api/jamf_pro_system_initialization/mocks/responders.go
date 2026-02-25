@@ -39,12 +39,12 @@ func (m *JamfProSystemInitializationMock) register(method, path string, statusCo
 
 // RegisterInitializeMock registers a successful POST /api/v1/system/initialize response.
 func (m *JamfProSystemInitializationMock) RegisterInitializeMock() {
-	m.register("POST", "/api/v1/system/initialize", 200, "initialize_success.json")
+	m.register("POST", "/api/v1/system/initialize", 200, "validate_initialize.json")
 }
 
 // RegisterInitializeDatabaseConnectionMock registers a successful POST /api/v1/system/initialize-database-connection response.
 func (m *JamfProSystemInitializationMock) RegisterInitializeDatabaseConnectionMock() {
-	m.register("POST", "/api/v1/system/initialize-database-connection", 200, "initialize_database_connection_success.json")
+	m.register("POST", "/api/v1/system/initialize-database-connection", 200, "validate_initialize_database_connection.json")
 }
 
 func (m *JamfProSystemInitializationMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
