@@ -21,7 +21,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.RestrictedSoftwareMock) {
 // ListRestrictedSoftware
 // =============================================================================
 
-func TestUnitListRestrictedSoftware_Success(t *testing.T) {
+func TestUnit_RestrictedSoftware_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -41,7 +41,7 @@ func TestUnitListRestrictedSoftware_Success(t *testing.T) {
 // GetRestrictedSoftwareByID
 // =============================================================================
 
-func TestUnitGetRestrictedSoftwareByID_Success(t *testing.T) {
+func TestUnit_RestrictedSoftware_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -57,7 +57,7 @@ func TestUnitGetRestrictedSoftwareByID_Success(t *testing.T) {
 	assert.True(t, result.General.MatchExactProcessName)
 }
 
-func TestUnitGetRestrictedSoftwareByID_ZeroID(t *testing.T) {
+func TestUnit_RestrictedSoftware_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -67,7 +67,7 @@ func TestUnitGetRestrictedSoftwareByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "restricted software ID must be a positive integer")
 }
 
-func TestUnitGetRestrictedSoftwareByID_NotFound(t *testing.T) {
+func TestUnit_RestrictedSoftware_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -82,7 +82,7 @@ func TestUnitGetRestrictedSoftwareByID_NotFound(t *testing.T) {
 // GetRestrictedSoftwareByName
 // =============================================================================
 
-func TestUnitGetRestrictedSoftwareByName_Success(t *testing.T) {
+func TestUnit_RestrictedSoftware_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByNameMock()
 
@@ -95,7 +95,7 @@ func TestUnitGetRestrictedSoftwareByName_Success(t *testing.T) {
 	assert.Equal(t, "Calculator", result.General.Name)
 }
 
-func TestUnitGetRestrictedSoftwareByName_EmptyName(t *testing.T) {
+func TestUnit_RestrictedSoftware_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -109,7 +109,7 @@ func TestUnitGetRestrictedSoftwareByName_EmptyName(t *testing.T) {
 // CreateRestrictedSoftware
 // =============================================================================
 
-func TestUnitCreateRestrictedSoftware_Success(t *testing.T) {
+func TestUnit_RestrictedSoftware_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -137,7 +137,7 @@ func TestUnitCreateRestrictedSoftware_Success(t *testing.T) {
 	assert.Equal(t, 100, result.ID)
 }
 
-func TestUnitCreateRestrictedSoftware_NilRequest(t *testing.T) {
+func TestUnit_RestrictedSoftware_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -151,7 +151,7 @@ func TestUnitCreateRestrictedSoftware_NilRequest(t *testing.T) {
 // UpdateRestrictedSoftwareByID
 // =============================================================================
 
-func TestUnitUpdateRestrictedSoftwareByID_Success(t *testing.T) {
+func TestUnit_RestrictedSoftware_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByIDMock()
 
@@ -171,7 +171,7 @@ func TestUnitUpdateRestrictedSoftwareByID_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateRestrictedSoftwareByID_ZeroID(t *testing.T) {
+func TestUnit_RestrictedSoftware_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestRestrictedSoftware{}
@@ -186,7 +186,7 @@ func TestUnitUpdateRestrictedSoftwareByID_ZeroID(t *testing.T) {
 // UpdateRestrictedSoftwareByName
 // =============================================================================
 
-func TestUnitUpdateRestrictedSoftwareByName_Success(t *testing.T) {
+func TestUnit_RestrictedSoftware_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByNameMock()
 
@@ -201,7 +201,7 @@ func TestUnitUpdateRestrictedSoftwareByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateRestrictedSoftwareByName_EmptyName(t *testing.T) {
+func TestUnit_RestrictedSoftware_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestRestrictedSoftware{}
@@ -216,7 +216,7 @@ func TestUnitUpdateRestrictedSoftwareByName_EmptyName(t *testing.T) {
 // DeleteRestrictedSoftwareByID
 // =============================================================================
 
-func TestUnitDeleteRestrictedSoftwareByID_Success(t *testing.T) {
+func TestUnit_RestrictedSoftware_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByIDMock()
 
@@ -226,7 +226,7 @@ func TestUnitDeleteRestrictedSoftwareByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteRestrictedSoftwareByID_ZeroID(t *testing.T) {
+func TestUnit_RestrictedSoftware_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -239,7 +239,7 @@ func TestUnitDeleteRestrictedSoftwareByID_ZeroID(t *testing.T) {
 // DeleteRestrictedSoftwareByName
 // =============================================================================
 
-func TestUnitDeleteRestrictedSoftwareByName_Success(t *testing.T) {
+func TestUnit_RestrictedSoftware_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByNameMock()
 
@@ -249,11 +249,67 @@ func TestUnitDeleteRestrictedSoftwareByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteRestrictedSoftwareByName_EmptyName(t *testing.T) {
+func TestUnit_RestrictedSoftware_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "restricted software name is required")
+}
+
+func TestUnit_RestrictedSoftware_List_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_RestrictedSoftware_GetByName_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetByName(context.Background(), "Calculator")
+	require.Error(t, err)
+}
+
+func TestUnit_RestrictedSoftware_Create_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.Create(context.Background(), &RequestRestrictedSoftware{})
+	require.Error(t, err)
+}
+
+func TestUnit_RestrictedSoftware_UpdateByID_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_RestrictedSoftware_UpdateByID_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &RequestRestrictedSoftware{})
+	require.Error(t, err)
+}
+
+func TestUnit_RestrictedSoftware_UpdateByName_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.UpdateByName(context.Background(), "Calculator", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_RestrictedSoftware_UpdateByName_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.UpdateByName(context.Background(), "Calculator", &RequestRestrictedSoftware{})
+	require.Error(t, err)
+}
+
+func TestUnit_RestrictedSoftware_DeleteByID_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_RestrictedSoftware_DeleteByName_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.DeleteByName(context.Background(), "Calculator")
+	require.Error(t, err)
 }

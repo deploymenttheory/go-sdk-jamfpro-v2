@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.SitesMock) {
 // ListSites
 // =============================================================================
 
-func TestUnitListSites_Success(t *testing.T) {
+func TestUnit_Sites_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -42,7 +42,7 @@ func TestUnitListSites_Success(t *testing.T) {
 // GetSiteByID
 // =============================================================================
 
-func TestUnitGetSiteByID_Success(t *testing.T) {
+func TestUnit_Sites_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -56,7 +56,7 @@ func TestUnitGetSiteByID_Success(t *testing.T) {
 	assert.Equal(t, "Main Campus", result.Name)
 }
 
-func TestUnitGetSiteByID_ZeroID(t *testing.T) {
+func TestUnit_Sites_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -66,7 +66,7 @@ func TestUnitGetSiteByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "site ID must be a positive integer")
 }
 
-func TestUnitGetSiteByID_NegativeID(t *testing.T) {
+func TestUnit_Sites_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), -1)
@@ -76,7 +76,7 @@ func TestUnitGetSiteByID_NegativeID(t *testing.T) {
 	assert.Contains(t, err.Error(), "site ID must be a positive integer")
 }
 
-func TestUnitGetSiteByID_NotFound(t *testing.T) {
+func TestUnit_Sites_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -91,7 +91,7 @@ func TestUnitGetSiteByID_NotFound(t *testing.T) {
 // GetSiteByName
 // =============================================================================
 
-func TestUnitGetSiteByName_Success(t *testing.T) {
+func TestUnit_Sites_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByNameMock()
 
@@ -105,7 +105,7 @@ func TestUnitGetSiteByName_Success(t *testing.T) {
 	assert.Equal(t, "Main Campus", result.Name)
 }
 
-func TestUnitGetSiteByName_EmptyName(t *testing.T) {
+func TestUnit_Sites_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -119,7 +119,7 @@ func TestUnitGetSiteByName_EmptyName(t *testing.T) {
 // CreateSite
 // =============================================================================
 
-func TestUnitCreateSite_Success(t *testing.T) {
+func TestUnit_Sites_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -134,7 +134,7 @@ func TestUnitCreateSite_Success(t *testing.T) {
 	assert.Equal(t, "New Site", result.Name)
 }
 
-func TestUnitCreateSite_NilRequest(t *testing.T) {
+func TestUnit_Sites_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -144,7 +144,7 @@ func TestUnitCreateSite_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateSite_Conflict(t *testing.T) {
+func TestUnit_Sites_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -160,7 +160,7 @@ func TestUnitCreateSite_Conflict(t *testing.T) {
 // UpdateSiteByID
 // =============================================================================
 
-func TestUnitUpdateSiteByID_Success(t *testing.T) {
+func TestUnit_Sites_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByIDMock()
 
@@ -175,7 +175,7 @@ func TestUnitUpdateSiteByID_Success(t *testing.T) {
 	assert.Equal(t, "Main Campus Updated", result.Name)
 }
 
-func TestUnitUpdateSiteByID_ZeroID(t *testing.T) {
+func TestUnit_Sites_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 0, &RequestSite{Name: "x"})
@@ -185,7 +185,7 @@ func TestUnitUpdateSiteByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "site ID must be a positive integer")
 }
 
-func TestUnitUpdateSiteByID_NilRequest(t *testing.T) {
+func TestUnit_Sites_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
@@ -199,7 +199,7 @@ func TestUnitUpdateSiteByID_NilRequest(t *testing.T) {
 // UpdateSiteByName
 // =============================================================================
 
-func TestUnitUpdateSiteByName_Success(t *testing.T) {
+func TestUnit_Sites_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByNameMock()
 
@@ -214,7 +214,7 @@ func TestUnitUpdateSiteByName_Success(t *testing.T) {
 	assert.Equal(t, "Main Campus Updated", result.Name)
 }
 
-func TestUnitUpdateSiteByName_EmptyName(t *testing.T) {
+func TestUnit_Sites_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "", &RequestSite{Name: "x"})
@@ -224,7 +224,7 @@ func TestUnitUpdateSiteByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "site name is required")
 }
 
-func TestUnitUpdateSiteByName_NilRequest(t *testing.T) {
+func TestUnit_Sites_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "Main Campus", nil)
@@ -238,7 +238,7 @@ func TestUnitUpdateSiteByName_NilRequest(t *testing.T) {
 // DeleteSiteByID
 // =============================================================================
 
-func TestUnitDeleteSiteByID_Success(t *testing.T) {
+func TestUnit_Sites_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByIDMock()
 
@@ -248,7 +248,7 @@ func TestUnitDeleteSiteByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteSiteByID_ZeroID(t *testing.T) {
+func TestUnit_Sites_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -261,7 +261,7 @@ func TestUnitDeleteSiteByID_ZeroID(t *testing.T) {
 // DeleteSiteByName
 // =============================================================================
 
-func TestUnitDeleteSiteByName_Success(t *testing.T) {
+func TestUnit_Sites_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByNameMock()
 
@@ -271,7 +271,7 @@ func TestUnitDeleteSiteByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteSiteByName_EmptyName(t *testing.T) {
+func TestUnit_Sites_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")

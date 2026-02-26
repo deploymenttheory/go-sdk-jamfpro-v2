@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.HealthCheckMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_HealthCheck_GetV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	healthy, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)

@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.AdueSessionTokenSettingsMo
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_AdueSessionTokenSettings_GetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -28,7 +28,7 @@ func TestUnitGetV1_Success(t *testing.T) {
 	assert.Equal(t, 30, result.ExpirationIntervalDays)
 }
 
-func TestUnitUpdateV1_Success(t *testing.T) {
+func TestUnit_AdueSessionTokenSettings_UpdateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -43,7 +43,7 @@ func TestUnitUpdateV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateV1_NilRequest(t *testing.T) {
+func TestUnit_AdueSessionTokenSettings_UpdateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateV1(context.Background(), nil)

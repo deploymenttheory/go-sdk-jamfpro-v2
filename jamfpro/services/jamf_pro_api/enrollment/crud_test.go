@@ -16,7 +16,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.EnrollmentMock) {
 }
 
 // Tests for V2 API - History
-func TestUnitGetHistoryV2_Success(t *testing.T) {
+func TestUnit_Enrollment_GetHistoryV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetHistoryV2Mock()
 
@@ -33,7 +33,7 @@ func TestUnitGetHistoryV2_Success(t *testing.T) {
 }
 
 // Tests for V3 API - Access Groups
-func TestUnitListAccessGroupsV3_Success(t *testing.T) {
+func TestUnit_Enrollment_ListAccessGroupsV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListAccessGroupsV3Mock()
 
@@ -49,7 +49,7 @@ func TestUnitListAccessGroupsV3_Success(t *testing.T) {
 	assert.Equal(t, "Test Access Group", result.Results[0].Name)
 }
 
-func TestUnitGetAccessGroupByIDV3_Success(t *testing.T) {
+func TestUnit_Enrollment_GetAccessGroupByIDV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetAccessGroupByIDV3Mock()
 
@@ -64,7 +64,7 @@ func TestUnitGetAccessGroupByIDV3_Success(t *testing.T) {
 	assert.True(t, result.EnterpriseEnrollmentEnabled)
 }
 
-func TestUnitGetAccessGroupByIDV3_EmptyID(t *testing.T) {
+func TestUnit_Enrollment_GetAccessGroupByIDV3_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetAccessGroupByIDV3(context.Background(), "")
@@ -74,7 +74,7 @@ func TestUnitGetAccessGroupByIDV3_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "access group ID is required")
 }
 
-func TestUnitCreateAccessGroupV3_Success(t *testing.T) {
+func TestUnit_Enrollment_CreateAccessGroupV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateAccessGroupV3Mock()
 
@@ -98,7 +98,7 @@ func TestUnitCreateAccessGroupV3_Success(t *testing.T) {
 	assert.Equal(t, "2", result.ID)
 }
 
-func TestUnitCreateAccessGroupV3_NilRequest(t *testing.T) {
+func TestUnit_Enrollment_CreateAccessGroupV3_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateAccessGroupV3(context.Background(), nil)
@@ -108,7 +108,7 @@ func TestUnitCreateAccessGroupV3_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitUpdateAccessGroupByIDV3_Success(t *testing.T) {
+func TestUnit_Enrollment_UpdateAccessGroupByIDV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateAccessGroupByIDV3Mock()
 
@@ -129,7 +129,7 @@ func TestUnitUpdateAccessGroupByIDV3_Success(t *testing.T) {
 	assert.True(t, result.RequireEula)
 }
 
-func TestUnitUpdateAccessGroupByIDV3_EmptyID(t *testing.T) {
+func TestUnit_Enrollment_UpdateAccessGroupByIDV3_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	request := &ResourceAccountDrivenUserEnrollmentAccessGroup{Name: "Test"}
@@ -140,7 +140,7 @@ func TestUnitUpdateAccessGroupByIDV3_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "access group ID is required")
 }
 
-func TestUnitUpdateAccessGroupByIDV3_NilRequest(t *testing.T) {
+func TestUnit_Enrollment_UpdateAccessGroupByIDV3_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateAccessGroupByIDV3(context.Background(), "1", nil)
@@ -150,7 +150,7 @@ func TestUnitUpdateAccessGroupByIDV3_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitDeleteAccessGroupByIDV3_Success(t *testing.T) {
+func TestUnit_Enrollment_DeleteAccessGroupByIDV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteAccessGroupByIDV3Mock()
 
@@ -161,7 +161,7 @@ func TestUnitDeleteAccessGroupByIDV3_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteAccessGroupByIDV3_EmptyID(t *testing.T) {
+func TestUnit_Enrollment_DeleteAccessGroupByIDV3_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteAccessGroupByIDV3(context.Background(), "")
@@ -171,7 +171,7 @@ func TestUnitDeleteAccessGroupByIDV3_EmptyID(t *testing.T) {
 }
 
 // Tests for V3 API - Language Messages
-func TestUnitListLanguageMessagesV3_Success(t *testing.T) {
+func TestUnit_Enrollment_ListLanguageMessagesV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageMessagesV3Mock()
 
@@ -186,7 +186,7 @@ func TestUnitListLanguageMessagesV3_Success(t *testing.T) {
 	assert.Equal(t, "English", result[0].Name)
 }
 
-func TestUnitListLanguageCodesV3_Success(t *testing.T) {
+func TestUnit_Enrollment_ListLanguageCodesV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 
@@ -201,7 +201,7 @@ func TestUnitListLanguageCodesV3_Success(t *testing.T) {
 	assert.Equal(t, "English", result[0].Name)
 }
 
-func TestUnitGetLanguageMessageV3_Success(t *testing.T) {
+func TestUnit_Enrollment_GetLanguageMessageV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 	mock.RegisterGetLanguageMessageV3Mock()
@@ -217,7 +217,7 @@ func TestUnitGetLanguageMessageV3_Success(t *testing.T) {
 	assert.Equal(t, "Enrollment", result.Title)
 }
 
-func TestUnitUpdateLanguageMessageV3_Success(t *testing.T) {
+func TestUnit_Enrollment_UpdateLanguageMessageV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 	mock.RegisterUpdateLanguageMessageV3Mock()
@@ -241,7 +241,7 @@ func TestUnitUpdateLanguageMessageV3_Success(t *testing.T) {
 	assert.Equal(t, "Updated Enrollment", result.Title)
 }
 
-func TestUnitUpdateLanguageMessageV3_NilRequest(t *testing.T) {
+func TestUnit_Enrollment_UpdateLanguageMessageV3_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateLanguageMessageV3(context.Background(), "en", nil)
@@ -251,7 +251,7 @@ func TestUnitUpdateLanguageMessageV3_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitDeleteLanguageMessageV3_Success(t *testing.T) {
+func TestUnit_Enrollment_DeleteLanguageMessageV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 	mock.RegisterDeleteLanguageMessageV3Mock()
@@ -263,7 +263,7 @@ func TestUnitDeleteLanguageMessageV3_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteMultipleLanguageMessagesV3_Success(t *testing.T) {
+func TestUnit_Enrollment_DeleteMultipleLanguageMessagesV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 	mock.RegisterDeleteMultipleLanguageMessagesV3Mock()
@@ -279,7 +279,7 @@ func TestUnitDeleteMultipleLanguageMessagesV3_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteMultipleLanguageMessagesV3_EmptyRequest(t *testing.T) {
+func TestUnit_Enrollment_DeleteMultipleLanguageMessagesV3_EmptyRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteMultipleLanguageMessagesV3(context.Background(), &RequestDeleteMultipleLanguages{IDs: []string{}})
@@ -289,7 +289,7 @@ func TestUnitDeleteMultipleLanguageMessagesV3_EmptyRequest(t *testing.T) {
 }
 
 // Tests for V4 API - Enrollment Settings
-func TestUnitGetV4_Success(t *testing.T) {
+func TestUnit_Enrollment_GetV4_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetV4Mock()
 
@@ -304,7 +304,7 @@ func TestUnitGetV4_Success(t *testing.T) {
 	assert.Equal(t, "admin", result.ManagementUsername)
 }
 
-func TestUnitUpdateV4_Success(t *testing.T) {
+func TestUnit_Enrollment_UpdateV4_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateV4Mock()
 
@@ -327,7 +327,7 @@ func TestUnitUpdateV4_Success(t *testing.T) {
 	assert.True(t, result.RestrictReenrollment)
 }
 
-func TestUnitUpdateV4_NilRequest(t *testing.T) {
+func TestUnit_Enrollment_UpdateV4_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateV4(context.Background(), nil)
@@ -338,7 +338,7 @@ func TestUnitUpdateV4_NilRequest(t *testing.T) {
 }
 
 // Tests for Validation
-func TestUnitValidateLanguageCode_Valid(t *testing.T) {
+func TestUnit_Enrollment_ValidateLanguageCode_Valid(t *testing.T) {
 	codes := []ResourceLanguageCode{
 		{Value: "en", Name: "English"},
 		{Value: "es", Name: "Spanish"},
@@ -348,7 +348,7 @@ func TestUnitValidateLanguageCode_Valid(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestUnitValidateLanguageCode_Invalid(t *testing.T) {
+func TestUnit_Enrollment_ValidateLanguageCode_Invalid(t *testing.T) {
 	codes := []ResourceLanguageCode{
 		{Value: "en", Name: "English"},
 	}
@@ -358,7 +358,7 @@ func TestUnitValidateLanguageCode_Invalid(t *testing.T) {
 	assert.Contains(t, err.Error(), "invalid language code")
 }
 
-func TestUnitValidateLanguageCode_Empty(t *testing.T) {
+func TestUnit_Enrollment_ValidateLanguageCode_Empty(t *testing.T) {
 	codes := []ResourceLanguageCode{{Value: "en", Name: "English"}}
 
 	err := ValidateLanguageCode("", codes)
@@ -366,7 +366,7 @@ func TestUnitValidateLanguageCode_Empty(t *testing.T) {
 	assert.Contains(t, err.Error(), "required")
 }
 
-func TestUnitGetHistoryV2_Error(t *testing.T) {
+func TestUnit_Enrollment_GetHistoryV2_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetHistoryV2(context.Background(), nil)
@@ -375,7 +375,7 @@ func TestUnitGetHistoryV2_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitListAccessGroupsV3_Error(t *testing.T) {
+func TestUnit_Enrollment_ListAccessGroupsV3_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.ListAccessGroupsV3(context.Background(), nil)
@@ -384,7 +384,7 @@ func TestUnitListAccessGroupsV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitGetAccessGroupByIDV3_Error(t *testing.T) {
+func TestUnit_Enrollment_GetAccessGroupByIDV3_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetAccessGroupByIDV3(context.Background(), "2")
@@ -393,7 +393,7 @@ func TestUnitGetAccessGroupByIDV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitCreateAccessGroupV3_Error(t *testing.T) {
+func TestUnit_Enrollment_CreateAccessGroupV3_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	request := &ResourceAccountDrivenUserEnrollmentAccessGroup{Name: "Test"}
@@ -403,7 +403,7 @@ func TestUnitCreateAccessGroupV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitUpdateAccessGroupByIDV3_Error(t *testing.T) {
+func TestUnit_Enrollment_UpdateAccessGroupByIDV3_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	request := &ResourceAccountDrivenUserEnrollmentAccessGroup{Name: "Test"}
@@ -413,7 +413,7 @@ func TestUnitUpdateAccessGroupByIDV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitDeleteAccessGroupByIDV3_Error(t *testing.T) {
+func TestUnit_Enrollment_DeleteAccessGroupByIDV3_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteAccessGroupByIDV3(context.Background(), "2")
@@ -421,7 +421,7 @@ func TestUnitDeleteAccessGroupByIDV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitListLanguageMessagesV3_Error(t *testing.T) {
+func TestUnit_Enrollment_ListLanguageMessagesV3_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.ListLanguageMessagesV3(context.Background())
@@ -430,7 +430,7 @@ func TestUnitListLanguageMessagesV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitGetLanguageMessageV3_ListCodesError(t *testing.T) {
+func TestUnit_Enrollment_GetLanguageMessageV3_ListCodesError(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetLanguageMessageV3(context.Background(), "en")
@@ -439,7 +439,7 @@ func TestUnitGetLanguageMessageV3_ListCodesError(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitGetLanguageMessageV3_InvalidCode(t *testing.T) {
+func TestUnit_Enrollment_GetLanguageMessageV3_InvalidCode(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 
@@ -450,7 +450,7 @@ func TestUnitGetLanguageMessageV3_InvalidCode(t *testing.T) {
 	assert.Contains(t, err.Error(), "invalid language code")
 }
 
-func TestUnitGetLanguageMessageV3_Error(t *testing.T) {
+func TestUnit_Enrollment_GetLanguageMessageV3_Error(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 
@@ -460,7 +460,7 @@ func TestUnitGetLanguageMessageV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitUpdateLanguageMessageV3_ListCodesError(t *testing.T) {
+func TestUnit_Enrollment_UpdateLanguageMessageV3_ListCodesError(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	request := &ResourceEnrollmentLanguage{LanguageCode: "en", Name: "English"}
@@ -470,7 +470,7 @@ func TestUnitUpdateLanguageMessageV3_ListCodesError(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitUpdateLanguageMessageV3_InvalidCode(t *testing.T) {
+func TestUnit_Enrollment_UpdateLanguageMessageV3_InvalidCode(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 
@@ -482,7 +482,7 @@ func TestUnitUpdateLanguageMessageV3_InvalidCode(t *testing.T) {
 	assert.Contains(t, err.Error(), "invalid language code")
 }
 
-func TestUnitUpdateLanguageMessageV3_Error(t *testing.T) {
+func TestUnit_Enrollment_UpdateLanguageMessageV3_Error(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 
@@ -493,7 +493,7 @@ func TestUnitUpdateLanguageMessageV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitDeleteLanguageMessageV3_ListCodesError(t *testing.T) {
+func TestUnit_Enrollment_DeleteLanguageMessageV3_ListCodesError(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteLanguageMessageV3(context.Background(), "en")
@@ -501,7 +501,7 @@ func TestUnitDeleteLanguageMessageV3_ListCodesError(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitDeleteLanguageMessageV3_InvalidCode(t *testing.T) {
+func TestUnit_Enrollment_DeleteLanguageMessageV3_InvalidCode(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 
@@ -511,7 +511,7 @@ func TestUnitDeleteLanguageMessageV3_InvalidCode(t *testing.T) {
 	assert.Contains(t, err.Error(), "invalid language code")
 }
 
-func TestUnitDeleteLanguageMessageV3_Error(t *testing.T) {
+func TestUnit_Enrollment_DeleteLanguageMessageV3_Error(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 
@@ -520,7 +520,7 @@ func TestUnitDeleteLanguageMessageV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitDeleteMultipleLanguageMessagesV3_ListCodesError(t *testing.T) {
+func TestUnit_Enrollment_DeleteMultipleLanguageMessagesV3_ListCodesError(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	request := &RequestDeleteMultipleLanguages{IDs: []string{"en"}}
@@ -529,7 +529,7 @@ func TestUnitDeleteMultipleLanguageMessagesV3_ListCodesError(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitDeleteMultipleLanguageMessagesV3_InvalidCode(t *testing.T) {
+func TestUnit_Enrollment_DeleteMultipleLanguageMessagesV3_InvalidCode(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 
@@ -540,7 +540,7 @@ func TestUnitDeleteMultipleLanguageMessagesV3_InvalidCode(t *testing.T) {
 	assert.Contains(t, err.Error(), "invalid language code")
 }
 
-func TestUnitDeleteMultipleLanguageMessagesV3_Error(t *testing.T) {
+func TestUnit_Enrollment_DeleteMultipleLanguageMessagesV3_Error(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLanguageCodesV3Mock()
 
@@ -550,7 +550,7 @@ func TestUnitDeleteMultipleLanguageMessagesV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitListLanguageCodesV3_Error(t *testing.T) {
+func TestUnit_Enrollment_ListLanguageCodesV3_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.ListLanguageCodesV3(context.Background())
@@ -559,7 +559,7 @@ func TestUnitListLanguageCodesV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitGetV4_Error(t *testing.T) {
+func TestUnit_Enrollment_GetV4_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetV4(context.Background())
@@ -568,7 +568,7 @@ func TestUnitGetV4_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitUpdateV4_Error(t *testing.T) {
+func TestUnit_Enrollment_UpdateV4_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	request := &ResourceEnrollment{ManagementUsername: "admin"}

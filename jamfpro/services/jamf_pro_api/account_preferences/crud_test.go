@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.AccountPreferencesMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV3_Success(t *testing.T) {
+func TestUnit_AccountPreferences_GetV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetAccountPreferencesMock()
 
@@ -28,7 +28,7 @@ func TestUnitGetV3_Success(t *testing.T) {
 	assert.Equal(t, "DARK", result.UserInterfaceDisplayTheme)
 }
 
-func TestUnitUpdateV3_Success(t *testing.T) {
+func TestUnit_AccountPreferences_UpdateV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateAccountPreferencesMock()
 
@@ -47,7 +47,7 @@ func TestUnitUpdateV3_Success(t *testing.T) {
 	assert.Equal(t, "en", result.Language)
 }
 
-func TestUnitGetV3_Error(t *testing.T) {
+func TestUnit_AccountPreferences_GetV3_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetV3(context.Background())
@@ -56,7 +56,7 @@ func TestUnitGetV3_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitUpdateV3_NilRequest(t *testing.T) {
+func TestUnit_AccountPreferences_UpdateV3_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateV3(context.Background(), nil)
@@ -66,7 +66,7 @@ func TestUnitUpdateV3_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitUpdateV3_Error(t *testing.T) {
+func TestUnit_AccountPreferences_UpdateV3_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	request := &ResourceAccountPreferencesV2{Language: "en"}

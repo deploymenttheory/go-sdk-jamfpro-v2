@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ApiIntegrationsMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListV1_Success(t *testing.T) {
+func TestUnit_ApiIntegrations_ListV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -29,7 +29,7 @@ func TestUnitListV1_Success(t *testing.T) {
 	assert.Equal(t, 1, result.Results[0].ID)
 }
 
-func TestUnitGetByIDV1_Success(t *testing.T) {
+func TestUnit_ApiIntegrations_GetByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock("1")
 
@@ -41,7 +41,7 @@ func TestUnitGetByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "Test Integration", result.DisplayName)
 }
 
-func TestUnitGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_ApiIntegrations_GetByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
@@ -50,7 +50,7 @@ func TestUnitGetByIDV1_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitGetByNameV1_Success(t *testing.T) {
+func TestUnit_ApiIntegrations_GetByNameV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -61,7 +61,7 @@ func TestUnitGetByNameV1_Success(t *testing.T) {
 	assert.Equal(t, "Test Integration", result.DisplayName)
 }
 
-func TestUnitCreateV1_NilRequest(t *testing.T) {
+func TestUnit_ApiIntegrations_CreateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateV1(context.Background(), nil)
@@ -70,7 +70,7 @@ func TestUnitCreateV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitCreateV1_Success(t *testing.T) {
+func TestUnit_ApiIntegrations_CreateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -82,7 +82,7 @@ func TestUnitCreateV1_Success(t *testing.T) {
 	assert.Equal(t, "Test Integration", result.DisplayName)
 }
 
-func TestUnitUpdateByIDV1_EmptyID(t *testing.T) {
+func TestUnit_ApiIntegrations_UpdateByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &ResourceApiIntegration{})
@@ -91,7 +91,7 @@ func TestUnitUpdateByIDV1_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitUpdateByIDV1_Success(t *testing.T) {
+func TestUnit_ApiIntegrations_UpdateByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByIDMock("1")
 
@@ -102,7 +102,7 @@ func TestUnitUpdateByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_ApiIntegrations_DeleteByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByIDV1(context.Background(), "")
@@ -110,7 +110,7 @@ func TestUnitDeleteByIDV1_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitDeleteByIDV1_Success(t *testing.T) {
+func TestUnit_ApiIntegrations_DeleteByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByIDMock("1")
 
@@ -120,7 +120,7 @@ func TestUnitDeleteByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateByNameV1_Success(t *testing.T) {
+func TestUnit_ApiIntegrations_UpdateByNameV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 	mock.RegisterUpdateByIDMock("1")
@@ -132,7 +132,7 @@ func TestUnitUpdateByNameV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateByNameV1_NilRequest(t *testing.T) {
+func TestUnit_ApiIntegrations_UpdateByNameV1_NilRequest(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -142,7 +142,7 @@ func TestUnitUpdateByNameV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitDeleteByNameV1_Success(t *testing.T) {
+func TestUnit_ApiIntegrations_DeleteByNameV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 	mock.RegisterDeleteByIDMock("1")
@@ -153,7 +153,7 @@ func TestUnitDeleteByNameV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteByNameV1_NotFound(t *testing.T) {
+func TestUnit_ApiIntegrations_DeleteByNameV1_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -164,7 +164,7 @@ func TestUnitDeleteByNameV1_NotFound(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitRefreshClientCredentialsByIDV1_EmptyID(t *testing.T) {
+func TestUnit_ApiIntegrations_RefreshClientCredentialsByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.RefreshClientCredentialsByIDV1(context.Background(), "")
@@ -173,7 +173,7 @@ func TestUnitRefreshClientCredentialsByIDV1_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitRefreshClientCredentialsByIDV1_Success(t *testing.T) {
+func TestUnit_ApiIntegrations_RefreshClientCredentialsByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterRefreshClientCredentialsMock("1")
 

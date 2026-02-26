@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUnitGetSettingsV1_Success(t *testing.T) {
+func TestUnit_LogFlushing_GetSettingsV1_Success(t *testing.T) {
 	mock := mocks.NewLogFlushingMock()
 	mock.RegisterGetSettingsMock()
 	service := NewService(mock)
@@ -23,7 +23,7 @@ func TestUnitGetSettingsV1_Success(t *testing.T) {
 	assert.Equal(t, "Jamf Pro Server Logs", result.RetentionPolicies[0].DisplayName)
 }
 
-func TestUnitListTasksV1_Success(t *testing.T) {
+func TestUnit_LogFlushing_ListTasksV1_Success(t *testing.T) {
 	mock := mocks.NewLogFlushingMock()
 	mock.RegisterListTasksMock()
 	service := NewService(mock)
@@ -37,7 +37,7 @@ func TestUnitListTasksV1_Success(t *testing.T) {
 	assert.Equal(t, "COMPLETED", result[0].State)
 }
 
-func TestUnitGetTaskByIDV1_Success(t *testing.T) {
+func TestUnit_LogFlushing_GetTaskByIDV1_Success(t *testing.T) {
 	mock := mocks.NewLogFlushingMock()
 	mock.RegisterGetTaskByIDMock()
 	service := NewService(mock)
@@ -51,7 +51,7 @@ func TestUnitGetTaskByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "COMPLETED", result.State)
 }
 
-func TestUnitGetTaskByIDV1_EmptyID(t *testing.T) {
+func TestUnit_LogFlushing_GetTaskByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewLogFlushingMock()
 	service := NewService(mock)
 
@@ -62,7 +62,7 @@ func TestUnitGetTaskByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "task ID is required")
 }
 
-func TestUnitQueueTaskV1_Success(t *testing.T) {
+func TestUnit_LogFlushing_QueueTaskV1_Success(t *testing.T) {
 	mock := mocks.NewLogFlushingMock()
 	mock.RegisterQueueTaskMock()
 	service := NewService(mock)
@@ -81,7 +81,7 @@ func TestUnitQueueTaskV1_Success(t *testing.T) {
 	assert.Equal(t, "/api/v1/log-flushing/task/2", result.Href)
 }
 
-func TestUnitQueueTaskV1_NilRequest(t *testing.T) {
+func TestUnit_LogFlushing_QueueTaskV1_NilRequest(t *testing.T) {
 	mock := mocks.NewLogFlushingMock()
 	service := NewService(mock)
 
@@ -92,7 +92,7 @@ func TestUnitQueueTaskV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "log flushing task request cannot be nil")
 }
 
-func TestUnitDeleteTaskByIDV1_Success(t *testing.T) {
+func TestUnit_LogFlushing_DeleteTaskByIDV1_Success(t *testing.T) {
 	mock := mocks.NewLogFlushingMock()
 	mock.RegisterDeleteTaskMock()
 	service := NewService(mock)
@@ -102,7 +102,7 @@ func TestUnitDeleteTaskByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteTaskByIDV1_EmptyID(t *testing.T) {
+func TestUnit_LogFlushing_DeleteTaskByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewLogFlushingMock()
 	service := NewService(mock)
 

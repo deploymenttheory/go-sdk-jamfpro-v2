@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.CacheSettingsMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_CacheSettings_GetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -27,7 +27,7 @@ func TestUnitGetV1_Success(t *testing.T) {
 	assert.Equal(t, 3600, result.TimeToLiveSeconds)
 }
 
-func TestUnitUpdateV1_NilRequest(t *testing.T) {
+func TestUnit_CacheSettings_UpdateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateV1(context.Background(), nil)
@@ -36,7 +36,7 @@ func TestUnitUpdateV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitUpdateV1_Success(t *testing.T) {
+func TestUnit_CacheSettings_UpdateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterPutMock()
 

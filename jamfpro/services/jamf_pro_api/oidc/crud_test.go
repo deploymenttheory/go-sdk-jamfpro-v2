@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUnitGetDirectIdPLoginURLV1_Success(t *testing.T) {
+func TestUnit_Oidc_GetDirectIdPLoginURLV1_Success(t *testing.T) {
 	mock := mocks.NewOIDCMock()
 	mock.RegisterGetDirectIdPLoginURLMock()
 	service := NewService(mock)
@@ -21,7 +21,7 @@ func TestUnitGetDirectIdPLoginURLV1_Success(t *testing.T) {
 	assert.Equal(t, "https://idp.example.com/authorize?client_id=jamfpro", result.URL)
 }
 
-func TestUnitGetPublicKeyV1_Success(t *testing.T) {
+func TestUnit_Oidc_GetPublicKeyV1_Success(t *testing.T) {
 	mock := mocks.NewOIDCMock()
 	mock.RegisterGetPublicKeyMock()
 	service := NewService(mock)
@@ -40,7 +40,7 @@ func TestUnitGetPublicKeyV1_Success(t *testing.T) {
 	assert.Equal(t, "xGOr-H7A...", result.Keys[0].N)
 }
 
-func TestUnitGenerateCertificateV1_Success(t *testing.T) {
+func TestUnit_Oidc_GenerateCertificateV1_Success(t *testing.T) {
 	mock := mocks.NewOIDCMock()
 	mock.RegisterGenerateCertificateMock()
 	service := NewService(mock)
@@ -50,7 +50,7 @@ func TestUnitGenerateCertificateV1_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitGetRedirectURLV1_Success(t *testing.T) {
+func TestUnit_Oidc_GetRedirectURLV1_Success(t *testing.T) {
 	mock := mocks.NewOIDCMock()
 	mock.RegisterGetRedirectURLMock()
 	service := NewService(mock)
@@ -67,7 +67,7 @@ func TestUnitGetRedirectURLV1_Success(t *testing.T) {
 	assert.Equal(t, "https://idp.example.com/login?redirect=https://jamf.example.com", result.RedirectURL)
 }
 
-func TestUnitGetRedirectURLV1_NilRequest(t *testing.T) {
+func TestUnit_Oidc_GetRedirectURLV1_NilRequest(t *testing.T) {
 	mock := mocks.NewOIDCMock()
 	service := NewService(mock)
 

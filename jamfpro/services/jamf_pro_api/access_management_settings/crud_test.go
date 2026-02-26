@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.AccessManagementSettingsMo
 	return NewService(mock), mock
 }
 
-func TestUnitGetV4_Success(t *testing.T) {
+func TestUnit_AccessManagementSettings_GetV4_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -25,7 +25,7 @@ func TestUnitGetV4_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitCreateV4_NilRequest(t *testing.T) {
+func TestUnit_AccessManagementSettings_CreateV4_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateV4(context.Background(), nil)
@@ -34,7 +34,7 @@ func TestUnitCreateV4_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitCreateV4_Success(t *testing.T) {
+func TestUnit_AccessManagementSettings_CreateV4_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterPostMock()
 

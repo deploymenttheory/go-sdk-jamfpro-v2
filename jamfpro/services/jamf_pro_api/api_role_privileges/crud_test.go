@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.APIRolePrivilegesMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListV1_Success(t *testing.T) {
+func TestUnit_ApiRolePrivileges_ListV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)
@@ -24,7 +24,7 @@ func TestUnitListV1_Success(t *testing.T) {
 	require.Len(t, result.Privileges, 3)
 }
 
-func TestUnitSearchPrivilegesByNameV1_Success(t *testing.T) {
+func TestUnit_ApiRolePrivileges_SearchPrivilegesByNameV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.SearchPrivilegesByNameV1(context.Background(), "Read", 10)
 	require.NoError(t, err)

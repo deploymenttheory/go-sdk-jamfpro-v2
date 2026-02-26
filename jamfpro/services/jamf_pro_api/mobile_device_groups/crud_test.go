@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.MobileDeviceGroupsMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListSmartV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_ListSmartV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListSmartMock()
 
@@ -30,7 +30,7 @@ func TestUnitListSmartV1_Success(t *testing.T) {
 	assert.Equal(t, "iPhones", result.Results[0].Name)
 }
 
-func TestUnitGetSmartByIDV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_GetSmartByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetSmartMock()
 
@@ -45,7 +45,7 @@ func TestUnitGetSmartByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "Model", result.Criteria[0].Name)
 }
 
-func TestUnitCreateSmartV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_CreateSmartV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateSmartMock()
 
@@ -63,7 +63,7 @@ func TestUnitCreateSmartV1_Success(t *testing.T) {
 	assert.NotEmpty(t, result.Href)
 }
 
-func TestUnitUpdateSmartByIDV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_UpdateSmartByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateSmartMock()
 
@@ -81,7 +81,7 @@ func TestUnitUpdateSmartByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "iPhones Updated", result.Name)
 }
 
-func TestUnitDeleteSmartByIDV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_DeleteSmartByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteSmartMock()
 
@@ -91,7 +91,7 @@ func TestUnitDeleteSmartByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitListStaticV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_ListStaticV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListStaticMock()
 
@@ -106,7 +106,7 @@ func TestUnitListStaticV1_Success(t *testing.T) {
 	assert.Equal(t, "Static Devices", result.Results[0].Name)
 }
 
-func TestUnitGetStaticByIDV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_GetStaticByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetStaticMock()
 
@@ -119,7 +119,7 @@ func TestUnitGetStaticByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "Static Devices", result.Name)
 }
 
-func TestUnitCreateStaticV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_CreateStaticV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateStaticMock()
 
@@ -138,7 +138,7 @@ func TestUnitCreateStaticV1_Success(t *testing.T) {
 	assert.NotEmpty(t, result.Href)
 }
 
-func TestUnitUpdateStaticByIDV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_UpdateStaticByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateStaticMock()
 
@@ -157,7 +157,7 @@ func TestUnitUpdateStaticByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "Static Devices Updated", result.Name)
 }
 
-func TestUnitDeleteStaticByIDV1_Success(t *testing.T) {
+func TestUnit_MobileDeviceGroups_DeleteStaticByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteStaticMock()
 

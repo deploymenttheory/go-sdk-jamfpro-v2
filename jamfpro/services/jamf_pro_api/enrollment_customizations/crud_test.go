@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestListV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_ListV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterListMock()
 
@@ -24,7 +24,7 @@ func TestListV2(t *testing.T) {
 	assert.Equal(t, "Test Customization 1", result.Results[0].DisplayName)
 }
 
-func TestListV2_WithPagination(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_ListV2_WithPagination(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterListMock()
 
@@ -41,7 +41,7 @@ func TestListV2_WithPagination(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestGetByIDV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetByIDV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterGetByIDMock()
 
@@ -55,7 +55,7 @@ func TestGetByIDV2(t *testing.T) {
 	assert.Equal(t, "Test Customization 1", result.DisplayName)
 }
 
-func TestGetByIDV2_EmptyID(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -67,7 +67,7 @@ func TestGetByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "enrollment customization ID is required")
 }
 
-func TestGetByNameV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetByNameV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterListMock()
 	mock.RegisterGetByIDMock()
@@ -82,7 +82,7 @@ func TestGetByNameV2(t *testing.T) {
 	assert.Equal(t, "Test Customization 1", result.DisplayName)
 }
 
-func TestGetByNameV2_EmptyName(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetByNameV2_EmptyName(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -94,7 +94,7 @@ func TestGetByNameV2_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "enrollment customization name is required")
 }
 
-func TestGetByNameV2_NotFound(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetByNameV2_NotFound(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterListMock()
 
@@ -107,7 +107,7 @@ func TestGetByNameV2_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "not found")
 }
 
-func TestCreateV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_CreateV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterCreateMock()
 
@@ -124,7 +124,7 @@ func TestCreateV2(t *testing.T) {
 	assert.Equal(t, "3", result.ID)
 }
 
-func TestCreateV2_NilRequest(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_CreateV2_NilRequest(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -136,7 +136,7 @@ func TestCreateV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestCreateV2_EmptyDisplayName(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_CreateV2_EmptyDisplayName(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -151,7 +151,7 @@ func TestCreateV2_EmptyDisplayName(t *testing.T) {
 	assert.Contains(t, err.Error(), "display name is required")
 }
 
-func TestUpdateByIDV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_UpdateByIDV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterUpdateMock()
 
@@ -167,7 +167,7 @@ func TestUpdateByIDV2(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestUpdateByIDV2_EmptyID(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_UpdateByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -180,7 +180,7 @@ func TestUpdateByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "enrollment customization ID is required")
 }
 
-func TestUpdateByIDV2_NilRequest(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_UpdateByIDV2_NilRequest(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -192,7 +192,7 @@ func TestUpdateByIDV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUpdateByIDV2_EmptyDisplayName(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_UpdateByIDV2_EmptyDisplayName(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -205,7 +205,7 @@ func TestUpdateByIDV2_EmptyDisplayName(t *testing.T) {
 	assert.Contains(t, err.Error(), "display name is required")
 }
 
-func TestDeleteByIDV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_DeleteByIDV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterDeleteMock()
 
@@ -216,7 +216,7 @@ func TestDeleteByIDV2(t *testing.T) {
 	assert.NotNil(t, resp)
 }
 
-func TestDeleteByIDV2_EmptyID(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_DeleteByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -227,7 +227,7 @@ func TestDeleteByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "enrollment customization ID is required")
 }
 
-func TestGetHistoryV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetHistoryV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterGetHistoryMock()
 
@@ -241,7 +241,7 @@ func TestGetHistoryV2(t *testing.T) {
 	assert.Len(t, result.Results, 2)
 }
 
-func TestGetHistoryV2_EmptyID(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetHistoryV2_EmptyID(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -253,7 +253,7 @@ func TestGetHistoryV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "enrollment customization ID is required")
 }
 
-func TestAddHistoryNotesV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_AddHistoryNotesV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterAddHistoryNotesMock()
 
@@ -267,7 +267,7 @@ func TestAddHistoryNotesV2(t *testing.T) {
 	assert.Equal(t, "Test note added", result.Note)
 }
 
-func TestAddHistoryNotesV2_EmptyID(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_AddHistoryNotesV2_EmptyID(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -280,7 +280,7 @@ func TestAddHistoryNotesV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "enrollment customization ID is required")
 }
 
-func TestAddHistoryNotesV2_NilRequest(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_AddHistoryNotesV2_NilRequest(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -292,7 +292,7 @@ func TestAddHistoryNotesV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request body is required")
 }
 
-func TestAddHistoryNotesV2_EmptyNote(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_AddHistoryNotesV2_EmptyNote(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -305,7 +305,7 @@ func TestAddHistoryNotesV2_EmptyNote(t *testing.T) {
 	assert.Contains(t, err.Error(), "note is required")
 }
 
-func TestGetPrestagesV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetPrestagesV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterGetPrestagesMock()
 
@@ -319,7 +319,7 @@ func TestGetPrestagesV2(t *testing.T) {
 	assert.Equal(t, "Computer Prestage 1", result.Dependencies[0].HumanReadableName)
 }
 
-func TestGetPrestagesV2_EmptyID(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetPrestagesV2_EmptyID(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -331,7 +331,7 @@ func TestGetPrestagesV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "enrollment customization ID is required")
 }
 
-func TestUploadImageV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_UploadImageV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterUploadImageMock()
 
@@ -346,7 +346,7 @@ func TestUploadImageV2(t *testing.T) {
 	assert.Contains(t, result.URL, "enrollment-customizations/images/123")
 }
 
-func TestUploadImageV2_NilFileReader(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_UploadImageV2_NilFileReader(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -358,7 +358,7 @@ func TestUploadImageV2_NilFileReader(t *testing.T) {
 	assert.Contains(t, err.Error(), "file reader is required")
 }
 
-func TestUploadImageV2_EmptyFileName(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_UploadImageV2_EmptyFileName(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 
@@ -371,7 +371,7 @@ func TestUploadImageV2_EmptyFileName(t *testing.T) {
 	assert.Contains(t, err.Error(), "file name is required")
 }
 
-func TestGetImageByIdV2(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetImageByIdV2(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	mock.RegisterGetImageByIdMock("123")
 
@@ -387,7 +387,7 @@ func TestGetImageByIdV2(t *testing.T) {
 	assert.Equal(t, byte(0x50), data[1])
 }
 
-func TestGetImageByIdV2_EmptyID(t *testing.T) {
+func TestUnit_EnrollmentCustomizations_GetImageByIdV2_EmptyID(t *testing.T) {
 	mock := mocks.NewEnrollmentCustomizationsMock()
 	svc := NewService(mock)
 

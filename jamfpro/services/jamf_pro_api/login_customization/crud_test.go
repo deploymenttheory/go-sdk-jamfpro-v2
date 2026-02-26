@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.LoginCustomizationMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_LoginCustomization_GetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLoginCustomizationMock()
 
@@ -46,7 +46,7 @@ func TestUnit_LoginCustomization_UpdateV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitUpdateV1_Success(t *testing.T) {
+func TestUnit_LoginCustomization_UpdateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateLoginCustomizationMock()
 

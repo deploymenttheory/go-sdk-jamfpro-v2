@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.OAuth2SessionTokensMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_OAuth2SessionTokens_GetV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)

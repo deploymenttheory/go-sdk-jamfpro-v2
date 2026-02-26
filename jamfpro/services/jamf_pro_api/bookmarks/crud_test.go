@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.BookmarksMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListV1_Success(t *testing.T) {
+func TestUnit_Bookmarks_ListV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
@@ -27,7 +27,7 @@ func TestUnitListV1_Success(t *testing.T) {
 	require.Equal(t, "Jamf", result.Results[0].Name)
 }
 
-func TestUnitGetByIDV1_Success(t *testing.T) {
+func TestUnit_Bookmarks_GetByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
@@ -36,7 +36,7 @@ func TestUnitGetByIDV1_Success(t *testing.T) {
 	require.Equal(t, "1", result.ID)
 }
 
-func TestUnitCreateV1_Success(t *testing.T) {
+func TestUnit_Bookmarks_CreateV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	bm := &ResourceBookmark{Name: "Test", URL: "https://example.com", SiteID: "-1", IconID: "1"}
 	result, resp, err := svc.CreateV1(context.Background(), bm)
@@ -46,7 +46,7 @@ func TestUnitCreateV1_Success(t *testing.T) {
 	require.Equal(t, "2", result.ID)
 }
 
-func TestUnitDeleteByIDV1_Success(t *testing.T) {
+func TestUnit_Bookmarks_DeleteByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)

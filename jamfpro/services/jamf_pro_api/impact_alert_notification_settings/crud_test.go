@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ImpactAlertNotificationSet
 	return NewService(mock), mock
 }
 
-func TestUnitGetImpactAlertNotificationSettings_Success(t *testing.T) {
+func TestUnit_ImpactAlertNotificationSettings_Get_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -31,7 +31,7 @@ func TestUnitGetImpactAlertNotificationSettings_Success(t *testing.T) {
 	assert.False(t, result.DeployableObjectsConfirmationCodeEnabled)
 }
 
-func TestUnitUpdateImpactAlertNotificationSettings_Success(t *testing.T) {
+func TestUnit_ImpactAlertNotificationSettings_Update_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -50,7 +50,7 @@ func TestUnitUpdateImpactAlertNotificationSettings_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitUpdateImpactAlertNotificationSettings_NilRequest(t *testing.T) {
+func TestUnit_ImpactAlertNotificationSettings_Update_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.UpdateV1(context.Background(), nil)

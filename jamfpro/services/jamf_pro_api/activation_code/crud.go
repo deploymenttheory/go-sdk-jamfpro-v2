@@ -34,6 +34,11 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-activation-code-history
 		AddHistoryNoteV1(ctx context.Context, req *HistoryNoteRequest) (*HistoryEntry, *interfaces.Response, error)
+
+		// ExportHistoryV1 exports activation code history in specified format (JSON or CSV).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-activation-code-history-export
+		ExportHistoryV1(ctx context.Context, queryParams map[string]string, req *HistoryExportRequest) (*HistoryExportResponse, *interfaces.Response, error)
 	}
 
 	// Service provides methods for interacting with activation code endpoints.
@@ -66,7 +71,6 @@ func (s *Service) UpdateV1(ctx context.Context, req *ActivationCodeRequest) (*in
 	endpoint := EndpointActivationCodeV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
@@ -89,7 +93,6 @@ func (s *Service) UpdateOrganizationNameV1(ctx context.Context, req *Organizatio
 	endpoint := EndpointActivationCodeOrganizationNameV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
@@ -112,8 +115,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -165,6 +167,34 @@ func (s *Service) AddHistoryNoteV1(ctx context.Context, req *HistoryNoteRequest)
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// ExportHistoryV1 exports activation code history in specified format (JSON or CSV).
+// URL: POST /api/v1/activation-code/history/export
+// acceptType should be "application/json" or "text/csv"
+// The request body is optional and can override query parameters if URI exceeds 2,000 characters.
+// https://developer.jamf.com/jamf-pro/reference/post_v1-activation-code-history-export
+func (s *Service) ExportHistoryV1(ctx context.Context, queryParams map[string]string, req *HistoryExportRequest) (*HistoryExportResponse, *interfaces.Response, error) {
+	endpoint := EndpointActivationCodeHistoryExportV1
+
+	var result HistoryExportResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	var body any
+	if req != nil {
+		body = req
+	}
+
+	resp, err := s.client.PostWithQuery(ctx, endpoint, queryParams, body, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

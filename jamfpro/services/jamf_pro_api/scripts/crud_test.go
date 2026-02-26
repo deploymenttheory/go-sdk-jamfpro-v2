@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ScriptsMock) {
 // ListScriptsV1
 // =============================================================================
 
-func TestUnitListScripts_Success(t *testing.T) {
+func TestUnit_Scripts_ListV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListScriptsMock()
 
@@ -40,7 +40,7 @@ func TestUnitListScripts_Success(t *testing.T) {
 	assert.Equal(t, "BEFORE", result.Results[1].Priority)
 }
 
-func TestUnitListScripts_WithrsqlQuery(t *testing.T) {
+func TestUnit_Scripts_ListV1_WithrsqlQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListScriptsMock()
 
@@ -51,7 +51,7 @@ func TestUnitListScripts_WithrsqlQuery(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitListScripts_WithRSQLFilter(t *testing.T) {
+func TestUnit_Scripts_ListV1_WithRSQLFilter(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListScriptsRSQLMock()
 
@@ -75,7 +75,7 @@ func TestUnitListScripts_WithRSQLFilter(t *testing.T) {
 // GetScriptByIDV1
 // =============================================================================
 
-func TestUnitGetScriptByID_Success(t *testing.T) {
+func TestUnit_Scripts_GetByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetScriptMock()
 
@@ -93,7 +93,7 @@ func TestUnitGetScriptByID_Success(t *testing.T) {
 	assert.NotEmpty(t, result.ScriptContents)
 }
 
-func TestUnitGetScriptByID_EmptyID(t *testing.T) {
+func TestUnit_Scripts_GetByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetScriptByIDV1(context.Background(), "")
@@ -103,7 +103,7 @@ func TestUnitGetScriptByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "script ID is required")
 }
 
-func TestUnitGetScriptByID_NotFound(t *testing.T) {
+func TestUnit_Scripts_GetByIDV1_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -118,7 +118,7 @@ func TestUnitGetScriptByID_NotFound(t *testing.T) {
 // CreateScriptV1
 // =============================================================================
 
-func TestUnitCreateScript_Success(t *testing.T) {
+func TestUnit_Scripts_CreateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateScriptMock()
 
@@ -137,7 +137,7 @@ func TestUnitCreateScript_Success(t *testing.T) {
 	assert.Contains(t, result.Href, "/api/v1/scripts/3")
 }
 
-func TestUnitCreateScript_NilRequest(t *testing.T) {
+func TestUnit_Scripts_CreateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateScriptV1(context.Background(), nil)
@@ -147,7 +147,7 @@ func TestUnitCreateScript_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateScript_Conflict(t *testing.T) {
+func TestUnit_Scripts_CreateV1_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -163,7 +163,7 @@ func TestUnitCreateScript_Conflict(t *testing.T) {
 // UpdateScriptByIDV1
 // =============================================================================
 
-func TestUnitUpdateScriptByID_Success(t *testing.T) {
+func TestUnit_Scripts_UpdateByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateScriptMock()
 
@@ -182,7 +182,7 @@ func TestUnitUpdateScriptByID_Success(t *testing.T) {
 	assert.Equal(t, "BEFORE", result.Priority)
 }
 
-func TestUnitUpdateScriptByID_EmptyID(t *testing.T) {
+func TestUnit_Scripts_UpdateByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateScriptByIDV1(context.Background(), "", &RequestScript{Name: "x"})
@@ -192,7 +192,7 @@ func TestUnitUpdateScriptByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "script ID is required")
 }
 
-func TestUnitUpdateScriptByID_NilRequest(t *testing.T) {
+func TestUnit_Scripts_UpdateByIDV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateScriptByIDV1(context.Background(), "1", nil)
@@ -206,7 +206,7 @@ func TestUnitUpdateScriptByID_NilRequest(t *testing.T) {
 // DeleteScriptByIDV1
 // =============================================================================
 
-func TestUnitDeleteScriptByID_Success(t *testing.T) {
+func TestUnit_Scripts_DeleteByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteScriptMock()
 
@@ -216,7 +216,7 @@ func TestUnitDeleteScriptByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteScriptByID_EmptyID(t *testing.T) {
+func TestUnit_Scripts_DeleteByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteScriptByIDV1(context.Background(), "")
@@ -229,7 +229,7 @@ func TestUnitDeleteScriptByID_EmptyID(t *testing.T) {
 // GetScriptHistoryV1
 // =============================================================================
 
-func TestUnitGetScriptHistory_Success(t *testing.T) {
+func TestUnit_Scripts_GetHistoryV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetScriptHistoryMock()
 
@@ -245,7 +245,7 @@ func TestUnitGetScriptHistory_Success(t *testing.T) {
 	assert.Equal(t, "Script created", result.Results[0].Note)
 }
 
-func TestUnitGetScriptHistory_WithRSQLFilter(t *testing.T) {
+func TestUnit_Scripts_GetHistoryV1_WithRSQLFilter(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetScriptHistoryMock()
 
@@ -260,7 +260,7 @@ func TestUnitGetScriptHistory_WithRSQLFilter(t *testing.T) {
 	assert.Equal(t, rsqlQuery, mock.LastRSQLQuery, "rsqlQuery should be passed through to the HTTP client")
 }
 
-func TestUnitGetScriptHistory_EmptyID(t *testing.T) {
+func TestUnit_Scripts_GetHistoryV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetScriptHistoryV1(context.Background(), "", nil)
@@ -274,7 +274,7 @@ func TestUnitGetScriptHistory_EmptyID(t *testing.T) {
 // AddScriptHistoryNotesV1
 // =============================================================================
 
-func TestUnitAddScriptHistoryNotes_Success(t *testing.T) {
+func TestUnit_Scripts_AddHistoryNotesV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterAddScriptHistoryNotesMock()
 
@@ -285,7 +285,7 @@ func TestUnitAddScriptHistoryNotes_Success(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode)
 }
 
-func TestUnitAddScriptHistoryNotes_EmptyID(t *testing.T) {
+func TestUnit_Scripts_AddHistoryNotesV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &AddScriptHistoryNotesRequest{Note: "Test note"}
@@ -295,7 +295,7 @@ func TestUnitAddScriptHistoryNotes_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "script ID is required")
 }
 
-func TestUnitAddScriptHistoryNotes_NilRequest(t *testing.T) {
+func TestUnit_Scripts_AddHistoryNotesV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.AddScriptHistoryNotesV1(context.Background(), "1", nil)
@@ -308,7 +308,7 @@ func TestUnitAddScriptHistoryNotes_NilRequest(t *testing.T) {
 // DownloadScriptByIDV1
 // =============================================================================
 
-func TestUnitDownloadScriptByID_Success(t *testing.T) {
+func TestUnit_Scripts_DownloadByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDownloadScriptMock()
 
@@ -322,7 +322,7 @@ func TestUnitDownloadScriptByID_Success(t *testing.T) {
 	assert.Contains(t, string(data), "#!/bin/bash")
 }
 
-func TestUnitDownloadScriptByID_EmptyID(t *testing.T) {
+func TestUnit_Scripts_DownloadByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	data, resp, err := svc.DownloadScriptByIDV1(context.Background(), "")

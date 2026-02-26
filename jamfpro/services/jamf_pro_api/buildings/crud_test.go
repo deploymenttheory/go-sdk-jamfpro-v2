@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.BuildingsMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListBuildings_Success(t *testing.T) {
+func TestUnit_Buildings_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListBuildingsMock()
 
@@ -33,7 +33,7 @@ func TestUnitListBuildings_Success(t *testing.T) {
 	assert.Equal(t, "Warehouse", result.Results[1].Name)
 }
 
-func TestUnitListBuildings_WithrsqlQuery(t *testing.T) {
+func TestUnit_Buildings_List_WithrsqlQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListBuildingsMock()
 
@@ -44,7 +44,7 @@ func TestUnitListBuildings_WithrsqlQuery(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitListBuildings_WithRSQLFilter(t *testing.T) {
+func TestUnit_Buildings_List_WithRSQLFilter(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListBuildingsRSQLMock()
 
@@ -62,7 +62,7 @@ func TestUnitListBuildings_WithRSQLFilter(t *testing.T) {
 	assert.Equal(t, rsqlQuery, mock.LastRSQLQuery)
 }
 
-func TestUnitGetBuildingByID_Success(t *testing.T) {
+func TestUnit_Buildings_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetBuildingMock()
 
@@ -78,7 +78,7 @@ func TestUnitGetBuildingByID_Success(t *testing.T) {
 	assert.Equal(t, "Austin", result.City)
 }
 
-func TestUnitGetBuildingByID_EmptyID(t *testing.T) {
+func TestUnit_Buildings_GetByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
@@ -88,7 +88,7 @@ func TestUnitGetBuildingByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "building ID is required")
 }
 
-func TestUnitGetBuildingByID_NotFound(t *testing.T) {
+func TestUnit_Buildings_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -99,7 +99,7 @@ func TestUnitGetBuildingByID_NotFound(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 }
 
-func TestUnitCreateBuilding_Success(t *testing.T) {
+func TestUnit_Buildings_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateBuildingMock()
 
@@ -120,7 +120,7 @@ func TestUnitCreateBuilding_Success(t *testing.T) {
 	assert.Contains(t, result.Href, "/api/v1/buildings/3")
 }
 
-func TestUnitCreateBuilding_NilRequest(t *testing.T) {
+func TestUnit_Buildings_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateV1(context.Background(), nil)
@@ -130,7 +130,7 @@ func TestUnitCreateBuilding_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateBuilding_Conflict(t *testing.T) {
+func TestUnit_Buildings_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -142,7 +142,7 @@ func TestUnitCreateBuilding_Conflict(t *testing.T) {
 	assert.Equal(t, 409, resp.StatusCode)
 }
 
-func TestUnitUpdateBuildingByID_Success(t *testing.T) {
+func TestUnit_Buildings_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateBuildingMock()
 
@@ -164,7 +164,7 @@ func TestUnitUpdateBuildingByID_Success(t *testing.T) {
 	assert.Equal(t, "Main Office Updated", result.Name)
 }
 
-func TestUnitUpdateBuildingByID_EmptyID(t *testing.T) {
+func TestUnit_Buildings_UpdateByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &RequestBuilding{Name: "x"})
@@ -174,7 +174,7 @@ func TestUnitUpdateBuildingByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUnitUpdateBuildingByID_NilRequest(t *testing.T) {
+func TestUnit_Buildings_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
@@ -184,7 +184,7 @@ func TestUnitUpdateBuildingByID_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitDeleteBuildingByID_Success(t *testing.T) {
+func TestUnit_Buildings_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteBuildingMock()
 
@@ -194,7 +194,7 @@ func TestUnitDeleteBuildingByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteBuildingByID_EmptyID(t *testing.T) {
+func TestUnit_Buildings_DeleteByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByIDV1(context.Background(), "")
@@ -203,7 +203,7 @@ func TestUnitDeleteBuildingByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "building ID is required")
 }
 
-func TestUnitDeleteBuildingsByID_Success(t *testing.T) {
+func TestUnit_Buildings_DeleteMultipleByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteBuildingsByIDMock()
 
@@ -214,7 +214,7 @@ func TestUnitDeleteBuildingsByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteBuildingsByID_EmptyIDs(t *testing.T) {
+func TestUnit_Buildings_DeleteMultipleByID_EmptyIDs(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteBuildingsByIDV1(context.Background(), &DeleteBuildingsByIDRequest{IDs: []string{}})
@@ -223,7 +223,7 @@ func TestUnitDeleteBuildingsByID_EmptyIDs(t *testing.T) {
 	assert.Contains(t, err.Error(), "ids are required")
 }
 
-func TestUnitDeleteBuildingsByID_NilRequest(t *testing.T) {
+func TestUnit_Buildings_DeleteMultipleByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteBuildingsByIDV1(context.Background(), nil)
@@ -232,7 +232,7 @@ func TestUnitDeleteBuildingsByID_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "ids are required")
 }
 
-func TestUnitGetBuildingHistoryV1_Success(t *testing.T) {
+func TestUnit_Buildings_GetHistoryV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetBuildingHistoryMock()
 
@@ -251,7 +251,7 @@ func TestUnitGetBuildingHistoryV1_Success(t *testing.T) {
 	assert.Equal(t, "Initial creation", *result.Results[0].Details)
 }
 
-func TestUnitGetBuildingHistoryV1_NullDetails(t *testing.T) {
+func TestUnit_Buildings_GetHistoryV1_NullDetails(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetBuildingHistoryNullDetailsMock()
 
@@ -266,7 +266,7 @@ func TestUnitGetBuildingHistoryV1_NullDetails(t *testing.T) {
 	assert.Nil(t, result.Results[0].Details)
 }
 
-func TestUnitGetBuildingHistoryV1_EmptyID(t *testing.T) {
+func TestUnit_Buildings_GetHistoryV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetBuildingHistoryV1(context.Background(), "", nil)
@@ -276,7 +276,7 @@ func TestUnitGetBuildingHistoryV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "building ID is required")
 }
 
-func TestUnitAddBuildingHistoryNotesV1_Success(t *testing.T) {
+func TestUnit_Buildings_AddHistoryNotesV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterAddBuildingHistoryNotesMock()
 
@@ -287,7 +287,7 @@ func TestUnitAddBuildingHistoryNotesV1_Success(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode)
 }
 
-func TestUnitAddBuildingHistoryNotesV1_EmptyID(t *testing.T) {
+func TestUnit_Buildings_AddHistoryNotesV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.AddBuildingHistoryNotesV1(context.Background(), "", &AddHistoryNotesRequest{Note: "x"})
@@ -296,7 +296,7 @@ func TestUnitAddBuildingHistoryNotesV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "building ID is required")
 }
 
-func TestUnitAddBuildingHistoryNotesV1_NilRequest(t *testing.T) {
+func TestUnit_Buildings_AddHistoryNotesV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.AddBuildingHistoryNotesV1(context.Background(), "1", nil)

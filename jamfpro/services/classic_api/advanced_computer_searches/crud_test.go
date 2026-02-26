@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.AdvancedComputerSearchesMo
 // ListAdvancedComputerSearches
 // =============================================================================
 
-func TestUnitListAdvancedComputerSearches_Success(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListAdvancedComputerSearchesMock()
 
@@ -42,7 +42,7 @@ func TestUnitListAdvancedComputerSearches_Success(t *testing.T) {
 // GetAdvancedComputerSearchByID
 // =============================================================================
 
-func TestUnitGetAdvancedComputerSearchByID_Success(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetAdvancedComputerSearchByIDMock()
 
@@ -66,7 +66,7 @@ func TestUnitGetAdvancedComputerSearchByID_Success(t *testing.T) {
 	assert.Equal(t, "TestMac001", result.Computers[0].Name)
 }
 
-func TestUnitGetAdvancedComputerSearchByID_ZeroID(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -76,7 +76,7 @@ func TestUnitGetAdvancedComputerSearchByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced computer search ID must be a positive integer")
 }
 
-func TestUnitGetAdvancedComputerSearchByID_NegativeID(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), -1)
@@ -86,7 +86,7 @@ func TestUnitGetAdvancedComputerSearchByID_NegativeID(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced computer search ID must be a positive integer")
 }
 
-func TestUnitGetAdvancedComputerSearchByID_NotFound(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -101,7 +101,7 @@ func TestUnitGetAdvancedComputerSearchByID_NotFound(t *testing.T) {
 // GetAdvancedComputerSearchByName
 // =============================================================================
 
-func TestUnitGetAdvancedComputerSearchByName_Success(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetAdvancedComputerSearchByNameMock()
 
@@ -115,7 +115,7 @@ func TestUnitGetAdvancedComputerSearchByName_Success(t *testing.T) {
 	assert.Equal(t, "Test Search", result.Name)
 }
 
-func TestUnitGetAdvancedComputerSearchByName_EmptyName(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -129,7 +129,7 @@ func TestUnitGetAdvancedComputerSearchByName_EmptyName(t *testing.T) {
 // CreateAdvancedComputerSearch
 // =============================================================================
 
-func TestUnitCreateAdvancedComputerSearch_Success(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateAdvancedComputerSearchMock()
 
@@ -156,7 +156,7 @@ func TestUnitCreateAdvancedComputerSearch_Success(t *testing.T) {
 	assert.Equal(t, 100, result.ID)
 }
 
-func TestUnitCreateAdvancedComputerSearch_NilRequest(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -166,7 +166,7 @@ func TestUnitCreateAdvancedComputerSearch_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateAdvancedComputerSearch_Conflict(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -182,7 +182,7 @@ func TestUnitCreateAdvancedComputerSearch_Conflict(t *testing.T) {
 // UpdateAdvancedComputerSearchByID
 // =============================================================================
 
-func TestUnitUpdateAdvancedComputerSearchByID_Success(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateAdvancedComputerSearchByIDMock()
 
@@ -196,7 +196,7 @@ func TestUnitUpdateAdvancedComputerSearchByID_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateAdvancedComputerSearchByID_ZeroID(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestAdvancedComputerSearch{Name: "Updated Search Name"}
@@ -207,7 +207,7 @@ func TestUnitUpdateAdvancedComputerSearchByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced computer search ID must be a positive integer")
 }
 
-func TestUnitUpdateAdvancedComputerSearchByID_NilRequest(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
@@ -221,7 +221,7 @@ func TestUnitUpdateAdvancedComputerSearchByID_NilRequest(t *testing.T) {
 // UpdateAdvancedComputerSearchByName
 // =============================================================================
 
-func TestUnitUpdateAdvancedComputerSearchByName_Success(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateAdvancedComputerSearchByNameMock()
 
@@ -235,7 +235,7 @@ func TestUnitUpdateAdvancedComputerSearchByName_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateAdvancedComputerSearchByName_EmptyName(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestAdvancedComputerSearch{Name: "Updated Search Name"}
@@ -246,7 +246,7 @@ func TestUnitUpdateAdvancedComputerSearchByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced computer search name is required")
 }
 
-func TestUnitUpdateAdvancedComputerSearchByName_NilRequest(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "Test Search", nil)
@@ -260,7 +260,7 @@ func TestUnitUpdateAdvancedComputerSearchByName_NilRequest(t *testing.T) {
 // DeleteAdvancedComputerSearchByID
 // =============================================================================
 
-func TestUnitDeleteAdvancedComputerSearchByID_Success(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteAdvancedComputerSearchByIDMock()
 
@@ -270,7 +270,7 @@ func TestUnitDeleteAdvancedComputerSearchByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteAdvancedComputerSearchByID_ZeroID(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -279,7 +279,7 @@ func TestUnitDeleteAdvancedComputerSearchByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced computer search ID must be a positive integer")
 }
 
-func TestUnitDeleteAdvancedComputerSearchByID_NegativeID(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_DeleteByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), -1)
@@ -292,7 +292,7 @@ func TestUnitDeleteAdvancedComputerSearchByID_NegativeID(t *testing.T) {
 // DeleteAdvancedComputerSearchByName
 // =============================================================================
 
-func TestUnitDeleteAdvancedComputerSearchByName_Success(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteAdvancedComputerSearchByNameMock()
 
@@ -302,7 +302,7 @@ func TestUnitDeleteAdvancedComputerSearchByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteAdvancedComputerSearchByName_EmptyName(t *testing.T) {
+func TestUnit_AdvancedComputerSearches_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")

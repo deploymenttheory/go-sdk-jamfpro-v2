@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.JamfProInformationMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV2_Success(t *testing.T) {
+func TestUnit_JamfProInformation_GetV2_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetV2(context.Background())
 	require.NoError(t, err)

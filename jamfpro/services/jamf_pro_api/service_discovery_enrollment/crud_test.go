@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ServiceDiscoveryEnrollment
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_ServiceDiscoveryEnrollment_GetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetWellKnownSettingsMock()
 
@@ -30,7 +30,7 @@ func TestUnitGetV1_Success(t *testing.T) {
 	assert.Equal(t, "USER_ENROLLMENT", result.WellKnownSettings[0].EnrollmentType)
 }
 
-func TestUnitUpdateV1_Success(t *testing.T) {
+func TestUnit_ServiceDiscoveryEnrollment_UpdateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateWellKnownSettingsMock()
 
@@ -46,7 +46,7 @@ func TestUnitUpdateV1_Success(t *testing.T) {
 	assert.Nil(t, result)
 }
 
-func TestUnitUpdateV1_NilRequest(t *testing.T) {
+func TestUnit_ServiceDiscoveryEnrollment_UpdateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateV1(context.Background(), nil)
@@ -56,7 +56,7 @@ func TestUnitUpdateV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitGetV1_Error(t *testing.T) {
+func TestUnit_ServiceDiscoveryEnrollment_GetV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetV1(context.Background())
@@ -65,7 +65,7 @@ func TestUnitGetV1_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitUpdateV1_Error(t *testing.T) {
+func TestUnit_ServiceDiscoveryEnrollment_UpdateV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	request := &WellKnownSettingsResponseV1{
@@ -79,7 +79,7 @@ func TestUnitUpdateV1_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitUpdateV1_Non204Response(t *testing.T) {
+func TestUnit_ServiceDiscoveryEnrollment_UpdateV1_Non204Response(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateWellKnownSettingsNon204Mock()
 

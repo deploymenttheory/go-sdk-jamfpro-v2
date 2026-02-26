@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUnitGetForUserAndSiteV1_Success(t *testing.T) {
+func TestUnit_JamfProNotifications_GetForUserAndSiteV1_Success(t *testing.T) {
 	mock := mocks.NewNotificationsMock()
 	mock.RegisterGetNotificationsMock()
 	service := NewService(mock)

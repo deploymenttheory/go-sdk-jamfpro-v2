@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.JamfProServerURLMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_JamfProServerUrl_GetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -29,7 +29,7 @@ func TestUnitGetV1_Success(t *testing.T) {
 	assert.Equal(t, "http://jamf.example.com:8080", result.UnsecuredEnrollmentUrl)
 }
 
-func TestUnitUpdateV1_Success(t *testing.T) {
+func TestUnit_JamfProServerUrl_UpdateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -48,7 +48,7 @@ func TestUnitUpdateV1_Success(t *testing.T) {
 	assert.Equal(t, "http://jamf-updated.example.com:8080", result.UnsecuredEnrollmentUrl)
 }
 
-func TestUnitUpdateV1_NilRequest(t *testing.T) {
+func TestUnit_JamfProServerUrl_UpdateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateV1(context.Background(), nil)

@@ -264,3 +264,77 @@ func TestUnit_LicensedSoftware_Conflict(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "Licensed software with that name already exists")
 }
+
+func TestUnit_LicensedSoftware_List_Error(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_LicensedSoftware_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "Sample Licensed Software 1")
+	require.Error(t, err)
+}
+
+func TestUnit_LicensedSoftware_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_LicensedSoftware_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &licensed_software.Resource{General: licensed_software.SubsetGeneral{Name: ""}})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "licensed software name is required")
+}
+
+func TestUnit_LicensedSoftware_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &licensed_software.Resource{General: licensed_software.SubsetGeneral{Name: "Test"}})
+	require.Error(t, err)
+}
+
+func TestUnit_LicensedSoftware_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Sample Licensed Software 1", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_LicensedSoftware_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Sample Licensed Software 1", &licensed_software.Resource{General: licensed_software.SubsetGeneral{Name: ""}})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "licensed software name is required in request")
+}
+
+func TestUnit_LicensedSoftware_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Sample Licensed Software 1", &licensed_software.Resource{General: licensed_software.SubsetGeneral{Name: "Updated"}})
+	require.Error(t, err)
+}
+
+func TestUnit_LicensedSoftware_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_LicensedSoftware_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewLicensedSoftwareMock()
+	svc := licensed_software.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "Sample Licensed Software 1")
+	require.Error(t, err)
+}

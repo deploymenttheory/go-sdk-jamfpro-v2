@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.VolumePurchasingLocationsM
 	return NewService(mock), mock
 }
 
-func TestUnitListVolumePurchasingLocations_Success(t *testing.T) {
+func TestUnit_VolumePurchasingLocations_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -31,7 +31,7 @@ func TestUnitListVolumePurchasingLocations_Success(t *testing.T) {
 	assert.Equal(t, "VPL One", result.Results[0].Name)
 }
 
-func TestUnitGetVolumePurchasingLocationByID_Success(t *testing.T) {
+func TestUnit_VolumePurchasingLocations_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -46,7 +46,7 @@ func TestUnitGetVolumePurchasingLocationByID_Success(t *testing.T) {
 	assert.True(t, result.AutomaticallyPopulatePurchasedContent)
 }
 
-func TestUnitGetVolumePurchasingLocationByID_EmptyID(t *testing.T) {
+func TestUnit_VolumePurchasingLocations_GetByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
@@ -55,7 +55,7 @@ func TestUnitGetVolumePurchasingLocationByID_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitCreateVolumePurchasingLocation_Success(t *testing.T) {
+func TestUnit_VolumePurchasingLocations_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -74,7 +74,7 @@ func TestUnitCreateVolumePurchasingLocation_Success(t *testing.T) {
 	assert.NotEmpty(t, result.Href)
 }
 
-func TestUnitUpdateVolumePurchasingLocationByID_Success(t *testing.T) {
+func TestUnit_VolumePurchasingLocations_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -94,7 +94,7 @@ func TestUnitUpdateVolumePurchasingLocationByID_Success(t *testing.T) {
 	assert.Equal(t, "VPL One Updated", result.Name)
 }
 
-func TestUnitDeleteVolumePurchasingLocationByID_Success(t *testing.T) {
+func TestUnit_VolumePurchasingLocations_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
@@ -104,7 +104,7 @@ func TestUnitDeleteVolumePurchasingLocationByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitReclaimVolumePurchasingLocationByID_Success(t *testing.T) {
+func TestUnit_VolumePurchasingLocations_ReclaimByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterReclaimMock()
 
@@ -114,7 +114,7 @@ func TestUnitReclaimVolumePurchasingLocationByID_Success(t *testing.T) {
 	assert.Equal(t, 202, resp.StatusCode)
 }
 
-func TestUnitGetContentV1_Success(t *testing.T) {
+func TestUnit_VolumePurchasingLocations_GetContentV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetContentMock()
 

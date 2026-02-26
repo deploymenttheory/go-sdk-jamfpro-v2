@@ -19,7 +19,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.DirectoryBindingsMock) {
 // ListDirectoryBindings
 // =============================================================================
 
-func TestUnitListDirectoryBindings_Success(t *testing.T) {
+func TestUnit_DirectoryBindings_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListDirectoryBindingsMock()
 
@@ -41,7 +41,7 @@ func TestUnitListDirectoryBindings_Success(t *testing.T) {
 // GetDirectoryBindingByID
 // =============================================================================
 
-func TestUnitGetDirectoryBindingByID_Success(t *testing.T) {
+func TestUnit_DirectoryBindings_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetDirectoryBindingByIDMock()
 
@@ -57,21 +57,21 @@ func TestUnitGetDirectoryBindingByID_Success(t *testing.T) {
 	assert.Equal(t, "Active Directory", result.Type)
 }
 
-func TestUnitGetDirectoryBindingByID_ZeroID(t *testing.T) {
+func TestUnit_DirectoryBindings_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByID(context.Background(), 0)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "directory binding ID must be a positive integer")
 }
 
-func TestUnitGetDirectoryBindingByID_NegativeID(t *testing.T) {
+func TestUnit_DirectoryBindings_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByID(context.Background(), -1)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "directory binding ID must be a positive integer")
 }
 
-func TestUnitGetDirectoryBindingByID_NotFound(t *testing.T) {
+func TestUnit_DirectoryBindings_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -84,7 +84,7 @@ func TestUnitGetDirectoryBindingByID_NotFound(t *testing.T) {
 // GetDirectoryBindingByName
 // =============================================================================
 
-func TestUnitGetDirectoryBindingByName_Success(t *testing.T) {
+func TestUnit_DirectoryBindings_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetDirectoryBindingByNameMock()
 
@@ -97,7 +97,7 @@ func TestUnitGetDirectoryBindingByName_Success(t *testing.T) {
 	assert.Equal(t, "AD Binding", result.Name)
 }
 
-func TestUnitGetDirectoryBindingByName_EmptyName(t *testing.T) {
+func TestUnit_DirectoryBindings_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByName(context.Background(), "")
 	require.Error(t, err)
@@ -108,7 +108,7 @@ func TestUnitGetDirectoryBindingByName_EmptyName(t *testing.T) {
 // CreateDirectoryBinding
 // =============================================================================
 
-func TestUnitCreateDirectoryBinding_Success(t *testing.T) {
+func TestUnit_DirectoryBindings_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateDirectoryBindingMock()
 
@@ -126,14 +126,14 @@ func TestUnitCreateDirectoryBinding_Success(t *testing.T) {
 	assert.Equal(t, "AD Binding", result.Name)
 }
 
-func TestUnitCreateDirectoryBinding_NilRequest(t *testing.T) {
+func TestUnit_DirectoryBindings_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.Create(context.Background(), nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateDirectoryBinding_Conflict(t *testing.T) {
+func TestUnit_DirectoryBindings_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -147,7 +147,7 @@ func TestUnitCreateDirectoryBinding_Conflict(t *testing.T) {
 // UpdateDirectoryBindingByID
 // =============================================================================
 
-func TestUnitUpdateDirectoryBindingByID_Success(t *testing.T) {
+func TestUnit_DirectoryBindings_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateDirectoryBindingByIDMock()
 
@@ -161,14 +161,14 @@ func TestUnitUpdateDirectoryBindingByID_Success(t *testing.T) {
 	assert.Equal(t, "AD Binding Updated", result.Name)
 }
 
-func TestUnitUpdateDirectoryBindingByID_ZeroID(t *testing.T) {
+func TestUnit_DirectoryBindings_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByID(context.Background(), 0, &RequestDirectoryBinding{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "directory binding ID must be a positive integer")
 }
 
-func TestUnitUpdateDirectoryBindingByID_NilRequest(t *testing.T) {
+func TestUnit_DirectoryBindings_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
 	require.Error(t, err)
@@ -179,7 +179,7 @@ func TestUnitUpdateDirectoryBindingByID_NilRequest(t *testing.T) {
 // UpdateDirectoryBindingByName
 // =============================================================================
 
-func TestUnitUpdateDirectoryBindingByName_Success(t *testing.T) {
+func TestUnit_DirectoryBindings_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateDirectoryBindingByNameMock()
 
@@ -192,14 +192,14 @@ func TestUnitUpdateDirectoryBindingByName_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateDirectoryBindingByName_EmptyName(t *testing.T) {
+func TestUnit_DirectoryBindings_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByName(context.Background(), "", &RequestDirectoryBinding{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "directory binding name is required")
 }
 
-func TestUnitUpdateDirectoryBindingByName_NilRequest(t *testing.T) {
+func TestUnit_DirectoryBindings_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByName(context.Background(), "AD Binding", nil)
 	require.Error(t, err)
@@ -210,7 +210,7 @@ func TestUnitUpdateDirectoryBindingByName_NilRequest(t *testing.T) {
 // DeleteDirectoryBindingByID
 // =============================================================================
 
-func TestUnitDeleteDirectoryBindingByID_Success(t *testing.T) {
+func TestUnit_DirectoryBindings_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteDirectoryBindingByIDMock()
 
@@ -219,7 +219,7 @@ func TestUnitDeleteDirectoryBindingByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteDirectoryBindingByID_ZeroID(t *testing.T) {
+func TestUnit_DirectoryBindings_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, err := svc.DeleteByID(context.Background(), 0)
 	require.Error(t, err)
@@ -230,7 +230,7 @@ func TestUnitDeleteDirectoryBindingByID_ZeroID(t *testing.T) {
 // DeleteDirectoryBindingByName
 // =============================================================================
 
-func TestUnitDeleteDirectoryBindingByName_Success(t *testing.T) {
+func TestUnit_DirectoryBindings_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteDirectoryBindingByNameMock()
 
@@ -239,7 +239,7 @@ func TestUnitDeleteDirectoryBindingByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteDirectoryBindingByName_EmptyName(t *testing.T) {
+func TestUnit_DirectoryBindings_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, err := svc.DeleteByName(context.Background(), "")
 	require.Error(t, err)

@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.CloudInformationMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_CloudInformation_GetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetCloudInformationMock()
 

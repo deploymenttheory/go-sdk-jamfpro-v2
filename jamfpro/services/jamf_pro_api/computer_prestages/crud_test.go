@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ComputerPrestagesMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListV3_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_ListV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -29,7 +29,7 @@ func TestUnitListV3_Success(t *testing.T) {
 	assert.Equal(t, "1", result.Results[0].ID)
 }
 
-func TestUnitGetByIDV3_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_GetByIDV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock("1")
 
@@ -41,7 +41,7 @@ func TestUnitGetByIDV3_Success(t *testing.T) {
 	assert.Equal(t, "Test Prestage", result.DisplayName)
 }
 
-func TestUnitGetByIDV3_EmptyID(t *testing.T) {
+func TestUnit_ComputerPrestages_GetByIDV3_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDV3(context.Background(), "")
@@ -50,7 +50,7 @@ func TestUnitGetByIDV3_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitGetByNameV3_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_GetByNameV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -61,7 +61,7 @@ func TestUnitGetByNameV3_Success(t *testing.T) {
 	assert.Equal(t, "Test Prestage", result.DisplayName)
 }
 
-func TestUnitCreateV3_NilRequest(t *testing.T) {
+func TestUnit_ComputerPrestages_CreateV3_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateV3(context.Background(), nil)
@@ -70,7 +70,7 @@ func TestUnitCreateV3_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitCreateV3_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_CreateV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -83,7 +83,7 @@ func TestUnitCreateV3_Success(t *testing.T) {
 	assert.Equal(t, "/api/v3/computer-prestages/1", result.Href)
 }
 
-func TestUnitUpdateByIDV3_EmptyID(t *testing.T) {
+func TestUnit_ComputerPrestages_UpdateByIDV3_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByIDV3(context.Background(), "", &ResourceComputerPrestage{})
@@ -92,7 +92,7 @@ func TestUnitUpdateByIDV3_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitUpdateByIDV3_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_UpdateByIDV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock("1")    // internal GET for version lock
 	mock.RegisterUpdateByIDMock("1") // PUT
@@ -104,7 +104,7 @@ func TestUnitUpdateByIDV3_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteByIDV3_EmptyID(t *testing.T) {
+func TestUnit_ComputerPrestages_DeleteByIDV3_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByIDV3(context.Background(), "")
@@ -112,7 +112,7 @@ func TestUnitDeleteByIDV3_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitDeleteByIDV3_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_DeleteByIDV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByIDMock("1")
 
@@ -122,7 +122,7 @@ func TestUnitDeleteByIDV3_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateByNameV3_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_UpdateByNameV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()       // GetByNameV3 (also provides version lock)
 	mock.RegisterUpdateByIDMock("1") // PUT
@@ -134,7 +134,7 @@ func TestUnitUpdateByNameV3_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateByNameV3_NilRequest(t *testing.T) {
+func TestUnit_ComputerPrestages_UpdateByNameV3_NilRequest(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -144,7 +144,7 @@ func TestUnitUpdateByNameV3_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitDeleteByNameV3_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_DeleteByNameV3_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 	mock.RegisterDeleteByIDMock("1")
@@ -155,7 +155,7 @@ func TestUnitDeleteByNameV3_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteByNameV3_NotFound(t *testing.T) {
+func TestUnit_ComputerPrestages_DeleteByNameV3_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -165,7 +165,7 @@ func TestUnitDeleteByNameV3_NotFound(t *testing.T) {
 	_ = resp
 }
 
-func TestUnitGetDeviceScopeByIDV2_EmptyID(t *testing.T) {
+func TestUnit_ComputerPrestages_GetDeviceScopeByIDV2_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetDeviceScopeByIDV2(context.Background(), "")
@@ -174,7 +174,7 @@ func TestUnitGetDeviceScopeByIDV2_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitGetDeviceScopeByIDV2_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_GetDeviceScopeByIDV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetDeviceScopeMock("1")
 
@@ -189,7 +189,7 @@ func TestUnitGetDeviceScopeByIDV2_Success(t *testing.T) {
 	assert.Equal(t, "admin", result.Assignments[0].UserAssigned)
 }
 
-func TestUnitReplaceDeviceScopeByIDV2_EmptyID(t *testing.T) {
+func TestUnit_ComputerPrestages_ReplaceDeviceScopeByIDV2_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.ReplaceDeviceScopeByIDV2(context.Background(), "", &ReplaceDeviceScopeRequest{SerialNumbers: []string{"ABC"}, VersionLock: 1})
@@ -198,7 +198,7 @@ func TestUnitReplaceDeviceScopeByIDV2_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitReplaceDeviceScopeByIDV2_NilRequest(t *testing.T) {
+func TestUnit_ComputerPrestages_ReplaceDeviceScopeByIDV2_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.ReplaceDeviceScopeByIDV2(context.Background(), "1", nil)
@@ -207,7 +207,7 @@ func TestUnitReplaceDeviceScopeByIDV2_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitReplaceDeviceScopeByIDV2_Success(t *testing.T) {
+func TestUnit_ComputerPrestages_ReplaceDeviceScopeByIDV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetDeviceScopeMock("1")     // internal GET for version lock
 	mock.RegisterReplaceDeviceScopeMock("1") // PUT

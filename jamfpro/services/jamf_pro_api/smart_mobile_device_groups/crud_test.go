@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.SmartMobileDeviceGroupsMoc
 	return NewService(mock), mock
 }
 
-func TestUnitList_Success(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -30,7 +30,7 @@ func TestUnitList_Success(t *testing.T) {
 	assert.Equal(t, "iPhones", result.Results[0].GroupName)
 }
 
-func TestUnitGetByID_Success(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -45,7 +45,7 @@ func TestUnitGetByID_Success(t *testing.T) {
 	assert.Equal(t, "Model", result.Criteria[0].Name)
 }
 
-func TestUnitGetByName_Success(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -58,7 +58,7 @@ func TestUnitGetByName_Success(t *testing.T) {
 	assert.Equal(t, "iPhones", result.GroupName)
 }
 
-func TestUnitGetByName_NotFound(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_GetByName_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListEmptyMock()
 
@@ -67,7 +67,7 @@ func TestUnitGetByName_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "not found")
 }
 
-func TestUnitGetMembership_Success(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_GetMembership_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMembershipMock()
 
@@ -82,7 +82,7 @@ func TestUnitGetMembership_Success(t *testing.T) {
 	assert.Equal(t, "iPhone 14", result.Results[0].DisplayName)
 }
 
-func TestUnitCreate_Success(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -102,7 +102,7 @@ func TestUnitCreate_Success(t *testing.T) {
 	assert.NotEmpty(t, result.Href)
 }
 
-func TestUnitUpdateByID_Success(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -122,7 +122,7 @@ func TestUnitUpdateByID_Success(t *testing.T) {
 	assert.Equal(t, "iPhones Updated", result.GroupName)
 }
 
-func TestUnitDeleteByID_Success(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
@@ -132,7 +132,7 @@ func TestUnitDeleteByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitGetByID_EmptyID(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_GetByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	_, _, err := svc.GetByID(context.Background(), "")
@@ -140,7 +140,7 @@ func TestUnitGetByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "ID is required")
 }
 
-func TestUnitGetByName_EmptyName(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	_, _, err := svc.GetByName(context.Background(), "")
@@ -148,7 +148,7 @@ func TestUnitGetByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "name is required")
 }
 
-func TestUnitGetMembership_EmptyID(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_GetMembership_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	_, _, err := svc.GetMembership(context.Background(), "", nil)
@@ -156,7 +156,7 @@ func TestUnitGetMembership_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "ID is required")
 }
 
-func TestUnitCreate_NilRequest(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	_, _, err := svc.Create(context.Background(), nil)
@@ -164,7 +164,7 @@ func TestUnitCreate_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitUpdateByID_EmptyID(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_UpdateByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestSmartMobileDeviceGroup{GroupName: "Test"}
 
@@ -173,7 +173,7 @@ func TestUnitUpdateByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUnitUpdateByID_NilRequest(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	_, _, err := svc.UpdateByID(context.Background(), "1", nil)
@@ -181,7 +181,7 @@ func TestUnitUpdateByID_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitDeleteByID_EmptyID(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_DeleteByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	_, err := svc.DeleteByID(context.Background(), "")

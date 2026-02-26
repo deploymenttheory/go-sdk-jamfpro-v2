@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.StaticComputerGroupsMock) 
 	return NewService(mock), mock
 }
 
-func TestUnitListV2_Success(t *testing.T) {
+func TestUnit_StaticComputerGroups_ListV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -33,7 +33,7 @@ func TestUnitListV2_Success(t *testing.T) {
 	assert.Equal(t, 5, result.Results[0].Count)
 }
 
-func TestUnitGetByIDV2_Success(t *testing.T) {
+func TestUnit_StaticComputerGroups_GetByIDV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -49,7 +49,7 @@ func TestUnitGetByIDV2_Success(t *testing.T) {
 	assert.Equal(t, 5, result.Count)
 }
 
-func TestUnitGetByIDV2_EmptyID(t *testing.T) {
+func TestUnit_StaticComputerGroups_GetByIDV2_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDV2(context.Background(), "")
@@ -59,7 +59,7 @@ func TestUnitGetByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "static computer group ID is required")
 }
 
-func TestUnitGetByIDV2_NotFound(t *testing.T) {
+func TestUnit_StaticComputerGroups_GetByIDV2_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -70,7 +70,7 @@ func TestUnitGetByIDV2_NotFound(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 }
 
-func TestUnitGetByNameV2_Success(t *testing.T) {
+func TestUnit_StaticComputerGroups_GetByNameV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -84,7 +84,7 @@ func TestUnitGetByNameV2_Success(t *testing.T) {
 	assert.Equal(t, 5, result.Count)
 }
 
-func TestUnitGetByNameV2_EmptyName(t *testing.T) {
+func TestUnit_StaticComputerGroups_GetByNameV2_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByNameV2(context.Background(), "")
@@ -94,7 +94,7 @@ func TestUnitGetByNameV2_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "static computer group name is required")
 }
 
-func TestUnitGetByNameV2_NotFound(t *testing.T) {
+func TestUnit_StaticComputerGroups_GetByNameV2_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListEmptyMock()
 
@@ -105,7 +105,7 @@ func TestUnitGetByNameV2_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "was not found")
 }
 
-func TestUnitCreateV2_Success(t *testing.T) {
+func TestUnit_StaticComputerGroups_CreateV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -124,7 +124,7 @@ func TestUnitCreateV2_Success(t *testing.T) {
 	assert.Contains(t, result.Href, "/api/v2/computer-groups/static-groups/3")
 }
 
-func TestUnitCreateV2_NilRequest(t *testing.T) {
+func TestUnit_StaticComputerGroups_CreateV2_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateV2(context.Background(), nil)
@@ -134,7 +134,7 @@ func TestUnitCreateV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateV2_Conflict(t *testing.T) {
+func TestUnit_StaticComputerGroups_CreateV2_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -149,7 +149,7 @@ func TestUnitCreateV2_Conflict(t *testing.T) {
 	assert.Equal(t, 409, resp.StatusCode)
 }
 
-func TestUnitUpdateByIDV2_Success(t *testing.T) {
+func TestUnit_StaticComputerGroups_UpdateByIDV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -172,7 +172,7 @@ func TestUnitUpdateByIDV2_Success(t *testing.T) {
 	require.Len(t, result.Assignments, 3)
 }
 
-func TestUnitUpdateByIDV2_EmptyID(t *testing.T) {
+func TestUnit_StaticComputerGroups_UpdateByIDV2_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestStaticGroup{Name: "x", Assignments: []string{}}
@@ -183,7 +183,7 @@ func TestUnitUpdateByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUnitUpdateByIDV2_NilRequest(t *testing.T) {
+func TestUnit_StaticComputerGroups_UpdateByIDV2_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByIDV2(context.Background(), "1", nil)
@@ -193,7 +193,7 @@ func TestUnitUpdateByIDV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitDeleteByIDV2_Success(t *testing.T) {
+func TestUnit_StaticComputerGroups_DeleteByIDV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
@@ -203,7 +203,7 @@ func TestUnitDeleteByIDV2_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteByIDV2_EmptyID(t *testing.T) {
+func TestUnit_StaticComputerGroups_DeleteByIDV2_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByIDV2(context.Background(), "")

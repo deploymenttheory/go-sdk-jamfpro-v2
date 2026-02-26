@@ -354,3 +354,99 @@ func TestUnit_MacApplications_Conflict(t *testing.T) {
 func boolPtr(b bool) *bool {
 	return &b
 }
+
+func TestUnit_MacApplications_List_Error(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_MacApplications_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "Calculator")
+	require.Error(t, err)
+}
+
+func TestUnit_MacApplications_GetByIDAndSubset_Error(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.GetByIDAndSubset(context.Background(), 1, "General")
+	require.Error(t, err)
+}
+
+func TestUnit_MacApplications_GetByNameAndSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.GetByNameAndSubset(context.Background(), "Calculator", "")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mac application subset cannot be empty")
+}
+
+func TestUnit_MacApplications_GetByNameAndSubset_Error(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.GetByNameAndSubset(context.Background(), "Calculator", "General")
+	require.Error(t, err)
+}
+
+func TestUnit_MacApplications_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MacApplications_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &mac_applications.Resource{General: mac_applications.SubsetGeneral{Name: ""}})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mac application name is required")
+}
+
+func TestUnit_MacApplications_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &mac_applications.Resource{General: mac_applications.SubsetGeneral{Name: "Calculator"}})
+	require.Error(t, err)
+}
+
+func TestUnit_MacApplications_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Calculator", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MacApplications_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Calculator", &mac_applications.Resource{General: mac_applications.SubsetGeneral{Name: ""}})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mac application name is required in request")
+}
+
+func TestUnit_MacApplications_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Calculator", &mac_applications.Resource{General: mac_applications.SubsetGeneral{Name: "Updated"}})
+	require.Error(t, err)
+}
+
+func TestUnit_MacApplications_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_MacApplications_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewMacApplicationsMock()
+	svc := mac_applications.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "Calculator")
+	require.Error(t, err)
+}

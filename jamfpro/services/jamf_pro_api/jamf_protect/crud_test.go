@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.JamfProtectMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetSettingsV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_GetSettingsV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetSettingsV1(context.Background())
 	require.NoError(t, err)
@@ -25,7 +25,7 @@ func TestUnitGetSettingsV1_Success(t *testing.T) {
 	require.Equal(t, "https://protect.example.com", result.ProtectURL)
 }
 
-func TestUnitUpdateSettingsV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_UpdateSettingsV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	request := &RequestJamfProtectSettings{AutoInstall: true}
 	result, resp, err := svc.UpdateSettingsV1(context.Background(), request)
@@ -43,7 +43,7 @@ func TestUnit_JamfProtect_UpdateSettingsV1_NilRequest(t *testing.T) {
 	require.Contains(t, err.Error(), "cannot be nil")
 }
 
-func TestUnitRegisterV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_RegisterV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	request := &RequestJamfProtectRegistration{
 		ProtectURL: "https://protect.example.com",
@@ -65,7 +65,7 @@ func TestUnit_JamfProtect_RegisterV1_NilRequest(t *testing.T) {
 	require.Contains(t, err.Error(), "cannot be nil")
 }
 
-func TestUnitSyncPlansV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_SyncPlansV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.SyncPlansV1(context.Background())
 	require.NoError(t, err)
@@ -73,7 +73,7 @@ func TestUnitSyncPlansV1_Success(t *testing.T) {
 	require.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitListDeploymentTasksV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_ListDeploymentTasksV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListDeploymentTasksV1(context.Background(), "deploy-123", nil)
 	require.NoError(t, err)
@@ -92,7 +92,7 @@ func TestUnit_JamfProtect_ListDeploymentTasksV1_EmptyID(t *testing.T) {
 	require.Contains(t, err.Error(), "deployment ID is required")
 }
 
-func TestUnitRetryDeploymentTasksV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_RetryDeploymentTasksV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.RetryDeploymentTasksV1(context.Background(), "deploy-123")
 	require.NoError(t, err)
@@ -108,7 +108,7 @@ func TestUnit_JamfProtect_RetryDeploymentTasksV1_EmptyID(t *testing.T) {
 	require.Contains(t, err.Error(), "deployment ID is required")
 }
 
-func TestUnitListHistoryV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_ListHistoryV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListHistoryV1(context.Background(), nil)
 	require.NoError(t, err)
@@ -118,7 +118,7 @@ func TestUnitListHistoryV1_Success(t *testing.T) {
 	require.Len(t, result.Results, 2)
 }
 
-func TestUnitCreateHistoryNoteV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_CreateHistoryNoteV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	request := &RequestJamfProtectHistoryNote{
 		Note:    "Test note",
@@ -140,7 +140,7 @@ func TestUnit_JamfProtect_CreateHistoryNoteV1_NilRequest(t *testing.T) {
 	require.Contains(t, err.Error(), "cannot be nil")
 }
 
-func TestUnitListPlansV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_ListPlansV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListPlansV1(context.Background(), nil)
 	require.NoError(t, err)
@@ -150,7 +150,7 @@ func TestUnitListPlansV1_Success(t *testing.T) {
 	require.Len(t, result.Results, 2)
 }
 
-func TestUnitDeleteIntegrationV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_DeleteIntegrationV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteIntegrationV1(context.Background())
 	require.NoError(t, err)
@@ -158,7 +158,7 @@ func TestUnitDeleteIntegrationV1_Success(t *testing.T) {
 	require.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitCreateIntegrationV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_CreateIntegrationV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	registration := &RequestJamfProtectRegistration{
 		ProtectURL: "https://protect.example.com",

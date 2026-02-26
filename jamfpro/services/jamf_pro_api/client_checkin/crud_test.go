@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ClientCheckinMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV3_Success(t *testing.T) {
+func TestUnit_ClientCheckin_GetV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetV3(context.Background())
 	require.NoError(t, err)
@@ -25,7 +25,7 @@ func TestUnitGetV3_Success(t *testing.T) {
 	require.True(t, result.CreateHooks)
 }
 
-func TestUnitUpdateV3_Success(t *testing.T) {
+func TestUnit_ClientCheckin_UpdateV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	settings := &ResourceClientCheckinSettings{CheckInFrequency: 30, CreateHooks: true}
 	result, resp, err := svc.UpdateV3(context.Background(), settings)
@@ -34,7 +34,7 @@ func TestUnitUpdateV3_Success(t *testing.T) {
 	require.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateV3_NilSettings(t *testing.T) {
+func TestUnit_ClientCheckin_UpdateV3_NilSettings(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.UpdateV3(context.Background(), nil)
 	require.Error(t, err)
@@ -42,7 +42,7 @@ func TestUnitUpdateV3_NilSettings(t *testing.T) {
 	require.Nil(t, resp)
 }
 
-func TestUnitGetHistoryV3_Success(t *testing.T) {
+func TestUnit_ClientCheckin_GetHistoryV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetHistoryV3(context.Background(), nil)
 	require.NoError(t, err)
@@ -55,7 +55,7 @@ func TestUnitGetHistoryV3_Success(t *testing.T) {
 	require.Equal(t, "Initial config", result.Results[0].Note)
 }
 
-func TestUnitAddHistoryNoteV3_Success(t *testing.T) {
+func TestUnit_ClientCheckin_AddHistoryNoteV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestClientCheckinHistoryNote{Note: "Test note"}
 	result, resp, err := svc.AddHistoryNoteV3(context.Background(), req)
@@ -67,7 +67,7 @@ func TestUnitAddHistoryNoteV3_Success(t *testing.T) {
 	require.NotEmpty(t, result.HREF)
 }
 
-func TestUnitAddHistoryNoteV3_NilRequest(t *testing.T) {
+func TestUnit_ClientCheckin_AddHistoryNoteV3_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.AddHistoryNoteV3(context.Background(), nil)
 	require.Error(t, err)

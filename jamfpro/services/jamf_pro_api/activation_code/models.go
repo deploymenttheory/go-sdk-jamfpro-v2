@@ -29,3 +29,23 @@ type HistoryResponse struct {
 type HistoryNoteRequest struct {
 	Note string `json:"note"`
 }
+
+// ExportField represents a field configuration for export.
+type ExportField struct {
+	Name  string `json:"name"`
+	Label string `json:"label,omitempty"`
+}
+
+// HistoryExportRequest is the body for exporting activation code history.
+type HistoryExportRequest struct {
+	Page     *int          `json:"page,omitempty"`
+	PageSize *int          `json:"pageSize,omitempty"`
+	Sort     []string      `json:"sort,omitempty"`
+	Filter   *string       `json:"filter,omitempty"`
+	Fields   []ExportField `json:"fields,omitempty"`
+}
+
+// HistoryExportResponse represents the export response (could be JSON or CSV data).
+type HistoryExportResponse struct {
+	Data any `json:"-"`
+}

@@ -330,3 +330,114 @@ func TestUnit_Users_Conflict(t *testing.T) {
 	assert.Contains(t, err.Error(), "user with that name already exists")
 }
 
+func TestUnit_Users_List_Error(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_Users_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "admin")
+	require.Error(t, err)
+}
+
+func TestUnit_Users_GetByEmail_Error(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.GetByEmail(context.Background(), "admin@example.com")
+	require.Error(t, err)
+}
+
+func TestUnit_Users_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_Users_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &users.RequestUser{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "user name is required")
+}
+
+func TestUnit_Users_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &users.RequestUser{Name: "admin"})
+	require.Error(t, err)
+}
+
+func TestUnit_Users_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "admin", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_Users_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "admin", &users.RequestUser{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "user name is required in request")
+}
+
+func TestUnit_Users_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "admin", &users.RequestUser{Name: "updated"})
+	require.Error(t, err)
+}
+
+func TestUnit_Users_UpdateByEmail_NilRequest(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.UpdateByEmail(context.Background(), "admin@example.com", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_Users_UpdateByEmail_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.UpdateByEmail(context.Background(), "admin@example.com", &users.RequestUser{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "user name is required in request")
+}
+
+func TestUnit_Users_UpdateByEmail_Error(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, _, err := svc.UpdateByEmail(context.Background(), "admin@example.com", &users.RequestUser{Name: "admin"})
+	require.Error(t, err)
+}
+
+func TestUnit_Users_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_Users_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "admin")
+	require.Error(t, err)
+}
+
+func TestUnit_Users_DeleteByEmail_Error(t *testing.T) {
+	mockClient := mocks.NewUsersMock()
+	svc := users.NewService(mockClient)
+	_, err := svc.DeleteByEmail(context.Background(), "admin@example.com")
+	require.Error(t, err)
+}
+

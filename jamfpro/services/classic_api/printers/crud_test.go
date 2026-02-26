@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.PrintersMock) {
 // ListPrinters
 // =============================================================================
 
-func TestUnitListPrinters_Success(t *testing.T) {
+func TestUnit_Printers_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListPrintersMock()
 
@@ -42,7 +42,7 @@ func TestUnitListPrinters_Success(t *testing.T) {
 // GetPrinterByID
 // =============================================================================
 
-func TestUnitGetPrinterByID_Success(t *testing.T) {
+func TestUnit_Printers_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetPrinterByIDMock()
 
@@ -58,7 +58,7 @@ func TestUnitGetPrinterByID_Success(t *testing.T) {
 	assert.Equal(t, "HP LaserJet", result.Model)
 }
 
-func TestUnitGetPrinterByID_ZeroID(t *testing.T) {
+func TestUnit_Printers_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -68,7 +68,7 @@ func TestUnitGetPrinterByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "printer ID must be a positive integer")
 }
 
-func TestUnitGetPrinterByID_NegativeID(t *testing.T) {
+func TestUnit_Printers_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), -1)
@@ -78,7 +78,7 @@ func TestUnitGetPrinterByID_NegativeID(t *testing.T) {
 	assert.Contains(t, err.Error(), "printer ID must be a positive integer")
 }
 
-func TestUnitGetPrinterByID_NotFound(t *testing.T) {
+func TestUnit_Printers_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -93,7 +93,7 @@ func TestUnitGetPrinterByID_NotFound(t *testing.T) {
 // GetPrinterByName
 // =============================================================================
 
-func TestUnitGetPrinterByName_Success(t *testing.T) {
+func TestUnit_Printers_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetPrinterByNameMock()
 
@@ -107,7 +107,7 @@ func TestUnitGetPrinterByName_Success(t *testing.T) {
 	assert.Equal(t, "Office Printer", result.Name)
 }
 
-func TestUnitGetPrinterByName_EmptyName(t *testing.T) {
+func TestUnit_Printers_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -121,7 +121,7 @@ func TestUnitGetPrinterByName_EmptyName(t *testing.T) {
 // CreatePrinter
 // =============================================================================
 
-func TestUnitCreatePrinter_Success(t *testing.T) {
+func TestUnit_Printers_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreatePrinterMock()
 
@@ -139,7 +139,7 @@ func TestUnitCreatePrinter_Success(t *testing.T) {
 	assert.Equal(t, 3, result.ID)
 }
 
-func TestUnitCreatePrinter_NilRequest(t *testing.T) {
+func TestUnit_Printers_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -149,7 +149,7 @@ func TestUnitCreatePrinter_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreatePrinter_Conflict(t *testing.T) {
+func TestUnit_Printers_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -165,7 +165,7 @@ func TestUnitCreatePrinter_Conflict(t *testing.T) {
 // UpdatePrinterByID
 // =============================================================================
 
-func TestUnitUpdatePrinterByID_Success(t *testing.T) {
+func TestUnit_Printers_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdatePrinterByIDMock()
 
@@ -179,7 +179,7 @@ func TestUnitUpdatePrinterByID_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdatePrinterByID_ZeroID(t *testing.T) {
+func TestUnit_Printers_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 0, &RequestPrinter{Name: "x"})
@@ -189,7 +189,7 @@ func TestUnitUpdatePrinterByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "printer ID must be a positive integer")
 }
 
-func TestUnitUpdatePrinterByID_NilRequest(t *testing.T) {
+func TestUnit_Printers_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
@@ -203,7 +203,7 @@ func TestUnitUpdatePrinterByID_NilRequest(t *testing.T) {
 // UpdatePrinterByName
 // =============================================================================
 
-func TestUnitUpdatePrinterByName_Success(t *testing.T) {
+func TestUnit_Printers_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdatePrinterByNameMock()
 
@@ -217,7 +217,7 @@ func TestUnitUpdatePrinterByName_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdatePrinterByName_EmptyName(t *testing.T) {
+func TestUnit_Printers_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "", &RequestPrinter{Name: "x"})
@@ -227,7 +227,7 @@ func TestUnitUpdatePrinterByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "printer name is required")
 }
 
-func TestUnitUpdatePrinterByName_NilRequest(t *testing.T) {
+func TestUnit_Printers_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "Office Printer", nil)
@@ -241,7 +241,7 @@ func TestUnitUpdatePrinterByName_NilRequest(t *testing.T) {
 // DeletePrinterByID
 // =============================================================================
 
-func TestUnitDeletePrinterByID_Success(t *testing.T) {
+func TestUnit_Printers_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeletePrinterByIDMock()
 
@@ -251,7 +251,7 @@ func TestUnitDeletePrinterByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeletePrinterByID_ZeroID(t *testing.T) {
+func TestUnit_Printers_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -264,7 +264,7 @@ func TestUnitDeletePrinterByID_ZeroID(t *testing.T) {
 // DeletePrinterByName
 // =============================================================================
 
-func TestUnitDeletePrinterByName_Success(t *testing.T) {
+func TestUnit_Printers_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeletePrinterByNameMock()
 
@@ -274,7 +274,7 @@ func TestUnitDeletePrinterByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeletePrinterByName_EmptyName(t *testing.T) {
+func TestUnit_Printers_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")

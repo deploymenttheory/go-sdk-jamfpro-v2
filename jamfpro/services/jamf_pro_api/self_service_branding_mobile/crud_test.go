@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.SelfServiceBrandingMobileM
 	return NewService(mock), mock
 }
 
-func TestUnitListV1_Success(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_ListV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -32,7 +32,7 @@ func TestUnitListV1_Success(t *testing.T) {
 	assert.Equal(t, "#FFFFFF", result.Results[0].HeaderBackgroundColorCode)
 }
 
-func TestUnitGetByIDV1_Success(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_GetByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -49,7 +49,7 @@ func TestUnitGetByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 5, *result.IconId)
 }
 
-func TestUnitGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_GetByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
@@ -59,7 +59,7 @@ func TestUnitGetByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "self-service branding mobile ID is required")
 }
 
-func TestUnitGetByIDV1_NotFound(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_GetByIDV1_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -70,7 +70,7 @@ func TestUnitGetByIDV1_NotFound(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 }
 
-func TestUnitGetByNameV1_Success(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_GetByNameV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -83,7 +83,7 @@ func TestUnitGetByNameV1_Success(t *testing.T) {
 	assert.Equal(t, "Corporate Branding", result.BrandingName)
 }
 
-func TestUnitGetByNameV1_EmptyName(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_GetByNameV1_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByNameV1(context.Background(), "")
@@ -93,7 +93,7 @@ func TestUnitGetByNameV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "self-service branding mobile name is required")
 }
 
-func TestUnitGetByNameV1_NotFound(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_GetByNameV1_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -104,7 +104,7 @@ func TestUnitGetByNameV1_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "was not found")
 }
 
-func TestUnitCreateV1_Success(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_CreateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -125,7 +125,7 @@ func TestUnitCreateV1_Success(t *testing.T) {
 	assert.Contains(t, result.Href, "/api/v1/self-service/branding/ios/3")
 }
 
-func TestUnitCreateV1_NilRequest(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_CreateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateV1(context.Background(), nil)
@@ -135,7 +135,7 @@ func TestUnitCreateV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateV1_Conflict(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_CreateV1_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -153,7 +153,7 @@ func TestUnitCreateV1_Conflict(t *testing.T) {
 	assert.Equal(t, 409, resp.StatusCode)
 }
 
-func TestUnitUpdateByIDV1_Success(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_UpdateByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -175,7 +175,7 @@ func TestUnitUpdateByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "Corporate Branding Updated", result.BrandingName)
 }
 
-func TestUnitUpdateByIDV1_EmptyID(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_UpdateByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &ResourceSelfServiceBrandingMobile{
@@ -192,7 +192,7 @@ func TestUnitUpdateByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUnitUpdateByIDV1_NilRequest(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_UpdateByIDV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
@@ -202,7 +202,7 @@ func TestUnitUpdateByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitDeleteByIDV1_Success(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_DeleteByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
@@ -212,7 +212,7 @@ func TestUnitDeleteByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_DeleteByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByIDV1(context.Background(), "")
@@ -221,7 +221,7 @@ func TestUnitDeleteByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "self-service branding mobile ID is required")
 }
 
-func TestUnitUpdateByNameV1_Success(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_UpdateByNameV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 	mock.RegisterUpdateMock()
@@ -240,7 +240,7 @@ func TestUnitUpdateByNameV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteByNameV1_Success(t *testing.T) {
+func TestUnit_SelfServiceBrandingMobile_DeleteByNameV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 	mock.RegisterDeleteMock()

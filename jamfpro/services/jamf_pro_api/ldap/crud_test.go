@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.LdapMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetLdapGroupsV1_Success(t *testing.T) {
+func TestUnit_Ldap_GetLdapGroupsV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLdapGroupsMock()
 
@@ -30,7 +30,7 @@ func TestUnitGetLdapGroupsV1_Success(t *testing.T) {
 	assert.Equal(t, 1, result.Results[0].LdapServerID)
 }
 
-func TestUnitGetLdapGroupsV1_WithQuery(t *testing.T) {
+func TestUnit_Ldap_GetLdapGroupsV1_WithQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLdapGroupsMock()
 
@@ -41,7 +41,7 @@ func TestUnitGetLdapGroupsV1_WithQuery(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitGetLdapServersV1_Success(t *testing.T) {
+func TestUnit_Ldap_GetLdapServersV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLdapServersMock()
 

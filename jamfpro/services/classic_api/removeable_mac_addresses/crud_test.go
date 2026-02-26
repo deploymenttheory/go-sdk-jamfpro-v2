@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.RemoveableMacAddressesMock
 // ListRemoveableMacAddresses
 // =============================================================================
 
-func TestUnitListRemoveableMacAddresses_Success(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -42,7 +42,7 @@ func TestUnitListRemoveableMacAddresses_Success(t *testing.T) {
 // GetRemoveableMacAddressByID
 // =============================================================================
 
-func TestUnitGetRemoveableMacAddressByID_Success(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -56,7 +56,7 @@ func TestUnitGetRemoveableMacAddressByID_Success(t *testing.T) {
 	assert.Equal(t, "AA:BB:CC:DD:EE:FF", result.Name)
 }
 
-func TestUnitGetRemoveableMacAddressByID_ZeroID(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -66,7 +66,7 @@ func TestUnitGetRemoveableMacAddressByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "removeable MAC address ID must be a positive integer")
 }
 
-func TestUnitGetRemoveableMacAddressByID_NegativeID(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), -1)
@@ -76,7 +76,7 @@ func TestUnitGetRemoveableMacAddressByID_NegativeID(t *testing.T) {
 	assert.Contains(t, err.Error(), "removeable MAC address ID must be a positive integer")
 }
 
-func TestUnitGetRemoveableMacAddressByID_NotFound(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -91,7 +91,7 @@ func TestUnitGetRemoveableMacAddressByID_NotFound(t *testing.T) {
 // GetRemoveableMacAddressByName
 // =============================================================================
 
-func TestUnitGetRemoveableMacAddressByName_Success(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByNameMock()
 
@@ -105,7 +105,7 @@ func TestUnitGetRemoveableMacAddressByName_Success(t *testing.T) {
 	assert.Equal(t, "AA:BB:CC:DD:EE:FF", result.Name)
 }
 
-func TestUnitGetRemoveableMacAddressByName_EmptyName(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -119,7 +119,7 @@ func TestUnitGetRemoveableMacAddressByName_EmptyName(t *testing.T) {
 // CreateRemoveableMacAddress
 // =============================================================================
 
-func TestUnitCreateRemoveableMacAddress_Success(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -134,7 +134,7 @@ func TestUnitCreateRemoveableMacAddress_Success(t *testing.T) {
 	assert.Equal(t, "AA:BB:CC:DD:EE:FF", result.Name)
 }
 
-func TestUnitCreateRemoveableMacAddress_NilRequest(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -144,7 +144,7 @@ func TestUnitCreateRemoveableMacAddress_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateRemoveableMacAddress_Conflict(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -160,7 +160,7 @@ func TestUnitCreateRemoveableMacAddress_Conflict(t *testing.T) {
 // UpdateRemoveableMacAddressByID
 // =============================================================================
 
-func TestUnitUpdateRemoveableMacAddressByID_Success(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByIDMock()
 
@@ -175,7 +175,7 @@ func TestUnitUpdateRemoveableMacAddressByID_Success(t *testing.T) {
 	assert.Equal(t, "Updated MAC Address", result.Name)
 }
 
-func TestUnitUpdateRemoveableMacAddressByID_ZeroID(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestRemoveableMacAddress{Name: "Updated MAC Address"}
@@ -186,7 +186,7 @@ func TestUnitUpdateRemoveableMacAddressByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "removeable MAC address ID must be a positive integer")
 }
 
-func TestUnitUpdateRemoveableMacAddressByID_NilRequest(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
@@ -200,7 +200,7 @@ func TestUnitUpdateRemoveableMacAddressByID_NilRequest(t *testing.T) {
 // UpdateRemoveableMacAddressByName
 // =============================================================================
 
-func TestUnitUpdateRemoveableMacAddressByName_Success(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByNameMock()
 
@@ -215,7 +215,7 @@ func TestUnitUpdateRemoveableMacAddressByName_Success(t *testing.T) {
 	assert.Equal(t, "Updated MAC Address", result.Name)
 }
 
-func TestUnitUpdateRemoveableMacAddressByName_EmptyName(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestRemoveableMacAddress{Name: "Updated MAC Address"}
@@ -226,7 +226,7 @@ func TestUnitUpdateRemoveableMacAddressByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "removeable MAC address name is required")
 }
 
-func TestUnitUpdateRemoveableMacAddressByName_NilRequest(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "AA:BB:CC:DD:EE:FF", nil)
@@ -240,7 +240,7 @@ func TestUnitUpdateRemoveableMacAddressByName_NilRequest(t *testing.T) {
 // DeleteRemoveableMacAddressByID
 // =============================================================================
 
-func TestUnitDeleteRemoveableMacAddressByID_Success(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByIDMock()
 
@@ -250,7 +250,7 @@ func TestUnitDeleteRemoveableMacAddressByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteRemoveableMacAddressByID_ZeroID(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -259,7 +259,7 @@ func TestUnitDeleteRemoveableMacAddressByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "removeable MAC address ID must be a positive integer")
 }
 
-func TestUnitDeleteRemoveableMacAddressByID_NegativeID(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_DeleteByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), -1)
@@ -272,7 +272,7 @@ func TestUnitDeleteRemoveableMacAddressByID_NegativeID(t *testing.T) {
 // DeleteRemoveableMacAddressByName
 // =============================================================================
 
-func TestUnitDeleteRemoveableMacAddressByName_Success(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByNameMock()
 
@@ -282,7 +282,7 @@ func TestUnitDeleteRemoveableMacAddressByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteRemoveableMacAddressByName_EmptyName(t *testing.T) {
+func TestUnit_RemoveableMacAddresses_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")

@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.AdvancedUserSearchesMock) 
 // ListAdvancedUserSearches
 // =============================================================================
 
-func TestUnitListAdvancedUserSearches_Success(t *testing.T) {
+func TestUnit_AdvancedUserSearches_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -42,7 +42,7 @@ func TestUnitListAdvancedUserSearches_Success(t *testing.T) {
 // GetAdvancedUserSearchByID
 // =============================================================================
 
-func TestUnitGetAdvancedUserSearchByID_Success(t *testing.T) {
+func TestUnit_AdvancedUserSearches_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -66,7 +66,7 @@ func TestUnitGetAdvancedUserSearchByID_Success(t *testing.T) {
 	assert.Equal(t, "testuser1", result.Users[0].Username)
 }
 
-func TestUnitGetAdvancedUserSearchByID_ZeroID(t *testing.T) {
+func TestUnit_AdvancedUserSearches_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -76,7 +76,7 @@ func TestUnitGetAdvancedUserSearchByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
 }
 
-func TestUnitGetAdvancedUserSearchByID_NegativeID(t *testing.T) {
+func TestUnit_AdvancedUserSearches_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), -1)
@@ -86,7 +86,7 @@ func TestUnitGetAdvancedUserSearchByID_NegativeID(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
 }
 
-func TestUnitGetAdvancedUserSearchByID_NotFound(t *testing.T) {
+func TestUnit_AdvancedUserSearches_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -101,7 +101,7 @@ func TestUnitGetAdvancedUserSearchByID_NotFound(t *testing.T) {
 // GetAdvancedUserSearchByName
 // =============================================================================
 
-func TestUnitGetAdvancedUserSearchByName_Success(t *testing.T) {
+func TestUnit_AdvancedUserSearches_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByNameMock()
 
@@ -115,7 +115,7 @@ func TestUnitGetAdvancedUserSearchByName_Success(t *testing.T) {
 	assert.Equal(t, "Test Search", result.Name)
 }
 
-func TestUnitGetAdvancedUserSearchByName_EmptyName(t *testing.T) {
+func TestUnit_AdvancedUserSearches_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -129,7 +129,7 @@ func TestUnitGetAdvancedUserSearchByName_EmptyName(t *testing.T) {
 // CreateAdvancedUserSearch
 // =============================================================================
 
-func TestUnitCreateAdvancedUserSearch_Success(t *testing.T) {
+func TestUnit_AdvancedUserSearches_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -156,7 +156,7 @@ func TestUnitCreateAdvancedUserSearch_Success(t *testing.T) {
 	assert.Equal(t, 100, result.ID)
 }
 
-func TestUnitCreateAdvancedUserSearch_NilRequest(t *testing.T) {
+func TestUnit_AdvancedUserSearches_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -166,7 +166,7 @@ func TestUnitCreateAdvancedUserSearch_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateAdvancedUserSearch_Conflict(t *testing.T) {
+func TestUnit_AdvancedUserSearches_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -182,7 +182,7 @@ func TestUnitCreateAdvancedUserSearch_Conflict(t *testing.T) {
 // UpdateAdvancedUserSearchByID
 // =============================================================================
 
-func TestUnitUpdateAdvancedUserSearchByID_Success(t *testing.T) {
+func TestUnit_AdvancedUserSearches_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByIDMock()
 
@@ -196,7 +196,7 @@ func TestUnitUpdateAdvancedUserSearchByID_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateAdvancedUserSearchByID_ZeroID(t *testing.T) {
+func TestUnit_AdvancedUserSearches_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestAdvancedUserSearch{Name: "Updated Search Name"}
@@ -207,7 +207,7 @@ func TestUnitUpdateAdvancedUserSearchByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
 }
 
-func TestUnitUpdateAdvancedUserSearchByID_NilRequest(t *testing.T) {
+func TestUnit_AdvancedUserSearches_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
@@ -221,7 +221,7 @@ func TestUnitUpdateAdvancedUserSearchByID_NilRequest(t *testing.T) {
 // UpdateAdvancedUserSearchByName
 // =============================================================================
 
-func TestUnitUpdateAdvancedUserSearchByName_Success(t *testing.T) {
+func TestUnit_AdvancedUserSearches_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByNameMock()
 
@@ -235,7 +235,7 @@ func TestUnitUpdateAdvancedUserSearchByName_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateAdvancedUserSearchByName_EmptyName(t *testing.T) {
+func TestUnit_AdvancedUserSearches_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestAdvancedUserSearch{Name: "Updated Search Name"}
@@ -246,7 +246,7 @@ func TestUnitUpdateAdvancedUserSearchByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced user search name is required")
 }
 
-func TestUnitUpdateAdvancedUserSearchByName_NilRequest(t *testing.T) {
+func TestUnit_AdvancedUserSearches_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "Test Search", nil)
@@ -260,7 +260,7 @@ func TestUnitUpdateAdvancedUserSearchByName_NilRequest(t *testing.T) {
 // DeleteAdvancedUserSearchByID
 // =============================================================================
 
-func TestUnitDeleteAdvancedUserSearchByID_Success(t *testing.T) {
+func TestUnit_AdvancedUserSearches_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByIDMock()
 
@@ -270,7 +270,7 @@ func TestUnitDeleteAdvancedUserSearchByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteAdvancedUserSearchByID_ZeroID(t *testing.T) {
+func TestUnit_AdvancedUserSearches_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -279,7 +279,7 @@ func TestUnitDeleteAdvancedUserSearchByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
 }
 
-func TestUnitDeleteAdvancedUserSearchByID_NegativeID(t *testing.T) {
+func TestUnit_AdvancedUserSearches_DeleteByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), -1)
@@ -292,7 +292,7 @@ func TestUnitDeleteAdvancedUserSearchByID_NegativeID(t *testing.T) {
 // DeleteAdvancedUserSearchByName
 // =============================================================================
 
-func TestUnitDeleteAdvancedUserSearchByName_Success(t *testing.T) {
+func TestUnit_AdvancedUserSearches_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByNameMock()
 
@@ -302,7 +302,7 @@ func TestUnitDeleteAdvancedUserSearchByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteAdvancedUserSearchByName_EmptyName(t *testing.T) {
+func TestUnit_AdvancedUserSearches_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")

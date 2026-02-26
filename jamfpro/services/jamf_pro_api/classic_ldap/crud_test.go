@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ClassicLdapMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetMappingsByIDV1_Success(t *testing.T) {
+func TestUnit_ClassicLdap_GetMappingsByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMappingsByIDMock("1")
 

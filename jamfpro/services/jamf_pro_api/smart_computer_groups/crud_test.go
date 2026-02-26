@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.SmartComputerGroupsMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitList_Success(t *testing.T) {
+func TestUnit_SmartComputerGroups_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -34,7 +34,7 @@ func TestUnitList_Success(t *testing.T) {
 	assert.Equal(t, "Test Smart Group", result.Results[1].Name)
 }
 
-func TestUnitGetByID_Success(t *testing.T) {
+func TestUnit_SmartComputerGroups_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -53,7 +53,7 @@ func TestUnitGetByID_Success(t *testing.T) {
 	assert.Equal(t, "is", result.Criteria[0].SearchType)
 }
 
-func TestUnitGetByID_EmptyID(t *testing.T) {
+func TestUnit_SmartComputerGroups_GetByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), "")
@@ -63,7 +63,7 @@ func TestUnitGetByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "smart computer group ID is required")
 }
 
-func TestUnitGetByID_NotFound(t *testing.T) {
+func TestUnit_SmartComputerGroups_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -74,7 +74,7 @@ func TestUnitGetByID_NotFound(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 }
 
-func TestUnitGetByName_Success(t *testing.T) {
+func TestUnit_SmartComputerGroups_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -88,7 +88,7 @@ func TestUnitGetByName_Success(t *testing.T) {
 	assert.Equal(t, 42, result.MembershipCount)
 }
 
-func TestUnitGetByName_EmptyName(t *testing.T) {
+func TestUnit_SmartComputerGroups_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -98,7 +98,7 @@ func TestUnitGetByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "smart computer group name is required")
 }
 
-func TestUnitGetByName_NotFound(t *testing.T) {
+func TestUnit_SmartComputerGroups_GetByName_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListEmptyMock()
 
@@ -109,7 +109,7 @@ func TestUnitGetByName_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "not found")
 }
 
-func TestUnitGetMembership_Success(t *testing.T) {
+func TestUnit_SmartComputerGroups_GetMembership_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMembershipMock()
 
@@ -123,7 +123,7 @@ func TestUnitGetMembership_Success(t *testing.T) {
 	assert.Equal(t, []int{101, 102, 103, 104, 105}, result.Members)
 }
 
-func TestUnitGetMembership_EmptyID(t *testing.T) {
+func TestUnit_SmartComputerGroups_GetMembership_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetMembership(context.Background(), "")
@@ -133,7 +133,7 @@ func TestUnitGetMembership_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "smart computer group ID is required")
 }
 
-func TestUnitCreate_Success(t *testing.T) {
+func TestUnit_SmartComputerGroups_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -154,7 +154,7 @@ func TestUnitCreate_Success(t *testing.T) {
 	assert.Equal(t, "/api/v2/computer-groups/smart-groups/3", result.Href)
 }
 
-func TestUnitCreate_NilRequest(t *testing.T) {
+func TestUnit_SmartComputerGroups_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -164,7 +164,7 @@ func TestUnitCreate_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreate_Conflict(t *testing.T) {
+func TestUnit_SmartComputerGroups_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -176,7 +176,7 @@ func TestUnitCreate_Conflict(t *testing.T) {
 	assert.Equal(t, 409, resp.StatusCode)
 }
 
-func TestUnitUpdateByID_Success(t *testing.T) {
+func TestUnit_SmartComputerGroups_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -198,7 +198,7 @@ func TestUnitUpdateByID_Success(t *testing.T) {
 	assert.Equal(t, "Updated description", result.Description)
 }
 
-func TestUnitUpdateByID_EmptyID(t *testing.T) {
+func TestUnit_SmartComputerGroups_UpdateByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), "", &RequestSmartGroup{Name: "x"})
@@ -208,7 +208,7 @@ func TestUnitUpdateByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUnitUpdateByID_NilRequest(t *testing.T) {
+func TestUnit_SmartComputerGroups_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), "1", nil)
@@ -218,7 +218,7 @@ func TestUnitUpdateByID_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitDeleteByID_Success(t *testing.T) {
+func TestUnit_SmartComputerGroups_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
@@ -228,7 +228,7 @@ func TestUnitDeleteByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteByID_EmptyID(t *testing.T) {
+func TestUnit_SmartComputerGroups_DeleteByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), "")

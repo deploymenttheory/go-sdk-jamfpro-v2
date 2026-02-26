@@ -91,7 +91,7 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceAdcsSettings) (
 	var result ResponseAdcsSettingsCreated
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
+		"Accept":       "*/*",
 		"Content-Type": mime.ApplicationJSON,
 	}
 
@@ -116,8 +116,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResponseAdcsSettin
 	var result ResponseAdcsSettings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -165,8 +164,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointAdcsSettingsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -188,7 +186,6 @@ func (s *Service) ValidateServerCertificateV1(ctx context.Context, request *Vali
 	endpoint := fmt.Sprintf("%s/validate-certificate", EndpointAdcsSettingsV1)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
@@ -211,7 +208,6 @@ func (s *Service) ValidateClientCertificateV1(ctx context.Context, request *Vali
 	endpoint := fmt.Sprintf("%s/validate-client-certificate", EndpointAdcsSettingsV1)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
@@ -236,8 +232,7 @@ func (s *Service) GetDependenciesByIDV1(ctx context.Context, id string) (*Depend
 	var result DependenciesResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -263,8 +258,7 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {

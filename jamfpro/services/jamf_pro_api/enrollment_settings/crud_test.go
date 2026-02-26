@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.EnrollmentSettingsMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV4_Success(t *testing.T) {
+func TestUnit_EnrollmentSettings_GetV4_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
