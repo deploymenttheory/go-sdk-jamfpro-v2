@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestAcceptance_Accounts_ListV1 tests listing user accounts with various RSQL queries.
+// TestAcceptance_Accounts_list_v1 tests listing user accounts with various RSQL queries.
 func TestAcceptance_Accounts_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
@@ -113,7 +113,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 	})
 }
 
-// TestAcceptance_Accounts_CRUD tests the full CRUD lifecycle for accounts.
+// TestAcceptance_Accounts_crud tests the full CRUD lifecycle for accounts.
 // Note: This test is commented out by default as it modifies data.
 // Uncomment and run carefully in a test environment.
 /*

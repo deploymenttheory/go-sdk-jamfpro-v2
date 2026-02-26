@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestListV1(t *testing.T) {
+func TestUnit_CloudIdp_ListV1_Success(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterListMock()
 
@@ -29,7 +29,7 @@ func TestListV1(t *testing.T) {
 	assert.True(t, result.Results[0].Enabled)
 }
 
-func TestGetByIDV1(t *testing.T) {
+func TestUnit_CloudIdp_GetByIDV1_Success(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterGetByIDMock("1")
 
@@ -46,7 +46,7 @@ func TestGetByIDV1(t *testing.T) {
 	assert.Equal(t, "AZURE", result.ProviderName)
 }
 
-func TestGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_CloudIdp_GetByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -59,7 +59,7 @@ func TestGetByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetByNameV1(t *testing.T) {
+func TestUnit_CloudIdp_GetByNameV1_Success(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterListMock()
 	mock.RegisterGetByIDMock("1")
@@ -75,7 +75,7 @@ func TestGetByNameV1(t *testing.T) {
 	assert.Equal(t, "Test Azure IDP", result.DisplayName)
 }
 
-func TestGetByNameV1_EmptyName(t *testing.T) {
+func TestUnit_CloudIdp_GetByNameV1_EmptyName(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -88,7 +88,7 @@ func TestGetByNameV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "name is required")
 }
 
-func TestGetByNameV1_NotFound(t *testing.T) {
+func TestUnit_CloudIdp_GetByNameV1_NotFound(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterListMock()
 
@@ -103,7 +103,7 @@ func TestGetByNameV1_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "not found")
 }
 
-func TestExportV1(t *testing.T) {
+func TestUnit_CloudIdp_ExportV1_Success(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterExportMock()
 
@@ -125,7 +125,7 @@ func TestExportV1(t *testing.T) {
 	assert.NotEmpty(t, data)
 }
 
-func TestExportV1_QueryOnly(t *testing.T) {
+func TestUnit_CloudIdp_ExportV1_QueryOnly(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterExportMock()
 
@@ -144,7 +144,7 @@ func TestExportV1_QueryOnly(t *testing.T) {
 	assert.NotEmpty(t, data)
 }
 
-func TestExportV1_CSV(t *testing.T) {
+func TestUnit_CloudIdp_ExportV1_CSV(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterExportMock()
 
@@ -166,7 +166,7 @@ func TestExportV1_CSV(t *testing.T) {
 	assert.NotEmpty(t, data)
 }
 
-func TestGetHistoryByIDV1(t *testing.T) {
+func TestUnit_CloudIdp_GetHistoryByIDV1_Success(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterGetHistoryByIDMock("1")
 
@@ -184,7 +184,7 @@ func TestGetHistoryByIDV1(t *testing.T) {
 	assert.Equal(t, "Test history note", result.Results[0].Note)
 }
 
-func TestGetHistoryByIDV1_EmptyID(t *testing.T) {
+func TestUnit_CloudIdp_GetHistoryByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -197,7 +197,7 @@ func TestGetHistoryByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestAddHistoryNoteByIDV1(t *testing.T) {
+func TestUnit_CloudIdp_AddHistoryNoteByIDV1_Success(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterAddHistoryNoteMock("1")
 
@@ -215,7 +215,7 @@ func TestAddHistoryNoteByIDV1(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode)
 }
 
-func TestAddHistoryNoteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_CloudIdp_AddHistoryNoteByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -231,7 +231,7 @@ func TestAddHistoryNoteByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestAddHistoryNoteByIDV1_NilRequest(t *testing.T) {
+func TestUnit_CloudIdp_AddHistoryNoteByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -243,7 +243,7 @@ func TestAddHistoryNoteByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestTestGroupSearchByIDV1(t *testing.T) {
+func TestUnit_CloudIdp_TestGroupSearchByIDV1_Success(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterTestGroupSearchMock("1")
 
@@ -264,7 +264,7 @@ func TestTestGroupSearchByIDV1(t *testing.T) {
 	assert.Equal(t, "TestGroup", result.Results[0].Name)
 }
 
-func TestTestGroupSearchByIDV1_EmptyID(t *testing.T) {
+func TestUnit_CloudIdp_TestGroupSearchByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -281,7 +281,7 @@ func TestTestGroupSearchByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestTestGroupSearchByIDV1_NilRequest(t *testing.T) {
+func TestUnit_CloudIdp_TestGroupSearchByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -294,7 +294,7 @@ func TestTestGroupSearchByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestTestUserSearchByIDV1(t *testing.T) {
+func TestUnit_CloudIdp_TestUserSearchByIDV1_Success(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterTestUserSearchMock("1")
 
@@ -317,7 +317,7 @@ func TestTestUserSearchByIDV1(t *testing.T) {
 	assert.Equal(t, "testuser@example.com", result.Results[0].Attributes.EmailAddress)
 }
 
-func TestTestUserSearchByIDV1_EmptyID(t *testing.T) {
+func TestUnit_CloudIdp_TestUserSearchByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -334,7 +334,7 @@ func TestTestUserSearchByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestTestUserSearchByIDV1_NilRequest(t *testing.T) {
+func TestUnit_CloudIdp_TestUserSearchByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -347,7 +347,7 @@ func TestTestUserSearchByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestTestUserMembershipByIDV1(t *testing.T) {
+func TestUnit_CloudIdp_TestUserMembershipByIDV1_Success(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	mock.RegisterTestUserMembershipMock("1")
 
@@ -368,7 +368,7 @@ func TestTestUserMembershipByIDV1(t *testing.T) {
 	assert.True(t, result.IsMember)
 }
 
-func TestTestUserMembershipByIDV1_EmptyID(t *testing.T) {
+func TestUnit_CloudIdp_TestUserMembershipByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -386,7 +386,7 @@ func TestTestUserMembershipByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestTestUserMembershipByIDV1_NilRequest(t *testing.T) {
+func TestUnit_CloudIdp_TestUserMembershipByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudIdpMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -399,7 +399,7 @@ func TestTestUserMembershipByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestListV1_Error(t *testing.T) {
+func TestUnit_CloudIdp_ListV1_Error(t *testing.T) {
 	svc := NewService(mocks.NewCloudIdpMock())
 	ctx := context.Background()
 
@@ -410,7 +410,7 @@ func TestListV1_Error(t *testing.T) {
 	assert.Nil(t, result)
 }
 
-func TestGetByIDV1_Error(t *testing.T) {
+func TestUnit_CloudIdp_GetByIDV1_Error(t *testing.T) {
 	svc := NewService(mocks.NewCloudIdpMock())
 	ctx := context.Background()
 
@@ -421,7 +421,7 @@ func TestGetByIDV1_Error(t *testing.T) {
 	assert.Nil(t, result)
 }
 
-func TestGetByNameV1_Error(t *testing.T) {
+func TestUnit_CloudIdp_GetByNameV1_Error(t *testing.T) {
 	svc := NewService(mocks.NewCloudIdpMock())
 	ctx := context.Background()
 
@@ -432,7 +432,7 @@ func TestGetByNameV1_Error(t *testing.T) {
 	assert.Nil(t, result)
 }
 
-func TestExportV1_Error(t *testing.T) {
+func TestUnit_CloudIdp_ExportV1_Error(t *testing.T) {
 	svc := NewService(mocks.NewCloudIdpMock())
 	ctx := context.Background()
 
@@ -449,7 +449,7 @@ func TestExportV1_Error(t *testing.T) {
 	assert.Nil(t, data)
 }
 
-func TestGetHistoryByIDV1_Error(t *testing.T) {
+func TestUnit_CloudIdp_GetHistoryByIDV1_Error(t *testing.T) {
 	svc := NewService(mocks.NewCloudIdpMock())
 	ctx := context.Background()
 
@@ -460,7 +460,7 @@ func TestGetHistoryByIDV1_Error(t *testing.T) {
 	assert.Nil(t, result)
 }
 
-func TestAddHistoryNoteByIDV1_Error(t *testing.T) {
+func TestUnit_CloudIdp_AddHistoryNoteByIDV1_Error(t *testing.T) {
 	svc := NewService(mocks.NewCloudIdpMock())
 	ctx := context.Background()
 
@@ -472,7 +472,7 @@ func TestAddHistoryNoteByIDV1_Error(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestTestGroupSearchByIDV1_Error(t *testing.T) {
+func TestUnit_CloudIdp_TestGroupSearchByIDV1_Error(t *testing.T) {
 	svc := NewService(mocks.NewCloudIdpMock())
 	ctx := context.Background()
 
@@ -485,7 +485,7 @@ func TestTestGroupSearchByIDV1_Error(t *testing.T) {
 	assert.Nil(t, result)
 }
 
-func TestTestUserSearchByIDV1_Error(t *testing.T) {
+func TestUnit_CloudIdp_TestUserSearchByIDV1_Error(t *testing.T) {
 	svc := NewService(mocks.NewCloudIdpMock())
 	ctx := context.Background()
 
@@ -498,7 +498,7 @@ func TestTestUserSearchByIDV1_Error(t *testing.T) {
 	assert.Nil(t, result)
 }
 
-func TestTestUserMembershipByIDV1_Error(t *testing.T) {
+func TestUnit_CloudIdp_TestUserMembershipByIDV1_Error(t *testing.T) {
 	svc := NewService(mocks.NewCloudIdpMock())
 	ctx := context.Background()
 

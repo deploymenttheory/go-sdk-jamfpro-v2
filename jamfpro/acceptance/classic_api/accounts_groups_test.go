@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_AccountGroups_Lifecycle exercises the full write/read/delete
+// TestAcceptance_AccountGroups_lifecycle exercises the full write/read/delete
 // lifecycle: Create → GetByID → GetByName → UpdateByID → UpdateByName →
 // GetByID (verify) → DeleteByID.
 // =============================================================================

@@ -12,7 +12,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_ComputerHistory_GetByID tests retrieving computer history by ID.
+// TestAcceptance_ComputerHistory_get_by_id tests retrieving computer history by ID.
 // Requires at least one computer in Jamf Pro. Set COMPUTER_ID to skip inventory lookup.
 // =============================================================================
 
@@ -49,7 +49,7 @@ func TestAcceptance_ComputerHistory_get_by_id(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerHistory_GetByIDAndSubset tests retrieving a subset of
+// TestAcceptance_ComputerHistory_get_by_id_and_subset tests retrieving a subset of
 // computer history by ID.
 // =============================================================================
 
@@ -86,7 +86,7 @@ func TestAcceptance_ComputerHistory_get_by_id_and_subset(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerHistory_GetByName tests retrieving computer history by name.
+// TestAcceptance_ComputerHistory_get_by_name tests retrieving computer history by name.
 // =============================================================================
 
 func TestAcceptance_ComputerHistory_get_by_name(t *testing.T) {
@@ -120,7 +120,7 @@ func TestAcceptance_ComputerHistory_get_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerHistory_ValidationErrors tests validation error handling.
+// TestAcceptance_ComputerHistory_validation_errors tests validation error handling.
 // =============================================================================
 
 func TestAcceptance_ComputerHistory_validation_errors(t *testing.T) {

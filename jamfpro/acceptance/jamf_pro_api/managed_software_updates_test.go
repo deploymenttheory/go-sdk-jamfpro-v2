@@ -34,9 +34,9 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Operations
 //     -- Reason: Read operations for available updates, plans, and feature toggles
-//     -- Tests: TestAcceptance_ManagedSoftwareUpdates_GetAvailableUpdates,
-//               TestAcceptance_ManagedSoftwareUpdates_GetPlans,
-//               TestAcceptance_ManagedSoftwareUpdates_FeatureToggle
+//     -- Tests: TestAcceptance_ManagedSoftwareUpdates_get_available_updates,
+//               TestAcceptance_ManagedSoftwareUpdates_get_plans,
+//               TestAcceptance_ManagedSoftwareUpdates_feature_toggle
 //     -- Flow: Get Available Updates → List Plans → Get Plan Details
 //
 // Test Coverage

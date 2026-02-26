@@ -26,13 +26,13 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle (without List)
 //     -- Reason: Service supports Create, Read (GetByID only), Update, Delete operations
-//     -- Tests: TestAcceptance_DockItems_Lifecycle
+//     -- Tests: TestAcceptance_DockItems_lifecycle
 //     -- Flow: Create → GetByID → Update → Verify → Delete
 //     -- Note: No List operation available for this service
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_DockItems_ValidationErrors
+//     -- Tests: TestAcceptance_DockItems_validation_errors
 //     -- Cases: Empty IDs, nil requests, missing required fields
 //
 //   Note: RSQL Filter Testing NOT applicable
@@ -58,7 +58,7 @@ import (
 //   • Update response may not include body - verification done via re-fetch
 //
 // =============================================================================
-// TestAcceptance_DockItems_Lifecycle exercises the full write/read/delete
+// TestAcceptance_DockItems_lifecycle exercises the full write/read/delete
 // lifecycle: Create → GetByID → Update → GetByID (verify) → Delete.
 // =============================================================================
 
@@ -138,7 +138,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_DockItems_ValidationErrors
+// TestAcceptance_DockItems_validation_errors
 // =============================================================================
 
 func TestAcceptance_DockItems_validation_errors(t *testing.T) {

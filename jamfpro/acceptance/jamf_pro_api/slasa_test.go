@@ -22,7 +22,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: GetStatusV1 is read-only; AcceptV1 is a one-time mutation
-//     -- Tests: TestAcceptance_SLASA_GetStatusV1
+//     -- Tests: TestAcceptance_SLASA_get_status_v1
 //     -- Flow: Get status → Verify response structure
 //
 // Test Coverage

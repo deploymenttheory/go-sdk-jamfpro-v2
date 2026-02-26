@@ -34,11 +34,11 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_MobileDevicePrestages_LifecycleWithScope
+//     -- Tests: TestAcceptance_MobileDevicePrestages_lifecycle_with_scope
 //     -- Flow: Create → GetByID → GetByName → GetScope → Update → Delete
 //
 //   ✓ List Operations
-//     -- Tests: TestAcceptance_MobileDevicePrestages_ListV3
+//     -- Tests: TestAcceptance_MobileDevicePrestages_list_v3
 //     -- Flow: List all prestages → Verify response structure
 //
 //   Note: RSQL Filter Testing NOT applicable

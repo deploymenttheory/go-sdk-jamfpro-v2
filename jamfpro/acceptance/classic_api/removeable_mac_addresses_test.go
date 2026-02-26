@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_RemoveableMacAddresses_Lifecycle exercises the full write/read/delete
+// TestAcceptance_RemoveableMacAddresses_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -171,7 +171,7 @@ func TestAcceptance_RemoveableMacAddresses_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_RemoveableMacAddresses_DeleteByName creates a removeable MAC address then deletes by name.
+// TestAcceptance_RemoveableMacAddresses_delete_by_name creates a removeable MAC address then deletes by name.
 // =============================================================================
 
 func TestAcceptance_RemoveableMacAddresses_delete_by_name(t *testing.T) {
@@ -211,7 +211,7 @@ func TestAcceptance_RemoveableMacAddresses_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_RemoveableMacAddresses_ValidationErrors tests client-side validation
+// TestAcceptance_RemoveableMacAddresses_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
@@ -239,13 +239,13 @@ func TestAcceptance_RemoveableMacAddresses_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &removeable_mac_addresses.RequestRemoveableMacAddress{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &removeable_mac_addresses.RequestRemoveableMacAddress{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "removeable MAC address ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &removeable_mac_addresses.RequestRemoveableMacAddress{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &removeable_mac_addresses.RequestRemoveableMacAddress{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "removeable MAC address name is required")
 	})

@@ -31,17 +31,17 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_Scripts_Lifecycle
+//     -- Tests: TestAcceptance_Scripts_lifecycle
 //     -- Flow: Create → List → GetByID → Update → Verify → History → Delete
 //
 //   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
 //     -- Reason: ListScriptsV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_Scripts_ListWithRSQLFilter
+//     -- Tests: TestAcceptance_Scripts_list_with_rsql_filter
 //     -- Flow: Create unique script → Filter with RSQL → Verify filtered results
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_Scripts_ValidationErrors
+//     -- Tests: TestAcceptance_Scripts_validation_errors
 //     -- Cases: Empty IDs, nil requests, missing required fields
 //
 // Test Coverage
@@ -70,7 +70,7 @@ import (
 //   • Comprehensive validation error testing ensures client-side validation works correctly
 //
 // =============================================================================
-// TestAcceptance_Scripts_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Scripts_lifecycle exercises the full write/read/delete
 // lifecycle in the order: Create → List → GetByID → Update → GetByID
 // (verify update) → AddHistoryNotes → GetHistory → Delete.
 // =============================================================================
@@ -255,7 +255,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Scripts_ListWithRSQLFilter creates a script, then lists
+// TestAcceptance_Scripts_list_with_rsql_filter creates a script, then lists
 // scripts using an RSQL filter expression to confirm the filter is accepted
 // by the API and the created script appears in the filtered results.
 // =============================================================================
@@ -325,7 +325,7 @@ func TestAcceptance_Scripts_list_with_rsql_filter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Scripts_ValidationErrors tests client-side validation
+// TestAcceptance_Scripts_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
@@ -347,7 +347,7 @@ func TestAcceptance_Scripts_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateScriptByID_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateScriptByIDV1(context.Background(), "", &scripts.RequestScript{Name: "x"})
+		_, _, err := svc.UpdateScriptByIDV1(context.Background(), "", &scripts.RequestScript{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "script ID is required")
 	})

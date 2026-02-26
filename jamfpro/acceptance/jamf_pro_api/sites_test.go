@@ -22,17 +22,17 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Read-Only Operations
 //     -- Reason: Sites are system-managed resources (no Create/Update/Delete)
-//     -- Tests: TestAcceptance_Sites_ListAndGetObjects
+//     -- Tests: TestAcceptance_Sites_list_and_get_objects
 //     -- Flow: List sites → Get objects for first site
 //
 //   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
 //     -- Reason: GetObjectsByIDV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_Sites_GetObjectsWithRSQLFilter
+//     -- Tests: TestAcceptance_Sites_get_objects_with_rsql_filter
 //     -- Flow: Get objects with RSQL filter → Verify filtered results
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_Sites_ValidationErrors
+//     -- Tests: TestAcceptance_Sites_validation_errors
 //     -- Cases: Empty IDs
 //
 // Test Coverage
@@ -50,7 +50,7 @@ import (
 //   • GetObjectsByIDV1 may return empty results if no objects assigned to site
 //
 // =============================================================================
-// TestAcceptance_Sites_ListAndGetObjects exercises read-only operations:
+// TestAcceptance_Sites_list_and_get_objects exercises read-only operations:
 // List → GetObjectsByID.
 // =============================================================================
 
@@ -105,7 +105,7 @@ func TestAcceptance_Sites_list_and_get_objects(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Sites_GetObjectsWithRSQLFilter
+// TestAcceptance_Sites_get_objects_with_rsql_filter
 // =============================================================================
 
 func TestAcceptance_Sites_get_objects_with_rsql_filter(t *testing.T) {
@@ -144,7 +144,7 @@ func TestAcceptance_Sites_get_objects_with_rsql_filter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Sites_ValidationErrors
+// TestAcceptance_Sites_validation_errors
 // =============================================================================
 
 func TestAcceptance_Sites_validation_errors(t *testing.T) {

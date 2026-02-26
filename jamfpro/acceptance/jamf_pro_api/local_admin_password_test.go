@@ -29,17 +29,17 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Read-Only Settings
 //     -- Reason: LAPS is a system-level feature that requires specific device configuration
-//     -- Tests: TestAcceptance_LocalAdminPassword_Settings_GetAndUpdate
+//     -- Tests: TestAcceptance_LocalAdminPassword_settings_get_and_update
 //     -- Flow: Get current settings → Update → Get again → Restore original
 //
 //   ✓ Pattern 3: Read-Only Lists
 //     -- Reason: Pending rotations and capable accounts are system-managed lists
-//     -- Tests: TestAcceptance_LocalAdminPassword_PendingRotations
+//     -- Tests: TestAcceptance_LocalAdminPassword_pending_rotations
 //     -- Flow: List pending rotations → Verify response structure
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_LocalAdminPassword_ValidationErrors
+//     -- Tests: TestAcceptance_LocalAdminPassword_validation_errors
 //     -- Cases: Empty IDs, nil requests, missing required fields
 //
 // Test Coverage
@@ -58,7 +58,7 @@ import (
 //   • Settings are restored to original values after update tests
 //
 // =============================================================================
-// TestAcceptance_LocalAdminPassword_Settings_GetAndUpdate exercises the
+// TestAcceptance_LocalAdminPassword_settings_get_and_update exercises the
 // settings read and update operations.
 // =============================================================================
 
@@ -115,7 +115,7 @@ func TestAcceptance_LocalAdminPassword_settings_get_and_update(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_LocalAdminPassword_PendingRotations
+// TestAcceptance_LocalAdminPassword_pending_rotations
 // =============================================================================
 
 func TestAcceptance_LocalAdminPassword_pending_rotations(t *testing.T) {
@@ -142,7 +142,7 @@ func TestAcceptance_LocalAdminPassword_pending_rotations(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_LocalAdminPassword_ValidationErrors
+// TestAcceptance_LocalAdminPassword_validation_errors
 // =============================================================================
 
 func TestAcceptance_LocalAdminPassword_validation_errors(t *testing.T) {

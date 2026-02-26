@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_Computers_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Computers_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 //
@@ -218,7 +218,7 @@ func TestAcceptance_Computers_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Computers_DeleteByName creates a computer then deletes by name.
+// TestAcceptance_Computers_delete_by_name creates a computer then deletes by name.
 // =============================================================================
 
 func TestAcceptance_Computers_delete_by_name(t *testing.T) {
@@ -268,7 +268,7 @@ func TestAcceptance_Computers_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Computers_ValidationErrors validates error handling.
+// TestAcceptance_Computers_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_Computers_validation_errors(t *testing.T) {
@@ -295,13 +295,13 @@ func TestAcceptance_Computers_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), "", &computers.ResponseComputer{General: computers.ComputerSubsetGeneral{Name: "test"}})
+		_, _, err := svc.UpdateByID(context.Background(), "", &computers.ResponseComputer{General: computers.ComputerSubsetGeneral{Name: "sdkv2_acc_test"}})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "computer ID cannot be empty")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &computers.ResponseComputer{General: computers.ComputerSubsetGeneral{Name: "x"}})
+		_, _, err := svc.UpdateByName(context.Background(), "", &computers.ResponseComputer{General: computers.ComputerSubsetGeneral{Name: "sdkv2_acc_x"}})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "computer name cannot be empty")
 	})

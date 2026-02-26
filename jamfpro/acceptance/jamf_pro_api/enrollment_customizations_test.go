@@ -35,13 +35,13 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle [COMPLETE]
 //     -- Reason: Standard resource with full CRUD operations
-//     -- Tests: TestAcceptance_EnrollmentCustomizations_FullCRUDLifecycle
+//     -- Tests: TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle
 //     -- Flow: Create → Read → Update → Verify → Delete → Verify deletion (6-step)
 //
 //   ✓ Pattern 5: RSQL Filter Testing [COMPLETE]
 //     -- Reason: ListV2 and GetHistoryV2 accept rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_EnrollmentCustomizations_ListWithRSQLFilter
-//              TestAcceptance_EnrollmentCustomizations_HistoryWithRSQLFilter
+//     -- Tests: TestAcceptance_EnrollmentCustomizations_list_with_rsql_filter
+//              TestAcceptance_EnrollmentCustomizations_history_with_rsql_filter
 //     -- Flow: Create → List with RSQL → Verify filtered results → Cleanup
 //
 // Test Coverage
@@ -81,7 +81,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	// Create
 	acc.LogTestStage(t, "Create", "Creating enrollment customization")
 	createReq := &enrollment_customizations.ResourceEnrollmentCustomization{
-		DisplayName: fmt.Sprintf("ACC-Test-%s", acc.UniqueName("sdkv2_acc_test")),
+		DisplayName: fmt.Sprintf("sdkv2_acc_ACC-Test-%s", acc.UniqueName("sdkv2_acc_test")),
 		Description: "Acceptance test enrollment customization",
 		SiteID:      "-1",
 		BrandingSettings: enrollment_customizations.SubsetBrandingSettings{
@@ -187,7 +187,7 @@ func TestAcceptance_EnrollmentCustomizations_list_with_rsql_filter(t *testing.T)
 
 	// Create a test customization for filtering
 	acc.LogTestStage(t, "Setup", "Creating enrollment customization for RSQL filter test")
-	uniqueName := fmt.Sprintf("ACC-RSQL-Test-%s", acc.UniqueName("sdkv2_acc_test"))
+	uniqueName := fmt.Sprintf("sdkv2_acc_ACC-RSQL-Test-%s", acc.UniqueName("sdkv2_acc_test"))
 	createReq := &enrollment_customizations.ResourceEnrollmentCustomization{
 		DisplayName: uniqueName,
 		Description: "RSQL filter test",
@@ -253,7 +253,7 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 	// Create a customization to generate history
 	acc.LogTestStage(t, "Setup", "Creating enrollment customization for history test")
 	createReq := &enrollment_customizations.ResourceEnrollmentCustomization{
-		DisplayName: fmt.Sprintf("ACC-History-Test-%s", acc.UniqueName("sdkv2_acc_test")),
+		DisplayName: fmt.Sprintf("sdkv2_acc_ACC-History-Test-%s", acc.UniqueName("sdkv2_acc_test")),
 		Description: "History test",
 		SiteID:      "-1",
 		BrandingSettings: enrollment_customizations.SubsetBrandingSettings{
@@ -331,7 +331,7 @@ func TestAcceptance_EnrollmentCustomizations_history_with_rsql_filter(t *testing
 	// Create a customization
 	acc.LogTestStage(t, "Setup", "Creating enrollment customization for history RSQL test")
 	createReq := &enrollment_customizations.ResourceEnrollmentCustomization{
-		DisplayName: fmt.Sprintf("ACC-HistoryRSQL-Test-%s", acc.UniqueName("sdkv2_acc_test")),
+		DisplayName: fmt.Sprintf("sdkv2_acc_ACC-HistoryRSQL-Test-%s", acc.UniqueName("sdkv2_acc_test")),
 		Description: "History RSQL test",
 		SiteID:      "-1",
 		BrandingSettings: enrollment_customizations.SubsetBrandingSettings{

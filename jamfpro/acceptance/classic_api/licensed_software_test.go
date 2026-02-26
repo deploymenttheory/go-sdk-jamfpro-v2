@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_LicensedSoftware_Lifecycle exercises the full write/read/delete
+// TestAcceptance_LicensedSoftware_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -193,7 +193,7 @@ func TestAcceptance_LicensedSoftware_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_LicensedSoftware_DeleteByName creates licensed software then deletes by name.
+// TestAcceptance_LicensedSoftware_delete_by_name creates licensed software then deletes by name.
 // =============================================================================
 
 func TestAcceptance_LicensedSoftware_delete_by_name(t *testing.T) {
@@ -240,7 +240,7 @@ func TestAcceptance_LicensedSoftware_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_LicensedSoftware_ValidationErrors validates error handling.
+// TestAcceptance_LicensedSoftware_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_LicensedSoftware_validation_errors(t *testing.T) {

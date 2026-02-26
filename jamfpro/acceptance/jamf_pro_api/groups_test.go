@@ -29,12 +29,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Resources [COMPLETE]
 //     -- Reason: Groups are managed through computer_groups and mobile_device_groups services
-//     -- Tests: TestAcceptance_Groups_List, TestAcceptance_Groups_GetOperations
+//     -- Tests: TestAcceptance_Groups_list, TestAcceptance_Groups_get_operations
 //     -- Flow: List → GetByID → GetByName → GetByJamfProID
 //
 //   ✓ Pattern 5: RSQL Filter Testing [COMPLETE]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_Groups_ListWithRSQLFilter
+//     -- Tests: TestAcceptance_Groups_list_with_rsql_filter
 //     -- Flow: List all → List with RSQL filter → Verify filtered results
 //
 // Test Coverage

@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGetDeviceComplianceFeatureToggleV1(t *testing.T) {
+func TestUnit_ConditionalAccess_GetDeviceComplianceFeatureToggleV1_Success(t *testing.T) {
 	mock := mocks.NewConditionalAccessMock()
 	mock.RegisterGetDeviceComplianceFeatureToggleMock()
 
@@ -24,7 +24,7 @@ func TestGetDeviceComplianceFeatureToggleV1(t *testing.T) {
 	assert.True(t, result.SharedDeviceFeatureEnabled)
 }
 
-func TestGetDeviceComplianceFeatureToggleV1_Error(t *testing.T) {
+func TestUnit_ConditionalAccess_GetDeviceComplianceFeatureToggleV1_Error(t *testing.T) {
 	mock := mocks.NewConditionalAccessMock()
 	// No mock response registered — HTTP call will fail.
 	svc := NewService(mock)
@@ -38,7 +38,7 @@ func TestGetDeviceComplianceFeatureToggleV1_Error(t *testing.T) {
 	_ = resp
 }
 
-func TestGetDeviceComplianceInformationComputerV1(t *testing.T) {
+func TestUnit_ConditionalAccess_GetDeviceComplianceInformationComputerV1_Success(t *testing.T) {
 	mock := mocks.NewConditionalAccessMock()
 	mock.RegisterGetDeviceComplianceInformationComputerMock()
 
@@ -57,7 +57,7 @@ func TestGetDeviceComplianceInformationComputerV1(t *testing.T) {
 	assert.Equal(t, "Vendor A", result[0].ComplianceVendor)
 }
 
-func TestGetDeviceComplianceInformationMobileV1(t *testing.T) {
+func TestUnit_ConditionalAccess_GetDeviceComplianceInformationMobileV1_Success(t *testing.T) {
 	mock := mocks.NewConditionalAccessMock()
 	mock.RegisterGetDeviceComplianceInformationMobileMock()
 

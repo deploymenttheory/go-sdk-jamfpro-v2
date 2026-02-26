@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MobileDeviceApplications_Lifecycle exercises the full write/read/delete
+// TestAcceptance_MobileDeviceApplications_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → GetByBundleID → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 //
@@ -251,7 +251,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceApplications_DeleteByName creates a mobile device
+// TestAcceptance_MobileDeviceApplications_delete_by_name creates a mobile device
 // application then deletes by name.
 // =============================================================================
 
@@ -310,7 +310,7 @@ func TestAcceptance_MobileDeviceApplications_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceApplications_ValidationErrors validates error handling.
+// TestAcceptance_MobileDeviceApplications_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_MobileDeviceApplications_validation_errors(t *testing.T) {

@@ -119,7 +119,7 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_SelfServiceBrandingIOS_ValidationErrors
+// TestAcceptance_SelfServiceBrandingIOS_validation_errors
 // =============================================================================
 
 func TestAcceptance_SelfServiceBrandingIOS_validation_errors(t *testing.T) {

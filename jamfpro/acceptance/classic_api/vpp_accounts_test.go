@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_VPPAccounts_Lifecycle exercises the full write/read/delete
+// TestAcceptance_VPPAccounts_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → UpdateByID → DeleteByID.
 // Note: the Classic API VPP accounts resource does not support ByName operations.
 // =============================================================================
@@ -134,7 +134,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_VPPAccounts_ValidationErrors tests client-side validation.
+// TestAcceptance_VPPAccounts_validation_errors tests client-side validation.
 // =============================================================================
 
 func TestAcceptance_VPPAccounts_validation_errors(t *testing.T) {
@@ -155,7 +155,7 @@ func TestAcceptance_VPPAccounts_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateVPPAccountByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &vpp_accounts.RequestVPPAccount{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &vpp_accounts.RequestVPPAccount{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "VPP account ID must be a positive integer")
 	})

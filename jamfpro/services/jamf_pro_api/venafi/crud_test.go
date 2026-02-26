@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreate(t *testing.T) {
+func TestUnit_Venafi_Create_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterCreateMock()
 
@@ -32,7 +32,7 @@ func TestCreate(t *testing.T) {
 	assert.Equal(t, "/api/v1/pki/venafi/1", result.Href)
 }
 
-func TestCreate_NilRequest(t *testing.T) {
+func TestUnit_Venafi_Create_NilRequest(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -45,7 +45,7 @@ func TestCreate_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestGetByID(t *testing.T) {
+func TestUnit_Venafi_GetByID_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterGetByIDMock("1")
 
@@ -64,7 +64,7 @@ func TestGetByID(t *testing.T) {
 	assert.True(t, result.RefreshTokenConfigured)
 }
 
-func TestGetByID_EmptyID(t *testing.T) {
+func TestUnit_Venafi_GetByID_EmptyID(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -77,7 +77,7 @@ func TestGetByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateByID(t *testing.T) {
+func TestUnit_Venafi_UpdateByID_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterUpdateByIDMock("1")
 
@@ -96,7 +96,7 @@ func TestUpdateByID(t *testing.T) {
 	assert.Equal(t, "Venafi Certificate Authority", result.Name)
 }
 
-func TestUpdateByID_EmptyID(t *testing.T) {
+func TestUnit_Venafi_UpdateByID_EmptyID(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -111,7 +111,7 @@ func TestUpdateByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateByID_NilRequest(t *testing.T) {
+func TestUnit_Venafi_UpdateByID_NilRequest(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -124,7 +124,7 @@ func TestUpdateByID_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestDeleteByID(t *testing.T) {
+func TestUnit_Venafi_DeleteByID_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterDeleteByIDMock("1")
 
@@ -138,7 +138,7 @@ func TestDeleteByID(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestDeleteByID_EmptyID(t *testing.T) {
+func TestUnit_Venafi_DeleteByID_EmptyID(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -150,7 +150,7 @@ func TestDeleteByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetConnectionStatus(t *testing.T) {
+func TestUnit_Venafi_GetConnectionStatus_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterGetConnectionStatusMock("1")
 
@@ -165,7 +165,7 @@ func TestGetConnectionStatus(t *testing.T) {
 	assert.Equal(t, "Successfully connected", result.Status)
 }
 
-func TestGetConnectionStatus_EmptyID(t *testing.T) {
+func TestUnit_Venafi_GetConnectionStatus_EmptyID(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -178,7 +178,7 @@ func TestGetConnectionStatus_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetDependentProfiles(t *testing.T) {
+func TestUnit_Venafi_GetDependentProfiles_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterGetDependentProfilesMock("1")
 
@@ -196,7 +196,7 @@ func TestGetDependentProfiles(t *testing.T) {
 	assert.Equal(t, "OSXConfigurationProfile.html?id=1", result.Results[0].URLPath)
 }
 
-func TestGetDependentProfiles_EmptyID(t *testing.T) {
+func TestUnit_Venafi_GetDependentProfiles_EmptyID(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -209,7 +209,7 @@ func TestGetDependentProfiles_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetHistory(t *testing.T) {
+func TestUnit_Venafi_GetHistory_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterGetHistoryMock("1")
 
@@ -227,7 +227,7 @@ func TestGetHistory(t *testing.T) {
 	assert.Equal(t, "Test note", result.Results[0].Note)
 }
 
-func TestGetHistory_EmptyID(t *testing.T) {
+func TestUnit_Venafi_GetHistory_EmptyID(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -240,7 +240,7 @@ func TestGetHistory_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestAddHistoryNote(t *testing.T) {
+func TestUnit_Venafi_AddHistoryNote_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterAddHistoryNoteMock("1")
 
@@ -260,7 +260,7 @@ func TestAddHistoryNote(t *testing.T) {
 	assert.Equal(t, "/api/v1/pki/venafi/1/history/2", result.Href)
 }
 
-func TestAddHistoryNote_EmptyID(t *testing.T) {
+func TestUnit_Venafi_AddHistoryNote_EmptyID(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -275,7 +275,7 @@ func TestAddHistoryNote_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestAddHistoryNote_NilRequest(t *testing.T) {
+func TestUnit_Venafi_AddHistoryNote_NilRequest(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -288,7 +288,7 @@ func TestAddHistoryNote_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestGetJamfPublicKey(t *testing.T) {
+func TestUnit_Venafi_GetJamfPublicKey_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterGetJamfPublicKeyMock("1")
 
@@ -303,7 +303,7 @@ func TestGetJamfPublicKey(t *testing.T) {
 	assert.NotEmpty(t, data)
 }
 
-func TestGetJamfPublicKey_EmptyID(t *testing.T) {
+func TestUnit_Venafi_GetJamfPublicKey_EmptyID(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -316,7 +316,7 @@ func TestGetJamfPublicKey_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetProxyTrustStore(t *testing.T) {
+func TestUnit_Venafi_GetProxyTrustStore_Success(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	mock.RegisterGetProxyTrustStoreMock("1")
 
@@ -331,7 +331,7 @@ func TestGetProxyTrustStore(t *testing.T) {
 	assert.NotNil(t, data)
 }
 
-func TestGetProxyTrustStore_EmptyID(t *testing.T) {
+func TestUnit_Venafi_GetProxyTrustStore_EmptyID(t *testing.T) {
 	mock := mocks.NewVenafiMock()
 	svc := NewService(mock)
 	ctx := context.Background()

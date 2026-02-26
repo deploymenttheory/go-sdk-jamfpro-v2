@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_Webhooks_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Webhooks_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -199,7 +199,7 @@ func TestAcceptance_Webhooks_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Webhooks_DeleteByName creates a webhook then deletes by name.
+// TestAcceptance_Webhooks_delete_by_name creates a webhook then deletes by name.
 // =============================================================================
 
 func TestAcceptance_Webhooks_delete_by_name(t *testing.T) {
@@ -248,7 +248,7 @@ func TestAcceptance_Webhooks_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Webhooks_ValidationErrors tests client-side validation
+// TestAcceptance_Webhooks_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
@@ -276,13 +276,13 @@ func TestAcceptance_Webhooks_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateWebhookByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &webhooks.RequestWebhook{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &webhooks.RequestWebhook{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "webhook ID must be a positive integer")
 	})
 
 	t.Run("UpdateWebhookByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &webhooks.RequestWebhook{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &webhooks.RequestWebhook{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "webhook name is required")
 	})

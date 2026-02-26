@@ -31,22 +31,22 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_Categories_Lifecycle
+//     -- Tests: TestAcceptance_Categories_lifecycle
 //     -- Flow: Create → List → GetByID → Update → Verify → History → Delete
 //
 //   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_Categories_ListWithRSQLFilter
+//     -- Tests: TestAcceptance_Categories_list_with_rsql_filter
 //     -- Flow: Create unique category → Filter with RSQL → Verify filtered results
 //
 //   ✓ Pattern 6: Bulk Operations
 //     -- Reason: Service provides DeleteCategoriesByIDV1 for bulk deletion
-//     -- Tests: TestAcceptance_Categories_BulkDelete
+//     -- Tests: TestAcceptance_Categories_bulk_delete
 //     -- Flow: Create multiple → Bulk delete → Verify deletion
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_Categories_ValidationErrors
+//     -- Tests: TestAcceptance_Categories_validation_errors
 //     -- Cases: Empty IDs, nil requests, missing required fields
 //
 // Test Coverage
@@ -70,7 +70,7 @@ import (
 //   • Categories have a Priority field that can be tested for update verification
 //
 // =============================================================================
-// TestAcceptance_Categories_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Categories_lifecycle exercises the full write/read/delete
 // lifecycle in the order: Create → List → GetByID → Update → GetByID
 // (verify update) → AddHistoryNotes → GetHistory → Delete.
 // =============================================================================
@@ -249,7 +249,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Categories_ListWithRSQLFilter creates a category, then lists
+// TestAcceptance_Categories_list_with_rsql_filter creates a category, then lists
 // categories using an RSQL filter expression to confirm the filter is accepted
 // by the API and the created category appears in the filtered results.
 // =============================================================================
@@ -316,7 +316,7 @@ func TestAcceptance_Categories_list_with_rsql_filter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Categories_BulkDelete creates two categories and removes
+// TestAcceptance_Categories_bulk_delete creates two categories and removes
 // them together via DeleteCategoriesByIDV1.
 // =============================================================================
 
@@ -376,7 +376,7 @@ func TestAcceptance_Categories_bulk_delete(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Categories_ValidationErrors tests client-side validation
+// TestAcceptance_Categories_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
@@ -398,7 +398,7 @@ func TestAcceptance_Categories_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateCategoryByID_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateByIDV1(context.Background(), "", &categories.RequestCategory{Name: "x"})
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &categories.RequestCategory{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})

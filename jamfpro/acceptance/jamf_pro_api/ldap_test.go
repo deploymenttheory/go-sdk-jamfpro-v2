@@ -23,7 +23,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to LDAP groups and servers
-//     -- Tests: TestAcceptance_Ldap_GetLdapGroupsV1, TestAcceptance_Ldap_GetLdapServersV1
+//     -- Tests: TestAcceptance_Ldap_get_ldap_groups_v1, TestAcceptance_Ldap_get_ldap_servers_v1
 //     -- Flow: Get LDAP data → Verify response structure
 //
 //   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]

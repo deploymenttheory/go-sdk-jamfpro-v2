@@ -21,7 +21,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to available locales
-//     -- Tests: TestAcceptance_Locales_List
+//     -- Tests: TestAcceptance_Locales_list
 //     -- Flow: List locales → Verify response structure
 //
 //   Note: RSQL Filter Testing NOT applicable

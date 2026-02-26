@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MobileDeviceProvisioningProfiles_Lifecycle exercises the full
+// TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle exercises the full
 // write/read/delete lifecycle: CreateByID → List → GetByID → GetByName →
 // GetByUUID → UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -206,7 +206,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceProvisioningProfiles_DeleteByName creates a profile
+// TestAcceptance_MobileDeviceProvisioningProfiles_delete_by_name creates a profile
 // then deletes by name.
 // =============================================================================
 
@@ -254,7 +254,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_delete_by_name(t *testing.T
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceProvisioningProfiles_ValidationErrors validates error handling.
+// TestAcceptance_MobileDeviceProvisioningProfiles_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_MobileDeviceProvisioningProfiles_validation_errors(t *testing.T) {
@@ -282,7 +282,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_validation_errors(t *testin
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), 0, &mobile_device_provisioning_profiles.RequestResource{
-			General: mobile_device_provisioning_profiles.SubsetGeneral{Name: "test"},
+			General: mobile_device_provisioning_profiles.SubsetGeneral{Name: "sdkv2_acc_test"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device provisioning profile ID must be a positive integer")
@@ -290,7 +290,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_validation_errors(t *testin
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
 		_, _, err := svc.UpdateByName(context.Background(), "", &mobile_device_provisioning_profiles.RequestResource{
-			General: mobile_device_provisioning_profiles.SubsetGeneral{Name: "x"},
+			General: mobile_device_provisioning_profiles.SubsetGeneral{Name: "sdkv2_acc_x"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device provisioning profile name cannot be empty")

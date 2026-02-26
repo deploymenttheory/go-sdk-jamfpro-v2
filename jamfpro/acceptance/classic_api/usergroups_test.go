@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_UserGroups_Lifecycle exercises the full write/read/delete
+// TestAcceptance_UserGroups_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -241,7 +241,7 @@ func TestAcceptance_UserGroups_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_UserGroups_DeleteByName creates a user group then deletes by name.
+// TestAcceptance_UserGroups_delete_by_name creates a user group then deletes by name.
 // =============================================================================
 
 func TestAcceptance_UserGroups_delete_by_name(t *testing.T) {
@@ -284,7 +284,7 @@ func TestAcceptance_UserGroups_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_UserGroups_ValidationErrors validates error handling.
+// TestAcceptance_UserGroups_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_UserGroups_validation_errors(t *testing.T) {
@@ -311,13 +311,13 @@ func TestAcceptance_UserGroups_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &usergroups.RequestUserGroup{Name: "test"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &usergroups.RequestUserGroup{Name: "sdkv2_acc_test"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "user group ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &usergroups.RequestUserGroup{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &usergroups.RequestUserGroup{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "user group name cannot be empty")
 	})

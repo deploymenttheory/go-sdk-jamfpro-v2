@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_Classes_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Classes_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -195,7 +195,7 @@ func TestAcceptance_Classes_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Classes_DeleteByName creates a class then deletes by name.
+// TestAcceptance_Classes_delete_by_name creates a class then deletes by name.
 // =============================================================================
 
 func TestAcceptance_Classes_delete_by_name(t *testing.T) {
@@ -238,7 +238,7 @@ func TestAcceptance_Classes_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Classes_ValidationErrors tests client-side validation
+// TestAcceptance_Classes_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
@@ -266,13 +266,13 @@ func TestAcceptance_Classes_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &classes.RequestClass{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &classes.RequestClass{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &classes.RequestClass{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &classes.RequestClass{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class name is required")
 	})

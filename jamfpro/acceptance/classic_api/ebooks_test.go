@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_Ebooks_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Ebooks_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -235,7 +235,7 @@ func TestAcceptance_Ebooks_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Ebooks_DeleteByName creates an ebook then deletes by name.
+// TestAcceptance_Ebooks_delete_by_name creates an ebook then deletes by name.
 // =============================================================================
 
 func TestAcceptance_Ebooks_delete_by_name(t *testing.T) {
@@ -288,7 +288,7 @@ func TestAcceptance_Ebooks_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Ebooks_ValidationErrors validates error handling.
+// TestAcceptance_Ebooks_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_Ebooks_validation_errors(t *testing.T) {

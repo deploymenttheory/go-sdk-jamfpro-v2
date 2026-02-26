@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestAcceptance_ActivationCode_GetHistoryV1 tests retrieving activation code history with various RSQL queries.
+// TestAcceptance_ActivationCode_get_history_v1 tests retrieving activation code history with various RSQL queries.
 func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client

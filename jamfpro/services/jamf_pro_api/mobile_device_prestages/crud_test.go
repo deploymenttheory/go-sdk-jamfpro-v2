@@ -10,7 +10,7 @@ import (
 )
 
 // TestListV3 tests listing all mobile device prestages.
-func TestListV3(t *testing.T) {
+func TestUnit_MobileDevicePrestages_ListV3_Success(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterListMock()
 
@@ -31,7 +31,7 @@ func TestListV3(t *testing.T) {
 }
 
 // TestGetByIDV3 tests retrieving a mobile device prestage by ID.
-func TestGetByIDV3(t *testing.T) {
+func TestUnit_MobileDevicePrestages_GetByIDV3_Success(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterGetByIDMock("1")
 
@@ -61,7 +61,7 @@ func TestGetByIDV3(t *testing.T) {
 }
 
 // TestGetByNameV3 tests retrieving a mobile device prestage by display name.
-func TestGetByNameV3(t *testing.T) {
+func TestUnit_MobileDevicePrestages_GetByNameV3_Success(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterListMock()
 
@@ -77,7 +77,7 @@ func TestGetByNameV3(t *testing.T) {
 }
 
 // TestGetByNameV3_NotFound tests retrieving a mobile device prestage by name when not found.
-func TestGetByNameV3_NotFound(t *testing.T) {
+func TestUnit_MobileDevicePrestages_GetByNameV3_NotFound(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterListMock()
 
@@ -91,7 +91,7 @@ func TestGetByNameV3_NotFound(t *testing.T) {
 }
 
 // TestCreateV3 tests creating a new mobile device prestage.
-func TestCreateV3(t *testing.T) {
+func TestUnit_MobileDevicePrestages_CreateV3_Success(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterCreateMock()
 
@@ -131,7 +131,7 @@ func TestCreateV3(t *testing.T) {
 }
 
 // TestUpdateByIDV3 tests updating a mobile device prestage by ID.
-func TestUpdateByIDV3(t *testing.T) {
+func TestUnit_MobileDevicePrestages_UpdateByIDV3_Success(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterGetByIDMock("1")    // internal GET for version lock
 	mock.RegisterUpdateByIDMock("1") // PUT
@@ -169,7 +169,7 @@ func TestUpdateByIDV3(t *testing.T) {
 
 // TestUpdateByNameV3 tests updating a mobile device prestage by display name.
 // The list response provides the version lock – no separate GET is needed.
-func TestUpdateByNameV3(t *testing.T) {
+func TestUnit_MobileDevicePrestages_UpdateByNameV3_Success(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterListMock()       // GetByNameV3 (also provides version lock)
 	mock.RegisterUpdateByIDMock("1") // PUT
@@ -200,7 +200,7 @@ func TestUpdateByNameV3(t *testing.T) {
 }
 
 // TestDeleteByIDV3 tests deleting a mobile device prestage by ID.
-func TestDeleteByIDV3(t *testing.T) {
+func TestUnit_MobileDevicePrestages_DeleteByIDV3_Success(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterDeleteByIDMock("1")
 
@@ -213,7 +213,7 @@ func TestDeleteByIDV3(t *testing.T) {
 }
 
 // TestDeleteByNameV3 tests deleting a mobile device prestage by display name.
-func TestDeleteByNameV3(t *testing.T) {
+func TestUnit_MobileDevicePrestages_DeleteByNameV3_Success(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterListMock()
 	mock.RegisterDeleteByIDMock("2")
@@ -227,7 +227,7 @@ func TestDeleteByNameV3(t *testing.T) {
 }
 
 // TestGetScopeByIDV2 tests retrieving device scope for a mobile device prestage.
-func TestGetScopeByIDV2(t *testing.T) {
+func TestUnit_MobileDevicePrestages_GetScopeByIDV2_Success(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterGetScopeByIDMock("1")
 
@@ -247,7 +247,7 @@ func TestGetScopeByIDV2(t *testing.T) {
 }
 
 // TestListV3_Empty tests listing mobile device prestages when the list is empty.
-func TestListV3_Empty(t *testing.T) {
+func TestUnit_MobileDevicePrestages_ListV3_Empty(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	mock.RegisterEmptyListMock()
 
@@ -262,7 +262,7 @@ func TestListV3_Empty(t *testing.T) {
 }
 
 // TestCreateV3_NilPrestage tests creating with a nil prestage object.
-func TestCreateV3_NilPrestage(t *testing.T) {
+func TestUnit_MobileDevicePrestages_CreateV3_NilPrestage(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -275,7 +275,7 @@ func TestCreateV3_NilPrestage(t *testing.T) {
 }
 
 // TestCreateV3_EmptyDisplayName tests creating with an empty display name.
-func TestCreateV3_EmptyDisplayName(t *testing.T) {
+func TestUnit_MobileDevicePrestages_CreateV3_EmptyDisplayName(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -292,7 +292,7 @@ func TestCreateV3_EmptyDisplayName(t *testing.T) {
 }
 
 // TestUpdateByIDV3_NilPrestage tests updating with a nil prestage object.
-func TestUpdateByIDV3_NilPrestage(t *testing.T) {
+func TestUnit_MobileDevicePrestages_UpdateByIDV3_NilPrestage(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -305,7 +305,7 @@ func TestUpdateByIDV3_NilPrestage(t *testing.T) {
 }
 
 // TestUpdateByIDV3_EmptyID tests updating with an empty ID.
-func TestUpdateByIDV3_EmptyID(t *testing.T) {
+func TestUnit_MobileDevicePrestages_UpdateByIDV3_EmptyID(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -322,7 +322,7 @@ func TestUpdateByIDV3_EmptyID(t *testing.T) {
 }
 
 // TestUpdateByIDV3_EmptyDisplayName tests updating with an empty display name.
-func TestUpdateByIDV3_EmptyDisplayName(t *testing.T) {
+func TestUnit_MobileDevicePrestages_UpdateByIDV3_EmptyDisplayName(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -339,7 +339,7 @@ func TestUpdateByIDV3_EmptyDisplayName(t *testing.T) {
 }
 
 // TestUpdateByNameV3_EmptyName tests updating with an empty name.
-func TestUpdateByNameV3_EmptyName(t *testing.T) {
+func TestUnit_MobileDevicePrestages_UpdateByNameV3_EmptyName(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -356,7 +356,7 @@ func TestUpdateByNameV3_EmptyName(t *testing.T) {
 }
 
 // TestDeleteByIDV3_EmptyID tests deleting with an empty ID.
-func TestDeleteByIDV3_EmptyID(t *testing.T) {
+func TestUnit_MobileDevicePrestages_DeleteByIDV3_EmptyID(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -368,7 +368,7 @@ func TestDeleteByIDV3_EmptyID(t *testing.T) {
 }
 
 // TestDeleteByNameV3_EmptyName tests deleting with an empty name.
-func TestDeleteByNameV3_EmptyName(t *testing.T) {
+func TestUnit_MobileDevicePrestages_DeleteByNameV3_EmptyName(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -380,7 +380,7 @@ func TestDeleteByNameV3_EmptyName(t *testing.T) {
 }
 
 // TestGetScopeByIDV2_EmptyID tests getting scope with an empty ID.
-func TestGetScopeByIDV2_EmptyID(t *testing.T) {
+func TestUnit_MobileDevicePrestages_GetScopeByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -393,7 +393,7 @@ func TestGetScopeByIDV2_EmptyID(t *testing.T) {
 }
 
 // TestGetByIDV3_EmptyID tests getting by ID with an empty ID.
-func TestGetByIDV3_EmptyID(t *testing.T) {
+func TestUnit_MobileDevicePrestages_GetByIDV3_EmptyID(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 
@@ -406,7 +406,7 @@ func TestGetByIDV3_EmptyID(t *testing.T) {
 }
 
 // TestGetByNameV3_EmptyName tests getting by name with an empty name.
-func TestGetByNameV3_EmptyName(t *testing.T) {
+func TestUnit_MobileDevicePrestages_GetByNameV3_EmptyName(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
 	svc := NewService(mock)
 

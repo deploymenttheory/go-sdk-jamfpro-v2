@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MobileDeviceConfigurationProfiles_Lifecycle exercises the full
+// TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByName →
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -228,7 +228,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceConfigurationProfiles_DeleteByName creates a profile
+// TestAcceptance_MobileDeviceConfigurationProfiles_delete_by_name creates a profile
 // then deletes by name.
 // =============================================================================
 
@@ -282,7 +282,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_delete_by_name(t *testing.
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceConfigurationProfiles_ValidationErrors validates error handling.
+// TestAcceptance_MobileDeviceConfigurationProfiles_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_MobileDeviceConfigurationProfiles_validation_errors(t *testing.T) {
@@ -310,7 +310,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_validation_errors(t *testi
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), 0, &mobile_device_configuration_profiles.RequestResource{
-			General: mobile_device_configuration_profiles.SubsetGeneral{Name: "test"},
+			General: mobile_device_configuration_profiles.SubsetGeneral{Name: "sdkv2_acc_test"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device configuration profile ID must be a positive integer")
@@ -318,7 +318,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_validation_errors(t *testi
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
 		_, _, err := svc.UpdateByName(context.Background(), "", &mobile_device_configuration_profiles.RequestResource{
-			General: mobile_device_configuration_profiles.SubsetGeneral{Name: "x"},
+			General: mobile_device_configuration_profiles.SubsetGeneral{Name: "sdkv2_acc_x"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device configuration profile name cannot be empty")

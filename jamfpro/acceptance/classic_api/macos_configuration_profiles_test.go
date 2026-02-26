@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MacOSConfigurationProfiles_Lifecycle exercises the full
+// TestAcceptance_MacOSConfigurationProfiles_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByName →
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -214,7 +214,7 @@ func TestAcceptance_MacOSConfigurationProfiles_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MacOSConfigurationProfiles_DeleteByName creates a profile
+// TestAcceptance_MacOSConfigurationProfiles_delete_by_name creates a profile
 // then deletes by name.
 // =============================================================================
 
@@ -264,7 +264,7 @@ func TestAcceptance_MacOSConfigurationProfiles_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MacOSConfigurationProfiles_ValidationErrors validates error handling.
+// TestAcceptance_MacOSConfigurationProfiles_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_MacOSConfigurationProfiles_validation_errors(t *testing.T) {
@@ -292,7 +292,7 @@ func TestAcceptance_MacOSConfigurationProfiles_validation_errors(t *testing.T) {
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), 0, &macos_configuration_profiles.RequestResource{
-			General: macos_configuration_profiles.SubsetGeneral{Name: "test"},
+			General: macos_configuration_profiles.SubsetGeneral{Name: "sdkv2_acc_test"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "macOS configuration profile ID must be a positive integer")
@@ -300,7 +300,7 @@ func TestAcceptance_MacOSConfigurationProfiles_validation_errors(t *testing.T) {
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
 		_, _, err := svc.UpdateByName(context.Background(), "", &macos_configuration_profiles.RequestResource{
-			General: macos_configuration_profiles.SubsetGeneral{Name: "x"},
+			General: macos_configuration_profiles.SubsetGeneral{Name: "sdkv2_acc_x"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "macOS configuration profile name cannot be empty")

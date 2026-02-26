@@ -25,12 +25,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration [COMPLETE]
 //     -- Reason: Singleton settings that cannot be created or deleted, only updated
-//     -- Tests: TestAcceptance_Engage_SettingsLifecycle
+//     -- Tests: TestAcceptance_Engage_settings_lifecycle
 //     -- Flow: Get original → Update → Verify → Restore → Verify restoration (5-step)
 //
 //   ✓ Pattern 5: RSQL Filter Testing [COMPLETE]
 //     -- Reason: GetHistoryV2 accepts rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_Engage_HistoryWithRSQLFilter
+//     -- Tests: TestAcceptance_Engage_history_with_rsql_filter
 //     -- Flow: Get history → Filter with RSQL → Verify filtered results
 //
 // Test Coverage

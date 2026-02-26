@@ -35,11 +35,11 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_ComputerPrestages_LifecycleReplaceScope
+//     -- Tests: TestAcceptance_ComputerPrestages_lifecycle_replace_scope
 //     -- Flow: Create → GetByID → GetByName → GetDeviceScope → ReplaceScope → Update → Delete
 //
 //   ✓ List Operations
-//     -- Tests: TestAcceptance_ComputerPrestages_ListV3
+//     -- Tests: TestAcceptance_ComputerPrestages_list_v3
 //     -- Flow: List all prestages → Verify response structure
 //
 //   Note: RSQL Filter Testing NOT applicable

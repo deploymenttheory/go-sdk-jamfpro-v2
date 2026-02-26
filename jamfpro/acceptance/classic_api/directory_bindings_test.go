@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_DirectoryBindings_Lifecycle exercises the full write/read/delete
+// TestAcceptance_DirectoryBindings_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -200,7 +200,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_DirectoryBindings_DeleteByName creates a binding then deletes by name.
+// TestAcceptance_DirectoryBindings_delete_by_name creates a binding then deletes by name.
 // =============================================================================
 
 func TestAcceptance_DirectoryBindings_delete_by_name(t *testing.T) {
@@ -252,7 +252,7 @@ func TestAcceptance_DirectoryBindings_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_DirectoryBindings_ValidationErrors tests client-side validation.
+// TestAcceptance_DirectoryBindings_validation_errors tests client-side validation.
 // =============================================================================
 
 func TestAcceptance_DirectoryBindings_validation_errors(t *testing.T) {
@@ -279,13 +279,13 @@ func TestAcceptance_DirectoryBindings_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateDirectoryBindingByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &directory_bindings.RequestDirectoryBinding{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &directory_bindings.RequestDirectoryBinding{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding ID must be a positive integer")
 	})
 
 	t.Run("UpdateDirectoryBindingByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &directory_bindings.RequestDirectoryBinding{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &directory_bindings.RequestDirectoryBinding{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding name is required")
 	})

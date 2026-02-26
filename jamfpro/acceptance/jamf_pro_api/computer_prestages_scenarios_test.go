@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestAcceptance_ComputerPrestages_MinimalConfig tests creating a prestage with minimal required configuration.
+// TestAcceptance_ComputerPrestages_minimal_config tests creating a prestage with minimal required configuration.
 func TestAcceptance_ComputerPrestages_minimal_config(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
@@ -106,7 +106,7 @@ func TestAcceptance_ComputerPrestages_minimal_config(t *testing.T) {
 	assert.Equal(t, name, fetched.DisplayName)
 }
 
-// TestAcceptance_ComputerPrestages_RecoveryLockScenario tests prestage with recovery lock enabled.
+// TestAcceptance_ComputerPrestages_recovery_lock_scenario tests prestage with recovery lock enabled.
 func TestAcceptance_ComputerPrestages_recovery_lock_scenario(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
@@ -198,7 +198,7 @@ func TestAcceptance_ComputerPrestages_recovery_lock_scenario(t *testing.T) {
 	assert.Equal(t, name, fetched.DisplayName)
 }
 
-// TestAcceptance_ComputerPrestages_AccountSettingsScenario tests prestage with admin account enabled.
+// TestAcceptance_ComputerPrestages_account_settings_scenario tests prestage with admin account enabled.
 func TestAcceptance_ComputerPrestages_account_settings_scenario(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
@@ -295,7 +295,7 @@ func TestAcceptance_ComputerPrestages_account_settings_scenario(t *testing.T) {
 	assert.Equal(t, name, fetched.DisplayName)
 }
 
-// TestAcceptance_ComputerPrestages_MaximalConfig tests creating a prestage with maximal configuration.
+// TestAcceptance_ComputerPrestages_maximal_config tests creating a prestage with maximal configuration.
 func TestAcceptance_ComputerPrestages_maximal_config(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
@@ -423,7 +423,7 @@ func TestAcceptance_ComputerPrestages_maximal_config(t *testing.T) {
 	assert.Equal(t, "MINIMUM_OS_LATEST_MAJOR_VERSION", fetched.PrestageMinimumOsTargetVersionType)
 }
 
-// TestAcceptance_ComputerPrestages_ValidationErrors tests validation of enum fields.
+// TestAcceptance_ComputerPrestages_validation_errors tests validation of enum fields.
 func TestAcceptance_ComputerPrestages_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages

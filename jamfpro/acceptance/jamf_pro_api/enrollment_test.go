@@ -40,27 +40,27 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration Testing
 //     -- Reason: V4 settings endpoint returns singleton configuration
-//     -- Tests: TestAcceptance_Enrollment_GetAndUpdateV4
+//     -- Tests: TestAcceptance_Enrollment_get_and_update_v4
 //     -- Flow: Get settings → Update settings → Verify changes
 //
 //   ✓ Pattern 4: Full Lifecycle Testing
 //     -- Reason: Access groups support full CRUD operations
-//     -- Tests: TestAcceptance_Enrollment_AccessGroupLifecycleV3
+//     -- Tests: TestAcceptance_Enrollment_access_group_lifecycle_v3
 //     -- Flow: Create → Get → Update → Delete
 //
 //   ✓ Pattern 3: Read-Only List Testing
 //     -- Reason: Language messages are pre-configured in Jamf Pro
-//     -- Tests: TestAcceptance_Enrollment_LanguageMessagesV3
+//     -- Tests: TestAcceptance_Enrollment_language_messages_v3
 //     -- Flow: List all → Get by code → List available codes
 //
 //   ✓ Pattern 3: Read-Only List Testing
 //     -- Reason: Enrollment history is read-only audit data
-//     -- Tests: TestAcceptance_Enrollment_HistoryV2
+//     -- Tests: TestAcceptance_Enrollment_history_v2
 //     -- Flow: Get history → Verify structure
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_Enrollment_ValidationErrors
+//     -- Tests: TestAcceptance_Enrollment_validation_errors
 //     -- Cases: Empty IDs, invalid language codes, nil requests
 //
 // Test Coverage

@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_Printers_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Printers_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -189,7 +189,7 @@ func TestAcceptance_Printers_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Printers_DeleteByName creates a printer then deletes by name.
+// TestAcceptance_Printers_delete_by_name creates a printer then deletes by name.
 // =============================================================================
 
 func TestAcceptance_Printers_delete_by_name(t *testing.T) {
@@ -233,7 +233,7 @@ func TestAcceptance_Printers_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Printers_ValidationErrors tests client-side validation
+// TestAcceptance_Printers_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
@@ -261,13 +261,13 @@ func TestAcceptance_Printers_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &printers.RequestPrinter{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &printers.RequestPrinter{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "printer ID must be a positive integer")
 	})
 
 	t.Run("UpdatePrinterByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &printers.RequestPrinter{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &printers.RequestPrinter{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "printer name is required")
 	})

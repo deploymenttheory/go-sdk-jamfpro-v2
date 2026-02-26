@@ -14,7 +14,7 @@ import (
 
 
 // =============================================================================
-// TestAcceptance_Policies_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Policies_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -202,7 +202,7 @@ func TestAcceptance_Policies_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Policies_DeleteByName creates a policy then deletes by name.
+// TestAcceptance_Policies_delete_by_name creates a policy then deletes by name.
 // =============================================================================
 
 func TestAcceptance_Policies_delete_by_name(t *testing.T) {
@@ -251,7 +251,7 @@ func TestAcceptance_Policies_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Policies_ValidationErrors tests client-side validation
+// TestAcceptance_Policies_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 

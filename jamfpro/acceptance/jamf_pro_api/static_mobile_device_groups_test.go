@@ -133,7 +133,7 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_StaticMobileDeviceGroups_ValidationErrors
+// TestAcceptance_StaticMobileDeviceGroups_validation_errors
 // =============================================================================
 
 func TestAcceptance_StaticMobileDeviceGroups_validation_errors(t *testing.T) {

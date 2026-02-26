@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_LDAPServers_Lifecycle exercises the full write/read/delete
+// TestAcceptance_LDAPServers_lifecycle exercises the full write/read/delete
 // lifecycle: Create → GetByID → GetByName → UpdateByID → UpdateByName →
 // GetByID (verify) → DeleteByID.
 // =============================================================================

@@ -10,7 +10,7 @@ import (
 )
 
 // TestListV2 tests listing all patch policies.
-func TestListV2(t *testing.T) {
+func TestUnit_PatchPolicies_ListV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -41,7 +41,7 @@ func TestListV2(t *testing.T) {
 }
 
 // TestGetByIDV2 tests retrieving a patch policy by ID.
-func TestGetByIDV2(t *testing.T) {
+func TestUnit_PatchPolicies_GetByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -73,7 +73,7 @@ func TestGetByIDV2(t *testing.T) {
 }
 
 // TestGetByIDV2_NotFound tests retrieving a patch policy by ID when not found.
-func TestGetByIDV2_NotFound(t *testing.T) {
+func TestUnit_PatchPolicies_GetByIDV2_NotFound(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -88,7 +88,7 @@ func TestGetByIDV2_NotFound(t *testing.T) {
 }
 
 // TestGetByIDV2_EmptyID tests retrieving a patch policy with an empty ID.
-func TestGetByIDV2_EmptyID(t *testing.T) {
+func TestUnit_PatchPolicies_GetByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -101,7 +101,7 @@ func TestGetByIDV2_EmptyID(t *testing.T) {
 }
 
 // TestGetByNameV2 tests retrieving a patch policy by name.
-func TestGetByNameV2(t *testing.T) {
+func TestUnit_PatchPolicies_GetByNameV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -117,7 +117,7 @@ func TestGetByNameV2(t *testing.T) {
 }
 
 // TestGetByNameV2_NotFound tests retrieving a patch policy by name when not found.
-func TestGetByNameV2_NotFound(t *testing.T) {
+func TestUnit_PatchPolicies_GetByNameV2_NotFound(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -131,7 +131,7 @@ func TestGetByNameV2_NotFound(t *testing.T) {
 }
 
 // TestGetByNameV2_EmptyName tests retrieving a patch policy with an empty name.
-func TestGetByNameV2_EmptyName(t *testing.T) {
+func TestUnit_PatchPolicies_GetByNameV2_EmptyName(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -144,7 +144,7 @@ func TestGetByNameV2_EmptyName(t *testing.T) {
 }
 
 // TestGetDashboardStatusV2 tests checking if a patch policy is on the dashboard.
-func TestGetDashboardStatusV2(t *testing.T) {
+func TestUnit_PatchPolicies_GetDashboardStatusV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterGetDashboardStatusMock("1", true)
 
@@ -158,7 +158,7 @@ func TestGetDashboardStatusV2(t *testing.T) {
 }
 
 // TestGetDashboardStatusV2_NotOnDashboard tests checking dashboard status when not on dashboard.
-func TestGetDashboardStatusV2_NotOnDashboard(t *testing.T) {
+func TestUnit_PatchPolicies_GetDashboardStatusV2_NotOnDashboard(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterGetDashboardStatusMock("2", false)
 
@@ -172,7 +172,7 @@ func TestGetDashboardStatusV2_NotOnDashboard(t *testing.T) {
 }
 
 // TestGetDashboardStatusV2_EmptyID tests getting dashboard status with an empty ID.
-func TestGetDashboardStatusV2_EmptyID(t *testing.T) {
+func TestUnit_PatchPolicies_GetDashboardStatusV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -185,7 +185,7 @@ func TestGetDashboardStatusV2_EmptyID(t *testing.T) {
 }
 
 // TestAddToDashboardV2 tests adding a patch policy to the dashboard.
-func TestAddToDashboardV2(t *testing.T) {
+func TestUnit_PatchPolicies_AddToDashboardV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterAddToDashboardMock("1")
 
@@ -198,7 +198,7 @@ func TestAddToDashboardV2(t *testing.T) {
 }
 
 // TestAddToDashboardV2_EmptyID tests adding to dashboard with an empty ID.
-func TestAddToDashboardV2_EmptyID(t *testing.T) {
+func TestUnit_PatchPolicies_AddToDashboardV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -210,7 +210,7 @@ func TestAddToDashboardV2_EmptyID(t *testing.T) {
 }
 
 // TestRemoveFromDashboardV2 tests removing a patch policy from the dashboard.
-func TestRemoveFromDashboardV2(t *testing.T) {
+func TestUnit_PatchPolicies_RemoveFromDashboardV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterRemoveFromDashboardMock("1")
 
@@ -223,7 +223,7 @@ func TestRemoveFromDashboardV2(t *testing.T) {
 }
 
 // TestRemoveFromDashboardV2_EmptyID tests removing from dashboard with an empty ID.
-func TestRemoveFromDashboardV2_EmptyID(t *testing.T) {
+func TestUnit_PatchPolicies_RemoveFromDashboardV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -235,7 +235,7 @@ func TestRemoveFromDashboardV2_EmptyID(t *testing.T) {
 }
 
 // TestListV2_Empty tests listing patch policies when the list is empty.
-func TestListV2_Empty(t *testing.T) {
+func TestUnit_PatchPolicies_ListV2_Empty(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterEmptyListMock()
 
@@ -250,7 +250,7 @@ func TestListV2_Empty(t *testing.T) {
 }
 
 // TestGetByIDV2_EmptyList tests getting by ID when the list is empty.
-func TestGetByIDV2_EmptyList(t *testing.T) {
+func TestUnit_PatchPolicies_GetByIDV2_EmptyList(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterEmptyListMock()
 
@@ -264,7 +264,7 @@ func TestGetByIDV2_EmptyList(t *testing.T) {
 }
 
 // TestGetByNameV2_EmptyList tests getting by name when the list is empty.
-func TestGetByNameV2_EmptyList(t *testing.T) {
+func TestUnit_PatchPolicies_GetByNameV2_EmptyList(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterEmptyListMock()
 

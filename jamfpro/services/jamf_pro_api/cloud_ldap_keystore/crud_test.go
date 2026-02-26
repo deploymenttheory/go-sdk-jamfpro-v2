@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestValidateV1(t *testing.T) {
+func TestUnit_CloudLdapKeystore_ValidateV1_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapKeystoreMock()
 	mock.RegisterValidateMock()
 
@@ -33,7 +33,7 @@ func TestValidateV1(t *testing.T) {
 	assert.NotEmpty(t, result.ExpirationDate)
 }
 
-func TestValidateV1_NilRequest(t *testing.T) {
+func TestUnit_CloudLdapKeystore_ValidateV1_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudLdapKeystoreMock()
 	svc := NewService(mock)
 	ctx := context.Background()

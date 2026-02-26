@@ -30,11 +30,11 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_PatchSoftwareTitleConfigurations_Lifecycle
+//     -- Tests: TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle
 //     -- Flow: Create → GetByID → GetByName → Update → Delete
 //
 //   ✓ List Operations
-//     -- Tests: TestAcceptance_PatchSoftwareTitleConfigurations_ListV2
+//     -- Tests: TestAcceptance_PatchSoftwareTitleConfigurations_list_v2
 //     -- Flow: List all configurations → Verify response structure
 //
 //   Note: RSQL Filter Testing NOT applicable

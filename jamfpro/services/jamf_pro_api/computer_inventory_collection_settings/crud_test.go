@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetV2(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_GetV2_Success(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	mock.RegisterGetMock()
 
@@ -22,7 +22,7 @@ func TestGetV2(t *testing.T) {
 	assert.Len(t, result.ApplicationPaths, 2)
 }
 
-func TestUpdateV2(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_Success(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	mock.RegisterUpdateMock()
 
@@ -39,7 +39,7 @@ func TestUpdateV2(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUpdateV2_NilSettings(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_NilSettings(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	svc := NewService(mock)
 
@@ -50,7 +50,7 @@ func TestUpdateV2_NilSettings(t *testing.T) {
 	assert.Contains(t, err.Error(), "settings is required")
 }
 
-func TestCreateCustomPathV2(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_Success(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	mock.RegisterCreateCustomPathMock()
 
@@ -68,7 +68,7 @@ func TestCreateCustomPathV2(t *testing.T) {
 	assert.Contains(t, result.Href, "custom-path/3")
 }
 
-func TestCreateCustomPathV2_NilRequest(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_NilRequest(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	svc := NewService(mock)
 
@@ -80,7 +80,7 @@ func TestCreateCustomPathV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request body is required")
 }
 
-func TestCreateCustomPathV2_EmptyPath(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_EmptyPath(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	svc := NewService(mock)
 
@@ -93,7 +93,7 @@ func TestCreateCustomPathV2_EmptyPath(t *testing.T) {
 	assert.Contains(t, err.Error(), "path is required")
 }
 
-func TestDeleteCustomPathByIDV2(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_Success(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	mock.RegisterDeleteCustomPathMock()
 
@@ -105,7 +105,7 @@ func TestDeleteCustomPathByIDV2(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestDeleteCustomPathByIDV2_EmptyID(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	svc := NewService(mock)
 

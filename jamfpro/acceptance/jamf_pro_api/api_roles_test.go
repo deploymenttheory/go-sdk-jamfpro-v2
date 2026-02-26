@@ -28,12 +28,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_APIRoles_Lifecycle
+//     -- Tests: TestAcceptance_APIRoles_lifecycle
 //     -- Flow: Create → GetByID → Update → Delete
 //
 //   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: MISSING - Should be added as TestAcceptance_APIRoles_ListWithRSQLFilter
+//     -- Tests: MISSING - Should be added as TestAcceptance_APIRoles_list_with_rsql_filter
 //     -- Flow: Create unique role → Filter with RSQL → Verify filtered results
 //     -- Status: MANDATORY test not implemented
 //

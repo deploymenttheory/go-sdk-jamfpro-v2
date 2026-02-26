@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_RestrictedSoftware_Lifecycle exercises the full write/read/delete
+// TestAcceptance_RestrictedSoftware_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -198,7 +198,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_RestrictedSoftware_DeleteByName creates restricted software
+// TestAcceptance_RestrictedSoftware_delete_by_name creates restricted software
 // then deletes it by name.
 // =============================================================================
 
@@ -253,7 +253,7 @@ func TestAcceptance_RestrictedSoftware_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_RestrictedSoftware_ValidationErrors tests client-side validation
+// TestAcceptance_RestrictedSoftware_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 

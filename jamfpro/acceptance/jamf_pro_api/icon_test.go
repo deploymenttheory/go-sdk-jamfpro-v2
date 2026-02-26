@@ -26,12 +26,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 4: Read-Only with Existing Data
 //     -- Reason: Tests use existing icons from the system (IDs 1-100)
-//     -- Tests: TestAcceptance_Icons_GetByID
+//     -- Tests: TestAcceptance_Icons_get_by_id
 //     -- Flow: Find existing icon → GetByID → Verify metadata
 //     -- Note: Upload operation not tested in acceptance tests
 //
 //   ✗ Download operation (commented out)
-//     -- TestAcceptance_Icons_Download exists but is commented out
+//     -- TestAcceptance_Icons_download exists but is commented out
 //     -- Reason: Server-side issues with corrupted/missing icon files causing 500 errors
 //
 // Test Coverage

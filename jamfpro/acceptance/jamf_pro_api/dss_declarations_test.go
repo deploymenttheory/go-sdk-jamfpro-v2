@@ -21,7 +21,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: DSS declarations are read-only and require a valid UUID
-//     -- Tests: TestAcceptance_DSSDeclarations_GetByUUID
+//     -- Tests: TestAcceptance_DSSDeclarations_get_by_uuid
 //     -- Flow: Get by UUID → Verify structure
 //
 // Test Coverage

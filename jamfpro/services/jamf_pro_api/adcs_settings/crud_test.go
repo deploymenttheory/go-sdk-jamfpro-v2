@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateV1(t *testing.T) {
+func TestUnit_AdcsSettings_CreateV1_Success(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	mock.RegisterCreateMock()
 
@@ -32,7 +32,7 @@ func TestCreateV1(t *testing.T) {
 	assert.Equal(t, "/api/v1/pki/adcs-settings/1", result.Href)
 }
 
-func TestCreateV1_NilRequest(t *testing.T) {
+func TestUnit_AdcsSettings_CreateV1_NilRequest(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -45,7 +45,7 @@ func TestCreateV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestGetByIDV1(t *testing.T) {
+func TestUnit_AdcsSettings_GetByIDV1_Success(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	mock.RegisterGetByIDMock("1")
 
@@ -65,7 +65,7 @@ func TestGetByIDV1(t *testing.T) {
 	assert.False(t, result.Outbound)
 }
 
-func TestGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_AdcsSettings_GetByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -78,7 +78,7 @@ func TestGetByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateByIDV1(t *testing.T) {
+func TestUnit_AdcsSettings_UpdateByIDV1_Success(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	mock.RegisterUpdateByIDMock("1")
 
@@ -96,7 +96,7 @@ func TestUpdateByIDV1(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUpdateByIDV1_EmptyID(t *testing.T) {
+func TestUnit_AdcsSettings_UpdateByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -112,7 +112,7 @@ func TestUpdateByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateByIDV1_NilRequest(t *testing.T) {
+func TestUnit_AdcsSettings_UpdateByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -124,7 +124,7 @@ func TestUpdateByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestDeleteByIDV1(t *testing.T) {
+func TestUnit_AdcsSettings_DeleteByIDV1_Success(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	mock.RegisterDeleteByIDMock("1")
 
@@ -138,7 +138,7 @@ func TestDeleteByIDV1(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestDeleteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_AdcsSettings_DeleteByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -150,7 +150,7 @@ func TestDeleteByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestValidateServerCertificateV1(t *testing.T) {
+func TestUnit_AdcsSettings_ValidateServerCertificateV1_Success(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	mock.RegisterValidateServerCertificateMock()
 
@@ -169,7 +169,7 @@ func TestValidateServerCertificateV1(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestValidateServerCertificateV1_NilRequest(t *testing.T) {
+func TestUnit_AdcsSettings_ValidateServerCertificateV1_NilRequest(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -181,7 +181,7 @@ func TestValidateServerCertificateV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestValidateClientCertificateV1(t *testing.T) {
+func TestUnit_AdcsSettings_ValidateClientCertificateV1_Success(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	mock.RegisterValidateClientCertificateMock()
 
@@ -202,7 +202,7 @@ func TestValidateClientCertificateV1(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestValidateClientCertificateV1_NilRequest(t *testing.T) {
+func TestUnit_AdcsSettings_ValidateClientCertificateV1_NilRequest(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -214,7 +214,7 @@ func TestValidateClientCertificateV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestGetDependenciesByIDV1(t *testing.T) {
+func TestUnit_AdcsSettings_GetDependenciesByIDV1_Success(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	mock.RegisterGetDependenciesByIDMock("1")
 
@@ -232,7 +232,7 @@ func TestGetDependenciesByIDV1(t *testing.T) {
 	assert.Equal(t, "OSX_CONFIGURATION_PROFILE", result.Results[0].ConfigProfileType)
 }
 
-func TestGetDependenciesByIDV1_EmptyID(t *testing.T) {
+func TestUnit_AdcsSettings_GetDependenciesByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -245,7 +245,7 @@ func TestGetDependenciesByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetHistoryByIDV1(t *testing.T) {
+func TestUnit_AdcsSettings_GetHistoryByIDV1_Success(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	mock.RegisterGetHistoryByIDMock("1")
 
@@ -263,7 +263,7 @@ func TestGetHistoryByIDV1(t *testing.T) {
 	assert.Equal(t, "Test note", result.Results[0].Note)
 }
 
-func TestGetHistoryByIDV1_EmptyID(t *testing.T) {
+func TestUnit_AdcsSettings_GetHistoryByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -276,7 +276,7 @@ func TestGetHistoryByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestAddHistoryNoteByIDV1(t *testing.T) {
+func TestUnit_AdcsSettings_AddHistoryNoteByIDV1_Success(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	mock.RegisterAddHistoryNoteMock("1")
 
@@ -294,7 +294,7 @@ func TestAddHistoryNoteByIDV1(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode)
 }
 
-func TestAddHistoryNoteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_AdcsSettings_AddHistoryNoteByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -310,7 +310,7 @@ func TestAddHistoryNoteByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestAddHistoryNoteByIDV1_NilRequest(t *testing.T) {
+func TestUnit_AdcsSettings_AddHistoryNoteByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -322,63 +322,63 @@ func TestAddHistoryNoteByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestCreateV1_Error(t *testing.T) {
+func TestUnit_AdcsSettings_CreateV1_Error(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	_, _, err := svc.CreateV1(context.Background(), &ResourceAdcsSettings{DisplayName: "test"})
 	require.Error(t, err)
 }
 
-func TestGetByIDV1_Error(t *testing.T) {
+func TestUnit_AdcsSettings_GetByIDV1_Error(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	_, _, err := svc.GetByIDV1(context.Background(), "1")
 	require.Error(t, err)
 }
 
-func TestUpdateByIDV1_Error(t *testing.T) {
+func TestUnit_AdcsSettings_UpdateByIDV1_Error(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	_, err := svc.UpdateByIDV1(context.Background(), "1", &ResourceAdcsSettings{DisplayName: "test"})
 	require.Error(t, err)
 }
 
-func TestDeleteByIDV1_Error(t *testing.T) {
+func TestUnit_AdcsSettings_DeleteByIDV1_Error(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	_, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.Error(t, err)
 }
 
-func TestValidateServerCertificateV1_Error(t *testing.T) {
+func TestUnit_AdcsSettings_ValidateServerCertificateV1_Error(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	_, err := svc.ValidateServerCertificateV1(context.Background(), &ValidateCertificateRequest{Filename: "test.p12"})
 	require.Error(t, err)
 }
 
-func TestValidateClientCertificateV1_Error(t *testing.T) {
+func TestUnit_AdcsSettings_ValidateClientCertificateV1_Error(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	_, err := svc.ValidateClientCertificateV1(context.Background(), &ValidateCertificateRequest{Filename: "test.p12"})
 	require.Error(t, err)
 }
 
-func TestGetDependenciesByIDV1_Error(t *testing.T) {
+func TestUnit_AdcsSettings_GetDependenciesByIDV1_Error(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	_, _, err := svc.GetDependenciesByIDV1(context.Background(), "1")
 	require.Error(t, err)
 }
 
-func TestGetHistoryByIDV1_Error(t *testing.T) {
+func TestUnit_AdcsSettings_GetHistoryByIDV1_Error(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	_, _, err := svc.GetHistoryByIDV1(context.Background(), "1", nil)
 	require.Error(t, err)
 }
 
-func TestAddHistoryNoteByIDV1_HTTPError(t *testing.T) {
+func TestUnit_AdcsSettings_AddHistoryNoteByIDV1_HTTPError(t *testing.T) {
 	mock := mocks.NewAdcsSettingsMock()
 	svc := NewService(mock)
 	_, err := svc.AddHistoryNoteByIDV1(context.Background(), "1", &HistoryNoteRequest{Note: "test"})

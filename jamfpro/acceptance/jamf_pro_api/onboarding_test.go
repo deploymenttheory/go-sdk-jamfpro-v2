@@ -29,7 +29,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration
 //     -- Reason: Singleton settings that cannot be created or deleted, only updated
-//     -- Tests: TestAcceptance_Onboarding_GetV1, TestAcceptance_Onboarding_UpdateV1
+//     -- Tests: TestAcceptance_Onboarding_get_v1, TestAcceptance_Onboarding_update_v1
 //     -- Flow: Get → Update → Verify → Restore
 //
 // Test Coverage

@@ -11,7 +11,7 @@ import (
 )
 
 // TestGetAvailableUpdates tests retrieving available software updates.
-func TestGetAvailableUpdates(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetAvailableUpdates_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterGetAvailableUpdatesMock()
 
@@ -30,7 +30,7 @@ func TestGetAvailableUpdates(t *testing.T) {
 }
 
 // TestGetPlans tests listing all managed software update plans.
-func TestGetPlans(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlans_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterGetPlansMock()
 
@@ -67,7 +67,7 @@ func TestGetPlans(t *testing.T) {
 }
 
 // TestGetPlans_Empty tests listing plans when empty.
-func TestGetPlans_Empty(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlans_Empty(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterEmptyPlansMock()
 
@@ -84,7 +84,7 @@ func TestGetPlans_Empty(t *testing.T) {
 }
 
 // TestGetPlanByUUID tests retrieving a plan by UUID.
-func TestGetPlanByUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlanByUUID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 	mock.RegisterGetPlanByUUIDMock(uuid)
@@ -106,7 +106,7 @@ func TestGetPlanByUUID(t *testing.T) {
 }
 
 // TestGetPlanByUUID_EmptyUUID tests getting plan with an empty UUID.
-func TestGetPlanByUUID_EmptyUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlanByUUID_EmptyUUID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -119,7 +119,7 @@ func TestGetPlanByUUID_EmptyUUID(t *testing.T) {
 }
 
 // TestGetDeclarationsByPlanUUID tests retrieving declarations by plan UUID.
-func TestGetDeclarationsByPlanUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetDeclarationsByPlanUUID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 	mock.RegisterGetDeclarationsByPlanUUIDMock(uuid)
@@ -147,7 +147,7 @@ func TestGetDeclarationsByPlanUUID(t *testing.T) {
 }
 
 // TestGetDeclarationsByPlanUUID_EmptyUUID tests getting declarations with an empty UUID.
-func TestGetDeclarationsByPlanUUID_EmptyUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetDeclarationsByPlanUUID_EmptyUUID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -160,7 +160,7 @@ func TestGetDeclarationsByPlanUUID_EmptyUUID(t *testing.T) {
 }
 
 // TestCreatePlanByDeviceID tests creating a plan by device ID.
-func TestCreatePlanByDeviceID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByDeviceID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterCreatePlanByDeviceIDMock()
 
@@ -193,7 +193,7 @@ func TestCreatePlanByDeviceID(t *testing.T) {
 }
 
 // TestCreatePlanByDeviceID_NilPlan tests creating a plan with nil input.
-func TestCreatePlanByDeviceID_NilPlan(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByDeviceID_NilPlan(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -206,7 +206,7 @@ func TestCreatePlanByDeviceID_NilPlan(t *testing.T) {
 }
 
 // TestCreatePlanByGroupID tests creating a plan by group ID.
-func TestCreatePlanByGroupID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByGroupID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterCreatePlanByGroupIDMock()
 
@@ -234,7 +234,7 @@ func TestCreatePlanByGroupID(t *testing.T) {
 }
 
 // TestCreatePlanByGroupID_NilPlan tests creating a group plan with nil input.
-func TestCreatePlanByGroupID_NilPlan(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByGroupID_NilPlan(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -247,7 +247,7 @@ func TestCreatePlanByGroupID_NilPlan(t *testing.T) {
 }
 
 // TestGetPlansByGroupID tests retrieving plans by group ID.
-func TestGetPlansByGroupID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlansByGroupID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	groupID := "100"
 	mock.RegisterGetPlansByGroupIDMock(groupID)
@@ -264,7 +264,7 @@ func TestGetPlansByGroupID(t *testing.T) {
 }
 
 // TestGetPlansByGroupID_EmptyGroupID tests getting plans with empty group ID.
-func TestGetPlansByGroupID_EmptyGroupID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlansByGroupID_EmptyGroupID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -277,7 +277,7 @@ func TestGetPlansByGroupID_EmptyGroupID(t *testing.T) {
 }
 
 // TestGetPlansByGroupID_EmptyGroupType tests getting plans with empty group type.
-func TestGetPlansByGroupID_EmptyGroupType(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlansByGroupID_EmptyGroupType(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -290,7 +290,7 @@ func TestGetPlansByGroupID_EmptyGroupType(t *testing.T) {
 }
 
 // TestGetFeatureToggle tests retrieving the feature toggle.
-func TestGetFeatureToggle(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetFeatureToggle_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterGetFeatureToggleMock()
 
@@ -305,7 +305,7 @@ func TestGetFeatureToggle(t *testing.T) {
 }
 
 // TestUpdateFeatureToggle tests updating the feature toggle.
-func TestUpdateFeatureToggle(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_UpdateFeatureToggle_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterUpdateFeatureToggleMock()
 
@@ -328,7 +328,7 @@ func TestUpdateFeatureToggle(t *testing.T) {
 }
 
 // TestUpdateFeatureToggle_NilToggle tests updating feature toggle with nil input.
-func TestUpdateFeatureToggle_NilToggle(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_UpdateFeatureToggle_NilToggle(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -341,7 +341,7 @@ func TestUpdateFeatureToggle_NilToggle(t *testing.T) {
 }
 
 // TestGetFeatureToggleStatus tests retrieving the feature toggle status.
-func TestGetFeatureToggleStatus(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetFeatureToggleStatus_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterGetFeatureToggleStatusMock()
 
@@ -362,7 +362,7 @@ func TestGetFeatureToggleStatus(t *testing.T) {
 }
 
 // TestForceStopFeatureToggleProcess tests force stopping the feature toggle process.
-func TestForceStopFeatureToggleProcess(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_ForceStopFeatureToggleProcess_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterForceStopFeatureToggleProcessMock()
 
@@ -379,7 +379,7 @@ func TestForceStopFeatureToggleProcess(t *testing.T) {
 }
 
 // TestGetPlanEventsByUUID tests retrieving plan events by UUID.
-func TestGetPlanEventsByUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlanEventsByUUID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 	mock.RegisterGetPlanEventsByUUIDMock(uuid)
@@ -397,7 +397,7 @@ func TestGetPlanEventsByUUID(t *testing.T) {
 }
 
 // TestGetPlanEventsByUUID_EmptyUUID tests getting plan events with an empty UUID.
-func TestGetPlanEventsByUUID_EmptyUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlanEventsByUUID_EmptyUUID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -410,7 +410,7 @@ func TestGetPlanEventsByUUID_EmptyUUID(t *testing.T) {
 }
 
 // TestGetUpdateStatuses tests retrieving update statuses with pagination.
-func TestGetUpdateStatuses(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatuses_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterGetUpdateStatusesMock()
 
@@ -432,7 +432,7 @@ func TestGetUpdateStatuses(t *testing.T) {
 }
 
 // TestGetUpdateStatusesByComputerGroup tests retrieving update statuses by computer group.
-func TestGetUpdateStatusesByComputerGroup(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputerGroup_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	groupID := "100"
 	mock.RegisterGetUpdateStatusesByComputerGroupMock(groupID)
@@ -449,7 +449,7 @@ func TestGetUpdateStatusesByComputerGroup(t *testing.T) {
 }
 
 // TestGetUpdateStatusesByComputerGroup_EmptyID tests getting update statuses with empty ID.
-func TestGetUpdateStatusesByComputerGroup_EmptyID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputerGroup_EmptyID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -462,7 +462,7 @@ func TestGetUpdateStatusesByComputerGroup_EmptyID(t *testing.T) {
 }
 
 // TestGetUpdateStatusesByComputer tests retrieving update statuses by computer.
-func TestGetUpdateStatusesByComputer(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputer_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	computerID := "12345"
 	mock.RegisterGetUpdateStatusesByComputerMock(computerID)
@@ -478,7 +478,7 @@ func TestGetUpdateStatusesByComputer(t *testing.T) {
 }
 
 // TestGetUpdateStatusesByComputer_EmptyID tests getting update statuses with empty ID.
-func TestGetUpdateStatusesByComputer_EmptyID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputer_EmptyID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -491,7 +491,7 @@ func TestGetUpdateStatusesByComputer_EmptyID(t *testing.T) {
 }
 
 // TestGetUpdateStatusesByMobileDeviceGroup tests retrieving update statuses by mobile device group.
-func TestGetUpdateStatusesByMobileDeviceGroup(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDeviceGroup_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	groupID := "200"
 	mock.RegisterGetUpdateStatusesByMobileDeviceGroupMock(groupID)
@@ -507,7 +507,7 @@ func TestGetUpdateStatusesByMobileDeviceGroup(t *testing.T) {
 }
 
 // TestGetUpdateStatusesByMobileDeviceGroup_EmptyID tests getting update statuses with empty ID.
-func TestGetUpdateStatusesByMobileDeviceGroup_EmptyID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDeviceGroup_EmptyID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -520,7 +520,7 @@ func TestGetUpdateStatusesByMobileDeviceGroup_EmptyID(t *testing.T) {
 }
 
 // TestGetUpdateStatusesByMobileDevice tests retrieving update statuses by mobile device.
-func TestGetUpdateStatusesByMobileDevice(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDevice_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	deviceID := "67890"
 	mock.RegisterGetUpdateStatusesByMobileDeviceMock(deviceID)
@@ -536,7 +536,7 @@ func TestGetUpdateStatusesByMobileDevice(t *testing.T) {
 }
 
 // TestGetUpdateStatusesByMobileDevice_EmptyID tests getting update statuses with empty ID.
-func TestGetUpdateStatusesByMobileDevice_EmptyID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDevice_EmptyID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 

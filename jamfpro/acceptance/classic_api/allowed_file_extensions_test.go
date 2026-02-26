@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_AllowedFileExtensions_Lifecycle exercises the full
+// TestAcceptance_AllowedFileExtensions_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByExtension →
 // DeleteByID.
 // Note: the Classic API does not support updating allowed file extensions.
@@ -135,7 +135,7 @@ func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_AllowedFileExtensions_ValidationErrors tests client-side
+// TestAcceptance_AllowedFileExtensions_validation_errors tests client-side
 // validation without making any network calls.
 // =============================================================================
 

@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_SoftwareUpdateServers_Lifecycle exercises the full
+// TestAcceptance_SoftwareUpdateServers_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByName →
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -183,7 +183,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_SoftwareUpdateServers_DeleteByName creates a server then deletes by name.
+// TestAcceptance_SoftwareUpdateServers_delete_by_name creates a server then deletes by name.
 // =============================================================================
 
 func TestAcceptance_SoftwareUpdateServers_delete_by_name(t *testing.T) {
@@ -227,7 +227,7 @@ func TestAcceptance_SoftwareUpdateServers_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_SoftwareUpdateServers_ValidationErrors tests client-side validation.
+// TestAcceptance_SoftwareUpdateServers_validation_errors tests client-side validation.
 // =============================================================================
 
 func TestAcceptance_SoftwareUpdateServers_validation_errors(t *testing.T) {
@@ -254,13 +254,13 @@ func TestAcceptance_SoftwareUpdateServers_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateSoftwareUpdateServerByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &software_update_servers.RequestSoftwareUpdateServer{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &software_update_servers.RequestSoftwareUpdateServer{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "software update server ID must be a positive integer")
 	})
 
 	t.Run("UpdateSoftwareUpdateServerByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &software_update_servers.RequestSoftwareUpdateServer{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &software_update_servers.RequestSoftwareUpdateServer{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "software update server name is required")
 	})

@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_Lifecycle exercises the full write/read/delete
+// TestAcceptance_ComputerGroups_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -238,7 +238,7 @@ func TestAcceptance_ComputerGroups_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_DeleteByName creates a computer group then deletes by name.
+// TestAcceptance_ComputerGroups_delete_by_name creates a computer group then deletes by name.
 // =============================================================================
 
 func TestAcceptance_ComputerGroups_delete_by_name(t *testing.T) {
@@ -281,7 +281,7 @@ func TestAcceptance_ComputerGroups_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_ValidationErrors validates error handling.
+// TestAcceptance_ComputerGroups_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_ComputerGroups_validation_errors(t *testing.T) {
@@ -308,13 +308,13 @@ func TestAcceptance_ComputerGroups_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &computer_groups.RequestComputerGroup{Name: "test"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &computer_groups.RequestComputerGroup{Name: "sdkv2_acc_test"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "computer group ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &computer_groups.RequestComputerGroup{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &computer_groups.RequestComputerGroup{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "computer group name cannot be empty")
 	})

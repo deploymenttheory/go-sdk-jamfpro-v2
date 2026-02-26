@@ -27,17 +27,17 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration Testing
 //     -- Reason: Settings endpoint returns singleton configuration
-//     -- Tests: TestAcceptance_JamfConnect_GetSettings
+//     -- Tests: TestAcceptance_JamfConnect_get_settings
 //     -- Flow: Get settings → Verify structure
 //
 //   ✓ Pattern 3: Read-Only List Testing
 //     -- Reason: Config profiles are created/managed outside this API
-//     -- Tests: TestAcceptance_JamfConnect_ListAndGetProfiles
+//     -- Tests: TestAcceptance_JamfConnect_list_and_get_profiles
 //     -- Flow: List profiles → Get by UUID/ID/Name → Verify
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_JamfConnect_ValidationErrors
+//     -- Tests: TestAcceptance_JamfConnect_validation_errors
 //     -- Cases: Empty UUID, empty name, invalid ID, nil requests
 //
 // Test Coverage

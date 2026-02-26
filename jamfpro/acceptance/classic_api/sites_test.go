@@ -14,7 +14,7 @@ import (
 
 
 // =============================================================================
-// TestAcceptance_Sites_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Sites_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -175,7 +175,7 @@ func TestAcceptance_Sites_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Sites_DeleteByName creates a site then deletes it by name.
+// TestAcceptance_Sites_delete_by_name creates a site then deletes it by name.
 // =============================================================================
 
 func TestAcceptance_Sites_delete_by_name(t *testing.T) {
@@ -215,7 +215,7 @@ func TestAcceptance_Sites_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Sites_ValidationErrors tests client-side validation
+// TestAcceptance_Sites_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
@@ -243,13 +243,13 @@ func TestAcceptance_Sites_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &sites.RequestSite{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &sites.RequestSite{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &sites.RequestSite{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &sites.RequestSite{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site name is required")
 	})

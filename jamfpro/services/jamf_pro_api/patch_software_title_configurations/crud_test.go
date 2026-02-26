@@ -10,7 +10,7 @@ import (
 )
 
 // TestListV2 tests listing all patch software title configurations.
-func TestListV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_ListV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterListMock()
 
@@ -34,7 +34,7 @@ func TestListV2(t *testing.T) {
 }
 
 // TestGetByIDV2 tests retrieving a patch software title configuration by ID.
-func TestGetByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterGetByIDMock("1")
 
@@ -67,7 +67,7 @@ func TestGetByIDV2(t *testing.T) {
 }
 
 // TestGetByIDV2_EmptyID tests retrieving a patch software title configuration with empty ID.
-func TestGetByIDV2_EmptyID(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -80,7 +80,7 @@ func TestGetByIDV2_EmptyID(t *testing.T) {
 }
 
 // TestGetByNameV2 tests retrieving a patch software title configuration by display name.
-func TestGetByNameV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetByNameV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterListMock()
 
@@ -96,7 +96,7 @@ func TestGetByNameV2(t *testing.T) {
 }
 
 // TestGetByNameV2_NotFound tests retrieving a patch software title configuration by name when not found.
-func TestGetByNameV2_NotFound(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetByNameV2_NotFound(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterListMock()
 
@@ -110,7 +110,7 @@ func TestGetByNameV2_NotFound(t *testing.T) {
 }
 
 // TestGetByNameV2_EmptyName tests retrieving a patch software title configuration with empty name.
-func TestGetByNameV2_EmptyName(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetByNameV2_EmptyName(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -123,7 +123,7 @@ func TestGetByNameV2_EmptyName(t *testing.T) {
 }
 
 // TestCreateV2 tests creating a new patch software title configuration.
-func TestCreateV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_CreateV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterCreateMock()
 
@@ -159,7 +159,7 @@ func TestCreateV2(t *testing.T) {
 }
 
 // TestCreateV2_NilConfig tests creating a patch software title configuration with nil config.
-func TestCreateV2_NilConfig(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_CreateV2_NilConfig(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -172,7 +172,7 @@ func TestCreateV2_NilConfig(t *testing.T) {
 }
 
 // TestCreateV2_EmptyDisplayName tests creating a patch software title configuration with empty display name.
-func TestCreateV2_EmptyDisplayName(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_CreateV2_EmptyDisplayName(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -189,7 +189,7 @@ func TestCreateV2_EmptyDisplayName(t *testing.T) {
 }
 
 // TestCreateV2_EmptySoftwareTitleID tests creating a patch software title configuration with empty software title ID.
-func TestCreateV2_EmptySoftwareTitleID(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_CreateV2_EmptySoftwareTitleID(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -206,7 +206,7 @@ func TestCreateV2_EmptySoftwareTitleID(t *testing.T) {
 }
 
 // TestUpdateByIDV2 tests updating a patch software title configuration by ID.
-func TestUpdateByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_UpdateByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterUpdateByIDMock("1")
 
@@ -229,7 +229,7 @@ func TestUpdateByIDV2(t *testing.T) {
 }
 
 // TestUpdateByIDV2_EmptyID tests updating a patch software title configuration with empty ID.
-func TestUpdateByIDV2_EmptyID(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_UpdateByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -246,7 +246,7 @@ func TestUpdateByIDV2_EmptyID(t *testing.T) {
 }
 
 // TestUpdateByIDV2_NilConfig tests updating a patch software title configuration with nil config.
-func TestUpdateByIDV2_NilConfig(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_UpdateByIDV2_NilConfig(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -259,7 +259,7 @@ func TestUpdateByIDV2_NilConfig(t *testing.T) {
 }
 
 // TestUpdateByNameV2 tests updating a patch software title configuration by name.
-func TestUpdateByNameV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_UpdateByNameV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterListMock()
 	mock.RegisterUpdateByIDMock("1")
@@ -280,7 +280,7 @@ func TestUpdateByNameV2(t *testing.T) {
 }
 
 // TestUpdateByNameV2_EmptyName tests updating a patch software title configuration with empty name.
-func TestUpdateByNameV2_EmptyName(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_UpdateByNameV2_EmptyName(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -297,7 +297,7 @@ func TestUpdateByNameV2_EmptyName(t *testing.T) {
 }
 
 // TestDeleteByIDV2 tests deleting a patch software title configuration by ID.
-func TestDeleteByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_DeleteByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterDeleteByIDMock("1")
 
@@ -310,7 +310,7 @@ func TestDeleteByIDV2(t *testing.T) {
 }
 
 // TestDeleteByIDV2_EmptyID tests deleting a patch software title configuration with empty ID.
-func TestDeleteByIDV2_EmptyID(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_DeleteByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -322,7 +322,7 @@ func TestDeleteByIDV2_EmptyID(t *testing.T) {
 }
 
 // TestDeleteByNameV2 tests deleting a patch software title configuration by name.
-func TestDeleteByNameV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_DeleteByNameV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterListMock()
 	mock.RegisterDeleteByIDMock("1")
@@ -336,7 +336,7 @@ func TestDeleteByNameV2(t *testing.T) {
 }
 
 // TestDeleteByNameV2_EmptyName tests deleting a patch software title configuration with empty name.
-func TestDeleteByNameV2_EmptyName(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_DeleteByNameV2_EmptyName(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -348,7 +348,7 @@ func TestDeleteByNameV2_EmptyName(t *testing.T) {
 }
 
 // TestGetDashboardStatusByIDV2 tests getting dashboard status.
-func TestGetDashboardStatusByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetDashboardStatusByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterGetDashboardStatusMock("1")
 
@@ -362,7 +362,7 @@ func TestGetDashboardStatusByIDV2(t *testing.T) {
 }
 
 // TestGetDashboardStatusByIDV2_EmptyID tests getting dashboard status with empty ID.
-func TestGetDashboardStatusByIDV2_EmptyID(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetDashboardStatusByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -375,7 +375,7 @@ func TestGetDashboardStatusByIDV2_EmptyID(t *testing.T) {
 }
 
 // TestAddToDashboardByIDV2 tests adding to dashboard.
-func TestAddToDashboardByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_AddToDashboardByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterAddToDashboardMock("1")
 
@@ -388,7 +388,7 @@ func TestAddToDashboardByIDV2(t *testing.T) {
 }
 
 // TestRemoveFromDashboardByIDV2 tests removing from dashboard.
-func TestRemoveFromDashboardByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_RemoveFromDashboardByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterRemoveFromDashboardMock("1")
 
@@ -401,7 +401,7 @@ func TestRemoveFromDashboardByIDV2(t *testing.T) {
 }
 
 // TestGetDefinitionsByIDV2 tests getting definitions.
-func TestGetDefinitionsByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetDefinitionsByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterGetDefinitionsMock("1")
 
@@ -417,7 +417,7 @@ func TestGetDefinitionsByIDV2(t *testing.T) {
 }
 
 // TestGetDependenciesByIDV2 tests getting dependencies.
-func TestGetDependenciesByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetDependenciesByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterGetDependenciesMock("1")
 
@@ -433,7 +433,7 @@ func TestGetDependenciesByIDV2(t *testing.T) {
 }
 
 // TestExportReportByIDV2 tests exporting report.
-func TestExportReportByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_ExportReportByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterExportReportMock("1")
 
@@ -447,7 +447,7 @@ func TestExportReportByIDV2(t *testing.T) {
 }
 
 // TestGetExtensionAttributesByIDV2 tests getting extension attributes.
-func TestGetExtensionAttributesByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetExtensionAttributesByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterGetExtensionAttributesMock("1")
 
@@ -463,7 +463,7 @@ func TestGetExtensionAttributesByIDV2(t *testing.T) {
 }
 
 // TestGetPatchReportByIDV2 tests getting patch report.
-func TestGetPatchReportByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetPatchReportByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterGetPatchReportMock("1")
 
@@ -479,7 +479,7 @@ func TestGetPatchReportByIDV2(t *testing.T) {
 }
 
 // TestGetPatchSummaryByIDV2 tests getting patch summary.
-func TestGetPatchSummaryByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetPatchSummaryByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterGetPatchSummaryMock("1")
 
@@ -496,7 +496,7 @@ func TestGetPatchSummaryByIDV2(t *testing.T) {
 }
 
 // TestGetHistoryByIDV2 tests getting history.
-func TestGetHistoryByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetHistoryByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterGetHistoryMock("1")
 
@@ -512,7 +512,7 @@ func TestGetHistoryByIDV2(t *testing.T) {
 }
 
 // TestAddHistoryNoteByIDV2 tests adding history note.
-func TestAddHistoryNoteByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_AddHistoryNoteByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterAddHistoryNoteMock("1")
 
@@ -527,7 +527,7 @@ func TestAddHistoryNoteByIDV2(t *testing.T) {
 }
 
 // TestAddHistoryNoteByIDV2_EmptyNote tests adding history note with empty note.
-func TestAddHistoryNoteByIDV2_EmptyNote(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_AddHistoryNoteByIDV2_EmptyNote(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	svc := NewService(mock)
 
@@ -540,7 +540,7 @@ func TestAddHistoryNoteByIDV2_EmptyNote(t *testing.T) {
 }
 
 // TestGetPatchVersionsByIDV2 tests getting patch versions.
-func TestGetPatchVersionsByIDV2(t *testing.T) {
+func TestUnit_PatchSoftwareTitleConfigurations_GetPatchVersionsByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
 	mock.RegisterGetPatchVersionsMock("1")
 

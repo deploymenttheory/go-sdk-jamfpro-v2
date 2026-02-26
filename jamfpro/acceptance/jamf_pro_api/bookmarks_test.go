@@ -28,7 +28,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle [PARTIAL]
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_Bookmarks_Lifecycle
+//     -- Tests: TestAcceptance_Bookmarks_lifecycle
 //     -- Flow: Create → GetByID → Delete (MISSING Update step)
 //
 //   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]

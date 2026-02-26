@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_DiskEncryptionConfigurations_Lifecycle exercises the full
+// TestAcceptance_DiskEncryptionConfigurations_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByName →
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -183,7 +183,7 @@ func TestAcceptance_DiskEncryptionConfigurations_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_DiskEncryptionConfigurations_DeleteByName creates a config then deletes by name.
+// TestAcceptance_DiskEncryptionConfigurations_delete_by_name creates a config then deletes by name.
 // =============================================================================
 
 func TestAcceptance_DiskEncryptionConfigurations_delete_by_name(t *testing.T) {
@@ -226,7 +226,7 @@ func TestAcceptance_DiskEncryptionConfigurations_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_DiskEncryptionConfigurations_ValidationErrors tests client-side validation.
+// TestAcceptance_DiskEncryptionConfigurations_validation_errors tests client-side validation.
 // =============================================================================
 
 func TestAcceptance_DiskEncryptionConfigurations_validation_errors(t *testing.T) {
@@ -253,13 +253,13 @@ func TestAcceptance_DiskEncryptionConfigurations_validation_errors(t *testing.T)
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &disk_encryption_configurations.RequestDiskEncryptionConfiguration{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &disk_encryption_configurations.RequestDiskEncryptionConfiguration{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &disk_encryption_configurations.RequestDiskEncryptionConfiguration{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &disk_encryption_configurations.RequestDiskEncryptionConfiguration{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "disk encryption configuration name is required")
 	})

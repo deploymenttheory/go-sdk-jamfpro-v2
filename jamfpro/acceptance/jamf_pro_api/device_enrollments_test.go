@@ -34,12 +34,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 4: Read-Only with Existing Data
 //     -- Reason: Device enrollments typically exist and cannot be easily created in tests
-//     -- Tests: TestAcceptance_DeviceEnrollments_ListAndGet
+//     -- Tests: TestAcceptance_DeviceEnrollments_list_and_get
 //     -- Flow: List → If exists, test GetByID, GetByName, GetHistory, GetSyncStates
 //
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Public key and sync states are read-only system information
-//     -- Tests: TestAcceptance_DeviceEnrollments_PublicKey, TestAcceptance_DeviceEnrollments_AllSyncStates
+//     -- Tests: TestAcceptance_DeviceEnrollments_public_key, TestAcceptance_DeviceEnrollments_all_sync_states
 //     -- Flow: Get public key → Verify PEM format; Get all sync states → Verify structure
 //
 // Test Coverage

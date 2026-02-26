@@ -22,7 +22,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration
 //     -- Reason: Singleton settings that cannot be created or deleted
-//     -- Tests: TestAcceptance_ClientCheckin_Get
+//     -- Tests: TestAcceptance_ClientCheckin_get
 //     -- Flow: Get current settings → Verify structure and values
 //     -- Note: Full update/restore cycle not implemented yet (should be added)
 //

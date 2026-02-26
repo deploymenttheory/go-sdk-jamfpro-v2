@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestAcceptance_VolumePurchasingLocations_List verifies that listing volume purchasing locations
+// TestAcceptance_VolumePurchasingLocations_list verifies that listing volume purchasing locations
 // works against a real Jamf Pro instance. Create/Update/Delete require a valid VPP service token
 // and are not exercised here.
 func TestAcceptance_VolumePurchasingLocations_list_v1(t *testing.T) {
@@ -26,7 +26,7 @@ func TestAcceptance_VolumePurchasingLocations_list_v1(t *testing.T) {
 	require.GreaterOrEqual(t, list.TotalCount, 0)
 }
 
-// TestAcceptance_VolumePurchasingLocations_GetByID fetches a single location by ID when at least one exists.
+// TestAcceptance_VolumePurchasingLocations_get_by_id fetches a single location by ID when at least one exists.
 func TestAcceptance_VolumePurchasingLocations_get_by_idv1(t *testing.T) {
 	acc.RequireClient(t)
 
@@ -49,7 +49,7 @@ func TestAcceptance_VolumePurchasingLocations_get_by_idv1(t *testing.T) {
 	require.Equal(t, list.Results[0].ID, got.ID)
 }
 
-// TestAcceptance_VolumePurchasingLocations_GetHistoryV1 fetches history for a volume purchasing location.
+// TestAcceptance_VolumePurchasingLocations_get_history_v1 fetches history for a volume purchasing location.
 func TestAcceptance_VolumePurchasingLocations_get_history_v1(t *testing.T) {
 	acc.RequireClient(t)
 
@@ -72,7 +72,7 @@ func TestAcceptance_VolumePurchasingLocations_get_history_v1(t *testing.T) {
 	require.GreaterOrEqual(t, history.TotalCount, 0)
 }
 
-// TestAcceptance_VolumePurchasingLocations_AddHistoryNotesV1 adds a history note to a volume purchasing location.
+// TestAcceptance_VolumePurchasingLocations_add_history_notes_v1 adds a history note to a volume purchasing location.
 func TestAcceptance_VolumePurchasingLocations_add_history_notes_v1(t *testing.T) {
 	acc.RequireClient(t)
 
@@ -97,7 +97,7 @@ func TestAcceptance_VolumePurchasingLocations_add_history_notes_v1(t *testing.T)
 	require.Equal(t, 201, resp.StatusCode)
 }
 
-// TestAcceptance_VolumePurchasingLocations_RevokeVolumePurchasingLocationLicensesByIDV1 tests revoking licenses.
+// TestAcceptance_VolumePurchasingLocations_revoke_volume_purchasing_location_licenses_by_idv1 tests revoking licenses.
 // This test may skip if there are no VPP locations or if the operation is not supported.
 func TestAcceptance_VolumePurchasingLocations_revoke_volume_purchasing_location_licenses_by_idv1(t *testing.T) {
 	acc.RequireClient(t)

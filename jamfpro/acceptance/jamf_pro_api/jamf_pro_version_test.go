@@ -21,7 +21,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to system version information
-//     -- Tests: TestAcceptance_JamfProVersion_GetV1
+//     -- Tests: TestAcceptance_JamfProVersion_get_v1
 //     -- Flow: Get version → Verify response structure and required fields
 //
 // Test Coverage

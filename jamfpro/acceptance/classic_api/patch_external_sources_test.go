@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_PatchExternalSources_Lifecycle exercises the full
+// TestAcceptance_PatchExternalSources_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByName →
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -186,7 +186,7 @@ func TestAcceptance_PatchExternalSources_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_PatchExternalSources_ValidationErrors tests client-side validation.
+// TestAcceptance_PatchExternalSources_validation_errors tests client-side validation.
 // =============================================================================
 
 func TestAcceptance_PatchExternalSources_validation_errors(t *testing.T) {
@@ -213,13 +213,13 @@ func TestAcceptance_PatchExternalSources_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &patch_external_sources.RequestPatchExternalSource{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &patch_external_sources.RequestPatchExternalSource{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "patch external source ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &patch_external_sources.RequestPatchExternalSource{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &patch_external_sources.RequestPatchExternalSource{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "patch external source name is required")
 	})

@@ -29,18 +29,18 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_ComputerExtensionAttributes_Lifecycle
+//     -- Tests: TestAcceptance_ComputerExtensionAttributes_lifecycle
 //     -- Flow: Create → List → GetByID → Update → Verify → Delete
 //
 //   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: MISSING - Should be added as TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter
+//     -- Tests: MISSING - Should be added as TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter
 //     -- Flow: Create unique EA → Filter with RSQL → Verify filtered results
 //     -- Status: MANDATORY test not implemented
 //
 //   ✓ Pattern 6: Bulk Operations
 //     -- Reason: Service provides DeleteComputerExtensionAttributesByIDV1 for bulk deletion
-//     -- Tests: TestAcceptance_ComputerExtensionAttributes_DeleteMultiple
+//     -- Tests: TestAcceptance_ComputerExtensionAttributes_delete_multiple
 //     -- Flow: Create multiple → Bulk delete → Verify deletion
 //
 // Test Coverage
@@ -62,7 +62,7 @@ import (
 //   • Computer Extension Attributes extend inventory data collection for devices
 //   • DataType options: String, Integer, Date
 //   • InputType options: TEXT, SCRIPT, POPUP_MENU, LDAP_ATTRIBUTE
-//   • TODO: Add TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter (MANDATORY)
+//   • TODO: Add TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter (MANDATORY)
 //   • TODO: Add validation error tests for empty IDs, nil requests, etc.
 //
 // =============================================================================
@@ -199,7 +199,7 @@ func TestAcceptance_ComputerExtensionAttributes_delete_multiple(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter
+// TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter
 // =============================================================================
 
 func TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter(t *testing.T) {

@@ -36,12 +36,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle (Smart Groups)
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations for smart groups
-//     -- Tests: TestAcceptance_ComputerGroups_Smart_Lifecycle
+//     -- Tests: TestAcceptance_ComputerGroups_smart_lifecycle
 //     -- Flow: Create → List → GetByID → Update → Verify → Delete
 //
 //   ✓ Pattern 1: Full CRUD Lifecycle (Static Groups)
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations for static groups
-//     -- Tests: TestAcceptance_ComputerGroups_Static_Lifecycle
+//     -- Tests: TestAcceptance_ComputerGroups_static_lifecycle
 //     -- Flow: Create → List → GetByID → Update (PATCH) → Verify → Delete
 //
 //   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]
@@ -52,7 +52,7 @@ import (
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_ComputerGroups_ValidationErrors
+//     -- Tests: TestAcceptance_ComputerGroups_validation_errors
 //     -- Cases: Empty IDs, nil requests for both smart and static groups
 //
 // Test Coverage
@@ -86,11 +86,11 @@ import (
 //   • All tests register cleanup handlers to remove test groups
 //   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
 //   • Static group creation may return 500 in some environments (test handles gracefully)
-//   • TODO: Add TestAcceptance_ComputerGroups_Smart_ListWithRSQLFilter (MANDATORY)
-//   • TODO: Add TestAcceptance_ComputerGroups_Static_ListWithRSQLFilter (MANDATORY)
+//   • TODO: Add TestAcceptance_ComputerGroups_smart_list_with_rsql_filter (MANDATORY)
+//   • TODO: Add TestAcceptance_ComputerGroups_static_list_with_rsql_filter (MANDATORY)
 //
 // =============================================================================
-// TestAcceptance_ComputerGroups_Smart_Lifecycle
+// TestAcceptance_ComputerGroups_smart_lifecycle
 // =============================================================================
 
 func TestAcceptance_ComputerGroups_smart_lifecycle(t *testing.T) {
@@ -192,7 +192,7 @@ func TestAcceptance_ComputerGroups_smart_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_Static_Lifecycle
+// TestAcceptance_ComputerGroups_static_lifecycle
 // =============================================================================
 
 func TestAcceptance_ComputerGroups_static_lifecycle(t *testing.T) {
@@ -291,7 +291,7 @@ func TestAcceptance_ComputerGroups_static_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_Smart_ListWithRSQLFilter
+// TestAcceptance_ComputerGroups_smart_list_with_rsql_filter
 // =============================================================================
 
 func TestAcceptance_ComputerGroups_smart_list_with_rsql_filter(t *testing.T) {
@@ -344,7 +344,7 @@ func TestAcceptance_ComputerGroups_smart_list_with_rsql_filter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_Static_ListWithRSQLFilter
+// TestAcceptance_ComputerGroups_static_list_with_rsql_filter
 // =============================================================================
 
 func TestAcceptance_ComputerGroups_static_list_with_rsql_filter(t *testing.T) {
@@ -398,7 +398,7 @@ func TestAcceptance_ComputerGroups_static_list_with_rsql_filter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_ValidationErrors
+// TestAcceptance_ComputerGroups_validation_errors
 // =============================================================================
 
 func TestAcceptance_ComputerGroups_validation_errors(t *testing.T) {
@@ -419,7 +419,7 @@ func TestAcceptance_ComputerGroups_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateSmartV2_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateSmartV2(context.Background(), "", &computer_groups.RequestSmartGroup{Name: "x"})
+		_, _, err := svc.UpdateSmartV2(context.Background(), "", &computer_groups.RequestSmartGroup{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})
@@ -443,7 +443,7 @@ func TestAcceptance_ComputerGroups_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateStaticByIDV2_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateStaticByIDV2(context.Background(), "", &computer_groups.RequestStaticGroup{Name: "x"})
+		_, _, err := svc.UpdateStaticByIDV2(context.Background(), "", &computer_groups.RequestStaticGroup{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})

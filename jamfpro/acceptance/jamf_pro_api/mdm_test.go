@@ -23,7 +23,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_MDM_ValidationErrors
+//     -- Tests: TestAcceptance_MDM_validation_errors
 //     -- Cases: Empty IDs, nil requests
 //
 // Notes
@@ -33,7 +33,7 @@ import (
 //     against a real tenant to avoid affecting production devices
 //
 // =============================================================================
-// TestAcceptance_MDM_ValidationErrors
+// TestAcceptance_MDM_validation_errors
 // =============================================================================
 
 func TestAcceptance_MDM_validation_errors(t *testing.T) {
@@ -73,7 +73,7 @@ func TestAcceptance_MDM_validation_errors(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MDM_BlankPush (optional - requires enrolled device)
+// TestAcceptance_MDM_blank_push (optional - requires enrolled device)
 // =============================================================================
 // Uncomment and set JAMF_MDM_TEST_DEVICE_ID to test blank push against a real device.
 //

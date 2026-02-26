@@ -19,7 +19,7 @@ func uniqueAccountName(prefix string) string {
 }
 
 // =============================================================================
-// TestAcceptance_Accounts_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Accounts_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -210,7 +210,7 @@ func TestAcceptance_Accounts_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Accounts_DeleteByName creates an account then deletes by name.
+// TestAcceptance_Accounts_delete_by_name creates an account then deletes by name.
 // =============================================================================
 
 func TestAcceptance_Accounts_delete_by_name(t *testing.T) {
@@ -259,7 +259,7 @@ func TestAcceptance_Accounts_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Accounts_ValidationErrors tests client-side validation
+// TestAcceptance_Accounts_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
@@ -287,13 +287,13 @@ func TestAcceptance_Accounts_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateAccountByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &accounts.RequestAccount{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &accounts.RequestAccount{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account ID must be a positive integer")
 	})
 
 	t.Run("UpdateAccountByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &accounts.RequestAccount{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &accounts.RequestAccount{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account name is required")
 	})

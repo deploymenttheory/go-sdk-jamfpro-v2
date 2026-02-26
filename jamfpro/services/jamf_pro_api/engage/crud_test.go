@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetV2(t *testing.T) {
+func TestUnit_Engage_GetV2_Success(t *testing.T) {
 	mock := mocks.NewEngageMock()
 	mock.RegisterGetMock()
 
@@ -21,7 +21,7 @@ func TestGetV2(t *testing.T) {
 	assert.True(t, result.IsEnabled)
 }
 
-func TestUpdateV2(t *testing.T) {
+func TestUnit_Engage_UpdateV2_Success(t *testing.T) {
 	mock := mocks.NewEngageMock()
 	mock.RegisterUpdateMock()
 
@@ -35,7 +35,7 @@ func TestUpdateV2(t *testing.T) {
 	assert.False(t, result.IsEnabled)
 }
 
-func TestUpdateV2_NilRequest(t *testing.T) {
+func TestUnit_Engage_UpdateV2_NilRequest(t *testing.T) {
 	mock := mocks.NewEngageMock()
 	svc := NewService(mock)
 
@@ -47,7 +47,7 @@ func TestUpdateV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "settings cannot be nil")
 }
 
-func TestGetHistoryV2(t *testing.T) {
+func TestUnit_Engage_GetHistoryV2_Success(t *testing.T) {
 	mock := mocks.NewEngageMock()
 	mock.RegisterGetHistoryMock()
 
@@ -62,7 +62,7 @@ func TestGetHistoryV2(t *testing.T) {
 	assert.Equal(t, "admin", result.Results[0].Username)
 }
 
-func TestGetHistoryV2_WithFilter(t *testing.T) {
+func TestUnit_Engage_GetHistoryV2_WithFilter(t *testing.T) {
 	mock := mocks.NewEngageMock()
 	mock.RegisterGetHistoryMock()
 
@@ -78,7 +78,7 @@ func TestGetHistoryV2_WithFilter(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestAddHistoryNotesV2(t *testing.T) {
+func TestUnit_Engage_AddHistoryNotesV2_Success(t *testing.T) {
 	mock := mocks.NewEngageMock()
 	mock.RegisterAddHistoryNotesMock()
 
@@ -92,7 +92,7 @@ func TestAddHistoryNotesV2(t *testing.T) {
 	assert.Equal(t, "Test note added", result.Note)
 }
 
-func TestAddHistoryNotesV2_NilRequest(t *testing.T) {
+func TestUnit_Engage_AddHistoryNotesV2_NilRequest(t *testing.T) {
 	mock := mocks.NewEngageMock()
 	svc := NewService(mock)
 
@@ -104,7 +104,7 @@ func TestAddHistoryNotesV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request body is required")
 }
 
-func TestAddHistoryNotesV2_EmptyNote(t *testing.T) {
+func TestUnit_Engage_AddHistoryNotesV2_EmptyNote(t *testing.T) {
 	mock := mocks.NewEngageMock()
 	svc := NewService(mock)
 

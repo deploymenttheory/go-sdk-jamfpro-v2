@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_FileShareDistributionPoints_Lifecycle exercises the full
+// TestAcceptance_FileShareDistributionPoints_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByName →
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -204,7 +204,7 @@ func TestAcceptance_FileShareDistributionPoints_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_FileShareDistributionPoints_DeleteByName creates a
+// TestAcceptance_FileShareDistributionPoints_delete_by_name creates a
 // distribution point then deletes by name.
 // =============================================================================
 
@@ -248,7 +248,7 @@ func TestAcceptance_FileShareDistributionPoints_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_FileShareDistributionPoints_ValidationErrors validates error handling.
+// TestAcceptance_FileShareDistributionPoints_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_FileShareDistributionPoints_validation_errors(t *testing.T) {
@@ -275,13 +275,13 @@ func TestAcceptance_FileShareDistributionPoints_validation_errors(t *testing.T) 
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &file_share_distribution_points.RequestFileShareDistributionPoint{Name: "test"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &file_share_distribution_points.RequestFileShareDistributionPoint{Name: "sdkv2_acc_test"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "distribution point ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &file_share_distribution_points.RequestFileShareDistributionPoint{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &file_share_distribution_points.RequestFileShareDistributionPoint{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "distribution point name cannot be empty")
 	})

@@ -24,7 +24,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern: Upload with temporary file
 //     -- Reason: Upload creates resources; use temp file for cleanup
-//     -- Tests: TestAcceptance_SelfServiceBrandingUpload_Upload
+//     -- Tests: TestAcceptance_SelfServiceBrandingUpload_upload
 //
 // Test Coverage
 // -----------------------------------------------------------------------------

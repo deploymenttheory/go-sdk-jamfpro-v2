@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestForceSyncV1(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_ForceSyncV1_Success(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	mock.RegisterForceSyncMock("test-client-id")
 
@@ -23,7 +23,7 @@ func TestForceSyncV1(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestForceSyncV1_EmptyClientManagementID(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_ForceSyncV1_EmptyClientManagementID(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -35,7 +35,7 @@ func TestForceSyncV1_EmptyClientManagementID(t *testing.T) {
 	assert.Contains(t, err.Error(), "clientManagementID is required")
 }
 
-func TestGetStatusItemsV1(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_GetStatusItemsV1_Success(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	mock.RegisterGetStatusItemsMock("test-client-id")
 
@@ -52,7 +52,7 @@ func TestGetStatusItemsV1(t *testing.T) {
 	assert.Equal(t, "Mac", result.StatusItems[0].Value)
 }
 
-func TestGetStatusItemsV1_EmptyClientManagementID(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_GetStatusItemsV1_EmptyClientManagementID(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -65,7 +65,7 @@ func TestGetStatusItemsV1_EmptyClientManagementID(t *testing.T) {
 	assert.Contains(t, err.Error(), "clientManagementID is required")
 }
 
-func TestGetStatusItemByKeyV1(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_GetStatusItemByKeyV1_Success(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	mock.RegisterGetStatusItemByKeyMock("test-client-id", "device.model.family")
 
@@ -81,7 +81,7 @@ func TestGetStatusItemByKeyV1(t *testing.T) {
 	assert.Equal(t, "Mac", result.Value)
 }
 
-func TestGetStatusItemByKeyV1_EmptyClientManagementID(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_GetStatusItemByKeyV1_EmptyClientManagementID(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -94,7 +94,7 @@ func TestGetStatusItemByKeyV1_EmptyClientManagementID(t *testing.T) {
 	assert.Contains(t, err.Error(), "clientManagementID is required")
 }
 
-func TestGetStatusItemByKeyV1_EmptyKey(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_GetStatusItemByKeyV1_EmptyKey(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -107,7 +107,7 @@ func TestGetStatusItemByKeyV1_EmptyKey(t *testing.T) {
 	assert.Contains(t, err.Error(), "key is required")
 }
 
-func TestForceSyncV1_Error(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_ForceSyncV1_Error(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	// No mock response registered — HTTP call will fail.
 	svc := NewService(mock)
@@ -119,7 +119,7 @@ func TestForceSyncV1_Error(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestGetStatusItemsV1_Error(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_GetStatusItemsV1_Error(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	// No mock response registered — HTTP call will fail.
 	svc := NewService(mock)
@@ -132,7 +132,7 @@ func TestGetStatusItemsV1_Error(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestGetStatusItemByKeyV1_Error(t *testing.T) {
+func TestUnit_DeclarativeDeviceManagement_GetStatusItemByKeyV1_Error(t *testing.T) {
 	mock := mocks.NewDeclarativeDeviceManagementMock()
 	// No mock response registered — HTTP call will fail.
 	svc := NewService(mock)

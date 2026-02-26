@@ -13,7 +13,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_NetworkSegments_Lifecycle exercises the full write/read/delete
+// TestAcceptance_NetworkSegments_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
@@ -185,7 +185,7 @@ func TestAcceptance_NetworkSegments_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_NetworkSegments_DeleteByName creates a segment then deletes by name.
+// TestAcceptance_NetworkSegments_delete_by_name creates a segment then deletes by name.
 // =============================================================================
 
 func TestAcceptance_NetworkSegments_delete_by_name(t *testing.T) {
@@ -229,7 +229,7 @@ func TestAcceptance_NetworkSegments_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_NetworkSegments_ValidationErrors tests client-side validation
+// TestAcceptance_NetworkSegments_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
@@ -257,13 +257,13 @@ func TestAcceptance_NetworkSegments_validation_errors(t *testing.T) {
 	})
 
 	t.Run("UpdateNetworkSegmentByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &network_segments.RequestNetworkSegment{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &network_segments.RequestNetworkSegment{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment ID must be a positive integer")
 	})
 
 	t.Run("UpdateNetworkSegmentByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &network_segments.RequestNetworkSegment{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &network_segments.RequestNetworkSegment{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment name is required")
 	})

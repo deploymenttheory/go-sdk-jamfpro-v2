@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MacApplications_Lifecycle exercises the full write/read/delete
+// TestAcceptance_MacApplications_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 //
@@ -250,7 +250,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MacApplications_DeleteByName creates a Mac application then deletes by name.
+// TestAcceptance_MacApplications_delete_by_name creates a Mac application then deletes by name.
 // =============================================================================
 
 func TestAcceptance_MacApplications_delete_by_name(t *testing.T) {
@@ -309,7 +309,7 @@ func TestAcceptance_MacApplications_delete_by_name(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MacApplications_ValidationErrors validates error handling.
+// TestAcceptance_MacApplications_validation_errors validates error handling.
 // =============================================================================
 
 func TestAcceptance_MacApplications_validation_errors(t *testing.T) {
