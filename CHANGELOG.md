@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.3.0...v0.4.0) (2026-02-26)
+
+
+### Features
+
+* add optimistic locking tests for computer and mobile device prestages ([dc99830](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/dc998301f10779e7fc91a2fab5d3ffd66f6f6dcb))
+* add optimistic locking tests for computer and mobile device prestages ([2c42cec](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/2c42cec3ba5cf0b77930fe9cbae941d99f93c38b))
+* add unit tests for various API services and enhance mock responders ([39aafe6](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/39aafe6de27d551095c3ba402a7de818c6bf08fb))
+* add unit tests for various API services and enhance mock responders ([f640371](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/f640371898c988ae6c7aec2c3fe1de69a977fa20))
+* enhance unit tests for API services with error handling and validation ([a41c71a](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/a41c71a22dc7bf2488fc83f457f5d4c0201e7f76))
+* implement UUID preservation in macOS configuration profile updates ([9b2de85](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/9b2de85cb1047d1806e834d3911a602c14c6e353))
+* implement UUID preservation in macOS configuration profile updates ([ec879c5](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/ec879c5d8e4fc36c83c6fd5e67ee772e0bb29e42))
+
 ## [0.3.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.2.0...v0.3.0) (2026-02-25)
 
 
