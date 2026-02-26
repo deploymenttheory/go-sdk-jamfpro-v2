@@ -394,6 +394,256 @@ func TestUnit_MobileDeviceApplications_Conflict(t *testing.T) {
 	assert.Contains(t, err.Error(), "mobile device application with that name already exists")
 }
 
+func TestUnit_MobileDeviceApplications_List_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.List(context.Background())
+
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceApplications_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.GetByName(context.Background(), "nonexistent")
+
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceApplications_GetByBundleID_EmptyBundleID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.GetByBundleID(context.Background(), "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "bundle ID cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_GetByBundleIDAndVersion_EmptyBundleID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.GetByBundleIDAndVersion(context.Background(), "", "1.0")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "bundle ID cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_GetByBundleIDAndVersion_EmptyVersion(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.GetByBundleIDAndVersion(context.Background(), "com.example.app", "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "version cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_GetByIDAndSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.GetByIDAndSubset(context.Background(), 1, "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "subset cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_GetByNameAndSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.GetByNameAndSubset(context.Background(), "Sample iOS App", "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "subset cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	req := &mobile_device_applications.Resource{
+		General: mobile_device_applications.SubsetGeneral{Name: ""},
+	}
+
+	_, _, err := svc.UpdateByID(context.Background(), 1, req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name is required")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	req := &mobile_device_applications.Resource{
+		General: mobile_device_applications.SubsetGeneral{Name: ""},
+	}
+
+	_, _, err := svc.UpdateByName(context.Background(), "Sample iOS App", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name is required")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByName_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	req := &mobile_device_applications.Resource{
+		General: mobile_device_applications.SubsetGeneral{Name: "Test"},
+	}
+
+	_, _, err := svc.UpdateByName(context.Background(), "", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.UpdateByName(context.Background(), "Sample iOS App", nil)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByBundleID_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	req := &mobile_device_applications.Resource{
+		General: mobile_device_applications.SubsetGeneral{Name: ""},
+	}
+
+	_, _, err := svc.UpdateByBundleID(context.Background(), "com.example.app", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name is required")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByBundleID_EmptyBundleID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	req := &mobile_device_applications.Resource{
+		General: mobile_device_applications.SubsetGeneral{Name: "Test"},
+	}
+
+	_, _, err := svc.UpdateByBundleID(context.Background(), "", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "bundle ID cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByBundleID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.UpdateByBundleID(context.Background(), "com.example.app", nil)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByIDAndVersion_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	req := &mobile_device_applications.Resource{
+		General: mobile_device_applications.SubsetGeneral{Name: ""},
+	}
+
+	_, _, err := svc.UpdateByIDAndVersion(context.Background(), 1, "1.0", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name is required")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByIDAndVersion_ZeroID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	req := &mobile_device_applications.Resource{
+		General: mobile_device_applications.SubsetGeneral{Name: "Test"},
+	}
+
+	_, _, err := svc.UpdateByIDAndVersion(context.Background(), 0, "1.0", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "ID must be a positive integer")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByIDAndVersion_EmptyVersion(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	req := &mobile_device_applications.Resource{
+		General: mobile_device_applications.SubsetGeneral{Name: "Test"},
+	}
+
+	_, _, err := svc.UpdateByIDAndVersion(context.Background(), 1, "", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "version cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_UpdateByIDAndVersion_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, _, err := svc.UpdateByIDAndVersion(context.Background(), 1, "1.0", nil)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceApplications_DeleteByBundleID_EmptyBundleID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, err := svc.DeleteByBundleID(context.Background(), "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "bundle ID cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_DeleteByBundleIDAndVersion_EmptyBundleID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, err := svc.DeleteByBundleIDAndVersion(context.Background(), "", "1.0")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "bundle ID cannot be empty")
+}
+
+func TestUnit_MobileDeviceApplications_DeleteByBundleIDAndVersion_EmptyVersion(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceApplicationsMock()
+	svc := mobile_device_applications.NewService(mockClient)
+
+	_, err := svc.DeleteByBundleIDAndVersion(context.Background(), "com.example.app", "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "version cannot be empty")
+}
+
 func boolPtr(b bool) *bool {
 	return &b
 }

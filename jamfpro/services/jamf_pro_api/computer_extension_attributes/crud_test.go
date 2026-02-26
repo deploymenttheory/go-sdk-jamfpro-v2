@@ -213,3 +213,40 @@ func TestUnitGetHistoryByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 2, result.Results[1].ID)
 	assert.Equal(t, "Updated script", result.Results[1].Note)
 }
+
+func TestUnit_ComputerExtensionAttributes_GetHistoryByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetHistoryByIDV1(context.Background(), "", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_ComputerExtensionAttributes_AddHistoryNoteByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNoteMock()
+
+	req := &AddHistoryNoteRequest{Note: "Manual note added"}
+	resp, err := svc.AddHistoryNoteByIDV1(context.Background(), "1", req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode)
+}
+
+func TestUnit_ComputerExtensionAttributes_AddHistoryNoteByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &AddHistoryNoteRequest{Note: "Test note"}
+	resp, err := svc.AddHistoryNoteByIDV1(context.Background(), "", req)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_ComputerExtensionAttributes_AddHistoryNoteByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.AddHistoryNoteByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}

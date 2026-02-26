@@ -49,6 +49,18 @@ func (m *SsoCertificateMock) RegisterDeleteMock() {
 	m.register("DELETE", "/api/v2/sso/cert", 200, "")
 }
 
+func (m *SsoCertificateMock) RegisterUpdateMock() {
+	m.register("PUT", "/api/v2/sso/cert", 200, "validate_get.json")
+}
+
+func (m *SsoCertificateMock) RegisterDownloadMock() {
+	m.register("GET", "/api/v2/sso/cert/download", 200, "")
+}
+
+func (m *SsoCertificateMock) RegisterParseMock() {
+	m.register("POST", "/api/v2/sso/cert/parse", 200, "validate_parse.json")
+}
+
 func (m *SsoCertificateMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

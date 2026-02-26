@@ -48,6 +48,11 @@ func (m *ServiceDiscoveryEnrollmentMock) RegisterUpdateWellKnownSettingsMock() {
 	m.register("PUT", "/api/v1/service-discovery-enrollment/well-known-settings", 204, "validate_update_204.json")
 }
 
+// RegisterUpdateWellKnownSettingsNon204Mock registers a PUT well-known-settings response with 200 status.
+func (m *ServiceDiscoveryEnrollmentMock) RegisterUpdateWellKnownSettingsNon204Mock() {
+	m.register("PUT", "/api/v1/service-discovery-enrollment/well-known-settings", 200, "")
+}
+
 func (m *ServiceDiscoveryEnrollmentMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

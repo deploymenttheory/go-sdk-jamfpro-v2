@@ -71,3 +71,41 @@ func TestUnitDeleteByIDV1_Success(t *testing.T) {
 	require.NotNil(t, resp)
 	require.Equal(t, 204, resp.StatusCode)
 }
+
+func TestUnit_APIRoles_UpdateByIDV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestAPIRole{DisplayName: "Updated Role", Privileges: []string{"Read Computers", "Update Computers"}}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, "1", result.ID)
+	require.Equal(t, "Administrator", result.DisplayName)
+}
+
+func TestUnit_APIRoles_UpdateByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestAPIRole{DisplayName: "Updated Role", Privileges: []string{"Read Computers"}}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", req)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_APIRoles_UpdateByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_APIRoles_DeleteByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "API role ID is required")
+}

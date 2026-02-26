@@ -133,6 +133,80 @@ func (m *JamfConnectMock) RegisterRetryDeploymentTasksMock() {
 	m.register("POST", "/api/v1/jamf-connect/deployments/123e4567-e89b-12d3-a456-426614174000/tasks/retry", 204, []byte{})
 }
 
+func (m *JamfConnectMock) RegisterGetDeploymentTasksMock() {
+	body := []byte(`{
+		"totalCount": 2,
+		"results": [
+			{"status": "COMPLETED", "updated": "2024-01-15T10:00:00Z", "version": "2.0.0"},
+			{"status": "PENDING", "updated": "2024-01-15T11:00:00Z", "version": "2.1.0"}
+		]
+	}`)
+	m.register("GET", "/api/v1/jamf-connect/deployments/dep-123/tasks", 200, body)
+}
+
+func (m *JamfConnectMock) RegisterGetHistoryMock() {
+	body := []byte(`{
+		"totalCount": 1,
+		"results": [
+			{"id": "1", "username": "admin", "date": "2024-01-15T10:00:00Z", "note": "Config updated", "details": "Profile modified"}
+		]
+	}`)
+	m.register("GET", "/api/v1/jamf-connect/history", 200, body)
+}
+
+// RegisterListConfigProfilesBadJSONMock registers a response with invalid JSON body for the config profiles endpoint.
+// This is used to test the mergePage unmarshal error path.
+func (m *JamfConnectMock) RegisterListConfigProfilesBadJSONMock() {
+	m.responses["GET:/api/v1/jamf-connect/config-profiles"] = registeredResponse{
+		statusCode: 200,
+		rawBody:    []byte("not-valid-json"),
+	}
+}
+
+// RegisterListConfigProfilesBadResultsMock registers a response where profileId is a string (not an int),
+// causing mapstructure.Decode to fail when decoding the profile.
+func (m *JamfConnectMock) RegisterListConfigProfilesBadResultsMock() {
+	body := []byte(`{"totalCount": 1, "results": [{"profileId": "not-a-number"}]}`)
+	m.responses["GET:/api/v1/jamf-connect/config-profiles"] = registeredResponse{
+		statusCode: 200,
+		rawBody:    body,
+	}
+}
+
+// RegisterGetDeploymentTasksBadJSONMock registers invalid JSON for the deployment tasks endpoint.
+func (m *JamfConnectMock) RegisterGetDeploymentTasksBadJSONMock() {
+	m.responses["GET:/api/v1/jamf-connect/deployments/dep-123/tasks"] = registeredResponse{
+		statusCode: 200,
+		rawBody:    []byte("not-valid-json"),
+	}
+}
+
+// RegisterGetDeploymentTasksBadResultsMock registers a response where a field has an incompatible type.
+func (m *JamfConnectMock) RegisterGetDeploymentTasksBadResultsMock() {
+	body := []byte(`{"totalCount": 1, "results": [{"status": ["not", "a", "string"]}]}`)
+	m.responses["GET:/api/v1/jamf-connect/deployments/dep-123/tasks"] = registeredResponse{
+		statusCode: 200,
+		rawBody:    body,
+	}
+}
+
+// RegisterGetHistoryBadJSONMock registers invalid JSON for the history endpoint.
+func (m *JamfConnectMock) RegisterGetHistoryBadJSONMock() {
+	m.responses["GET:/api/v1/jamf-connect/history"] = registeredResponse{
+		statusCode: 200,
+		rawBody:    []byte("not-valid-json"),
+	}
+}
+
+// RegisterGetHistoryBadResultsMock registers a response where a field has an incompatible type.
+func (m *JamfConnectMock) RegisterGetHistoryBadResultsMock() {
+	body := []byte(`{"totalCount": 1, "results": [{"id": ["not", "a", "string"]}]}`)
+	m.responses["GET:/api/v1/jamf-connect/history"] = registeredResponse{
+		statusCode: 200,
+		rawBody:    body,
+	}
+}
+
 func (m *JamfConnectMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)

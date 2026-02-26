@@ -52,6 +52,7 @@ func (m *CloudDistributionPointMock) RegisterMocks() {
 	m.register("GET", "/api/v1/cloud-distribution-point/upload-capability", 200, "validate_upload_capability.json")
 	m.register("GET", "/api/v1/cloud-distribution-point/test-connection", 200, "validate_test_connection.json")
 	m.register("GET", "/api/v1/cloud-distribution-point/history", 200, "validate_history.json")
+	m.register("GET", "/api/v1/cloud-distribution-point/files", 200, "validate_files.json")
 }
 
 func (m *CloudDistributionPointMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

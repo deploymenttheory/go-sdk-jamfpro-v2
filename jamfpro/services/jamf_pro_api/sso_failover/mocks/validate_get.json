@@ -1,0 +1,4 @@
+{
+  "failoverUrl": "https://sso.example.com/failover?key=abc123",
+  "generationTime": 1705312200000
+}

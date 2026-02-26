@@ -91,6 +91,36 @@ func TestUnitAddHistoryNotes_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
+func TestUnit_Reenrollment_Get_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.Get(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_Reenrollment_GetHistory_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetHistory(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_Reenrollment_ExportHistory_WithBody(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportHistoryMock()
+
+	page := 0
+	pageSize := 100
+	body := &ExportReenrollmentHistoryRequest{Page: &page, PageSize: &pageSize}
+	resp, data, err := svc.ExportHistory(context.Background(), nil, body)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, data)
+	require.Equal(t, 200, resp.StatusCode)
+}
+
 func TestUnitExportHistory_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportHistoryMock()

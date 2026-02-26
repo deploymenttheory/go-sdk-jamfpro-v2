@@ -104,8 +104,24 @@ func (m *VolumePurchasingLocationsMock) RegisterGetContentMock() {
 	m.register("GET", "/api/v1/volume-purchasing-locations/1/content", 200, "validate_content.json")
 }
 
+func (m *VolumePurchasingLocationsMock) RegisterGetContentWithResultsMock() {
+	m.register("GET", "/api/v1/volume-purchasing-locations/2/content", 200, "validate_content_with_results.json")
+}
+
 func (m *VolumePurchasingLocationsMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v1/volume-purchasing-locations/999", 404, "error_not_found.json")
+}
+
+func (m *VolumePurchasingLocationsMock) RegisterGetHistoryMock() {
+	m.register("GET", "/api/v1/volume-purchasing-locations/1/history", 200, "validate_history.json")
+}
+
+func (m *VolumePurchasingLocationsMock) RegisterAddHistoryNotesMock() {
+	m.register("POST", "/api/v1/volume-purchasing-locations/1/history", 201, "")
+}
+
+func (m *VolumePurchasingLocationsMock) RegisterRevokeLicensesMock() {
+	m.register("POST", "/api/v1/volume-purchasing-locations/1/revoke-licenses", 200, "")
 }
 
 func (m *VolumePurchasingLocationsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

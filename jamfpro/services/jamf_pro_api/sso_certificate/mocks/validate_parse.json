@@ -1,0 +1,10 @@
+{
+  "keys": [
+    {
+      "id": "key-1",
+      "valid": true
+    }
+  ],
+  "type": "PKCS12",
+  "keystoreSetupType": "UPLOADED"
+}

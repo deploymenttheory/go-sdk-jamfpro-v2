@@ -123,6 +123,14 @@ func (m *MobileDeviceGroupsMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v1/mobile-device-groups/smart-groups/999", 404, "error_not_found.json")
 }
 
+func (m *MobileDeviceGroupsMock) RegisterGetStaticNotFoundErrorMock() {
+	m.registerError("GET", "/api/v1/mobile-device-groups/static-groups/999", 404, "error_not_found.json")
+}
+
+func (m *MobileDeviceGroupsMock) RegisterListSmartErrorMock() {
+	m.registerError("GET", "/api/v1/mobile-device-groups/smart-groups", 500, "error_not_found.json")
+}
+
 func (m *MobileDeviceGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)

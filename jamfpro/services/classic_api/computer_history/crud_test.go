@@ -198,6 +198,116 @@ func TestUnit_ComputerHistory_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "Resource not found")
 }
 
+func TestUnit_ComputerHistory_GetByIDAndSubset_EmptyID(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetByIDAndSubset(context.Background(), "", "General")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "ID cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetByNameAndSubset_EmptyName(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetByNameAndSubset(context.Background(), "", "General")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetByNameAndSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetByNameAndSubset(context.Background(), "Test-MacBook-Pro", "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "subset cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetByUDID_Empty(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetByUDID(context.Background(), "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "UDID cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetByUDIDAndSubset_EmptyUDID(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetByUDIDAndSubset(context.Background(), "", "General")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "UDID cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetByUDIDAndSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetByUDIDAndSubset(context.Background(), "00000000-0000-0000-0000-000000000001", "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "subset cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetBySerialNumber_Empty(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetBySerialNumber(context.Background(), "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "serial number cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetBySerialNumberAndSubset_EmptySerial(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetBySerialNumberAndSubset(context.Background(), "", "General")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "serial number cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetBySerialNumberAndSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetBySerialNumberAndSubset(context.Background(), "C02XYZ123456", "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "subset cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetByMACAddressAndSubset_EmptyMAC(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetByMACAddressAndSubset(context.Background(), "", "General")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "MAC address cannot be empty")
+}
+
+func TestUnit_ComputerHistory_GetByMACAddressAndSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewComputerHistoryMock()
+	svc := computer_history.NewService(mockClient)
+
+	_, _, err := svc.GetByMACAddressAndSubset(context.Background(), "00:11:22:33:44:55", "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "subset cannot be empty")
+}
+
 // Verify url.PathEscape behavior for MAC address.
 // Note: colons are valid in URL paths and are not escaped by PathEscape.
 func TestUnit_ComputerHistory_MACAddressPathEscape(t *testing.T) {

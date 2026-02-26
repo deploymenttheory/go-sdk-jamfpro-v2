@@ -11,17 +11,17 @@ import (
 type (
 	// DSSDeclarationsServiceInterface defines the interface for DSS declarations operations.
 	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-id
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
 	DSSDeclarationsServiceInterface interface {
 		// GetByUUIDV1 returns the specified DSS declaration by UUID.
 		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-id
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
 		GetByUUIDV1(ctx context.Context, uuid string) (*ResponseDSSDeclaration, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the DSS declarations-related methods of the Jamf Pro API.
 	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-id
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
 	Service struct {
 		client interfaces.HTTPClient
 	}
@@ -40,7 +40,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // GetByUUIDV1 returns the specified DSS declaration by UUID.
 // URL: GET /api/v1/dss-declarations/{uuid}
-// https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-id
+// https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
 func (s *Service) GetByUUIDV1(ctx context.Context, uuid string) (*ResponseDSSDeclaration, *interfaces.Response, error) {
 	if uuid == "" {
 		return nil, nil, fmt.Errorf("uuid is required")

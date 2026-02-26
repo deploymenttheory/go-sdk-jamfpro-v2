@@ -2,6 +2,7 @@ package self_service_branding_upload
 
 import (
 	"context"
+	"os"
 	"strings"
 	"testing"
 
@@ -44,4 +45,31 @@ func TestUnitUploadFromFile_FileNotFound(t *testing.T) {
 	require.Nil(t, result)
 	require.Nil(t, resp)
 	require.Contains(t, err.Error(), "open branding image file")
+}
+
+func TestUnit_SelfServiceBrandingUpload_UploadFromFile_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	f, err := os.CreateTemp(t.TempDir(), "branding-*.png")
+	require.NoError(t, err)
+	_, err = f.WriteString("fake png bytes")
+	require.NoError(t, err)
+	require.NoError(t, f.Close())
+
+	result, resp, err := svc.UploadFromFile(context.Background(), f.Name())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Contains(t, []int{200, 201}, resp.StatusCode)
+	require.NotEmpty(t, result.URL)
+}
+
+func TestUnit_SelfServiceBrandingUpload_Upload_Error(t *testing.T) {
+	mock := mocks.NewSelfServiceBrandingUploadMock()
+	svc := NewService(mock)
+
+	r := strings.NewReader("fake png bytes")
+	result, resp, err := svc.Upload(context.Background(), r, 14, "branding.png")
+	require.Error(t, err)
+	require.Nil(t, result)
+	_ = resp
 }

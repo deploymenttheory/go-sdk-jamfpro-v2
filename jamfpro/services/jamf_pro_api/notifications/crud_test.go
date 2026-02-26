@@ -25,3 +25,13 @@ func TestUnitListV1_Success(t *testing.T) {
 	require.Equal(t, "EXAMPLE", result[0].Type)
 	require.Equal(t, "1", result[0].ID)
 }
+
+func TestUnit_Notifications_ListV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListErrorMock()
+	result, resp, err := svc.ListV1(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 500, resp.StatusCode)
+}

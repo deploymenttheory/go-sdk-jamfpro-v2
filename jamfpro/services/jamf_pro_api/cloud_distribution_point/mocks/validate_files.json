@@ -1,0 +1,19 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "file-001",
+      "fileName": "package.pkg",
+      "inventoryId": "inv-001",
+      "type": "PACKAGE",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "file-002",
+      "fileName": "script.sh",
+      "inventoryId": "inv-002",
+      "type": "SCRIPT",
+      "status": "AVAILABLE"
+    }
+  ]
+}

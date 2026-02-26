@@ -166,3 +166,148 @@ func TestUnitDeleteStaticByIDV1_Success(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
 }
+
+func TestUnit_MobileDeviceGroups_ListSmartV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListSmartErrorMock()
+	result, resp, err := svc.ListSmartV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_MobileDeviceGroups_CreateSmartV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.CreateSmartV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceGroups_GetSmartByIDV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterNotFoundErrorMock()
+	result, resp, err := svc.GetSmartByIDV1(context.Background(), "999")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_CreateStaticV1_NilAssignments(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterCreateStaticMock()
+	req := &RequestStaticMobileDeviceGroup{
+		Name:   "New Static",
+		SiteId: "-1",
+	}
+	result, resp, err := svc.CreateStaticV1(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	assert.Equal(t, 201, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_UpdateStaticByIDV1_NilAssignments(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateStaticMock()
+	req := &RequestStaticMobileDeviceGroup{
+		Name:   "Static Updated",
+		SiteId: "-1",
+	}
+	result, resp, err := svc.UpdateStaticByIDV1(context.Background(), "10", req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_GetSmartByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetSmartByIDV1(context.Background(), "")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "smart mobile device group ID is required")
+}
+
+func TestUnit_MobileDeviceGroups_UpdateSmartByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestSmartMobileDeviceGroup{Name: "Test"}
+	result, resp, err := svc.UpdateSmartByIDV1(context.Background(), "", req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDeviceGroups_UpdateSmartByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.UpdateSmartByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceGroups_DeleteSmartByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteSmartByIDV1(context.Background(), "")
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "smart mobile device group ID is required")
+}
+
+func TestUnit_MobileDeviceGroups_GetStaticByIDV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetStaticNotFoundErrorMock()
+	result, resp, err := svc.GetStaticByIDV1(context.Background(), "999")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_GetStaticByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetStaticByIDV1(context.Background(), "")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "static mobile device group ID is required")
+}
+
+func TestUnit_MobileDeviceGroups_CreateStaticV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.CreateStaticV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceGroups_UpdateStaticByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestStaticMobileDeviceGroup{Name: "Test"}
+	result, resp, err := svc.UpdateStaticByIDV1(context.Background(), "", req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDeviceGroups_UpdateStaticByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.UpdateStaticByIDV1(context.Background(), "10", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceGroups_DeleteStaticByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteStaticByIDV1(context.Background(), "")
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "static mobile device group ID is required")
+}

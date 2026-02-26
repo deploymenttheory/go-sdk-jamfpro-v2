@@ -216,6 +216,67 @@ func TestUnitDeleteByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "self-service branding configuration ID is required")
 }
 
+func TestUnitUpdateByName_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+	mock.RegisterUpdateMock()
+
+	req := &ResourceSelfServiceBrandingMacOS{
+		BrandingName: "Corporate Branding Updated",
+	}
+	result, resp, err := svc.UpdateByName(context.Background(), "Corporate Branding", req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnitUpdateByName_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+
+	req := &ResourceSelfServiceBrandingMacOS{BrandingName: "Updated"}
+	result, resp, err := svc.UpdateByName(context.Background(), "NonExistent", req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnitDeleteByName_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+	mock.RegisterDeleteMock()
+
+	resp, err := svc.DeleteByName(context.Background(), "Corporate Branding")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+}
+
+func TestUnitDeleteByName_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+
+	resp, err := svc.DeleteByName(context.Background(), "NonExistent")
+	assert.Error(t, err)
+	_ = resp
+}
+
+func TestUnitDeleteByID_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.DeleteByID(context.Background(), "999")
+	assert.Error(t, err)
+	_ = resp
+}
+
+func TestUnitList_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.List(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
 func intPtr(i int) *int {
 	return &i
 }

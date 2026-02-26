@@ -49,3 +49,19 @@ func TestUnitUpdateV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	assert.Equal(t, 200, resp.StatusCode)
 }
+
+func TestUnit_DeviceCommunicationSettings_GetHistoryV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryMock()
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].ID)
+	assert.Equal(t, "admin", result.Results[0].Username)
+	assert.Equal(t, "Settings updated", result.Results[0].Note)
+}

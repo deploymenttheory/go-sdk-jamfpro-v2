@@ -44,6 +44,18 @@ func (m *ReturnToServiceMock) RegisterGetByIDMock() {
 	m.register("GET", "/api/v1/return-to-service/1", 200, "validate_get.json")
 }
 
+func (m *ReturnToServiceMock) RegisterCreateMock() {
+	m.register("POST", "/api/v1/return-to-service", 201, "validate_create.json")
+}
+
+func (m *ReturnToServiceMock) RegisterUpdateMock() {
+	m.register("PUT", "/api/v1/return-to-service/1", 200, "validate_update.json")
+}
+
+func (m *ReturnToServiceMock) RegisterDeleteMock() {
+	m.register("DELETE", "/api/v1/return-to-service/1", 204, "")
+}
+
 func (m *ReturnToServiceMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

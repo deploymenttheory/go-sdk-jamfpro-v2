@@ -329,3 +329,225 @@ func TestUnit_MobileDeviceEnrollmentProfiles_NotFound(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "Resource not found")
 }
+
+func TestUnit_MobileDeviceEnrollmentProfiles_List_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByName(context.Background(), "Unknown")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_GetByInvitation_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByInvitation(context.Background(), "unknown")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_GetByIDWithSubset_ZeroID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByIDWithSubset(context.Background(), 0, "General")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device enrollment profile ID must be a positive integer")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_GetByIDWithSubset_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByIDWithSubset(context.Background(), 2, "General")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_GetByNameWithSubset_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByNameWithSubset(context.Background(), "", "General")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device enrollment profile name cannot be empty")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_GetByNameWithSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByNameWithSubset(context.Background(), "Test", "")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "subset cannot be empty")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_GetByNameWithSubset_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByNameWithSubset(context.Background(), "Unknown", "General")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_Create_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	req := &mobile_device_enrollment_profiles.Resource{
+		General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.Create(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByID_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	req := &mobile_device_enrollment_profiles.Resource{
+		General: mobile_device_enrollment_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.UpdateByID(context.Background(), 1, req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device enrollment profile name is required in request")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	req := &mobile_device_enrollment_profiles.Resource{
+		General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.UpdateByID(context.Background(), 2, req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByName_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	req := &mobile_device_enrollment_profiles.Resource{
+		General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.UpdateByName(context.Background(), "", req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device enrollment profile name cannot be empty")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.UpdateByName(context.Background(), "Test", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	req := &mobile_device_enrollment_profiles.Resource{
+		General: mobile_device_enrollment_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.UpdateByName(context.Background(), "Test", req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device enrollment profile name is required in request")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	req := &mobile_device_enrollment_profiles.Resource{
+		General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.UpdateByName(context.Background(), "Unknown", req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByInvitation_EmptyInvitation(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	req := &mobile_device_enrollment_profiles.Resource{
+		General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.UpdateByInvitation(context.Background(), "", req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device enrollment profile invitation cannot be empty")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByInvitation_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, _, err := svc.UpdateByInvitation(context.Background(), "123", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByInvitation_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	req := &mobile_device_enrollment_profiles.Resource{
+		General: mobile_device_enrollment_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.UpdateByInvitation(context.Background(), "123", req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device enrollment profile name is required in request")
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_UpdateByInvitation_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	req := &mobile_device_enrollment_profiles.Resource{
+		General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.UpdateByInvitation(context.Background(), "unknown", req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, err := svc.DeleteByID(context.Background(), 999)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, err := svc.DeleteByName(context.Background(), "Unknown")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceEnrollmentProfiles_DeleteByInvitation_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceEnrollmentProfilesMock()
+	svc := mobile_device_enrollment_profiles.NewService(mockClient)
+
+	_, err := svc.DeleteByInvitation(context.Background(), "unknown")
+	require.Error(t, err)
+}

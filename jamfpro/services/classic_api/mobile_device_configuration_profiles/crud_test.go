@@ -296,3 +296,142 @@ func TestUnit_MobileDeviceConfigurationProfiles_Conflict(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "mobile device configuration profile with that name already exists")
 }
+
+func TestUnit_MobileDeviceConfigurationProfiles_List_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByName(context.Background(), "Unknown")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_GetByIDWithSubset_ZeroID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByIDWithSubset(context.Background(), 0, "General")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device configuration profile ID must be a positive integer")
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_GetByIDWithSubset_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByIDWithSubset(context.Background(), 2, "General")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_GetByNameWithSubset_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByNameWithSubset(context.Background(), "", "General")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device configuration profile name cannot be empty")
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_GetByNameWithSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByNameWithSubset(context.Background(), "Test", "")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "subset cannot be empty")
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_GetByNameWithSubset_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, _, err := svc.GetByNameWithSubset(context.Background(), "Unknown", "General")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.UpdateByID(context.Background(), 1, req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device configuration profile name is required")
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.UpdateByID(context.Background(), 2, req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, _, err := svc.UpdateByName(context.Background(), "Test", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.UpdateByName(context.Background(), "Test", req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device configuration profile name is required in request")
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.UpdateByName(context.Background(), "Unknown", req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, err := svc.DeleteByID(context.Background(), 999)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	_, err := svc.DeleteByName(context.Background(), "Unknown")
+	require.Error(t, err)
+}

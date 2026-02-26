@@ -69,3 +69,62 @@ func TestUnitGetEnrollmentCustomizationDependencies_Success(t *testing.T) {
 	assert.Equal(t, "Enrollment Customization A", result.Dependencies[0].Name)
 	assert.Equal(t, "Enrollment Customization A", result.Dependencies[0].HumanReadableName)
 }
+
+func TestUnit_SsoSettings_DisableV3_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDisableMock()
+
+	resp, err := svc.DisableV3(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 204, resp.StatusCode)
+}
+
+func TestUnit_SsoSettings_GetHistoryV3_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryMock()
+
+	result, resp, err := svc.GetHistoryV3(context.Background(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].ID)
+	assert.Equal(t, "admin", result.Results[0].Username)
+}
+
+func TestUnit_SsoSettings_AddHistoryNoteV3_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNoteMock()
+
+	req := &AddHistoryNoteRequest{Note: "Test note"}
+	result, resp, err := svc.AddHistoryNoteV3(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, "2", result.ID)
+}
+
+func TestUnit_SsoSettings_AddHistoryNoteV3_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.AddHistoryNoteV3(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_SsoSettings_DownloadMetadataV3_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDownloadMetadataMock()
+
+	data, resp, err := svc.DownloadMetadataV3(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	_ = data
+}

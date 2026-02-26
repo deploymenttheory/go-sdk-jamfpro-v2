@@ -71,3 +71,69 @@ func TestUnitDeleteDeploymentByIDV1_Success(t *testing.T) {
 	require.NotNil(t, resp)
 	require.Equal(t, 204, resp.StatusCode)
 }
+
+func TestUnit_AppInstallers_UpdateDeploymentByIDV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	enabled := true
+	req := &RequestDeployment{Name: "Updated Deployment", AppTitleId: "1", Enabled: &enabled}
+	result, resp, err := svc.UpdateDeploymentByIDV1(context.Background(), "1", req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, "1", result.ID)
+	require.Equal(t, "Example Deployment", result.Name)
+}
+
+func TestUnit_AppInstallers_UpdateDeploymentByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestDeployment{Name: "Updated Deployment", AppTitleId: "1"}
+	result, resp, err := svc.UpdateDeploymentByIDV1(context.Background(), "", req)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_AppInstallers_UpdateDeploymentByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.UpdateDeploymentByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_AppInstallers_GetTitleByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetTitleByIDV1(context.Background(), "")
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "title ID is required")
+}
+
+func TestUnit_AppInstallers_GetDeploymentByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetDeploymentByIDV1(context.Background(), "")
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "deployment ID is required")
+}
+
+func TestUnit_AppInstallers_CreateDeploymentV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.CreateDeploymentV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_AppInstallers_DeleteDeploymentByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteDeploymentByIDV1(context.Background(), "")
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "deployment ID is required")
+}

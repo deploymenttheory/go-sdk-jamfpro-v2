@@ -52,6 +52,14 @@ func (m *NotificationsMock) RegisterMocks() {
 	m.register("GET", "/api/v1/notifications", 200, "validate_list.json")
 }
 
+func (m *NotificationsMock) RegisterListErrorMock() {
+	m.responses["GET:/api/v1/notifications"] = registeredResponse{
+		statusCode: 500,
+		rawBody:    []byte(`{"code":"INTERNAL","message":"server error"}`),
+		errMsg:     "Jamf Pro API error (500) [INTERNAL]: server error",
+	}
+}
+
 func (m *NotificationsMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	return m.dispatch("GET", path, result)
 }
