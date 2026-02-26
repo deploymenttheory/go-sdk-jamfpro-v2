@@ -169,7 +169,7 @@ func TestUnit_ComputerExtensionAttributes_DeleteByID_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitDeleteComputerExtensionAttributesByID_Success(t *testing.T) {
+func TestUnit_ComputerExtensionAttributes_DeleteMultipleByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMultipleMock()
 
@@ -180,7 +180,7 @@ func TestUnitDeleteComputerExtensionAttributesByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteComputerExtensionAttributesByID_NilRequest(t *testing.T) {
+func TestUnit_ComputerExtensionAttributes_DeleteMultipleByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteComputerExtensionAttributesByIDV1(context.Background(), nil)
@@ -188,7 +188,7 @@ func TestUnitDeleteComputerExtensionAttributesByID_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitDeleteComputerExtensionAttributesByID_EmptyIDs(t *testing.T) {
+func TestUnit_ComputerExtensionAttributes_DeleteMultipleByID_EmptyIDs(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteComputerExtensionAttributesByIDV1(context.Background(), &DeleteComputerExtensionAttributesByIDRequest{IDs: nil})
@@ -196,7 +196,7 @@ func TestUnitDeleteComputerExtensionAttributesByID_EmptyIDs(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitGetHistoryByIDV1_Success(t *testing.T) {
+func TestUnit_ComputerExtensionAttributes_GetHistoryByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterHistoryMock()
 

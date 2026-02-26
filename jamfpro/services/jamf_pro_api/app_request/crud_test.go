@@ -57,7 +57,7 @@ func TestUnit_AppRequest_ListFormInputFields_WithQueryParams(t *testing.T) {
 // ReplaceFormInputFieldsV1
 // =============================================================================
 
-func TestUnitReplaceFormInputFields_Success(t *testing.T) {
+func TestUnit_AppRequest_ReplaceFormInputFields_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterReplaceFormInputFieldsMock()
 
@@ -80,7 +80,7 @@ func TestUnitReplaceFormInputFields_Success(t *testing.T) {
 	assert.Equal(t, "Justification", result[1].Title)
 }
 
-func TestUnitReplaceFormInputFields_NilRequest(t *testing.T) {
+func TestUnit_AppRequest_ReplaceFormInputFields_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.ReplaceFormInputFieldsV1(context.Background(), nil)
@@ -94,7 +94,7 @@ func TestUnitReplaceFormInputFields_NilRequest(t *testing.T) {
 // CreateFormInputFieldV1
 // =============================================================================
 
-func TestUnitCreateFormInputField_Success(t *testing.T) {
+func TestUnit_AppRequest_CreateFormInputField_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateFormInputFieldMock()
 
@@ -112,7 +112,7 @@ func TestUnitCreateFormInputField_Success(t *testing.T) {
 	assert.Equal(t, 3, result.Priority)
 }
 
-func TestUnitCreateFormInputField_NilRequest(t *testing.T) {
+func TestUnit_AppRequest_CreateFormInputField_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateFormInputFieldV1(context.Background(), nil)
@@ -126,7 +126,7 @@ func TestUnitCreateFormInputField_NilRequest(t *testing.T) {
 // GetFormInputFieldByIDV1
 // =============================================================================
 
-func TestUnitGetFormInputFieldByID_Success(t *testing.T) {
+func TestUnit_AppRequest_GetFormInputFieldByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetFormInputFieldMock()
 
@@ -142,7 +142,7 @@ func TestUnitGetFormInputFieldByID_Success(t *testing.T) {
 	assert.Equal(t, 1, result.Priority)
 }
 
-func TestUnitGetFormInputFieldByID_NotFound(t *testing.T) {
+func TestUnit_AppRequest_GetFormInputFieldByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -157,7 +157,7 @@ func TestUnitGetFormInputFieldByID_NotFound(t *testing.T) {
 // UpdateFormInputFieldByIDV1
 // =============================================================================
 
-func TestUnitUpdateFormInputFieldByID_Success(t *testing.T) {
+func TestUnit_AppRequest_UpdateFormInputFieldByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateFormInputFieldMock()
 
@@ -173,7 +173,7 @@ func TestUnitUpdateFormInputFieldByID_Success(t *testing.T) {
 	assert.Equal(t, "Quantity", result.Title)
 }
 
-func TestUnitUpdateFormInputFieldByID_NilRequest(t *testing.T) {
+func TestUnit_AppRequest_UpdateFormInputFieldByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateFormInputFieldByIDV1(context.Background(), 1, nil)
@@ -187,7 +187,7 @@ func TestUnitUpdateFormInputFieldByID_NilRequest(t *testing.T) {
 // DeleteFormInputFieldByIDV1
 // =============================================================================
 
-func TestUnitDeleteFormInputFieldByID_Success(t *testing.T) {
+func TestUnit_AppRequest_DeleteFormInputFieldByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteFormInputFieldMock()
 
@@ -201,7 +201,7 @@ func TestUnitDeleteFormInputFieldByID_Success(t *testing.T) {
 // GetSettingsV1
 // =============================================================================
 
-func TestUnitGetSettings_Success(t *testing.T) {
+func TestUnit_AppRequest_GetSettings_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetSettingsMock()
 
@@ -223,7 +223,7 @@ func TestUnitGetSettings_Success(t *testing.T) {
 // UpdateSettingsV1
 // =============================================================================
 
-func TestUnitUpdateSettings_Success(t *testing.T) {
+func TestUnit_AppRequest_UpdateSettings_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateSettingsMock()
 
@@ -244,7 +244,7 @@ func TestUnitUpdateSettings_Success(t *testing.T) {
 	assert.Equal(t, 1, result.RequesterUserGroupID)
 }
 
-func TestUnitUpdateSettings_NilRequest(t *testing.T) {
+func TestUnit_AppRequest_UpdateSettings_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateSettingsV1(context.Background(), nil)

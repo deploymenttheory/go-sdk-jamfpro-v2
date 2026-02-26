@@ -36,7 +36,7 @@ func TestUnit_AppInstallers_GetTitleByIDV1_Success(t *testing.T) {
 	require.Equal(t, "Example App", result.TitleName)
 }
 
-func TestUnitListDeploymentsV1_Success(t *testing.T) {
+func TestUnit_AppInstallers_ListDeploymentsV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListDeploymentsV1(context.Background(), nil)
 	require.NoError(t, err)
@@ -45,7 +45,7 @@ func TestUnitListDeploymentsV1_Success(t *testing.T) {
 	require.Equal(t, 1, result.TotalCount)
 }
 
-func TestUnitGetDeploymentByIDV1_Success(t *testing.T) {
+func TestUnit_AppInstallers_GetDeploymentByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetDeploymentByIDV1(context.Background(), "1")
 	require.NoError(t, err)
@@ -54,7 +54,7 @@ func TestUnitGetDeploymentByIDV1_Success(t *testing.T) {
 	require.Equal(t, "1", result.ID)
 }
 
-func TestUnitCreateDeploymentV1_Success(t *testing.T) {
+func TestUnit_AppInstallers_CreateDeploymentV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestDeployment{Name: "New", AppTitleId: "1"}
 	result, resp, err := svc.CreateDeploymentV1(context.Background(), req)
@@ -64,7 +64,7 @@ func TestUnitCreateDeploymentV1_Success(t *testing.T) {
 	require.Equal(t, "2", result.ID)
 }
 
-func TestUnitDeleteDeploymentByIDV1_Success(t *testing.T) {
+func TestUnit_AppInstallers_DeleteDeploymentByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteDeploymentByIDV1(context.Background(), "1")
 	require.NoError(t, err)

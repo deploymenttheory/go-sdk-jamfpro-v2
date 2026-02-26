@@ -25,7 +25,7 @@ func TestUnit_CloudDistributionPoint_GetV1_Success(t *testing.T) {
 	require.Equal(t, "JCDS", result.CdnType)
 }
 
-func TestUnitGetUploadCapabilityV1_Success(t *testing.T) {
+func TestUnit_CloudDistributionPoint_GetUploadCapabilityV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetUploadCapabilityV1(context.Background())
 	require.NoError(t, err)
@@ -34,7 +34,7 @@ func TestUnitGetUploadCapabilityV1_Success(t *testing.T) {
 	require.True(t, result.DirectUploadCapable)
 }
 
-func TestUnitGetTestConnectionV1_Success(t *testing.T) {
+func TestUnit_CloudDistributionPoint_GetTestConnectionV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetTestConnectionV1(context.Background())
 	require.NoError(t, err)
@@ -43,7 +43,7 @@ func TestUnitGetTestConnectionV1_Success(t *testing.T) {
 	require.True(t, result.HasConnectionSucceeded)
 }
 
-func TestUnitDeleteV1_Success(t *testing.T) {
+func TestUnit_CloudDistributionPoint_DeleteV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteV1(context.Background())
 	require.NoError(t, err)
@@ -51,7 +51,7 @@ func TestUnitDeleteV1_Success(t *testing.T) {
 	require.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitCreateV1_Success(t *testing.T) {
+func TestUnit_CloudDistributionPoint_CreateV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestCloudDistributionPointV1{
 		CdnType: "JAMF_CLOUD",
@@ -78,7 +78,7 @@ func TestUnit_CloudDistributionPoint_UpdateV1_Success(t *testing.T) {
 	require.True(t, result.HasConnectionSucceeded)
 }
 
-func TestUnitGetHistoryV1_Success(t *testing.T) {
+func TestUnit_CloudDistributionPoint_GetHistoryV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
 	require.NoError(t, err)

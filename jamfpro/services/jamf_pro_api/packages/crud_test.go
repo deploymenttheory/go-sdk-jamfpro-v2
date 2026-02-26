@@ -177,7 +177,7 @@ func TestUnit_Packages_UploadV1_EmptyPath(t *testing.T) {
 	assert.Contains(t, err.Error(), "file path is required")
 }
 
-func TestUnitAssignManifestToPackageV1_Success(t *testing.T) {
+func TestUnit_Packages_AssignManifestToPackageV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterAssignManifestMock()
 
@@ -192,7 +192,7 @@ func TestUnitAssignManifestToPackageV1_Success(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode)
 }
 
-func TestUnitDeletePackageManifestV1_Success(t *testing.T) {
+func TestUnit_Packages_DeletePackageManifestV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteManifestMock()
 
@@ -287,7 +287,7 @@ func TestUnit_Packages_DeleteByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "package ID is required")
 }
 
-func TestUnitDeletePackagesByID_Success(t *testing.T) {
+func TestUnit_Packages_DeleteMultipleByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeletePackagesByIDMock()
 
@@ -298,7 +298,7 @@ func TestUnitDeletePackagesByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeletePackagesByID_EmptyIDs(t *testing.T) {
+func TestUnit_Packages_DeleteMultipleByID_EmptyIDs(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeletePackagesByIDV1(context.Background(), &DeletePackagesByIDRequest{IDs: []string{}})
@@ -307,7 +307,7 @@ func TestUnitDeletePackagesByID_EmptyIDs(t *testing.T) {
 	assert.Contains(t, err.Error(), "ids are required")
 }
 
-func TestUnitDeletePackagesByID_NilRequest(t *testing.T) {
+func TestUnit_Packages_DeleteMultipleByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeletePackagesByIDV1(context.Background(), nil)
@@ -316,7 +316,7 @@ func TestUnitDeletePackagesByID_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "ids are required")
 }
 
-func TestUnitGetHistoryV1_Success(t *testing.T) {
+func TestUnit_Packages_GetHistoryV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetPackageHistoryMock()
 
@@ -333,7 +333,7 @@ func TestUnitGetHistoryV1_Success(t *testing.T) {
 	assert.Equal(t, "Package created", result.Results[0].Note)
 }
 
-func TestUnitGetHistoryV1_EmptyID(t *testing.T) {
+func TestUnit_Packages_GetHistoryV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetHistoryV1(context.Background(), "", nil)
@@ -343,7 +343,7 @@ func TestUnitGetHistoryV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "package ID is required")
 }
 
-func TestUnitAddHistoryNotesV1_Success(t *testing.T) {
+func TestUnit_Packages_AddHistoryNotesV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterAddPackageHistoryNotesMock()
 
@@ -354,7 +354,7 @@ func TestUnitAddHistoryNotesV1_Success(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode)
 }
 
-func TestUnitAddHistoryNotesV1_EmptyID(t *testing.T) {
+func TestUnit_Packages_AddHistoryNotesV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.AddHistoryNotesV1(context.Background(), "", &AddHistoryNotesRequest{Note: "x"})
@@ -363,7 +363,7 @@ func TestUnitAddHistoryNotesV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "package ID is required")
 }
 
-func TestUnitAddHistoryNotesV1_NilRequest(t *testing.T) {
+func TestUnit_Packages_AddHistoryNotesV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.AddHistoryNotesV1(context.Background(), "1", nil)

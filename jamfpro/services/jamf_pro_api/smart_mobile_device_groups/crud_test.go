@@ -67,7 +67,7 @@ func TestUnit_SmartMobileDeviceGroups_GetByName_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "not found")
 }
 
-func TestUnitGetMembership_Success(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_GetMembership_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMembershipMock()
 
@@ -148,7 +148,7 @@ func TestUnit_SmartMobileDeviceGroups_GetByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "name is required")
 }
 
-func TestUnitGetMembership_EmptyID(t *testing.T) {
+func TestUnit_SmartMobileDeviceGroups_GetMembership_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	_, _, err := svc.GetMembership(context.Background(), "", nil)

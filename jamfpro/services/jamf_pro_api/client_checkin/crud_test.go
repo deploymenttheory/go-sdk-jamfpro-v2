@@ -42,7 +42,7 @@ func TestUnit_ClientCheckin_UpdateV3_NilSettings(t *testing.T) {
 	require.Nil(t, resp)
 }
 
-func TestUnitGetHistoryV3_Success(t *testing.T) {
+func TestUnit_ClientCheckin_GetHistoryV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetHistoryV3(context.Background(), nil)
 	require.NoError(t, err)
@@ -55,7 +55,7 @@ func TestUnitGetHistoryV3_Success(t *testing.T) {
 	require.Equal(t, "Initial config", result.Results[0].Note)
 }
 
-func TestUnitAddHistoryNoteV3_Success(t *testing.T) {
+func TestUnit_ClientCheckin_AddHistoryNoteV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestClientCheckinHistoryNote{Note: "Test note"}
 	result, resp, err := svc.AddHistoryNoteV3(context.Background(), req)
@@ -67,7 +67,7 @@ func TestUnitAddHistoryNoteV3_Success(t *testing.T) {
 	require.NotEmpty(t, result.HREF)
 }
 
-func TestUnitAddHistoryNoteV3_NilRequest(t *testing.T) {
+func TestUnit_ClientCheckin_AddHistoryNoteV3_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.AddHistoryNoteV3(context.Background(), nil)
 	require.Error(t, err)

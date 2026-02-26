@@ -220,7 +220,7 @@ func TestUnit_Categories_DeleteByID_EmptyID(t *testing.T) {
 // DeleteCategoriesByIDV1 (bulk)
 // =============================================================================
 
-func TestUnitDeleteCategoriesByID_Success(t *testing.T) {
+func TestUnit_Categories_DeleteMultipleByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteCategoriesBulkMock()
 
@@ -231,7 +231,7 @@ func TestUnitDeleteCategoriesByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteCategoriesByID_NilRequest(t *testing.T) {
+func TestUnit_Categories_DeleteMultipleByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteCategoriesByIDV1(context.Background(), nil)
@@ -240,7 +240,7 @@ func TestUnitDeleteCategoriesByID_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "ids are required")
 }
 
-func TestUnitDeleteCategoriesByID_EmptyIDs(t *testing.T) {
+func TestUnit_Categories_DeleteMultipleByID_EmptyIDs(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &DeleteCategoriesByIDRequest{IDs: []string{}}
@@ -254,7 +254,7 @@ func TestUnitDeleteCategoriesByID_EmptyIDs(t *testing.T) {
 // GetCategoryHistoryV1
 // =============================================================================
 
-func TestUnitGetCategoryHistory_Success(t *testing.T) {
+func TestUnit_Categories_GetHistory_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetCategoryHistoryMock()
 
@@ -270,7 +270,7 @@ func TestUnitGetCategoryHistory_Success(t *testing.T) {
 	assert.Equal(t, "Category created", result.Results[0].Note)
 }
 
-func TestUnitGetCategoryHistory_EmptyID(t *testing.T) {
+func TestUnit_Categories_GetHistory_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetCategoryHistoryV1(context.Background(), "", nil)
@@ -284,7 +284,7 @@ func TestUnitGetCategoryHistory_EmptyID(t *testing.T) {
 // AddCategoryHistoryNotesV1
 // =============================================================================
 
-func TestUnitAddCategoryHistoryNotes_Success(t *testing.T) {
+func TestUnit_Categories_AddHistoryNotes_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterAddCategoryHistoryNotesMock()
 
@@ -295,7 +295,7 @@ func TestUnitAddCategoryHistoryNotes_Success(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode)
 }
 
-func TestUnitAddCategoryHistoryNotes_EmptyID(t *testing.T) {
+func TestUnit_Categories_AddHistoryNotes_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &AddCategoryHistoryNotesRequest{Note: "Test note"}
@@ -305,7 +305,7 @@ func TestUnitAddCategoryHistoryNotes_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "category ID is required")
 }
 
-func TestUnitAddCategoryHistoryNotes_NilRequest(t *testing.T) {
+func TestUnit_Categories_AddHistoryNotes_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.AddCategoryHistoryNotesV1(context.Background(), "1", nil)

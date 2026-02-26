@@ -96,7 +96,7 @@ func TestUnit_JamfConnect_GetConfigProfileByID_InvalidID(t *testing.T) {
 	assert.Contains(t, err.Error(), "profile ID must be greater than 0")
 }
 
-func TestUnitGetConfigProfileByName_Success(t *testing.T) {
+func TestUnit_JamfConnect_GetConfigProfileByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListConfigProfilesMock()
 
@@ -110,7 +110,7 @@ func TestUnitGetConfigProfileByName_Success(t *testing.T) {
 	assert.Equal(t, 2, result.ProfileID)
 }
 
-func TestUnitGetConfigProfileByName_EmptyName(t *testing.T) {
+func TestUnit_JamfConnect_GetConfigProfileByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetConfigProfileByNameV1(context.Background(), "")
@@ -163,7 +163,7 @@ func TestUnit_JamfConnect_UpdateConfigProfileByUUID_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitRetryDeploymentTasksByUUID_Success(t *testing.T) {
+func TestUnit_JamfConnect_RetryDeploymentTasksByUUID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterRetryDeploymentTasksMock()
 
@@ -175,7 +175,7 @@ func TestUnitRetryDeploymentTasksByUUID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitRetryDeploymentTasksByUUID_EmptyUUID(t *testing.T) {
+func TestUnit_JamfConnect_RetryDeploymentTasksByUUID_EmptyUUID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.RetryDeploymentTasksByUUIDV1(context.Background(), "", []string{"1"})
@@ -184,7 +184,7 @@ func TestUnitRetryDeploymentTasksByUUID_EmptyUUID(t *testing.T) {
 	assert.Contains(t, err.Error(), "uuid is required")
 }
 
-func TestUnitRetryDeploymentTasksByUUID_EmptyComputerIDs(t *testing.T) {
+func TestUnit_JamfConnect_RetryDeploymentTasksByUUID_EmptyComputerIDs(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.RetryDeploymentTasksByUUIDV1(context.Background(), "123e4567-e89b-12d3-a456-426614174000", []string{})

@@ -150,7 +150,7 @@ func TestUnit_JamfProtect_ListPlansV1_Success(t *testing.T) {
 	require.Len(t, result.Results, 2)
 }
 
-func TestUnitDeleteIntegrationV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_DeleteIntegrationV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteIntegrationV1(context.Background())
 	require.NoError(t, err)
@@ -158,7 +158,7 @@ func TestUnitDeleteIntegrationV1_Success(t *testing.T) {
 	require.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitCreateIntegrationV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_CreateIntegrationV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	registration := &RequestJamfProtectRegistration{
 		ProtectURL: "https://protect.example.com",

@@ -79,7 +79,7 @@ func TestUnit_JamfRemoteAssist_GetSessionByIDV2_EmptyID(t *testing.T) {
 	require.Contains(t, err.Error(), "session ID is required")
 }
 
-func TestUnitExportSessionsV2_Success(t *testing.T) {
+func TestUnit_JamfRemoteAssist_ExportSessionsV2_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ExportSessionsV2(context.Background(), &ExportSessionsRequest{}, "text/csv")
 	require.NoError(t, err)

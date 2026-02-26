@@ -188,7 +188,7 @@ func TestUnit_Departments_DeleteByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "department ID is required")
 }
 
-func TestUnitGetDepartmentHistoryV1_Success(t *testing.T) {
+func TestUnit_Departments_GetHistoryV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetDepartmentHistoryMock()
 
@@ -205,7 +205,7 @@ func TestUnitGetDepartmentHistoryV1_Success(t *testing.T) {
 	assert.Equal(t, "Department created", result.Results[0].Note)
 }
 
-func TestUnitGetDepartmentHistoryV1_EmptyID(t *testing.T) {
+func TestUnit_Departments_GetHistoryV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetDepartmentHistoryV1(context.Background(), "", nil)
@@ -215,7 +215,7 @@ func TestUnitGetDepartmentHistoryV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "department ID is required")
 }
 
-func TestUnitAddDepartmentHistoryNotesV1_Success(t *testing.T) {
+func TestUnit_Departments_AddHistoryNotesV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterAddDepartmentHistoryNotesMock()
 
@@ -226,7 +226,7 @@ func TestUnitAddDepartmentHistoryNotesV1_Success(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode)
 }
 
-func TestUnitAddDepartmentHistoryNotesV1_EmptyID(t *testing.T) {
+func TestUnit_Departments_AddHistoryNotesV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.AddDepartmentHistoryNotesV1(context.Background(), "", &AddHistoryNotesRequest{Note: "x"})
@@ -235,7 +235,7 @@ func TestUnitAddDepartmentHistoryNotesV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "department ID is required")
 }
 
-func TestUnitAddDepartmentHistoryNotesV1_NilRequest(t *testing.T) {
+func TestUnit_Departments_AddHistoryNotesV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.AddDepartmentHistoryNotesV1(context.Background(), "1", nil)

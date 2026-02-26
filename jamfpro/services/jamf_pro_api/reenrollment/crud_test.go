@@ -121,7 +121,7 @@ func TestUnit_Reenrollment_ExportHistory_WithBody(t *testing.T) {
 	require.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitExportHistory_Success(t *testing.T) {
+func TestUnit_Reenrollment_ExportHistory_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportHistoryMock()
 

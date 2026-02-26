@@ -150,7 +150,7 @@ func TestUnit_AdvancedMobileDeviceSearches_UpdateByIDV1_NilSearch(t *testing.T) 
 	require.Contains(t, err.Error(), "search is required")
 }
 
-func TestUnitGetChoicesV1_Success(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_GetChoicesV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetChoicesV1(context.Background(), "Device Name", "-1", "")
 	require.NoError(t, err)
