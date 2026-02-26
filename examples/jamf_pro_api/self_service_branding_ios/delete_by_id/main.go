@@ -8,7 +8,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_mobile"
 )
 
 func main() {
@@ -27,18 +26,10 @@ func main() {
 		id = os.Args[1]
 	}
 
-	req := &self_service_branding_mobile.ResourceSelfServiceBrandingMobile{
-		BrandingName:              "go-sdk-v2-Self-Service-Branding-Mobile-Updated",
-		HeaderBackgroundColorCode: "#F0F0F0",
-		MenuIconColorCode:         "#0066CC",
-		BrandingNameColorCode:     "#222222",
-		StatusBarTextColor:        "dark",
-	}
-
-	result, _, err := jamfClient.SelfServiceBrandingMobile.UpdateByIDV1(context.Background(), id, req)
+	_, err = jamfClient.SelfServiceBrandingIOS.DeleteByIDV1(context.Background(), id)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("Updated self-service branding mobile: ID=%s BrandingName=%s\n", result.ID, result.BrandingName)
+	fmt.Printf("Deleted self-service branding mobile (ID=%s)\n", id)
 }

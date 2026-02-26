@@ -8,7 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_mobile"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_ios"
 )
 
 func main() {
@@ -22,12 +22,12 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	name := "Corporate Branding"
+	id := "1"
 	if len(os.Args) > 1 {
-		name = os.Args[1]
+		id = os.Args[1]
 	}
 
-	req := &self_service_branding_mobile.ResourceSelfServiceBrandingMobile{
+	req := &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
 		BrandingName:              "go-sdk-v2-Self-Service-Branding-Mobile-Updated",
 		HeaderBackgroundColorCode: "#F0F0F0",
 		MenuIconColorCode:         "#0066CC",
@@ -35,7 +35,7 @@ func main() {
 		StatusBarTextColor:        "dark",
 	}
 
-	result, _, err := jamfClient.SelfServiceBrandingMobile.UpdateByNameV1(context.Background(), name, req)
+	result, _, err := jamfClient.SelfServiceBrandingIOS.UpdateByIDV1(context.Background(), id, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

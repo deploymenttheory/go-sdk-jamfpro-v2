@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_mobile"
 )
 
 func main() {
@@ -21,18 +22,18 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	req := &self_service_branding_mobile.ResourceSelfServiceBrandingMobile{
-		BrandingName:              "go-sdk-v2-Self-Service-Branding-Mobile",
-		HeaderBackgroundColorCode: "#FFFFFF",
-		MenuIconColorCode:         "#000000",
-		BrandingNameColorCode:     "#333333",
-		StatusBarTextColor:        "light",
+	name := "Corporate Branding"
+	if len(os.Args) > 1 {
+		name = os.Args[1]
 	}
 
-	result, _, err := jamfClient.SelfServiceBrandingMobile.CreateV1(context.Background(), req)
+	result, _, err := jamfClient.SelfServiceBrandingIOS.GetByNameV1(context.Background(), name)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("Created self-service branding mobile: ID=%s Href=%s\n", result.ID, result.Href)
+
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Self-Service Branding Mobile (iOS) by Name:")
+	fmt.Println(string(out))
 }

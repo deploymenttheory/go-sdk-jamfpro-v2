@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
@@ -21,15 +21,18 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	id := "1"
-	if len(os.Args) > 1 {
-		id = os.Args[1]
+	// Optional: add query parameters for pagination/sorting
+	query := map[string]string{
+		"sort": "id:desc",
 	}
 
-	_, err = jamfClient.SelfServiceBrandingMobile.DeleteByIDV1(context.Background(), id)
+	result, _, err := jamfClient.SelfServiceBrandingIOS.ListV1(context.Background(), query)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("Deleted self-service branding mobile (ID=%s)\n", id)
+
+	out, _ := json.MarshalIndent(result, "", "    ")
+	fmt.Println("Self-Service Branding Mobile (iOS):")
+	fmt.Println(string(out))
 }
