@@ -17,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 type EnrollmentSettingsMock struct {
@@ -36,16 +37,38 @@ func (m *EnrollmentSettingsMock) register(method, path string, statusCode int, f
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
+func (m *EnrollmentSettingsMock) registerError(method, path string, statusCode int, fixture string) {
+	body, err := os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+	if err != nil {
+		panic(fmt.Sprintf("EnrollmentSettingsMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	var parsed struct {
+		Code    string `json:"code"`
+		Message string `json:"message"`
+	}
+	_ = json.Unmarshal(body, &parsed)
+	errMsg := fmt.Sprintf("Jamf Pro API error (%d) [%s]: %s", statusCode, parsed.Code, parsed.Message)
+	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body, errMsg: errMsg}
+}
+
 func (m *EnrollmentSettingsMock) RegisterGetMock() {
 	m.register("GET", "/api/v4/enrollment", 200, "validate_get.json")
+}
+
+// RegisterGetErrorMock registers GET /api/v4/enrollment → 500 with error for error-path testing.
+func (m *EnrollmentSettingsMock) RegisterGetErrorMock() {
+	m.registerError("GET", "/api/v4/enrollment", 500, "error_not_found.json")
 }
 
 func (m *EnrollmentSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("EnrollmentSettingsMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("EnrollmentSettingsMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

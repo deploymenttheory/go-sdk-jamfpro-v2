@@ -14,12 +14,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_DirectoryBindings_Lifecycle exercises the full write/read/delete
+// TestAcceptance_DirectoryBindings_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
+func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicDirectoryBindings
@@ -30,7 +30,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test directory binding")
 
-	bindingName := acc.UniqueName("acc-test-dirbinding")
+	bindingName := acc.UniqueName("sdkv2_acc_acc-test-dirbinding")
 	createReq := &directory_bindings.RequestDirectoryBinding{
 		Name:       bindingName,
 		Priority:   1,
@@ -125,7 +125,7 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-dirbinding-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-dirbinding-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating directory binding ID=%d to name=%q", bindingID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -200,16 +200,16 @@ func TestAcceptance_DirectoryBindings_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_DirectoryBindings_DeleteByName creates a binding then deletes by name.
+// TestAcceptance_DirectoryBindings_delete_by_name creates a binding then deletes by name.
 // =============================================================================
 
-func TestAcceptance_DirectoryBindings_DeleteByName(t *testing.T) {
+func TestAcceptance_DirectoryBindings_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicDirectoryBindings
 	ctx := context.Background()
 
-	bindingName := acc.UniqueName("acc-test-dirbinding-dbn")
+	bindingName := acc.UniqueName("sdkv2_acc_acc-test-dirbinding-dbn")
 	createReq := &directory_bindings.RequestDirectoryBinding{
 		Name:       bindingName,
 		Priority:   1,
@@ -252,10 +252,10 @@ func TestAcceptance_DirectoryBindings_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_DirectoryBindings_ValidationErrors tests client-side validation.
+// TestAcceptance_DirectoryBindings_validation_errors tests client-side validation.
 // =============================================================================
 
-func TestAcceptance_DirectoryBindings_ValidationErrors(t *testing.T) {
+func TestAcceptance_DirectoryBindings_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicDirectoryBindings
@@ -279,13 +279,13 @@ func TestAcceptance_DirectoryBindings_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateDirectoryBindingByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &directory_bindings.RequestDirectoryBinding{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &directory_bindings.RequestDirectoryBinding{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding ID must be a positive integer")
 	})
 
 	t.Run("UpdateDirectoryBindingByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &directory_bindings.RequestDirectoryBinding{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &directory_bindings.RequestDirectoryBinding{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "directory binding name is required")
 	})

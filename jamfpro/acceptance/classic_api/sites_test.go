@@ -14,12 +14,12 @@ import (
 
 
 // =============================================================================
-// TestAcceptance_Sites_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Sites_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_Sites_Lifecycle(t *testing.T) {
+func TestAcceptance_Sites_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicSites
@@ -30,7 +30,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test site")
 
-	siteName := acc.UniqueName("acc-test-site")
+	siteName := acc.UniqueName("sdkv2_acc_acc-test-site")
 	createReq := &sites.RequestSite{Name: siteName}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -114,7 +114,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-site-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-site-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating site ID=%d to name=%q", siteID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -175,16 +175,16 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Sites_DeleteByName creates a site then deletes it by name.
+// TestAcceptance_Sites_delete_by_name creates a site then deletes it by name.
 // =============================================================================
 
-func TestAcceptance_Sites_DeleteByName(t *testing.T) {
+func TestAcceptance_Sites_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicSites
 	ctx := context.Background()
 
-	siteName := acc.UniqueName("acc-test-site-dbn")
+	siteName := acc.UniqueName("sdkv2_acc_acc-test-site-dbn")
 	createReq := &sites.RequestSite{Name: siteName}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -215,11 +215,11 @@ func TestAcceptance_Sites_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Sites_ValidationErrors tests client-side validation
+// TestAcceptance_Sites_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_Sites_ValidationErrors(t *testing.T) {
+func TestAcceptance_Sites_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicSites
@@ -243,13 +243,13 @@ func TestAcceptance_Sites_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &sites.RequestSite{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &sites.RequestSite{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &sites.RequestSite{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &sites.RequestSite{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "site name is required")
 	})

@@ -31,12 +31,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_Buildings_Lifecycle
+//     -- Tests: TestAcceptance_Buildings_lifecycle
 //     -- Flow: Create → List → GetByID → Update → Verify → History → Delete
 //
 //   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_Buildings_ListWithRSQLFilter
+//     -- Tests: TestAcceptance_Buildings_list_with_rsql_filter
 //     -- Flow: Create unique building → Filter with RSQL → Verify filtered results
 //
 //   ✓ Pattern 6: Bulk Operations
@@ -46,7 +46,7 @@ import (
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_Buildings_ValidationErrors
+//     -- Tests: TestAcceptance_Buildings_validation_errors
 //     -- Cases: Empty IDs, nil requests, missing required fields
 //
 // Test Coverage
@@ -70,11 +70,11 @@ import (
 //   • Bulk delete tested to verify multi-resource deletion functionality
 //
 // =============================================================================
-// TestAcceptance_Buildings_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Buildings_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → Update → GetByID (verify) → History → Delete.
 // =============================================================================
 
-func TestAcceptance_Buildings_Lifecycle(t *testing.T) {
+func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Buildings
@@ -84,7 +84,7 @@ func TestAcceptance_Buildings_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test building")
 
 	createReq := &buildings.RequestBuilding{
-		Name:           acc.UniqueName("acc-test-building"),
+		Name:           acc.UniqueName("sdkv2_acc_acc-test-building"),
 		StreetAddress1: "123 Test St",
 		City:           "Austin",
 		StateProvince:  "TX",
@@ -144,7 +144,7 @@ func TestAcceptance_Buildings_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating building ID=%s", buildingID)
 
 	updateReq := &buildings.RequestBuilding{
-		Name:           acc.UniqueName("acc-test-building-updated"),
+		Name:           acc.UniqueName("sdkv2_acc_acc-test-building-updated"),
 		StreetAddress1: "456 Updated Ave",
 		City:           "Austin",
 		StateProvince:  "TX",
@@ -194,16 +194,16 @@ func TestAcceptance_Buildings_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Buildings_ListWithRSQLFilter
+// TestAcceptance_Buildings_list_with_rsql_filter
 // =============================================================================
 
-func TestAcceptance_Buildings_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Buildings_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Buildings
 	ctx := context.Background()
 
-	name := acc.UniqueName("acc-rsql-building")
+	name := acc.UniqueName("sdkv2_acc_acc-rsql-building")
 	createReq := &buildings.RequestBuilding{
 		Name:    name,
 		City:    "Austin",
@@ -246,10 +246,10 @@ func TestAcceptance_Buildings_ListWithRSQLFilter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Buildings_ValidationErrors
+// TestAcceptance_Buildings_validation_errors
 // =============================================================================
 
-func TestAcceptance_Buildings_ValidationErrors(t *testing.T) {
+func TestAcceptance_Buildings_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Buildings
@@ -267,7 +267,7 @@ func TestAcceptance_Buildings_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateBuildingByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateByIDV1(context.Background(), "", &buildings.RequestBuilding{Name: "x"})
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &buildings.RequestBuilding{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})

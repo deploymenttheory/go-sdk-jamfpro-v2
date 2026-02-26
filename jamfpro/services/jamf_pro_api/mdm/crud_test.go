@@ -178,3 +178,78 @@ func TestUnit_MDM_ListCommandsV2_Success(t *testing.T) {
 	assert.Equal(t, "DeviceLock", result.Results[0].CommandType)
 	assert.Equal(t, "Completed", result.Results[0].Status)
 }
+
+func TestUnit_Mdm_ListCommandsV2_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListCommandsErrorMock()
+
+	result, resp, err := svc.ListCommandsV2(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Contains(t, err.Error(), "failed to list MDM commands")
+}
+
+func TestUnit_Mdm_ListCommandsV2_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered - dispatch returns (nil, err)
+
+	result, resp, err := svc.ListCommandsV2(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to list MDM commands")
+}
+
+func TestUnit_Mdm_ListCommandsV2_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListCommandsInvalidJSONMock()
+
+	result, resp, err := svc.ListCommandsV2(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_Mdm_BlankPush_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterBlankPushErrorMock()
+
+	result, resp, err := svc.BlankPush(context.Background(), []string{"device-001"})
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_Mdm_DeployPackage_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDeployPackageErrorMock()
+
+	req := &DeployPackageRequest{
+		Manifest:         PackageManifest{HashType: "SHA256", URL: "https://example.com/pkg.dmg", Hash: "abc", Title: "Test"},
+		InstallAsManaged: true,
+		Devices:          []int{1001},
+		GroupID:          "g1",
+	}
+	result, resp, err := svc.DeployPackage(context.Background(), req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_Mdm_RenewProfile_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterRenewProfileErrorMock()
+
+	req := &RenewProfileRequest{UDIDs: []string{"udid-001"}}
+	result, resp, err := svc.RenewProfile(context.Background(), req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}

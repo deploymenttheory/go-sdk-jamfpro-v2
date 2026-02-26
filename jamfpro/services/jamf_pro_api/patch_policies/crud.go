@@ -14,14 +14,23 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
 	PatchPoliciesServiceInterface interface {
-		// ListV2 returns a list of all patch policies.
+		// ListV2 returns a list of all patch policies with full details.
 		//
-		// This endpoint retrieves all patch policies with their details.
+		// This endpoint retrieves all patch policies with their details from /policy-details.
 		// The v2 API is read-only for patch policies. Create/Update/Delete operations
 		// require the Classic API (XML).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
 		ListV2(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+
+		// ListSummaryV2 returns a list of patch policy summaries.
+		//
+		// This endpoint retrieves patch policy summaries (policyName, policyEnabled,
+		// policyTargetVersion, softwareTitle, pending, completed, deferred, failed)
+		// from GET /api/v2/patch-policies. Lighter-weight than ListV2 which uses /policy-details.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
+		ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *interfaces.Response, error)
 
 		// GetByIDV2 returns the patch policy by ID.
 		//
@@ -74,13 +83,13 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Jamf Pro API - Patch Policies CRUD Operations (v2 - Read Only)
 // -----------------------------------------------------------------------------
 
-// ListV2 returns a list of all patch policies.
+// ListV2 returns a list of all patch policies with full details.
 // URL: GET /api/v2/patch-policies/policy-details
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
 func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointPatchPoliciesV2 + "/policy-details"
+	endpoint := EndpointPatchPoliciesPolicyDetails
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
@@ -102,6 +111,25 @@ func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Respon
 	}
 
 	result.TotalCount = len(result.Results)
+
+	return &result, resp, nil
+}
+
+// ListSummaryV2 returns a list of patch policy summaries.
+// URL: GET /api/v2/patch-policies
+// https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
+func (s *Service) ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *interfaces.Response, error) {
+	endpoint := EndpointPatchPoliciesV2
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	var result ListSummaryResponse
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to list patch policy summaries: %w", err)
+	}
 
 	return &result, resp, nil
 }
@@ -163,8 +191,7 @@ func (s *Service) GetDashboardStatusV2(ctx context.Context, id string) (*Dashboa
 	var result DashboardStatusResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -209,8 +236,7 @@ func (s *Service) RemoveFromDashboardV2(ctx context.Context, id string) (*interf
 	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchPoliciesV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

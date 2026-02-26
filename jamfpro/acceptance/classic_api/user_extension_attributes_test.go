@@ -13,12 +13,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_UserExtensionAttributes_Lifecycle exercises the full write/read/delete
+// TestAcceptance_UserExtensionAttributes_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_UserExtensionAttributes_Lifecycle(t *testing.T) {
+func TestAcceptance_UserExtensionAttributes_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicUserExtensionAttributes
@@ -29,7 +29,7 @@ func TestAcceptance_UserExtensionAttributes_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test user extension attribute")
 
-	attrName := acc.UniqueName("acc-test-userextattr")
+	attrName := acc.UniqueName("sdkv2_acc_acc-test-userextattr")
 	createReq := &user_extension_attributes.RequestUserExtensionAttribute{
 		Name:        attrName,
 		Description: "Acceptance test user extension attribute",
@@ -119,7 +119,7 @@ func TestAcceptance_UserExtensionAttributes_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-userextattr-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-userextattr-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating user extension attribute ID=%d to name=%q", attrID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -192,17 +192,17 @@ func TestAcceptance_UserExtensionAttributes_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_UserExtensionAttributes_DeleteByName creates a user extension
+// TestAcceptance_UserExtensionAttributes_delete_by_name creates a user extension
 // attribute then deletes by name.
 // =============================================================================
 
-func TestAcceptance_UserExtensionAttributes_DeleteByName(t *testing.T) {
+func TestAcceptance_UserExtensionAttributes_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicUserExtensionAttributes
 	ctx := context.Background()
 
-	attrName := acc.UniqueName("acc-test-userextattr-dbn")
+	attrName := acc.UniqueName("sdkv2_acc_acc-test-userextattr-dbn")
 	createReq := &user_extension_attributes.RequestUserExtensionAttribute{
 		Name:        attrName,
 		Description: "Delete by name test",
@@ -240,10 +240,10 @@ func TestAcceptance_UserExtensionAttributes_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_UserExtensionAttributes_ValidationErrors validates error handling.
+// TestAcceptance_UserExtensionAttributes_validation_errors validates error handling.
 // =============================================================================
 
-func TestAcceptance_UserExtensionAttributes_ValidationErrors(t *testing.T) {
+func TestAcceptance_UserExtensionAttributes_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicUserExtensionAttributes
@@ -267,13 +267,13 @@ func TestAcceptance_UserExtensionAttributes_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &user_extension_attributes.RequestUserExtensionAttribute{Name: "test"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &user_extension_attributes.RequestUserExtensionAttribute{Name: "sdkv2_acc_test"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "user extension attribute ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &user_extension_attributes.RequestUserExtensionAttribute{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &user_extension_attributes.RequestUserExtensionAttribute{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "user extension attribute name cannot be empty")
 	})

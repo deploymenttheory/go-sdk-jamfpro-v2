@@ -22,7 +22,7 @@ func main() {
 
 	iconID := 1       // Replace with the desired icon ID
 	res, scale := "original", "0"
-	body, _, err := jamfClient.Icons.DownloadV1(context.Background(), iconID, res, scale)
+	body, _, err := jamfClient.Icon.DownloadV1(context.Background(), iconID, res, scale)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

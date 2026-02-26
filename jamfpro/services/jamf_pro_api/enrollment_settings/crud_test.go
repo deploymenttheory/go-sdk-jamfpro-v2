@@ -26,3 +26,24 @@ func TestUnit_EnrollmentSettings_GetV4_Success(t *testing.T) {
 	assert.True(t, result.MacOsEnterpriseEnrollmentEnabled)
 	assert.True(t, result.IosEnterpriseEnrollmentEnabled)
 }
+
+func TestUnit_EnrollmentSettings_GetV4_Error_ClientReturnsError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetErrorMock()
+
+	result, resp, err := svc.GetV4(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_EnrollmentSettings_GetV4_Error_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// Do not register any mock - dispatch returns (nil, err)
+
+	result, resp, err := svc.GetV4(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+}

@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGetByUUIDV1(t *testing.T) {
+func TestUnit_DssDeclarations_GetByUUIDV1_Success(t *testing.T) {
 	mock := mocks.NewDSSDeclarationsMock()
 	mocks.RegisterGetByUUIDMock(mock)
 
@@ -27,7 +27,7 @@ func TestGetByUUIDV1(t *testing.T) {
 	assert.Equal(t, "com.apple.configuration.management.status-subscriptions", result.Declarations[0].Type)
 }
 
-func TestGetByUUIDV1_EmptyUUID(t *testing.T) {
+func TestUnit_DssDeclarations_GetByUUIDV1_EmptyUUID(t *testing.T) {
 	mock := mocks.NewDSSDeclarationsMock()
 	svc := NewService(mock)
 	ctx := context.Background()

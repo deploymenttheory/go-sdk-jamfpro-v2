@@ -59,8 +59,7 @@ func (s *Service) Get(ctx context.Context) (*ResourceReenrollmentSettings, *inte
 
 	endpoint := EndpointReenrollmentV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

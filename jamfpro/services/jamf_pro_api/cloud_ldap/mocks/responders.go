@@ -17,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 type CloudLdapMock struct {
@@ -80,12 +81,27 @@ func (m *CloudLdapMock) RegisterUpdateMappingsByIDMock(id string) {
 	m.register("PUT", "/api/v2/cloud-ldaps/"+id+"/mappings", 200, "validate_default_mappings.json")
 }
 
+// RegisterGetByIDErrorMock registers GET /api/v2/cloud-ldaps/{id} with an error response for API error path testing.
+func (m *CloudLdapMock) RegisterGetByIDErrorMock(id string) {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_get.json"))
+	m.responses["GET:/api/v2/cloud-ldaps/"+id] = registeredResponse{statusCode: 404, rawBody: body, errMsg: "Jamf Pro API error (404): not found"}
+}
+
+// RegisterCreateErrorMock registers POST /api/v2/cloud-ldaps with an error response for API error path testing.
+func (m *CloudLdapMock) RegisterCreateErrorMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_create.json"))
+	m.responses["POST:/api/v2/cloud-ldaps"] = registeredResponse{statusCode: 500, rawBody: body, errMsg: "Jamf Pro API error (500): server error"}
+}
+
 func (m *CloudLdapMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("CloudLdapMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("CloudLdapMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

@@ -61,8 +61,7 @@ func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListR
 	endpoint := EndpointStaticGroupsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -85,8 +84,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResourceStaticMobile
 	var result ResourceStaticMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -167,8 +165,7 @@ func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Respon
 	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

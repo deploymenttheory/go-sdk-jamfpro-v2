@@ -22,12 +22,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration Testing
 //     -- Reason: Jamf Pro Server URL is a singleton settings object (no Create/Delete)
-//     -- Tests: TestAcceptance_JamfProServerURL_GetAndUpdate
+//     -- Tests: TestAcceptance_JamfProServerURL_get_and_update
 //     -- Flow: Get current → Update → Get (verify) → Restore original
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_JamfProServerURL_ValidationErrors
+//     -- Tests: TestAcceptance_JamfProServerURL_validation_errors
 //     -- Cases: Nil request validation
 //
 // Test Coverage
@@ -45,7 +45,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_JamfProServerURL_GetAndUpdate(t *testing.T) {
+func TestAcceptance_JamfProServerURL_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.JamfProServerURL
@@ -90,7 +90,7 @@ func TestAcceptance_JamfProServerURL_GetAndUpdate(t *testing.T) {
 	assert.Equal(t, modified.UnsecuredEnrollmentUrl, current.UnsecuredEnrollmentUrl)
 }
 
-func TestAcceptance_JamfProServerURL_ValidationErrors(t *testing.T) {
+func TestAcceptance_JamfProServerURL_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.JamfProServerURL

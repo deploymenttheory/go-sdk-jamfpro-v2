@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_ReturnToService_ListV1(t *testing.T) {
+func TestAcceptance_ReturnToService_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ReturnToService
 	ctx := context.Background()

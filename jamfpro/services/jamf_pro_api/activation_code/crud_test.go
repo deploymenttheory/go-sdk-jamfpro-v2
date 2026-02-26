@@ -219,3 +219,33 @@ func TestUnit_ActivationCode_ExportHistoryV1_Success(t *testing.T) {
 func stringPtr(s string) *string {
 	return &s
 }
+
+func TestUnit_ActivationCode_GetHistoryV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_ActivationCode_UpdateV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.UpdateV1(context.Background(), &ActivationCodeRequest{ActivationCode: "ABCD-EFGH-IJKL-MNOP-QRST"})
+	require.Error(t, err)
+}
+
+func TestUnit_ActivationCode_UpdateOrganizationNameV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.UpdateOrganizationNameV1(context.Background(), &OrganizationNameRequest{OrganizationName: "Test"})
+	require.Error(t, err)
+}
+
+func TestUnit_ActivationCode_AddHistoryNoteV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.AddHistoryNoteV1(context.Background(), &HistoryNoteRequest{Note: "test note"})
+	require.Error(t, err)
+}
+
+func TestUnit_ActivationCode_ExportHistoryV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.ExportHistoryV1(context.Background(), nil, &HistoryExportRequest{})
+	require.Error(t, err)
+}

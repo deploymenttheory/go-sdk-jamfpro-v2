@@ -30,17 +30,17 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_Departments_Lifecycle
+//     -- Tests: TestAcceptance_Departments_lifecycle
 //     -- Flow: Create → List → GetByID → Update → Verify → History → Delete
 //
 //   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_Departments_ListWithRSQLFilter
+//     -- Tests: TestAcceptance_Departments_list_with_rsql_filter
 //     -- Flow: Create unique department → Filter with RSQL → Verify filtered results
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_Departments_ValidationErrors
+//     -- Tests: TestAcceptance_Departments_validation_errors
 //     -- Cases: Empty IDs, nil requests, missing required fields
 //
 // Test Coverage
@@ -65,11 +65,11 @@ import (
 //   • Comprehensive validation error testing ensures client-side validation works correctly
 //
 // =============================================================================
-// TestAcceptance_Departments_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Departments_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → Update → GetByID (verify) → Delete.
 // =============================================================================
 
-func TestAcceptance_Departments_Lifecycle(t *testing.T) {
+func TestAcceptance_Departments_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Departments
@@ -79,7 +79,7 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test department")
 
 	createReq := &departments.RequestDepartment{
-		Name: acc.UniqueName("acc-test-dept"),
+		Name: acc.UniqueName("sdkv2_acc_acc-test-dept"),
 	}
 	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateDepartmentV1 should not return an error")
@@ -134,7 +134,7 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating department ID=%s", departmentID)
 
 	updateReq := &departments.RequestDepartment{
-		Name: acc.UniqueName("acc-test-dept-updated"),
+		Name: acc.UniqueName("sdkv2_acc_acc-test-dept-updated"),
 	}
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, departmentID, updateReq)
 	require.NoError(t, err)
@@ -179,16 +179,16 @@ func TestAcceptance_Departments_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Departments_ListWithRSQLFilter
+// TestAcceptance_Departments_list_with_rsql_filter
 // =============================================================================
 
-func TestAcceptance_Departments_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Departments_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Departments
 	ctx := context.Background()
 
-	name := acc.UniqueName("acc-rsql-dept")
+	name := acc.UniqueName("sdkv2_acc_acc-rsql-dept")
 	createReq := &departments.RequestDepartment{Name: name}
 
 	created, _, err := svc.CreateV1(ctx, createReq)
@@ -227,10 +227,10 @@ func TestAcceptance_Departments_ListWithRSQLFilter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Departments_ValidationErrors
+// TestAcceptance_Departments_validation_errors
 // =============================================================================
 
-func TestAcceptance_Departments_ValidationErrors(t *testing.T) {
+func TestAcceptance_Departments_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Departments
@@ -248,7 +248,7 @@ func TestAcceptance_Departments_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateDepartmentByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateByIDV1(context.Background(), "", &departments.RequestDepartment{Name: "x"})
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &departments.RequestDepartment{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})

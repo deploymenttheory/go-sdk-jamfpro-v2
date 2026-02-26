@@ -135,7 +135,7 @@ func TestCloudIdp_TestSearches(t *testing.T) {
 	firstID := list.Results[0].ID
 
 	groupReq := &cloud_idp.TestGroupSearchRequest{
-		GroupName: "TestGroup",
+		GroupName: "sdkv2_acc_TestGroup",
 	}
 	_, _, err = svc.TestGroupSearchByIDV1(ctx, firstID, groupReq)
 	if err != nil {
@@ -152,7 +152,7 @@ func TestCloudIdp_TestSearches(t *testing.T) {
 
 	membershipReq := &cloud_idp.TestUserMembershipRequest{
 		Username:  "testuser",
-		GroupName: "TestGroup",
+		GroupName: "sdkv2_acc_TestGroup",
 	}
 	_, _, err = svc.TestUserMembershipByIDV1(ctx, firstID, membershipReq)
 	if err != nil {

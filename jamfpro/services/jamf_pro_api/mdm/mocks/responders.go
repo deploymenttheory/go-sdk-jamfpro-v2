@@ -78,12 +78,7 @@ func (m *MDMMock) registerError(method, path string, statusCode int, fixture str
 func (m *MDMMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("MDMMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("MDMMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -140,6 +135,26 @@ func (m *MDMMock) RegisterRenewProfileMock() {
 
 func (m *MDMMock) RegisterNotFoundErrorMock() {
 	m.registerError("POST", "/api/v2/mdm/commands", 404, "error_not_found.json")
+}
+
+func (m *MDMMock) RegisterBlankPushErrorMock() {
+	m.registerError("POST", "/api/v2/mdm/blank-push", 500, "error_not_found.json")
+}
+
+func (m *MDMMock) RegisterDeployPackageErrorMock() {
+	m.registerError("POST", "/api/v1/deploy-package?verbose=true", 500, "error_not_found.json")
+}
+
+func (m *MDMMock) RegisterRenewProfileErrorMock() {
+	m.registerError("POST", "/api/v1/mdm/renew-profile", 500, "error_not_found.json")
+}
+
+func (m *MDMMock) RegisterListCommandsErrorMock() {
+	m.registerError("GET", "/api/v2/mdm/commands", 500, "error_not_found.json")
+}
+
+func (m *MDMMock) RegisterListCommandsInvalidJSONMock() {
+	m.register("GET", "/api/v2/mdm/commands", 200, "validate_list_commands_invalid.json")
 }
 
 func (m *MDMMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

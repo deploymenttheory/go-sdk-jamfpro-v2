@@ -111,8 +111,7 @@ func (s *Service) GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *inter
 	endpoint := EndpointJCDSV1 + "/files"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result []ResourceJCDSFile
@@ -135,8 +134,7 @@ func (s *Service) GetPackageURIByNameV1(ctx context.Context, packageName string)
 	endpoint := fmt.Sprintf("%s/files/%s", EndpointJCDSV1, packageName)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResponseJCDSFile

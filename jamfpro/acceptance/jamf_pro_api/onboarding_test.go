@@ -29,7 +29,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration
 //     -- Reason: Singleton settings that cannot be created or deleted, only updated
-//     -- Tests: TestAcceptance_Onboarding_GetV1, TestAcceptance_Onboarding_UpdateV1
+//     -- Tests: TestAcceptance_Onboarding_get_v1, TestAcceptance_Onboarding_update_v1
 //     -- Flow: Get → Update → Verify → Restore
 //
 // Test Coverage
@@ -51,7 +51,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_Onboarding_GetV1(t *testing.T) {
+func TestAcceptance_Onboarding_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
@@ -63,7 +63,7 @@ func TestAcceptance_Onboarding_GetV1(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_Onboarding_UpdateV1(t *testing.T) {
+func TestAcceptance_Onboarding_update_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
@@ -102,7 +102,7 @@ func convertToUpdateItems(items []onboarding.OnboardingItemResponse) []onboardin
 	return result
 }
 
-func TestAcceptance_Onboarding_GetEligibleAppsV1(t *testing.T) {
+func TestAcceptance_Onboarding_get_eligible_apps_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
@@ -115,7 +115,7 @@ func TestAcceptance_Onboarding_GetEligibleAppsV1(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_Onboarding_GetEligibleConfigurationProfilesV1(t *testing.T) {
+func TestAcceptance_Onboarding_get_eligible_configuration_profiles_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
@@ -128,7 +128,7 @@ func TestAcceptance_Onboarding_GetEligibleConfigurationProfilesV1(t *testing.T) 
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_Onboarding_GetEligiblePoliciesV1(t *testing.T) {
+func TestAcceptance_Onboarding_get_eligible_policies_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
@@ -141,7 +141,7 @@ func TestAcceptance_Onboarding_GetEligiblePoliciesV1(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_Onboarding_GetHistoryV1(t *testing.T) {
+func TestAcceptance_Onboarding_get_history_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()
@@ -154,7 +154,7 @@ func TestAcceptance_Onboarding_GetHistoryV1(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_Onboarding_AddHistoryNotesV1(t *testing.T) {
+func TestAcceptance_Onboarding_add_history_notes_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Onboarding
 	ctx := context.Background()

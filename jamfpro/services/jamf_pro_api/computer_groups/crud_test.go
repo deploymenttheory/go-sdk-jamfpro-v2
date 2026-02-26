@@ -17,6 +17,17 @@ func setupMockService(t *testing.T) (*Service, *mocks.ComputerGroupsMock) {
 
 // --- Smart Groups ---
 
+func TestUnit_ComputerGroups_ListSmartGroups_ClientError(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered - dispatch returns (nil, err)
+
+	result, resp, err := svc.ListSmartV2(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response registered")
+}
+
 func TestUnit_ComputerGroups_ListSmartGroups_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListSmartGroupsMock()
@@ -71,6 +82,27 @@ func TestUnit_ComputerGroups_GetSmartGroupByID_NotFound(t *testing.T) {
 	result, resp, err := svc.GetSmartByIDV2(context.Background(), "999")
 	assert.Error(t, err)
 	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_ComputerGroups_UpdateSmartGroup_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterSmartUpdateNotFoundErrorMock()
+
+	result, resp, err := svc.UpdateSmartV2(context.Background(), "999", &RequestSmartGroup{Name: "x"})
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_ComputerGroups_DeleteSmartGroup_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterSmartDeleteNotFoundErrorMock()
+
+	resp, err := svc.DeleteSmartV2(context.Background(), "999")
+	assert.Error(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 404, resp.StatusCode)
 }
@@ -178,6 +210,16 @@ func TestUnit_ComputerGroups_DeleteSmartGroup_EmptyID(t *testing.T) {
 
 // --- Static Groups ---
 
+func TestUnit_ComputerGroups_ListStaticGroups_ClientError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.ListStaticV2(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response registered")
+}
+
 func TestUnit_ComputerGroups_ListStaticGroups_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListStaticGroupsMock()
@@ -212,6 +254,17 @@ func TestUnit_ComputerGroups_GetStaticGroupByID_Success(t *testing.T) {
 	assert.Equal(t, []string{"101", "102"}, result.ComputerIds)
 }
 
+func TestUnit_ComputerGroups_GetStaticGroupByID_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterStaticNotFoundErrorMock()
+
+	result, resp, err := svc.GetStaticByIDV2(context.Background(), "999")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
 func TestUnit_ComputerGroups_GetStaticGroupByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
@@ -238,6 +291,18 @@ func TestUnit_ComputerGroups_CreateStaticGroup_Success(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode)
 	assert.Equal(t, "12", result.ID)
 	assert.Contains(t, result.Href, "/api/v2/computer-groups/static-groups/12")
+}
+
+func TestUnit_ComputerGroups_CreateStaticGroup_Conflict(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterStaticConflictErrorMock()
+
+	req := &RequestStaticGroup{Name: "Duplicate"}
+	result, resp, err := svc.CreateStaticV2(context.Background(), req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 409, resp.StatusCode)
 }
 
 func TestUnit_ComputerGroups_CreateStaticGroup_NilRequest(t *testing.T) {
@@ -278,6 +343,18 @@ func TestUnit_ComputerGroups_UpdateStaticGroup_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
+func TestUnit_ComputerGroups_UpdateStaticGroup_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterStaticUpdateNotFoundErrorMock()
+
+	req := &RequestStaticGroup{Name: "x"}
+	result, resp, err := svc.UpdateStaticByIDV2(context.Background(), "999", req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
 func TestUnit_ComputerGroups_UpdateStaticGroup_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
@@ -298,6 +375,16 @@ func TestUnit_ComputerGroups_DeleteStaticGroup_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
+func TestUnit_ComputerGroups_DeleteStaticGroup_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterStaticDeleteNotFoundErrorMock()
+
+	resp, err := svc.DeleteStaticByIDV2(context.Background(), "999")
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
 func TestUnit_ComputerGroups_DeleteStaticGroup_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
@@ -305,4 +392,71 @@ func TestUnit_ComputerGroups_DeleteStaticGroup_EmptyID(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "static group ID is required")
+}
+
+// --- ListAllV1 ---
+
+func TestUnit_ComputerGroups_ListAllV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListAllV1Mock()
+
+	result, resp, err := svc.ListAllV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	require.Len(t, result, 2)
+	assert.Equal(t, "1", result[0].ID)
+	assert.Equal(t, "MacBooks", result[0].Name)
+	assert.True(t, result[0].SmartGroup)
+	assert.Equal(t, "10", result[1].ID)
+	assert.Equal(t, "Test Machines", result[1].Name)
+	assert.False(t, result[1].SmartGroup)
+}
+
+func TestUnit_ComputerGroups_ListAllV1_ClientError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.ListAllV1(context.Background())
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response registered")
+}
+
+// --- GetSmartGroupMembershipByIDV2 ---
+
+func TestUnit_ComputerGroups_GetSmartGroupMembershipByIDV2_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetSmartGroupMembershipMock()
+
+	result, resp, err := svc.GetSmartGroupMembershipByIDV2(context.Background(), "1")
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	require.Len(t, result.Members, 3)
+	assert.Equal(t, []int{101, 102, 103}, result.Members)
+}
+
+func TestUnit_ComputerGroups_GetSmartGroupMembershipByIDV2_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetSmartGroupMembershipByIDV2(context.Background(), "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "smart group ID is required")
+}
+
+func TestUnit_ComputerGroups_GetSmartGroupMembershipByIDV2_ClientError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetSmartGroupMembershipByIDV2(context.Background(), "999")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response registered")
 }

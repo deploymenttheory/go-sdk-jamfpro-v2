@@ -14,12 +14,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_LDAPServers_Lifecycle exercises the full write/read/delete
+// TestAcceptance_LDAPServers_lifecycle exercises the full write/read/delete
 // lifecycle: Create → GetByID → GetByName → UpdateByID → UpdateByName →
 // GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_LDAPServers_Lifecycle(t *testing.T) {
+func TestAcceptance_LDAPServers_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicLdapServers
@@ -30,7 +30,7 @@ func TestAcceptance_LDAPServers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test LDAP server")
 
-	serverName := acc.UniqueName("acc-test-ldap")
+	serverName := acc.UniqueName("sdkv2_acc_acc-test-ldap")
 	createReq := &ldap_servers.RequestLDAPServer{
 		Connection: ldap_servers.RequestConnection{
 			Name:               serverName,
@@ -101,7 +101,7 @@ func TestAcceptance_LDAPServers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-ldap-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-ldap-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating LDAP server ID=%d to name=%q", serverID, updatedName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)

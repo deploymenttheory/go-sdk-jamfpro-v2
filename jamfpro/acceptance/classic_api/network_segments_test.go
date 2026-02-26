@@ -13,12 +13,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_NetworkSegments_Lifecycle exercises the full write/read/delete
+// TestAcceptance_NetworkSegments_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
+func TestAcceptance_NetworkSegments_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicNetworkSegments
@@ -29,7 +29,7 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test network segment")
 
-	segmentName := acc.UniqueName("acc-test-netseg")
+	segmentName := acc.UniqueName("sdkv2_acc_acc-test-netseg")
 	createReq := &network_segments.RequestNetworkSegment{
 		Name:            segmentName,
 		StartingAddress: "192.168.100.0",
@@ -118,7 +118,7 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-netseg-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-netseg-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating network segment ID=%d to name=%q", segmentID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -185,16 +185,16 @@ func TestAcceptance_NetworkSegments_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_NetworkSegments_DeleteByName creates a segment then deletes by name.
+// TestAcceptance_NetworkSegments_delete_by_name creates a segment then deletes by name.
 // =============================================================================
 
-func TestAcceptance_NetworkSegments_DeleteByName(t *testing.T) {
+func TestAcceptance_NetworkSegments_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicNetworkSegments
 	ctx := context.Background()
 
-	segmentName := acc.UniqueName("acc-test-netseg-dbn")
+	segmentName := acc.UniqueName("sdkv2_acc_acc-test-netseg-dbn")
 	createReq := &network_segments.RequestNetworkSegment{
 		Name:            segmentName,
 		StartingAddress: "172.16.50.0",
@@ -229,11 +229,11 @@ func TestAcceptance_NetworkSegments_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_NetworkSegments_ValidationErrors tests client-side validation
+// TestAcceptance_NetworkSegments_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_NetworkSegments_ValidationErrors(t *testing.T) {
+func TestAcceptance_NetworkSegments_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicNetworkSegments
@@ -257,13 +257,13 @@ func TestAcceptance_NetworkSegments_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateNetworkSegmentByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &network_segments.RequestNetworkSegment{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &network_segments.RequestNetworkSegment{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment ID must be a positive integer")
 	})
 
 	t.Run("UpdateNetworkSegmentByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &network_segments.RequestNetworkSegment{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &network_segments.RequestNetworkSegment{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "network segment name is required")
 	})

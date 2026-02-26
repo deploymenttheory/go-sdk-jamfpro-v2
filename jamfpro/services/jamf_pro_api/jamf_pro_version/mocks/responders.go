@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -16,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 type JamfProVersionMock struct {
@@ -28,12 +30,24 @@ func NewJamfProVersionMock() *JamfProVersionMock {
 }
 
 func (m *JamfProVersionMock) register(method, path string, statusCode int, fixture string) {
-	body, _ := os.ReadFile(filepath.Join(mustGetwd(), "mocks", fixture))
+	var body []byte
+	if fixture != "" {
+		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
 func (m *JamfProVersionMock) RegisterMocks() {
 	m.register("GET", "/api/v1/jamf-pro-version", 200, "validate_get.json")
+}
+
+// RegisterGetErrorMock registers a GET response that returns an error (for testing error paths).
+func (m *JamfProVersionMock) RegisterGetErrorMock() {
+	m.responses["GET:/api/v1/jamf-pro-version"] = registeredResponse{
+		statusCode: 500,
+		rawBody:    []byte(`{"error":"internal server error"}`),
+		errMsg:     "mock client error",
+	}
 }
 
 func (m *JamfProVersionMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -88,16 +102,19 @@ func (m *JamfProVersionMock) GetLogger() *zap.Logger                     { retur
 func (m *JamfProVersionMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("no mock for %s %s", method, path)
+		return nil, fmt.Errorf("no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
 	return resp, nil
 }
 
-func mustGetwd() string {
-	dir, _ := os.Getwd()
-	return dir
+func mustMocksDir() string {
+	_, filename, _, _ := runtime.Caller(0)
+	return filepath.Dir(filename)
 }

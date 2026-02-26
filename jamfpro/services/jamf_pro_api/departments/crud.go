@@ -54,6 +54,11 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-id-history
 		AddDepartmentHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error)
+
+		// DeleteDepartmentsByIDV1 deletes multiple departments by their IDs.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-delete-multiple
+		DeleteDepartmentsByIDV1(ctx context.Context, req *DeleteDepartmentsByIDRequest) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the departments-related methods of the Jamf Pro API.
@@ -106,7 +111,10 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list departments: %w", err)
 	}
@@ -127,8 +135,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDepartment
 	var result ResourceDepartment
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -206,8 +213,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointDepartmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -254,7 +260,10 @@ func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQue
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get department history: %w", err)
 	}
@@ -275,6 +284,29 @@ func (s *Service) AddDepartmentHistoryNotesV1(ctx context.Context, id string, re
 	}
 
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointDepartmentsV1, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// DeleteDepartmentsByIDV1 deletes multiple departments by their IDs.
+// URL: POST /api/v1/departments/delete-multiple
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-delete-multiple
+func (s *Service) DeleteDepartmentsByIDV1(ctx context.Context, req *DeleteDepartmentsByIDRequest) (*interfaces.Response, error) {
+	if req == nil || len(req.IDs) == 0 {
+		return nil, fmt.Errorf("department IDs are required")
+	}
+
+	endpoint := EndpointDepartmentsV1 + "/delete-multiple"
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,

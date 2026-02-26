@@ -12,4 +12,5 @@ const (
 	ApplicationPEMCertificateChain = "application/pem-certificate-chain"
 	ApplicationXPEMFile            = "application/x-pem-file"
 	ApplicationOctetStream         = "application/octet-stream"
+	ApplicationXAppleAspenConfig   = "application/x-apple-aspen-config"
 )

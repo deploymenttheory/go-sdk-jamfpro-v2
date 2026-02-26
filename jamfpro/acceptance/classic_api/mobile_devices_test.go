@@ -13,12 +13,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MobileDevices_List verifies list returns without error.
+// TestAcceptance_MobileDevices_list verifies list returns without error.
 // Note: Mobile devices are typically enrolled via MDM; we cannot create them
 // via Classic API for lifecycle testing. This test focuses on read operations.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_List(t *testing.T) {
+func TestAcceptance_MobileDevices_list(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -37,11 +37,11 @@ func TestAcceptance_MobileDevices_List(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDevices_GetByID fetches a mobile device by ID if any exist.
+// TestAcceptance_MobileDevices_get_by_id fetches a mobile device by ID if any exist.
 // Skips if no devices are in the instance.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_GetByID(t *testing.T) {
+func TestAcceptance_MobileDevices_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -74,11 +74,11 @@ func TestAcceptance_MobileDevices_GetByID(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDevices_GetByName fetches a mobile device by name if any exist.
+// TestAcceptance_MobileDevices_get_by_name fetches a mobile device by name if any exist.
 // Skips if no devices are in the instance.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_GetByName(t *testing.T) {
+func TestAcceptance_MobileDevices_get_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -118,11 +118,11 @@ func TestAcceptance_MobileDevices_GetByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDevices_GetByIDAndDataSubset fetches a subset if a device exists.
+// TestAcceptance_MobileDevices_get_by_id_and_data_subset fetches a subset if a device exists.
 // Skips if no devices are in the instance.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_GetByIDAndDataSubset(t *testing.T) {
+func TestAcceptance_MobileDevices_get_by_id_and_data_subset(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -153,10 +153,10 @@ func TestAcceptance_MobileDevices_GetByIDAndDataSubset(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDevices_ValidationErrors validates error handling.
+// TestAcceptance_MobileDevices_validation_errors validates error handling.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_ValidationErrors(t *testing.T) {
+func TestAcceptance_MobileDevices_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -181,7 +181,7 @@ func TestAcceptance_MobileDevices_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), "", &mobile_devices.ResponseMobileDevice{
-			General: mobile_devices.MobileDeviceSubsetGeneral{Name: "test"},
+			General: mobile_devices.MobileDeviceSubsetGeneral{Name: "sdkv2_acc_test"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device ID cannot be empty")
@@ -189,7 +189,7 @@ func TestAcceptance_MobileDevices_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
 		_, _, err := svc.UpdateByName(context.Background(), "", &mobile_devices.ResponseMobileDevice{
-			General: mobile_devices.MobileDeviceSubsetGeneral{Name: "test"},
+			General: mobile_devices.MobileDeviceSubsetGeneral{Name: "sdkv2_acc_test"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device name cannot be empty")
@@ -209,12 +209,12 @@ func TestAcceptance_MobileDevices_ValidationErrors(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDevices_UpdateByID updates a device if one exists.
+// TestAcceptance_MobileDevices_update_by_id updates a device if one exists.
 // Note: This test updates location/asset info only; it does not delete devices.
 // Skips if no devices exist.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_UpdateByID(t *testing.T) {
+func TestAcceptance_MobileDevices_update_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -240,7 +240,7 @@ func TestAcceptance_MobileDevices_UpdateByID(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 
-	updatedName := acc.UniqueName("acc-test-mobdev-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-mobdev-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating mobile device ID=%s to device_name=%q", deviceID, updatedName)
 
 	updateReq := &mobile_devices.ResponseMobileDevice{

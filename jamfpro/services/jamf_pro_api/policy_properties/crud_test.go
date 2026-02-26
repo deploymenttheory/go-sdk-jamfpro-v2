@@ -44,3 +44,26 @@ func TestUnit_PolicyProperties_Update_NilRequest(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
 }
+
+func TestUnit_PolicyProperties_Get_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// Do not register mock - triggers no mock registered error
+	result, resp, err := svc.Get(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no mock registered")
+}
+
+func TestUnit_PolicyProperties_Update_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// Do not register mock - triggers no mock registered error
+	result, resp, err := svc.Update(context.Background(), &ResourcePolicyProperties{
+		PoliciesRequireNetworkStateChange: false,
+		AllowNetworkStateChangeTriggers:   true,
+	})
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no mock registered")
+}

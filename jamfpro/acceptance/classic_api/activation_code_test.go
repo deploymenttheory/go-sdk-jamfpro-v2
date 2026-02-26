@@ -10,12 +10,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_ActivationCode_GetAndUpdate gets the current activation code
+// TestAcceptance_ActivationCode_get_and_update gets the current activation code
 // only. Update is not exercised in acceptance tests to avoid breaking the server
 // with an invalid code.
 // =============================================================================
 
-func TestAcceptance_ActivationCode_GetActivationCode(t *testing.T) {
+func TestAcceptance_ActivationCode_get_activation_code(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicActivationCode
@@ -37,11 +37,11 @@ func TestAcceptance_ActivationCode_GetActivationCode(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ActivationCode_ValidationErrors tests client-side validation
+// TestAcceptance_ActivationCode_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_ActivationCode_ValidationErrors(t *testing.T) {
+func TestAcceptance_ActivationCode_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicActivationCode

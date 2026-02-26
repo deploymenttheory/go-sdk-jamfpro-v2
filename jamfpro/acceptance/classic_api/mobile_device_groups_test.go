@@ -14,12 +14,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MobileDeviceGroups_Lifecycle exercises the full write/read/delete
+// TestAcceptance_MobileDeviceGroups_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceGroups_Lifecycle(t *testing.T) {
+func TestAcceptance_MobileDeviceGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceGroups
@@ -30,7 +30,7 @@ func TestAcceptance_MobileDeviceGroups_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test mobile device group")
 
-	groupName := acc.UniqueName("acc-test-mobgrp")
+	groupName := acc.UniqueName("sdkv2_acc_acc-test-mobgrp")
 	createReq := &mobile_device_groups.RequestMobileDeviceGroup{
 		Name:    groupName,
 		IsSmart: true,
@@ -134,7 +134,7 @@ func TestAcceptance_MobileDeviceGroups_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-mobgrp-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-mobgrp-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating mobile device group ID=%d to name=%q", groupID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -238,16 +238,16 @@ func TestAcceptance_MobileDeviceGroups_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceGroups_DeleteByName creates a mobile device group then deletes by name.
+// TestAcceptance_MobileDeviceGroups_delete_by_name creates a mobile device group then deletes by name.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceGroups_DeleteByName(t *testing.T) {
+func TestAcceptance_MobileDeviceGroups_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceGroups
 	ctx := context.Background()
 
-	groupName := acc.UniqueName("acc-test-mobgrp-dbn")
+	groupName := acc.UniqueName("sdkv2_acc_acc-test-mobgrp-dbn")
 	createReq := &mobile_device_groups.RequestMobileDeviceGroup{
 		Name:    groupName,
 		IsSmart: false,
@@ -281,10 +281,10 @@ func TestAcceptance_MobileDeviceGroups_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceGroups_ValidationErrors validates error handling.
+// TestAcceptance_MobileDeviceGroups_validation_errors validates error handling.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceGroups_ValidationErrors(t *testing.T) {
+func TestAcceptance_MobileDeviceGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceGroups
@@ -308,13 +308,13 @@ func TestAcceptance_MobileDeviceGroups_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &mobile_device_groups.RequestMobileDeviceGroup{Name: "test"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &mobile_device_groups.RequestMobileDeviceGroup{Name: "sdkv2_acc_test"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device group ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &mobile_device_groups.RequestMobileDeviceGroup{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &mobile_device_groups.RequestMobileDeviceGroup{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device group name cannot be empty")
 	})

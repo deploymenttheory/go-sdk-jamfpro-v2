@@ -33,7 +33,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_StaticMobileDeviceGroups_Lifecycle(t *testing.T) {
+func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.StaticMobileDeviceGroups
@@ -43,7 +43,7 @@ func TestAcceptance_StaticMobileDeviceGroups_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test static mobile device group")
 
 	createReq := &static_mobile_device_groups.RequestStaticMobileDeviceGroup{
-		Name:        acc.UniqueName("acc-test-static-md"),
+		Name:        acc.UniqueName("sdkv2_acc_acc-test-static-md"),
 		Description: "Acceptance test static mobile device group",
 		SiteID:      "-1",
 		Assignments: []static_mobile_device_groups.StaticMobileDeviceGroupAssignment{},
@@ -104,7 +104,7 @@ func TestAcceptance_StaticMobileDeviceGroups_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating static mobile device group ID=%s", groupID)
 
 	updateReq := &static_mobile_device_groups.RequestStaticMobileDeviceGroup{
-		Name:        acc.UniqueName("acc-test-static-md-updated"),
+		Name:        acc.UniqueName("sdkv2_acc_acc-test-static-md-updated"),
 		Description: "Updated description",
 		SiteID:      "-1",
 		Assignments: []static_mobile_device_groups.StaticMobileDeviceGroupAssignment{},
@@ -133,10 +133,10 @@ func TestAcceptance_StaticMobileDeviceGroups_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_StaticMobileDeviceGroups_ValidationErrors
+// TestAcceptance_StaticMobileDeviceGroups_validation_errors
 // =============================================================================
 
-func TestAcceptance_StaticMobileDeviceGroups_ValidationErrors(t *testing.T) {
+func TestAcceptance_StaticMobileDeviceGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.StaticMobileDeviceGroups

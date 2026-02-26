@@ -42,6 +42,16 @@ func TestUnit_DistributionPoint_ListV1_Success(t *testing.T) {
 	assert.Equal(t, "Test DP", result.Results[0].Name)
 }
 
+func TestUnit_DistributionPoint_ListV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListInvalidMock()
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to list distribution points")
+}
+
 func TestUnit_DistributionPoint_CreateV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestDistributionPoint{
@@ -193,6 +203,15 @@ func TestUnit_DistributionPoint_PatchByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "distribution point ID is required")
 }
 
+func TestUnit_DistributionPoint_PatchByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.PatchByIDV1(context.Background(), "1", nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
 func TestUnit_DistributionPoint_GetHistoryByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetHistoryByIDV1(context.Background(), "1", nil)
@@ -213,6 +232,16 @@ func TestUnit_DistributionPoint_GetHistoryByIDV1_EmptyID(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "distribution point ID is required")
+}
+
+func TestUnit_DistributionPoint_GetHistoryByIDV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterHistoryInvalidMock()
+	result, resp, err := svc.GetHistoryByIDV1(context.Background(), "1", nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get distribution point history")
 }
 
 func TestUnit_DistributionPoint_CreateHistoryNoteV1_Success(t *testing.T) {

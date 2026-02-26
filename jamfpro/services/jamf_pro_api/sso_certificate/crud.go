@@ -68,8 +68,7 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *int
 	var result ResourceSSOKeystoreResponse
 	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
@@ -151,8 +150,7 @@ func (s *Service) ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*
 func (s *Service) DeleteV2(ctx context.Context) (*interfaces.Response, error) {
 	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {

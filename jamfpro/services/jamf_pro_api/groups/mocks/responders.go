@@ -19,6 +19,12 @@ var validateListJSON []byte
 //go:embed validate_get.json
 var validateGetJSON []byte
 
+//go:embed validate_list_empty.json
+var validateListEmptyJSON []byte
+
+//go:embed validate_list_invalid.json
+var validateListInvalidJSON []byte
+
 type registeredResponse struct {
 	method   string
 	path     string
@@ -59,7 +65,7 @@ func (m *GroupsMock) dispatch(method, path string) ([]byte, int, bool) {
 func (m *GroupsMock) Get(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
 	data, status, ok := m.dispatch("GET", endpoint)
 	if !ok {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for GET %s", endpoint)
+		return nil, fmt.Errorf("no mock registered for GET %s", endpoint)
 	}
 
 	if result != nil && data != nil {
@@ -74,7 +80,7 @@ func (m *GroupsMock) Get(ctx context.Context, endpoint string, params map[string
 func (m *GroupsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	data, status, ok := m.dispatch("POST", endpoint)
 	if !ok {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for POST %s", endpoint)
+		return nil, fmt.Errorf("no mock registered for POST %s", endpoint)
 	}
 
 	if result != nil && data != nil {
@@ -89,7 +95,7 @@ func (m *GroupsMock) Post(ctx context.Context, endpoint string, body any, header
 func (m *GroupsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	data, status, ok := m.dispatch("PUT", endpoint)
 	if !ok {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for PUT %s", endpoint)
+		return nil, fmt.Errorf("no mock registered for PUT %s", endpoint)
 	}
 
 	if result != nil && data != nil {
@@ -104,7 +110,7 @@ func (m *GroupsMock) Put(ctx context.Context, endpoint string, body any, headers
 func (m *GroupsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	data, status, ok := m.dispatch("PATCH", endpoint)
 	if !ok {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for PATCH %s", endpoint)
+		return nil, fmt.Errorf("no mock registered for PATCH %s", endpoint)
 	}
 
 	if result != nil && data != nil {
@@ -119,7 +125,7 @@ func (m *GroupsMock) Patch(ctx context.Context, endpoint string, body any, heade
 func (m *GroupsMock) Delete(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
 	_, status, ok := m.dispatch("DELETE", endpoint)
 	if !ok {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for DELETE %s", endpoint)
+		return nil, fmt.Errorf("no mock registered for DELETE %s", endpoint)
 	}
 
 	return &interfaces.Response{StatusCode: status}, nil
@@ -132,7 +138,7 @@ func (m *GroupsMock) DeleteWithBody(ctx context.Context, endpoint string, body a
 func (m *GroupsMock) GetBytes(ctx context.Context, endpoint string, params map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
 	data, status, ok := m.dispatch("GET", endpoint)
 	if !ok {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil, fmt.Errorf("no mock registered for GET %s", endpoint)
+		return nil, nil, fmt.Errorf("no mock registered for GET %s", endpoint)
 	}
 
 	return &interfaces.Response{StatusCode: status}, data, nil
@@ -141,7 +147,7 @@ func (m *GroupsMock) GetBytes(ctx context.Context, endpoint string, params map[s
 func (m *GroupsMock) GetPaginated(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, mergePage func(page []byte) error) (*interfaces.Response, error) {
 	data, status, ok := m.dispatch("GET", endpoint)
 	if !ok {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, fmt.Errorf("no mock registered for GET %s", endpoint)
+		return nil, fmt.Errorf("no mock registered for GET %s", endpoint)
 	}
 	if mergePage != nil && data != nil {
 		if err := mergePage(data); err != nil {
@@ -216,11 +222,20 @@ func (m *GroupsMock) RegisterDeleteMock() {
 }
 
 func (m *GroupsMock) RegisterEmptyListMock() {
-	emptyResponse := []byte(`{"totalCount":0,"results":[]}`)
 	m.responses = append(m.responses, registeredResponse{
 		method:   "GET",
 		path:     "/api/v1/groups",
-		response: emptyResponse,
+		response: validateListEmptyJSON,
+		status:   http.StatusOK,
+	})
+}
+
+// RegisterListInvalidJSONMock returns invalid JSON to trigger mergePage unmarshal/decode errors.
+func (m *GroupsMock) RegisterListInvalidJSONMock() {
+	m.responses = append(m.responses, registeredResponse{
+		method:   "GET",
+		path:     "/api/v1/groups",
+		response: validateListInvalidJSON,
 		status:   http.StatusOK,
 	})
 }

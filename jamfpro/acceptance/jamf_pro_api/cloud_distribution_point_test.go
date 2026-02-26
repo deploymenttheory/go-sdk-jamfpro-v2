@@ -8,9 +8,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestAcceptance_CloudDistributionPoint_Get verifies GET cloud distribution point.
+// TestAcceptance_CloudDistributionPoint_get verifies GET cloud distribution point.
 // Create/Update/Delete are not run to avoid changing instance CDP configuration.
-func TestAcceptance_CloudDistributionPoint_Get(t *testing.T) {
+func TestAcceptance_CloudDistributionPoint_get(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.CloudDistributionPoint
 	ctx := context.Background()

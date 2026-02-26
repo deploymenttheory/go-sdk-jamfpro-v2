@@ -21,7 +21,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to Jamf Pro system information
-//     -- Tests: TestAcceptance_JamfProInformation_Get
+//     -- Tests: TestAcceptance_JamfProInformation_get
 //     -- Flow: Get information → Verify response structure and required fields
 //
 // Test Coverage
@@ -38,7 +38,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_JamfProInformation_Get(t *testing.T) {
+func TestAcceptance_JamfProInformation_get(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.JamfProInformation
 	ctx := context.Background()

@@ -31,3 +31,8 @@ type RequestOIDCRedirectURL struct {
 type ResourceOIDCRedirectURL struct {
 	RedirectURL string `json:"redirectUrl"` // URL to redirect for OIDC authentication
 }
+
+// ResourcePublicFeatures represents the public OIDC configuration features.
+type ResourcePublicFeatures struct {
+	JamfIdAuthenticationEnabled bool `json:"jamfIdAuthenticationEnabled"` // Whether Jamf ID authentication is enabled
+}

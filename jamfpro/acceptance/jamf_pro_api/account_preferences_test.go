@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_AccountPreferences_GetV3(t *testing.T) {
+func TestAcceptance_AccountPreferences_get_v3(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AccountPreferences
 	ctx := context.Background()
@@ -22,7 +22,7 @@ func TestAcceptance_AccountPreferences_GetV3(t *testing.T) {
 	assert.NotEmpty(t, result.Language)
 }
 
-func TestAcceptance_AccountPreferences_UpdateV2(t *testing.T) {
+func TestAcceptance_AccountPreferences_update_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AccountPreferences
 	ctx := context.Background()

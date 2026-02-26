@@ -45,8 +45,7 @@ func (s *Service) GetV1(ctx context.Context) (*SessionTokenResponse, *interfaces
 	endpoint := EndpointOAuth2SessionTokensV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_Notifications_List(t *testing.T) {
+func TestAcceptance_Notifications_list(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Notifications
 	ctx := context.Background()

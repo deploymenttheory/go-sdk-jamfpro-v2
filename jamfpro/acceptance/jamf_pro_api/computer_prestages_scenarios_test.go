@@ -11,12 +11,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestAcceptance_ComputerPrestages_MinimalConfig tests creating a prestage with minimal required configuration.
-func TestAcceptance_ComputerPrestages_MinimalConfig(t *testing.T) {
+// TestAcceptance_ComputerPrestages_minimal_config tests creating a prestage with minimal required configuration.
+func TestAcceptance_ComputerPrestages_minimal_config(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
 	ctx := context.Background()
-	name := acc.UniqueName("acc-prestage-minimal")
+	name := acc.UniqueName("sdkv2_acc_acc-prestage-minimal")
 
 	created, resp, err := svc.CreateV3(ctx, &computer_prestages.ResourceComputerPrestage{
 		DisplayName:                        name,
@@ -106,12 +106,12 @@ func TestAcceptance_ComputerPrestages_MinimalConfig(t *testing.T) {
 	assert.Equal(t, name, fetched.DisplayName)
 }
 
-// TestAcceptance_ComputerPrestages_RecoveryLockScenario tests prestage with recovery lock enabled.
-func TestAcceptance_ComputerPrestages_RecoveryLockScenario(t *testing.T) {
+// TestAcceptance_ComputerPrestages_recovery_lock_scenario tests prestage with recovery lock enabled.
+func TestAcceptance_ComputerPrestages_recovery_lock_scenario(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
 	ctx := context.Background()
-	name := acc.UniqueName("acc-prestage-recovery")
+	name := acc.UniqueName("sdkv2_acc_acc-prestage-recovery")
 
 	created, resp, err := svc.CreateV3(ctx, &computer_prestages.ResourceComputerPrestage{
 		DisplayName:                        name,
@@ -198,12 +198,12 @@ func TestAcceptance_ComputerPrestages_RecoveryLockScenario(t *testing.T) {
 	assert.Equal(t, name, fetched.DisplayName)
 }
 
-// TestAcceptance_ComputerPrestages_AccountSettingsScenario tests prestage with admin account enabled.
-func TestAcceptance_ComputerPrestages_AccountSettingsScenario(t *testing.T) {
+// TestAcceptance_ComputerPrestages_account_settings_scenario tests prestage with admin account enabled.
+func TestAcceptance_ComputerPrestages_account_settings_scenario(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
 	ctx := context.Background()
-	name := acc.UniqueName("acc-prestage-account")
+	name := acc.UniqueName("sdkv2_acc_acc-prestage-account")
 
 	created, resp, err := svc.CreateV3(ctx, &computer_prestages.ResourceComputerPrestage{
 		DisplayName:                        name,
@@ -271,7 +271,7 @@ func TestAcceptance_ComputerPrestages_AccountSettingsScenario(t *testing.T) {
 			UserAccountType:                         "STANDARD",
 			PrefillPrimaryAccountInfoFeatureEnabled: boolPtr(true),
 			PrefillType:                             "DEVICE_OWNER",
-			PrefillAccountFullName:                  "Test User",
+			PrefillAccountFullName:                  "sdkv2_acc_Test User",
 			PrefillAccountUserName:                  "testuser",
 			PreventPrefillInfoFromModification:      boolPtr(true),
 		},
@@ -295,12 +295,12 @@ func TestAcceptance_ComputerPrestages_AccountSettingsScenario(t *testing.T) {
 	assert.Equal(t, name, fetched.DisplayName)
 }
 
-// TestAcceptance_ComputerPrestages_MaximalConfig tests creating a prestage with maximal configuration.
-func TestAcceptance_ComputerPrestages_MaximalConfig(t *testing.T) {
+// TestAcceptance_ComputerPrestages_maximal_config tests creating a prestage with maximal configuration.
+func TestAcceptance_ComputerPrestages_maximal_config(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
 	ctx := context.Background()
-	name := acc.UniqueName("acc-prestage-maximal")
+	name := acc.UniqueName("sdkv2_acc_acc-prestage-maximal")
 
 	created, resp, err := svc.CreateV3(ctx, &computer_prestages.ResourceComputerPrestage{
 		DisplayName:                        name,
@@ -398,7 +398,7 @@ func TestAcceptance_ComputerPrestages_MaximalConfig(t *testing.T) {
 			UserAccountType:                         "ADMINISTRATOR",
 			PrefillPrimaryAccountInfoFeatureEnabled: boolPtr(true),
 			PrefillType:                             "DEVICE_OWNER",
-			PrefillAccountFullName:                  "Device Owner",
+			PrefillAccountFullName:                  "sdkv2_acc_Device Owner",
 			PrefillAccountUserName:                  "deviceowner",
 			PreventPrefillInfoFromModification:      boolPtr(true),
 		},
@@ -423,8 +423,8 @@ func TestAcceptance_ComputerPrestages_MaximalConfig(t *testing.T) {
 	assert.Equal(t, "MINIMUM_OS_LATEST_MAJOR_VERSION", fetched.PrestageMinimumOsTargetVersionType)
 }
 
-// TestAcceptance_ComputerPrestages_ValidationErrors tests validation of enum fields.
-func TestAcceptance_ComputerPrestages_ValidationErrors(t *testing.T) {
+// TestAcceptance_ComputerPrestages_validation_errors tests validation of enum fields.
+func TestAcceptance_ComputerPrestages_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
 	ctx := context.Background()
@@ -449,7 +449,7 @@ func TestAcceptance_ComputerPrestages_ValidationErrors(t *testing.T) {
 
 	t.Run("InvalidUserAccountType", func(t *testing.T) {
 		_, _, err := svc.CreateV3(ctx, &computer_prestages.ResourceComputerPrestage{
-			DisplayName: "test",
+			DisplayName: "sdkv2_acc_test",
 			AccountSettings: &computer_prestages.AccountSettings{
 				UserAccountType: "INVALID_TYPE",
 			},
@@ -460,7 +460,7 @@ func TestAcceptance_ComputerPrestages_ValidationErrors(t *testing.T) {
 
 	t.Run("InvalidPrefillType", func(t *testing.T) {
 		_, _, err := svc.CreateV3(ctx, &computer_prestages.ResourceComputerPrestage{
-			DisplayName: "test",
+			DisplayName: "sdkv2_acc_test",
 			AccountSettings: &computer_prestages.AccountSettings{
 				PrefillType: "INVALID_TYPE",
 			},

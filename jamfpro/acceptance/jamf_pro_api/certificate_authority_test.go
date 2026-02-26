@@ -26,7 +26,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to certificate authority data
-//     -- Tests: TestAcceptance_CertificateAuthority_GetV1
+//     -- Tests: TestAcceptance_CertificateAuthority_get_v1
 //     -- Flow: Get active CA → Verify response structure and required fields
 //
 // Test Coverage
@@ -52,7 +52,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_CertificateAuthority_GetV1(t *testing.T) {
+func TestAcceptance_CertificateAuthority_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.CertificateAuthority
 	ctx := context.Background()

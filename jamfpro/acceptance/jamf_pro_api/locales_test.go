@@ -21,7 +21,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to available locales
-//     -- Tests: TestAcceptance_Locales_List
+//     -- Tests: TestAcceptance_Locales_list
 //     -- Flow: List locales → Verify response structure
 //
 //   Note: RSQL Filter Testing NOT applicable
@@ -43,7 +43,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_Locales_List(t *testing.T) {
+func TestAcceptance_Locales_list(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Locales
 	ctx := context.Background()

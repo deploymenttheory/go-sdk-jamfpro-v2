@@ -53,6 +53,19 @@ func (m *CloudDistributionPointMock) RegisterMocks() {
 	m.register("GET", "/api/v1/cloud-distribution-point/test-connection", 200, "validate_test_connection.json")
 	m.register("GET", "/api/v1/cloud-distribution-point/history", 200, "validate_history.json")
 	m.register("GET", "/api/v1/cloud-distribution-point/files", 200, "validate_files.json")
+	m.register("POST", "/api/v1/cloud-distribution-point/history", 201, "validate_history_note.json")
+	m.register("POST", "/api/v1/cloud-distribution-point/fail-upload/test-id", 204, "")
+	m.register("POST", "/api/v1/cloud-distribution-point/refresh-inventory", 200, "")
+}
+
+// RegisterHistoryInvalidMock registers GET history with invalid JSON for testing mergePage error paths.
+func (m *CloudDistributionPointMock) RegisterHistoryInvalidMock() {
+	m.register("GET", "/api/v1/cloud-distribution-point/history", 200, "validate_history_invalid.json")
+}
+
+// RegisterFilesInvalidMock registers GET files with invalid JSON for testing mergePage error paths.
+func (m *CloudDistributionPointMock) RegisterFilesInvalidMock() {
+	m.register("GET", "/api/v1/cloud-distribution-point/files", 200, "validate_files_invalid.json")
 }
 
 func (m *CloudDistributionPointMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -95,7 +108,9 @@ func (m *CloudDistributionPointMock) GetPaginated(ctx context.Context, path stri
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		_ = mergePage(resp.Body)
+		if err := mergePage(resp.Body); err != nil {
+			return resp, err
+		}
 	}
 	return resp, nil
 }
@@ -107,7 +122,7 @@ func (m *CloudDistributionPointMock) GetLogger() *zap.Logger                    
 func (m *CloudDistributionPointMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Body: nil}, fmt.Errorf("no mock for %s %s", method, path)
+		return nil, fmt.Errorf("no mock for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if r.errMsg != "" {

@@ -85,7 +85,11 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetV1(ctx context.Context) (*ResponseOnboardingSettings, *interfaces.Response, error) {
 	var result ResponseOnboardingSettings
 	endpoint := EndpointOnboardingV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -116,7 +120,7 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceUpdateOnboardin
 func (s *Service) GetEligibleAppsV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *interfaces.Response, error) {
 	var result ResponseEligibilityList
 	endpoint := EndpointEligibleApps
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	headers := map[string]string{"Accept": mime.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -130,7 +134,7 @@ func (s *Service) GetEligibleAppsV1(ctx context.Context, query map[string]string
 func (s *Service) GetEligibleConfigurationProfilesV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *interfaces.Response, error) {
 	var result ResponseEligibilityList
 	endpoint := EndpointEligibleConfigurationProfiles
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	headers := map[string]string{"Accept": mime.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -144,7 +148,7 @@ func (s *Service) GetEligibleConfigurationProfilesV1(ctx context.Context, query 
 func (s *Service) GetEligiblePoliciesV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *interfaces.Response, error) {
 	var result ResponseEligibilityList
 	endpoint := EndpointEligiblePolicies
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	headers := map[string]string{"Accept": mime.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -162,8 +166,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -215,8 +218,7 @@ func (s *Service) ExportHistoryV1(ctx context.Context, acceptHeader string, rsql
 	}
 
 	headers := map[string]string{
-		"Accept":       acceptHeader,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": acceptHeader,
 	}
 
 	resp, data, err := s.client.GetBytes(ctx, endpoint, rsqlQuery, headers)

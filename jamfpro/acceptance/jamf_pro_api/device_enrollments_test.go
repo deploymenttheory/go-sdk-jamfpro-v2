@@ -34,12 +34,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 4: Read-Only with Existing Data
 //     -- Reason: Device enrollments typically exist and cannot be easily created in tests
-//     -- Tests: TestAcceptance_DeviceEnrollments_ListAndGet
+//     -- Tests: TestAcceptance_DeviceEnrollments_list_and_get
 //     -- Flow: List → If exists, test GetByID, GetByName, GetHistory, GetSyncStates
 //
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Public key and sync states are read-only system information
-//     -- Tests: TestAcceptance_DeviceEnrollments_PublicKey, TestAcceptance_DeviceEnrollments_AllSyncStates
+//     -- Tests: TestAcceptance_DeviceEnrollments_public_key, TestAcceptance_DeviceEnrollments_all_sync_states
 //     -- Flow: Get public key → Verify PEM format; Get all sync states → Verify structure
 //
 // Test Coverage
@@ -64,7 +64,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_DeviceEnrollments_ListAndGet(t *testing.T) {
+func TestAcceptance_DeviceEnrollments_list_and_get(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DeviceEnrollments
@@ -115,7 +115,7 @@ func TestAcceptance_DeviceEnrollments_ListAndGet(t *testing.T) {
 	acc.LogTestSuccess(t, "GetByName: ID=%s", enrollmentByName.ID)
 }
 
-func TestAcceptance_DeviceEnrollments_History(t *testing.T) {
+func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DeviceEnrollments
@@ -154,7 +154,7 @@ func TestAcceptance_DeviceEnrollments_History(t *testing.T) {
 	}
 }
 
-func TestAcceptance_DeviceEnrollments_SyncStates(t *testing.T) {
+func TestAcceptance_DeviceEnrollments_sync_states(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DeviceEnrollments
@@ -185,7 +185,7 @@ func TestAcceptance_DeviceEnrollments_SyncStates(t *testing.T) {
 	acc.LogTestSuccess(t, "Latest sync state: %s", latestSync.SyncState)
 }
 
-func TestAcceptance_DeviceEnrollments_AllSyncStates(t *testing.T) {
+func TestAcceptance_DeviceEnrollments_all_sync_states(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DeviceEnrollments
@@ -204,7 +204,7 @@ func TestAcceptance_DeviceEnrollments_AllSyncStates(t *testing.T) {
 	acc.LogTestSuccess(t, "Retrieved %d total sync state(s) across all instances", len(allSyncStates))
 }
 
-func TestAcceptance_DeviceEnrollments_PublicKey(t *testing.T) {
+func TestAcceptance_DeviceEnrollments_public_key(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DeviceEnrollments

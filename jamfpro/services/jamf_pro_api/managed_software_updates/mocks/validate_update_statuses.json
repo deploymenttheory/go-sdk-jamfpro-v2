@@ -1,0 +1,27 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "osUpdatesStatusId": "1",
+      "device": {
+        "deviceId": "12345",
+        "objectType": "COMPUTER",
+        "href": "/v1/computers-inventory/12345"
+      },
+      "downloadPercentComplete": 0.8,
+      "downloaded": true,
+      "productKey": "macOSUpdate19F77",
+      "status": "DOWNLOADING",
+      "deferralsRemaining": 5,
+      "maxDeferrals": 5,
+      "nextScheduledInstall": "2022-12-25T21:09:31.661Z",
+      "pastNotifications": [
+        "2022-12-22T21:09:31.661Z",
+        "2022-12-23T21:09:31.661Z",
+        "2022-12-24T21:09:31.661Z"
+      ],
+      "created": "2022-12-22T21:09:00.661Z",
+      "updated": "2022-12-24T21:09:31.661Z"
+    }
+  ]
+}

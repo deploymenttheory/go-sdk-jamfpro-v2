@@ -39,22 +39,22 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_Packages_Lifecycle
+//     -- Tests: TestAcceptance_Packages_lifecycle
 //     -- Flow: CreateAndUpload (download → create → upload → verify) → List → GetByID → Update → Verify → History → Delete
 //
 //   ✓ Pattern 5: RSQL Filter Testing [MANDATORY]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_Packages_ListWithRSQLFilter
+//     -- Tests: TestAcceptance_Packages_list_with_rsql_filter
 //     -- Flow: Create unique package → Filter with RSQL → Verify filtered results
 //
 //   ✓ Pattern 6: Bulk Operations
 //     -- Reason: Service provides DeletePackagesByIDV1 for bulk deletion
-//     -- Tests: TestAcceptance_Packages_DeleteMultiple
+//     -- Tests: TestAcceptance_Packages_delete_multiple
 //     -- Flow: Create multiple → Bulk delete → Verify deletion
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_Packages_ValidationErrors
+//     -- Tests: TestAcceptance_Packages_validation_errors
 //     -- Cases: Empty IDs, nil requests, missing required fields
 //
 // Test Coverage
@@ -95,11 +95,11 @@ func uniquePackageName(base string) string {
 }
 
 // =============================================================================
-// TestAcceptance_Packages_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Packages_lifecycle exercises the full write/read/delete
 // lifecycle: CreateAndUpload (create metadata → upload → verify SHA3_512) → List → GetByID → Update → History → Delete.
 // =============================================================================
 
-func TestAcceptance_Packages_Lifecycle(t *testing.T) {
+func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Packages
@@ -251,10 +251,10 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Packages_ListWithRSQLFilter
+// TestAcceptance_Packages_list_with_rsql_filter
 // =============================================================================
 
-func TestAcceptance_Packages_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Packages_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Packages
@@ -312,10 +312,10 @@ func TestAcceptance_Packages_ListWithRSQLFilter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Packages_DeleteMultiple
+// TestAcceptance_Packages_delete_multiple
 // =============================================================================
 
-func TestAcceptance_Packages_DeleteMultiple(t *testing.T) {
+func TestAcceptance_Packages_delete_multiple(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Packages
@@ -368,10 +368,10 @@ func TestAcceptance_Packages_DeleteMultiple(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Packages_ValidationErrors
+// TestAcceptance_Packages_validation_errors
 // =============================================================================
 
-func TestAcceptance_Packages_ValidationErrors(t *testing.T) {
+func TestAcceptance_Packages_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Packages
@@ -389,7 +389,7 @@ func TestAcceptance_Packages_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateByIDV1(context.Background(), "", &packages.ResourcePackage{PackageName: "x"})
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &packages.ResourcePackage{PackageName: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})

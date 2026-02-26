@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestAcceptance_SmartMobileDeviceGroups_List verifies listing smart mobile device groups.
-func TestAcceptance_SmartMobileDeviceGroups_List(t *testing.T) {
+// TestAcceptance_SmartMobileDeviceGroups_list verifies listing smart mobile device groups.
+func TestAcceptance_SmartMobileDeviceGroups_list(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SmartMobileDeviceGroups
@@ -23,8 +23,8 @@ func TestAcceptance_SmartMobileDeviceGroups_List(t *testing.T) {
 	require.GreaterOrEqual(t, list.TotalCount, 0)
 }
 
-// TestAcceptance_SmartMobileDeviceGroups_GetByID fetches a smart group by ID when at least one exists.
-func TestAcceptance_SmartMobileDeviceGroups_GetByID(t *testing.T) {
+// TestAcceptance_SmartMobileDeviceGroups_get_by_id fetches a smart group by ID when at least one exists.
+func TestAcceptance_SmartMobileDeviceGroups_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SmartMobileDeviceGroups
@@ -46,8 +46,8 @@ func TestAcceptance_SmartMobileDeviceGroups_GetByID(t *testing.T) {
 	require.Equal(t, list.Results[0].GroupID, got.GroupID)
 }
 
-// TestAcceptance_SmartMobileDeviceGroups_GetMembership fetches membership when at least one group exists.
-func TestAcceptance_SmartMobileDeviceGroups_GetMembership(t *testing.T) {
+// TestAcceptance_SmartMobileDeviceGroups_get_membership fetches membership when at least one group exists.
+func TestAcceptance_SmartMobileDeviceGroups_get_membership(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SmartMobileDeviceGroups

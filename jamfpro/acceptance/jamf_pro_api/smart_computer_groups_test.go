@@ -35,7 +35,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_SmartComputerGroups_Lifecycle(t *testing.T) {
+func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SmartComputerGroups
@@ -45,7 +45,7 @@ func TestAcceptance_SmartComputerGroups_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test smart computer group")
 
 	createReq := &smart_computer_groups.RequestSmartGroup{
-		Name:        acc.UniqueName("acc-test-smart-cg"),
+		Name:        acc.UniqueName("sdkv2_acc_acc-test-smart-cg"),
 		Description: "Acceptance test smart computer group",
 		Criteria: []smart_computer_groups.SubsetCriteria{
 			{Name: "Computer Name", Priority: 1, AndOr: "and", SearchType: "is", Value: "*"},
@@ -104,7 +104,7 @@ func TestAcceptance_SmartComputerGroups_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating smart computer group ID=%s", groupID)
 
 	updateReq := &smart_computer_groups.RequestSmartGroup{
-		Name:        acc.UniqueName("acc-test-smart-cg-updated"),
+		Name:        acc.UniqueName("sdkv2_acc_acc-test-smart-cg-updated"),
 		Description: "Updated description",
 		Criteria: []smart_computer_groups.SubsetCriteria{
 			{Name: "Computer Name", Priority: 1, AndOr: "and", SearchType: "is", Value: "*"},
@@ -133,7 +133,7 @@ func TestAcceptance_SmartComputerGroups_Lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Smart computer group ID=%s deleted", groupID)
 }
 
-func TestAcceptance_SmartComputerGroups_List(t *testing.T) {
+func TestAcceptance_SmartComputerGroups_list(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SmartComputerGroups
@@ -147,7 +147,7 @@ func TestAcceptance_SmartComputerGroups_List(t *testing.T) {
 	assert.NotNil(t, result.Results)
 }
 
-func TestAcceptance_SmartComputerGroups_ValidationErrors(t *testing.T) {
+func TestAcceptance_SmartComputerGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SmartComputerGroups
@@ -178,7 +178,7 @@ func TestAcceptance_SmartComputerGroups_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), "", &smart_computer_groups.RequestSmartGroup{
-			Name: "x",
+			Name: "sdkv2_acc_x",
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")

@@ -40,7 +40,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_MacOSConfigProfileCustomSettings_GetSchemaList(t *testing.T) {
+func TestAcceptance_MacOSConfigProfileCustomSettings_get_schema_list(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.MacOSConfigProfileCustomSettings
 	ctx := context.Background()

@@ -25,3 +25,59 @@ func TestUnit_TimeZones_ListV1_Success(t *testing.T) {
 	require.Equal(t, "America/Los_Angeles", result[0].ZoneId)
 	require.Equal(t, "Pacific Time (US & Canada)", result[0].DisplayName)
 }
+
+func TestUnit_TimeZones_ListV1_EmptyList(t *testing.T) {
+	mock := mocks.NewTimeZonesMock()
+	mock.RegisterListV1EmptyMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.ListV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode)
+	require.Len(t, result, 0)
+}
+
+func TestUnit_TimeZones_ListV1_Error(t *testing.T) {
+	mock := mocks.NewTimeZonesMock()
+	mock.RegisterListV1ErrorMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.ListV1(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 500, resp.StatusCode)
+	require.Contains(t, err.Error(), "mock client error")
+}
+
+func TestUnit_TimeZones_ListV1_NoMockRegistered(t *testing.T) {
+	mock := mocks.NewTimeZonesMock()
+	// Do not call RegisterMocks - no mock registered for GET /api/v1/time-zones
+	svc := NewService(mock)
+
+	result, resp, err := svc.ListV1(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "no response for")
+}
+
+func TestUnit_TimeZones_ListV1_InvalidJSON(t *testing.T) {
+	mock := mocks.NewTimeZonesMock()
+	mock.RegisterListV1InvalidJSONMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.ListV1(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_TimeZones_NewService(t *testing.T) {
+	mock := mocks.NewTimeZonesMock()
+	svc := NewService(mock)
+	require.NotNil(t, svc)
+	require.NotNil(t, svc.client)
+}

@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGetTokenExchangeDetailsV1(t *testing.T) {
+func TestUnit_Csa_GetTokenExchangeDetailsV1_Success(t *testing.T) {
 	mock := mocks.NewCSAMock()
 	mock.RegisterGetTokenExchangeDetailsMock()
 
@@ -27,7 +27,7 @@ func TestGetTokenExchangeDetailsV1(t *testing.T) {
 	assert.NotEmpty(t, result.Scopes)
 }
 
-func TestGetTenantIDV1(t *testing.T) {
+func TestUnit_Csa_GetTenantIDV1_Success(t *testing.T) {
 	mock := mocks.NewCSAMock()
 	mock.RegisterGetTenantIDMock()
 
@@ -42,7 +42,7 @@ func TestGetTenantIDV1(t *testing.T) {
 	assert.NotEmpty(t, result.TenantID)
 }
 
-func TestDeleteTokenExchangeV1(t *testing.T) {
+func TestUnit_Csa_DeleteTokenExchangeV1_Success(t *testing.T) {
 	mock := mocks.NewCSAMock()
 	mock.RegisterDeleteTokenExchangeMock()
 
@@ -54,4 +54,25 @@ func TestDeleteTokenExchangeV1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
+}
+
+func TestUnit_Csa_GetTokenExchangeDetailsV1_Error(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetTokenExchangeDetailsV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_Csa_GetTenantIDV1_Error(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetTenantIDV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_Csa_DeleteTokenExchangeV1_Error(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	svc := NewService(mock)
+	_, err := svc.DeleteTokenExchangeV1(context.Background())
+	require.Error(t, err)
 }

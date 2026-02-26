@@ -25,6 +25,11 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize-database-connection
 		InitializeDatabaseConnection(ctx context.Context, password string) (*interfaces.Response, error)
+
+		// PlatformInitialize sets up Jamf Pro Server with OIDC SSO and a federated user (no password required).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-platform-initialize
+		PlatformInitialize(ctx context.Context, request *ResourcePlatformInitialize) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the Jamf Pro system initialization API.
@@ -84,6 +89,29 @@ func (s *Service) InitializeDatabaseConnection(ctx context.Context, password str
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
 	if err != nil {
 		return resp, fmt.Errorf("failed to initialize database connection: %w", err)
+	}
+
+	return resp, nil
+}
+
+// PlatformInitialize sets up Jamf Pro Server with OIDC SSO and a federated user (no password required).
+// URL: POST /api/v1/system/platform-initialize
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-platform-initialize
+func (s *Service) PlatformInitialize(ctx context.Context, request *ResourcePlatformInitialize) (*interfaces.Response, error) {
+	if request == nil {
+		return nil, fmt.Errorf("request cannot be nil")
+	}
+
+	endpoint := EndpointSystemPlatformInitializeV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	if err != nil {
+		return resp, fmt.Errorf("failed to platform initialize Jamf Pro system: %w", err)
 	}
 
 	return resp, nil

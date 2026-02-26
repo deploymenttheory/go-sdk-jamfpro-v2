@@ -58,3 +58,44 @@ func TestUnit_ImpactAlertNotificationSettings_Update_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
 }
+
+func TestUnit_ImpactAlertNotificationSettings_Get_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetErrorMock()
+
+	result, resp, err := svc.GetV1(context.Background())
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+	assert.Contains(t, err.Error(), "NOT-FOUND")
+}
+
+func TestUnit_ImpactAlertNotificationSettings_Update_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateErrorMock()
+
+	request := &ResourceImpactAlertNotificationSettings{
+		ScopeableObjectsAlertEnabled:             true,
+		ScopeableObjectsConfirmationCodeEnabled:  false,
+		DeployableObjectsAlertEnabled:            true,
+		DeployableObjectsConfirmationCodeEnabled: false,
+	}
+
+	resp, err := svc.UpdateV1(context.Background(), request)
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 400, resp.StatusCode)
+	assert.Contains(t, err.Error(), "BAD-REQUEST")
+}
+
+func TestUnit_ImpactAlertNotificationSettings_Get_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// Do not register any mock - dispatch returns nil, err
+
+	result, resp, err := svc.GetV1(context.Background())
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response registered")
+}

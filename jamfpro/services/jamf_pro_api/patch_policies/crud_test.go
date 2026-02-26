@@ -10,7 +10,7 @@ import (
 )
 
 // TestListV2 tests listing all patch policies.
-func TestListV2(t *testing.T) {
+func TestUnit_PatchPolicies_ListV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -41,7 +41,7 @@ func TestListV2(t *testing.T) {
 }
 
 // TestGetByIDV2 tests retrieving a patch policy by ID.
-func TestGetByIDV2(t *testing.T) {
+func TestUnit_PatchPolicies_GetByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -73,7 +73,7 @@ func TestGetByIDV2(t *testing.T) {
 }
 
 // TestGetByIDV2_NotFound tests retrieving a patch policy by ID when not found.
-func TestGetByIDV2_NotFound(t *testing.T) {
+func TestUnit_PatchPolicies_GetByIDV2_NotFound(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -88,7 +88,7 @@ func TestGetByIDV2_NotFound(t *testing.T) {
 }
 
 // TestGetByIDV2_EmptyID tests retrieving a patch policy with an empty ID.
-func TestGetByIDV2_EmptyID(t *testing.T) {
+func TestUnit_PatchPolicies_GetByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -101,7 +101,7 @@ func TestGetByIDV2_EmptyID(t *testing.T) {
 }
 
 // TestGetByNameV2 tests retrieving a patch policy by name.
-func TestGetByNameV2(t *testing.T) {
+func TestUnit_PatchPolicies_GetByNameV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -117,7 +117,7 @@ func TestGetByNameV2(t *testing.T) {
 }
 
 // TestGetByNameV2_NotFound tests retrieving a patch policy by name when not found.
-func TestGetByNameV2_NotFound(t *testing.T) {
+func TestUnit_PatchPolicies_GetByNameV2_NotFound(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterListMock()
 
@@ -131,7 +131,7 @@ func TestGetByNameV2_NotFound(t *testing.T) {
 }
 
 // TestGetByNameV2_EmptyName tests retrieving a patch policy with an empty name.
-func TestGetByNameV2_EmptyName(t *testing.T) {
+func TestUnit_PatchPolicies_GetByNameV2_EmptyName(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -144,7 +144,7 @@ func TestGetByNameV2_EmptyName(t *testing.T) {
 }
 
 // TestGetDashboardStatusV2 tests checking if a patch policy is on the dashboard.
-func TestGetDashboardStatusV2(t *testing.T) {
+func TestUnit_PatchPolicies_GetDashboardStatusV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterGetDashboardStatusMock("1", true)
 
@@ -158,7 +158,7 @@ func TestGetDashboardStatusV2(t *testing.T) {
 }
 
 // TestGetDashboardStatusV2_NotOnDashboard tests checking dashboard status when not on dashboard.
-func TestGetDashboardStatusV2_NotOnDashboard(t *testing.T) {
+func TestUnit_PatchPolicies_GetDashboardStatusV2_NotOnDashboard(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterGetDashboardStatusMock("2", false)
 
@@ -172,7 +172,7 @@ func TestGetDashboardStatusV2_NotOnDashboard(t *testing.T) {
 }
 
 // TestGetDashboardStatusV2_EmptyID tests getting dashboard status with an empty ID.
-func TestGetDashboardStatusV2_EmptyID(t *testing.T) {
+func TestUnit_PatchPolicies_GetDashboardStatusV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -185,7 +185,7 @@ func TestGetDashboardStatusV2_EmptyID(t *testing.T) {
 }
 
 // TestAddToDashboardV2 tests adding a patch policy to the dashboard.
-func TestAddToDashboardV2(t *testing.T) {
+func TestUnit_PatchPolicies_AddToDashboardV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterAddToDashboardMock("1")
 
@@ -198,7 +198,7 @@ func TestAddToDashboardV2(t *testing.T) {
 }
 
 // TestAddToDashboardV2_EmptyID tests adding to dashboard with an empty ID.
-func TestAddToDashboardV2_EmptyID(t *testing.T) {
+func TestUnit_PatchPolicies_AddToDashboardV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -210,7 +210,7 @@ func TestAddToDashboardV2_EmptyID(t *testing.T) {
 }
 
 // TestRemoveFromDashboardV2 tests removing a patch policy from the dashboard.
-func TestRemoveFromDashboardV2(t *testing.T) {
+func TestUnit_PatchPolicies_RemoveFromDashboardV2_Success(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterRemoveFromDashboardMock("1")
 
@@ -223,7 +223,7 @@ func TestRemoveFromDashboardV2(t *testing.T) {
 }
 
 // TestRemoveFromDashboardV2_EmptyID tests removing from dashboard with an empty ID.
-func TestRemoveFromDashboardV2_EmptyID(t *testing.T) {
+func TestUnit_PatchPolicies_RemoveFromDashboardV2_EmptyID(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	svc := NewService(mock)
 
@@ -235,7 +235,7 @@ func TestRemoveFromDashboardV2_EmptyID(t *testing.T) {
 }
 
 // TestListV2_Empty tests listing patch policies when the list is empty.
-func TestListV2_Empty(t *testing.T) {
+func TestUnit_PatchPolicies_ListV2_Empty(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterEmptyListMock()
 
@@ -250,7 +250,7 @@ func TestListV2_Empty(t *testing.T) {
 }
 
 // TestGetByIDV2_EmptyList tests getting by ID when the list is empty.
-func TestGetByIDV2_EmptyList(t *testing.T) {
+func TestUnit_PatchPolicies_GetByIDV2_EmptyList(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterEmptyListMock()
 
@@ -264,7 +264,7 @@ func TestGetByIDV2_EmptyList(t *testing.T) {
 }
 
 // TestGetByNameV2_EmptyList tests getting by name when the list is empty.
-func TestGetByNameV2_EmptyList(t *testing.T) {
+func TestUnit_PatchPolicies_GetByNameV2_EmptyList(t *testing.T) {
 	mock := mocks.NewPatchPoliciesMock()
 	mock.RegisterEmptyListMock()
 
@@ -275,4 +275,141 @@ func TestGetByNameV2_EmptyList(t *testing.T) {
 	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "not found")
+}
+
+// TestListSummaryV2_Success tests listing patch policy summaries.
+func TestUnit_PatchPolicies_ListSummaryV2_Success(t *testing.T) {
+	mock := mocks.NewPatchPoliciesMock()
+	mock.RegisterListSummaryMock()
+
+	svc := NewService(mock)
+	result, resp, err := svc.ListSummaryV2(context.Background(), nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 2, result.TotalCount)
+	assert.Len(t, result.Results, 2)
+	assert.Equal(t, "1", result.Results[0].ID)
+	assert.Equal(t, "Adobe Acrobat Reader DC Patch Policy", result.Results[0].PolicyName)
+	assert.True(t, result.Results[0].PolicyEnabled)
+	assert.Equal(t, "24.001.20643", result.Results[0].PolicyTargetVersion)
+	assert.Equal(t, "PROMPT_USERS_TO_SELF_SERVICE", result.Results[0].PolicyDeploymentMethod)
+	assert.Equal(t, "Adobe Acrobat Reader DC", result.Results[0].SoftwareTitle)
+	assert.Equal(t, 5, result.Results[0].Pending)
+	assert.Equal(t, 100, result.Results[0].Completed)
+	assert.Equal(t, 2, result.Results[0].Deferred)
+	assert.Equal(t, 1, result.Results[0].Failed)
+
+	assert.Equal(t, "2", result.Results[1].ID)
+	assert.Equal(t, "Google Chrome Patch Policy", result.Results[1].PolicyName)
+	assert.True(t, result.Results[1].PolicyEnabled)
+}
+
+// TestListSummaryV2_WithQuery tests listing summaries with RSQL query.
+func TestUnit_PatchPolicies_ListSummaryV2_WithQuery(t *testing.T) {
+	mock := mocks.NewPatchPoliciesMock()
+	mock.RegisterListSummaryMock()
+
+	svc := NewService(mock)
+	query := map[string]string{"filter": "policyEnabled==true"}
+	result, resp, err := svc.ListSummaryV2(context.Background(), query)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 2, result.TotalCount)
+}
+
+// TestListSummaryV2_Empty tests listing summaries when empty.
+func TestUnit_PatchPolicies_ListSummaryV2_Empty(t *testing.T) {
+	mock := mocks.NewPatchPoliciesMock()
+	mock.RegisterListSummaryEmptyMock()
+
+	svc := NewService(mock)
+	result, resp, err := svc.ListSummaryV2(context.Background(), nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 0, result.TotalCount)
+	assert.Len(t, result.Results, 0)
+}
+
+// TestListSummaryV2_Error tests listing summaries when API returns error.
+func TestUnit_PatchPolicies_ListSummaryV2_Error(t *testing.T) {
+	mock := mocks.NewPatchPoliciesMock()
+	mock.RegisterListSummaryErrorMock()
+
+	svc := NewService(mock)
+	result, resp, err := svc.ListSummaryV2(context.Background(), nil)
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to list patch policy summaries")
+}
+
+// TestListV2_Error tests listing when API returns error.
+func TestUnit_PatchPolicies_ListV2_Error(t *testing.T) {
+	mock := mocks.NewPatchPoliciesMock()
+	mock.RegisterListErrorMock()
+
+	svc := NewService(mock)
+	result, resp, err := svc.ListV2(context.Background())
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+}
+
+// TestListV2_InvalidJSON tests listing when API returns invalid JSON.
+func TestUnit_PatchPolicies_ListV2_InvalidJSON(t *testing.T) {
+	mock := mocks.NewPatchPoliciesMock()
+	mock.RegisterListInvalidMock()
+
+	svc := NewService(mock)
+	result, resp, err := svc.ListV2(context.Background())
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+// TestGetDashboardStatusV2_Error tests dashboard status when API returns error.
+func TestUnit_PatchPolicies_GetDashboardStatusV2_Error(t *testing.T) {
+	mock := mocks.NewPatchPoliciesMock()
+	mock.RegisterGetDashboardStatusErrorMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetDashboardStatusV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+}
+
+// TestAddToDashboardV2_Error tests adding to dashboard when API returns error.
+func TestUnit_PatchPolicies_AddToDashboardV2_Error(t *testing.T) {
+	mock := mocks.NewPatchPoliciesMock()
+	mock.RegisterAddToDashboardErrorMock("1")
+
+	svc := NewService(mock)
+	resp, err := svc.AddToDashboardV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+}
+
+// TestRemoveFromDashboardV2_Error tests removing from dashboard when API returns error.
+func TestUnit_PatchPolicies_RemoveFromDashboardV2_Error(t *testing.T) {
+	mock := mocks.NewPatchPoliciesMock()
+	mock.RegisterRemoveFromDashboardErrorMock("1")
+
+	svc := NewService(mock)
+	resp, err := svc.RemoveFromDashboardV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
 }

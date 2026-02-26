@@ -109,3 +109,33 @@ func TestUnit_APIRoles_DeleteByIDV1_EmptyID(t *testing.T) {
 	require.Nil(t, resp)
 	require.Contains(t, err.Error(), "API role ID is required")
 }
+
+func TestUnit_ApiRoles_ListV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewAPIRolesMock())
+	_, _, err := svc.ListV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_ApiRoles_GetByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewAPIRolesMock())
+	_, _, err := svc.GetByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestUnit_ApiRoles_CreateV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewAPIRolesMock())
+	_, _, err := svc.CreateV1(context.Background(), &RequestAPIRole{DisplayName: "test"})
+	require.Error(t, err)
+}
+
+func TestUnit_ApiRoles_UpdateByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewAPIRolesMock())
+	_, _, err := svc.UpdateByIDV1(context.Background(), "1", &RequestAPIRole{DisplayName: "test"})
+	require.Error(t, err)
+}
+
+func TestUnit_ApiRoles_DeleteByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewAPIRolesMock())
+	_, err := svc.DeleteByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}

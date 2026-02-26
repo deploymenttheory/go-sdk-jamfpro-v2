@@ -91,3 +91,50 @@ func TestUnit_InitializeDatabaseConnection_UnregisteredPath(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 	assert.Contains(t, err.Error(), "JamfProSystemInitializationMock")
 }
+
+func TestUnit_PlatformInitialize_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterPlatformInitializeMock()
+
+	request := &ResourcePlatformInitialize{
+		ActivationCode:  "test-activation-code",
+		InstitutionName: "Test Institution",
+		EulaAccepted:    true,
+		Username:        "admin",
+		Email:           "admin@example.com",
+		JssUrl:          "https://jamf.example.com",
+	}
+
+	resp, err := svc.PlatformInitialize(context.Background(), request)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode)
+}
+
+func TestUnit_PlatformInitialize_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.PlatformInitialize(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request cannot be nil")
+}
+
+func TestUnit_PlatformInitialize_UnregisteredPath(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &ResourcePlatformInitialize{
+		ActivationCode:  "test",
+		InstitutionName: "Test",
+		EulaAccepted:    true,
+		Username:        "admin",
+		Email:           "admin@example.com",
+		JssUrl:          "https://jamf.example.com",
+	}
+
+	resp, err := svc.PlatformInitialize(context.Background(), request)
+	require.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+	assert.Contains(t, err.Error(), "JamfProSystemInitializationMock")
+}

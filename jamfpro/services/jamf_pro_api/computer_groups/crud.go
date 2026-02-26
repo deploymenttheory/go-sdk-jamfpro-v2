@@ -62,6 +62,17 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-groups-static-groups-id
 		DeleteStaticByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
+
+		// ListAllV1 returns a simple list of all computer groups (id, name, description, smartGroup).
+		// No pagination, just a simple list.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-groups
+		ListAllV1(ctx context.Context) ([]ResourceGroupV1, *interfaces.Response, error)
+
+		// GetSmartGroupMembershipByIDV2 returns the membership (computer IDs) for a smart group.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-group-membership-id
+		GetSmartGroupMembershipByIDV2(ctx context.Context, id string) (*SmartGroupMembershipResponse, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the computer groups-related methods of the Jamf Pro API.
@@ -90,8 +101,7 @@ func (s *Service) ListSmartV2(ctx context.Context, rsqlQuery map[string]string) 
 	endpoint := EndpointSmartGroupsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -114,8 +124,7 @@ func (s *Service) GetSmartByIDV2(ctx context.Context, id string) (*ResourceSmart
 	var result ResourceSmartGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -188,8 +197,7 @@ func (s *Service) DeleteSmartV2(ctx context.Context, id string) (*interfaces.Res
 	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -212,8 +220,7 @@ func (s *Service) ListStaticV2(ctx context.Context, rsqlQuery map[string]string)
 	endpoint := EndpointStaticGroupsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -236,8 +243,7 @@ func (s *Service) GetStaticByIDV2(ctx context.Context, id string) (*ResourceStat
 	var result ResourceStaticGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -310,8 +316,7 @@ func (s *Service) DeleteStaticByIDV2(ctx context.Context, id string) (*interface
 	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -320,4 +325,50 @@ func (s *Service) DeleteStaticByIDV2(ctx context.Context, id string) (*interface
 	}
 
 	return resp, nil
+}
+
+// -----------------------------------------------------------------------------
+// V1 and Additional V2 Endpoints
+// -----------------------------------------------------------------------------
+
+// ListAllV1 returns a simple list of all computer groups (id, name, description, smartGroup).
+// URL: GET /api/v1/computer-groups
+func (s *Service) ListAllV1(ctx context.Context) ([]ResourceGroupV1, *interfaces.Response, error) {
+	var result []ResourceGroupV1
+
+	endpoint := EndpointComputerGroupsV1
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetSmartGroupMembershipByIDV2 returns the membership (computer IDs) for a smart group.
+// URL: GET /api/v2/computer-groups/smart-group-membership/{id}
+func (s *Service) GetSmartGroupMembershipByIDV2(ctx context.Context, id string) (*SmartGroupMembershipResponse, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("smart group ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupMembershipV2, id)
+
+	var result SmartGroupMembershipResponse
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
 }

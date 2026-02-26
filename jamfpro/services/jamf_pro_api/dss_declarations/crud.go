@@ -51,8 +51,7 @@ func (s *Service) GetByUUIDV1(ctx context.Context, uuid string) (*ResponseDSSDec
 	endpoint := fmt.Sprintf("%s/%s", EndpointDSSDeclarationsV1, uuid)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

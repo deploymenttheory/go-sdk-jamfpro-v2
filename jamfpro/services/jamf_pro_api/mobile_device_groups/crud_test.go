@@ -15,6 +15,12 @@ func setupMockService(t *testing.T) (*Service, *mocks.MobileDeviceGroupsMock) {
 	return NewService(mock), mock
 }
 
+func TestUnit_MobileDeviceGroups_NewService(t *testing.T) {
+	mock := mocks.NewMobileDeviceGroupsMock()
+	svc := NewService(mock)
+	require.NotNil(t, svc)
+}
+
 func TestUnit_MobileDeviceGroups_ListSmartV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListSmartMock()
@@ -106,6 +112,17 @@ func TestUnit_MobileDeviceGroups_ListStaticV1_Success(t *testing.T) {
 	assert.Equal(t, "Static Devices", result.Results[0].Name)
 }
 
+func TestUnit_MobileDeviceGroups_ListStaticV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListStaticErrorMock()
+
+	result, resp, err := svc.ListStaticV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
 func TestUnit_MobileDeviceGroups_GetStaticByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetStaticMock()
@@ -173,7 +190,17 @@ func TestUnit_MobileDeviceGroups_ListSmartV1_Error(t *testing.T) {
 	result, resp, err := svc.ListSmartV1(context.Background(), nil)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	require.NotNil(t, resp)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_ListSmartV1_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.ListSmartV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response registered")
 }
 
 func TestUnit_MobileDeviceGroups_CreateSmartV1_NilRequest(t *testing.T) {
@@ -311,3 +338,151 @@ func TestUnit_MobileDeviceGroups_DeleteStaticByIDV1_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "static mobile device group ID is required")
 }
+
+// -----------------------------------------------------------------------------
+// ListAllV1, Membership, Erase
+// -----------------------------------------------------------------------------
+
+func TestUnit_MobileDeviceGroups_ListAllV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListAllMock()
+
+	result, resp, err := svc.ListAllV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	require.Len(t, result, 2)
+	assert.Equal(t, 1, result[0].ID)
+	assert.Equal(t, "iPhones", result[0].Name)
+	assert.True(t, result[0].IsSmartGroup)
+	assert.Equal(t, 10, result[1].ID)
+	assert.Equal(t, "Static Devices", result[1].Name)
+	assert.False(t, result[1].IsSmartGroup)
+}
+
+func TestUnit_MobileDeviceGroups_ListAllV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListAllErrorMock()
+
+	result, resp, err := svc.ListAllV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_GetStaticGroupMembershipV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetStaticGroupMembershipMock()
+
+	result, resp, err := svc.GetStaticGroupMembershipV1(context.Background(), "10", nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	assert.Equal(t, "101", result.Results[0].MobileDeviceID)
+	assert.Equal(t, "iPhone 1", result.Results[0].DisplayName)
+	assert.Equal(t, "102", result.Results[1].MobileDeviceID)
+}
+
+func TestUnit_MobileDeviceGroups_GetStaticGroupMembershipV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetStaticGroupMembershipV1(context.Background(), "", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "static group ID is required")
+}
+
+func TestUnit_MobileDeviceGroups_GetStaticGroupMembershipV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetStaticGroupMembershipErrorMock()
+
+	result, resp, err := svc.GetStaticGroupMembershipV1(context.Background(), "10", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_GetSmartGroupMembershipV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetSmartGroupMembershipMock()
+
+	result, resp, err := svc.GetSmartGroupMembershipV1(context.Background(), "1", nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "201", result.Results[0].MobileDeviceID)
+	assert.Equal(t, "iPad Pro", result.Results[0].DisplayName)
+}
+
+func TestUnit_MobileDeviceGroups_GetSmartGroupMembershipV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetSmartGroupMembershipV1(context.Background(), "", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "smart group ID is required")
+}
+
+func TestUnit_MobileDeviceGroups_GetSmartGroupMembershipV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetSmartGroupMembershipErrorMock()
+
+	result, resp, err := svc.GetSmartGroupMembershipV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterEraseDevicesMock()
+
+	req := &RequestEraseDevices{
+		PreserveDataPlan:       boolPtr(false),
+		DisallowProximitySetup: boolPtr(true),
+	}
+	resp, err := svc.EraseDevicesByGroupIDV1(context.Background(), "1", req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_NilRequest(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterEraseDevicesMock()
+
+	resp, err := svc.EraseDevicesByGroupIDV1(context.Background(), "1", nil)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.EraseDevicesByGroupIDV1(context.Background(), "", nil)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "group ID is required")
+}
+
+func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterEraseDevicesErrorMock()
+
+	resp, err := svc.EraseDevicesByGroupIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func boolPtr(b bool) *bool { return &b }

@@ -13,13 +13,13 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_VPPAssignments_Lifecycle exercises the full write/read/delete
+// TestAcceptance_VPPAssignments_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → UpdateByID → DeleteByID.
 // Note: VPP assignments require an existing VPP admin account. The test uses
 // the first available VPP account from List; if none exist, the test is skipped.
 // =============================================================================
 
-func TestAcceptance_VPPAssignments_Lifecycle(t *testing.T) {
+func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicVPPAssignments
@@ -49,7 +49,7 @@ func TestAcceptance_VPPAssignments_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test VPP assignment")
 
-	assignmentName := acc.UniqueName("acc-test-vpp-assignment")
+	assignmentName := acc.UniqueName("sdkv2_acc_acc-test-vpp-assignment")
 	createReq := &vpp_assignments.Resource{
 		General: vpp_assignments.SubsetGeneral{
 			Name:                assignmentName,
@@ -128,7 +128,7 @@ func TestAcceptance_VPPAssignments_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-vpp-assignment-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-vpp-assignment-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating VPP assignment ID=%d to name=%q", assignmentID, updatedName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -180,10 +180,10 @@ func TestAcceptance_VPPAssignments_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_VPPAssignments_ValidationErrors tests client-side validation.
+// TestAcceptance_VPPAssignments_validation_errors tests client-side validation.
 // =============================================================================
 
-func TestAcceptance_VPPAssignments_ValidationErrors(t *testing.T) {
+func TestAcceptance_VPPAssignments_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicVPPAssignments
@@ -210,7 +210,7 @@ func TestAcceptance_VPPAssignments_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), 0, &vpp_assignments.Resource{
-			General: vpp_assignments.SubsetGeneral{Name: "x"},
+			General: vpp_assignments.SubsetGeneral{Name: "sdkv2_acc_x"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "VPP assignment ID must be a positive integer")

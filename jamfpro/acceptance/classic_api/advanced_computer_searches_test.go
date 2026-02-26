@@ -13,12 +13,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_AdvancedComputerSearches_Lifecycle exercises the full write/read/delete
+// TestAcceptance_AdvancedComputerSearches_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
+func TestAcceptance_AdvancedComputerSearches_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAdvancedComputerSearches
@@ -29,7 +29,7 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test advanced computer search")
 
-	searchName := acc.UniqueName("acc-test-search")
+	searchName := acc.UniqueName("sdkv2_acc_acc-test-search")
 	createReq := &advanced_computer_searches.RequestAdvancedComputerSearch{
 		Name:   searchName,
 		ViewAs: "Standard Web Page",
@@ -136,7 +136,7 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-search-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-search-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating search ID=%d to name=%q", searchID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -230,16 +230,16 @@ func TestAcceptance_AdvancedComputerSearches_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_AdvancedComputerSearches_DeleteByName creates a search then deletes by name.
+// TestAcceptance_AdvancedComputerSearches_delete_by_name creates a search then deletes by name.
 // =============================================================================
 
-func TestAcceptance_AdvancedComputerSearches_DeleteByName(t *testing.T) {
+func TestAcceptance_AdvancedComputerSearches_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAdvancedComputerSearches
 	ctx := context.Background()
 
-	searchName := acc.UniqueName("acc-test-search-del")
+	searchName := acc.UniqueName("sdkv2_acc_acc-test-search-del")
 	createReq := &advanced_computer_searches.RequestAdvancedComputerSearch{
 		Name:   searchName,
 		ViewAs: "Standard Web Page",
@@ -285,11 +285,11 @@ func TestAcceptance_AdvancedComputerSearches_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_AdvancedComputerSearches_ValidationErrors tests client-side validation
+// TestAcceptance_AdvancedComputerSearches_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_AdvancedComputerSearches_ValidationErrors(t *testing.T) {
+func TestAcceptance_AdvancedComputerSearches_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAdvancedComputerSearches
@@ -313,13 +313,13 @@ func TestAcceptance_AdvancedComputerSearches_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &advanced_computer_searches.RequestAdvancedComputerSearch{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &advanced_computer_searches.RequestAdvancedComputerSearch{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced computer search ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &advanced_computer_searches.RequestAdvancedComputerSearch{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &advanced_computer_searches.RequestAdvancedComputerSearch{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced computer search name is required")
 	})

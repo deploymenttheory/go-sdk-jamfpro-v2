@@ -29,18 +29,18 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_ComputerExtensionAttributes_Lifecycle
+//     -- Tests: TestAcceptance_ComputerExtensionAttributes_lifecycle
 //     -- Flow: Create → List → GetByID → Update → Verify → Delete
 //
 //   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: MISSING - Should be added as TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter
+//     -- Tests: MISSING - Should be added as TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter
 //     -- Flow: Create unique EA → Filter with RSQL → Verify filtered results
 //     -- Status: MANDATORY test not implemented
 //
 //   ✓ Pattern 6: Bulk Operations
 //     -- Reason: Service provides DeleteComputerExtensionAttributesByIDV1 for bulk deletion
-//     -- Tests: TestAcceptance_ComputerExtensionAttributes_DeleteMultiple
+//     -- Tests: TestAcceptance_ComputerExtensionAttributes_delete_multiple
 //     -- Flow: Create multiple → Bulk delete → Verify deletion
 //
 // Test Coverage
@@ -62,12 +62,12 @@ import (
 //   • Computer Extension Attributes extend inventory data collection for devices
 //   • DataType options: String, Integer, Date
 //   • InputType options: TEXT, SCRIPT, POPUP_MENU, LDAP_ATTRIBUTE
-//   • TODO: Add TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter (MANDATORY)
+//   • TODO: Add TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter (MANDATORY)
 //   • TODO: Add validation error tests for empty IDs, nil requests, etc.
 //
 // =============================================================================
 
-func TestAcceptance_ComputerExtensionAttributes_Lifecycle(t *testing.T) {
+func TestAcceptance_ComputerExtensionAttributes_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ComputerExtensionAttributes
@@ -77,7 +77,7 @@ func TestAcceptance_ComputerExtensionAttributes_Lifecycle(t *testing.T) {
 
 	enabled := true
 	createReq := &computer_extension_attributes.RequestComputerExtensionAttribute{
-		Name:                 acc.UniqueName("acc-test-ea"),
+		Name:                 acc.UniqueName("sdkv2_acc_acc-test-ea"),
 		Description:          "Acceptance test EA",
 		DataType:             "String",
 		Enabled:              &enabled,
@@ -127,7 +127,7 @@ func TestAcceptance_ComputerExtensionAttributes_Lifecycle(t *testing.T) {
 	assert.Equal(t, createReq.Name, fetched.Name)
 
 	acc.LogTestStage(t, "Update", "Updating computer extension attribute ID=%s", eaID)
-	updatedName := acc.UniqueName("acc-test-ea-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-ea-updated")
 	updateReq := &computer_extension_attributes.RequestComputerExtensionAttribute{
 		Name:                 updatedName,
 		Description:          "Updated description",
@@ -154,7 +154,7 @@ func TestAcceptance_ComputerExtensionAttributes_Lifecycle(t *testing.T) {
 	assert.Equal(t, 204, deleteResp.StatusCode)
 }
 
-func TestAcceptance_ComputerExtensionAttributes_DeleteMultiple(t *testing.T) {
+func TestAcceptance_ComputerExtensionAttributes_delete_multiple(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ComputerExtensionAttributes
@@ -162,7 +162,7 @@ func TestAcceptance_ComputerExtensionAttributes_DeleteMultiple(t *testing.T) {
 
 	enabled := true
 	createReq := &computer_extension_attributes.RequestComputerExtensionAttribute{
-		Name:                 acc.UniqueName("acc-delmulti-ea-1"),
+		Name:                 acc.UniqueName("sdkv2_acc_acc-delmulti-ea-1"),
 		DataType:             "String",
 		InventoryDisplayType: "General",
 		InputType:            "TEXT",
@@ -173,7 +173,7 @@ func TestAcceptance_ComputerExtensionAttributes_DeleteMultiple(t *testing.T) {
 	require.NotNil(t, c1)
 
 	createReq2 := &computer_extension_attributes.RequestComputerExtensionAttribute{
-		Name:                 acc.UniqueName("acc-delmulti-ea-2"),
+		Name:                 acc.UniqueName("sdkv2_acc_acc-delmulti-ea-2"),
 		DataType:             "String",
 		InventoryDisplayType: "General",
 		InputType:            "TEXT",
@@ -199,16 +199,16 @@ func TestAcceptance_ComputerExtensionAttributes_DeleteMultiple(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter
+// TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter
 // =============================================================================
 
-func TestAcceptance_ComputerExtensionAttributes_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ComputerExtensionAttributes
 	ctx := context.Background()
 
-	name := acc.UniqueName("acc-rsql-ea")
+	name := acc.UniqueName("sdkv2_acc_acc-rsql-ea")
 	enabled := true
 	createReq := &computer_extension_attributes.RequestComputerExtensionAttribute{
 		Name:                 name,

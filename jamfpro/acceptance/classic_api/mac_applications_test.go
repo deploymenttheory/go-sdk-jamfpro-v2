@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MacApplications_Lifecycle exercises the full write/read/delete
+// TestAcceptance_MacApplications_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 //
@@ -22,7 +22,7 @@ import (
 // no VPP account is configured or if the bundle ID is not available in VPP.
 // =============================================================================
 
-func TestAcceptance_MacApplications_Lifecycle(t *testing.T) {
+func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMacApplications
@@ -33,7 +33,7 @@ func TestAcceptance_MacApplications_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test Mac application")
 
-	appName := acc.UniqueName("acc-test-macapp")
+	appName := acc.UniqueName("sdkv2_acc_acc-test-macapp")
 	createReq := &mac_applications.Resource{
 		General: mac_applications.SubsetGeneral{
 			Name:           appName,
@@ -151,7 +151,7 @@ func TestAcceptance_MacApplications_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 6. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-macapp-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-macapp-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating Mac application ID=%d to name=%q", appID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -250,16 +250,16 @@ func TestAcceptance_MacApplications_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MacApplications_DeleteByName creates a Mac application then deletes by name.
+// TestAcceptance_MacApplications_delete_by_name creates a Mac application then deletes by name.
 // =============================================================================
 
-func TestAcceptance_MacApplications_DeleteByName(t *testing.T) {
+func TestAcceptance_MacApplications_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMacApplications
 	ctx := context.Background()
 
-	appName := acc.UniqueName("acc-test-macapp-dbn")
+	appName := acc.UniqueName("sdkv2_acc_acc-test-macapp-dbn")
 	createReq := &mac_applications.Resource{
 		General: mac_applications.SubsetGeneral{
 			Name:           appName,
@@ -309,10 +309,10 @@ func TestAcceptance_MacApplications_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MacApplications_ValidationErrors validates error handling.
+// TestAcceptance_MacApplications_validation_errors validates error handling.
 // =============================================================================
 
-func TestAcceptance_MacApplications_ValidationErrors(t *testing.T) {
+func TestAcceptance_MacApplications_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMacApplications
@@ -337,7 +337,7 @@ func TestAcceptance_MacApplications_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), 0, &mac_applications.Resource{
-			General: mac_applications.SubsetGeneral{Name: "test", BundleID: "com.test.app"},
+			General: mac_applications.SubsetGeneral{Name: "sdkv2_acc_test", BundleID: "com.test.app"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mac application ID must be a positive integer")
@@ -345,7 +345,7 @@ func TestAcceptance_MacApplications_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
 		_, _, err := svc.UpdateByName(context.Background(), "", &mac_applications.Resource{
-			General: mac_applications.SubsetGeneral{Name: "x", BundleID: "com.test.app"},
+			General: mac_applications.SubsetGeneral{Name: "sdkv2_acc_x", BundleID: "com.test.app"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mac application name cannot be empty")

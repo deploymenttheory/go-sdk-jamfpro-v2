@@ -28,8 +28,8 @@ import (
 //   ✓ Pattern 3: Read-Only Operations
 //     -- Reason: v2 API is read-only for patch policies. Create/Update/Delete
 //        operations require the Classic API (XML).
-//     -- Tests: TestAcceptance_PatchPolicies_ListV2,
-//               TestAcceptance_PatchPolicies_DashboardOperations
+//     -- Tests: TestAcceptance_PatchPolicies_list_v2,
+//               TestAcceptance_PatchPolicies_dashboard_operations
 //     -- Flow: List → Get (if available) → Dashboard Operations
 //
 //   Note: RSQL Filter Testing NOT applicable
@@ -55,7 +55,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_PatchPolicies_ListV2(t *testing.T) {
+func TestAcceptance_PatchPolicies_list_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PatchPolicies
 	ctx := context.Background()
@@ -103,7 +103,7 @@ func TestAcceptance_PatchPolicies_ListV2(t *testing.T) {
 	}
 }
 
-func TestAcceptance_PatchPolicies_DashboardOperations(t *testing.T) {
+func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PatchPolicies
 	ctx := context.Background()

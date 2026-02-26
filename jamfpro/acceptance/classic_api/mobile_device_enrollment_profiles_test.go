@@ -13,12 +13,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MobileDeviceEnrollmentProfiles_Lifecycle exercises the full
+// TestAcceptance_MobileDeviceEnrollmentProfiles_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByName →
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceEnrollmentProfiles_Lifecycle(t *testing.T) {
+func TestAcceptance_MobileDeviceEnrollmentProfiles_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceEnrollmentProfiles
@@ -29,7 +29,7 @@ func TestAcceptance_MobileDeviceEnrollmentProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test mobile device enrollment profile")
 
-	profileName := acc.UniqueName("acc-test-md-enrollment-profile")
+	profileName := acc.UniqueName("sdkv2_acc_acc-test-md-enrollment-profile")
 	createReq := &mobile_device_enrollment_profiles.Resource{
 		General: mobile_device_enrollment_profiles.SubsetGeneral{
 			Name:        profileName,
@@ -131,7 +131,7 @@ func TestAcceptance_MobileDeviceEnrollmentProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 6. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-md-enrollment-profile-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-md-enrollment-profile-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating profile ID=%d to name=%q", profileID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -200,17 +200,17 @@ func TestAcceptance_MobileDeviceEnrollmentProfiles_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceEnrollmentProfiles_DeleteByName creates a profile
+// TestAcceptance_MobileDeviceEnrollmentProfiles_delete_by_name creates a profile
 // then deletes by name.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceEnrollmentProfiles_DeleteByName(t *testing.T) {
+func TestAcceptance_MobileDeviceEnrollmentProfiles_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceEnrollmentProfiles
 	ctx := context.Background()
 
-	profileName := acc.UniqueName("acc-test-md-enrollment-profile-dbn")
+	profileName := acc.UniqueName("sdkv2_acc_acc-test-md-enrollment-profile-dbn")
 	createReq := &mobile_device_enrollment_profiles.Resource{
 		General: mobile_device_enrollment_profiles.SubsetGeneral{
 			Name:        profileName,
@@ -246,10 +246,10 @@ func TestAcceptance_MobileDeviceEnrollmentProfiles_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceEnrollmentProfiles_ValidationErrors validates error handling.
+// TestAcceptance_MobileDeviceEnrollmentProfiles_validation_errors validates error handling.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceEnrollmentProfiles_ValidationErrors(t *testing.T) {
+func TestAcceptance_MobileDeviceEnrollmentProfiles_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceEnrollmentProfiles
@@ -274,7 +274,7 @@ func TestAcceptance_MobileDeviceEnrollmentProfiles_ValidationErrors(t *testing.T
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), 0, &mobile_device_enrollment_profiles.Resource{
-			General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "test"},
+			General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "sdkv2_acc_test"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device enrollment profile ID must be a positive integer")
@@ -282,7 +282,7 @@ func TestAcceptance_MobileDeviceEnrollmentProfiles_ValidationErrors(t *testing.T
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
 		_, _, err := svc.UpdateByName(context.Background(), "", &mobile_device_enrollment_profiles.Resource{
-			General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "x"},
+			General: mobile_device_enrollment_profiles.SubsetGeneral{Name: "sdkv2_acc_x"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "mobile device enrollment profile name cannot be empty")

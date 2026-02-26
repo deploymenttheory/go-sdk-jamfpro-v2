@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_OAuth2SessionTokens_GetV1(t *testing.T) {
+func TestAcceptance_OAuth2SessionTokens_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.OAuth2SessionTokens
 	ctx := context.Background()

@@ -1,0 +1,9 @@
+{
+	"retentionPolicies": [{
+		"displayName": "Jamf Pro Server Logs",
+		"qualifier": "JAMFSoftwareServer",
+		"retentionPeriod": 30,
+		"retentionPeriodUnit": "Days"
+	}],
+	"hourOfDay": 2
+}

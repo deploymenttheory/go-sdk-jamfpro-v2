@@ -15,6 +15,12 @@ func setupMockService(t *testing.T) (*Service, *mocks.CacheSettingsMock) {
 	return NewService(mock), mock
 }
 
+func TestUnit_CacheSettings_NewService(t *testing.T) {
+	mock := mocks.NewCacheSettingsMock()
+	svc := NewService(mock)
+	require.NotNil(t, svc)
+}
+
 func TestUnit_CacheSettings_GetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
@@ -25,6 +31,17 @@ func TestUnit_CacheSettings_GetV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, "ehcache", result.CacheType)
 	assert.Equal(t, 3600, result.TimeToLiveSeconds)
+}
+
+func TestUnit_CacheSettings_GetV1_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered
+
+	result, resp, err := svc.GetV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response")
 }
 
 func TestUnit_CacheSettings_UpdateV1_NilRequest(t *testing.T) {
@@ -49,4 +66,19 @@ func TestUnit_CacheSettings_UpdateV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_CacheSettings_UpdateV1_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered
+
+	request := &ResourceCacheSettings{
+		CacheType:         "ehcache",
+		TimeToLiveSeconds: 3600,
+	}
+	result, resp, err := svc.UpdateV1(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response")
 }

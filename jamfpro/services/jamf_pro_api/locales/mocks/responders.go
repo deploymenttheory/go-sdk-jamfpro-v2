@@ -44,6 +44,23 @@ func (m *LocalesMock) RegisterMocks() {
 	m.register("GET", "/api/v1/locales", 200, "validate_list.json")
 }
 
+// RegisterListV1ErrorMock registers a GET /api/v1/locales response that returns an error (for testing error paths).
+func (m *LocalesMock) RegisterListV1ErrorMock() {
+	m.responses["GET:/api/v1/locales"] = registeredResponse{
+		statusCode: 500,
+		rawBody:    []byte(`{"error":"internal server error"}`),
+		errMsg:     "mock client error",
+	}
+}
+
+// RegisterListV1InvalidJSONMock registers a GET response with invalid JSON (for testing unmarshal error path).
+func (m *LocalesMock) RegisterListV1InvalidJSONMock() {
+	m.responses["GET:/api/v1/locales"] = registeredResponse{
+		statusCode: 200,
+		rawBody:    []byte(`{invalid json`),
+	}
+}
+
 func (m *LocalesMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	return m.dispatch("GET", path, result)
 }
@@ -96,7 +113,7 @@ func (m *LocalesMock) GetLogger() *zap.Logger                     { return m.log
 func (m *LocalesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("LocalesMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("LocalesMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if r.errMsg != "" {

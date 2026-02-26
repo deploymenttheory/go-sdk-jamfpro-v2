@@ -98,6 +98,11 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-id-history
 		AddHistoryNotesV1(ctx context.Context, id string, request *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error)
+
+		// GetDevicesByIDV1 retrieves a list of devices assigned to the specified device enrollment instance.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-devices
+		GetDevicesByIDV1(ctx context.Context, id string) (*DevicesResponse, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the device enrollments-related methods of the Jamf Pro API.
@@ -151,7 +156,10 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list device enrollments: %w", err)
 	}
@@ -172,8 +180,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDeviceEnro
 	endpoint := fmt.Sprintf("%s/%s", EndpointDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -241,7 +248,10 @@ func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[str
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device enrollment history for ID %s: %w", id, err)
 	}
@@ -262,8 +272,7 @@ func (s *Service) GetSyncStatesV1(ctx context.Context, id string) ([]ResourceSyn
 	endpoint := fmt.Sprintf("%s/%s/syncs", EndpointDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -287,8 +296,7 @@ func (s *Service) GetLatestSyncStateV1(ctx context.Context, id string) (*Resourc
 	endpoint := fmt.Sprintf("%s/%s/syncs/latest", EndpointDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -308,8 +316,7 @@ func (s *Service) GetAllSyncStatesV1(ctx context.Context) ([]ResourceSyncState, 
 	endpoint := fmt.Sprintf("%s/syncs", EndpointDeviceEnrollmentsV1)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -508,6 +515,30 @@ func (s *Service) AddHistoryNotesV1(ctx context.Context, id string, request *Req
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to add history notes for device enrollment ID %s: %w", id, err)
+	}
+
+	return &result, resp, nil
+}
+
+// GetDevicesByIDV1 retrieves a list of devices assigned to the specified device enrollment instance.
+// URL: GET /api/v1/device-enrollments/{id}/devices
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-devices
+func (s *Service) GetDevicesByIDV1(ctx context.Context, id string) (*DevicesResponse, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("device enrollment ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/devices", EndpointDeviceEnrollmentsV1, id)
+
+	var result DevicesResponse
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get devices for device enrollment ID %s: %w", id, err)
 	}
 
 	return &result, resp, nil

@@ -13,12 +13,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_PatchExternalSources_Lifecycle exercises the full
+// TestAcceptance_PatchExternalSources_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByName →
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
+func TestAcceptance_PatchExternalSources_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPatchExternalSources
@@ -29,7 +29,7 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test patch external source")
 
-	sourceName := acc.UniqueName("acc-test-patchsrc")
+	sourceName := acc.UniqueName("sdkv2_acc_acc-test-patchsrc")
 	createReq := &patch_external_sources.RequestPatchExternalSource{
 		Name:       sourceName,
 		HostName:   "patches.example.com",
@@ -117,7 +117,7 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-patchsrc-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-patchsrc-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating patch external source ID=%d to name=%q", sourceID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -186,10 +186,10 @@ func TestAcceptance_PatchExternalSources_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_PatchExternalSources_ValidationErrors tests client-side validation.
+// TestAcceptance_PatchExternalSources_validation_errors tests client-side validation.
 // =============================================================================
 
-func TestAcceptance_PatchExternalSources_ValidationErrors(t *testing.T) {
+func TestAcceptance_PatchExternalSources_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPatchExternalSources
@@ -213,13 +213,13 @@ func TestAcceptance_PatchExternalSources_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &patch_external_sources.RequestPatchExternalSource{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &patch_external_sources.RequestPatchExternalSource{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "patch external source ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &patch_external_sources.RequestPatchExternalSource{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &patch_external_sources.RequestPatchExternalSource{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "patch external source name is required")
 	})

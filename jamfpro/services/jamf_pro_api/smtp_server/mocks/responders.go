@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -31,7 +32,7 @@ func NewSMTPServerMock() *SMTPServerMock {
 func (m *SMTPServerMock) register(method, path string, statusCode int, fixture string) {
 	var body []byte
 	if fixture != "" {
-		data, err := loadMockResponse(fixture)
+		data, err := os.ReadFile(filepath.Join(mustMocksDir(), fixture))
 		if err != nil {
 			panic(fmt.Sprintf("SMTPServerMock: load %q: %v", fixture, err))
 		}
@@ -43,6 +44,47 @@ func (m *SMTPServerMock) register(method, path string, statusCode int, fixture s
 func (m *SMTPServerMock) RegisterMocks() {
 	m.register("GET", "/api/v2/smtp-server", 200, "validate_get.json")
 	m.register("PUT", "/api/v2/smtp-server", 200, "validate_get.json")
+	m.register("GET", "/api/v1/smtp-server/history", 200, "validate_history.json")
+	m.register("POST", "/api/v1/smtp-server/history", 201, "validate_add_history_note.json")
+	m.register("POST", "/api/v1/smtp-server/test", 202, "")
+}
+
+func (m *SMTPServerMock) registerError(method, path string, statusCode int, fixture string, errMsg string) {
+	var body []byte
+	if fixture != "" {
+		data, _ := os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+		body = data
+	}
+	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body, errMsg: errMsg}
+}
+
+func (m *SMTPServerMock) RegisterGetErrorMock() {
+	m.registerError("GET", "/api/v2/smtp-server", 500, "validate_get.json", "Jamf Pro API error (500): server error")
+}
+
+func (m *SMTPServerMock) RegisterPutErrorMock() {
+	m.registerError("PUT", "/api/v2/smtp-server", 500, "validate_get.json", "Jamf Pro API error (500): server error")
+}
+
+func (m *SMTPServerMock) RegisterGetHistoryErrorMock() {
+	m.registerError("GET", "/api/v1/smtp-server/history", 500, "validate_history.json", "Jamf Pro API error (500): server error")
+}
+
+func (m *SMTPServerMock) RegisterGetHistoryInvalidJSONMock() {
+	m.responses["GET:/api/v1/smtp-server/history"] = registeredResponse{statusCode: 200, rawBody: []byte(`{invalid json`)}
+}
+
+func (m *SMTPServerMock) RegisterGetHistoryInvalidItemMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_history_invalid_item.json"))
+	m.responses["GET:/api/v1/smtp-server/history"] = registeredResponse{statusCode: 200, rawBody: body}
+}
+
+func (m *SMTPServerMock) RegisterAddHistoryNoteErrorMock() {
+	m.registerError("POST", "/api/v1/smtp-server/history", 500, "validate_add_history_note.json", "Jamf Pro API error (500): server error")
+}
+
+func (m *SMTPServerMock) RegisterTestErrorMock() {
+	m.responses["POST:/api/v1/smtp-server/test"] = registeredResponse{statusCode: 500, rawBody: nil, errMsg: "Jamf Pro API error (500): server error"}
 }
 
 func (m *SMTPServerMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -85,7 +127,9 @@ func (m *SMTPServerMock) GetPaginated(ctx context.Context, path string, q map[st
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		_ = mergePage(resp.Body)
+		if err := mergePage(resp.Body); err != nil {
+			return resp, err
+		}
 	}
 	return resp, nil
 }
@@ -97,7 +141,7 @@ func (m *SMTPServerMock) GetLogger() *zap.Logger                     { return m.
 func (m *SMTPServerMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("SMTPServerMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("SMTPServerMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if r.errMsg != "" {
@@ -111,10 +155,7 @@ func (m *SMTPServerMock) dispatch(method, path string, result any) (*interfaces.
 	return resp, nil
 }
 
-func loadMockResponse(filename string) ([]byte, error) {
-	dir, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-	return os.ReadFile(filepath.Join(dir, "mocks", filename))
+func mustMocksDir() string {
+	_, filename, _, _ := runtime.Caller(0)
+	return filepath.Dir(filename)
 }

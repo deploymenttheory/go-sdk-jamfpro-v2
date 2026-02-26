@@ -34,12 +34,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations
-//     -- Tests: TestAcceptance_ApiIntegrations_Lifecycle
+//     -- Tests: TestAcceptance_ApiIntegrations_lifecycle
 //     -- Flow: Create role (dependency) → Create → GetByID → GetByName → RefreshCredentials → Update → Delete
 //
 //   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: MISSING - Should be added as TestAcceptance_ApiIntegrations_ListWithRSQLFilter
+//     -- Tests: MISSING - Should be added as TestAcceptance_ApiIntegrations_list_with_rsql_filter
 //     -- Flow: Create unique integration → Filter with RSQL → Verify filtered results
 //     -- Status: MANDATORY test not implemented
 //
@@ -71,7 +71,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_ApiIntegrations_ListV1(t *testing.T) {
+func TestAcceptance_ApiIntegrations_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ApiIntegrations
 	ctx := context.Background()
@@ -84,16 +84,16 @@ func TestAcceptance_ApiIntegrations_ListV1(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_ApiIntegrations_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_ApiIntegrations_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ApiIntegrations
 	roleSvc := acc.Client.APIRoles
 	ctx := context.Background()
 
-	name := acc.UniqueName("acc-rsql-integration")
+	name := acc.UniqueName("sdkv2_acc_acc-rsql-integration")
 
 	// Create API role first (dependency)
-	roleName := acc.UniqueName("acc-rsql-integration-role")
+	roleName := acc.UniqueName("sdkv2_acc_acc-rsql-integration-role")
 	roleReq := &api_roles.RequestAPIRole{
 		DisplayName: roleName,
 		Privileges:  []string{"Read Computers"},
@@ -152,15 +152,15 @@ func TestAcceptance_ApiIntegrations_ListWithRSQLFilter(t *testing.T) {
 	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target integration found=%v", list.TotalCount, found)
 }
 
-func TestAcceptance_ApiIntegrations_Lifecycle(t *testing.T) {
+func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ApiIntegrations
 	roleSvc := acc.Client.APIRoles
 	ctx := context.Background()
-	name := acc.UniqueName("acc-api-integration")
+	name := acc.UniqueName("sdkv2_acc_acc-api-integration")
 
 	// Create a valid API role first (dependency chain: api_roles → api_integrations)
-	roleName := acc.UniqueName("acc-api-integration-role")
+	roleName := acc.UniqueName("sdkv2_acc_acc-api-integration-role")
 	roleReq := &api_roles.RequestAPIRole{
 		DisplayName: roleName,
 		Privileges:  []string{"Read Computers"},

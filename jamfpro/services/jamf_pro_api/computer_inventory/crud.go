@@ -199,8 +199,7 @@ func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceComputerIn
 	var result ResourceComputerInventory
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
@@ -224,8 +223,7 @@ func (s *Service) GetDetailByIDV3(ctx context.Context, id string) (*ResourceComp
 	var result ResourceComputerInventory
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -275,8 +273,7 @@ func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*interfaces.Resp
 	}
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -343,8 +340,7 @@ func (s *Service) GetFileVaultByIDV3(ctx context.Context, id string) (*FileVault
 	var result FileVaultInventory
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -368,8 +364,7 @@ func (s *Service) GetDeviceLockPinByIDV3(ctx context.Context, id string) (*Respo
 	var result ResponseDeviceLockPin
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -393,8 +388,7 @@ func (s *Service) GetRecoveryLockPasswordByIDV3(ctx context.Context, id string) 
 	var result ResponseRecoveryLockPassword
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -472,8 +466,7 @@ func (s *Service) DeleteAttachmentByIDV3(ctx context.Context, computerID, attach
 	}
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

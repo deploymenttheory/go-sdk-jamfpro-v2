@@ -4,10 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -61,6 +64,39 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-prestages-id-scope
 		GetScopeByIDV2(ctx context.Context, id string) (*ResourceDeviceScope, *interfaces.Response, error)
+
+		// ReplaceScopeByIDV2 replaces the device scope for the mobile device prestage by ID (v2 API).
+		ReplaceScopeByIDV2(ctx context.Context, id string, request *RequestReplaceScope) (*ResourceDeviceScope, *interfaces.Response, error)
+
+		// AddScopeByIDV2 adds device scope (serial numbers) to the mobile device prestage by ID (v2 API).
+		AddScopeByIDV2(ctx context.Context, id string, request *RequestAddScope) (*ResourceDeviceScope, *interfaces.Response, error)
+
+		// RemoveScopeByIDV2 removes device scope (serial numbers) from the mobile device prestage by ID (v2 API).
+		RemoveScopeByIDV2(ctx context.Context, id string, request *RequestRemoveScope) (*ResourceDeviceScope, *interfaces.Response, error)
+
+		// GetAllSyncsV2 returns all prestage sync states for all mobile device prestages (v2 API).
+		GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *interfaces.Response, error)
+
+		// GetSyncsByIDV2 returns sync states for a specific mobile device prestage by ID (v2 API).
+		GetSyncsByIDV2(ctx context.Context, id string) ([]ResourcePrestageSync, *interfaces.Response, error)
+
+		// GetLatestSyncByIDV2 returns the latest sync state for a mobile device prestage by ID (v2 API).
+		GetLatestSyncByIDV2(ctx context.Context, id string) (*ResourcePrestageSync, *interfaces.Response, error)
+
+		// GetAttachmentsByIDV3 returns attachments for a mobile device prestage by ID (v3 API).
+		GetAttachmentsByIDV3(ctx context.Context, id string) ([]ResourceAttachment, *interfaces.Response, error)
+
+		// UploadAttachmentV3 uploads an attachment to a mobile device prestage by ID (v3 API).
+		UploadAttachmentV3(ctx context.Context, id string, fileReader io.Reader, fileSize int64, fileName string) (*ResourceAttachmentUpload, *interfaces.Response, error)
+
+		// DeleteAttachmentsByIDV3 deletes attachments from a mobile device prestage by ID (v3 API).
+		DeleteAttachmentsByIDV3(ctx context.Context, id string, request *RequestDeleteAttachments) (*interfaces.Response, error)
+
+		// GetHistoryByIDV3 returns the history for a mobile device prestage by ID (v3 API).
+		GetHistoryByIDV3(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error)
+
+		// AddHistoryNoteByIDV3 adds a history note to a mobile device prestage by ID (v3 API).
+		AddHistoryNoteByIDV3(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the mobile device prestages-related methods of the Jamf Pro API.
@@ -123,8 +159,7 @@ func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceMobileDevi
 	var result ResourceMobileDevicePrestage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -283,8 +318,7 @@ func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDevicePrestagesV3, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -322,11 +356,352 @@ func (s *Service) GetScopeByIDV2(ctx context.Context, id string) (*ResourceDevic
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// ReplaceScopeByIDV2 replaces the device scope for the mobile device prestage by ID.
+// Fetches the current scope first to obtain versionLock and injects it transparently.
+// URL: PUT /api/v2/mobile-device-prestages/{id}/scope
+func (s *Service) ReplaceScopeByIDV2(ctx context.Context, id string, request *RequestReplaceScope) (*ResourceDeviceScope, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	currentScope, _, err := s.GetScopeByIDV2(ctx, id)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch current device scope for version locking: %w", err)
+	}
+
+	version_locking.EnsureVersionLock(currentScope, request)
+
+	endpoint := fmt.Sprintf("%s/%s/scope", EndpointMobileDevicePrestagesV2, id)
+
+	var result ResourceDeviceScope
+
+	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// AddScopeByIDV2 adds device scope (serial numbers) to the mobile device prestage by ID.
+// URL: POST /api/v2/mobile-device-prestages/{id}/scope
+func (s *Service) AddScopeByIDV2(ctx context.Context, id string, request *RequestAddScope) (*ResourceDeviceScope, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	currentScope, _, err := s.GetScopeByIDV2(ctx, id)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch current device scope for version locking: %w", err)
+	}
+
+	version_locking.EnsureVersionLock(currentScope, request)
+
+	endpoint := fmt.Sprintf("%s/%s/scope", EndpointMobileDevicePrestagesV2, id)
+
+	var result ResourceDeviceScope
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// RemoveScopeByIDV2 removes device scope (serial numbers) from the mobile device prestage by ID.
+// URL: POST /api/v2/mobile-device-prestages/{id}/scope/delete-multiple
+func (s *Service) RemoveScopeByIDV2(ctx context.Context, id string, request *RequestRemoveScope) (*ResourceDeviceScope, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	currentScope, _, err := s.GetScopeByIDV2(ctx, id)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch current device scope for version locking: %w", err)
+	}
+
+	version_locking.EnsureVersionLock(currentScope, request)
+
+	endpoint := fmt.Sprintf("%s/%s/scope/delete-multiple", EndpointMobileDevicePrestagesV2, id)
+
+	var result ResourceDeviceScope
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetAllSyncsV2 returns all prestage sync states for all mobile device prestages.
+// URL: GET /api/v2/mobile-device-prestages/syncs
+func (s *Service) GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *interfaces.Response, error) {
+	endpoint := EndpointMobileDevicePrestagesV2 + "/syncs"
+
+	var result []ResourcePrestageSync
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetSyncsByIDV2 returns sync states for a specific mobile device prestage by ID.
+// URL: GET /api/v2/mobile-device-prestages/{id}/syncs
+func (s *Service) GetSyncsByIDV2(ctx context.Context, id string) ([]ResourcePrestageSync, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/syncs", EndpointMobileDevicePrestagesV2, id)
+
+	var result []ResourcePrestageSync
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetLatestSyncByIDV2 returns the latest sync state for a mobile device prestage by ID.
+// URL: GET /api/v2/mobile-device-prestages/{id}/syncs/latest
+func (s *Service) GetLatestSyncByIDV2(ctx context.Context, id string) (*ResourcePrestageSync, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/syncs/latest", EndpointMobileDevicePrestagesV2, id)
+
+	var result ResourcePrestageSync
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetAttachmentsByIDV3 returns attachments for a mobile device prestage by ID.
+// URL: GET /api/v3/mobile-device-prestages/{id}/attachments
+func (s *Service) GetAttachmentsByIDV3(ctx context.Context, id string) ([]ResourceAttachment, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/attachments", EndpointMobileDevicePrestagesV3, id)
+
+	var result []ResourceAttachment
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// UploadAttachmentV3 uploads an attachment to a mobile device prestage by ID.
+// URL: POST /api/v3/mobile-device-prestages/{id}/attachments
+func (s *Service) UploadAttachmentV3(ctx context.Context, id string, fileReader io.Reader, fileSize int64, fileName string) (*ResourceAttachmentUpload, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+	if fileReader == nil {
+		return nil, nil, fmt.Errorf("file reader is required")
+	}
+	if fileName == "" {
+		return nil, nil, fmt.Errorf("file name is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/attachments", EndpointMobileDevicePrestagesV3, id)
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	var result ResourceAttachmentUpload
+
+	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// UploadAttachmentFromFileV3 opens the file at filePath and uploads it via UploadAttachmentV3.
+func (s *Service) UploadAttachmentFromFileV3(ctx context.Context, id string, filePath string) (*ResourceAttachmentUpload, *interfaces.Response, error) {
+	f, err := os.Open(filePath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("open attachment file: %w", err)
+	}
+	defer f.Close()
+
+	info, err := f.Stat()
+	if err != nil {
+		return nil, nil, fmt.Errorf("stat attachment file: %w", err)
+	}
+
+	fileName := info.Name()
+	if fileName == "" {
+		fileName = filePath
+	}
+
+	return s.UploadAttachmentV3(ctx, id, f, info.Size(), fileName)
+}
+
+// DeleteAttachmentsByIDV3 deletes attachments from a mobile device prestage by ID.
+// URL: POST /api/v3/mobile-device-prestages/{id}/attachments/delete-multiple
+func (s *Service) DeleteAttachmentsByIDV3(ctx context.Context, id string, request *RequestDeleteAttachments) (*interfaces.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	if request == nil {
+		return nil, fmt.Errorf("request is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/attachments/delete-multiple", EndpointMobileDevicePrestagesV3, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// GetHistoryByIDV3 returns the history for a mobile device prestage by ID with pagination.
+// URL: GET /api/v3/mobile-device-prestages/{id}/history
+// Query params: page, page-size, sort, filter
+func (s *Service) GetHistoryByIDV3(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/history", EndpointMobileDevicePrestagesV3, id)
+
+	var result HistoryResponse
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var history HistoryObject
+				if err := mapstructure.Decode(item, &history); err != nil {
+					return fmt.Errorf("failed to decode history object: %w", err)
+				}
+				result.Results = append(result.Results, history)
+			}
+		}
+
+		return nil
+	}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get mobile device prestage history: %w", err)
+	}
+
+	return &result, resp, nil
+}
+
+// AddHistoryNoteByIDV3 adds a history note to a mobile device prestage by ID.
+// URL: POST /api/v3/mobile-device-prestages/{id}/history
+func (s *Service) AddHistoryNoteByIDV3(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+	if request.Note == "" {
+		return nil, nil, fmt.Errorf("note is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/history", EndpointMobileDevicePrestagesV3, id)
+
+	var result ResponseAddHistoryNote
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

@@ -16,6 +16,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 // CloudInformationMock is a test double implementing interfaces.HTTPClient.
@@ -39,12 +40,24 @@ func (m *CloudInformationMock) RegisterGetCloudInformationMock() {
 	m.register("GET", "/api/v1/cloud-information", 200, "validate_get.json")
 }
 
+// RegisterGetCloudInformationErrorMock registers a GET response that returns an error (for testing error paths).
+func (m *CloudInformationMock) RegisterGetCloudInformationErrorMock() {
+	m.responses["GET:/api/v1/cloud-information"] = registeredResponse{
+		statusCode: 500,
+		rawBody:    []byte(`{"error":"internal server error"}`),
+		errMsg:     "mock client error",
+	}
+}
+
 func (m *CloudInformationMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("CloudInformationMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("CloudInformationMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

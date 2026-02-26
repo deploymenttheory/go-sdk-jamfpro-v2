@@ -146,3 +146,26 @@ type CreateResponse struct {
 type RequestDeleteMultipleLanguages struct {
 	IDs []string `json:"ids"`
 }
+
+// ResourceADUESessionTokenSettings represents ADUE (Account Driven User Enrollment) session token settings (API v1).
+// Used by GetADUESessionTokenSettingsV1 and UpdateADUESessionTokenSettingsV1.
+type ResourceADUESessionTokenSettings struct {
+	Enabled                   bool `json:"enabled"`
+	ExpirationIntervalDays    int  `json:"expirationIntervalDays,omitempty"`
+	ExpirationIntervalSeconds int  `json:"expirationIntervalSeconds,omitempty"`
+}
+
+// RequestAddHistoryNotes represents the request body for adding enrollment history notes (API v2).
+type RequestAddHistoryNotes struct {
+	Note string `json:"note"`
+}
+
+// RequestExportHistory represents the optional request body for exporting enrollment history (API v2).
+// Overrides query parameters when URI would exceed ~2k characters.
+type RequestExportHistory struct {
+	Page     *int     `json:"page,omitempty"`
+	PageSize *int     `json:"pageSize,omitempty"`
+	Sort     []string `json:"sort,omitempty"`
+	Filter   *string  `json:"filter,omitempty"`
+	Fields   []string `json:"fields,omitempty"`
+}

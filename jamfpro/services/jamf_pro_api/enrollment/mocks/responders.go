@@ -35,7 +35,11 @@ func NewEnrollmentMock() *EnrollmentMock {
 
 // RegisterMocks registers all standard success responses in one call.
 func (m *EnrollmentMock) RegisterMocks() {
+	m.RegisterGetADUESessionTokenSettingsV1Mock()
+	m.RegisterUpdateADUESessionTokenSettingsV1Mock()
 	m.RegisterGetHistoryV2Mock()
+	m.RegisterAddHistoryNotesV2Mock()
+	m.RegisterExportHistoryV2Mock()
 	m.RegisterListAccessGroupsV3Mock()
 	m.RegisterGetAccessGroupByIDV3Mock()
 	m.RegisterCreateAccessGroupV3Mock()
@@ -43,6 +47,7 @@ func (m *EnrollmentMock) RegisterMocks() {
 	m.RegisterDeleteAccessGroupByIDV3Mock()
 	m.RegisterListLanguageMessagesV3Mock()
 	m.RegisterListLanguageCodesV3Mock()
+	m.RegisterListFilteredLanguageCodesV3Mock()
 	m.RegisterGetLanguageMessageV3Mock()
 	m.RegisterUpdateLanguageMessageV3Mock()
 	m.RegisterDeleteLanguageMessageV3Mock()
@@ -85,6 +90,24 @@ func (m *EnrollmentMock) dispatch(method, path string, result any) (*interfaces.
 	return resp, nil
 }
 
+func (m *EnrollmentMock) RegisterGetADUESessionTokenSettingsV1Mock() {
+	body := []byte(`{
+		"enabled": false,
+		"expirationIntervalDays": 1,
+		"expirationIntervalSeconds": 86400
+	}`)
+	m.register("GET", "/api/v1/adue-session-token-settings", 200, body)
+}
+
+func (m *EnrollmentMock) RegisterUpdateADUESessionTokenSettingsV1Mock() {
+	body := []byte(`{
+		"enabled": true,
+		"expirationIntervalDays": 1,
+		"expirationIntervalSeconds": 86400
+	}`)
+	m.register("PUT", "/api/v1/adue-session-token-settings", 200, body)
+}
+
 func (m *EnrollmentMock) RegisterGetHistoryV2Mock() {
 	body := []byte(`{
 		"totalCount": 2,
@@ -106,6 +129,19 @@ func (m *EnrollmentMock) RegisterGetHistoryV2Mock() {
 		]
 	}`)
 	m.register("GET", "/api/v2/enrollment/history", 200, body)
+}
+
+func (m *EnrollmentMock) RegisterAddHistoryNotesV2Mock() {
+	body := []byte(`{
+		"id": "1",
+		"href": "https://yourJamfProUrl.jamf/api/v1/resource/1"
+	}`)
+	m.register("POST", "/api/v2/enrollment/history", 201, body)
+}
+
+func (m *EnrollmentMock) RegisterExportHistoryV2Mock() {
+	body := []byte("Username,DATE,NOTES,Details\nadmin,2022-02-04T11:56:26.343Z,Edited,Re-enrollment Restricted true")
+	m.register("POST", "/api/v2/enrollment/history/export", 200, body)
 }
 
 func (m *EnrollmentMock) RegisterListAccessGroupsV3Mock() {
@@ -195,6 +231,14 @@ func (m *EnrollmentMock) RegisterListLanguageCodesV3Mock() {
 		{"value": "fr", "name": "French"}
 	]`)
 	m.register("GET", "/api/v3/enrollment/language-codes", 200, body)
+}
+
+func (m *EnrollmentMock) RegisterListFilteredLanguageCodesV3Mock() {
+	body := []byte(`[
+		{"value": "de", "name": "German"},
+		{"value": "ja", "name": "Japanese"}
+	]`)
+	m.register("GET", "/api/v3/enrollment/filtered-language-codes", 200, body)
 }
 
 func (m *EnrollmentMock) RegisterGetLanguageMessageV3Mock() {

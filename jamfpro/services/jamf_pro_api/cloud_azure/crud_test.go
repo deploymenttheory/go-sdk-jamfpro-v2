@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGetDefaultServerConfigurationV1(t *testing.T) {
+func TestUnit_CloudAzure_GetDefaultServerConfigurationV1_Success(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	mock.RegisterGetDefaultServerConfigurationMock()
 
@@ -26,7 +26,7 @@ func TestGetDefaultServerConfigurationV1(t *testing.T) {
 	assert.Equal(t, "userPrincipalName", result.Mappings.UserName)
 }
 
-func TestGetByIDV1(t *testing.T) {
+func TestUnit_CloudAzure_GetByIDV1_Success(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	mock.RegisterGetByIDMock("1")
 
@@ -44,7 +44,7 @@ func TestGetByIDV1(t *testing.T) {
 	assert.True(t, result.Server.Enabled)
 }
 
-func TestGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_CloudAzure_GetByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -57,7 +57,7 @@ func TestGetByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetByNameV1(t *testing.T) {
+func TestUnit_CloudAzure_GetByNameV1_Success(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	mock.RegisterListMock()
 	mock.RegisterGetByIDMock("1")
@@ -73,7 +73,7 @@ func TestGetByNameV1(t *testing.T) {
 	assert.Equal(t, "Test Azure IDP", result.CloudIdPCommon.DisplayName)
 }
 
-func TestGetByNameV1_EmptyName(t *testing.T) {
+func TestUnit_CloudAzure_GetByNameV1_EmptyName(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -86,7 +86,7 @@ func TestGetByNameV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "name is required")
 }
 
-func TestCreateV1(t *testing.T) {
+func TestUnit_CloudAzure_CreateV1_Success(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	mock.RegisterCreateMock()
 
@@ -113,7 +113,7 @@ func TestCreateV1(t *testing.T) {
 	assert.Equal(t, "/api/v1/cloud-azure/1", result.Href)
 }
 
-func TestCreateV1_NilRequest(t *testing.T) {
+func TestUnit_CloudAzure_CreateV1_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -126,7 +126,7 @@ func TestCreateV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUpdateByIDV1(t *testing.T) {
+func TestUnit_CloudAzure_UpdateByIDV1_Success(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	mock.RegisterUpdateByIDMock("1")
 
@@ -148,7 +148,7 @@ func TestUpdateByIDV1(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestUpdateByIDV1_EmptyID(t *testing.T) {
+func TestUnit_CloudAzure_UpdateByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -163,7 +163,7 @@ func TestUpdateByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateByIDV1_NilRequest(t *testing.T) {
+func TestUnit_CloudAzure_UpdateByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -176,7 +176,7 @@ func TestUpdateByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUpdateByNameV1(t *testing.T) {
+func TestUnit_CloudAzure_UpdateByNameV1_Success(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	mock.RegisterListMock()
 	mock.RegisterGetByIDMock("1")
@@ -199,7 +199,7 @@ func TestUpdateByNameV1(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestUpdateByNameV1_EmptyName(t *testing.T) {
+func TestUnit_CloudAzure_UpdateByNameV1_EmptyName(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -214,7 +214,7 @@ func TestUpdateByNameV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "name is required")
 }
 
-func TestDeleteByIDV1(t *testing.T) {
+func TestUnit_CloudAzure_DeleteByIDV1_Success(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	mock.RegisterDeleteByIDMock("1")
 
@@ -228,7 +228,7 @@ func TestDeleteByIDV1(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestDeleteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_CloudAzure_DeleteByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -240,7 +240,7 @@ func TestDeleteByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestDeleteByNameV1(t *testing.T) {
+func TestUnit_CloudAzure_DeleteByNameV1_Success(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	mock.RegisterListMock()
 	mock.RegisterGetByIDMock("1")
@@ -256,7 +256,7 @@ func TestDeleteByNameV1(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestDeleteByNameV1_EmptyName(t *testing.T) {
+func TestUnit_CloudAzure_DeleteByNameV1_EmptyName(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -268,7 +268,7 @@ func TestDeleteByNameV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "name is required")
 }
 
-func TestGetDefaultMappingsV1(t *testing.T) {
+func TestUnit_CloudAzure_GetDefaultMappingsV1_Success(t *testing.T) {
 	mock := mocks.NewCloudAzureMock()
 	mock.RegisterGetDefaultMappingsMock()
 
@@ -283,4 +283,122 @@ func TestGetDefaultMappingsV1(t *testing.T) {
 	assert.Equal(t, "objectGUID", result.UserId)
 	assert.Equal(t, "userPrincipalName", result.UserName)
 	assert.Equal(t, "displayName", result.RealName)
+}
+
+func TestUnit_CloudAzure_GetDefaultServerConfigurationV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetDefaultServerConfigurationV1(ctx)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestUnit_CloudAzure_GetByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByIDV1(ctx, "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestUnit_CloudAzure_GetByNameV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByNameV1(ctx, "Test Azure IDP")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestUnit_CloudAzure_CreateV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	request := &ResourceCloudAzure{
+		CloudIdPCommon: CloudIdPCommon{
+			DisplayName:  "Test Azure IDP",
+			ProviderName: "AZURE",
+		},
+	}
+
+	result, resp, err := svc.CreateV1(ctx, request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestUnit_CloudAzure_UpdateByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	request := &ResourceCloudAzure{
+		CloudIdPCommon: CloudIdPCommon{
+			DisplayName:  "Updated Azure IDP",
+			ProviderName: "AZURE",
+		},
+	}
+
+	result, resp, err := svc.UpdateByIDV1(ctx, "1", request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestUnit_CloudAzure_UpdateByNameV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	request := &ResourceCloudAzure{
+		CloudIdPCommon: CloudIdPCommon{
+			DisplayName:  "Updated Azure IDP",
+			ProviderName: "AZURE",
+		},
+	}
+
+	result, resp, err := svc.UpdateByNameV1(ctx, "Test Azure IDP", request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestUnit_CloudAzure_DeleteByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	resp, err := svc.DeleteByIDV1(ctx, "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_CloudAzure_DeleteByNameV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	resp, err := svc.DeleteByNameV1(ctx, "Test Azure IDP")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_CloudAzure_GetDefaultMappingsV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetDefaultMappingsV1(ctx)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
 }

@@ -41,8 +41,7 @@ func (s *Service) GetMappingsByIDV1(ctx context.Context, id string) (*ResourceOn
 	var result ResourceOnPremLdapMappingsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

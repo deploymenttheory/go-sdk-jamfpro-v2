@@ -45,8 +45,7 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceJamfProInformation, *inte
 	endpoint := EndpointJamfProInformationV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

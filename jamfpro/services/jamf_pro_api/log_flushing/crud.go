@@ -79,8 +79,7 @@ func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSettin
 	endpoint := EndpointLogFlushingV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResourceLogFlushingSettings
@@ -99,8 +98,7 @@ func (s *Service) ListTasksV1(ctx context.Context) ([]ResourceLogFlushingTask, *
 	endpoint := EndpointLogFlushingV1 + "/task"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result []ResourceLogFlushingTask
@@ -123,8 +121,7 @@ func (s *Service) GetTaskByIDV1(ctx context.Context, id string) (*ResourceLogFlu
 	endpoint := fmt.Sprintf("%s/task/%s", EndpointLogFlushingV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResourceLogFlushingTask
@@ -171,8 +168,7 @@ func (s *Service) DeleteTaskByIDV1(ctx context.Context, id string) (*interfaces.
 	endpoint := fmt.Sprintf("%s/task/%s", EndpointLogFlushingV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

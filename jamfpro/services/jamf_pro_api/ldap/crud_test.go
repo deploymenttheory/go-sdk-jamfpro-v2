@@ -41,6 +41,27 @@ func TestUnit_Ldap_GetLdapGroupsV1_WithQuery(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
+func TestUnit_Ldap_GetLdapGroupsV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetLdapGroupsErrorMock()
+
+	result, resp, err := svc.GetLdapGroupsV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_Ldap_GetLdapGroupsV1_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered
+
+	result, resp, err := svc.GetLdapGroupsV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
 func TestUnit_Ldap_GetLdapServersV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLdapServersMock()
@@ -55,4 +76,69 @@ func TestUnit_Ldap_GetLdapServersV1_Success(t *testing.T) {
 	assert.Equal(t, "Corporate LDAP", result[0].Name)
 	assert.Equal(t, 2, result[1].ID)
 	assert.Equal(t, "Cloud IdP", result[1].Name)
+}
+
+func TestUnit_Ldap_GetLdapServersV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetLdapServersErrorMock()
+
+	result, resp, err := svc.GetLdapServersV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_Ldap_GetLdapServersV1_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered
+
+	result, resp, err := svc.GetLdapServersV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_Ldap_GetLdapServersOnlyV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetLdapServersOnlyMock()
+
+	result, resp, err := svc.GetLdapServersOnlyV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	require.Len(t, result, 2)
+	assert.Equal(t, 1, result[0].ID)
+	assert.Equal(t, "Corporate LDAP", result[0].Name)
+	assert.Equal(t, 3, result[1].ID)
+	assert.Equal(t, "Legacy LDAP", result[1].Name)
+}
+
+func TestUnit_Ldap_GetLdapServersOnlyV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetLdapServersOnlyErrorMock()
+
+	result, resp, err := svc.GetLdapServersOnlyV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_Ldap_GetLdapServersOnlyV1_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered
+
+	result, resp, err := svc.GetLdapServersOnlyV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_Ldap_NewService(t *testing.T) {
+	mock := mocks.NewLdapMock()
+	svc := NewService(mock)
+	require.NotNil(t, svc)
+	assert.NotNil(t, svc.client)
 }

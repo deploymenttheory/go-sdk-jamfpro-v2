@@ -79,3 +79,16 @@ func TestUnit_ComputerInventoryCollection_Update_NilSettings(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "settings is required")
 }
+
+func TestUnit_ComputerInventoryCollection_Get_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.Get(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_ComputerInventoryCollection_Update_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	settings := &computer_inventory_collection.ResourceComputerInventoryCollection{LocalUserAccounts: true}
+	_, err := svc.Update(context.Background(), settings)
+	require.Error(t, err)
+}

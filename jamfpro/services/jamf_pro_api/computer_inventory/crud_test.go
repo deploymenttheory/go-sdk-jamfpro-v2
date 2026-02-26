@@ -502,3 +502,126 @@ func TestUnit_ComputerInventory_GetDeviceLockPinByIDV3_EmptyID(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "id is required")
 }
+
+func TestUnit_ComputerInventory_ListV3_NoMockRegistered(t *testing.T) {
+	mock := mocks.NewComputerInventoryMock()
+	// No mock registered - dispatch returns nil, err
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.ListV3(ctx, nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
+}
+
+func TestUnit_ComputerInventory_ListV3_ClientError(t *testing.T) {
+	mock := mocks.NewComputerInventoryMock()
+	mock.RegisterListErrorMock()
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.ListV3(ctx, nil)
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "simulated ListV3 API error")
+}
+
+func TestUnit_ComputerInventory_ListV3_InvalidJSON(t *testing.T) {
+	mock := mocks.NewComputerInventoryMock()
+	mock.RegisterListInvalidJSONMock()
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.ListV3(ctx, nil)
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_ComputerInventory_ListFileVaultV3_ClientError(t *testing.T) {
+	mock := mocks.NewComputerInventoryMock()
+	mock.RegisterListFileVaultErrorMock()
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.ListFileVaultV3(ctx)
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "simulated ListFileVault API error")
+}
+
+func TestUnit_ComputerInventory_ListFileVaultV3_InvalidJSON(t *testing.T) {
+	mock := mocks.NewComputerInventoryMock()
+	mock.RegisterListFileVaultInvalidJSONMock()
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.ListFileVaultV3(ctx)
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_ComputerInventory_CreateV3_ClientError(t *testing.T) {
+	mock := mocks.NewComputerInventoryMock()
+	mock.RegisterCreateErrorMock()
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	request := &ResourceComputerInventory{
+		General: ComputerInventorySubsetGeneral{Name: "Test"},
+	}
+
+	result, resp, err := svc.CreateV3(ctx, request)
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "simulated CreateV3 API error")
+}
+
+func TestUnit_ComputerInventory_GetByIDV3_ClientError(t *testing.T) {
+	mock := mocks.NewComputerInventoryMock()
+	mock.RegisterGetByIDErrorMock("1")
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByIDV3(ctx, "1")
+
+	assert.Error(t, err)
+	assert.NotNil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "simulated GetByID API error")
+}
+
+func TestUnit_ComputerInventory_DeleteByIDV3_ClientError(t *testing.T) {
+	mock := mocks.NewComputerInventoryMock()
+	mock.RegisterDeleteErrorMock("1")
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	resp, err := svc.DeleteByIDV3(ctx, "1")
+
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "simulated Delete API error")
+}

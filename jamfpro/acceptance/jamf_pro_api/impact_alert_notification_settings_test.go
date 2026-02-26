@@ -22,12 +22,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration Testing
 //     -- Reason: Impact Alert Notification Settings is a singleton settings object
-//     -- Tests: TestAcceptance_ImpactAlertNotificationSettings_GetAndUpdate
+//     -- Tests: TestAcceptance_ImpactAlertNotificationSettings_get_and_update
 //     -- Flow: Get current → Update → Get (verify) → Restore original
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_ImpactAlertNotificationSettings_ValidationErrors
+//     -- Tests: TestAcceptance_ImpactAlertNotificationSettings_validation_errors
 //     -- Cases: Nil request validation
 //
 // Test Coverage
@@ -46,7 +46,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_ImpactAlertNotificationSettings_GetAndUpdate(t *testing.T) {
+func TestAcceptance_ImpactAlertNotificationSettings_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ImpactAlertNotificationSettings
@@ -90,7 +90,7 @@ func TestAcceptance_ImpactAlertNotificationSettings_GetAndUpdate(t *testing.T) {
 	assert.Equal(t, modified.DeployableObjectsConfirmationCodeEnabled, current.DeployableObjectsConfirmationCodeEnabled)
 }
 
-func TestAcceptance_ImpactAlertNotificationSettings_ValidationErrors(t *testing.T) {
+func TestAcceptance_ImpactAlertNotificationSettings_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ImpactAlertNotificationSettings

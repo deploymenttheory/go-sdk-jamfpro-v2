@@ -36,12 +36,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle (Smart Groups)
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations for smart groups
-//     -- Tests: TestAcceptance_ComputerGroups_Smart_Lifecycle
+//     -- Tests: TestAcceptance_ComputerGroups_smart_lifecycle
 //     -- Flow: Create → List → GetByID → Update → Verify → Delete
 //
 //   ✓ Pattern 1: Full CRUD Lifecycle (Static Groups)
 //     -- Reason: Service supports complete Create, Read, Update, Delete operations for static groups
-//     -- Tests: TestAcceptance_ComputerGroups_Static_Lifecycle
+//     -- Tests: TestAcceptance_ComputerGroups_static_lifecycle
 //     -- Flow: Create → List → GetByID → Update (PATCH) → Verify → Delete
 //
 //   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]
@@ -52,7 +52,7 @@ import (
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_ComputerGroups_ValidationErrors
+//     -- Tests: TestAcceptance_ComputerGroups_validation_errors
 //     -- Cases: Empty IDs, nil requests for both smart and static groups
 //
 // Test Coverage
@@ -86,14 +86,14 @@ import (
 //   • All tests register cleanup handlers to remove test groups
 //   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
 //   • Static group creation may return 500 in some environments (test handles gracefully)
-//   • TODO: Add TestAcceptance_ComputerGroups_Smart_ListWithRSQLFilter (MANDATORY)
-//   • TODO: Add TestAcceptance_ComputerGroups_Static_ListWithRSQLFilter (MANDATORY)
+//   • TODO: Add TestAcceptance_ComputerGroups_smart_list_with_rsql_filter (MANDATORY)
+//   • TODO: Add TestAcceptance_ComputerGroups_static_list_with_rsql_filter (MANDATORY)
 //
 // =============================================================================
-// TestAcceptance_ComputerGroups_Smart_Lifecycle
+// TestAcceptance_ComputerGroups_smart_lifecycle
 // =============================================================================
 
-func TestAcceptance_ComputerGroups_Smart_Lifecycle(t *testing.T) {
+func TestAcceptance_ComputerGroups_smart_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ComputerGroups
@@ -103,7 +103,7 @@ func TestAcceptance_ComputerGroups_Smart_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test smart computer group")
 
 	createReq := &computer_groups.RequestSmartGroup{
-		Name: acc.UniqueName("acc-test-smart"),
+		Name: acc.UniqueName("sdkv2_acc_acc-test-smart"),
 		Criteria: []computer_groups.Criterion{
 			{Name: "Computer Name", Priority: 0, AndOr: "and", SearchType: "like", Value: "test-%"},
 		},
@@ -163,7 +163,7 @@ func TestAcceptance_ComputerGroups_Smart_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating smart group ID=%s", groupID)
 
 	updateReq := &computer_groups.RequestSmartGroup{
-		Name: acc.UniqueName("acc-test-smart-updated"),
+		Name: acc.UniqueName("sdkv2_acc_acc-test-smart-updated"),
 		Criteria: []computer_groups.Criterion{
 			{Name: "Computer Name", Priority: 0, AndOr: "and", SearchType: "like", Value: "updated-%"},
 		},
@@ -192,10 +192,10 @@ func TestAcceptance_ComputerGroups_Smart_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_Static_Lifecycle
+// TestAcceptance_ComputerGroups_static_lifecycle
 // =============================================================================
 
-func TestAcceptance_ComputerGroups_Static_Lifecycle(t *testing.T) {
+func TestAcceptance_ComputerGroups_static_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ComputerGroups
@@ -205,7 +205,7 @@ func TestAcceptance_ComputerGroups_Static_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test static computer group")
 
 	createReq := &computer_groups.RequestStaticGroup{
-		Name:        acc.UniqueName("acc-test-static"),
+		Name:        acc.UniqueName("sdkv2_acc_acc-test-static"),
 		ComputerIds: []string{},
 	}
 	created, createResp, err := svc.CreateStaticV2(ctx, createReq)
@@ -291,16 +291,16 @@ func TestAcceptance_ComputerGroups_Static_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_Smart_ListWithRSQLFilter
+// TestAcceptance_ComputerGroups_smart_list_with_rsql_filter
 // =============================================================================
 
-func TestAcceptance_ComputerGroups_Smart_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_ComputerGroups_smart_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ComputerGroups
 	ctx := context.Background()
 
-	name := acc.UniqueName("acc-rsql-smart")
+	name := acc.UniqueName("sdkv2_acc_acc-rsql-smart")
 	createReq := &computer_groups.RequestSmartGroup{
 		Name: name,
 		Criteria: []computer_groups.Criterion{
@@ -344,16 +344,16 @@ func TestAcceptance_ComputerGroups_Smart_ListWithRSQLFilter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_Static_ListWithRSQLFilter
+// TestAcceptance_ComputerGroups_static_list_with_rsql_filter
 // =============================================================================
 
-func TestAcceptance_ComputerGroups_Static_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_ComputerGroups_static_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ComputerGroups
 	ctx := context.Background()
 
-	name := acc.UniqueName("acc-rsql-static")
+	name := acc.UniqueName("sdkv2_acc_acc-rsql-static")
 	createReq := &computer_groups.RequestStaticGroup{
 		Name:        name,
 		ComputerIds: []string{},
@@ -398,10 +398,10 @@ func TestAcceptance_ComputerGroups_Static_ListWithRSQLFilter(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_ValidationErrors
+// TestAcceptance_ComputerGroups_validation_errors
 // =============================================================================
 
-func TestAcceptance_ComputerGroups_ValidationErrors(t *testing.T) {
+func TestAcceptance_ComputerGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ComputerGroups
@@ -419,7 +419,7 @@ func TestAcceptance_ComputerGroups_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateSmartV2_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateSmartV2(context.Background(), "", &computer_groups.RequestSmartGroup{Name: "x"})
+		_, _, err := svc.UpdateSmartV2(context.Background(), "", &computer_groups.RequestSmartGroup{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})
@@ -443,7 +443,7 @@ func TestAcceptance_ComputerGroups_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateStaticByIDV2_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateStaticByIDV2(context.Background(), "", &computer_groups.RequestStaticGroup{Name: "x"})
+		_, _, err := svc.UpdateStaticByIDV2(context.Background(), "", &computer_groups.RequestStaticGroup{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})

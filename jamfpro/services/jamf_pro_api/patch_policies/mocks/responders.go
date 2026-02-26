@@ -17,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 type PatchPoliciesMock struct {
@@ -34,6 +35,20 @@ func (m *PatchPoliciesMock) register(method, path string, statusCode int, fixtur
 		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+func (m *PatchPoliciesMock) registerError(method, path string, statusCode int, fixture string) {
+	body, err := os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+	if err != nil {
+		panic("PatchPoliciesMock: failed to load error fixture: " + err.Error())
+	}
+	var parsed struct {
+		Code    string `json:"code"`
+		Message string `json:"message"`
+	}
+	_ = json.Unmarshal(body, &parsed)
+	errMsg := fmt.Sprintf("Jamf Pro API error (%d) [%s]: %s", statusCode, parsed.Code, parsed.Message)
+	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body, errMsg: errMsg}
 }
 
 func (m *PatchPoliciesMock) RegisterListMock() {
@@ -60,12 +75,47 @@ func (m *PatchPoliciesMock) RegisterEmptyListMock() {
 	m.register("GET", "/api/v2/patch-policies/policy-details", 200, "validate_empty_list.json")
 }
 
+func (m *PatchPoliciesMock) RegisterListSummaryMock() {
+	m.register("GET", "/api/v2/patch-policies", 200, "validate_list_summary.json")
+}
+
+func (m *PatchPoliciesMock) RegisterListSummaryEmptyMock() {
+	m.register("GET", "/api/v2/patch-policies", 200, "validate_list_summary_empty.json")
+}
+
+func (m *PatchPoliciesMock) RegisterListErrorMock() {
+	m.registerError("GET", "/api/v2/patch-policies/policy-details", 500, "error_not_found.json")
+}
+
+func (m *PatchPoliciesMock) RegisterListInvalidMock() {
+	m.register("GET", "/api/v2/patch-policies/policy-details", 200, "validate_list_invalid.json")
+}
+
+func (m *PatchPoliciesMock) RegisterListSummaryErrorMock() {
+	m.registerError("GET", "/api/v2/patch-policies", 500, "error_not_found.json")
+}
+
+func (m *PatchPoliciesMock) RegisterGetDashboardStatusErrorMock(id string) {
+	m.registerError("GET", "/api/v2/patch-policies/"+id+"/dashboard", 404, "error_not_found.json")
+}
+
+func (m *PatchPoliciesMock) RegisterAddToDashboardErrorMock(id string) {
+	m.registerError("POST", "/api/v2/patch-policies/"+id+"/dashboard", 500, "error_not_found.json")
+}
+
+func (m *PatchPoliciesMock) RegisterRemoveFromDashboardErrorMock(id string) {
+	m.registerError("DELETE", "/api/v2/patch-policies/"+id+"/dashboard", 500, "error_not_found.json")
+}
+
 func (m *PatchPoliciesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("PatchPoliciesMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("PatchPoliciesMock: no response registered for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -122,7 +172,9 @@ func (m *PatchPoliciesMock) GetPaginated(ctx context.Context, path string, _ map
 			Results json.RawMessage `json:"results"`
 		}
 		if err := json.Unmarshal(resp.Body, &wrapper); err == nil {
-			_ = mergePage(wrapper.Results)
+			if err := mergePage(wrapper.Results); err != nil {
+				return resp, err
+			}
 		}
 	}
 	return resp, nil

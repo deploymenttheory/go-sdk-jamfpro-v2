@@ -96,3 +96,49 @@ func TestUnit_SsoCertificate_ParseV2_Success(t *testing.T) {
 	assert.Equal(t, "key-1", result.Keys[0].ID)
 	assert.True(t, result.Keys[0].Valid)
 }
+
+func TestUnit_SsoCertificate_GetV2_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetV2(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_SsoCertificate_CreateV2_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.CreateV2(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_SsoCertificate_DeleteV2_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.DeleteV2(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_SsoCertificate_UpdateV2_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &UpdateKeystoreRequest{
+		Type:              "PKCS12",
+		KeystoreSetupType: "UPLOADED",
+		KeystorePassword:  "password",
+	}
+	_, _, err := svc.UpdateV2(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_SsoCertificate_DownloadV2_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.DownloadV2(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_SsoCertificate_ParseV2_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &ParseKeystoreRequest{
+		KeystoreFile:     "file",
+		KeystorePassword: "pass",
+		KeystoreFileName: "f.p12",
+	}
+	_, _, err := svc.ParseV2(context.Background(), req)
+	require.Error(t, err)
+}

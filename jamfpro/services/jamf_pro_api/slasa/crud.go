@@ -53,8 +53,7 @@ func (s *Service) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *inter
 	endpoint := EndpointSLASAV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResourceSLASAStatus

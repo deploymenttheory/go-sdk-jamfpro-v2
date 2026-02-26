@@ -1,0 +1,8 @@
+{
+  "totalCount": 3,
+  "results": [
+    {"siteId": "1", "objectType": "Computer", "objectId": "101"},
+    {"siteId": "1", "objectType": "MobileDevice", "objectId": "201"},
+    {"siteId": "1", "objectType": "User", "objectId": "301"}
+  ]
+}

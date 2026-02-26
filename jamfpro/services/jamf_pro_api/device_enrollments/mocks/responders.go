@@ -4,6 +4,7 @@ import (
 	"context"
 	_ "embed"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -29,6 +30,15 @@ var mockCreateResponse []byte
 
 //go:embed validate_disown.json
 var mockDisownResponse []byte
+
+//go:embed validate_add_history_notes.json
+var mockAddHistoryNotesResponse []byte
+
+//go:embed validate_latest_sync_state.json
+var mockLatestSyncStateResponse []byte
+
+//go:embed validate_devices.json
+var mockDevicesResponse []byte
 
 type registeredResponse struct {
 	method   string
@@ -56,10 +66,13 @@ func (m *DeviceEnrollmentsMock) dispatch(method, path string) ([]byte, int, bool
 	return nil, 0, false
 }
 
+// errNoMockRegistered is returned when no mock is registered for the request.
+var errNoMockRegistered = fmt.Errorf("no mock registered")
+
 func (m *DeviceEnrollmentsMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -80,7 +93,7 @@ func (m *DeviceEnrollmentsMock) Get(ctx context.Context, endpoint string, queryP
 func (m *DeviceEnrollmentsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("POST", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -107,7 +120,7 @@ func (m *DeviceEnrollmentsMock) PostMultipart(ctx context.Context, endpoint stri
 func (m *DeviceEnrollmentsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("PUT", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -126,7 +139,7 @@ func (m *DeviceEnrollmentsMock) Patch(ctx context.Context, endpoint string, body
 func (m *DeviceEnrollmentsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	_, status, found := m.dispatch("DELETE", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	return &interfaces.Response{StatusCode: status}, nil
@@ -135,7 +148,7 @@ func (m *DeviceEnrollmentsMock) Delete(ctx context.Context, endpoint string, que
 func (m *DeviceEnrollmentsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	_, status, found := m.dispatch("DELETE", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	return &interfaces.Response{StatusCode: status}, nil
@@ -144,7 +157,7 @@ func (m *DeviceEnrollmentsMock) DeleteWithBody(ctx context.Context, endpoint str
 func (m *DeviceEnrollmentsMock) GetBytes(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil, nil
+		return nil, nil, errNoMockRegistered
 	}
 
 	return &interfaces.Response{StatusCode: status}, body, nil
@@ -153,7 +166,7 @@ func (m *DeviceEnrollmentsMock) GetBytes(ctx context.Context, endpoint string, q
 func (m *DeviceEnrollmentsMock) GetPaginated(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 	if mergePage != nil && body != nil {
 		if err := mergePage(body); err != nil {
@@ -226,15 +239,10 @@ func RegisterGetPublicKeyMock(mock *DeviceEnrollmentsMock) {
 }
 
 func RegisterGetLatestSyncStateMock(mock *DeviceEnrollmentsMock) {
-	latestSync := `{
-  "syncState": "CONNECTION_ERROR",
-  "instanceId": "1",
-  "timestamp": "2019-04-17T14:08:06.706+0000"
-}`
 	mock.responses = append(mock.responses, registeredResponse{
 		method:   "GET",
 		path:     "/api/v1/device-enrollments/",
-		response: []byte(latestSync),
+		response: mockLatestSyncStateResponse,
 		status:   http.StatusOK,
 	})
 }
@@ -294,14 +302,19 @@ func RegisterDisownDevicesMock(mock *DeviceEnrollmentsMock) {
 }
 
 func RegisterAddHistoryNotesMock(mock *DeviceEnrollmentsMock) {
-	addHistoryResp := `{
-  "id": "1",
-  "href": "/api/v1/device-enrollments/1/history"
-}`
 	mock.responses = append(mock.responses, registeredResponse{
 		method:   "POST",
 		path:     "/api/v1/device-enrollments/",
-		response: []byte(addHistoryResp),
+		response: mockAddHistoryNotesResponse,
 		status:   http.StatusCreated,
+	})
+}
+
+func RegisterGetDevicesByIDMock(mock *DeviceEnrollmentsMock) {
+	mock.responses = append(mock.responses, registeredResponse{
+		method:   "GET",
+		path:     "/api/v1/device-enrollments/",
+		response: mockDevicesResponse,
+		status:   http.StatusOK,
 	})
 }

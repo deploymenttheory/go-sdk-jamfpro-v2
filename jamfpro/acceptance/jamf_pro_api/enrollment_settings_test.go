@@ -21,7 +21,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to enrollment settings
-//     -- Tests: TestAcceptance_EnrollmentSettings_GetV4
+//     -- Tests: TestAcceptance_EnrollmentSettings_get_v4
 //     -- Flow: Get settings → Verify response structure and status code
 //
 // Test Coverage
@@ -38,7 +38,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_EnrollmentSettings_GetV4(t *testing.T) {
+func TestAcceptance_EnrollmentSettings_get_v4(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.EnrollmentSettings
 	ctx := context.Background()

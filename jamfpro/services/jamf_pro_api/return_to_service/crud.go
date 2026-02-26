@@ -63,7 +63,11 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) ListV1(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
 	endpoint := EndpointReturnToServiceV1
 	var result ListResponse
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -80,7 +84,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceReturnToSe
 	}
 	endpoint := EndpointReturnToServiceV1 + "/" + id
 	var result ResourceReturnToServiceConfiguration
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	headers := map[string]string{"Accept": mime.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -97,7 +101,12 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceReturnToService
 	}
 	endpoint := EndpointReturnToServiceV1
 	var result CreateResponse
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -117,7 +126,12 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *Resource
 	}
 	endpoint := EndpointReturnToServiceV1 + "/" + id
 	var result ResourceReturnToServiceConfiguration
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -133,7 +147,11 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 		return nil, fmt.Errorf("id is required")
 	}
 	endpoint := EndpointReturnToServiceV1 + "/" + id
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return nil, err

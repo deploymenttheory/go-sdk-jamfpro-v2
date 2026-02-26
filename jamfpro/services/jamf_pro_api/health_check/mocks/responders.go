@@ -43,6 +43,7 @@ func (m *HealthCheckMock) register(method, path string, statusCode int, fixture 
 
 func (m *HealthCheckMock) RegisterMocks() {
 	m.register("GET", "/api/v1/health-check", 200, "validate_get.json")
+	m.register("GET", "/api/v1/health-status", 200, "validate_health_status.json")
 }
 
 func (m *HealthCheckMock) RegisterErrorMock() {

@@ -23,7 +23,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to LDAP groups and servers
-//     -- Tests: TestAcceptance_Ldap_GetLdapGroupsV1, TestAcceptance_Ldap_GetLdapServersV1
+//     -- Tests: TestAcceptance_Ldap_get_ldap_groups_v1, TestAcceptance_Ldap_get_ldap_servers_v1
 //     -- Flow: Get LDAP data → Verify response structure
 //
 //   ✗ Pattern 5: RSQL Filter Testing [MANDATORY - MISSING]
@@ -52,7 +52,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_Ldap_GetLdapGroupsV1(t *testing.T) {
+func TestAcceptance_Ldap_get_ldap_groups_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Ldap
 	ctx := context.Background()
@@ -65,7 +65,7 @@ func TestAcceptance_Ldap_GetLdapGroupsV1(t *testing.T) {
 	assert.NotNil(t, result.Results)
 }
 
-func TestAcceptance_Ldap_GetLdapServersV1(t *testing.T) {
+func TestAcceptance_Ldap_get_ldap_servers_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Ldap
 	ctx := context.Background()
@@ -77,7 +77,7 @@ func TestAcceptance_Ldap_GetLdapServersV1(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_Ldap_GetLdapGroupsV1_WithRSQLFilter(t *testing.T) {
+func TestAcceptance_Ldap_get_ldap_groups_v1_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Ldap
 	ctx := context.Background()

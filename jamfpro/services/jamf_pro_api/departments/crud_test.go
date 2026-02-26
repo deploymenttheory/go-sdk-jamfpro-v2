@@ -243,3 +243,87 @@ func TestUnit_Departments_AddHistoryNotesV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request body is required")
 }
+
+func TestUnit_Departments_DeleteDepartmentsByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteDepartmentsByIDMock()
+
+	req := &DeleteDepartmentsByIDRequest{IDs: []string{"1", "2", "3"}}
+	resp, err := svc.DeleteDepartmentsByIDV1(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 204, resp.StatusCode)
+}
+
+func TestUnit_Departments_DeleteDepartmentsByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.DeleteDepartmentsByIDV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "department IDs are required")
+}
+
+func TestUnit_Departments_DeleteDepartmentsByIDV1_EmptyIDs(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.DeleteDepartmentsByIDV1(context.Background(), &DeleteDepartmentsByIDRequest{IDs: []string{}})
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "department IDs are required")
+}
+
+func TestUnit_Departments_ListV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListInvalidJSONMock()
+
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_Departments_ListV1_APIError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListAPIErrorMock()
+
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_Departments_GetDepartmentHistoryV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterHistoryInvalidJSONMock()
+
+	result, resp, err := svc.GetDepartmentHistoryV1(context.Background(), "1", nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_Departments_GetDepartmentHistoryV1_APIError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterHistoryAPIErrorMock()
+
+	result, resp, err := svc.GetDepartmentHistoryV1(context.Background(), "1", nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_Departments_DeleteDepartmentsByIDV1_APIError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteDepartmentsByIDErrorMock()
+
+	req := &DeleteDepartmentsByIDRequest{IDs: []string{"1", "2"}}
+	resp, err := svc.DeleteDepartmentsByIDV1(context.Background(), req)
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}

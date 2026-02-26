@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
+	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -38,11 +41,23 @@ func (m *ImpactAlertNotificationSettingsMock) RegisterMocks() {
 	m.RegisterUpdateMock()
 }
 
-func (m *ImpactAlertNotificationSettingsMock) register(method, path string, statusCode int, body []byte) {
+func (m *ImpactAlertNotificationSettingsMock) register(method, path string, statusCode int, fixture string) {
+	var body []byte
+	if fixture != "" {
+		data, err := loadMockResponse(fixture)
+		if err != nil {
+			panic(fmt.Sprintf("ImpactAlertNotificationSettingsMock: failed to load fixture %q: %v", fixture, err))
+		}
+		body = data
+	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
-func (m *ImpactAlertNotificationSettingsMock) registerError(method, path string, statusCode int, body []byte) {
+func (m *ImpactAlertNotificationSettingsMock) registerError(method, path string, statusCode int, fixture string) {
+	body, err := loadMockResponse(fixture)
+	if err != nil {
+		panic(fmt.Sprintf("ImpactAlertNotificationSettingsMock: failed to load error fixture %q: %v", fixture, err))
+	}
 	var parsed struct {
 		Code    string `json:"code"`
 		Message string `json:"message"`
@@ -52,15 +67,20 @@ func (m *ImpactAlertNotificationSettingsMock) registerError(method, path string,
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body, errMsg: errMsg}
 }
 
+func loadMockResponse(filename string) ([]byte, error) {
+	_, callerPath, _, _ := runtime.Caller(0)
+	dir := filepath.Dir(callerPath)
+	data, err := os.ReadFile(filepath.Join(dir, filename))
+	if err != nil {
+		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
+	}
+	return data, nil
+}
+
 func (m *ImpactAlertNotificationSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("ImpactAlertNotificationSettingsMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("ImpactAlertNotificationSettingsMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -83,18 +103,20 @@ func (m *ImpactAlertNotificationSettingsMock) dispatch(method, path string, resu
 }
 
 func (m *ImpactAlertNotificationSettingsMock) RegisterGetMock() {
-	body := []byte(`{
-		"scopeableObjectsAlertEnabled": true,
-		"scopeableObjectsConfirmationCodeEnabled": false,
-		"deployableObjectsAlertEnabled": true,
-		"deployableObjectsConfirmationCodeEnabled": false
-	}`)
-	m.register("GET", "/api/v1/impact-alert-notification-settings", 200, body)
+	m.register("GET", "/api/v1/impact-alert-notification-settings", 200, "validate_get.json")
 }
 
 func (m *ImpactAlertNotificationSettingsMock) RegisterUpdateMock() {
 	// Update returns 204 No Content
-	m.register("PUT", "/api/v1/impact-alert-notification-settings", 204, []byte{})
+	m.register("PUT", "/api/v1/impact-alert-notification-settings", 204, "")
+}
+
+func (m *ImpactAlertNotificationSettingsMock) RegisterGetErrorMock() {
+	m.registerError("GET", "/api/v1/impact-alert-notification-settings", 404, "error_not_found.json")
+}
+
+func (m *ImpactAlertNotificationSettingsMock) RegisterUpdateErrorMock() {
+	m.registerError("PUT", "/api/v1/impact-alert-notification-settings", 400, "error_update.json")
 }
 
 func (m *ImpactAlertNotificationSettingsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

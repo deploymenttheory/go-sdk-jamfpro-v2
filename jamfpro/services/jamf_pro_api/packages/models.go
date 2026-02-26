@@ -105,6 +105,16 @@ type DeletePackagesByIDRequest struct {
 	IDs []string `json:"ids"`
 }
 
+// ExportRequest is the optional request body for ExportV1 and ExportHistoryV1.
+// Used to override query parameters when the URI would exceed the 2,000 character limit.
+type ExportRequest struct {
+	Page     *int     `json:"page,omitempty"`
+	PageSize *int     `json:"pageSize,omitempty"`
+	Sort     []string `json:"sort,omitempty"`
+	Filter   *string  `json:"filter,omitempty"`
+	Fields   []any    `json:"fields,omitempty"`
+}
+
 // BoolPtr returns a pointer to b. Use for required *bool fields in RequestPackage.
 func BoolPtr(b bool) *bool {
 	return &b

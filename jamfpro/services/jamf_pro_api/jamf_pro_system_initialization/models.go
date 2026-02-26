@@ -17,3 +17,15 @@ type ResourceSystemInitialize struct {
 	Email           string `json:"email,omitempty"`
 	JssUrl          string `json:"jssUrl"`
 }
+
+// ResourcePlatformInitialize is the request payload for initializing a Jamf Pro Server with OIDC SSO
+// and a federated user (no password required).
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-platform-initialize
+type ResourcePlatformInitialize struct {
+	ActivationCode  string `json:"activationCode"`
+	InstitutionName string `json:"institutionName"`
+	EulaAccepted    bool   `json:"eulaAccepted"`
+	Username        string `json:"username"`
+	Email           string `json:"email"`
+	JssUrl          string `json:"jssUrl"`
+}

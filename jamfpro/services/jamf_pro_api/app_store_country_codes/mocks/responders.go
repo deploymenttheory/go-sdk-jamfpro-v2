@@ -45,6 +45,10 @@ func (m *AppStoreCountryCodesMock) RegisterMocks() {
 	m.register("GET", "/api/v1/app-store-country-codes", 200, "validate_list.json")
 }
 
+func (m *AppStoreCountryCodesMock) RegisterEmptyListMock() {
+	m.register("GET", "/api/v1/app-store-country-codes", 200, "empty_list.json")
+}
+
 func (m *AppStoreCountryCodesMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	return m.dispatch("GET", path, result)
 }
@@ -97,7 +101,7 @@ func (m *AppStoreCountryCodesMock) GetLogger() *zap.Logger                     {
 func (m *AppStoreCountryCodesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("AppStoreCountryCodesMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("AppStoreCountryCodesMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if r.errMsg != "" {

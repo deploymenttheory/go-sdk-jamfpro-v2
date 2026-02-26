@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGetDefaultMappingsV2(t *testing.T) {
+func TestUnit_CloudLdap_GetDefaultMappingsV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterGetDefaultMappingsMock("GOOGLE")
 
@@ -26,7 +26,7 @@ func TestGetDefaultMappingsV2(t *testing.T) {
 	assert.Equal(t, "member", result.MembershipMappings.GroupMembershipMapping)
 }
 
-func TestGetDefaultServerConfigurationV2(t *testing.T) {
+func TestUnit_CloudLdap_GetDefaultServerConfigurationV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterGetDefaultServerConfigurationMock("GOOGLE")
 
@@ -44,7 +44,20 @@ func TestGetDefaultServerConfigurationV2(t *testing.T) {
 	assert.Equal(t, 60, result.SearchTimeout)
 }
 
-func TestGetDefaultMappingsV2_EmptyProviderName(t *testing.T) {
+func TestUnit_CloudLdap_GetDefaultServerConfigurationV2_EmptyProviderName(t *testing.T) {
+	mock := mocks.NewCloudLdapMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetDefaultServerConfigurationV2(ctx, "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "providerName is required")
+}
+
+func TestUnit_CloudLdap_GetDefaultMappingsV2_EmptyProviderName(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -57,7 +70,7 @@ func TestGetDefaultMappingsV2_EmptyProviderName(t *testing.T) {
 	assert.Contains(t, err.Error(), "providerName is required")
 }
 
-func TestCreateV2(t *testing.T) {
+func TestUnit_CloudLdap_CreateV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterCreateMock()
 
@@ -86,7 +99,7 @@ func TestCreateV2(t *testing.T) {
 	assert.Equal(t, "/api/v2/cloud-ldaps/1", result.Href)
 }
 
-func TestCreateV2_NilRequest(t *testing.T) {
+func TestUnit_CloudLdap_CreateV2_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -99,7 +112,30 @@ func TestCreateV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestGetByIDV2(t *testing.T) {
+func TestUnit_CloudLdap_CreateV2_APICallFails(t *testing.T) {
+	mock := mocks.NewCloudLdapMock()
+	mock.RegisterCreateErrorMock()
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	request := &ResourceCloudLdap{
+		CloudIdPCommon: &CloudIdPCommon{
+			ProviderName: "GOOGLE",
+			DisplayName:  "Test Google LDAP",
+		},
+	}
+
+	result, resp, err := svc.CreateV2(ctx, request)
+
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "server error")
+}
+
+func TestUnit_CloudLdap_GetByIDV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterGetByIDMock("1")
 
@@ -118,7 +154,7 @@ func TestGetByIDV2(t *testing.T) {
 	assert.Equal(t, "LDAPS", result.Server.ConnectionType)
 }
 
-func TestGetByIDV2_EmptyID(t *testing.T) {
+func TestUnit_CloudLdap_GetByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -131,7 +167,23 @@ func TestGetByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateByIDV2(t *testing.T) {
+func TestUnit_CloudLdap_GetByIDV2_APICallFails(t *testing.T) {
+	mock := mocks.NewCloudLdapMock()
+	mock.RegisterGetByIDErrorMock("999")
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByIDV2(ctx, "999")
+
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "not found")
+}
+
+func TestUnit_CloudLdap_UpdateByIDV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterUpdateByIDMock("1")
 
@@ -153,7 +205,7 @@ func TestUpdateByIDV2(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestUpdateByIDV2_EmptyID(t *testing.T) {
+func TestUnit_CloudLdap_UpdateByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -168,7 +220,7 @@ func TestUpdateByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateByIDV2_NilRequest(t *testing.T) {
+func TestUnit_CloudLdap_UpdateByIDV2_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -181,7 +233,7 @@ func TestUpdateByIDV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestDeleteByIDV2(t *testing.T) {
+func TestUnit_CloudLdap_DeleteByIDV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterDeleteByIDMock("1")
 
@@ -195,7 +247,7 @@ func TestDeleteByIDV2(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestDeleteByIDV2_EmptyID(t *testing.T) {
+func TestUnit_CloudLdap_DeleteByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -207,7 +259,7 @@ func TestDeleteByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetBindConnectionPoolStatsByIDV2(t *testing.T) {
+func TestUnit_CloudLdap_GetBindConnectionPoolStatsByIDV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterGetBindConnectionPoolStatsMock("1")
 
@@ -224,7 +276,7 @@ func TestGetBindConnectionPoolStatsByIDV2(t *testing.T) {
 	assert.Equal(t, int64(15), result.NumAvailableConnections)
 }
 
-func TestGetBindConnectionPoolStatsByIDV2_EmptyID(t *testing.T) {
+func TestUnit_CloudLdap_GetBindConnectionPoolStatsByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -237,7 +289,7 @@ func TestGetBindConnectionPoolStatsByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetSearchConnectionPoolStatsByIDV2(t *testing.T) {
+func TestUnit_CloudLdap_GetSearchConnectionPoolStatsByIDV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterGetSearchConnectionPoolStatsMock("1")
 
@@ -252,7 +304,7 @@ func TestGetSearchConnectionPoolStatsByIDV2(t *testing.T) {
 	assert.Equal(t, int64(95), result.NumSuccessfulCheckouts)
 }
 
-func TestGetSearchConnectionPoolStatsByIDV2_EmptyID(t *testing.T) {
+func TestUnit_CloudLdap_GetSearchConnectionPoolStatsByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -265,7 +317,7 @@ func TestGetSearchConnectionPoolStatsByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestTestConnectionByIDV2(t *testing.T) {
+func TestUnit_CloudLdap_TestConnectionByIDV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterTestConnectionMock("1")
 
@@ -280,7 +332,7 @@ func TestTestConnectionByIDV2(t *testing.T) {
 	assert.Equal(t, "Successfully connected", result.Status)
 }
 
-func TestTestConnectionByIDV2_EmptyID(t *testing.T) {
+func TestUnit_CloudLdap_TestConnectionByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -293,7 +345,7 @@ func TestTestConnectionByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetMappingsByIDV2(t *testing.T) {
+func TestUnit_CloudLdap_GetMappingsByIDV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterGetMappingsByIDMock("1")
 
@@ -309,7 +361,7 @@ func TestGetMappingsByIDV2(t *testing.T) {
 	assert.Equal(t, "cn", result.GroupMappings.GroupName)
 }
 
-func TestGetMappingsByIDV2_EmptyID(t *testing.T) {
+func TestUnit_CloudLdap_GetMappingsByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -322,7 +374,7 @@ func TestGetMappingsByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateMappingsByIDV2(t *testing.T) {
+func TestUnit_CloudLdap_UpdateMappingsByIDV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterUpdateMappingsByIDMock("1")
 
@@ -352,7 +404,7 @@ func TestUpdateMappingsByIDV2(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestUpdateMappingsByIDV2_EmptyID(t *testing.T) {
+func TestUnit_CloudLdap_UpdateMappingsByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -367,7 +419,7 @@ func TestUpdateMappingsByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateMappingsByIDV2_NilRequest(t *testing.T) {
+func TestUnit_CloudLdap_UpdateMappingsByIDV2_NilRequest(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
 	ctx := context.Background()

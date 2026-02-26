@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -64,10 +65,62 @@ func (m *MobileDevicePrestagesMock) RegisterEmptyListMock() {
 	m.register("GET", "/api/v3/mobile-device-prestages", 200, "validate_empty_list.json")
 }
 
+func (m *MobileDevicePrestagesMock) RegisterReplaceScopeByIDMock(id string) {
+	m.register("GET", "/api/v2/mobile-device-prestages/"+id+"/scope", 200, "validate_scope.json")
+	m.register("PUT", "/api/v2/mobile-device-prestages/"+id+"/scope", 200, "validate_scope.json")
+}
+
+// RegisterReplaceScopePutOnlyMock registers only PUT (no GET) to test scope fetch error.
+func (m *MobileDevicePrestagesMock) RegisterReplaceScopePutOnlyMock(id string) {
+	m.register("PUT", "/api/v2/mobile-device-prestages/"+id+"/scope", 200, "validate_scope.json")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterAddScopeByIDMock(id string) {
+	m.register("GET", "/api/v2/mobile-device-prestages/"+id+"/scope", 200, "validate_scope.json")
+	m.register("POST", "/api/v2/mobile-device-prestages/"+id+"/scope", 200, "validate_scope.json")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterRemoveScopeByIDMock(id string) {
+	m.register("GET", "/api/v2/mobile-device-prestages/"+id+"/scope", 200, "validate_scope.json")
+	m.register("POST", "/api/v2/mobile-device-prestages/"+id+"/scope/delete-multiple", 200, "validate_scope.json")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterGetAllSyncsMock() {
+	m.register("GET", "/api/v2/mobile-device-prestages/syncs", 200, "validate_syncs.json")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterGetSyncsByIDMock(id string) {
+	m.register("GET", "/api/v2/mobile-device-prestages/"+id+"/syncs", 200, "validate_syncs.json")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterGetLatestSyncByIDMock(id string) {
+	m.register("GET", "/api/v2/mobile-device-prestages/"+id+"/syncs/latest", 200, "validate_sync_latest.json")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterGetAttachmentsByIDMock(id string) {
+	m.register("GET", "/api/v3/mobile-device-prestages/"+id+"/attachments", 200, "validate_attachments.json")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterUploadAttachmentMock(id string) {
+	m.register("POST", "/api/v3/mobile-device-prestages/"+id+"/attachments", 200, "validate_attachment_upload.json")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterDeleteAttachmentsByIDMock(id string) {
+	m.register("POST", "/api/v3/mobile-device-prestages/"+id+"/attachments/delete-multiple", 200, "")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterGetHistoryByIDMock(id string) {
+	m.register("GET", "/api/v3/mobile-device-prestages/"+id+"/history", 200, "validate_history.json")
+}
+
+func (m *MobileDevicePrestagesMock) RegisterAddHistoryNoteByIDMock(id string) {
+	m.register("POST", "/api/v3/mobile-device-prestages/"+id+"/history", 200, "validate_add_history_note.json")
+}
+
 func (m *MobileDevicePrestagesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("MobileDevicePrestagesMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("MobileDevicePrestagesMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if result != nil && len(r.rawBody) > 0 {
@@ -118,15 +171,22 @@ func (m *MobileDevicePrestagesMock) GetBytes(ctx context.Context, path string, _
 func (m *MobileDevicePrestagesMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		// Extract the results array from the response for pagination
-		var wrapper struct {
-			Results json.RawMessage `json:"results"`
+		var pageData []byte
+		if strings.Contains(path, "/history") {
+			pageData = resp.Body
+		} else {
+			var wrapper struct {
+				Results json.RawMessage `json:"results"`
+			}
+			if err := json.Unmarshal(resp.Body, &wrapper); err == nil {
+				pageData = wrapper.Results
+			}
 		}
-		if err := json.Unmarshal(resp.Body, &wrapper); err == nil {
-			_ = mergePage(wrapper.Results)
+		if len(pageData) > 0 {
+			_ = mergePage(pageData)
 		}
 	}
 	return resp, nil

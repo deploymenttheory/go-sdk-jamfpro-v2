@@ -88,6 +88,24 @@ type (
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history
 		AddHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error)
 
+		// ExportV1 exports the packages collection as CSV or JSON.
+		//
+		// Query params: export-fields, export-labels, page, page-size, sort, filter.
+		// Optional request body overrides query params for long URIs.
+		// Accept header: text/csv or application/json. Returns raw bytes.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-export
+		ExportV1(ctx context.Context, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error)
+
+		// ExportHistoryV1 exports the package history for a specified package as CSV or JSON.
+		//
+		// Query params: export-fields, export-labels, page, page-size, sort, filter.
+		// Optional request body overrides query params for long URIs.
+		// Accept header: text/csv or application/json. Returns raw bytes.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history-export
+		ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error)
+
 		// CreateAndUpload creates package metadata, uploads the file, and verifies SHA3_512.
 		// Convenience method for creating and uploading a package.
 		//
@@ -146,7 +164,10 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list packages: %w", err)
 	}
@@ -167,8 +188,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourcePackage, *
 	var result ResourcePackage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -330,8 +350,7 @@ func (s *Service) DeletePackageManifestV1(ctx context.Context, id string) (*inte
 	endpoint := fmt.Sprintf("%s/%s/manifest", EndpointPackagesV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -353,8 +372,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointPackagesV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -403,8 +421,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[str
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -440,6 +457,57 @@ func (s *Service) AddHistoryNotesV1(ctx context.Context, id string, req *AddHist
 	}
 
 	return resp, nil
+}
+
+// ExportV1 exports the packages collection as CSV or JSON.
+// URL: POST /api/v1/packages/export
+// Query params: export-fields, export-labels, page, page-size, sort, filter
+// https://developer.jamf.com/jamf-pro/reference/post_v1-packages-export
+func (s *Service) ExportV1(ctx context.Context, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error) {
+	endpoint := EndpointPackagesExport
+	if acceptType == "" {
+		acceptType = mime.ApplicationJSON
+	}
+	headers := map[string]string{
+		"Accept":       acceptType,
+		"Content-Type": mime.ApplicationJSON,
+	}
+	var reqBody any
+	if body != nil {
+		reqBody = body
+	}
+	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, reqBody, headers, nil)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to export packages: %w", err)
+	}
+	return resp.Body, resp, nil
+}
+
+// ExportHistoryV1 exports the package history for a specified package as CSV or JSON.
+// URL: POST /api/v1/packages/{id}/history/export
+// Query params: export-fields, export-labels, page, page-size, sort, filter
+// https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history-export
+func (s *Service) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("package ID is required")
+	}
+	endpoint := fmt.Sprintf("%s/%s%s", EndpointPackagesV1, id, EndpointPackagesHistoryExport)
+	if acceptType == "" {
+		acceptType = mime.ApplicationJSON
+	}
+	headers := map[string]string{
+		"Accept":       acceptType,
+		"Content-Type": mime.ApplicationJSON,
+	}
+	var reqBody any
+	if body != nil {
+		reqBody = body
+	}
+	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, reqBody, headers, nil)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to export package history: %w", err)
+	}
+	return resp.Body, resp, nil
 }
 
 // CreateAndUpload creates package metadata, uploads the file, and verifies SHA3_512.

@@ -13,12 +13,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_VPPAccounts_Lifecycle exercises the full write/read/delete
+// TestAcceptance_VPPAccounts_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → UpdateByID → DeleteByID.
 // Note: the Classic API VPP accounts resource does not support ByName operations.
 // =============================================================================
 
-func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
+func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicVPPAccounts
@@ -29,7 +29,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test VPP account")
 
-	accountName := acc.UniqueName("acc-test-vpp")
+	accountName := acc.UniqueName("sdkv2_acc_acc-test-vpp")
 	createReq := &vpp_accounts.RequestVPPAccount{
 		Name:    accountName,
 		Country: "US",
@@ -102,7 +102,7 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-vpp-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-vpp-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating VPP account ID=%d to name=%q", accountID, updatedName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -134,10 +134,10 @@ func TestAcceptance_VPPAccounts_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_VPPAccounts_ValidationErrors tests client-side validation.
+// TestAcceptance_VPPAccounts_validation_errors tests client-side validation.
 // =============================================================================
 
-func TestAcceptance_VPPAccounts_ValidationErrors(t *testing.T) {
+func TestAcceptance_VPPAccounts_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicVPPAccounts
@@ -155,7 +155,7 @@ func TestAcceptance_VPPAccounts_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateVPPAccountByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &vpp_accounts.RequestVPPAccount{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &vpp_accounts.RequestVPPAccount{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "VPP account ID must be a positive integer")
 	})

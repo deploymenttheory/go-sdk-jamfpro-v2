@@ -45,10 +45,24 @@ func (m *SelfServiceSettingsMock) RegisterUpdateMock() {
 	m.register("PUT", "/api/v1/self-service/settings", 200, "validate_get.json")
 }
 
+func (m *SelfServiceSettingsMock) RegisterGetHistoryMock() {
+	m.register("GET", "/api/v1/self-service/settings/history", 200, "validate_history.json")
+}
+
+func (m *SelfServiceSettingsMock) RegisterGetHistoryInvalidMock() {
+	m.register("GET", "/api/v1/self-service/settings/history", 200, "validate_history_invalid.json")
+}
+
+func (m *SelfServiceSettingsMock) RegisterAddHistoryNotesMock() {
+	m.register("POST", "/api/v1/self-service/settings/history", 201, "validate_add_history_notes.json")
+}
+
+var errNoMockRegistered = fmt.Errorf("no mock registered")
+
 func (m *SelfServiceSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("SelfServiceSettingsMock: no response for %s %s", method, path)
+		return nil, errNoMockRegistered
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if result != nil && len(r.rawBody) > 0 {
@@ -102,7 +116,9 @@ func (m *SelfServiceSettingsMock) GetPaginated(ctx context.Context, path string,
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		_ = mergePage(resp.Body)
+		if err := mergePage(resp.Body); err != nil {
+			return resp, err
+		}
 	}
 	return resp, nil
 }

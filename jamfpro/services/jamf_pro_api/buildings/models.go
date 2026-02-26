@@ -63,3 +63,13 @@ type AddHistoryNotesRequest struct {
 type DeleteBuildingsByIDRequest struct {
 	IDs []string `json:"ids"`
 }
+
+// ExportRequest is the optional request body for ExportV1 and ExportHistoryV1.
+// Overrides query parameters when URI would exceed ~2k characters.
+type ExportRequest struct {
+	Page     *int      `json:"page,omitempty"`
+	PageSize *int      `json:"pageSize,omitempty"`
+	Sort     []string  `json:"sort,omitempty"`
+	Filter   *string   `json:"filter,omitempty"`
+	Fields   []string  `json:"fields,omitempty"`
+}

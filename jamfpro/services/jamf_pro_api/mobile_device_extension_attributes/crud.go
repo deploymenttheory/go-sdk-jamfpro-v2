@@ -54,6 +54,11 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes-id-history
 		AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddHistoryNoteRequest) (*interfaces.Response, error)
+
+		// GetDataDependencyByIDV1 returns smart group dependent objects for the specified mobile device extension attribute.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id-data-dependency
+		GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the mobile device extension attributes-related methods of the Jamf Pro API.
@@ -105,7 +110,10 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list mobile device extension attributes: %w", err)
 	}
@@ -126,8 +134,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceMobileDevi
 	var result ResourceMobileDeviceExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -203,8 +210,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDeviceExtensionAttributesV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -274,7 +280,10 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get mobile device extension attribute history: %w", err)
 	}
@@ -306,4 +315,28 @@ func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddH
 	}
 
 	return resp, nil
+}
+
+// GetDataDependencyByIDV1 returns smart group dependent objects for the specified mobile device extension attribute.
+// URL: GET /api/v1/mobile-device-extension-attributes/{id}/data-dependency
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id-data-dependency
+func (s *Service) GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("mobile device extension attribute ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/data-dependency", EndpointMobileDeviceExtensionAttributesV1, id)
+
+	var result DataDependencyResponse
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
 }

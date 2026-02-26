@@ -24,3 +24,14 @@ type HistoryResponse struct {
 	TotalCount int           `json:"totalCount"`
 	Results    []HistoryItem `json:"results"`
 }
+
+// RequestAddHistoryNotes is the request body for AddHistoryNotesV1.
+type RequestAddHistoryNotes struct {
+	Note string `json:"note"`
+}
+
+// ResponseAddHistoryNotes is the response for AddHistoryNotesV1 (201 Created).
+type ResponseAddHistoryNotes struct {
+	ID   string `json:"id"`
+	Href string `json:"href"`
+}

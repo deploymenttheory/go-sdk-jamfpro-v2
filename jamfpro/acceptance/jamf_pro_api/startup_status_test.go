@@ -21,7 +21,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to server startup status
-//     -- Tests: TestAcceptance_StartupStatus_GetV1
+//     -- Tests: TestAcceptance_StartupStatus_get_v1
 //     -- Flow: Get status → Verify response structure
 //
 // Test Coverage
@@ -39,7 +39,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_StartupStatus_GetV1(t *testing.T) {
+func TestAcceptance_StartupStatus_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.StartupStatus
 	ctx := context.Background()

@@ -29,12 +29,12 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Resources [COMPLETE]
 //     -- Reason: Groups are managed through computer_groups and mobile_device_groups services
-//     -- Tests: TestAcceptance_Groups_List, TestAcceptance_Groups_GetOperations
+//     -- Tests: TestAcceptance_Groups_list, TestAcceptance_Groups_get_operations
 //     -- Flow: List → GetByID → GetByName → GetByJamfProID
 //
 //   ✓ Pattern 5: RSQL Filter Testing [COMPLETE]
 //     -- Reason: ListV1 accepts rsqlQuery parameter for filtering
-//     -- Tests: TestAcceptance_Groups_ListWithRSQLFilter
+//     -- Tests: TestAcceptance_Groups_list_with_rsql_filter
 //     -- Flow: List all → List with RSQL filter → Verify filtered results
 //
 // Test Coverage
@@ -57,7 +57,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_Groups_List(t *testing.T) {
+func TestAcceptance_Groups_list(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -77,7 +77,7 @@ func TestAcceptance_Groups_List(t *testing.T) {
 	}
 }
 
-func TestAcceptance_Groups_ListWithPagination(t *testing.T) {
+func TestAcceptance_Groups_list_with_pagination(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -96,7 +96,7 @@ func TestAcceptance_Groups_ListWithPagination(t *testing.T) {
 	acc.LogTestSuccess(t, "Paginated list returned %d results (total: %d)", len(result.Results), result.TotalCount)
 }
 
-func TestAcceptance_Groups_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Groups_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -134,7 +134,7 @@ func TestAcceptance_Groups_ListWithRSQLFilter(t *testing.T) {
 		"Filtered results should be <= total results")
 }
 
-func TestAcceptance_Groups_GetByID(t *testing.T) {
+func TestAcceptance_Groups_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -160,7 +160,7 @@ func TestAcceptance_Groups_GetByID(t *testing.T) {
 	acc.LogTestSuccess(t, "Retrieved group - Name: %s, Type: %s", result.GroupName, result.GroupType)
 }
 
-func TestAcceptance_Groups_GetComputerGroupByName(t *testing.T) {
+func TestAcceptance_Groups_get_computer_group_by_name(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -193,7 +193,7 @@ func TestAcceptance_Groups_GetComputerGroupByName(t *testing.T) {
 	acc.LogTestSuccess(t, "Retrieved computer group - Name: %s, ID: %s", result.GroupName, result.GroupJamfProId)
 }
 
-func TestAcceptance_Groups_GetMobileGroupByName(t *testing.T) {
+func TestAcceptance_Groups_get_mobile_group_by_name(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -226,7 +226,7 @@ func TestAcceptance_Groups_GetMobileGroupByName(t *testing.T) {
 	acc.LogTestSuccess(t, "Retrieved mobile group - Name: %s, ID: %s", result.GroupName, result.GroupJamfProId)
 }
 
-func TestAcceptance_Groups_GetComputerGroupByJamfProID(t *testing.T) {
+func TestAcceptance_Groups_get_computer_group_by_jamf_pro_id(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -259,7 +259,7 @@ func TestAcceptance_Groups_GetComputerGroupByJamfProID(t *testing.T) {
 	acc.LogTestSuccess(t, "Retrieved computer group - Name: %s, Platform ID: %s", result.GroupName, result.GroupPlatformId)
 }
 
-func TestAcceptance_Groups_GetMobileGroupByJamfProID(t *testing.T) {
+func TestAcceptance_Groups_get_mobile_group_by_jamf_pro_id(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -292,7 +292,7 @@ func TestAcceptance_Groups_GetMobileGroupByJamfProID(t *testing.T) {
 	acc.LogTestSuccess(t, "Retrieved mobile group - Name: %s, Platform ID: %s", result.GroupName, result.GroupPlatformId)
 }
 
-func TestAcceptance_Groups_Update(t *testing.T) {
+func TestAcceptance_Groups_update(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 

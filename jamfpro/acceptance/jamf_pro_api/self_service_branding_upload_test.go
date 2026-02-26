@@ -24,7 +24,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern: Upload with temporary file
 //     -- Reason: Upload creates resources; use temp file for cleanup
-//     -- Tests: TestAcceptance_SelfServiceBrandingUpload_Upload
+//     -- Tests: TestAcceptance_SelfServiceBrandingUpload_upload
 //
 // Test Coverage
 // -----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_SelfServiceBrandingUpload_Upload(t *testing.T) {
+func TestAcceptance_SelfServiceBrandingUpload_upload(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SelfServiceBrandingUpload
 	ctx := context.Background()

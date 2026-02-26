@@ -13,12 +13,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_SoftwareUpdateServers_Lifecycle exercises the full
+// TestAcceptance_SoftwareUpdateServers_lifecycle exercises the full
 // write/read/delete lifecycle: Create → List → GetByID → GetByName →
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_SoftwareUpdateServers_Lifecycle(t *testing.T) {
+func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicSoftwareUpdateServers
@@ -29,7 +29,7 @@ func TestAcceptance_SoftwareUpdateServers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test software update server")
 
-	serverName := acc.UniqueName("acc-test-sus")
+	serverName := acc.UniqueName("sdkv2_acc_acc-test-sus")
 	createReq := &software_update_servers.RequestSoftwareUpdateServer{
 		Name:      serverName,
 		IPAddress: "192.168.200.10",
@@ -116,7 +116,7 @@ func TestAcceptance_SoftwareUpdateServers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-sus-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-sus-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating software update server ID=%d to name=%q", serverID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -183,16 +183,16 @@ func TestAcceptance_SoftwareUpdateServers_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_SoftwareUpdateServers_DeleteByName creates a server then deletes by name.
+// TestAcceptance_SoftwareUpdateServers_delete_by_name creates a server then deletes by name.
 // =============================================================================
 
-func TestAcceptance_SoftwareUpdateServers_DeleteByName(t *testing.T) {
+func TestAcceptance_SoftwareUpdateServers_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicSoftwareUpdateServers
 	ctx := context.Background()
 
-	serverName := acc.UniqueName("acc-test-sus-dbn")
+	serverName := acc.UniqueName("sdkv2_acc_acc-test-sus-dbn")
 	createReq := &software_update_servers.RequestSoftwareUpdateServer{
 		Name:      serverName,
 		IPAddress: "172.16.100.10",
@@ -227,10 +227,10 @@ func TestAcceptance_SoftwareUpdateServers_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_SoftwareUpdateServers_ValidationErrors tests client-side validation.
+// TestAcceptance_SoftwareUpdateServers_validation_errors tests client-side validation.
 // =============================================================================
 
-func TestAcceptance_SoftwareUpdateServers_ValidationErrors(t *testing.T) {
+func TestAcceptance_SoftwareUpdateServers_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicSoftwareUpdateServers
@@ -254,13 +254,13 @@ func TestAcceptance_SoftwareUpdateServers_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateSoftwareUpdateServerByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &software_update_servers.RequestSoftwareUpdateServer{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &software_update_servers.RequestSoftwareUpdateServer{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "software update server ID must be a positive integer")
 	})
 
 	t.Run("UpdateSoftwareUpdateServerByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &software_update_servers.RequestSoftwareUpdateServer{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &software_update_servers.RequestSoftwareUpdateServer{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "software update server name is required")
 	})

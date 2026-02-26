@@ -64,3 +64,18 @@ type HistoryResponse struct {
 type AddHistoryNoteRequest struct {
 	Note string `json:"note"`
 }
+
+// DataDependencyItem represents a single dependent object (e.g., smart group).
+type DataDependencyItem struct {
+	ID                int    `json:"id"`
+	ObjectID          int    `json:"objectId"`
+	NameLocalization  string `json:"nameLocalization"`
+	IdentifiableName  string `json:"identifiableName"`
+	Hyperlink         string `json:"hyperlink"`
+}
+
+// DataDependencyResponse is the response for GetDataDependencyByIDV1.
+type DataDependencyResponse struct {
+	TotalCount int                  `json:"totalCount"`
+	Results    []DataDependencyItem `json:"results"`
+}

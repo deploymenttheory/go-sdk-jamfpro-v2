@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestListV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_ListV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterListMock(mock)
 
@@ -28,7 +28,7 @@ func TestListV1(t *testing.T) {
 	assert.Equal(t, "Example Device Enrollment Instance", result.Results[0].Name)
 }
 
-func TestListV1_WithPagination(t *testing.T) {
+func TestUnit_DeviceEnrollments_ListV1_WithPagination(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterListMock(mock)
 
@@ -49,7 +49,19 @@ func TestListV1_WithPagination(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestGetByIDV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_ListV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, resp, err := svc.ListV1(ctx, nil)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to list device enrollments")
+}
+
+func TestUnit_DeviceEnrollments_GetByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterGetByIDMock(mock)
 
@@ -65,7 +77,7 @@ func TestGetByIDV1(t *testing.T) {
 	assert.Equal(t, "Example Device Enrollment Instance", result.Name)
 }
 
-func TestGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -76,7 +88,19 @@ func TestGetByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetByNameV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetByIDV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, resp, err := svc.GetByIDV1(ctx, "999")
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get device enrollment by ID")
+}
+
+func TestUnit_DeviceEnrollments_GetByNameV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterListMock(mock)
 
@@ -92,7 +116,7 @@ func TestGetByNameV1(t *testing.T) {
 	assert.Equal(t, "Example Device Enrollment Instance", result.Name)
 }
 
-func TestGetByNameV1_EmptyName(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetByNameV1_EmptyName(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -103,7 +127,7 @@ func TestGetByNameV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "name is required")
 }
 
-func TestGetByNameV1_NotFound(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetByNameV1_NotFound(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterListMock(mock)
 
@@ -116,7 +140,21 @@ func TestGetByNameV1_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "not found")
 }
 
-func TestGetHistoryV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetByNameV1_ListFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	// No mock registered - ListV1 will fail
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, resp, err := svc.GetByNameV1(ctx, "Example")
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to list device enrollments")
+}
+
+func TestUnit_DeviceEnrollments_GetHistoryV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterGetHistoryMock(mock)
 
@@ -133,7 +171,7 @@ func TestGetHistoryV1(t *testing.T) {
 	assert.Equal(t, 1, result.Results[0].ID)
 }
 
-func TestGetHistoryV1_EmptyID(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetHistoryV1_EmptyID(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -144,7 +182,19 @@ func TestGetHistoryV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetSyncStatesV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetHistoryV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, resp, err := svc.GetHistoryV1(ctx, "999", nil)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get device enrollment history")
+}
+
+func TestUnit_DeviceEnrollments_GetSyncStatesV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterGetSyncStatesMock(mock)
 
@@ -161,7 +211,7 @@ func TestGetSyncStatesV1(t *testing.T) {
 	assert.Equal(t, "1", result[0].InstanceID)
 }
 
-func TestGetSyncStatesV1_EmptyID(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetSyncStatesV1_EmptyID(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -172,7 +222,19 @@ func TestGetSyncStatesV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetLatestSyncStateV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetSyncStatesV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, resp, err := svc.GetSyncStatesV1(ctx, "999")
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get device enrollment sync states")
+}
+
+func TestUnit_DeviceEnrollments_GetLatestSyncStateV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterGetLatestSyncStateMock(mock)
 
@@ -188,7 +250,7 @@ func TestGetLatestSyncStateV1(t *testing.T) {
 	assert.Equal(t, "1", result.InstanceID)
 }
 
-func TestGetLatestSyncStateV1_EmptyID(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetLatestSyncStateV1_EmptyID(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -199,7 +261,19 @@ func TestGetLatestSyncStateV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestGetAllSyncStatesV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetLatestSyncStateV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, resp, err := svc.GetLatestSyncStateV1(ctx, "999")
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get latest sync state")
+}
+
+func TestUnit_DeviceEnrollments_GetAllSyncStatesV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterGetAllSyncStatesMock(mock)
 
@@ -214,7 +288,19 @@ func TestGetAllSyncStatesV1(t *testing.T) {
 	assert.Len(t, result, 1)
 }
 
-func TestGetPublicKeyV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetAllSyncStatesV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, resp, err := svc.GetAllSyncStatesV1(ctx)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get all device enrollment sync states")
+}
+
+func TestUnit_DeviceEnrollments_GetPublicKeyV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterGetPublicKeyMock(mock)
 
@@ -229,7 +315,19 @@ func TestGetPublicKeyV1(t *testing.T) {
 	assert.Contains(t, string(result), "BEGIN PUBLIC KEY")
 }
 
-func TestCreateWithTokenV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_GetPublicKeyV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, resp, err := svc.GetPublicKeyV1(ctx)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get device enrollments public key")
+}
+
+func TestUnit_DeviceEnrollments_CreateWithTokenV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterCreateWithTokenMock(mock)
 
@@ -250,7 +348,7 @@ func TestCreateWithTokenV1(t *testing.T) {
 	assert.NotEmpty(t, result.Href)
 }
 
-func TestCreateWithTokenV1_NilRequest(t *testing.T) {
+func TestUnit_DeviceEnrollments_CreateWithTokenV1_NilRequest(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -261,7 +359,7 @@ func TestCreateWithTokenV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestCreateWithTokenV1_EmptyToken(t *testing.T) {
+func TestUnit_DeviceEnrollments_CreateWithTokenV1_EmptyToken(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -277,7 +375,21 @@ func TestCreateWithTokenV1_EmptyToken(t *testing.T) {
 	assert.Contains(t, err.Error(), "encodedToken is required")
 }
 
-func TestUpdateByIDV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_CreateWithTokenV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	req := &RequestTokenUpload{EncodedToken: "token"}
+
+	_, resp, err := svc.CreateWithTokenV1(ctx, req)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to create device enrollment with token")
+}
+
+func TestUnit_DeviceEnrollments_UpdateByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterUpdateByIDMock(mock)
 
@@ -298,7 +410,7 @@ func TestUpdateByIDV1(t *testing.T) {
 	assert.Equal(t, "1", result.ID)
 }
 
-func TestUpdateByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DeviceEnrollments_UpdateByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -311,7 +423,7 @@ func TestUpdateByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateByIDV1_NilRequest(t *testing.T) {
+func TestUnit_DeviceEnrollments_UpdateByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -322,7 +434,7 @@ func TestUpdateByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUpdateByIDV1_EmptyName(t *testing.T) {
+func TestUnit_DeviceEnrollments_UpdateByIDV1_EmptyName(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -335,7 +447,21 @@ func TestUpdateByIDV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "name is required")
 }
 
-func TestUpdateTokenByIDV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_UpdateByIDV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	req := &RequestUpdate{Name: "Updated"}
+
+	_, resp, err := svc.UpdateByIDV1(ctx, "999", req)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to update device enrollment by ID")
+}
+
+func TestUnit_DeviceEnrollments_UpdateTokenByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterUpdateTokenByIDMock(mock)
 
@@ -354,7 +480,7 @@ func TestUpdateTokenByIDV1(t *testing.T) {
 	assert.Equal(t, "1", result.ID)
 }
 
-func TestUpdateTokenByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DeviceEnrollments_UpdateTokenByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -367,7 +493,7 @@ func TestUpdateTokenByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUpdateTokenByIDV1_NilRequest(t *testing.T) {
+func TestUnit_DeviceEnrollments_UpdateTokenByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -378,7 +504,7 @@ func TestUpdateTokenByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUpdateTokenByIDV1_EmptyToken(t *testing.T) {
+func TestUnit_DeviceEnrollments_UpdateTokenByIDV1_EmptyToken(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -391,7 +517,21 @@ func TestUpdateTokenByIDV1_EmptyToken(t *testing.T) {
 	assert.Contains(t, err.Error(), "encodedToken is required")
 }
 
-func TestDeleteByIDV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_UpdateTokenByIDV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	req := &RequestTokenUpload{EncodedToken: "token"}
+
+	_, resp, err := svc.UpdateTokenByIDV1(ctx, "999", req)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to update device enrollment token by ID")
+}
+
+func TestUnit_DeviceEnrollments_DeleteByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterDeleteByIDMock(mock)
 
@@ -405,7 +545,7 @@ func TestDeleteByIDV1(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestDeleteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DeviceEnrollments_DeleteByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -416,7 +556,19 @@ func TestDeleteByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestDisownDevicesByIDV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_DeleteByIDV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	resp, err := svc.DeleteByIDV1(ctx, "999")
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to delete device enrollment by ID")
+}
+
+func TestUnit_DeviceEnrollments_DisownDevicesByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterDisownDevicesMock(mock)
 
@@ -437,7 +589,7 @@ func TestDisownDevicesByIDV1(t *testing.T) {
 	assert.Equal(t, "FAILED", result.Devices["0o9i8u7y6t"])
 }
 
-func TestDisownDevicesByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DeviceEnrollments_DisownDevicesByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -450,7 +602,7 @@ func TestDisownDevicesByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestDisownDevicesByIDV1_NilRequest(t *testing.T) {
+func TestUnit_DeviceEnrollments_DisownDevicesByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -461,7 +613,7 @@ func TestDisownDevicesByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestDisownDevicesByIDV1_EmptyDevicesList(t *testing.T) {
+func TestUnit_DeviceEnrollments_DisownDevicesByIDV1_EmptyDevicesList(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -474,7 +626,21 @@ func TestDisownDevicesByIDV1_EmptyDevicesList(t *testing.T) {
 	assert.Contains(t, err.Error(), "devices list is required")
 }
 
-func TestAddHistoryNotesV1(t *testing.T) {
+func TestUnit_DeviceEnrollments_DisownDevicesByIDV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	req := &RequestDisown{Devices: []string{"serial1"}}
+
+	_, resp, err := svc.DisownDevicesByIDV1(ctx, "999", req)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to disown devices")
+}
+
+func TestUnit_DeviceEnrollments_AddHistoryNotesV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	mocks.RegisterAddHistoryNotesMock(mock)
 
@@ -494,7 +660,7 @@ func TestAddHistoryNotesV1(t *testing.T) {
 	assert.NotEmpty(t, result.Href)
 }
 
-func TestAddHistoryNotesV1_EmptyID(t *testing.T) {
+func TestUnit_DeviceEnrollments_AddHistoryNotesV1_EmptyID(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -507,7 +673,7 @@ func TestAddHistoryNotesV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestAddHistoryNotesV1_NilRequest(t *testing.T) {
+func TestUnit_DeviceEnrollments_AddHistoryNotesV1_NilRequest(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -518,7 +684,7 @@ func TestAddHistoryNotesV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestAddHistoryNotesV1_EmptyNote(t *testing.T) {
+func TestUnit_DeviceEnrollments_AddHistoryNotesV1_EmptyNote(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
 	svc := NewService(mock)
 	ctx := context.Background()
@@ -529,4 +695,61 @@ func TestAddHistoryNotesV1_EmptyNote(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "note is required")
+}
+
+func TestUnit_DeviceEnrollments_AddHistoryNotesV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	req := &RequestAddHistoryNotes{Note: "Test note"}
+
+	_, resp, err := svc.AddHistoryNotesV1(ctx, "999", req)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to add history notes")
+}
+
+func TestUnit_DeviceEnrollments_GetDevicesByIDV1_Success(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	mocks.RegisterGetDevicesByIDMock(mock)
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetDevicesByIDV1(ctx, "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	assert.Len(t, result.Results, 2)
+	assert.Equal(t, "ABC123", result.Results[0].SerialNumber)
+	assert.Equal(t, "ASSIGNED", result.Results[0].ProfileStatus)
+}
+
+func TestUnit_DeviceEnrollments_GetDevicesByIDV1_EmptyID(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, _, err := svc.GetDevicesByIDV1(ctx, "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "device enrollment ID is required")
+}
+
+func TestUnit_DeviceEnrollments_GetDevicesByIDV1_APIFailure(t *testing.T) {
+	mock := mocks.NewDeviceEnrollmentsMock()
+	// No mock registered - triggers errNoMockRegistered
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	_, resp, err := svc.GetDevicesByIDV1(ctx, "1")
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get devices")
 }

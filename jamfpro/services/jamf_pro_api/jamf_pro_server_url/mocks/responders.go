@@ -47,10 +47,20 @@ func (m *JamfProServerURLMock) RegisterUpdateMock() {
 	m.register("PUT", "/api/v1/jamf-pro-server-url", 200, "validate_update.json")
 }
 
+func (m *JamfProServerURLMock) RegisterGetHistoryMock() {
+	m.register("GET", "/api/v1/jamf-pro-server-url/history", 200, "validate_history.json")
+}
+
+func (m *JamfProServerURLMock) RegisterCreateHistoryNoteMock() {
+	m.register("POST", "/api/v1/jamf-pro-server-url/history", 201, "validate_history_note.json")
+}
+
+var errNoMockRegistered = fmt.Errorf("JamfProServerURLMock: no response registered")
+
 func (m *JamfProServerURLMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("JamfProServerURLMock: no response for %s %s", method, path)
+		return nil, errNoMockRegistered
 	}
 	resp := &interfaces.Response{
 		StatusCode: r.statusCode,

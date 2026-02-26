@@ -81,3 +81,8 @@ type HistoryResponse struct {
 	TotalCount int           `json:"totalCount"`
 	Results    []HistoryItem `json:"results"`
 }
+
+// RequestAddHistoryNote is the request body for AddHistoryNoteV1.
+type RequestAddHistoryNote struct {
+	Note string `json:"note"`
+}

@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
+	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -41,44 +44,62 @@ func (m *JCDSMock) RegisterMocks() {
 	m.RegisterRefreshInventoryMock()
 }
 
-func (m *JCDSMock) register(method, path string, statusCode int, rawJSON string) {
+func (m *JCDSMock) register(method, path string, statusCode int, fixture string) {
+	var body []byte
+	if fixture != "" {
+		data, err := loadMockResponse(fixture)
+		if err != nil {
+			panic(fmt.Sprintf("JCDSMock: load %q: %v", fixture, err))
+		}
+		body = data
+	}
 	key := method + " " + path
 	m.responses[key] = registeredResponse{
 		statusCode: statusCode,
-		rawBody:    []byte(rawJSON),
+		rawBody:    body,
 	}
 }
 
 func (m *JCDSMock) RegisterGetPackagesMock() {
-	m.register("GET", "/api/v1/jcds/files", 200, `[{
-		"fileName": "test-package.pkg",
-		"length": 1024000,
-		"md5": "abc123",
-		"region": "us-east-1",
-		"sha3": "def456"
-	}]`)
+	m.register("GET", "/api/v1/jcds/files", 200, "validate_get_packages.json")
 }
 
 func (m *JCDSMock) RegisterGetPackageURIByNameMock() {
-	m.register("GET", "/api/v1/jcds/files/test-package.pkg", 200, `{
-		"uri": "s3://jamf-bucket/path/test-package.pkg"
-	}`)
+	m.register("GET", "/api/v1/jcds/files/test-package.pkg", 200, "validate_get_package_uri.json")
 }
 
 func (m *JCDSMock) RegisterRenewCredentialsMock() {
-	m.register("POST", "/api/v1/jcds/renew-credentials", 200, `{
-		"accessKeyID": "test-access-key",
-		"secretAccessKey": "test-secret-key",
-		"sessionToken": "test-session-token",
-		"region": "us-east-1",
-		"bucketName": "jamf-bucket",
-		"path": "path/",
-		"uuid": "test-uuid"
-	}`)
+	m.register("POST", "/api/v1/jcds/renew-credentials", 200, "validate_renew_credentials.json")
 }
 
 func (m *JCDSMock) RegisterRefreshInventoryMock() {
-	m.register("POST", "/api/v1/jcds/refresh-inventory", 204, ``)
+	m.register("POST", "/api/v1/jcds/refresh-inventory", 204, "")
+}
+
+// RegisterUploadCredentialsMock registers POST /api/v1/jcds/files for CreatePackageV1/DeletePackageV1.
+func (m *JCDSMock) RegisterUploadCredentialsMock() {
+	m.register("POST", "/api/v1/jcds/files", 200, "validate_upload_credentials.json")
+}
+
+// RegisterErrorMock registers a mock that returns an error for testing error paths.
+func (m *JCDSMock) RegisterErrorMock(method, path string, errMsg string) {
+	key := method + " " + path
+	m.responses[key] = registeredResponse{
+		statusCode: 500,
+		rawBody:    nil,
+		errMsg:     errMsg,
+	}
+}
+
+// RegisterIncompleteCredentialsMock registers POST /api/v1/jcds/files with incomplete credentials.
+func (m *JCDSMock) RegisterIncompleteCredentialsMock() {
+	m.register("POST", "/api/v1/jcds/files", 200, "validate_upload_credentials_incomplete.json")
+}
+
+func loadMockResponse(filename string) ([]byte, error) {
+	_, callerPath, _, _ := runtime.Caller(0)
+	dir := filepath.Dir(callerPath)
+	return os.ReadFile(filepath.Join(dir, filename))
 }
 
 // Get implements interfaces.HTTPClient.

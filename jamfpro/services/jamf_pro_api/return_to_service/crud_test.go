@@ -15,6 +15,16 @@ func setupMockService(t *testing.T) (*Service, *mocks.ReturnToServiceMock) {
 	return NewService(mock), mock
 }
 
+func TestUnit_ReturnToService_ListV1_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered - dispatch returns nil, err
+
+	result, resp, err := svc.ListV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
 func TestUnit_ReturnToService_ListV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
@@ -123,4 +133,59 @@ func TestUnit_ReturnToService_DeleteByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
+}
+
+func TestUnit_ReturnToService_ListV1_APIError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListErrorMock()
+
+	result, resp, err := svc.ListV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_ReturnToService_GetByIDV1_APIError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetByIDErrorMock()
+
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_ReturnToService_CreateV1_APIError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterCreateErrorMock()
+
+	req := &ResourceReturnToServiceConfiguration{DisplayName: "New Config"}
+	result, resp, err := svc.CreateV1(context.Background(), req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_ReturnToService_UpdateByIDV1_APIError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateErrorMock()
+
+	req := &ResourceReturnToServiceConfiguration{DisplayName: "Updated Config"}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_ReturnToService_DeleteByIDV1_APIError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteErrorMock()
+
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
+	require.Error(t, err)
+	assert.Nil(t, resp)
 }

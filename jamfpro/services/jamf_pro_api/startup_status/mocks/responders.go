@@ -42,7 +42,7 @@ func (m *StartupStatusMock) RegisterGetStartupStatusMock() {
 func (m *StartupStatusMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("StartupStatusMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("StartupStatusMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if result != nil && len(r.rawBody) > 0 {

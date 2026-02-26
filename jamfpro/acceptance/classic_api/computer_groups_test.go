@@ -14,12 +14,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_Lifecycle exercises the full write/read/delete
+// TestAcceptance_ComputerGroups_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_ComputerGroups_Lifecycle(t *testing.T) {
+func TestAcceptance_ComputerGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerGroups
@@ -30,7 +30,7 @@ func TestAcceptance_ComputerGroups_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test computer group")
 
-	groupName := acc.UniqueName("acc-test-compgrp")
+	groupName := acc.UniqueName("sdkv2_acc_acc-test-compgrp")
 	createReq := &computer_groups.RequestComputerGroup{
 		Name:    groupName,
 		IsSmart: true,
@@ -134,7 +134,7 @@ func TestAcceptance_ComputerGroups_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-compgrp-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-compgrp-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating computer group ID=%d to name=%q", groupID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -238,16 +238,16 @@ func TestAcceptance_ComputerGroups_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_DeleteByName creates a computer group then deletes by name.
+// TestAcceptance_ComputerGroups_delete_by_name creates a computer group then deletes by name.
 // =============================================================================
 
-func TestAcceptance_ComputerGroups_DeleteByName(t *testing.T) {
+func TestAcceptance_ComputerGroups_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerGroups
 	ctx := context.Background()
 
-	groupName := acc.UniqueName("acc-test-compgrp-dbn")
+	groupName := acc.UniqueName("sdkv2_acc_acc-test-compgrp-dbn")
 	createReq := &computer_groups.RequestComputerGroup{
 		Name:    groupName,
 		IsSmart: false,
@@ -281,10 +281,10 @@ func TestAcceptance_ComputerGroups_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerGroups_ValidationErrors validates error handling.
+// TestAcceptance_ComputerGroups_validation_errors validates error handling.
 // =============================================================================
 
-func TestAcceptance_ComputerGroups_ValidationErrors(t *testing.T) {
+func TestAcceptance_ComputerGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerGroups
@@ -308,13 +308,13 @@ func TestAcceptance_ComputerGroups_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &computer_groups.RequestComputerGroup{Name: "test"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &computer_groups.RequestComputerGroup{Name: "sdkv2_acc_test"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "computer group ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &computer_groups.RequestComputerGroup{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &computer_groups.RequestComputerGroup{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "computer group name cannot be empty")
 	})

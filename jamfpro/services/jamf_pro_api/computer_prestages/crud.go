@@ -62,6 +62,21 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-prestages-id-scope
 		ReplaceDeviceScopeByIDV2(ctx context.Context, id string, request *ReplaceDeviceScopeRequest) (*ResourceDeviceScope, *interfaces.Response, error)
+
+		// GetAllDeviceScopeV2 returns device scope for all computer prestages (Get all scope; v2 API).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-prestages-scope
+		GetAllDeviceScopeV2(ctx context.Context) (*AllDeviceScopeResponse, *interfaces.Response, error)
+
+		// AddDeviceScopeByIDV2 adds device scope (serial numbers) to the computer prestage by ID (Post scope; v2 API).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-prestages-id-scope
+		AddDeviceScopeByIDV2(ctx context.Context, id string, request *AddDeviceScopeRequest) (*ResourceDeviceScope, *interfaces.Response, error)
+
+		// RemoveDeviceScopeByIDV2 removes device scope (serial numbers) from the computer prestage by ID (Post delete-multiple; v2 API).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-prestages-id-scope-delete-multiple
+		RemoveDeviceScopeByIDV2(ctx context.Context, id string, request *RemoveDeviceScopeRequest) (*ResourceDeviceScope, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the computer prestages-related methods of the Jamf Pro API.
@@ -87,8 +102,7 @@ func (s *Service) ListV3(ctx context.Context, query map[string]string) (*ListRes
 	endpoint := EndpointComputerPrestagesV3
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
@@ -112,8 +126,7 @@ func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceComputerPr
 	var result ResourceComputerPrestage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -261,8 +274,7 @@ func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointComputerPrestagesV3, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -295,8 +307,7 @@ func (s *Service) GetDeviceScopeByIDV2(ctx context.Context, id string) (*Resourc
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -337,6 +348,96 @@ func (s *Service) ReplaceDeviceScopeByIDV2(ctx context.Context, id string, reque
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetAllDeviceScopeV2 returns device scope for all computer prestages.
+// URL: GET /api/v2/computer-prestages/scope
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-prestages-scope
+func (s *Service) GetAllDeviceScopeV2(ctx context.Context) (*AllDeviceScopeResponse, *interfaces.Response, error) {
+	endpoint := EndpointComputerPrestagesV2 + "/scope"
+
+	var result AllDeviceScopeResponse
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// AddDeviceScopeByIDV2 adds device scope (serial numbers) to the computer prestage by ID.
+// URL: POST /api/v2/computer-prestages/{id}/scope
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-prestages-id-scope
+func (s *Service) AddDeviceScopeByIDV2(ctx context.Context, id string, request *AddDeviceScopeRequest) (*ResourceDeviceScope, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	currentScope, _, err := s.GetDeviceScopeByIDV2(ctx, id)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch current device scope for version locking: %w", err)
+	}
+
+	version_locking.EnsureVersionLock(currentScope, request)
+
+	endpoint := fmt.Sprintf("%s/%s/scope", EndpointComputerPrestagesV2, id)
+
+	var result ResourceDeviceScope
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// RemoveDeviceScopeByIDV2 removes device scope (serial numbers) from the computer prestage by ID.
+// URL: POST /api/v2/computer-prestages/{id}/scope/delete-multiple
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-prestages-id-scope-delete-multiple
+func (s *Service) RemoveDeviceScopeByIDV2(ctx context.Context, id string, request *RemoveDeviceScopeRequest) (*ResourceDeviceScope, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	currentScope, _, err := s.GetDeviceScopeByIDV2(ctx, id)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch current device scope for version locking: %w", err)
+	}
+
+	version_locking.EnsureVersionLock(currentScope, request)
+
+	endpoint := fmt.Sprintf("%s/%s/scope/delete-multiple", EndpointComputerPrestagesV2, id)
+
+	var result ResourceDeviceScope
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

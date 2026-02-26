@@ -19,12 +19,12 @@ func uniqueAccountName(prefix string) string {
 }
 
 // =============================================================================
-// TestAcceptance_Accounts_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Accounts_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
+func TestAcceptance_Accounts_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAccounts
@@ -35,10 +35,10 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test account")
 
-	accountName := acc.UniqueName("test-account")
+	accountName := acc.UniqueName("sdkv2_acc_test-account")
 	createReq := &accounts.RequestAccount{
 		Name:         accountName,
-		FullName:     "Test Account User",
+		FullName:     "sdkv2_acc_Test Account User",
 		Email:        fmt.Sprintf("%s@example.com", accountName),
 		EmailAddress: fmt.Sprintf("%s@example.com", accountName),
 		Password:     "TestPassword123!",
@@ -135,7 +135,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("updated-account")
+	updatedName := acc.UniqueName("sdkv2_acc_updated-account")
 	acc.LogTestStage(t, "UpdateByID", "Updating account ID=%d to name=%q", accountID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -143,7 +143,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 
 	updateReq := &accounts.RequestAccount{
 		Name:         updatedName,
-		FullName:     "Updated Account User",
+		FullName:     "sdkv2_acc_Updated Account User",
 		Email:        fmt.Sprintf("%s@example.com", updatedName),
 		EmailAddress: fmt.Sprintf("%s@example.com", updatedName),
 		AccessLevel:  "Full Access",
@@ -166,7 +166,7 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 
 	revertReq := &accounts.RequestAccount{
 		Name:         accountName,
-		FullName:     "Test Account User",
+		FullName:     "sdkv2_acc_Test Account User",
 		Email:        fmt.Sprintf("%s@example.com", accountName),
 		EmailAddress: fmt.Sprintf("%s@example.com", accountName),
 		AccessLevel:  "Full Access",
@@ -210,19 +210,19 @@ func TestAcceptance_Accounts_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Accounts_DeleteByName creates an account then deletes by name.
+// TestAcceptance_Accounts_delete_by_name creates an account then deletes by name.
 // =============================================================================
 
-func TestAcceptance_Accounts_DeleteByName(t *testing.T) {
+func TestAcceptance_Accounts_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAccounts
 	ctx := context.Background()
 
-	accountName := acc.UniqueName("test-delete-account")
+	accountName := acc.UniqueName("sdkv2_acc_test-delete-account")
 	createReq := &accounts.RequestAccount{
 		Name:         accountName,
-		FullName:     "Test Delete Account User",
+		FullName:     "sdkv2_acc_Test Delete Account User",
 		Email:        fmt.Sprintf("%s@example.com", accountName),
 		EmailAddress: fmt.Sprintf("%s@example.com", accountName),
 		Password:     "TestPassword123!",
@@ -259,11 +259,11 @@ func TestAcceptance_Accounts_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Accounts_ValidationErrors tests client-side validation
+// TestAcceptance_Accounts_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_Accounts_ValidationErrors(t *testing.T) {
+func TestAcceptance_Accounts_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAccounts
@@ -287,13 +287,13 @@ func TestAcceptance_Accounts_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateAccountByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &accounts.RequestAccount{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &accounts.RequestAccount{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account ID must be a positive integer")
 	})
 
 	t.Run("UpdateAccountByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &accounts.RequestAccount{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &accounts.RequestAccount{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "account name is required")
 	})

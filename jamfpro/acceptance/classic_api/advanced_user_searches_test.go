@@ -18,12 +18,12 @@ func uniqueUserSearchName(prefix string) string {
 }
 
 // =============================================================================
-// TestAcceptance_AdvancedUserSearches_Lifecycle exercises the full write/read/delete
+// TestAcceptance_AdvancedUserSearches_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
+func TestAcceptance_AdvancedUserSearches_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAdvancedUserSearches
@@ -229,10 +229,10 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_AdvancedUserSearches_DeleteByName creates a search then deletes by name.
+// TestAcceptance_AdvancedUserSearches_delete_by_name creates a search then deletes by name.
 // =============================================================================
 
-func TestAcceptance_AdvancedUserSearches_DeleteByName(t *testing.T) {
+func TestAcceptance_AdvancedUserSearches_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAdvancedUserSearches
@@ -283,11 +283,11 @@ func TestAcceptance_AdvancedUserSearches_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_AdvancedUserSearches_ValidationErrors tests client-side validation
+// TestAcceptance_AdvancedUserSearches_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_AdvancedUserSearches_ValidationErrors(t *testing.T) {
+func TestAcceptance_AdvancedUserSearches_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAdvancedUserSearches
@@ -311,13 +311,13 @@ func TestAcceptance_AdvancedUserSearches_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateAdvancedUserSearchByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &advanced_user_searches.RequestAdvancedUserSearch{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &advanced_user_searches.RequestAdvancedUserSearch{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced user search ID must be a positive integer")
 	})
 
 	t.Run("UpdateAdvancedUserSearchByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &advanced_user_searches.RequestAdvancedUserSearch{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &advanced_user_searches.RequestAdvancedUserSearch{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "advanced user search name is required")
 	})

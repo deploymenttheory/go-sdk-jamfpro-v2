@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_AdvancedMobileDeviceSearches_ListV1(t *testing.T) {
+func TestAcceptance_AdvancedMobileDeviceSearches_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AdvancedMobileDeviceSearches
 	ctx := context.Background()
@@ -25,7 +25,7 @@ func TestAcceptance_AdvancedMobileDeviceSearches_ListV1(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_AdvancedMobileDeviceSearches_Lifecycle(t *testing.T) {
+func TestAcceptance_AdvancedMobileDeviceSearches_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AdvancedMobileDeviceSearches
 	ctx := context.Background()

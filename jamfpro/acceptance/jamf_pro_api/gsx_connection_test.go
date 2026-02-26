@@ -23,17 +23,17 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 2: Settings/Configuration Testing
 //     -- Reason: GSX Connection is a singleton settings object (no Create/Delete)
-//     -- Tests: TestAcceptance_GSXConnection_GetAndUpdate
+//     -- Tests: TestAcceptance_GSXConnection_get_and_update
 //     -- Flow: Get current → Update → Get (verify) → Restore original
 //
 //   ✓ Pattern 4: History/Audit Trail Testing
 //     -- Reason: Service provides GetHistoryV1 for audit trail
-//     -- Tests: TestAcceptance_GSXConnection_History
+//     -- Tests: TestAcceptance_GSXConnection_history
 //     -- Flow: Get history → Verify structure
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_GSXConnection_ValidationErrors
+//     -- Tests: TestAcceptance_GSXConnection_validation_errors
 //     -- Cases: Nil request validation
 //
 // Test Coverage
@@ -53,7 +53,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_GSXConnection_GetAndUpdate(t *testing.T) {
+func TestAcceptance_GSXConnection_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.GSXConnection
@@ -95,7 +95,7 @@ func TestAcceptance_GSXConnection_GetAndUpdate(t *testing.T) {
 	assert.Equal(t, modified.Enabled, current.Enabled)
 }
 
-func TestAcceptance_GSXConnection_History(t *testing.T) {
+func TestAcceptance_GSXConnection_history(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.GSXConnection
@@ -126,7 +126,7 @@ func TestAcceptance_GSXConnection_History(t *testing.T) {
 	assert.NotNil(t, historyFiltered)
 }
 
-func TestAcceptance_GSXConnection_ValidationErrors(t *testing.T) {
+func TestAcceptance_GSXConnection_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.GSXConnection

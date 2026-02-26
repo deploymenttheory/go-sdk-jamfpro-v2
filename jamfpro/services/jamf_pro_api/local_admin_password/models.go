@@ -76,6 +76,21 @@ type CurrentPasswordResponse struct {
 	Password string `json:"password"`
 }
 
+// AccountHistoryResponse represents the LAPS history for a specific username (or username+guid).
+// History includes date created, date last seen, expiration time, and rotational status.
+type AccountHistoryResponse struct {
+	TotalCount int                 `json:"totalCount"`
+	Results    []AccountHistoryItem `json:"results"`
+}
+
+// AccountHistoryItem represents a single LAPS account history entry.
+type AccountHistoryItem struct {
+	CreatedDate    string `json:"createdDate"`
+	DateLastSeen   string `json:"dateLastSeen"`
+	ExpirationTime string `json:"expirationTime"`
+	RotationStatus string `json:"rotationStatus"` // PENDING, COMPLETED, VIEWED, ERROR, INVALID
+}
+
 // FullHistoryResponse represents the complete history of all local admin passwords.
 type FullHistoryResponse struct {
 	TotalCount int              `json:"totalCount"`

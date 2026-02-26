@@ -21,7 +21,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern: One-time mutation
 //     -- Reason: AcceptDisclaimerV2 is a one-time operation
-//     -- Tests: TestAcceptance_PatchManagement_AcceptDisclaimerV2
+//     -- Tests: TestAcceptance_PatchManagement_accept_disclaimer_v2
 //     -- Flow: Accept disclaimer → Verify 200 status
 //
 // Test Coverage
@@ -36,7 +36,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_PatchManagement_AcceptDisclaimerV2(t *testing.T) {
+func TestAcceptance_PatchManagement_accept_disclaimer_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PatchManagement
 	ctx := context.Background()

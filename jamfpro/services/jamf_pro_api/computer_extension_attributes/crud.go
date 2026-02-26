@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
@@ -56,6 +57,31 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes-id-history
 		AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddHistoryNoteRequest) (*interfaces.Response, error)
+
+		// ListTemplatesV1 returns all computer extension attribute templates.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-templates
+		ListTemplatesV1(ctx context.Context, rsqlQuery map[string]string) (*TemplateListResponse, *interfaces.Response, error)
+
+		// GetTemplateByIDV1 returns the specified computer extension attribute template by ID.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-templates-id
+		GetTemplateByIDV1(ctx context.Context, id string) (*ResourceComputerExtensionAttributeTemplate, *interfaces.Response, error)
+
+		// UploadV1 uploads a computer extension attribute (multipart/form-data).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes-upload
+		UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, filename string) (*ResourceComputerExtensionAttribute, *interfaces.Response, error)
+
+		// GetDataDependencyByIDV1 returns smart group/advanced search dependent objects for the specified computer extension attribute.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id-data-dependency
+		GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *interfaces.Response, error)
+
+		// DownloadByIDV1 downloads the specified computer extension attribute in XML format.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id-download
+		DownloadByIDV1(ctx context.Context, id string) ([]byte, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the computer extension attributes-related methods of the Jamf Pro API.
@@ -107,7 +133,10 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list computer extension attributes: %w", err)
 	}
@@ -128,8 +157,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceComputerEx
 	var result ResourceComputerExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -205,8 +233,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointComputerExtensionAttributesV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -276,7 +303,10 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get computer extension attribute history: %w", err)
 	}
@@ -308,4 +338,145 @@ func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddH
 	}
 
 	return resp, nil
+}
+
+// ListTemplatesV1 returns all computer extension attribute templates.
+// URL: GET /api/v1/computer-extension-attributes/templates
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-templates
+func (s *Service) ListTemplatesV1(ctx context.Context, rsqlQuery map[string]string) (*TemplateListResponse, *interfaces.Response, error) {
+	var result TemplateListResponse
+
+	endpoint := EndpointComputerExtensionAttributesV1 + "/templates"
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var template ResourceComputerExtensionAttributeTemplate
+				if err := mapstructure.Decode(item, &template); err != nil {
+					return fmt.Errorf("failed to decode template: %w", err)
+				}
+				result.Results = append(result.Results, template)
+			}
+		}
+
+		return nil
+	}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to list computer extension attribute templates: %w", err)
+	}
+
+	return &result, resp, nil
+}
+
+// GetTemplateByIDV1 returns the specified computer extension attribute template by ID.
+// URL: GET /api/v1/computer-extension-attributes/templates/{id}
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-templates-id
+func (s *Service) GetTemplateByIDV1(ctx context.Context, id string) (*ResourceComputerExtensionAttributeTemplate, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("template ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/templates/%s", EndpointComputerExtensionAttributesV1, id)
+
+	var result ResourceComputerExtensionAttributeTemplate
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// UploadV1 uploads a computer extension attribute (multipart/form-data).
+// URL: POST /api/v1/computer-extension-attributes/upload
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes-upload
+func (s *Service) UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, filename string) (*ResourceComputerExtensionAttribute, *interfaces.Response, error) {
+	if fileReader == nil {
+		return nil, nil, fmt.Errorf("file reader is required")
+	}
+	if filename == "" {
+		return nil, nil, fmt.Errorf("filename is required")
+	}
+
+	endpoint := EndpointComputerExtensionAttributesV1 + "/upload"
+
+	var result ResourceComputerExtensionAttribute
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.PostMultipart(ctx, endpoint, "file", filename, fileReader, fileSize, nil, headers, nil, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetDataDependencyByIDV1 returns smart group/advanced search dependent objects for the specified computer extension attribute.
+// URL: GET /api/v1/computer-extension-attributes/{id}/data-dependency
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id-data-dependency
+func (s *Service) GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("computer extension attribute ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/data-dependency", EndpointComputerExtensionAttributesV1, id)
+
+	var result DataDependencyResponse
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// DownloadByIDV1 downloads the specified computer extension attribute in XML format.
+// URL: GET /api/v1/computer-extension-attributes/{id}/download
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id-download
+func (s *Service) DownloadByIDV1(ctx context.Context, id string) ([]byte, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("computer extension attribute ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/download", EndpointComputerExtensionAttributesV1, id)
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationXML,
+	}
+
+	var result []byte
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
 }

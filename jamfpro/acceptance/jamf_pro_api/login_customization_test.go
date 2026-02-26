@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_LoginCustomization_GetV1(t *testing.T) {
+func TestAcceptance_LoginCustomization_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.LoginCustomization
 	ctx := context.Background()
@@ -21,7 +21,7 @@ func TestAcceptance_LoginCustomization_GetV1(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_LoginCustomization_UpdateV1(t *testing.T) {
+func TestAcceptance_LoginCustomization_update_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.LoginCustomization
 	ctx := context.Background()

@@ -17,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 // SsoSettingsMock is a test double implementing interfaces.HTTPClient.
@@ -33,9 +34,27 @@ func NewSsoSettingsMock() *SsoSettingsMock {
 func (m *SsoSettingsMock) register(method, path string, statusCode int, fixture string) {
 	var body []byte
 	if fixture != "" {
-		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+		data, err := os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+		if err != nil {
+			panic(fmt.Sprintf("SsoSettingsMock: load %q: %v", fixture, err))
+		}
+		body = data
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+func (m *SsoSettingsMock) registerError(method, path string, statusCode int, fixture string) {
+	body, err := os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+	if err != nil {
+		panic(fmt.Sprintf("SsoSettingsMock: load error fixture %q: %v", fixture, err))
+	}
+	var parsed struct {
+		Code    string `json:"code"`
+		Message string `json:"message"`
+	}
+	_ = json.Unmarshal(body, &parsed)
+	errMsg := fmt.Sprintf("Jamf Pro API error (%d) [%s]: %s", statusCode, parsed.Code, parsed.Message)
+	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body, errMsg: errMsg}
 }
 
 // RegisterGetMock registers a successful GET /api/v3/sso response.
@@ -73,14 +92,54 @@ func (m *SsoSettingsMock) RegisterDownloadMetadataMock() {
 	m.register("GET", "/api/v3/sso/metadata/download", 200, "")
 }
 
+// RegisterGetErrorMock registers an error response for GetV3.
+func (m *SsoSettingsMock) RegisterGetErrorMock() {
+	m.registerError("GET", "/api/v3/sso", 500, "error_not_found.json")
+}
+
+// RegisterUpdateErrorMock registers an error response for UpdateV3.
+func (m *SsoSettingsMock) RegisterUpdateErrorMock() {
+	m.registerError("PUT", "/api/v3/sso", 500, "error_not_found.json")
+}
+
+// RegisterGetDependenciesErrorMock registers an error response for GetEnrollmentCustomizationDependenciesV3.
+func (m *SsoSettingsMock) RegisterGetDependenciesErrorMock() {
+	m.registerError("GET", "/api/v3/sso/dependencies", 500, "error_not_found.json")
+}
+
+// RegisterDisableErrorMock registers an error response for DisableV3.
+func (m *SsoSettingsMock) RegisterDisableErrorMock() {
+	m.registerError("POST", "/api/v3/sso/disable", 500, "error_not_found.json")
+}
+
+// RegisterGetHistoryErrorMock registers an error response for GetHistoryV3.
+func (m *SsoSettingsMock) RegisterGetHistoryErrorMock() {
+	m.registerError("GET", "/api/v3/sso/history", 500, "error_not_found.json")
+}
+
+// RegisterAddHistoryNoteErrorMock registers an error response for AddHistoryNoteV3.
+func (m *SsoSettingsMock) RegisterAddHistoryNoteErrorMock() {
+	m.registerError("POST", "/api/v3/sso/history", 500, "error_not_found.json")
+}
+
+// RegisterDownloadMetadataErrorMock registers an error response for DownloadMetadataV3.
+func (m *SsoSettingsMock) RegisterDownloadMetadataErrorMock() {
+	m.registerError("GET", "/api/v3/sso/metadata/download", 500, "error_not_found.json")
+}
+
 func (m *SsoSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("SsoSettingsMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("SsoSettingsMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
-		_ = json.Unmarshal(r.rawBody, result)
+		if err := json.Unmarshal(r.rawBody, result); err != nil {
+			return resp, err
+		}
 	}
 	return resp, nil
 }
@@ -120,14 +179,14 @@ func (m *SsoSettingsMock) DeleteWithBody(ctx context.Context, path string, _ any
 func (m *SsoSettingsMock) GetBytes(ctx context.Context, path string, _ map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
-		return resp, nil, err
+		return nil, nil, err
 	}
 	return resp, resp.Body, nil
 }
 func (m *SsoSettingsMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
 		_ = mergePage(resp.Body)

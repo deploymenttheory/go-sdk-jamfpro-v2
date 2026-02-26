@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_AccessManagementSettings_GetV4(t *testing.T) {
+func TestAcceptance_AccessManagementSettings_get_v4(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AccessManagementSettings
 	ctx := context.Background()

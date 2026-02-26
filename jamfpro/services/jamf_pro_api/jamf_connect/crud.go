@@ -62,6 +62,11 @@ type (
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-history
 		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
 
+		// AddHistoryNoteV1 adds a note to the Jamf Connect history.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-history
+		AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNote) (*interfaces.Response, error)
+
 		// RetryDeploymentTasksByUUIDV1 retries Connect install tasks for specified computers.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-deployments-configprofileuuid-tasks-retry
@@ -91,8 +96,7 @@ func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *int
 	endpoint := EndpointJamfConnectV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -134,7 +138,10 @@ func (s *Service) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf connect config profiles: %w", err)
 	}
@@ -273,7 +280,10 @@ func (s *Service) GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQ
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get deployment tasks: %w", err)
 	}
@@ -313,12 +323,40 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get jamf connect history: %w", err)
 	}
 
 	return &result, resp, nil
+}
+
+// AddHistoryNoteV1 adds a note to the Jamf Connect history.
+// URL: POST /api/v1/jamf-connect/history
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-history
+func (s *Service) AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNote) (*interfaces.Response, error) {
+	if req == nil {
+		return nil, fmt.Errorf("request is required")
+	}
+	if req.Note == "" {
+		return nil, fmt.Errorf("note is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/history", EndpointJamfConnectV1)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }
 
 // RetryDeploymentTasksByUUIDV1 retries Connect install tasks for specified computers.

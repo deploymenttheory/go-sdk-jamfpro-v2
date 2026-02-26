@@ -53,8 +53,7 @@ func (s *Service) GetTokenExchangeDetailsV1(ctx context.Context) (*ResourceToken
 	var result ResourceTokenExchangeDetails
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -74,8 +73,7 @@ func (s *Service) GetTenantIDV1(ctx context.Context) (*ResourceTenantID, *interf
 	var result ResourceTenantID
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -93,8 +91,7 @@ func (s *Service) DeleteTokenExchangeV1(ctx context.Context) (*interfaces.Respon
 	endpoint := EndpointCSAV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

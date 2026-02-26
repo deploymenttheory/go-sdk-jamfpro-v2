@@ -13,12 +13,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_Classes_Lifecycle exercises the full write/read/delete
+// TestAcceptance_Classes_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_Classes_Lifecycle(t *testing.T) {
+func TestAcceptance_Classes_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicClasses
@@ -29,7 +29,7 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test class")
 
-	className := acc.UniqueName("acc-test-class")
+	className := acc.UniqueName("sdkv2_acc_acc-test-class")
 	createReq := &classes.RequestClass{
 		Name:        className,
 		Description: "Acceptance test class",
@@ -127,7 +127,7 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-class-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-class-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating class ID=%d to name=%q", classID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -195,16 +195,16 @@ func TestAcceptance_Classes_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Classes_DeleteByName creates a class then deletes by name.
+// TestAcceptance_Classes_delete_by_name creates a class then deletes by name.
 // =============================================================================
 
-func TestAcceptance_Classes_DeleteByName(t *testing.T) {
+func TestAcceptance_Classes_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicClasses
 	ctx := context.Background()
 
-	className := acc.UniqueName("acc-test-class-del")
+	className := acc.UniqueName("sdkv2_acc_acc-test-class-del")
 	createReq := &classes.RequestClass{
 		Name:        className,
 		Description: "Test class for delete by name",
@@ -238,11 +238,11 @@ func TestAcceptance_Classes_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_Classes_ValidationErrors tests client-side validation
+// TestAcceptance_Classes_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_Classes_ValidationErrors(t *testing.T) {
+func TestAcceptance_Classes_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicClasses
@@ -266,13 +266,13 @@ func TestAcceptance_Classes_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &classes.RequestClass{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &classes.RequestClass{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class ID must be a positive integer")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &classes.RequestClass{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &classes.RequestClass{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "class name is required")
 	})

@@ -39,8 +39,7 @@ func (s *Service) GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *in
 	var result ResourceEnrollmentSettingsV4
 	endpoint := EndpointEnrollmentSettingsV4
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

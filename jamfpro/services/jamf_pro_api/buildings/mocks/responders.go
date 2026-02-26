@@ -82,12 +82,7 @@ func (m *BuildingsMock) registerError(method, path string, statusCode int, fixtu
 func (m *BuildingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("BuildingsMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("BuildingsMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -167,6 +162,14 @@ func (m *BuildingsMock) RegisterGetBuildingHistoryNullDetailsMock() {
 
 func (m *BuildingsMock) RegisterAddBuildingHistoryNotesMock() {
 	m.register("POST", "/api/v1/buildings/1/history", 201, "")
+}
+
+func (m *BuildingsMock) RegisterExportBuildingsMock() {
+	m.register("POST", "/api/v1/buildings/export", 200, "validate_list_buildings.json")
+}
+
+func (m *BuildingsMock) RegisterExportBuildingHistoryMock() {
+	m.register("POST", "/api/v1/buildings/1/history/export", 200, "validate_get_history.json")
 }
 
 func (m *BuildingsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

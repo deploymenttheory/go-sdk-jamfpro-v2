@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetV2(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_GetV2_Success(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	mock.RegisterGetMock()
 
@@ -22,7 +22,20 @@ func TestGetV2(t *testing.T) {
 	assert.Len(t, result.ApplicationPaths, 2)
 }
 
-func TestUpdateV2(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_GetV2_ClientError(t *testing.T) {
+	mock := mocks.NewComputerInventoryCollectionSettingsMock()
+	// No mock registered - dispatch returns (nil, err)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetV2(context.Background())
+
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no mock registered")
+}
+
+func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_Success(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	mock.RegisterUpdateMock()
 
@@ -39,7 +52,7 @@ func TestUpdateV2(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUpdateV2_NilSettings(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_NilSettings(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	svc := NewService(mock)
 
@@ -50,7 +63,22 @@ func TestUpdateV2_NilSettings(t *testing.T) {
 	assert.Contains(t, err.Error(), "settings is required")
 }
 
-func TestCreateCustomPathV2(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_ClientError(t *testing.T) {
+	mock := mocks.NewComputerInventoryCollectionSettingsMock()
+	// No mock registered
+
+	svc := NewService(mock)
+	settings := &ResourceComputerInventoryCollectionSettings{
+		ComputerInventoryCollectionPreferences: SubsetPreferences{MonitorApplicationUsage: false},
+	}
+	resp, err := svc.UpdateV2(context.Background(), settings)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no mock registered")
+}
+
+func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_Success(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	mock.RegisterCreateCustomPathMock()
 
@@ -68,7 +96,7 @@ func TestCreateCustomPathV2(t *testing.T) {
 	assert.Contains(t, result.Href, "custom-path/3")
 }
 
-func TestCreateCustomPathV2_NilRequest(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_NilRequest(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	svc := NewService(mock)
 
@@ -80,7 +108,7 @@ func TestCreateCustomPathV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request body is required")
 }
 
-func TestCreateCustomPathV2_EmptyPath(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_EmptyPath(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	svc := NewService(mock)
 
@@ -93,7 +121,21 @@ func TestCreateCustomPathV2_EmptyPath(t *testing.T) {
 	assert.Contains(t, err.Error(), "path is required")
 }
 
-func TestDeleteCustomPathByIDV2(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_ClientError(t *testing.T) {
+	mock := mocks.NewComputerInventoryCollectionSettingsMock()
+	// No mock registered
+
+	svc := NewService(mock)
+	req := &RequestCustomPath{Scope: "USER", Path: "/Users/Shared/CustomApp"}
+	result, resp, err := svc.CreateCustomPathV2(context.Background(), req)
+
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no mock registered")
+}
+
+func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_Success(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	mock.RegisterDeleteCustomPathMock()
 
@@ -105,7 +147,7 @@ func TestDeleteCustomPathByIDV2(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestDeleteCustomPathByIDV2_EmptyID(t *testing.T) {
+func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_EmptyID(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
 	svc := NewService(mock)
 
@@ -114,4 +156,16 @@ func TestDeleteCustomPathByIDV2_EmptyID(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "custom path ID is required")
+}
+
+func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_ClientError(t *testing.T) {
+	mock := mocks.NewComputerInventoryCollectionSettingsMock()
+	// No mock registered
+
+	svc := NewService(mock)
+	resp, err := svc.DeleteCustomPathByIDV2(context.Background(), "3")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no mock registered")
 }

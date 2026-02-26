@@ -10,11 +10,11 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_ComputerInventoryCollection_Get tests retrieving computer
+// TestAcceptance_ComputerInventoryCollection_get tests retrieving computer
 // inventory collection settings.
 // =============================================================================
 
-func TestAcceptance_ComputerInventoryCollection_Get(t *testing.T) {
+func TestAcceptance_ComputerInventoryCollection_get(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerInventoryCollection
@@ -36,12 +36,12 @@ func TestAcceptance_ComputerInventoryCollection_Get(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerInventoryCollection_Update tests updating computer
+// TestAcceptance_ComputerInventoryCollection_update tests updating computer
 // inventory collection settings. Uses Get to fetch current state, then Update
 // to restore it to avoid changing server configuration.
 // =============================================================================
 
-func TestAcceptance_ComputerInventoryCollection_Update(t *testing.T) {
+func TestAcceptance_ComputerInventoryCollection_update(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerInventoryCollection
@@ -70,11 +70,11 @@ func TestAcceptance_ComputerInventoryCollection_Update(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_ComputerInventoryCollection_ValidationErrors tests client-side
+// TestAcceptance_ComputerInventoryCollection_validation_errors tests client-side
 // validation without making any network calls.
 // =============================================================================
 
-func TestAcceptance_ComputerInventoryCollection_ValidationErrors(t *testing.T) {
+func TestAcceptance_ComputerInventoryCollection_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerInventoryCollection

@@ -16,6 +16,12 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
 		GetV1(ctx context.Context) (healthy bool, resp *interfaces.Response, err error)
+
+		// GetHealthStatusV1 returns request acceptance ratios for each concurrency group and time window.
+		// Only available in Jamf Cloud; returns 404 on non-cloud nodes.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-status
+		GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the health check-related methods of the Jamf Pro API.
@@ -43,8 +49,7 @@ func (s *Service) GetV1(ctx context.Context) (bool, *interfaces.Response, error)
 	endpoint := EndpointHealthCheckV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, nil)
@@ -53,4 +58,24 @@ func (s *Service) GetV1(ctx context.Context) (bool, *interfaces.Response, error)
 	}
 
 	return resp != nil && resp.StatusCode == 200, resp, nil
+}
+
+// GetHealthStatusV1 returns request acceptance ratios for each concurrency group and time window.
+// URL: GET /api/v1/health-status
+// Only available in Jamf Cloud; returns 404 on non-cloud nodes.
+func (s *Service) GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus, *interfaces.Response, error) {
+	endpoint := EndpointHealthStatusV1
+
+	var result ResourceHealthStatus
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
 }

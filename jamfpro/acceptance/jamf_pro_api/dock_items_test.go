@@ -26,13 +26,13 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 1: Full CRUD Lifecycle (without List)
 //     -- Reason: Service supports Create, Read (GetByID only), Update, Delete operations
-//     -- Tests: TestAcceptance_DockItems_Lifecycle
+//     -- Tests: TestAcceptance_DockItems_lifecycle
 //     -- Flow: Create → GetByID → Update → Verify → Delete
 //     -- Note: No List operation available for this service
 //
 //   ✓ Pattern 7: Validation Errors
 //     -- Reason: Client-side validation prevents invalid API calls
-//     -- Tests: TestAcceptance_DockItems_ValidationErrors
+//     -- Tests: TestAcceptance_DockItems_validation_errors
 //     -- Cases: Empty IDs, nil requests, missing required fields
 //
 //   Note: RSQL Filter Testing NOT applicable
@@ -58,11 +58,11 @@ import (
 //   • Update response may not include body - verification done via re-fetch
 //
 // =============================================================================
-// TestAcceptance_DockItems_Lifecycle exercises the full write/read/delete
+// TestAcceptance_DockItems_lifecycle exercises the full write/read/delete
 // lifecycle: Create → GetByID → Update → GetByID (verify) → Delete.
 // =============================================================================
 
-func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
+func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DockItems
@@ -72,7 +72,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test dock item")
 
 	createReq := &dock_items.RequestDockItem{
-		Name: acc.UniqueName("acc-test-dock"),
+		Name: acc.UniqueName("sdkv2_acc_acc-test-dock"),
 		Path: "/Applications/Safari.app",
 		Type: dock_items.TypeApp,
 	}
@@ -109,7 +109,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating dock item ID=%s", dockItemID)
 
 	updateReq := &dock_items.RequestDockItem{
-		Name: acc.UniqueName("acc-test-dock-updated"),
+		Name: acc.UniqueName("sdkv2_acc_acc-test-dock-updated"),
 		Path: "/Applications/Google Chrome.app",
 		Type: dock_items.TypeApp,
 	}
@@ -138,10 +138,10 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_DockItems_ValidationErrors
+// TestAcceptance_DockItems_validation_errors
 // =============================================================================
 
-func TestAcceptance_DockItems_ValidationErrors(t *testing.T) {
+func TestAcceptance_DockItems_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DockItems
@@ -160,7 +160,7 @@ func TestAcceptance_DockItems_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateDockItemByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.UpdateByIDV1(context.Background(), "", &dock_items.RequestDockItem{
-			Name: "x", Path: "/path", Type: dock_items.TypeApp,
+			Name: "sdkv2_acc_x", Path: "/path", Type: dock_items.TypeApp,
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")

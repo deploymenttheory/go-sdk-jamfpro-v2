@@ -31,6 +31,11 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings-history
 		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+
+		// AddHistoryNotesV1 adds a note to the device communication settings history.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-communication-settings-history
+		AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the device communication settings-related methods of the Jamf Pro API.
@@ -53,7 +58,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *interfaces.Response, error) {
 	var result ResourceDeviceCommunicationSettings
 	endpoint := EndpointDeviceCommunicationSettingsV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	headers := map[string]string{"Accept": mime.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -109,10 +114,34 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	}
 
 	endpoint := EndpointDeviceCommunicationSettingsHistoryV1
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device communication settings history: %w", err)
 	}
 
+	return &result, resp, nil
+}
+
+// AddHistoryNotesV1 adds a note to the device communication settings history.
+// URL: POST /api/v1/device-communication-settings/history
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-communication-settings-history
+func (s *Service) AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error) {
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+	if req.Note == "" {
+		return nil, nil, fmt.Errorf("note is required")
+	}
+
+	var result ResponseAddHistoryNotes
+	endpoint := EndpointDeviceCommunicationSettingsHistoryV1
+	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
 	return &result, resp, nil
 }

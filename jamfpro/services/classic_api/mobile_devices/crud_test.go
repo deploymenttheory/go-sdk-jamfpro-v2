@@ -294,3 +294,90 @@ func TestUnit_MobileDevices_NotFound(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "Resource not found")
 }
+
+func TestUnit_MobileDevices_List_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDevices_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "iPhone")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDevices_GetByIDAndDataSubset_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.GetByIDAndDataSubset(context.Background(), "1", "General")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDevices_GetByNameAndDataSubset_EmptySubset(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.GetByNameAndDataSubset(context.Background(), "iPhone", "")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "data subset cannot be empty")
+}
+
+func TestUnit_MobileDevices_GetByNameAndDataSubset_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.GetByNameAndDataSubset(context.Background(), "iPhone", "General")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDevices_Create_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.Create(context.Background(), &mobile_devices.ResponseMobileDevice{})
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDevices_UpdateByID_NilDevice(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device is required")
+}
+
+func TestUnit_MobileDevices_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), "1", &mobile_devices.ResponseMobileDevice{})
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDevices_UpdateByName_NilDevice(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "iPhone", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device is required")
+}
+
+func TestUnit_MobileDevices_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "iPhone", &mobile_devices.ResponseMobileDevice{})
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDevices_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDevices_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDevicesMock()
+	svc := mobile_devices.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "iPhone")
+	require.Error(t, err)
+}

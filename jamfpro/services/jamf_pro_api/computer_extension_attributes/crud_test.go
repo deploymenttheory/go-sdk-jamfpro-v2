@@ -1,7 +1,9 @@
 package computer_extension_attributes
 
 import (
+	"bytes"
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_extension_attributes/mocks"
@@ -249,4 +251,183 @@ func TestUnit_ComputerExtensionAttributes_AddHistoryNoteByIDV1_NilRequest(t *tes
 	require.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_ComputerExtensionAttributes_ListV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListInvalidMock()
+
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to list computer extension attributes")
+}
+
+func TestUnit_ComputerExtensionAttributes_GetHistoryByIDV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterHistoryInvalidMock()
+
+	result, resp, err := svc.GetHistoryByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get computer extension attribute history")
+}
+
+func TestUnit_ComputerExtensionAttributes_ListTemplatesV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListTemplatesMock()
+
+	result, resp, err := svc.ListTemplatesV1(context.Background(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	assert.Equal(t, "1", result.Results[0].ID)
+	assert.Equal(t, "Template One", result.Results[0].Name)
+	assert.Equal(t, "2", result.Results[1].ID)
+	assert.Equal(t, "Template Two", result.Results[1].Name)
+}
+
+func TestUnit_ComputerExtensionAttributes_ListTemplatesV1_WithRsqlQuery(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListTemplatesMock()
+
+	params := map[string]string{"page": "0", "page-size": "50"}
+	result, resp, err := svc.ListTemplatesV1(context.Background(), params)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_ComputerExtensionAttributes_ListTemplatesV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListTemplatesInvalidMock()
+
+	result, resp, err := svc.ListTemplatesV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to list computer extension attribute templates")
+}
+
+func TestUnit_ComputerExtensionAttributes_GetTemplateByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetTemplateMock()
+
+	result, resp, err := svc.GetTemplateByIDV1(context.Background(), "1")
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, "1", result.ID)
+	assert.Equal(t, "Template One", result.Name)
+	assert.Equal(t, "STRING", result.DataType)
+	assert.Equal(t, "General", result.TemplateCategory)
+}
+
+func TestUnit_ComputerExtensionAttributes_GetTemplateByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetTemplateByIDV1(context.Background(), "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "template ID is required")
+}
+
+func TestUnit_ComputerExtensionAttributes_UploadV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUploadMock()
+
+	fileContent := []byte("#!/bin/bash\necho test")
+	reader := bytes.NewReader(fileContent)
+
+	result, resp, err := svc.UploadV1(context.Background(), reader, int64(len(fileContent)), "test_script.sh")
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, "1", result.ID)
+	assert.Equal(t, "EA One", result.Name)
+}
+
+func TestUnit_ComputerExtensionAttributes_UploadV1_NilFileReader(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.UploadV1(context.Background(), nil, 100, "test.sh")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "file reader is required")
+}
+
+func TestUnit_ComputerExtensionAttributes_UploadV1_EmptyFilename(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	reader := strings.NewReader("content")
+	result, resp, err := svc.UploadV1(context.Background(), reader, 7, "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "filename is required")
+}
+
+func TestUnit_ComputerExtensionAttributes_GetDataDependencyByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDataDependencyMock()
+
+	result, resp, err := svc.GetDataDependencyByIDV1(context.Background(), "1")
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	assert.Equal(t, 1, result.Results[0].ID)
+	assert.Equal(t, "Smart Group A", result.Results[0].IdentifiableName)
+	assert.Equal(t, 2, result.Results[1].ID)
+	assert.Equal(t, "Advanced Search B", result.Results[1].IdentifiableName)
+}
+
+func TestUnit_ComputerExtensionAttributes_GetDataDependencyByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetDataDependencyByIDV1(context.Background(), "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "computer extension attribute ID is required")
+}
+
+func TestUnit_ComputerExtensionAttributes_DownloadByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDownloadMock()
+
+	result, resp, err := svc.DownloadByIDV1(context.Background(), "1")
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.NotEmpty(t, result)
+	assert.Contains(t, string(result), "<computer_extension_attribute>")
+	assert.Contains(t, string(result), "<id>1</id>")
+}
+
+func TestUnit_ComputerExtensionAttributes_DownloadByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.DownloadByIDV1(context.Background(), "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "computer extension attribute ID is required")
 }

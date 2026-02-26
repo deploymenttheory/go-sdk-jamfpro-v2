@@ -22,7 +22,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✗ Pattern 2: Settings/Configuration [INCOMPLETE]
 //     -- Reason: Singleton settings that cannot be created or deleted, only updated
-//     -- Tests: TestAcceptance_DeviceCommunicationSettings_GetV1, TestAcceptance_DeviceCommunicationSettings_UpdateV1
+//     -- Tests: TestAcceptance_DeviceCommunicationSettings_get_v1, TestAcceptance_DeviceCommunicationSettings_update_v1
 //     -- Flow: Get → Update (same values) - MISSING proper update/restore cycle
 //     -- Status: Tests exist but don't implement full Pattern 2 workflow
 //
@@ -46,7 +46,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_DeviceCommunicationSettings_GetV1(t *testing.T) {
+func TestAcceptance_DeviceCommunicationSettings_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.DeviceCommunicationSettings
 	ctx := context.Background()
@@ -58,7 +58,7 @@ func TestAcceptance_DeviceCommunicationSettings_GetV1(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_DeviceCommunicationSettings_UpdateV1(t *testing.T) {
+func TestAcceptance_DeviceCommunicationSettings_update_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.DeviceCommunicationSettings
 	ctx := context.Background()

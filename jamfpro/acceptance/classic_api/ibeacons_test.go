@@ -14,12 +14,12 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_IBeacons_Lifecycle exercises the full write/read/delete
+// TestAcceptance_IBeacons_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
+func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicIBeacons
@@ -30,7 +30,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test iBeacon")
 
-	beaconName := acc.UniqueName("acc-test-ibeacon")
+	beaconName := acc.UniqueName("sdkv2_acc_acc-test-ibeacon")
 	createReq := &ibeacons.RequestIBeacon{
 		Name:  beaconName,
 		UUID:  "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0",
@@ -119,7 +119,7 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-ibeacon-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-ibeacon-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating iBeacon ID=%d to name=%q", beaconID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -188,16 +188,16 @@ func TestAcceptance_IBeacons_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_IBeacons_DeleteByName creates an iBeacon then deletes by name.
+// TestAcceptance_IBeacons_delete_by_name creates an iBeacon then deletes by name.
 // =============================================================================
 
-func TestAcceptance_IBeacons_DeleteByName(t *testing.T) {
+func TestAcceptance_IBeacons_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicIBeacons
 	ctx := context.Background()
 
-	beaconName := acc.UniqueName("acc-test-ibeacon-dbn")
+	beaconName := acc.UniqueName("sdkv2_acc_acc-test-ibeacon-dbn")
 	createReq := &ibeacons.RequestIBeacon{
 		Name:  beaconName,
 		UUID:  "F7826DA6-4FA2-4E98-8024-BC5B71E0893E",
@@ -233,11 +233,11 @@ func TestAcceptance_IBeacons_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_IBeacons_ValidationErrors tests client-side validation
+// TestAcceptance_IBeacons_validation_errors tests client-side validation
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_IBeacons_ValidationErrors(t *testing.T) {
+func TestAcceptance_IBeacons_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicIBeacons
@@ -261,13 +261,13 @@ func TestAcceptance_IBeacons_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateIBeaconByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &ibeacons.RequestIBeacon{Name: "x"})
+		_, _, err := svc.UpdateByID(context.Background(), 0, &ibeacons.RequestIBeacon{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "iBeacon ID must be a positive integer")
 	})
 
 	t.Run("UpdateIBeaconByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &ibeacons.RequestIBeacon{Name: "x"})
+		_, _, err := svc.UpdateByName(context.Background(), "", &ibeacons.RequestIBeacon{Name: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "iBeacon name is required")
 	})

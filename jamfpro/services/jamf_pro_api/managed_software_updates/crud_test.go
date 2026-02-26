@@ -11,7 +11,20 @@ import (
 )
 
 // TestGetAvailableUpdates tests retrieving available software updates.
-func TestGetAvailableUpdates(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetAvailableUpdates_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/available-updates", "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetAvailableUpdates(context.Background())
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "api error")
+}
+
+func TestUnit_ManagedSoftwareUpdates_GetAvailableUpdates_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterGetAvailableUpdatesMock()
 
@@ -30,12 +43,14 @@ func TestGetAvailableUpdates(t *testing.T) {
 }
 
 // TestGetPlans tests listing all managed software update plans.
-func TestGetPlans(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlans_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterGetPlansMock()
 
 	svc := NewService(mock)
 	params := url.Values{}
+	params.Set("page", "0")
+	params.Set("page-size", "100")
 	result, resp, err := svc.GetPlans(context.Background(), params)
 
 	require.NoError(t, err)
@@ -66,8 +81,38 @@ func TestGetPlans(t *testing.T) {
 	assert.Equal(t, "COMPLETED", plan2.Status.State)
 }
 
+// TestGetPlans_Error tests listing plans when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetPlans_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/plans", "api error")
+
+	svc := NewService(mock)
+	params := url.Values{}
+	result, resp, err := svc.GetPlans(context.Background(), params)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "api error")
+}
+
+// TestGetPlans_InvalidJSON tests mergePage error path when response is invalid.
+func TestUnit_ManagedSoftwareUpdates_GetPlans_InvalidJSON(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterGetPlansInvalidMock()
+
+	svc := NewService(mock)
+	params := url.Values{}
+	result, resp, err := svc.GetPlans(context.Background(), params)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
 // TestGetPlans_Empty tests listing plans when empty.
-func TestGetPlans_Empty(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlans_Empty(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterEmptyPlansMock()
 
@@ -84,7 +129,7 @@ func TestGetPlans_Empty(t *testing.T) {
 }
 
 // TestGetPlanByUUID tests retrieving a plan by UUID.
-func TestGetPlanByUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlanByUUID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 	mock.RegisterGetPlanByUUIDMock(uuid)
@@ -105,8 +150,23 @@ func TestGetPlanByUUID(t *testing.T) {
 	assert.Equal(t, "2024-03-15T14:00:00", result.ForceInstallLocalDateTime)
 }
 
+// TestGetPlanByUUID_Error tests getting plan when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetPlanByUUID_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/plans/"+uuid, "not found")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetPlanByUUID(context.Background(), uuid)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "not found")
+}
+
 // TestGetPlanByUUID_EmptyUUID tests getting plan with an empty UUID.
-func TestGetPlanByUUID_EmptyUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlanByUUID_EmptyUUID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -119,7 +179,7 @@ func TestGetPlanByUUID_EmptyUUID(t *testing.T) {
 }
 
 // TestGetDeclarationsByPlanUUID tests retrieving declarations by plan UUID.
-func TestGetDeclarationsByPlanUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetDeclarationsByPlanUUID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 	mock.RegisterGetDeclarationsByPlanUUIDMock(uuid)
@@ -146,8 +206,22 @@ func TestGetDeclarationsByPlanUUID(t *testing.T) {
 	assert.Equal(t, "com.apple.configuration.softwareupdate.settings", decl2.Type)
 }
 
+// TestGetDeclarationsByPlanUUID_Error tests getting declarations when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetDeclarationsByPlanUUID_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/plans/"+uuid+"/declarations", "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetDeclarationsByPlanUUID(context.Background(), uuid)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
 // TestGetDeclarationsByPlanUUID_EmptyUUID tests getting declarations with an empty UUID.
-func TestGetDeclarationsByPlanUUID_EmptyUUID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetDeclarationsByPlanUUID_EmptyUUID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -160,7 +234,7 @@ func TestGetDeclarationsByPlanUUID_EmptyUUID(t *testing.T) {
 }
 
 // TestCreatePlanByDeviceID tests creating a plan by device ID.
-func TestCreatePlanByDeviceID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByDeviceID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterCreatePlanByDeviceIDMock()
 
@@ -192,8 +266,27 @@ func TestCreatePlanByDeviceID(t *testing.T) {
 	assert.Equal(t, "a1b2c3d4-e5f6-7890-abcd-ef1234567890", result.Plans[0].PlanID)
 }
 
+// TestCreatePlanByDeviceID_Error tests creating a plan when API returns error.
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByDeviceID_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterErrorMock("POST", "/api/v1/managed-software-updates/plans", "conflict")
+
+	svc := NewService(mock)
+	plan := &RequestPlanCreate{
+		Devices: []PlanObject{{ObjectType: "COMPUTER", DeviceId: "12345"}},
+		Config:  PlanConfig{UpdateAction: "DOWNLOAD_INSTALL", VersionType: "LATEST_MAJOR"},
+	}
+
+	result, resp, err := svc.CreatePlanByDeviceID(context.Background(), plan)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "conflict")
+}
+
 // TestCreatePlanByDeviceID_NilPlan tests creating a plan with nil input.
-func TestCreatePlanByDeviceID_NilPlan(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByDeviceID_NilPlan(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -206,7 +299,7 @@ func TestCreatePlanByDeviceID_NilPlan(t *testing.T) {
 }
 
 // TestCreatePlanByGroupID tests creating a plan by group ID.
-func TestCreatePlanByGroupID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByGroupID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterCreatePlanByGroupIDMock()
 
@@ -233,8 +326,26 @@ func TestCreatePlanByGroupID(t *testing.T) {
 	assert.Len(t, result.Plans, 1)
 }
 
+// TestCreatePlanByGroupID_Error tests creating a group plan when API returns error.
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByGroupID_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterErrorMock("POST", "/api/v1/managed-software-updates/plans/group", "api error")
+
+	svc := NewService(mock)
+	plan := &RequestPlanCreate{
+		Group:  PlanObject{ObjectType: "COMPUTER", GroupId: "100"},
+		Config: PlanConfig{UpdateAction: "DOWNLOAD_INSTALL", VersionType: "LATEST_MAJOR"},
+	}
+
+	result, resp, err := svc.CreatePlanByGroupID(context.Background(), plan)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
 // TestCreatePlanByGroupID_NilPlan tests creating a group plan with nil input.
-func TestCreatePlanByGroupID_NilPlan(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_CreatePlanByGroupID_NilPlan(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -247,7 +358,7 @@ func TestCreatePlanByGroupID_NilPlan(t *testing.T) {
 }
 
 // TestGetPlansByGroupID tests retrieving plans by group ID.
-func TestGetPlansByGroupID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlansByGroupID_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	groupID := "100"
 	mock.RegisterGetPlansByGroupIDMock(groupID)
@@ -263,8 +374,22 @@ func TestGetPlansByGroupID(t *testing.T) {
 	assert.Len(t, result.Results, 2)
 }
 
+// TestGetPlansByGroupID_Error tests getting plans when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetPlansByGroupID_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	groupID := "100"
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/plans/group/"+groupID+"?group-type=COMPUTER", "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetPlansByGroupID(context.Background(), groupID, "COMPUTER")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
 // TestGetPlansByGroupID_EmptyGroupID tests getting plans with empty group ID.
-func TestGetPlansByGroupID_EmptyGroupID(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlansByGroupID_EmptyGroupID(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -277,7 +402,7 @@ func TestGetPlansByGroupID_EmptyGroupID(t *testing.T) {
 }
 
 // TestGetPlansByGroupID_EmptyGroupType tests getting plans with empty group type.
-func TestGetPlansByGroupID_EmptyGroupType(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetPlansByGroupID_EmptyGroupType(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -289,8 +414,21 @@ func TestGetPlansByGroupID_EmptyGroupType(t *testing.T) {
 	assert.Contains(t, err.Error(), "groupType is required")
 }
 
+// TestGetFeatureToggle_Error tests retrieving feature toggle when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetFeatureToggle_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/plans/feature-toggle", "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetFeatureToggle(context.Background())
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
 // TestGetFeatureToggle tests retrieving the feature toggle.
-func TestGetFeatureToggle(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetFeatureToggle_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterGetFeatureToggleMock()
 
@@ -305,7 +443,7 @@ func TestGetFeatureToggle(t *testing.T) {
 }
 
 // TestUpdateFeatureToggle tests updating the feature toggle.
-func TestUpdateFeatureToggle(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_UpdateFeatureToggle_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterUpdateFeatureToggleMock()
 
@@ -327,8 +465,23 @@ func TestUpdateFeatureToggle(t *testing.T) {
 	assert.False(t, result.RecipeEnabled)
 }
 
+// TestUpdateFeatureToggle_Error tests updating feature toggle when API returns error.
+func TestUnit_ManagedSoftwareUpdates_UpdateFeatureToggle_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterErrorMock("PUT", "/api/v1/managed-software-updates/plans/feature-toggle", "api error")
+
+	svc := NewService(mock)
+	toggle := &RequestFeatureToggle{Toggle: true}
+
+	result, resp, err := svc.UpdateFeatureToggle(context.Background(), toggle)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
 // TestUpdateFeatureToggle_NilToggle tests updating feature toggle with nil input.
-func TestUpdateFeatureToggle_NilToggle(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_UpdateFeatureToggle_NilToggle(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	svc := NewService(mock)
 
@@ -340,8 +493,21 @@ func TestUpdateFeatureToggle_NilToggle(t *testing.T) {
 	assert.Contains(t, err.Error(), "toggle is required")
 }
 
+// TestGetFeatureToggleStatus_Error tests retrieving feature toggle status when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetFeatureToggleStatus_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/plans/feature-toggle/status", "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetFeatureToggleStatus(context.Background())
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
 // TestGetFeatureToggleStatus tests retrieving the feature toggle status.
-func TestGetFeatureToggleStatus(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_GetFeatureToggleStatus_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterGetFeatureToggleStatusMock()
 
@@ -361,8 +527,21 @@ func TestGetFeatureToggleStatus(t *testing.T) {
 	assert.Equal(t, "SUCCESS", result.ToggleOn.ExitState)
 }
 
+// TestForceStopFeatureToggleProcess_Error tests force stop when API returns error.
+func TestUnit_ManagedSoftwareUpdates_ForceStopFeatureToggleProcess_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterErrorMock("POST", "/api/v1/managed-software-updates/plans/feature-toggle/abandon", "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.ForceStopFeatureToggleProcess(context.Background())
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
 // TestForceStopFeatureToggleProcess tests force stopping the feature toggle process.
-func TestForceStopFeatureToggleProcess(t *testing.T) {
+func TestUnit_ManagedSoftwareUpdates_ForceStopFeatureToggleProcess_Success(t *testing.T) {
 	mock := mocks.NewManagedSoftwareUpdatesMock()
 	mock.RegisterForceStopFeatureToggleProcessMock()
 
@@ -376,4 +555,293 @@ func TestForceStopFeatureToggleProcess(t *testing.T) {
 	assert.Equal(t, 200, result.HTTPStatus)
 	assert.Len(t, result.Errors, 1)
 	assert.Equal(t, "PROCESS_STOPPED", result.Errors[0].Code)
+}
+
+// TestGetPlanEventsByUUID tests retrieving plan events by UUID.
+func TestUnit_ManagedSoftwareUpdates_GetPlanEventsByUUID_Success(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+	mock.RegisterGetPlanEventsByUUIDMock(uuid)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetPlanEventsByUUID(context.Background(), uuid)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Events, 2)
+	assert.Equal(t, "PLAN_CREATED", result.Events[0].Type)
+	assert.Equal(t, "SCAN_SCHEDULED", result.Events[1].Type)
+}
+
+// TestGetPlanEventsByUUID_Error tests getting plan events when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetPlanEventsByUUID_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/plans/"+uuid+"/events", "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetPlanEventsByUUID(context.Background(), uuid)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+// TestGetPlanEventsByUUID_EmptyUUID tests getting plan events with an empty UUID.
+func TestUnit_ManagedSoftwareUpdates_GetPlanEventsByUUID_EmptyUUID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetPlanEventsByUUID(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "uuid is required")
+}
+
+// TestGetUpdateStatuses_Error tests retrieving update statuses when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatuses_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/update-statuses", "api error")
+
+	svc := NewService(mock)
+	params := url.Values{}
+	result, resp, err := svc.GetUpdateStatuses(context.Background(), params)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+// TestGetUpdateStatuses_ArrayFormat tests mergePage with raw array format (Real API style).
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatuses_ArrayFormat(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterGetUpdateStatusesArrayFormatMock()
+
+	svc := NewService(mock)
+	params := url.Values{}
+	result, resp, err := svc.GetUpdateStatuses(context.Background(), params)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	assert.Len(t, result.Results, 1)
+	assert.Equal(t, "2", result.Results[0].OsUpdatesStatusId)
+	assert.Equal(t, "99999", result.Results[0].Device.DeviceId)
+	assert.Equal(t, "PENDING", result.Results[0].Status)
+}
+
+// TestGetUpdateStatuses_InvalidJSON tests mergePage error when response is invalid.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatuses_InvalidJSON(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterGetUpdateStatusesInvalidMock()
+
+	svc := NewService(mock)
+	params := url.Values{}
+	result, resp, err := svc.GetUpdateStatuses(context.Background(), params)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+// TestGetUpdateStatuses tests retrieving update statuses with pagination.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatuses_Success(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterGetUpdateStatusesMock()
+
+	svc := NewService(mock)
+	params := url.Values{}
+	result, resp, err := svc.GetUpdateStatuses(context.Background(), params)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	assert.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].OsUpdatesStatusId)
+	assert.Equal(t, "12345", result.Results[0].Device.DeviceId)
+	assert.Equal(t, "COMPUTER", result.Results[0].Device.ObjectType)
+	assert.Equal(t, "DOWNLOADING", result.Results[0].Status)
+	assert.Equal(t, "macOSUpdate19F77", result.Results[0].ProductKey)
+}
+
+// TestGetUpdateStatusesByComputerGroup tests retrieving update statuses by computer group.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputerGroup_Success(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	groupID := "100"
+	mock.RegisterGetUpdateStatusesByComputerGroupMock(groupID)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByComputerGroup(context.Background(), groupID)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].OsUpdatesStatusId)
+}
+
+// TestGetUpdateStatusesByComputerGroup_Error tests when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputerGroup_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	groupID := "100"
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/update-statuses/computer-groups/"+groupID, "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByComputerGroup(context.Background(), groupID)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+// TestGetUpdateStatusesByComputerGroup_EmptyID tests getting update statuses with empty ID.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputerGroup_EmptyID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetUpdateStatusesByComputerGroup(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetUpdateStatusesByComputer tests retrieving update statuses by computer.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputer_Success(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	computerID := "12345"
+	mock.RegisterGetUpdateStatusesByComputerMock(computerID)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByComputer(context.Background(), computerID)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Results, 1)
+}
+
+// TestGetUpdateStatusesByComputer_Error tests when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputer_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	computerID := "12345"
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/update-statuses/computers/"+computerID, "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByComputer(context.Background(), computerID)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+// TestGetUpdateStatusesByComputer_EmptyID tests getting update statuses with empty ID.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputer_EmptyID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetUpdateStatusesByComputer(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetUpdateStatusesByMobileDeviceGroup tests retrieving update statuses by mobile device group.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDeviceGroup_Success(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	groupID := "200"
+	mock.RegisterGetUpdateStatusesByMobileDeviceGroupMock(groupID)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByMobileDeviceGroup(context.Background(), groupID)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Results, 1)
+}
+
+// TestGetUpdateStatusesByMobileDeviceGroup_Error tests when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDeviceGroup_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	groupID := "200"
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/update-statuses/mobile-device-groups/"+groupID, "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByMobileDeviceGroup(context.Background(), groupID)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+// TestGetUpdateStatusesByMobileDeviceGroup_EmptyID tests getting update statuses with empty ID.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDeviceGroup_EmptyID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetUpdateStatusesByMobileDeviceGroup(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetUpdateStatusesByMobileDevice tests retrieving update statuses by mobile device.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDevice_Success(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	deviceID := "67890"
+	mock.RegisterGetUpdateStatusesByMobileDeviceMock(deviceID)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByMobileDevice(context.Background(), deviceID)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Results, 1)
+}
+
+// TestGetUpdateStatusesByMobileDevice_Error tests when API returns error.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDevice_Error(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	deviceID := "67890"
+	mock.RegisterErrorMock("GET", "/api/v1/managed-software-updates/update-statuses/mobile-devices/"+deviceID, "api error")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByMobileDevice(context.Background(), deviceID)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+// TestGetUpdateStatusesByMobileDevice_EmptyID tests getting update statuses with empty ID.
+func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDevice_EmptyID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetUpdateStatusesByMobileDevice(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
 }

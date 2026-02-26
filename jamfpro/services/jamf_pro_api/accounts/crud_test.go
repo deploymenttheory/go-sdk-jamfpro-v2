@@ -181,3 +181,27 @@ func TestUnit_Accounts_DeleteByIDV1_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "account ID is required")
 }
+
+func TestUnit_Accounts_ListV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.ListV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_Accounts_GetByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestUnit_Accounts_CreateV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.CreateV1(context.Background(), &RequestAccount{Username: "user"})
+	require.Error(t, err)
+}
+
+func TestUnit_Accounts_DeleteByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.DeleteByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}

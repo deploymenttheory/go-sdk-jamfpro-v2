@@ -111,6 +111,37 @@ func TestUnit_VolumePurchasingSubscriptions_UpdateByID_Success(t *testing.T) {
 	assert.Equal(t, "VPS One Updated", result.Name)
 }
 
+func TestUnit_VolumePurchasingSubscriptions_UpdateByID_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &RequestVolumePurchasingSubscription{Name: "Test", Enabled: true}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingSubscriptions_UpdateByID_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingSubscriptions_UpdateByID_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateNotFoundErrorMock()
+
+	req := &RequestVolumePurchasingSubscription{Name: "Test", Enabled: true}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "999", req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
 func TestUnit_VolumePurchasingSubscriptions_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
@@ -127,4 +158,25 @@ func TestUnit_VolumePurchasingSubscriptions_DeleteByID_EmptyID(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingSubscriptions_DeleteByID_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteNotFoundErrorMock()
+
+	resp, err := svc.DeleteByIDV1(context.Background(), "999")
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_VolumePurchasingSubscriptions_List_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListErrorMock()
+
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
 }

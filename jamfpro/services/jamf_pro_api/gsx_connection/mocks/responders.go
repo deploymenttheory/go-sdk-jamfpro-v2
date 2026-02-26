@@ -2,6 +2,7 @@ package mocks
 
 import (
 	"context"
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,6 +11,21 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 )
+
+//go:embed validate_get.json
+var mockGetResponse []byte
+
+//go:embed validate_update.json
+var mockUpdateResponse []byte
+
+//go:embed validate_history.json
+var mockHistoryResponse []byte
+
+//go:embed validate_error_not_found.json
+var mockErrorNotFoundResponse []byte
+
+//go:embed validate_history_invalid.json
+var mockHistoryInvalidResponse []byte
 
 // registeredResponse holds a pre-canned response for a single endpoint.
 type registeredResponse struct {
@@ -62,12 +78,7 @@ func (m *GSXConnectionMock) registerError(method, path string, statusCode int, b
 func (m *GSXConnectionMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("GSXConnectionMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("GSXConnectionMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -90,64 +101,24 @@ func (m *GSXConnectionMock) dispatch(method, path string, result any) (*interfac
 }
 
 func (m *GSXConnectionMock) RegisterGetGSXConnectionMock() {
-	body := []byte(`{
-		"enabled": true,
-		"username": "test@example.com",
-		"serviceAccountNo": "12345",
-		"shipToNo": "67890",
-		"gsxKeystore": {
-			"name": "certificate.p12",
-			"expirationEpoch": 1691954900000,
-			"errorMessage": ""
-		}
-	}`)
-	m.register("GET", "/api/v1/gsx-connection", 200, body)
+	m.register("GET", "/api/v1/gsx-connection", 200, mockGetResponse)
 }
 
 func (m *GSXConnectionMock) RegisterUpdateGSXConnectionMock() {
-	body := []byte(`{
-		"enabled": false,
-		"username": "updated@example.com",
-		"serviceAccountNo": "54321",
-		"shipToNo": "09876",
-		"gsxKeystore": {
-			"name": "certificate.p12",
-			"expirationEpoch": 1691954900000,
-			"errorMessage": ""
-		}
-	}`)
-	m.register("PATCH", "/api/v1/gsx-connection", 200, body)
+	m.register("PATCH", "/api/v1/gsx-connection", 200, mockUpdateResponse)
 }
 
 func (m *GSXConnectionMock) RegisterGetHistoryMock() {
-	body := []byte(`{
-		"totalCount": 2,
-		"results": [
-			{
-				"id": "1",
-				"username": "admin",
-				"date": "2024-01-15T10:30:00Z",
-				"note": "GSX connection enabled",
-				"details": "Enabled GSX connection for service account"
-			},
-			{
-				"id": "2",
-				"username": "admin",
-				"date": "2024-01-16T14:20:00Z",
-				"note": "Updated service account",
-				"details": "Changed service account number"
-			}
-		]
-	}`)
-	m.register("GET", "/api/v1/gsx-connection/history", 200, body)
+	m.register("GET", "/api/v1/gsx-connection/history", 200, mockHistoryResponse)
 }
 
 func (m *GSXConnectionMock) RegisterNotFoundErrorMock() {
-	body := []byte(`{
-		"code": "NOT-FOUND",
-		"message": "GSX connection not found"
-	}`)
-	m.registerError("GET", "/api/v1/gsx-connection", 404, body)
+	m.registerError("GET", "/api/v1/gsx-connection", 404, mockErrorNotFoundResponse)
+}
+
+// RegisterGetHistoryInvalidMock registers a response with invalid JSON to test mergePage unmarshal error.
+func (m *GSXConnectionMock) RegisterGetHistoryInvalidMock() {
+	m.register("GET", "/api/v1/gsx-connection/history", 200, mockHistoryInvalidResponse)
 }
 
 func (m *GSXConnectionMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

@@ -72,8 +72,7 @@ func (s *Service) ListTitlesV1(ctx context.Context, rsqlQuery map[string]string)
 	endpoint := EndpointTitlesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -95,8 +94,7 @@ func (s *Service) GetTitleByIDV1(ctx context.Context, id string) (*ResourceJamfA
 	var result ResourceJamfAppCatalogAppInstaller
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -116,8 +114,7 @@ func (s *Service) ListDeploymentsV1(ctx context.Context, rsqlQuery map[string]st
 	endpoint := EndpointDeploymentsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -139,8 +136,7 @@ func (s *Service) GetDeploymentByIDV1(ctx context.Context, id string) (*Resource
 	var result ResourceJamfAppCatalogDeployment
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -215,8 +211,7 @@ func (s *Service) DeleteDeploymentByIDV1(ctx context.Context, id string) (*inter
 	endpoint := fmt.Sprintf("%s/%s", EndpointDeploymentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

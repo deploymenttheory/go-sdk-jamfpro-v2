@@ -14,7 +14,7 @@ import (
 )
 
 // =============================================================================
-// TestAcceptance_MobileDeviceApplications_Lifecycle exercises the full write/read/delete
+// TestAcceptance_MobileDeviceApplications_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → GetByBundleID → UpdateByID →
 // UpdateByName → GetByID (verify) → DeleteByID.
 //
@@ -22,7 +22,7 @@ import (
 // This test uses a minimal configuration that may need adjustment for your tenant.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceApplications_Lifecycle(t *testing.T) {
+func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceApplications
@@ -33,7 +33,7 @@ func TestAcceptance_MobileDeviceApplications_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test mobile device application")
 
-	appName := acc.UniqueName("acc-test-mda")
+	appName := acc.UniqueName("sdkv2_acc_acc-test-mda")
 	internalApp := true
 	createReq := &mobile_device_applications.Resource{
 		General: mobile_device_applications.SubsetGeneral{
@@ -152,7 +152,7 @@ func TestAcceptance_MobileDeviceApplications_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 6. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-mda-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-mda-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating mobile device application ID=%d to name=%q", appID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -251,17 +251,17 @@ func TestAcceptance_MobileDeviceApplications_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceApplications_DeleteByName creates a mobile device
+// TestAcceptance_MobileDeviceApplications_delete_by_name creates a mobile device
 // application then deletes by name.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceApplications_DeleteByName(t *testing.T) {
+func TestAcceptance_MobileDeviceApplications_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceApplications
 	ctx := context.Background()
 
-	appName := acc.UniqueName("acc-test-mda-dbn")
+	appName := acc.UniqueName("sdkv2_acc_acc-test-mda-dbn")
 	internalApp := true
 	createReq := &mobile_device_applications.Resource{
 		General: mobile_device_applications.SubsetGeneral{
@@ -310,10 +310,10 @@ func TestAcceptance_MobileDeviceApplications_DeleteByName(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_MobileDeviceApplications_ValidationErrors validates error handling.
+// TestAcceptance_MobileDeviceApplications_validation_errors validates error handling.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceApplications_ValidationErrors(t *testing.T) {
+func TestAcceptance_MobileDeviceApplications_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceApplications

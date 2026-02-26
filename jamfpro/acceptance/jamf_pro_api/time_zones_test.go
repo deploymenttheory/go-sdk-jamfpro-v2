@@ -21,7 +21,7 @@ import (
 // -----------------------------------------------------------------------------
 //   ✓ Pattern 3: Read-Only Information
 //     -- Reason: Service only provides read access to available time zones
-//     -- Tests: TestAcceptance_TimeZones_ListV1
+//     -- Tests: TestAcceptance_TimeZones_list_v1
 //     -- Flow: List time zones → Verify response structure
 //
 //   Note: RSQL Filter Testing NOT applicable
@@ -43,7 +43,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_TimeZones_ListV1(t *testing.T) {
+func TestAcceptance_TimeZones_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.TimeZones
 	ctx := context.Background()

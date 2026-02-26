@@ -45,8 +45,7 @@ func (s *Service) GetV1(ctx context.Context) (*ResourceStartupStatusV1, *interfa
 	endpoint := EndpointStartupStatus
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -82,12 +83,7 @@ func (m *PackagesMock) registerError(method, path string, statusCode int, fixtur
 func (m *PackagesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("PackagesMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("PackagesMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -110,15 +106,16 @@ func (m *PackagesMock) dispatch(method, path string, result any) (*interfaces.Re
 }
 
 func loadMockResponse(filename string) ([]byte, error) {
-	dir, err := os.Getwd()
-	if err != nil {
-		return nil, fmt.Errorf("get working directory: %w", err)
-	}
-	data, err := os.ReadFile(filepath.Join(dir, "mocks", filename))
+	data, err := os.ReadFile(filepath.Join(mustMocksDir(), filename))
 	if err != nil {
 		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
 	}
 	return data, nil
+}
+
+func mustMocksDir() string {
+	_, filename, _, _ := runtime.Caller(0)
+	return filepath.Dir(filename)
 }
 
 func (m *PackagesMock) RegisterListPackagesMock() {
@@ -175,6 +172,39 @@ func (m *PackagesMock) RegisterGetPackageHistoryMock() {
 
 func (m *PackagesMock) RegisterAddPackageHistoryNotesMock() {
 	m.register("POST", "/api/v1/packages/1/history", 201, "")
+}
+
+func (m *PackagesMock) RegisterExportPackagesMock() {
+	m.register("POST", "/api/v1/packages/export", 200, "validate_export.json")
+}
+
+func (m *PackagesMock) RegisterExportHistoryMock() {
+	m.register("POST", "/api/v1/packages/1/history/export", 200, "validate_export_history.json")
+}
+
+// RegisterGetPackageWithHashMock registers a GET response for the package with the given ID,
+// returning a package that has HashType=SHA3_512 and the given HashValue. Used for CreateAndUpload tests.
+func (m *PackagesMock) RegisterGetPackageWithHashMock(id string, hashValue string) {
+	body, _ := json.Marshal(map[string]any{
+		"id": id, "packageName": "Test", "fileName": "test.pkg", "categoryId": "1",
+		"hashType": "SHA3_512", "hashValue": hashValue,
+	})
+	m.responses["GET:/api/v1/packages/"+id] = registeredResponse{statusCode: 200, rawBody: body}
+}
+
+// RegisterUploadPackageMockForID registers upload mock for a specific package ID (e.g. "3" from Create).
+func (m *PackagesMock) RegisterUploadPackageMockForID(id string) {
+	m.register("POST", "/api/v1/packages/"+id+"/upload", 201, "validate_create_package.json")
+}
+
+// RegisterRawBody registers a response with raw body bytes. Used for testing error paths (e.g. malformed JSON).
+func (m *PackagesMock) RegisterRawBody(method, path string, statusCode int, body []byte) {
+	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+// RegisterAPIError registers a response that returns an error (for testing error propagation).
+func (m *PackagesMock) RegisterAPIError(method, path string, statusCode int, errMsg string) {
+	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: []byte(`{}`), errMsg: errMsg}
 }
 
 func (m *PackagesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

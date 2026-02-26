@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestAcceptance_CloudInformation_GetV1 tests retrieving cloud information.
-func TestAcceptance_CloudInformation_GetV1(t *testing.T) {
+// TestAcceptance_CloudInformation_get_v1 tests retrieving cloud information.
+func TestAcceptance_CloudInformation_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 

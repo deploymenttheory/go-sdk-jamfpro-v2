@@ -1,0 +1,37 @@
+{
+  "api": {
+    "thirtySeconds": 0.75,
+    "oneMinute": 0.75,
+    "fiveMinutes": 0.75,
+    "fifteenMinutes": 0.75,
+    "thirtyMinutes": 0.75
+  },
+  "ui": {
+    "thirtySeconds": 0.75,
+    "oneMinute": 0.75,
+    "fiveMinutes": 0.75,
+    "fifteenMinutes": 0.75,
+    "thirtyMinutes": 0.75
+  },
+  "enrollment": {
+    "thirtySeconds": 0.75,
+    "oneMinute": 0.75,
+    "fiveMinutes": 0.75,
+    "fifteenMinutes": 0.75,
+    "thirtyMinutes": 0.75
+  },
+  "device": {
+    "thirtySeconds": 0.75,
+    "oneMinute": 0.75,
+    "fiveMinutes": 0.75,
+    "fifteenMinutes": 0.75,
+    "thirtyMinutes": 0.75
+  },
+  "default": {
+    "thirtySeconds": 0.75,
+    "oneMinute": 0.75,
+    "fiveMinutes": 0.75,
+    "fifteenMinutes": 0.75,
+    "thirtyMinutes": 0.75
+  }
+}

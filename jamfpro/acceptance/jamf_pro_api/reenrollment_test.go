@@ -12,7 +12,7 @@ import (
 
 // Acceptance tests run in doc order: Get → Update → GetHistory → AddHistoryNotes → ExportHistory.
 
-func TestAcceptance_Reenrollment_Get(t *testing.T) {
+func TestAcceptance_Reenrollment_get(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Reenrollment
 	ctx := context.Background()
@@ -24,7 +24,7 @@ func TestAcceptance_Reenrollment_Get(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_Reenrollment_Update(t *testing.T) {
+func TestAcceptance_Reenrollment_update(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Reenrollment
 	ctx := context.Background()
@@ -45,7 +45,7 @@ func TestAcceptance_Reenrollment_Update(t *testing.T) {
 	_, _, _ = svc.Update(ctx, &request)
 }
 
-func TestAcceptance_Reenrollment_GetHistory(t *testing.T) {
+func TestAcceptance_Reenrollment_get_history(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Reenrollment
 	ctx := context.Background()
@@ -59,7 +59,7 @@ func TestAcceptance_Reenrollment_GetHistory(t *testing.T) {
 	assert.NotNil(t, result.Results)
 }
 
-func TestAcceptance_Reenrollment_AddHistoryNotes(t *testing.T) {
+func TestAcceptance_Reenrollment_add_history_notes(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Reenrollment
 	ctx := context.Background()
@@ -73,7 +73,7 @@ func TestAcceptance_Reenrollment_AddHistoryNotes(t *testing.T) {
 	assert.Equal(t, request.Note, result.Note)
 }
 
-func TestAcceptance_Reenrollment_ExportHistory(t *testing.T) {
+func TestAcceptance_Reenrollment_export_history(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Reenrollment
 	ctx := context.Background()
