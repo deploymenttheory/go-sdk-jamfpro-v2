@@ -96,8 +96,7 @@ func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *int
 	endpoint := EndpointJamfConnectV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -139,7 +138,10 @@ func (s *Service) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf connect config profiles: %w", err)
 	}
@@ -278,7 +280,10 @@ func (s *Service) GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQ
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get deployment tasks: %w", err)
 	}
@@ -318,7 +323,10 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get jamf connect history: %w", err)
 	}

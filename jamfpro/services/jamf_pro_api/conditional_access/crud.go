@@ -49,8 +49,7 @@ func (s *Service) GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*Reso
 	var result ResourceDeviceComplianceStatus
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -69,8 +68,7 @@ func (s *Service) GetDeviceComplianceInformationComputerV1(ctx context.Context, 
 	var result []ResourceDeviceComplianceInfo
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -89,8 +87,7 @@ func (s *Service) GetDeviceComplianceInformationMobileV1(ctx context.Context, de
 	var result []ResourceDeviceComplianceInfo
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

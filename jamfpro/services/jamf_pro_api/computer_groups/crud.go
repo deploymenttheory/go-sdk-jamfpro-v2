@@ -101,8 +101,7 @@ func (s *Service) ListSmartV2(ctx context.Context, rsqlQuery map[string]string) 
 	endpoint := EndpointSmartGroupsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -125,8 +124,7 @@ func (s *Service) GetSmartByIDV2(ctx context.Context, id string) (*ResourceSmart
 	var result ResourceSmartGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -199,8 +197,7 @@ func (s *Service) DeleteSmartV2(ctx context.Context, id string) (*interfaces.Res
 	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -223,8 +220,7 @@ func (s *Service) ListStaticV2(ctx context.Context, rsqlQuery map[string]string)
 	endpoint := EndpointStaticGroupsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -247,8 +243,7 @@ func (s *Service) GetStaticByIDV2(ctx context.Context, id string) (*ResourceStat
 	var result ResourceStaticGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -321,8 +316,7 @@ func (s *Service) DeleteStaticByIDV2(ctx context.Context, id string) (*interface
 	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -345,8 +339,7 @@ func (s *Service) ListAllV1(ctx context.Context) ([]ResourceGroupV1, *interfaces
 	endpoint := EndpointComputerGroupsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -369,8 +362,7 @@ func (s *Service) GetSmartGroupMembershipByIDV2(ctx context.Context, id string) 
 	var result SmartGroupMembershipResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

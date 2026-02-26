@@ -122,8 +122,7 @@ func (s *Service) ListSummaryV2(ctx context.Context, rsqlQuery map[string]string
 	endpoint := EndpointPatchPoliciesV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ListSummaryResponse
@@ -192,8 +191,7 @@ func (s *Service) GetDashboardStatusV2(ctx context.Context, id string) (*Dashboa
 	var result DashboardStatusResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -238,8 +236,7 @@ func (s *Service) RemoveFromDashboardV2(ctx context.Context, id string) (*interf
 	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchPoliciesV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

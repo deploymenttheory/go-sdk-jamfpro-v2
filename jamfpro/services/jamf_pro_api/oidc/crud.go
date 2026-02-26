@@ -80,8 +80,7 @@ func (s *Service) GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDire
 	endpoint := EndpointOIDCV1 + "/direct-idp-login-url"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResourceOIDCDirectIdPLoginURL
@@ -100,8 +99,7 @@ func (s *Service) GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *
 	endpoint := EndpointOIDCV1 + "/public-key"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResourceOIDCPublicKey
@@ -120,8 +118,7 @@ func (s *Service) GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatu
 	endpoint := EndpointOIDCV1 + "/public-features"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResourcePublicFeatures

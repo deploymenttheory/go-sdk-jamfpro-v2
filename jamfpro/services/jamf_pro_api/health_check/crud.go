@@ -49,8 +49,7 @@ func (s *Service) GetV1(ctx context.Context) (bool, *interfaces.Response, error)
 	endpoint := EndpointHealthCheckV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, nil)
@@ -70,8 +69,7 @@ func (s *Service) GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus,
 	var result ResourceHealthStatus
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

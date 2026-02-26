@@ -77,8 +77,7 @@ func (s *Service) GetDefaultServerConfigurationV1(ctx context.Context) (*CloudAz
 	var result CloudAzureServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -102,8 +101,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCloudAzure
 	var result ResourceCloudAzure
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -126,8 +124,7 @@ func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudA
 	var providers []ResourceCloudAzure
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &providers)
@@ -222,8 +219,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointCloudAzureV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -257,8 +253,7 @@ func (s *Service) GetDefaultMappingsV1(ctx context.Context) (*CloudAzureServerMa
 	var result CloudAzureServerMappings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

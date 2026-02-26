@@ -45,8 +45,7 @@ func (s *Service) ListV1(ctx context.Context) ([]ResourceTimeZone, *interfaces.R
 	endpoint := EndpointTimeZonesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

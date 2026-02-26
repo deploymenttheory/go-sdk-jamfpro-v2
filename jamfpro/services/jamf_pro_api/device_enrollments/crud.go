@@ -156,7 +156,10 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list device enrollments: %w", err)
 	}
@@ -177,8 +180,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDeviceEnro
 	endpoint := fmt.Sprintf("%s/%s", EndpointDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -246,7 +248,10 @@ func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[str
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device enrollment history for ID %s: %w", id, err)
 	}
@@ -267,8 +272,7 @@ func (s *Service) GetSyncStatesV1(ctx context.Context, id string) ([]ResourceSyn
 	endpoint := fmt.Sprintf("%s/%s/syncs", EndpointDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -292,8 +296,7 @@ func (s *Service) GetLatestSyncStateV1(ctx context.Context, id string) (*Resourc
 	endpoint := fmt.Sprintf("%s/%s/syncs/latest", EndpointDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -313,8 +316,7 @@ func (s *Service) GetAllSyncStatesV1(ctx context.Context) ([]ResourceSyncState, 
 	endpoint := fmt.Sprintf("%s/syncs", EndpointDeviceEnrollmentsV1)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -531,8 +533,7 @@ func (s *Service) GetDevicesByIDV1(ctx context.Context, id string) (*DevicesResp
 	var result DevicesResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

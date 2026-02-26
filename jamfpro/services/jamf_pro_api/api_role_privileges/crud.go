@@ -48,8 +48,7 @@ func (s *Service) ListV1(ctx context.Context) (*ListResponse, *interfaces.Respon
 	endpoint := EndpointAPIRolePrivilegesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -74,8 +73,7 @@ func (s *Service) SearchPrivilegesByNameV1(ctx context.Context, name string, lim
 	var result ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

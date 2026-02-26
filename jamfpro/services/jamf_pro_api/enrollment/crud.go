@@ -146,8 +146,7 @@ func (s *Service) GetADUESessionTokenSettingsV1(ctx context.Context) (*ResourceA
 	var result ResourceADUESessionTokenSettings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -192,8 +191,7 @@ func (s *Service) GetHistoryV2(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -271,8 +269,7 @@ func (s *Service) ListAccessGroupsV3(ctx context.Context, rsqlQuery map[string]s
 	var result ListResponseAccessGroups
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -296,8 +293,7 @@ func (s *Service) GetAccessGroupByIDV3(ctx context.Context, id string) (*Resourc
 	var result ResourceAccountDrivenUserEnrollmentAccessGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -373,8 +369,7 @@ func (s *Service) DeleteAccessGroupByIDV3(ctx context.Context, id string) (*inte
 	endpoint := fmt.Sprintf("%s/access-groups/%s", EndpointEnrollmentV3, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -399,8 +394,7 @@ func (s *Service) ListLanguageMessagesV3(ctx context.Context) ([]ResourceEnrollm
 	var result response
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -431,8 +425,7 @@ func (s *Service) GetLanguageMessageV3(ctx context.Context, languageCode string)
 	var result ResourceEnrollmentLanguage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err = s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -497,8 +490,7 @@ func (s *Service) DeleteLanguageMessageV3(ctx context.Context, languageCode stri
 	endpoint := fmt.Sprintf("%s/languages/%s", EndpointEnrollmentV3, languageCode)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err = s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -554,8 +546,7 @@ func (s *Service) ListLanguageCodesV3(ctx context.Context) ([]ResourceLanguageCo
 	var result []ResourceLanguageCode
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -575,8 +566,7 @@ func (s *Service) ListFilteredLanguageCodesV3(ctx context.Context) ([]ResourceLa
 	var result []ResourceLanguageCode
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -596,8 +586,7 @@ func (s *Service) GetV4(ctx context.Context) (*ResourceEnrollment, *interfaces.R
 	var result ResourceEnrollment
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

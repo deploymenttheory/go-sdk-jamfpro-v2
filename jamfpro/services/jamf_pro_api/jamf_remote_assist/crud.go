@@ -77,8 +77,7 @@ func (s *Service) ListSessionsV1(ctx context.Context) ([]SessionHistory, *interf
 	var result []SessionHistory
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -102,8 +101,7 @@ func (s *Service) GetSessionByIDV1(ctx context.Context, id string) (*SessionHist
 	var result SessionHistory
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -151,7 +149,10 @@ func (s *Service) ListSessionsV2(ctx context.Context, rsqlQuery map[string]strin
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf remote assist sessions (v2): %w", err)
 	}
@@ -172,8 +173,7 @@ func (s *Service) GetSessionByIDV2(ctx context.Context, id string) (*SessionHist
 	var result SessionHistory
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

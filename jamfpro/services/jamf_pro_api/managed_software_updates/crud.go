@@ -135,8 +135,7 @@ func (s *Service) GetAvailableUpdates(ctx context.Context) (*ResponseAvailableUp
 	var result ResponseAvailableUpdates
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -211,8 +210,7 @@ func (s *Service) GetPlanByUUID(ctx context.Context, uuid string) (*ResourcePlan
 	var result ResourcePlan
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -236,8 +234,7 @@ func (s *Service) GetDeclarationsByPlanUUID(ctx context.Context, uuid string) (*
 	var result ResponseDeclarationsList
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -314,8 +311,7 @@ func (s *Service) GetPlansByGroupID(ctx context.Context, groupID string, groupTy
 	var result ResponsePlanList
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -335,8 +331,7 @@ func (s *Service) GetFeatureToggle(ctx context.Context) (*RequestFeatureToggle, 
 	var result RequestFeatureToggle
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -381,8 +376,7 @@ func (s *Service) GetFeatureToggleStatus(ctx context.Context) (*ResponseFeatureT
 	var result ResponseFeatureToggleStatus
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -428,8 +422,7 @@ func (s *Service) GetPlanEventsByUUID(ctx context.Context, uuid string) (*Respon
 	var result ResponsePlanEvents
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -513,8 +506,7 @@ func (s *Service) GetUpdateStatusesByComputerGroup(ctx context.Context, id strin
 	var result ResponseUpdateStatusList
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -538,8 +530,7 @@ func (s *Service) GetUpdateStatusesByComputer(ctx context.Context, id string) (*
 	var result ResponseUpdateStatusList
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -563,8 +554,7 @@ func (s *Service) GetUpdateStatusesByMobileDeviceGroup(ctx context.Context, id s
 	var result ResponseUpdateStatusList
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -588,8 +578,7 @@ func (s *Service) GetUpdateStatusesByMobileDevice(ctx context.Context, id string
 	var result ResponseUpdateStatusList
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

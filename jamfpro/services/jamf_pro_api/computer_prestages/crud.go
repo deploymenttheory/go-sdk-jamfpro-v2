@@ -102,8 +102,7 @@ func (s *Service) ListV3(ctx context.Context, query map[string]string) (*ListRes
 	endpoint := EndpointComputerPrestagesV3
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
@@ -127,8 +126,7 @@ func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceComputerPr
 	var result ResourceComputerPrestage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -276,8 +274,7 @@ func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointComputerPrestagesV3, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -310,8 +307,7 @@ func (s *Service) GetDeviceScopeByIDV2(ctx context.Context, id string) (*Resourc
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -368,8 +364,7 @@ func (s *Service) GetAllDeviceScopeV2(ctx context.Context) (*AllDeviceScopeRespo
 	var result AllDeviceScopeResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

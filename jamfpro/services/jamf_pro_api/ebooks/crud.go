@@ -88,7 +88,10 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list ebooks: %w", err)
 	}
@@ -109,8 +112,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *in
 	var result ResourceEbook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -134,8 +136,7 @@ func (s *Service) GetScopeByIDV1(ctx context.Context, id string) (*ResourceScope
 	var result ResourceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

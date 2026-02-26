@@ -66,8 +66,7 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceSMTPServer, *interfaces.R
 	endpoint := EndpointSMTPServerV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -92,7 +91,7 @@ func (s *Service) UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*R
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationMergePatchJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -134,7 +133,10 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	}
 
 	endpoint := EndpointSMTPServerHistoryV1
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get SMTP server history: %w", err)
 	}

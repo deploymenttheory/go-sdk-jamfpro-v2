@@ -53,8 +53,7 @@ func (s *Service) GetGroupsV1(ctx context.Context, id string) ([]ResourceGroup, 
 	var result []ResourceGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

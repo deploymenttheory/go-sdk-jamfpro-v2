@@ -54,7 +54,11 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetFeatureToggleEnabledV1(ctx context.Context) (bool, *interfaces.Response, error) {
 	var result ResourceFeatureToggleEnabled
 	endpoint := EndpointSelfServicePlusFeatureToggleEnabledV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return false, resp, err
@@ -68,7 +72,7 @@ func (s *Service) GetFeatureToggleEnabledV1(ctx context.Context) (bool, *interfa
 func (s *Service) GetV1(ctx context.Context) (*ResourceSelfServicePlusSettings, *interfaces.Response, error) {
 	var result ResourceSelfServicePlusSettings
 	endpoint := EndpointSelfServicePlusSettingsV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	headers := map[string]string{"Accept": mime.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -84,13 +88,20 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceSelfServicePlus
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	endpoint := EndpointSelfServicePlusSettingsV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Put(ctx, endpoint, request, headers, nil)
 	if err != nil {
 		return nil, resp, err
 	}
+
 	if resp != nil && resp.StatusCode == http.StatusNoContent {
 		return nil, resp, nil
 	}
+
 	return nil, resp, nil
 }

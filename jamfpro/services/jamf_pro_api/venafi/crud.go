@@ -62,6 +62,21 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-proxy-trust-store
 		GetProxyTrustStore(ctx context.Context, id string) (*interfaces.Response, []byte, error)
+
+		// RegenerateJamfPublicKeyByIDV1 regenerates the Jamf public key for Venafi configuration.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi-id-jamf-public-key-regenerate
+		RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+
+		// UploadProxyTrustStoreByIDV1 uploads the PKI Proxy Server public key (PEM certificate).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi-id-proxy-trust-store
+		UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pemCertificate []byte) (*interfaces.Response, error)
+
+		// DeleteProxyTrustStoreByIDV1 removes the PKI Proxy Server public key.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-venafi-id-proxy-trust-store
+		DeleteProxyTrustStoreByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the Venafi PKI-related methods of the Jamf Pro API.
@@ -114,8 +129,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResponseVenafi, *int
 	var result ResponseVenafi
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -163,8 +177,7 @@ func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Respon
 	endpoint := fmt.Sprintf("%s/%s", EndpointVenafiV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -187,8 +200,7 @@ func (s *Service) GetConnectionStatus(ctx context.Context, id string) (*Response
 	var result ResponseConnectionStatus
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -211,8 +223,7 @@ func (s *Service) GetDependentProfiles(ctx context.Context, id string) (*Respons
 	var result ResponseDependentProfiles
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -235,8 +246,7 @@ func (s *Service) GetHistory(ctx context.Context, id string, query map[string]st
 	var result ResponseHistory
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
@@ -284,7 +294,7 @@ func (s *Service) GetJamfPublicKey(ctx context.Context, id string) (*interfaces.
 	endpoint := fmt.Sprintf("%s/%s/jamf-public-key", EndpointVenafiV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationPKIXCert,
+		"Accept": mime.ApplicationPEMCertificateChain,
 	}
 
 	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -305,7 +315,7 @@ func (s *Service) GetProxyTrustStore(ctx context.Context, id string) (*interface
 	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", EndpointVenafiV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationOctetStream,
+		"Accept": mime.ApplicationPEMCertificateChain,
 	}
 
 	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -314,4 +324,71 @@ func (s *Service) GetProxyTrustStore(ctx context.Context, id string) (*interface
 	}
 
 	return resp, data, nil
+}
+
+// RegenerateJamfPublicKeyByIDV1 regenerates the Jamf public key for Venafi configuration.
+// URL: POST /api/v1/pki/venafi/{id}/jamf-public-key/regenerate
+func (s *Service) RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/jamf-public-key/regenerate", EndpointVenafiV1, id)
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// UploadProxyTrustStoreByIDV1 uploads the PKI Proxy Server public key (PEM certificate).
+// URL: POST /api/v1/pki/venafi/{id}/proxy-trust-store
+func (s *Service) UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pemCertificate []byte) (*interfaces.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	if len(pemCertificate) == 0 {
+		return nil, fmt.Errorf("pem certificate is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", EndpointVenafiV1, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationPEMCertificateChain,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, pemCertificate, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// DeleteProxyTrustStoreByIDV1 removes the PKI Proxy Server public key.
+// URL: DELETE /api/v1/pki/venafi/{id}/proxy-trust-store
+func (s *Service) DeleteProxyTrustStoreByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", EndpointVenafiV1, id)
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }

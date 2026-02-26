@@ -67,8 +67,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDockItem, 
 	var result ResourceDockItem
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -146,8 +145,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointDockItemsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

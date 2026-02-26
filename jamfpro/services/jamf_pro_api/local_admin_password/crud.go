@@ -111,8 +111,7 @@ func (s *Service) GetPendingRotationsV2(ctx context.Context) (*PendingRotationsR
 	endpoint := fmt.Sprintf("%s/pending-rotations", EndpointLocalAdminPasswordV2)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -132,8 +131,7 @@ func (s *Service) GetSettingsV2(ctx context.Context) (*SettingsResource, *interf
 	endpoint := fmt.Sprintf("%s/settings", EndpointLocalAdminPasswordV2)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -184,8 +182,7 @@ func (s *Service) GetPasswordHistoryByClientManagementIDV2(ctx context.Context, 
 	var result PasswordHistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -213,8 +210,7 @@ func (s *Service) GetCurrentPasswordByClientManagementIDV2(ctx context.Context, 
 	var result CurrentPasswordResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -242,8 +238,7 @@ func (s *Service) GetHistoryByUsernameV2(ctx context.Context, clientManagementID
 	var result AccountHistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -274,8 +269,7 @@ func (s *Service) GetAuditByUsernameAndGUIDV2(ctx context.Context, clientManagem
 	var result PasswordHistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -306,8 +300,7 @@ func (s *Service) GetHistoryByUsernameAndGUIDV2(ctx context.Context, clientManag
 	var result AccountHistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -339,8 +332,7 @@ func (s *Service) GetPasswordByUsernameAndGUIDV2(ctx context.Context, clientMana
 	var result CurrentPasswordResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -365,8 +357,7 @@ func (s *Service) GetFullHistoryByClientManagementIDV2(ctx context.Context, clie
 	var result FullHistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -391,8 +382,7 @@ func (s *Service) GetCapableAccountsByClientManagementIDV2(ctx context.Context, 
 	var result CapableAccountsResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

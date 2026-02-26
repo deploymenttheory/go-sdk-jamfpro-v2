@@ -117,7 +117,10 @@ func (s *Service) ListScriptsV1(ctx context.Context, rsqlQuery map[string]string
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list scripts: %w", err)
 	}
@@ -138,8 +141,7 @@ func (s *Service) GetScriptByIDV1(ctx context.Context, id string) (*ResourceScri
 	var result ResourceScript
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -216,8 +218,7 @@ func (s *Service) DeleteScriptByIDV1(ctx context.Context, id string) (*interface
 	endpoint := fmt.Sprintf("%s/%s", EndpointScriptsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,8 +261,7 @@ func (s *Service) GetScriptHistoryV1(ctx context.Context, id string, rsqlQuery m
 	var result ScriptHistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)

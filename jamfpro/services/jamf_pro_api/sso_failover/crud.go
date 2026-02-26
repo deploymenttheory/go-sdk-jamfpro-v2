@@ -49,8 +49,7 @@ func (s *Service) GetV1(ctx context.Context) (*FailoverSettings, *interfaces.Res
 
 	endpoint := EndpointSSOFailoverV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -180,8 +180,7 @@ func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourcePatchSoftw
 	var result ResourcePatchSoftwareTitleConfiguration
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -300,8 +299,7 @@ func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -342,8 +340,7 @@ func (s *Service) GetDashboardStatusByIDV2(ctx context.Context, id string) (*Res
 	var result ResourceDashboardStatus
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -386,8 +383,7 @@ func (s *Service) RemoveFromDashboardByIDV2(ctx context.Context, id string) (*in
 	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -524,8 +520,7 @@ func (s *Service) GetExtensionAttributesByIDV2(ctx context.Context, id string) (
 	var result []ResourceExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -592,8 +587,7 @@ func (s *Service) GetPatchSummaryByIDV2(ctx context.Context, id string) (*Resour
 	var result ResourcePatchSummary
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -698,8 +692,7 @@ func (s *Service) GetPatchVersionsByIDV2(ctx context.Context, id string) ([]Reso
 	var result []ResourcePatchVersion
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

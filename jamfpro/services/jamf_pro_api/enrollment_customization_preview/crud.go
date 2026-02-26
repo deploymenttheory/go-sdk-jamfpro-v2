@@ -115,8 +115,7 @@ func (s *Service) GetAllPanels(ctx context.Context, id string) (*PanelListRespon
 	var result PanelListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -142,8 +141,7 @@ func (s *Service) GetPanelByID(ctx context.Context, id, panelID string) (*Resour
 	var result ResourcePanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -167,8 +165,7 @@ func (s *Service) DeletePanel(ctx context.Context, id, panelID string) (*interfa
 	endpoint := fmt.Sprintf("%s/%s/all/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -227,8 +224,7 @@ func (s *Service) GetLdapPanel(ctx context.Context, id, panelID string) (*Resour
 	var result ResourceLdapPanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -288,8 +284,7 @@ func (s *Service) DeleteLdapPanel(ctx context.Context, id, panelID string) (*int
 	endpoint := fmt.Sprintf("%s/%s/ldap/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -345,8 +340,7 @@ func (s *Service) GetSsoPanel(ctx context.Context, id, panelID string) (*Resourc
 	var result ResourceSsoPanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -403,8 +397,7 @@ func (s *Service) DeleteSsoPanel(ctx context.Context, id, panelID string) (*inte
 	endpoint := fmt.Sprintf("%s/%s/sso/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -466,8 +459,7 @@ func (s *Service) GetTextPanel(ctx context.Context, id, panelID string) (*Resour
 	var result ResourceTextPanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -530,8 +522,7 @@ func (s *Service) DeleteTextPanel(ctx context.Context, id, panelID string) (*int
 	endpoint := fmt.Sprintf("%s/%s/text/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -557,8 +548,7 @@ func (s *Service) GetTextPanelMarkdown(ctx context.Context, id, panelID string) 
 	var result ResponseTextPanelMarkdown
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -96,7 +96,10 @@ func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListR
 	}
 
 	endpoint := EndpointSmartGroupsV2
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list smart computer groups: %w", err)
 	}
@@ -116,8 +119,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResourceSmartGroup, 
 	var result ResourceSmartGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -162,8 +164,7 @@ func (s *Service) GetMembership(ctx context.Context, id string) (*MembershipResp
 	var result MembershipResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -235,8 +236,7 @@ func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Respon
 	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

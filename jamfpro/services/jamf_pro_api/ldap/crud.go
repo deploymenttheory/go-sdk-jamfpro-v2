@@ -58,8 +58,7 @@ func (s *Service) GetLdapGroupsV1(ctx context.Context, rsqlQuery map[string]stri
 	endpoint := EndpointLdapGroupsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -79,8 +78,7 @@ func (s *Service) GetLdapServersV1(ctx context.Context) ([]ResourceLdapServerV1,
 	endpoint := EndpointLdapServersV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -100,8 +98,7 @@ func (s *Service) GetLdapServersOnlyV1(ctx context.Context) ([]ResourceLdapServe
 	endpoint := EndpointLdapServersOnlyV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -159,8 +159,7 @@ func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceMobileDevi
 	var result ResourceMobileDevicePrestage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -319,8 +318,7 @@ func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDevicePrestagesV3, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -358,8 +356,7 @@ func (s *Service) GetScopeByIDV2(ctx context.Context, id string) (*ResourceDevic
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -481,8 +478,7 @@ func (s *Service) GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *i
 	var result []ResourcePrestageSync
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -505,8 +501,7 @@ func (s *Service) GetSyncsByIDV2(ctx context.Context, id string) ([]ResourcePres
 	var result []ResourcePrestageSync
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -529,8 +524,7 @@ func (s *Service) GetLatestSyncByIDV2(ctx context.Context, id string) (*Resource
 	var result ResourcePrestageSync
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -553,8 +547,7 @@ func (s *Service) GetAttachmentsByIDV3(ctx context.Context, id string) ([]Resour
 	var result []ResourceAttachment
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -675,7 +668,10 @@ func (s *Service) GetHistoryByIDV3(ctx context.Context, id string, query map[str
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get mobile device prestage history: %w", err)
 	}

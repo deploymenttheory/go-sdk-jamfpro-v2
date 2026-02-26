@@ -111,8 +111,7 @@ func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointEnrollmentCustomizationsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -136,8 +135,7 @@ func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceEnrollment
 	var result ResourceEnrollmentCustomization
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -242,8 +240,7 @@ func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointEnrollmentCustomizationsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -268,8 +265,7 @@ func (s *Service) GetHistoryV2(ctx context.Context, id string, rsqlQuery map[str
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -324,8 +320,7 @@ func (s *Service) GetPrestagesV2(ctx context.Context, id string) (*PrestagesResp
 	var result PrestagesResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

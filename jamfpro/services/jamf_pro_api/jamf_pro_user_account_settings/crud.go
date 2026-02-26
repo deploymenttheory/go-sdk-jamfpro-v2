@@ -67,8 +67,7 @@ func (s *Service) GetSettingsV1(ctx context.Context, keyID string) (*ResourceUse
 	var result ResourceUserPreferencesSettings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -92,8 +91,7 @@ func (s *Service) GetV1(ctx context.Context, keyID string) (string, *interfaces.
 	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesV1, keyID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, body, err := s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -150,8 +148,7 @@ func (s *Service) DeleteV1(ctx context.Context, keyID string) (*interfaces.Respo
 	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesV1, keyID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

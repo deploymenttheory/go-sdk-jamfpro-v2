@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_mobile"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_ios"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -36,16 +36,16 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_SelfServiceBrandingMobile_Lifecycle(t *testing.T) {
+func TestAcceptance_SelfServiceBrandingIOS_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SelfServiceBrandingMobile
+	svc := acc.Client.SelfServiceBrandingIOS
 	ctx := context.Background()
 
 	// 1. Create
 	acc.LogTestStage(t, "Create", "Creating test self-service branding mobile")
 
-	createReq := &self_service_branding_mobile.ResourceSelfServiceBrandingMobile{
+	createReq := &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
 		BrandingName:              acc.UniqueName("acc-test-ssb-mobile"),
 		HeaderBackgroundColorCode: "#FFFFFF",
 		MenuIconColorCode:         "#000000",
@@ -88,7 +88,7 @@ func TestAcceptance_SelfServiceBrandingMobile_Lifecycle(t *testing.T) {
 	// 4. Update
 	acc.LogTestStage(t, "Update", "Updating branding ID=%s", brandingID)
 
-	updateReq := &self_service_branding_mobile.ResourceSelfServiceBrandingMobile{
+	updateReq := &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
 		BrandingName:              acc.UniqueName("acc-test-ssb-mobile-updated"),
 		HeaderBackgroundColorCode: "#F0F0F0",
 		MenuIconColorCode:         "#0066CC",
@@ -119,13 +119,13 @@ func TestAcceptance_SelfServiceBrandingMobile_Lifecycle(t *testing.T) {
 }
 
 // =============================================================================
-// TestAcceptance_SelfServiceBrandingMobile_ValidationErrors
+// TestAcceptance_SelfServiceBrandingIOS_ValidationErrors
 // =============================================================================
 
-func TestAcceptance_SelfServiceBrandingMobile_ValidationErrors(t *testing.T) {
+func TestAcceptance_SelfServiceBrandingIOS_ValidationErrors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SelfServiceBrandingMobile
+	svc := acc.Client.SelfServiceBrandingIOS
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")
@@ -146,7 +146,7 @@ func TestAcceptance_SelfServiceBrandingMobile_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateByIDV1(context.Background(), "", &self_service_branding_mobile.ResourceSelfServiceBrandingMobile{
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
 			BrandingName:              "x",
 			HeaderBackgroundColorCode: "#FFF",
 			MenuIconColorCode:         "#000",

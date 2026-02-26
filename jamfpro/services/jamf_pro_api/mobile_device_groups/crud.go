@@ -135,7 +135,10 @@ func (s *Service) ListSmartV1(ctx context.Context, rsqlQuery map[string]string) 
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list smart mobile device groups: %w", err)
 	}
@@ -156,8 +159,7 @@ func (s *Service) GetSmartByIDV1(ctx context.Context, id string) (*ResourceSmart
 	var result ResourceSmartMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -233,8 +235,7 @@ func (s *Service) DeleteSmartByIDV1(ctx context.Context, id string) (*interfaces
 	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -280,7 +281,10 @@ func (s *Service) ListStaticV1(ctx context.Context, rsqlQuery map[string]string)
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list static mobile device groups: %w", err)
 	}
@@ -301,8 +305,7 @@ func (s *Service) GetStaticByIDV1(ctx context.Context, id string) (*ResourceStat
 	var result ResourceStaticMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -386,8 +389,7 @@ func (s *Service) DeleteStaticByIDV1(ctx context.Context, id string) (*interface
 	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -411,8 +413,7 @@ func (s *Service) ListAllV1(ctx context.Context) ([]ResourceMobileDeviceGroupSum
 	endpoint := EndpointMobileDeviceGroupsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -458,7 +459,10 @@ func (s *Service) GetStaticGroupMembershipV1(ctx context.Context, id string, rsq
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get static group membership: %w", err)
 	}
@@ -501,7 +505,10 @@ func (s *Service) GetSmartGroupMembershipV1(ctx context.Context, id string, rsql
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get smart group membership: %w", err)
 	}

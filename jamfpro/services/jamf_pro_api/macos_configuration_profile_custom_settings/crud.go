@@ -52,8 +52,7 @@ func (s *Service) GetSchemaList(ctx context.Context) (*ResponseCustomSettingsSch
 	endpoint := EndpointCustomSettingsSchemaList
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResponseCustomSettingsSchemaList
@@ -75,8 +74,7 @@ func (s *Service) GetByPayloadUUID(ctx context.Context, id string) (*ResourceCon
 	endpoint := fmt.Sprintf("%s/%s", EndpointConfigProfilesMacOS, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResourceConfigProfile

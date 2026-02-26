@@ -101,8 +101,7 @@ func (s *Service) GetDefaultMappingsV2(ctx context.Context, providerName string)
 	var result ResponseDefaultMappings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -126,8 +125,7 @@ func (s *Service) GetDefaultServerConfigurationV2(ctx context.Context, providerN
 	var result ResponseDefaultServerConfiguration
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -176,8 +174,7 @@ func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceCloudLdap,
 	var result ResourceCloudLdap
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -227,8 +224,7 @@ func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Resp
 	endpoint := fmt.Sprintf("%s/%s", EndpointCloudLdapV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -252,8 +248,7 @@ func (s *Service) GetBindConnectionPoolStatsByIDV2(ctx context.Context, id strin
 	var result ConnectionPoolStats
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -277,8 +272,7 @@ func (s *Service) GetSearchConnectionPoolStatsByIDV2(ctx context.Context, id str
 	var result ConnectionPoolStats
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -302,8 +296,7 @@ func (s *Service) TestConnectionByIDV2(ctx context.Context, id string) (*Connect
 	var result ConnectionStatusResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -327,8 +320,7 @@ func (s *Service) GetMappingsByIDV2(ctx context.Context, id string) (*CloudLdapM
 	var result CloudLdapMappings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

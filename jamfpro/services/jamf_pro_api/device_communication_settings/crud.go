@@ -58,7 +58,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 func (s *Service) GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *interfaces.Response, error) {
 	var result ResourceDeviceCommunicationSettings
 	endpoint := EndpointDeviceCommunicationSettingsV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	headers := map[string]string{"Accept": mime.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -114,7 +114,10 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	}
 
 	endpoint := EndpointDeviceCommunicationSettingsHistoryV1
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device communication settings history: %w", err)
 	}

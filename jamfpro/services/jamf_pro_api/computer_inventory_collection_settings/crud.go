@@ -59,8 +59,7 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceComputerInventoryCollecti
 	var result ResourceComputerInventoryCollectionSettings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -134,8 +133,7 @@ func (s *Service) DeleteCustomPathByIDV2(ctx context.Context, id string) (*inter
 	endpoint := fmt.Sprintf("%s/custom-path/%s", EndpointComputerInventoryCollectionSettingsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

@@ -153,6 +153,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_computer_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smtp_server"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sites"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_certificate"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_failover"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_settings"
@@ -160,6 +161,8 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_computer_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/time_zones"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/tomcat_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/user"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/venafi"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/volume_purchasing_locations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/volume_purchasing_subscriptions"
@@ -327,8 +330,11 @@ type Client struct {
 	StaticComputerGroups                *static_computer_groups.Service
 	SelfServicePlusSettings             *self_service_plus_settings.Service
 	SMTPServer                          *smtp_server.Service
+	Sites                               *sites.Service
 	StartupStatus                       *startup_status.Service
 	TimeZones                           *time_zones.Service
+	TomcatSettings                      *tomcat_settings.Service
+	User                                *user.Service
 	Venafi                              *venafi.Service
 	VolumePurchasingLocations           *volume_purchasing_locations.Service
 	VolumePurchasingSubscriptions       *volume_purchasing_subscriptions.Service
@@ -499,8 +505,11 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		StaticComputerGroups:                static_computer_groups.NewService(transport),
 		SelfServicePlusSettings:             self_service_plus_settings.NewService(transport),
 		SMTPServer:                          smtp_server.NewService(transport),
+		Sites:                               sites.NewService(transport),
 		StartupStatus:                       startup_status.NewService(transport),
 		TimeZones:                           time_zones.NewService(transport),
+		TomcatSettings:                      tomcat_settings.NewService(transport),
+		User:                                user.NewService(transport),
 		Venafi:                              venafi.NewService(transport),
 		VolumePurchasingLocations:           volume_purchasing_locations.NewService(transport),
 		VolumePurchasingSubscriptions:       volume_purchasing_subscriptions.NewService(transport),

@@ -65,8 +65,7 @@ func (s *Service) GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *i
 	endpoint := EndpointClientCheckinV3
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -109,7 +108,10 @@ func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string)
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get client check-in history: %w", err)
 	}

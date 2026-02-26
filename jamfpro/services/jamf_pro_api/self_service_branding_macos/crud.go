@@ -81,8 +81,7 @@ func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListR
 	endpoint := EndpointSelfServiceBrandingMacOSV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -105,8 +104,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResourceSelfServiceB
 	var result ResourceSelfServiceBrandingMacOS
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -209,8 +207,7 @@ func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Respon
 	endpoint := fmt.Sprintf("%s/%s", EndpointSelfServiceBrandingMacOSV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

@@ -100,8 +100,7 @@ func (s *Service) GetV1(ctx context.Context) (*ResourceCloudDistributionPointV1,
 	endpoint := EndpointCloudDistributionPointV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -169,8 +168,7 @@ func (s *Service) DeleteV1(ctx context.Context) (*interfaces.Response, error) {
 	endpoint := EndpointCloudDistributionPointV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -189,8 +187,7 @@ func (s *Service) GetUploadCapabilityV1(ctx context.Context) (*UploadCapabilityV
 	var result UploadCapabilityV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -209,8 +206,7 @@ func (s *Service) GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *
 	var result TestConnectionV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -251,7 +247,10 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, EndpointCloudDistributionPointHistoryV1, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, EndpointCloudDistributionPointHistoryV1, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get cloud distribution point history: %w", err)
 	}
@@ -289,7 +288,10 @@ func (s *Service) GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, EndpointCloudDistributionPointFilesV1, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, EndpointCloudDistributionPointFilesV1, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get cloud distribution point files: %w", err)
 	}

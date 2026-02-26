@@ -127,8 +127,7 @@ func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfProtectSettin
 	endpoint := EndpointJamfProtectV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result ResourceJamfProtectSettings
@@ -274,7 +273,10 @@ func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect deployment tasks: %w", err)
 	}
@@ -336,7 +338,11 @@ func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect history: %w", err)
 	}
@@ -399,7 +405,10 @@ func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) 
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect plans: %w", err)
 	}
@@ -414,8 +423,7 @@ func (s *Service) DeleteIntegrationV1(ctx context.Context) (*interfaces.Response
 	endpoint := EndpointJamfProtectV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

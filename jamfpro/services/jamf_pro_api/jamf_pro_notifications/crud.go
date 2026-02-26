@@ -53,8 +53,7 @@ func (s *Service) GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotificati
 	endpoint := EndpointNotificationsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	var result []ResourceNotification
@@ -80,8 +79,7 @@ func (s *Service) DeleteByTypeAndIDV1(ctx context.Context, notificationType, id 
 	endpoint := fmt.Sprintf("%s/%s/%s", EndpointNotificationsV1, notificationType, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": mime.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
