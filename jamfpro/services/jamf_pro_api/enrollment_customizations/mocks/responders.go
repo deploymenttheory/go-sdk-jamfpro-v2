@@ -31,6 +31,9 @@ var validateAddHistoryNotesJSON []byte
 //go:embed validate_prestages.json
 var validatePrestagesJSON []byte
 
+//go:embed validate_upload_image.json
+var validateUploadImageJSON []byte
+
 type registeredResponse struct {
 	method   string
 	path     string
@@ -68,10 +71,13 @@ func (m *EnrollmentCustomizationsMock) dispatch(method, path string) ([]byte, in
 	return nil, 0, false
 }
 
+// errNoMockRegistered is returned when no mock is registered for the request.
+var errNoMockRegistered = fmt.Errorf("no mock registered")
+
 func (m *EnrollmentCustomizationsMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -90,7 +96,7 @@ func (m *EnrollmentCustomizationsMock) Get(ctx context.Context, endpoint string,
 func (m *EnrollmentCustomizationsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("POST", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -117,7 +123,7 @@ func (m *EnrollmentCustomizationsMock) PostForm(ctx context.Context, endpoint st
 func (m *EnrollmentCustomizationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("POST_MULTIPART", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -136,7 +142,7 @@ func (m *EnrollmentCustomizationsMock) PostMultipart(ctx context.Context, endpoi
 func (m *EnrollmentCustomizationsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("PUT", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -159,7 +165,7 @@ func (m *EnrollmentCustomizationsMock) Patch(ctx context.Context, endpoint strin
 func (m *EnrollmentCustomizationsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	_, status, found := m.dispatch("DELETE", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	return &interfaces.Response{StatusCode: status}, nil
@@ -172,7 +178,7 @@ func (m *EnrollmentCustomizationsMock) DeleteWithBody(ctx context.Context, endpo
 func (m *EnrollmentCustomizationsMock) GetBytes(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil, nil
+		return nil, nil, errNoMockRegistered
 	}
 
 	return &interfaces.Response{StatusCode: status}, body, nil
@@ -271,11 +277,10 @@ func (m *EnrollmentCustomizationsMock) RegisterGetPrestagesMock() {
 }
 
 func (m *EnrollmentCustomizationsMock) RegisterUploadImageMock() {
-	response := []byte(`{"id":"123","url":"https://example.jamfcloud.com/enrollment-customizations/images/123"}`)
 	m.responses = append(m.responses, registeredResponse{
 		method:   "POST_MULTIPART",
 		path:     "/api/v2/enrollment-customizations/images",
-		response: response,
+		response: validateUploadImageJSON,
 		status:   http.StatusCreated,
 	})
 }

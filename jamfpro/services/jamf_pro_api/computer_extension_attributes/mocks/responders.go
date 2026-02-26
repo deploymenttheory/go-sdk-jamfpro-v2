@@ -111,6 +111,38 @@ func (m *ComputerExtensionAttributesMock) RegisterAddHistoryNoteMock() {
 	m.register("POST", "/api/v1/computer-extension-attributes/1/history", 201, "")
 }
 
+func (m *ComputerExtensionAttributesMock) RegisterListTemplatesMock() {
+	m.register("GET", "/api/v1/computer-extension-attributes/templates", 200, "validate_templates_list.json")
+}
+
+func (m *ComputerExtensionAttributesMock) RegisterListTemplatesInvalidMock() {
+	m.register("GET", "/api/v1/computer-extension-attributes/templates", 200, "validate_templates_list_invalid.json")
+}
+
+func (m *ComputerExtensionAttributesMock) RegisterGetTemplateMock() {
+	m.register("GET", "/api/v1/computer-extension-attributes/templates/1", 200, "validate_template_get.json")
+}
+
+func (m *ComputerExtensionAttributesMock) RegisterUploadMock() {
+	m.register("POST", "/api/v1/computer-extension-attributes/upload", 200, "validate_get.json")
+}
+
+func (m *ComputerExtensionAttributesMock) RegisterDataDependencyMock() {
+	m.register("GET", "/api/v1/computer-extension-attributes/1/data-dependency", 200, "validate_data_dependency.json")
+}
+
+func (m *ComputerExtensionAttributesMock) RegisterDownloadMock() {
+	m.register("GET", "/api/v1/computer-extension-attributes/1/download", 200, "validate_download.xml")
+}
+
+func (m *ComputerExtensionAttributesMock) RegisterListInvalidMock() {
+	m.register("GET", "/api/v1/computer-extension-attributes", 200, "validate_list_invalid.json")
+}
+
+func (m *ComputerExtensionAttributesMock) RegisterHistoryInvalidMock() {
+	m.register("GET", "/api/v1/computer-extension-attributes/1/history", 200, "validate_history_invalid.json")
+}
+
 func (m *ComputerExtensionAttributesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)
@@ -177,12 +209,7 @@ func (m *ComputerExtensionAttributesMock) GetLogger() *zap.Logger               
 func (m *ComputerExtensionAttributesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("ComputerExtensionAttributesMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("ComputerExtensionAttributesMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -197,7 +224,9 @@ func (m *ComputerExtensionAttributesMock) dispatch(method, path string, result a
 	}
 
 	if result != nil && len(r.rawBody) > 0 {
-		if err := json.Unmarshal(r.rawBody, result); err != nil {
+		if b, ok := result.(*[]byte); ok {
+			*b = append([]byte(nil), r.rawBody...)
+		} else if err := json.Unmarshal(r.rawBody, result); err != nil {
 			return resp, fmt.Errorf("ComputerExtensionAttributesMock: unmarshal into result: %w", err)
 		}
 	}

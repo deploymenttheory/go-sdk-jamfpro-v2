@@ -41,6 +41,10 @@ func (m *LocalAdminPasswordMock) RegisterMocks() {
 	m.RegisterUpdateSettingsMock()
 	m.RegisterGetPasswordHistoryMock()
 	m.RegisterGetCurrentPasswordMock()
+	m.RegisterGetHistoryByUsernameMock()
+	m.RegisterGetAuditByUsernameAndGUIDMock()
+	m.RegisterGetHistoryByUsernameAndGUIDMock()
+	m.RegisterGetPasswordByUsernameAndGUIDMock()
 	m.RegisterGetFullHistoryMock()
 	m.RegisterGetCapableAccountsMock()
 	m.RegisterSetPasswordMock()
@@ -80,12 +84,7 @@ func (m *LocalAdminPasswordMock) registerError(method, path string, statusCode i
 func (m *LocalAdminPasswordMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("LocalAdminPasswordMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("LocalAdminPasswordMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -137,6 +136,22 @@ func (m *LocalAdminPasswordMock) RegisterGetPasswordHistoryMock() {
 
 func (m *LocalAdminPasswordMock) RegisterGetCurrentPasswordMock() {
 	m.register("GET", "/api/v2/local-admin-password/device-001/account/admin/password", 200, "validate_current_password.json")
+}
+
+func (m *LocalAdminPasswordMock) RegisterGetHistoryByUsernameMock() {
+	m.register("GET", "/api/v2/local-admin-password/device-001/account/admin/history", 200, "validate_account_history.json")
+}
+
+func (m *LocalAdminPasswordMock) RegisterGetAuditByUsernameAndGUIDMock() {
+	m.register("GET", "/api/v2/local-admin-password/device-001/account/admin/guid-123/audit", 200, "validate_password_history.json")
+}
+
+func (m *LocalAdminPasswordMock) RegisterGetHistoryByUsernameAndGUIDMock() {
+	m.register("GET", "/api/v2/local-admin-password/device-001/account/admin/guid-123/history", 200, "validate_account_history.json")
+}
+
+func (m *LocalAdminPasswordMock) RegisterGetPasswordByUsernameAndGUIDMock() {
+	m.register("GET", "/api/v2/local-admin-password/device-001/account/admin/guid-123/password", 200, "validate_current_password.json")
 }
 
 func (m *LocalAdminPasswordMock) RegisterGetFullHistoryMock() {

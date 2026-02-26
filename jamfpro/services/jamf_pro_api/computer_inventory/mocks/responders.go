@@ -17,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 type ComputerInventoryMock struct {
@@ -34,6 +35,10 @@ func (m *ComputerInventoryMock) register(method, path string, statusCode int, fi
 		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+func (m *ComputerInventoryMock) registerError(method, path string, errMsg string) {
+	m.responses[method+":"+path] = registeredResponse{statusCode: 500, rawBody: nil, errMsg: errMsg}
 }
 
 func (m *ComputerInventoryMock) RegisterListMock() {
@@ -77,9 +82,8 @@ func (m *ComputerInventoryMock) RegisterUploadAttachmentMock(computerID string) 
 }
 
 func (m *ComputerInventoryMock) RegisterGetAttachmentMock(computerID, attachmentID string) {
-	// Provide a JSON base64-encoded byte slice so json.Unmarshal into *[]byte returns non-nil bytes.
 	path := "/api/v3/computers-inventory/" + computerID + "/attachments/" + attachmentID
-	m.responses["GET:"+path] = registeredResponse{statusCode: 200, rawBody: []byte(`"dGVzdGF0dGFjaG1lbnQ="`)}
+	m.register("GET", path, 200, "validate_attachment_get.json")
 }
 
 func (m *ComputerInventoryMock) RegisterDeleteAttachmentMock(computerID, attachmentID string) {
@@ -98,12 +102,43 @@ func (m *ComputerInventoryMock) RegisterEraseMock(id string) {
 	m.register("POST", "/api/v1/computer-inventory/"+id+"/erase", 204, "")
 }
 
+func (m *ComputerInventoryMock) RegisterListErrorMock() {
+	m.registerError("GET", "/api/v3/computers-inventory", "simulated ListV3 API error")
+}
+
+func (m *ComputerInventoryMock) RegisterListFileVaultErrorMock() {
+	m.registerError("GET", "/api/v3/computers-inventory/filevault", "simulated ListFileVault API error")
+}
+
+func (m *ComputerInventoryMock) RegisterListInvalidJSONMock() {
+	m.register("GET", "/api/v3/computers-inventory", 200, "validate_list_invalid.json")
+}
+
+func (m *ComputerInventoryMock) RegisterListFileVaultInvalidJSONMock() {
+	m.register("GET", "/api/v3/computers-inventory/filevault", 200, "validate_filevault_list_invalid.json")
+}
+
+func (m *ComputerInventoryMock) RegisterCreateErrorMock() {
+	m.registerError("POST", "/api/v3/computers-inventory", "simulated CreateV3 API error")
+}
+
+func (m *ComputerInventoryMock) RegisterGetByIDErrorMock(id string) {
+	m.registerError("GET", "/api/v3/computers-inventory/"+id, "simulated GetByID API error")
+}
+
+func (m *ComputerInventoryMock) RegisterDeleteErrorMock(id string) {
+	m.registerError("DELETE", "/api/v3/computers-inventory/"+id, "simulated Delete API error")
+}
+
 func (m *ComputerInventoryMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("ComputerInventoryMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("ComputerInventoryMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -154,8 +189,10 @@ func (m *ComputerInventoryMock) GetPaginated(ctx context.Context, path string, _
 	if err != nil {
 		return resp, err
 	}
-	if mergePage != nil && len(resp.Body) > 0 {
-		_ = mergePage(resp.Body)
+	if mergePage != nil && resp != nil && len(resp.Body) > 0 {
+		if err := mergePage(resp.Body); err != nil {
+			return resp, err
+		}
 	}
 	return resp, nil
 }

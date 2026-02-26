@@ -84,12 +84,7 @@ func (m *ComputerGroupsMock) registerError(method, path string, statusCode int, 
 func (m *ComputerGroupsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("ComputerGroupsMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("ComputerGroupsMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -165,13 +160,46 @@ func (m *ComputerGroupsMock) RegisterDeleteStaticGroupMock() {
 	m.register("DELETE", "/api/v2/computer-groups/static-groups/10", 204, "")
 }
 
+// V1 and additional V2
+func (m *ComputerGroupsMock) RegisterListAllV1Mock() {
+	m.register("GET", "/api/v1/computer-groups", 200, "validate_list_all_v1.json")
+}
+
+func (m *ComputerGroupsMock) RegisterGetSmartGroupMembershipMock() {
+	m.register("GET", "/api/v2/computer-groups/smart-group-membership/1", 200, "validate_get_smart_group_membership.json")
+}
+
 // Errors
 func (m *ComputerGroupsMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v2/computer-groups/smart-groups/999", 404, "error_not_found.json")
 }
 
+func (m *ComputerGroupsMock) RegisterStaticNotFoundErrorMock() {
+	m.registerError("GET", "/api/v2/computer-groups/static-groups/999", 404, "error_not_found.json")
+}
+
 func (m *ComputerGroupsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/api/v2/computer-groups/smart-groups", 409, "error_conflict.json")
+}
+
+func (m *ComputerGroupsMock) RegisterStaticConflictErrorMock() {
+	m.registerError("POST", "/api/v2/computer-groups/static-groups", 409, "error_conflict.json")
+}
+
+func (m *ComputerGroupsMock) RegisterSmartUpdateNotFoundErrorMock() {
+	m.registerError("PUT", "/api/v2/computer-groups/smart-groups/999", 404, "error_not_found.json")
+}
+
+func (m *ComputerGroupsMock) RegisterStaticUpdateNotFoundErrorMock() {
+	m.registerError("PUT", "/api/v2/computer-groups/static-groups/999", 404, "error_not_found.json")
+}
+
+func (m *ComputerGroupsMock) RegisterSmartDeleteNotFoundErrorMock() {
+	m.registerError("DELETE", "/api/v2/computer-groups/smart-groups/999", 404, "error_not_found.json")
+}
+
+func (m *ComputerGroupsMock) RegisterStaticDeleteNotFoundErrorMock() {
+	m.registerError("DELETE", "/api/v2/computer-groups/static-groups/999", 404, "error_not_found.json")
 }
 
 func (m *ComputerGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

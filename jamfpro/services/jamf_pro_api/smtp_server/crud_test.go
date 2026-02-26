@@ -111,3 +111,79 @@ func TestUnit_SmtpServer_TestV1_EmptyRecipientEmail(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, resp)
 }
+
+func setupMockServiceWithError(t *testing.T, registerFn func(*mocks.SMTPServerMock)) (*Service, *mocks.SMTPServerMock) {
+	t.Helper()
+	mock := mocks.NewSMTPServerMock()
+	registerFn(mock)
+	return NewService(mock), mock
+}
+
+func TestUnit_SmtpServer_GetV2_Error(t *testing.T) {
+	svc, _ := setupMockServiceWithError(t, func(m *mocks.SMTPServerMock) { m.RegisterGetErrorMock() })
+	result, resp, err := svc.GetV2(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_SmtpServer_UpdateV2_Error(t *testing.T) {
+	svc, _ := setupMockServiceWithError(t, func(m *mocks.SMTPServerMock) { m.RegisterPutErrorMock() })
+	settings := &ResourceSMTPServer{
+		Enabled:            false,
+		AuthenticationType: "NONE",
+		ConnectionSettings: &ResourceSMTPServerConnectionSettings{Host: "smtp.example.com", Port: 587},
+		SenderSettings:     &ResourceSMTPServerSenderSettings{EmailAddress: "jamf@example.com"},
+	}
+	result, resp, err := svc.UpdateV2(context.Background(), settings)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_SmtpServer_GetHistoryV1_Error(t *testing.T) {
+	svc, _ := setupMockServiceWithError(t, func(m *mocks.SMTPServerMock) { m.RegisterGetHistoryErrorMock() })
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_SmtpServer_GetHistoryV1_InvalidJSON(t *testing.T) {
+	svc, _ := setupMockServiceWithError(t, func(m *mocks.SMTPServerMock) { m.RegisterGetHistoryInvalidJSONMock() })
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_SmtpServer_GetHistoryV1_InvalidItem(t *testing.T) {
+	svc, _ := setupMockServiceWithError(t, func(m *mocks.SMTPServerMock) { m.RegisterGetHistoryInvalidItemMock() })
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_SmtpServer_AddHistoryNoteV1_Error(t *testing.T) {
+	svc, _ := setupMockServiceWithError(t, func(m *mocks.SMTPServerMock) { m.RegisterAddHistoryNoteErrorMock() })
+	req := &AddHistoryNoteRequest{Note: "Test note"}
+	result, resp, err := svc.AddHistoryNoteV1(context.Background(), req)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 500, resp.StatusCode)
+}
+
+func TestUnit_SmtpServer_TestV1_Error(t *testing.T) {
+	svc, _ := setupMockServiceWithError(t, func(m *mocks.SMTPServerMock) { m.RegisterTestErrorMock() })
+	req := &TestRequest{RecipientEmail: "test@example.com"}
+	resp, err := svc.TestV1(context.Background(), req)
+	require.Error(t, err)
+	require.Nil(t, resp)
+}

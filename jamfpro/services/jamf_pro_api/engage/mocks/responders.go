@@ -4,6 +4,7 @@ import (
 	"context"
 	_ "embed"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -11,6 +12,9 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 )
+
+// errNoMockRegistered is returned when no mock is registered for the request.
+var errNoMockRegistered = fmt.Errorf("no mock registered")
 
 //go:embed validate_get.json
 var validateGetJSON []byte
@@ -23,6 +27,9 @@ var validateHistoryJSON []byte
 
 //go:embed validate_add_history_notes.json
 var validateAddHistoryNotesJSON []byte
+
+//go:embed validate_get_invalid.json
+var validateGetInvalidJSON []byte
 
 type registeredResponse struct {
 	method   string
@@ -53,7 +60,7 @@ func (m *EngageMock) dispatch(method, path string) ([]byte, int, bool) {
 func (m *EngageMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -72,7 +79,7 @@ func (m *EngageMock) Get(ctx context.Context, endpoint string, queryParams map[s
 func (m *EngageMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("POST", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -103,7 +110,7 @@ func (m *EngageMock) PostMultipart(ctx context.Context, endpoint string, fileFie
 func (m *EngageMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
 	respBody, status, found := m.dispatch("PUT", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil
+		return nil, errNoMockRegistered
 	}
 
 	if out != nil {
@@ -134,7 +141,7 @@ func (m *EngageMock) DeleteWithBody(ctx context.Context, endpoint string, body a
 func (m *EngageMock) GetBytes(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
-		return &interfaces.Response{StatusCode: http.StatusNotFound}, nil, nil
+		return nil, nil, errNoMockRegistered
 	}
 
 	return &interfaces.Response{StatusCode: status}, body, nil
@@ -165,6 +172,16 @@ func (m *EngageMock) RegisterGetMock() {
 		method:   "GET",
 		path:     "/api/v2/engage",
 		response: validateGetJSON,
+		status:   http.StatusOK,
+	})
+}
+
+// RegisterGetInvalidJSONMock registers a mock that returns invalid JSON for GET /api/v2/engage.
+func (m *EngageMock) RegisterGetInvalidJSONMock() {
+	m.responses = append(m.responses, registeredResponse{
+		method:   "GET",
+		path:     "/api/v2/engage",
+		response: validateGetInvalidJSON,
 		status:   http.StatusOK,
 	})
 }

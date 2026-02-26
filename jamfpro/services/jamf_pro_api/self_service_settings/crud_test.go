@@ -106,3 +106,64 @@ func TestUnit_SelfServiceSettings_AddHistoryNotesV1_EmptyNote(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "note is required")
 }
+
+func TestUnit_SelfServiceSettings_Get_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered - dispatch returns nil, errNoMockRegistered
+
+	result, resp, err := svc.Get(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_SelfServiceSettings_Update_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered for Update
+
+	request := &ResourceSelfServiceSettings{
+		InstallSettings: InstallSettings{InstallAutomatically: false, InstallLocation: "/Applications"},
+		LoginSettings:   LoginSettings{UserLoginLevel: "USER", AllowRememberMe: true, UseFido2: false, AuthType: "JAMF"},
+		ConfigurationSettings: ConfigurationSettings{
+			NotificationsEnabled: true, AlertUserApprovedMdm: false, DefaultLandingPage: "HOME",
+			DefaultHomeCategoryId: 0, BookmarksName: "Bookmarks",
+		},
+	}
+	result, resp, err := svc.Update(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_SelfServiceSettings_GetHistoryV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered for GetHistoryV1
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get self service settings history")
+}
+
+func TestUnit_SelfServiceSettings_GetHistoryV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryInvalidMock()
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get self service settings history")
+}
+
+func TestUnit_SelfServiceSettings_AddHistoryNotesV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered for AddHistoryNotesV1
+
+	req := &AddHistoryNotesRequest{Note: "test note"}
+	result, resp, err := svc.AddHistoryNotesV1(context.Background(), req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}

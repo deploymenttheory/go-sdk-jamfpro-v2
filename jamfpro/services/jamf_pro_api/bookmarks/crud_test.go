@@ -15,6 +15,13 @@ func setupMockService(t *testing.T) (*Service, *mocks.BookmarksMock) {
 	return NewService(mock), mock
 }
 
+// setupMockServiceNoMocks returns a service with a mock that has no responses registered (for error-path tests).
+func setupMockServiceNoMocks(t *testing.T) *Service {
+	t.Helper()
+	mock := mocks.NewBookmarksMock()
+	return NewService(mock)
+}
+
 func TestUnit_Bookmarks_ListV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListV1(context.Background(), nil)
@@ -107,4 +114,70 @@ func TestUnit_Bookmarks_DeleteByIDV1_EmptyID(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, resp)
 	require.Contains(t, err.Error(), "id is required")
+}
+
+// Error cases when no mock is registered (client returns error).
+func TestUnit_Bookmarks_ListV1_NoMock(t *testing.T) {
+	svc := setupMockServiceNoMocks(t)
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "no mock")
+}
+
+func TestUnit_Bookmarks_GetByIDV1_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// ID "999" has no registered mock (only "1" is mocked)
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "no mock")
+}
+
+func TestUnit_Bookmarks_CreateV1_NoMock(t *testing.T) {
+	svc := setupMockServiceNoMocks(t)
+	bm := &ResourceBookmark{Name: "Test", URL: "https://example.com", SiteID: "-1", IconID: "1"}
+	result, resp, err := svc.CreateV1(context.Background(), bm)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "no mock")
+}
+
+func TestUnit_Bookmarks_UpdateByIDV1_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	bm := &ResourceBookmark{Name: "Updated", URL: "https://updated.example.com", SiteID: "-1", IconID: "1"}
+	// ID "999" has no registered mock
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "999", bm)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "no mock")
+}
+
+func TestUnit_Bookmarks_DeleteByIDV1_NoMock(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// ID "999" has no registered mock
+	resp, err := svc.DeleteByIDV1(context.Background(), "999")
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "no mock")
+}
+
+func TestUnit_Bookmarks_ListV1_WithQuery(t *testing.T) {
+	svc, _ := setupMockService(t)
+	rsqlQuery := map[string]string{"page": "1", "page-size": "10"}
+	result, resp, err := svc.ListV1(context.Background(), rsqlQuery)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 1, result.TotalCount)
+}
+
+func TestUnit_Bookmarks_NewService(t *testing.T) {
+	mock := mocks.NewBookmarksMock()
+	svc := NewService(mock)
+	require.NotNil(t, svc)
 }

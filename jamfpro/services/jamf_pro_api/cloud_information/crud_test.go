@@ -29,3 +29,28 @@ func TestUnit_CloudInformation_GetV1_Success(t *testing.T) {
 	assert.False(t, result.GovCloudInstance)
 	assert.True(t, result.ManagedServiceProviderInstance)
 }
+
+func TestUnit_CloudInformation_GetV1_ClientError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetCloudInformationErrorMock()
+
+	result, resp, err := svc.GetV1(context.Background())
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "mock client error")
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Nil(t, result)
+}
+
+func TestUnit_CloudInformation_GetV1_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered - dispatch returns (nil, err)
+
+	result, resp, err := svc.GetV1(context.Background())
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no response for")
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}

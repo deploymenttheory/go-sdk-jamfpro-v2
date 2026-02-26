@@ -17,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 type ReturnToServiceMock struct {
@@ -34,6 +35,20 @@ func (m *ReturnToServiceMock) register(method, path string, statusCode int, fixt
 		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+func (m *ReturnToServiceMock) registerError(method, path string, statusCode int, fixture string) {
+	body, err := os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+	if err != nil {
+		panic(fmt.Sprintf("ReturnToServiceMock: failed to load error fixture %q: %v", fixture, err))
+	}
+	var parsed struct {
+		Code    string `json:"code"`
+		Message string `json:"message"`
+	}
+	_ = json.Unmarshal(body, &parsed)
+	errMsg := fmt.Sprintf("Jamf Pro API error (%d) [%s]: %s", statusCode, parsed.Code, parsed.Message)
+	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body, errMsg: errMsg}
 }
 
 func (m *ReturnToServiceMock) RegisterListMock() {
@@ -56,12 +71,35 @@ func (m *ReturnToServiceMock) RegisterDeleteMock() {
 	m.register("DELETE", "/api/v1/return-to-service/1", 204, "")
 }
 
+func (m *ReturnToServiceMock) RegisterListErrorMock() {
+	m.registerError("GET", "/api/v1/return-to-service", 500, "error_api.json")
+}
+
+func (m *ReturnToServiceMock) RegisterGetByIDErrorMock() {
+	m.registerError("GET", "/api/v1/return-to-service/1", 500, "error_api.json")
+}
+
+func (m *ReturnToServiceMock) RegisterCreateErrorMock() {
+	m.registerError("POST", "/api/v1/return-to-service", 500, "error_api.json")
+}
+
+func (m *ReturnToServiceMock) RegisterUpdateErrorMock() {
+	m.registerError("PUT", "/api/v1/return-to-service/1", 500, "error_api.json")
+}
+
+func (m *ReturnToServiceMock) RegisterDeleteErrorMock() {
+	m.registerError("DELETE", "/api/v1/return-to-service/1", 500, "error_api.json")
+}
+
 func (m *ReturnToServiceMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("ReturnToServiceMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("ReturnToServiceMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

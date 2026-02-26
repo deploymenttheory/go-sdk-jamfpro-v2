@@ -117,6 +117,36 @@ func (m *CategoriesMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/api/v1/categories", 409, "error_conflict.json")
 }
 
+// RegisterListErrorMock registers GET /api/v1/categories → 500 for error path testing.
+func (m *CategoriesMock) RegisterListErrorMock() {
+	m.registerError("GET", "/api/v1/categories", 500, "error_not_found.json")
+}
+
+// RegisterGetCategoryHistoryErrorMock registers GET /api/v1/categories/1/history → 500 for error path testing.
+func (m *CategoriesMock) RegisterGetCategoryHistoryErrorMock() {
+	m.registerError("GET", "/api/v1/categories/1/history", 500, "error_not_found.json")
+}
+
+// RegisterDeleteCategoryErrorMock registers DELETE /api/v1/categories/1 → 500 for error path testing.
+func (m *CategoriesMock) RegisterDeleteCategoryErrorMock() {
+	m.registerError("DELETE", "/api/v1/categories/1", 500, "error_not_found.json")
+}
+
+// RegisterDeleteCategoriesBulkErrorMock registers POST delete-multiple → 500 for error path testing.
+func (m *CategoriesMock) RegisterDeleteCategoriesBulkErrorMock() {
+	m.registerError("POST", "/api/v1/categories/delete-multiple", 500, "error_not_found.json")
+}
+
+// RegisterUpdateCategoryErrorMock registers PUT /api/v1/categories/1 → 404 for error path testing.
+func (m *CategoriesMock) RegisterUpdateCategoryErrorMock() {
+	m.registerError("PUT", "/api/v1/categories/1", 404, "error_not_found.json")
+}
+
+// RegisterAddCategoryHistoryNotesErrorMock registers POST /api/v1/categories/1/history → 500 for error path testing.
+func (m *CategoriesMock) RegisterAddCategoryHistoryNotesErrorMock() {
+	m.registerError("POST", "/api/v1/categories/1/history", 500, "error_not_found.json")
+}
+
 // ---- interfaces.HTTPClient implementation ----
 
 func (m *CategoriesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -216,15 +246,11 @@ func (m *CategoriesMock) registerError(method, path string, statusCode int, fixt
 
 // dispatch looks up the registered response and either unmarshals the body
 // into result or returns an error depending on the registration type.
+// When no mock is registered, returns (nil, error) to avoid misleading 404 responses.
 func (m *CategoriesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("CategoriesMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("CategoriesMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{

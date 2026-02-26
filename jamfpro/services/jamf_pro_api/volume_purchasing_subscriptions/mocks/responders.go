@@ -46,6 +46,9 @@ func (m *VolumePurchasingSubscriptionsMock) RegisterMocks() {
 // RegisterErrorMocks registers all error responses in one call.
 func (m *VolumePurchasingSubscriptionsMock) RegisterErrorMocks() {
 	m.RegisterNotFoundErrorMock()
+	m.RegisterUpdateNotFoundErrorMock()
+	m.RegisterDeleteNotFoundErrorMock()
+	m.RegisterListErrorMock()
 }
 
 func (m *VolumePurchasingSubscriptionsMock) register(method, path string, statusCode int, fixture string) {
@@ -96,6 +99,18 @@ func (m *VolumePurchasingSubscriptionsMock) RegisterDeleteMock() {
 
 func (m *VolumePurchasingSubscriptionsMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v1/volume-purchasing-subscriptions/999", 404, "error_not_found.json")
+}
+
+func (m *VolumePurchasingSubscriptionsMock) RegisterUpdateNotFoundErrorMock() {
+	m.registerError("PUT", "/api/v1/volume-purchasing-subscriptions/999", 404, "error_not_found.json")
+}
+
+func (m *VolumePurchasingSubscriptionsMock) RegisterDeleteNotFoundErrorMock() {
+	m.registerError("DELETE", "/api/v1/volume-purchasing-subscriptions/999", 404, "error_not_found.json")
+}
+
+func (m *VolumePurchasingSubscriptionsMock) RegisterListErrorMock() {
+	m.registerError("GET", "/api/v1/volume-purchasing-subscriptions", 500, "error_api.json")
 }
 
 func (m *VolumePurchasingSubscriptionsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -164,12 +179,7 @@ func (m *VolumePurchasingSubscriptionsMock) GetLogger() *zap.Logger             
 func (m *VolumePurchasingSubscriptionsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("VolumePurchasingSubscriptionsMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("VolumePurchasingSubscriptionsMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{

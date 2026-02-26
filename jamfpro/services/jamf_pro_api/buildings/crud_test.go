@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -304,3 +305,125 @@ func TestUnit_Buildings_AddHistoryNotesV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request body is required")
 }
+
+// TestUnit_Buildings_List_NoMockRegistered verifies error handling when no mock is registered.
+func TestUnit_Buildings_List_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// Do not register any mock
+
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to list buildings")
+}
+
+// TestUnit_Buildings_DeleteMultipleByID_NoMockRegistered verifies error when no mock is registered.
+func TestUnit_Buildings_DeleteMultipleByID_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// Do not register DeleteBuildingsByIDMock
+
+	req := &DeleteBuildingsByIDRequest{IDs: []string{"1", "2"}}
+	resp, err := svc.DeleteBuildingsByIDV1(context.Background(), req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+// TestUnit_Buildings_ExportV1_Success tests successful buildings export.
+func TestUnit_Buildings_ExportV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportBuildingsMock()
+
+	data, resp, err := svc.ExportV1(context.Background(), nil, nil, mime.ApplicationJSON)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, data)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Contains(t, string(data), "totalCount")
+}
+
+// TestUnit_Buildings_ExportV1_EmptyAcceptType tests default to application/json.
+func TestUnit_Buildings_ExportV1_EmptyAcceptType(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportBuildingsMock()
+
+	data, resp, err := svc.ExportV1(context.Background(), nil, nil, "")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, data)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+// TestUnit_Buildings_ExportV1_WithQueryAndBody tests export with query params and body.
+func TestUnit_Buildings_ExportV1_WithQueryAndBody(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportBuildingsMock()
+
+	query := map[string]string{"page": "0", "page-size": "100"}
+	req := &ExportRequest{Page: intPtr(0), PageSize: intPtr(100)}
+	data, resp, err := svc.ExportV1(context.Background(), query, req, mime.ApplicationJSON)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, data)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+// TestUnit_Buildings_ExportV1_NoMockRegistered verifies error when no mock is registered.
+func TestUnit_Buildings_ExportV1_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	data, resp, err := svc.ExportV1(context.Background(), nil, nil, mime.ApplicationJSON)
+	assert.Error(t, err)
+	assert.Nil(t, data)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to export buildings")
+}
+
+// TestUnit_Buildings_ExportHistoryV1_Success tests successful building history export.
+func TestUnit_Buildings_ExportHistoryV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportBuildingHistoryMock()
+
+	data, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, mime.ApplicationJSON)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, data)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Contains(t, string(data), "totalCount")
+}
+
+// TestUnit_Buildings_ExportHistoryV1_EmptyAcceptType tests default to application/json.
+func TestUnit_Buildings_ExportHistoryV1_EmptyAcceptType(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportBuildingHistoryMock()
+
+	data, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, "")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, data)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+// TestUnit_Buildings_ExportHistoryV1_EmptyID tests validation error for empty ID.
+func TestUnit_Buildings_ExportHistoryV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	data, resp, err := svc.ExportHistoryV1(context.Background(), "", nil, nil, mime.ApplicationJSON)
+	assert.Error(t, err)
+	assert.Nil(t, data)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "building ID is required")
+}
+
+// TestUnit_Buildings_ExportHistoryV1_NoMockRegistered verifies error when no mock is registered.
+func TestUnit_Buildings_ExportHistoryV1_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	data, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, mime.ApplicationJSON)
+	assert.Error(t, err)
+	assert.Nil(t, data)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to export building history")
+}
+
+func intPtr(i int) *int { return &i }

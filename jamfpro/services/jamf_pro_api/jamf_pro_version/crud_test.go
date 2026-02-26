@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_version/mocks"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -20,7 +21,41 @@ func TestUnit_JamfProVersion_GetV1_Success(t *testing.T) {
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
 	require.NotNil(t, result.Version)
-	require.Equal(t, "11.0.0", *result.Version)
+	assert.Equal(t, "11.0.0", *result.Version)
+}
+
+func TestUnit_JamfProVersion_GetV1_ClientError(t *testing.T) {
+	mock := mocks.NewJamfProVersionMock()
+	mock.RegisterGetErrorMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetV1(context.Background())
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "mock client error")
+	assert.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Nil(t, result)
+}
+
+func TestUnit_JamfProVersion_GetV1_NoMockRegistered(t *testing.T) {
+	mock := mocks.NewJamfProVersionMock()
+	// No mock registered - dispatch returns (nil, err)
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetV1(context.Background())
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no response for")
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestUnit_JamfProVersion_NewService(t *testing.T) {
+	mock := mocks.NewJamfProVersionMock()
+	svc := NewService(mock)
+	require.NotNil(t, svc)
 }

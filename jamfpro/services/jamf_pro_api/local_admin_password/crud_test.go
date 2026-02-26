@@ -250,3 +250,173 @@ func TestUnit_LocalAdminPassword_SetPasswordByClientManagementIDV2_NilRequest(t 
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "passwordList is required")
 }
+
+func TestUnit_LocalAdminPassword_GetHistoryByUsernameV2_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryByUsernameMock()
+
+	result, resp, err := svc.GetHistoryByUsernameV2(context.Background(), "device-001", "admin")
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	assert.Equal(t, "2024-01-10T12:00:00Z", result.Results[0].CreatedDate)
+	assert.Equal(t, "COMPLETED", result.Results[0].RotationStatus)
+}
+
+func TestUnit_LocalAdminPassword_GetHistoryByUsernameV2_EmptyClientManagementID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryByUsernameV2(context.Background(), "", "admin")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "clientManagementID is required")
+}
+
+func TestUnit_LocalAdminPassword_GetHistoryByUsernameV2_EmptyUsername(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryByUsernameV2(context.Background(), "device-001", "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "username is required")
+}
+
+func TestUnit_LocalAdminPassword_GetAuditByUsernameAndGUIDV2_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetAuditByUsernameAndGUIDMock()
+
+	result, resp, err := svc.GetAuditByUsernameAndGUIDV2(context.Background(), "device-001", "admin", "guid-123")
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	assert.Equal(t, "encrypted-password-1", result.Results[0].Password)
+	assert.Equal(t, "admin@example.com", result.Results[0].Audits[0].ViewedBy)
+}
+
+func TestUnit_LocalAdminPassword_GetAuditByUsernameAndGUIDV2_EmptyClientManagementID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetAuditByUsernameAndGUIDV2(context.Background(), "", "admin", "guid-123")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "clientManagementID is required")
+}
+
+func TestUnit_LocalAdminPassword_GetAuditByUsernameAndGUIDV2_EmptyUsername(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetAuditByUsernameAndGUIDV2(context.Background(), "device-001", "", "guid-123")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "username is required")
+}
+
+func TestUnit_LocalAdminPassword_GetAuditByUsernameAndGUIDV2_EmptyGUID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetAuditByUsernameAndGUIDV2(context.Background(), "device-001", "admin", "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "guid is required")
+}
+
+func TestUnit_LocalAdminPassword_GetHistoryByUsernameAndGUIDV2_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryByUsernameAndGUIDMock()
+
+	result, resp, err := svc.GetHistoryByUsernameAndGUIDV2(context.Background(), "device-001", "admin", "guid-123")
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	assert.Equal(t, "COMPLETED", result.Results[0].RotationStatus)
+}
+
+func TestUnit_LocalAdminPassword_GetHistoryByUsernameAndGUIDV2_EmptyClientManagementID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryByUsernameAndGUIDV2(context.Background(), "", "admin", "guid-123")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "clientManagementID is required")
+}
+
+func TestUnit_LocalAdminPassword_GetHistoryByUsernameAndGUIDV2_EmptyUsername(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryByUsernameAndGUIDV2(context.Background(), "device-001", "", "guid-123")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "username is required")
+}
+
+func TestUnit_LocalAdminPassword_GetHistoryByUsernameAndGUIDV2_EmptyGUID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryByUsernameAndGUIDV2(context.Background(), "device-001", "admin", "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "guid is required")
+}
+
+func TestUnit_LocalAdminPassword_GetPasswordByUsernameAndGUIDV2_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetPasswordByUsernameAndGUIDMock()
+
+	result, resp, err := svc.GetPasswordByUsernameAndGUIDV2(context.Background(), "device-001", "admin", "guid-123")
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, "SecureP@ssw0rd123!", result.Password)
+}
+
+func TestUnit_LocalAdminPassword_GetPasswordByUsernameAndGUIDV2_EmptyClientManagementID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetPasswordByUsernameAndGUIDV2(context.Background(), "", "admin", "guid-123")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "clientManagementID is required")
+}
+
+func TestUnit_LocalAdminPassword_GetPasswordByUsernameAndGUIDV2_EmptyUsername(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetPasswordByUsernameAndGUIDV2(context.Background(), "device-001", "", "guid-123")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "username is required")
+}
+
+func TestUnit_LocalAdminPassword_GetPasswordByUsernameAndGUIDV2_EmptyGUID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetPasswordByUsernameAndGUIDV2(context.Background(), "device-001", "admin", "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "guid is required")
+}

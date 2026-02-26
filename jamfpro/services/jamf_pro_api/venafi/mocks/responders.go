@@ -76,10 +76,22 @@ func (m *VenafiMock) RegisterGetProxyTrustStoreMock(id string) {
 	m.register("GET", "/api/v1/pki/venafi/"+id+"/proxy-trust-store", 200, "validate_jamf_public_key.pem")
 }
 
+func (m *VenafiMock) RegisterRegenerateJamfPublicKeyMock(id string) {
+	m.register("POST", "/api/v1/pki/venafi/"+id+"/jamf-public-key/regenerate", 200, "")
+}
+
+func (m *VenafiMock) RegisterUploadProxyTrustStoreMock(id string) {
+	m.register("POST", "/api/v1/pki/venafi/"+id+"/proxy-trust-store", 200, "")
+}
+
+func (m *VenafiMock) RegisterDeleteProxyTrustStoreMock(id string) {
+	m.register("DELETE", "/api/v1/pki/venafi/"+id+"/proxy-trust-store", 204, "")
+}
+
 func (m *VenafiMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("VenafiMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("VenafiMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if result != nil && len(r.rawBody) > 0 {

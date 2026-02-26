@@ -80,6 +80,10 @@ func (m *VolumePurchasingLocationsMock) RegisterListMock() {
 	m.register("GET", "/api/v1/volume-purchasing-locations", 200, "validate_list.json")
 }
 
+func (m *VolumePurchasingLocationsMock) RegisterListInvalidJSONMock() {
+	m.register("GET", "/api/v1/volume-purchasing-locations", 200, "validate_list_invalid.json")
+}
+
 func (m *VolumePurchasingLocationsMock) RegisterGetMock() {
 	m.register("GET", "/api/v1/volume-purchasing-locations/1", 200, "validate_get.json")
 }
@@ -102,6 +106,14 @@ func (m *VolumePurchasingLocationsMock) RegisterReclaimMock() {
 
 func (m *VolumePurchasingLocationsMock) RegisterGetContentMock() {
 	m.register("GET", "/api/v1/volume-purchasing-locations/1/content", 200, "validate_content.json")
+}
+
+func (m *VolumePurchasingLocationsMock) RegisterGetContentInvalidJSONMock() {
+	m.register("GET", "/api/v1/volume-purchasing-locations/99/content", 200, "validate_list_invalid.json")
+}
+
+func (m *VolumePurchasingLocationsMock) RegisterGetHistoryInvalidJSONMock() {
+	m.register("GET", "/api/v1/volume-purchasing-locations/99/history", 200, "validate_list_invalid.json")
 }
 
 func (m *VolumePurchasingLocationsMock) RegisterGetContentWithResultsMock() {
@@ -190,12 +202,7 @@ func (m *VolumePurchasingLocationsMock) GetLogger() *zap.Logger                 
 func (m *VolumePurchasingLocationsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("VolumePurchasingLocationsMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("VolumePurchasingLocationsMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{

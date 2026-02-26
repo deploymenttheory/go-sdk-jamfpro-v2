@@ -9,6 +9,20 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestListV2_APIError tests ListV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_ListV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	// No mock registered - dispatch returns error
+	svc := NewService(mock)
+
+	result, resp, err := svc.ListV2(context.Background())
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestListV2 tests listing all patch software title configurations.
 func TestUnit_PatchSoftwareTitleConfigurations_ListV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -31,6 +45,19 @@ func TestUnit_PatchSoftwareTitleConfigurations_ListV2_Success(t *testing.T) {
 	assert.Equal(t, "102", (*result)[1].SoftwareTitleID)
 	assert.False(t, (*result)[1].UINotifications)
 	assert.True(t, (*result)[1].EmailNotifications)
+}
+
+// TestGetByIDV2_APIError tests GetByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetByIDV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
 }
 
 // TestGetByIDV2 tests retrieving a patch software title configuration by ID.
@@ -79,6 +106,20 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetByIDV2_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
+// TestGetByNameV2_ListError tests GetByNameV2 when ListV2 returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetByNameV2_ListError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	// No list mock - ListV2 will fail
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetByNameV2(context.Background(), "Google Chrome")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestGetByNameV2 tests retrieving a patch software title configuration by display name.
 func TestUnit_PatchSoftwareTitleConfigurations_GetByNameV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -120,6 +161,23 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetByNameV2_EmptyName(t *testing.
 	assert.Nil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "name is required")
+}
+
+// TestCreateV2_APIError tests CreateV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_CreateV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	config := &ResourcePatchSoftwareTitleConfiguration{
+		DisplayName:     "New Config",
+		SoftwareTitleID: "103",
+	}
+	result, resp, err := svc.CreateV2(context.Background(), config)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
 }
 
 // TestCreateV2 tests creating a new patch software title configuration.
@@ -205,6 +263,20 @@ func TestUnit_PatchSoftwareTitleConfigurations_CreateV2_EmptySoftwareTitleID(t *
 	assert.Contains(t, err.Error(), "software title id is required")
 }
 
+// TestUpdateByIDV2_APIError tests UpdateByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_UpdateByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	config := &ResourcePatchSoftwareTitleConfiguration{DisplayName: "Updated", SoftwareTitleID: "101"}
+	result, resp, err := svc.UpdateByIDV2(context.Background(), "1", config)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestUpdateByIDV2 tests updating a patch software title configuration by ID.
 func TestUnit_PatchSoftwareTitleConfigurations_UpdateByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -258,6 +330,21 @@ func TestUnit_PatchSoftwareTitleConfigurations_UpdateByIDV2_NilConfig(t *testing
 	assert.Contains(t, err.Error(), "config is required")
 }
 
+// TestUpdateByNameV2_GetByNameError tests UpdateByNameV2 when GetByNameV2 fails.
+func TestUnit_PatchSoftwareTitleConfigurations_UpdateByNameV2_GetByNameError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	// No list mock - GetByNameV2 will fail
+	svc := NewService(mock)
+
+	config := &ResourcePatchSoftwareTitleConfiguration{DisplayName: "Updated", SoftwareTitleID: "101"}
+	result, resp, err := svc.UpdateByNameV2(context.Background(), "Google Chrome", config)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to get")
+}
+
 // TestUpdateByNameV2 tests updating a patch software title configuration by name.
 func TestUnit_PatchSoftwareTitleConfigurations_UpdateByNameV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -296,6 +383,18 @@ func TestUnit_PatchSoftwareTitleConfigurations_UpdateByNameV2_EmptyName(t *testi
 	assert.Contains(t, err.Error(), "name is required")
 }
 
+// TestDeleteByIDV2_APIError tests DeleteByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_DeleteByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	resp, err := svc.DeleteByIDV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestDeleteByIDV2 tests deleting a patch software title configuration by ID.
 func TestUnit_PatchSoftwareTitleConfigurations_DeleteByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -319,6 +418,19 @@ func TestUnit_PatchSoftwareTitleConfigurations_DeleteByIDV2_EmptyID(t *testing.T
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestDeleteByNameV2_GetByNameError tests DeleteByNameV2 when GetByNameV2 fails.
+func TestUnit_PatchSoftwareTitleConfigurations_DeleteByNameV2_GetByNameError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	// No list mock - GetByNameV2 will fail
+	svc := NewService(mock)
+
+	resp, err := svc.DeleteByNameV2(context.Background(), "Google Chrome")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get")
 }
 
 // TestDeleteByNameV2 tests deleting a patch software title configuration by name.
@@ -345,6 +457,19 @@ func TestUnit_PatchSoftwareTitleConfigurations_DeleteByNameV2_EmptyName(t *testi
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "name is required")
+}
+
+// TestGetDashboardStatusByIDV2_APIError tests GetDashboardStatusByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetDashboardStatusByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetDashboardStatusByIDV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
 }
 
 // TestGetDashboardStatusByIDV2 tests getting dashboard status.
@@ -374,6 +499,30 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetDashboardStatusByIDV2_EmptyID(
 	assert.Contains(t, err.Error(), "id is required")
 }
 
+// TestAddToDashboardByIDV2_EmptyID tests adding to dashboard with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_AddToDashboardByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	resp, err := svc.AddToDashboardByIDV2(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestAddToDashboardByIDV2_APIError tests AddToDashboardByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_AddToDashboardByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	resp, err := svc.AddToDashboardByIDV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestAddToDashboardByIDV2 tests adding to dashboard.
 func TestUnit_PatchSoftwareTitleConfigurations_AddToDashboardByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -387,6 +536,30 @@ func TestUnit_PatchSoftwareTitleConfigurations_AddToDashboardByIDV2_Success(t *t
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
+// TestRemoveFromDashboardByIDV2_EmptyID tests removing from dashboard with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_RemoveFromDashboardByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	resp, err := svc.RemoveFromDashboardByIDV2(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestRemoveFromDashboardByIDV2_APIError tests RemoveFromDashboardByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_RemoveFromDashboardByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	resp, err := svc.RemoveFromDashboardByIDV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestRemoveFromDashboardByIDV2 tests removing from dashboard.
 func TestUnit_PatchSoftwareTitleConfigurations_RemoveFromDashboardByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -398,6 +571,32 @@ func TestUnit_PatchSoftwareTitleConfigurations_RemoveFromDashboardByIDV2_Success
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
+}
+
+// TestGetDefinitionsByIDV2_EmptyID tests getting definitions with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_GetDefinitionsByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetDefinitionsByIDV2(context.Background(), "", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetDefinitionsByIDV2_APIError tests GetDefinitionsByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetDefinitionsByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetDefinitionsByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
 }
 
 // TestGetDefinitionsByIDV2 tests getting definitions.
@@ -416,6 +615,32 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetDefinitionsByIDV2_Success(t *t
 	assert.Equal(t, "1", result.Results[0].AbsoluteOrderID)
 }
 
+// TestGetDependenciesByIDV2_EmptyID tests getting dependencies with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_GetDependenciesByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetDependenciesByIDV2(context.Background(), "", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetDependenciesByIDV2_APIError tests GetDependenciesByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetDependenciesByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetDependenciesByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestGetDependenciesByIDV2 tests getting dependencies.
 func TestUnit_PatchSoftwareTitleConfigurations_GetDependenciesByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -432,6 +657,32 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetDependenciesByIDV2_Success(t *
 	assert.Equal(t, "Chrome Out of Date", result.Results[0].SmartGroupName)
 }
 
+// TestExportReportByIDV2_EmptyID tests exporting report with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_ExportReportByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	body, resp, err := svc.ExportReportByIDV2(context.Background(), "", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, body)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestExportReportByIDV2_APIError tests ExportReportByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_ExportReportByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	body, resp, err := svc.ExportReportByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, body)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestExportReportByIDV2 tests exporting report.
 func TestUnit_PatchSoftwareTitleConfigurations_ExportReportByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -444,6 +695,32 @@ func TestUnit_PatchSoftwareTitleConfigurations_ExportReportByIDV2_Success(t *tes
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
 	assert.Contains(t, string(body), "computerName")
+}
+
+// TestGetExtensionAttributesByIDV2_EmptyID tests getting extension attributes with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_GetExtensionAttributesByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetExtensionAttributesByIDV2(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetExtensionAttributesByIDV2_APIError tests GetExtensionAttributesByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetExtensionAttributesByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetExtensionAttributesByIDV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
 }
 
 // TestGetExtensionAttributesByIDV2 tests getting extension attributes.
@@ -462,6 +739,32 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetExtensionAttributesByIDV2_Succ
 	assert.True(t, result[0].Accepted)
 }
 
+// TestGetPatchReportByIDV2_EmptyID tests getting patch report with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_GetPatchReportByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetPatchReportByIDV2(context.Background(), "", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetPatchReportByIDV2_APIError tests GetPatchReportByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetPatchReportByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetPatchReportByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestGetPatchReportByIDV2 tests getting patch report.
 func TestUnit_PatchSoftwareTitleConfigurations_GetPatchReportByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -476,6 +779,32 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetPatchReportByIDV2_Success(t *t
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "MacBook", result.Results[0].ComputerName)
 	assert.Equal(t, "10.1", result.Results[0].Version)
+}
+
+// TestGetPatchSummaryByIDV2_EmptyID tests getting patch summary with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_GetPatchSummaryByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetPatchSummaryByIDV2(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetPatchSummaryByIDV2_APIError tests GetPatchSummaryByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetPatchSummaryByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetPatchSummaryByIDV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
 }
 
 // TestGetPatchSummaryByIDV2 tests getting patch summary.
@@ -495,6 +824,32 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetPatchSummaryByIDV2_Success(t *
 	assert.Equal(t, 6, result.OutOfDate)
 }
 
+// TestGetHistoryByIDV2_EmptyID tests getting history with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_GetHistoryByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetHistoryByIDV2(context.Background(), "", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetHistoryByIDV2_APIError tests GetHistoryByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetHistoryByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetHistoryByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
+}
+
 // TestGetHistoryByIDV2 tests getting history.
 func TestUnit_PatchSoftwareTitleConfigurations_GetHistoryByIDV2_Success(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -509,6 +864,19 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetHistoryByIDV2_Success(t *testi
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "admin", result.Results[0].Username)
 	assert.Equal(t, "Sso settings update", result.Results[0].Note)
+}
+
+// TestAddHistoryNoteByIDV2_APIError tests AddHistoryNoteByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_AddHistoryNoteByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.AddHistoryNoteByIDV2(context.Background(), "1", &RequestAddHistoryNote{Note: "Test"})
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
 }
 
 // TestAddHistoryNoteByIDV2 tests adding history note.
@@ -526,6 +894,32 @@ func TestUnit_PatchSoftwareTitleConfigurations_AddHistoryNoteByIDV2_Success(t *t
 	assert.Contains(t, result.Href, "/api/v1/resource/1")
 }
 
+// TestAddHistoryNoteByIDV2_EmptyID tests adding history note with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_AddHistoryNoteByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.AddHistoryNoteByIDV2(context.Background(), "", &RequestAddHistoryNote{Note: "Test"})
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestAddHistoryNoteByIDV2_NilRequest tests adding history note with nil request.
+func TestUnit_PatchSoftwareTitleConfigurations_AddHistoryNoteByIDV2_NilRequest(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.AddHistoryNoteByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
 // TestAddHistoryNoteByIDV2_EmptyNote tests adding history note with empty note.
 func TestUnit_PatchSoftwareTitleConfigurations_AddHistoryNoteByIDV2_EmptyNote(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
@@ -537,6 +931,32 @@ func TestUnit_PatchSoftwareTitleConfigurations_AddHistoryNoteByIDV2_EmptyNote(t 
 	assert.Nil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "note is required")
+}
+
+// TestGetPatchVersionsByIDV2_EmptyID tests getting patch versions with empty ID.
+func TestUnit_PatchSoftwareTitleConfigurations_GetPatchVersionsByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetPatchVersionsByIDV2(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetPatchVersionsByIDV2_APIError tests GetPatchVersionsByIDV2 when API returns error.
+func TestUnit_PatchSoftwareTitleConfigurations_GetPatchVersionsByIDV2_APIError(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetPatchVersionsByIDV2(context.Background(), "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
 }
 
 // TestGetPatchVersionsByIDV2 tests getting patch versions.

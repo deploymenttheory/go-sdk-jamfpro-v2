@@ -128,3 +128,88 @@ func TestUnit_SsoSettings_DownloadMetadataV3_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	_ = data
 }
+
+func TestUnit_SsoSettings_GetV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetErrorMock()
+
+	result, resp, err := svc.GetV3(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Contains(t, err.Error(), "Jamf Pro API error")
+}
+
+func TestUnit_SsoSettings_UpdateV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateErrorMock()
+
+	request := &ResourceSsoSettings{SsoEnabled: false, ConfigurationType: "OIDC"}
+	result, resp, err := svc.UpdateV3(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Contains(t, err.Error(), "Jamf Pro API error")
+}
+
+func TestUnit_SsoSettings_GetEnrollmentCustomizationDependenciesV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetDependenciesErrorMock()
+
+	result, resp, err := svc.GetEnrollmentCustomizationDependenciesV3(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Contains(t, err.Error(), "Jamf Pro API error")
+}
+
+func TestUnit_SsoSettings_DisableV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDisableErrorMock()
+
+	resp, err := svc.DisableV3(context.Background())
+	require.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Contains(t, err.Error(), "Jamf Pro API error")
+}
+
+func TestUnit_SsoSettings_GetHistoryV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryErrorMock()
+
+	result, resp, err := svc.GetHistoryV3(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Contains(t, err.Error(), "Jamf Pro API error")
+}
+
+func TestUnit_SsoSettings_AddHistoryNoteV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNoteErrorMock()
+
+	req := &AddHistoryNoteRequest{Note: "Test note"}
+	result, resp, err := svc.AddHistoryNoteV3(context.Background(), req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Contains(t, err.Error(), "Jamf Pro API error")
+}
+
+func TestUnit_SsoSettings_DownloadMetadataV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDownloadMetadataErrorMock()
+
+	data, resp, err := svc.DownloadMetadataV3(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, data)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Contains(t, err.Error(), "Jamf Pro API error")
+}

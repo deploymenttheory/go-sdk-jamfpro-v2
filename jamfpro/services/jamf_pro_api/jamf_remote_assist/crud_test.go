@@ -48,7 +48,7 @@ func TestUnit_JamfRemoteAssist_GetSessionByIDV1_NotFound(t *testing.T) {
 	result, resp, err := svc.GetSessionByIDV1(context.Background(), "nonexistent")
 	require.Error(t, err)
 	require.Nil(t, result)
-	require.NotNil(t, resp)
+	require.Nil(t, resp) // no mock registered for nonexistent path
 }
 
 func TestUnit_JamfRemoteAssist_ListSessionsV2_Success(t *testing.T) {
@@ -103,4 +103,69 @@ func TestUnit_JamfRemoteAssist_ExportSessionsV2_DefaultAcceptType(t *testing.T) 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	_ = result
+}
+
+func TestUnit_JamfRemoteAssist_ListSessionsV1_Error(t *testing.T) {
+	mock := mocks.NewJamfRemoteAssistMock()
+	mock.RegisterMocks()
+	mock.RegisterListSessionsV1ErrorMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.ListSessionsV1(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Contains(t, err.Error(), "failed to list jamf remote assist sessions (v1)")
+}
+
+func TestUnit_JamfRemoteAssist_ListSessionsV2_Error(t *testing.T) {
+	mock := mocks.NewJamfRemoteAssistMock()
+	mock.RegisterMocks()
+	mock.RegisterListSessionsV2ErrorMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.ListSessionsV2(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Contains(t, err.Error(), "failed to list jamf remote assist sessions (v2)")
+}
+
+func TestUnit_JamfRemoteAssist_ListSessionsV2_MergePageError(t *testing.T) {
+	mock := mocks.NewJamfRemoteAssistMock()
+	mock.RegisterMocks()
+	mock.RegisterListSessionsV2InvalidMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.ListSessionsV2(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_JamfRemoteAssist_GetSessionByIDV2_NotFound(t *testing.T) {
+	mock := mocks.NewJamfRemoteAssistMock()
+	mock.RegisterMocks()
+	mock.RegisterGetSessionByIDV2ErrorMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetSessionByIDV2(context.Background(), "nonexistent")
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Contains(t, err.Error(), "failed to get jamf remote assist session by ID (v2)")
+}
+
+func TestUnit_JamfRemoteAssist_ExportSessionsV2_Error(t *testing.T) {
+	mock := mocks.NewJamfRemoteAssistMock()
+	mock.RegisterMocks()
+	mock.RegisterExportSessionsV2ErrorMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.ExportSessionsV2(context.Background(), &ExportSessionsRequest{}, "text/csv")
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Contains(t, err.Error(), "failed to export jamf remote assist sessions")
 }

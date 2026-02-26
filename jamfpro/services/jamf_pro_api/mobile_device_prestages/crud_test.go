@@ -1,7 +1,10 @@
 package mobile_device_prestages
 
 import (
+	"bytes"
 	"context"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages/mocks"
@@ -482,5 +485,496 @@ func TestUnit_MobileDevicePrestages_UpdateByNameV3_FetchVersionLockError(t *test
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "failed to get mobile device prestage by name")
 	assert.Nil(t, result)
-	_ = resp // resp carries the 404 from the failed list call; content not asserted
+	assert.Nil(t, resp)
+}
+
+// --- Scope operations ---
+
+func TestUnit_MobileDevicePrestages_ReplaceScopeByIDV2_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterReplaceScopeByIDMock("1")
+
+	svc := NewService(mock)
+	req := &RequestReplaceScope{SerialNumbers: []string{"C02NEW123"}, VersionLock: 0}
+	result, resp, err := svc.ReplaceScopeByIDV2(context.Background(), "1", req)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, "1", result.PrestageId)
+	assert.Len(t, result.Assignments, 2)
+}
+
+func TestUnit_MobileDevicePrestages_ReplaceScopeByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+	req := &RequestReplaceScope{SerialNumbers: []string{"C02NEW123"}}
+
+	result, resp, err := svc.ReplaceScopeByIDV2(context.Background(), "", req)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevicePrestages_ReplaceScopeByIDV2_NilRequest(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.ReplaceScopeByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDevicePrestages_AddScopeByIDV2_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterAddScopeByIDMock("1")
+
+	svc := NewService(mock)
+	req := &RequestAddScope{SerialNumbers: []string{"C02NEW456"}, VersionLock: 0}
+	result, resp, err := svc.AddScopeByIDV2(context.Background(), "1", req)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, "1", result.PrestageId)
+}
+
+func TestUnit_MobileDevicePrestages_AddScopeByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+	req := &RequestAddScope{SerialNumbers: []string{"C02NEW456"}}
+
+	result, resp, err := svc.AddScopeByIDV2(context.Background(), "", req)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevicePrestages_AddScopeByIDV2_NilRequest(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.AddScopeByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDevicePrestages_RemoveScopeByIDV2_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterRemoveScopeByIDMock("1")
+
+	svc := NewService(mock)
+	req := &RequestRemoveScope{SerialNumbers: []string{"C02ABCDEFGH"}, VersionLock: 0}
+	result, resp, err := svc.RemoveScopeByIDV2(context.Background(), "1", req)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, "1", result.PrestageId)
+}
+
+func TestUnit_MobileDevicePrestages_RemoveScopeByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+	req := &RequestRemoveScope{SerialNumbers: []string{"C02ABCDEFGH"}}
+
+	result, resp, err := svc.RemoveScopeByIDV2(context.Background(), "", req)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevicePrestages_RemoveScopeByIDV2_NilRequest(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.RemoveScopeByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+// --- Sync operations ---
+
+func TestUnit_MobileDevicePrestages_GetAllSyncsV2_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterGetAllSyncsMock()
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetAllSyncsV2(context.Background())
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Len(t, result, 2)
+	assert.Equal(t, "1", result[0].PrestageId)
+	assert.Equal(t, "COMPLETE", result[0].SyncState)
+	assert.Equal(t, "2", result[1].PrestageId)
+	assert.Equal(t, "PENDING", result[1].SyncState)
+}
+
+func TestUnit_MobileDevicePrestages_GetSyncsByIDV2_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterGetSyncsByIDMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetSyncsByIDV2(context.Background(), "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Len(t, result, 2)
+}
+
+func TestUnit_MobileDevicePrestages_GetSyncsByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetSyncsByIDV2(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevicePrestages_GetLatestSyncByIDV2_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterGetLatestSyncByIDMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetLatestSyncByIDV2(context.Background(), "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, "1", result.PrestageId)
+	assert.Equal(t, "COMPLETE", result.SyncState)
+	assert.Equal(t, "2024-01-15T10:30:00Z", result.Timestamp)
+}
+
+func TestUnit_MobileDevicePrestages_GetLatestSyncByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetLatestSyncByIDV2(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// --- Attachments ---
+
+func TestUnit_MobileDevicePrestages_GetAttachmentsByIDV3_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterGetAttachmentsByIDMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetAttachmentsByIDV3(context.Background(), "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Len(t, result, 2)
+	assert.Equal(t, "att-1", result[0].ID)
+	assert.Equal(t, "profile.mobileconfig", result[0].Name)
+	assert.Equal(t, "att-2", result[1].ID)
+}
+
+func TestUnit_MobileDevicePrestages_GetAttachmentsByIDV3_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetAttachmentsByIDV3(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevicePrestages_UploadAttachmentV3_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterUploadAttachmentMock("1")
+
+	svc := NewService(mock)
+	content := []byte("test mobileconfig content")
+	reader := bytes.NewReader(content)
+	result, resp, err := svc.UploadAttachmentV3(context.Background(), "1", reader, int64(len(content)), "test.mobileconfig")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, "att-3", result.ID)
+	assert.Equal(t, "uploaded.mobileconfig", result.Name)
+	assert.Equal(t, "com.apple.mobileconfig", result.FileType)
+}
+
+func TestUnit_MobileDevicePrestages_UploadAttachmentV3_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+	reader := bytes.NewReader([]byte("content"))
+
+	result, resp, err := svc.UploadAttachmentV3(context.Background(), "", reader, 7, "test.mobileconfig")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevicePrestages_UploadAttachmentV3_NilReader(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.UploadAttachmentV3(context.Background(), "1", nil, 0, "test.mobileconfig")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "file reader is required")
+}
+
+func TestUnit_MobileDevicePrestages_UploadAttachmentV3_EmptyFileName(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+	reader := bytes.NewReader([]byte("content"))
+
+	result, resp, err := svc.UploadAttachmentV3(context.Background(), "1", reader, 7, "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "file name is required")
+}
+
+func TestUnit_MobileDevicePrestages_UploadAttachmentFromFileV3_Success(t *testing.T) {
+	tmpDir := t.TempDir()
+	tmpFile := filepath.Join(tmpDir, "test.mobileconfig")
+	require.NoError(t, os.WriteFile(tmpFile, []byte("test content"), 0644))
+
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterUploadAttachmentMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.UploadAttachmentFromFileV3(context.Background(), "1", tmpFile)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, "att-3", result.ID)
+}
+
+func TestUnit_MobileDevicePrestages_UploadAttachmentFromFileV3_FileNotFound(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.UploadAttachmentFromFileV3(context.Background(), "1", "/nonexistent/path/file.mobileconfig")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "open attachment file")
+}
+
+func TestUnit_MobileDevicePrestages_DeleteAttachmentsByIDV3_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterDeleteAttachmentsByIDMock("1")
+
+	svc := NewService(mock)
+	req := &RequestDeleteAttachments{IDs: []string{"att-1", "att-2"}}
+	resp, err := svc.DeleteAttachmentsByIDV3(context.Background(), "1", req)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_MobileDevicePrestages_DeleteAttachmentsByIDV3_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+	req := &RequestDeleteAttachments{IDs: []string{"att-1"}}
+
+	resp, err := svc.DeleteAttachmentsByIDV3(context.Background(), "", req)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevicePrestages_DeleteAttachmentsByIDV3_NilRequest(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	resp, err := svc.DeleteAttachmentsByIDV3(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+// --- History ---
+
+func TestUnit_MobileDevicePrestages_GetHistoryByIDV3_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterGetHistoryByIDMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetHistoryByIDV3(context.Background(), "1", nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 2, result.TotalCount)
+	assert.Len(t, result.Results, 2)
+	assert.Equal(t, 1, result.Results[0].ID)
+	assert.Equal(t, "admin", result.Results[0].Username)
+	assert.Equal(t, "Initial setup", result.Results[0].Note)
+}
+
+func TestUnit_MobileDevicePrestages_GetHistoryByIDV3_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetHistoryByIDV3(context.Background(), "", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevicePrestages_AddHistoryNoteByIDV3_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterAddHistoryNoteByIDMock("1")
+
+	svc := NewService(mock)
+	req := &RequestAddHistoryNote{Note: "Test history note"}
+	result, resp, err := svc.AddHistoryNoteByIDV3(context.Background(), "1", req)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, "1", result.ID)
+	assert.Contains(t, result.Href, "/api/v3/mobile-device-prestages/1/history")
+}
+
+func TestUnit_MobileDevicePrestages_AddHistoryNoteByIDV3_EmptyID(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+	req := &RequestAddHistoryNote{Note: "Test note"}
+
+	result, resp, err := svc.AddHistoryNoteByIDV3(context.Background(), "", req)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevicePrestages_AddHistoryNoteByIDV3_NilRequest(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.AddHistoryNoteByIDV3(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDevicePrestages_AddHistoryNoteByIDV3_EmptyNote(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	svc := NewService(mock)
+	req := &RequestAddHistoryNote{Note: ""}
+
+	result, resp, err := svc.AddHistoryNoteByIDV3(context.Background(), "1", req)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "note is required")
+}
+
+// --- Scope version lock fetch errors ---
+
+func TestUnit_MobileDevicePrestages_ReplaceScopeByIDV2_ScopeFetchError(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	mock.RegisterReplaceScopePutOnlyMock("999") // Only PUT, no GET - version lock fetch will fail
+
+	svc := NewService(mock)
+	req := &RequestReplaceScope{SerialNumbers: []string{"C02NEW123"}}
+	result, resp, err := svc.ReplaceScopeByIDV2(context.Background(), "999", req)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to fetch current device scope for version locking")
+}
+
+func TestUnit_MobileDevicePrestages_DeleteByNameV3_GetByNameFails(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	// No list mock - GetByNameV3 will fail when resolving name to ID
+
+	svc := NewService(mock)
+	resp, err := svc.DeleteByNameV3(context.Background(), "Nonexistent")
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get mobile device prestage by name")
+}
+
+func TestUnit_MobileDevicePrestages_CreateV3_APIFails(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	// No create mock registered - Post will fail
+
+	svc := NewService(mock)
+	prestage := &ResourceMobileDevicePrestage{DisplayName: "Valid Name"}
+	result, resp, err := svc.CreateV3(context.Background(), prestage)
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
+}
+
+func TestUnit_MobileDevicePrestages_ListV3_APIFails(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	// No list mock - GetPaginated will fail
+
+	svc := NewService(mock)
+	result, resp, err := svc.ListV3(context.Background())
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no response")
+}
+
+func TestUnit_MobileDevicePrestages_DeleteByIDV3_APIFails(t *testing.T) {
+	mock := mocks.NewMobileDevicePrestagesMock()
+	// No delete mock for this ID
+
+	svc := NewService(mock)
+	resp, err := svc.DeleteByIDV3(context.Background(), "1")
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response")
 }

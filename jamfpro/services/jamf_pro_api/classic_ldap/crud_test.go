@@ -33,3 +33,14 @@ func TestUnit_ClassicLdap_GetMappingsByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "name", result.UserGroupObjectMapIdTo)
 	assert.Equal(t, "name", result.UserGroupObjectMapGroupNameTo)
 }
+
+func TestUnit_ClassicLdap_GetMappingsByIDV1_NotFound(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered for id "999" - dispatch returns (nil, error)
+
+	result, resp, err := svc.GetMappingsByIDV1(context.Background(), "999")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "ClassicLdapMock: no response")
+}

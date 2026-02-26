@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -16,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 // LdapMock is a test double implementing interfaces.HTTPClient.
@@ -30,7 +32,10 @@ func NewLdapMock() *LdapMock {
 }
 
 func (m *LdapMock) register(method, path string, statusCode int, fixture string) {
-	body, _ := os.ReadFile(filepath.Join(mustGetwd(), "mocks", fixture))
+	var body []byte
+	if fixture != "" {
+		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
@@ -44,21 +49,47 @@ func (m *LdapMock) RegisterGetLdapServersMock() {
 	m.register("GET", "/api/v1/ldap/servers", 200, "validate_list_servers.json")
 }
 
+// RegisterGetLdapServersOnlyMock registers a successful GET /api/v1/ldap/ldap-servers response.
+func (m *LdapMock) RegisterGetLdapServersOnlyMock() {
+	m.register("GET", "/api/v1/ldap/ldap-servers", 200, "validate_list_servers_only.json")
+}
+
+// RegisterGetLdapGroupsErrorMock registers GET /api/v1/ldap/groups with an error for error-path testing.
+func (m *LdapMock) RegisterGetLdapGroupsErrorMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_list_groups.json"))
+	m.responses["GET:/api/v1/ldap/groups"] = registeredResponse{statusCode: 500, rawBody: body, errMsg: "Jamf Pro API error (500): server error"}
+}
+
+// RegisterGetLdapServersErrorMock registers GET /api/v1/ldap/servers with an error for error-path testing.
+func (m *LdapMock) RegisterGetLdapServersErrorMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_list_servers.json"))
+	m.responses["GET:/api/v1/ldap/servers"] = registeredResponse{statusCode: 404, rawBody: body, errMsg: "Jamf Pro API error (404): not found"}
+}
+
+// RegisterGetLdapServersOnlyErrorMock registers GET /api/v1/ldap/ldap-servers with an error for error-path testing.
+func (m *LdapMock) RegisterGetLdapServersOnlyErrorMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_list_servers_only.json"))
+	m.responses["GET:/api/v1/ldap/ldap-servers"] = registeredResponse{statusCode: 500, rawBody: body, errMsg: "Jamf Pro API error (500): server error"}
+}
+
 func (m *LdapMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("LdapMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("LdapMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
 	return resp, nil
 }
 
-func mustGetwd() string {
-	dir, _ := os.Getwd()
-	return dir
+func mustMocksDir() string {
+	_, filename, _, _ := runtime.Caller(0)
+	return filepath.Dir(filename)
 }
 
 func (m *LdapMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

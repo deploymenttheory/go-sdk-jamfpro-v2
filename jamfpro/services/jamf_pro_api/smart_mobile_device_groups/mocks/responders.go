@@ -173,12 +173,7 @@ func (m *SmartMobileDeviceGroupsMock) GetLogger() *zap.Logger                   
 func (m *SmartMobileDeviceGroupsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("SmartMobileDeviceGroupsMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("SmartMobileDeviceGroupsMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{

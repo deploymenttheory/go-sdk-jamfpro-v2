@@ -17,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 type ManagedSoftwareUpdatesMock struct {
@@ -34,6 +35,11 @@ func (m *ManagedSoftwareUpdatesMock) register(method, path string, statusCode in
 		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
 	}
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+// RegisterErrorMock registers an error response for testing error paths.
+func (m *ManagedSoftwareUpdatesMock) RegisterErrorMock(method, path, errMsg string) {
+	m.responses[method+":"+path] = registeredResponse{errMsg: errMsg}
 }
 
 func (m *ManagedSoftwareUpdatesMock) RegisterGetAvailableUpdatesMock() {
@@ -92,6 +98,21 @@ func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesMock() {
 	m.register("GET", "/api/v1/managed-software-updates/update-statuses", 200, "validate_update_statuses.json")
 }
 
+// RegisterGetUpdateStatusesArrayFormatMock uses raw array format (Real API style).
+func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesArrayFormatMock() {
+	m.register("GET", "/api/v1/managed-software-updates/update-statuses", 200, "validate_update_statuses_array.json")
+}
+
+// RegisterGetPlansInvalidMock returns invalid JSON to exercise mergePage error path.
+func (m *ManagedSoftwareUpdatesMock) RegisterGetPlansInvalidMock() {
+	m.register("GET", "/api/v1/managed-software-updates/plans", 200, "validate_plans_list_invalid.json")
+}
+
+// RegisterGetUpdateStatusesInvalidMock returns invalid JSON to exercise mergePage error path.
+func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesInvalidMock() {
+	m.register("GET", "/api/v1/managed-software-updates/update-statuses", 200, "validate_update_statuses_invalid.json")
+}
+
 func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesByComputerGroupMock(id string) {
 	m.register("GET", "/api/v1/managed-software-updates/update-statuses/computer-groups/"+id, 200, "validate_update_statuses.json")
 }
@@ -111,7 +132,10 @@ func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesByMobileDeviceMock
 func (m *ManagedSoftwareUpdatesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("ManagedSoftwareUpdatesMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("ManagedSoftwareUpdatesMock: no response for %s %s", method, path)
+	}
+	if r.errMsg != "" {
+		return nil, fmt.Errorf("%s", r.errMsg)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if result != nil && len(r.rawBody) > 0 {
@@ -162,11 +186,12 @@ func (m *ManagedSoftwareUpdatesMock) GetBytes(ctx context.Context, path string, 
 func (m *ManagedSoftwareUpdatesMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		// Pass the full response body to mergePage for processing
-		_ = mergePage(resp.Body)
+		if err := mergePage(resp.Body); err != nil {
+			return nil, err
+		}
 	}
 	return resp, nil
 }

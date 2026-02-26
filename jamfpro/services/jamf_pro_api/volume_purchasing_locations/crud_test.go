@@ -279,5 +279,129 @@ func TestUnit_VolumePurchasingLocations_ListV1_Error(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	_ = resp
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_ListV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListInvalidJSONMock()
+
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_VolumePurchasingLocations_GetByIDV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterNotFoundErrorMock()
+
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_VolumePurchasingLocations_GetByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetByIDV1(context.Background(), "1")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_CreateV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &RequestVolumePurchasingLocation{Name: "New", ServiceToken: "token"}
+	result, resp, err := svc.CreateV1(context.Background(), req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_UpdateByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &RequestVolumePurchasingLocation{Name: "Updated", ServiceToken: "token"}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_DeleteByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
+	require.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_ReclaimByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.ReclaimVolumePurchasingLocationByIDV1(context.Background(), "1")
+	require.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_GetContentV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetContentV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_GetContentV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetContentInvalidJSONMock()
+
+	result, resp, err := svc.GetContentV1(context.Background(), "99", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_VolumePurchasingLocations_GetHistoryV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_GetHistoryV1_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryInvalidJSONMock()
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), "99", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_VolumePurchasingLocations_AddHistoryNotesV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &AddHistoryNotesRequest{ObjectHistoryNote: "Note"}
+	resp, err := svc.AddHistoryNotesV1(context.Background(), "1", req)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestUnit_VolumePurchasingLocations_RevokeLicensesV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.RevokeVolumePurchasingLocationLicensesByIDV1(context.Background(), "1")
+	require.Error(t, err)
+	assert.Nil(t, resp)
 }

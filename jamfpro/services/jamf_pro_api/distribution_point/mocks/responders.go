@@ -73,10 +73,20 @@ func (m *DistributionPointMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v1/distribution-points/999", 404, "error_not_found.json")
 }
 
+// RegisterListInvalidMock registers GET list with invalid JSON for testing mergePage error paths.
+func (m *DistributionPointMock) RegisterListInvalidMock() {
+	m.register("GET", "/api/v1/distribution-points", 200, "validate_list_invalid.json")
+}
+
+// RegisterHistoryInvalidMock registers GET history with invalid JSON for testing mergePage error paths.
+func (m *DistributionPointMock) RegisterHistoryInvalidMock() {
+	m.register("GET", "/api/v1/distribution-points/1/history", 200, "validate_history_invalid.json")
+}
+
 func (m *DistributionPointMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("DistributionPointMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("DistributionPointMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
 	if r.errMsg != "" {
@@ -138,7 +148,9 @@ func (m *DistributionPointMock) GetPaginated(ctx context.Context, path string, q
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		_ = mergePage(resp.Body)
+		if err := mergePage(resp.Body); err != nil {
+			return resp, err
+		}
 	}
 	return resp, nil
 }

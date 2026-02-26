@@ -16,6 +16,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 type JamfProInformationMock struct {
@@ -34,6 +35,15 @@ func (m *JamfProInformationMock) register(method, path string, statusCode int, f
 
 func (m *JamfProInformationMock) RegisterMocks() {
 	m.register("GET", "/api/v2/jamf-pro-information", 200, "validate_get.json")
+}
+
+// RegisterGetV2ErrorMock registers a GET response that returns an error (for testing error paths).
+func (m *JamfProInformationMock) RegisterGetV2ErrorMock() {
+	m.responses["GET:/api/v2/jamf-pro-information"] = registeredResponse{
+		statusCode: 500,
+		rawBody:    []byte(`{"error":"internal server error"}`),
+		errMsg:     "mock client error",
+	}
 }
 
 func (m *JamfProInformationMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -88,9 +98,12 @@ func (m *JamfProInformationMock) GetLogger() *zap.Logger                     { r
 func (m *JamfProInformationMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("no mock for %s %s", method, path)
+		return nil, fmt.Errorf("no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

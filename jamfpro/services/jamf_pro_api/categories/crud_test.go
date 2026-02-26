@@ -72,6 +72,28 @@ func TestUnit_Categories_List_WithRSQLFilter(t *testing.T) {
 	assert.Equal(t, rsqlQuery, mock.LastRSQLQuery, "rsqlQuery should be passed through to the HTTP client")
 }
 
+func TestUnit_Categories_List_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// Do not register any mock
+
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to list categories")
+}
+
+func TestUnit_Categories_List_APIFailure(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListErrorMock()
+
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
 // =============================================================================
 // GetCategoryByIDV1
 // =============================================================================
@@ -193,6 +215,18 @@ func TestUnit_Categories_UpdateByID_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
+func TestUnit_Categories_UpdateByID_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateCategoryErrorMock()
+
+	req := &RequestCategory{Name: "Updated", Priority: 3}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
 // =============================================================================
 // DeleteCategoryByIDV1
 // =============================================================================
@@ -214,6 +248,16 @@ func TestUnit_Categories_DeleteByID_EmptyID(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "category ID is required")
+}
+
+func TestUnit_Categories_DeleteByID_APIFailure(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteCategoryErrorMock()
+
+	resp, err := svc.DeleteByIDV1(context.Background(), "1")
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
 }
 
 // =============================================================================
@@ -250,6 +294,17 @@ func TestUnit_Categories_DeleteMultipleByID_EmptyIDs(t *testing.T) {
 	assert.Contains(t, err.Error(), "ids are required")
 }
 
+func TestUnit_Categories_DeleteMultipleByID_APIFailure(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteCategoriesBulkErrorMock()
+
+	req := &DeleteCategoriesByIDRequest{IDs: []string{"1", "2"}}
+	resp, err := svc.DeleteCategoriesByIDV1(context.Background(), req)
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+}
+
 // =============================================================================
 // GetCategoryHistoryV1
 // =============================================================================
@@ -278,6 +333,18 @@ func TestUnit_Categories_GetHistory_EmptyID(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "category ID is required")
+}
+
+func TestUnit_Categories_GetHistory_APIFailure(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetCategoryHistoryErrorMock()
+
+	result, resp, err := svc.GetCategoryHistoryV1(context.Background(), "1", nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Contains(t, err.Error(), "failed to get category history")
 }
 
 // =============================================================================
@@ -312,4 +379,15 @@ func TestUnit_Categories_AddHistoryNotes_NilRequest(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request body is required")
+}
+
+func TestUnit_Categories_AddHistoryNotes_APIFailure(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterAddCategoryHistoryNotesErrorMock()
+
+	req := &AddCategoryHistoryNotesRequest{Note: "Test note"}
+	resp, err := svc.AddCategoryHistoryNotesV1(context.Background(), "1", req)
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
 }

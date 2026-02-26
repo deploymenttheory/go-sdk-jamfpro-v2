@@ -100,3 +100,67 @@ func TestUnit_GsxConnection_GetHistory_WithRSQLQuery(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, rsqlQuery, mock.LastRSQLQuery)
 }
+
+func TestUnit_GsxConnection_Get_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	// No mock registered
+
+	result, resp, err := svc.GetV1(context.Background())
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response registered")
+}
+
+func TestUnit_GsxConnection_Get_NotFoundError(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterNotFoundErrorMock()
+
+	result, resp, err := svc.GetV1(context.Background())
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+	assert.Contains(t, err.Error(), "NOT-FOUND")
+	assert.Contains(t, err.Error(), "GSX connection not found")
+}
+
+func TestUnit_GsxConnection_Update_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+	request := &ResourceGSXConnection{Enabled: true, Username: "test@example.com"}
+
+	result, resp, err := svc.UpdateV1(context.Background(), request)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response registered")
+}
+
+func TestUnit_GsxConnection_GetHistory_NoMockRegistered(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response registered")
+}
+
+func TestUnit_GsxConnection_GetHistory_InvalidJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryInvalidMock()
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Contains(t, err.Error(), "failed to get GSX connection history")
+	assert.Contains(t, err.Error(), "failed to unmarshal page")
+}
+
+func TestUnit_GsxConnection_NewService(t *testing.T) {
+	mock := mocks.NewGSXConnectionMock()
+	svc := NewService(mock)
+	require.NotNil(t, svc)
+}

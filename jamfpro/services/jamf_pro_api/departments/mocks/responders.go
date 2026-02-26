@@ -81,12 +81,7 @@ func (m *DepartmentsMock) registerError(method, path string, statusCode int, fix
 func (m *DepartmentsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("DepartmentsMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("DepartmentsMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -158,6 +153,30 @@ func (m *DepartmentsMock) RegisterGetDepartmentHistoryMock() {
 
 func (m *DepartmentsMock) RegisterAddDepartmentHistoryNotesMock() {
 	m.register("POST", "/api/v1/departments/1/history", 201, "")
+}
+
+func (m *DepartmentsMock) RegisterDeleteDepartmentsByIDMock() {
+	m.register("POST", "/api/v1/departments/delete-multiple", 204, "")
+}
+
+func (m *DepartmentsMock) RegisterListInvalidJSONMock() {
+	m.responses["GET:/api/v1/departments"] = registeredResponse{statusCode: 200, rawBody: []byte(`{"totalCount":1,"results":[{"id":"1","name":"x"`)}
+}
+
+func (m *DepartmentsMock) RegisterHistoryInvalidJSONMock() {
+	m.responses["GET:/api/v1/departments/1/history"] = registeredResponse{statusCode: 200, rawBody: []byte(`{"totalCount":1,"results":[{"id":"1"`)}
+}
+
+func (m *DepartmentsMock) RegisterListAPIErrorMock() {
+	m.registerError("GET", "/api/v1/departments", 500, "error_not_found.json")
+}
+
+func (m *DepartmentsMock) RegisterHistoryAPIErrorMock() {
+	m.registerError("GET", "/api/v1/departments/1/history", 500, "error_not_found.json")
+}
+
+func (m *DepartmentsMock) RegisterDeleteDepartmentsByIDErrorMock() {
+	m.registerError("POST", "/api/v1/departments/delete-multiple", 500, "error_not_found.json")
 }
 
 func (m *DepartmentsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

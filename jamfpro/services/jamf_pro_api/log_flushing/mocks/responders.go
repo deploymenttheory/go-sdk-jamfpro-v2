@@ -2,6 +2,7 @@ package mocks
 
 import (
 	"context"
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,6 +11,20 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 )
+
+//go:embed validate_settings.json
+var validateSettingsJSON []byte
+
+//go:embed validate_tasks_list.json
+var validateTasksListJSON []byte
+
+//go:embed validate_task_get.json
+var validateTaskGetJSON []byte
+
+//go:embed validate_queue_task.json
+var validateQueueTaskJSON []byte
+
+var errNoMockRegistered = fmt.Errorf("no mock registered")
 
 type registeredResponse struct {
 	statusCode int
@@ -30,90 +45,94 @@ func NewLogFlushingMock() *LogFlushingMock {
 	}
 }
 
-func (m *LogFlushingMock) register(method, path string, statusCode int, rawJSON string) {
+func (m *LogFlushingMock) register(method, path string, statusCode int, rawBody []byte) {
 	key := method + " " + path
 	m.responses[key] = registeredResponse{
 		statusCode: statusCode,
-		rawBody:    []byte(rawJSON),
+		rawBody:    rawBody,
+	}
+}
+
+func (m *LogFlushingMock) registerError(method, path string, errMsg string) {
+	key := method + " " + path
+	m.responses[key] = registeredResponse{
+		errMsg: errMsg,
 	}
 }
 
 func (m *LogFlushingMock) RegisterGetSettingsMock() {
-	m.register("GET", "/api/v1/log-flushing", 200, `{
-		"retentionPolicies": [{
-			"displayName": "Jamf Pro Server Logs",
-			"qualifier": "JAMFSoftwareServer",
-			"retentionPeriod": 30,
-			"retentionPeriodUnit": "Days"
-		}],
-		"hourOfDay": 2
-	}`)
+	m.register("GET", "/api/v1/log-flushing", 200, validateSettingsJSON)
+}
+
+func (m *LogFlushingMock) RegisterGetSettingsErrorMock() {
+	m.registerError("GET", "/api/v1/log-flushing", "api error")
 }
 
 func (m *LogFlushingMock) RegisterListTasksMock() {
-	m.register("GET", "/api/v1/log-flushing/task", 200, `[{
-		"id": "1",
-		"qualifier": "JAMFSoftwareServer",
-		"retentionPeriod": 30,
-		"retentionPeriodUnit": "Days",
-		"state": "COMPLETED"
-	}]`)
+	m.register("GET", "/api/v1/log-flushing/task", 200, validateTasksListJSON)
+}
+
+func (m *LogFlushingMock) RegisterListTasksErrorMock() {
+	m.registerError("GET", "/api/v1/log-flushing/task", "api error")
 }
 
 func (m *LogFlushingMock) RegisterGetTaskByIDMock() {
-	m.register("GET", "/api/v1/log-flushing/task/1", 200, `{
-		"id": "1",
-		"qualifier": "JAMFSoftwareServer",
-		"retentionPeriod": 30,
-		"retentionPeriodUnit": "Days",
-		"state": "COMPLETED"
-	}`)
+	m.register("GET", "/api/v1/log-flushing/task/1", 200, validateTaskGetJSON)
+}
+
+func (m *LogFlushingMock) RegisterGetTaskByIDErrorMock(id string) {
+	m.registerError("GET", "/api/v1/log-flushing/task/"+id, "api error")
 }
 
 func (m *LogFlushingMock) RegisterQueueTaskMock() {
-	m.register("POST", "/api/v1/log-flushing/task", 201, `{
-		"id": "2",
-		"href": "/api/v1/log-flushing/task/2"
-	}`)
+	m.register("POST", "/api/v1/log-flushing/task", 201, validateQueueTaskJSON)
+}
+
+func (m *LogFlushingMock) RegisterQueueTaskErrorMock() {
+	m.registerError("POST", "/api/v1/log-flushing/task", "api error")
 }
 
 func (m *LogFlushingMock) RegisterDeleteTaskMock() {
-	m.register("DELETE", "/api/v1/log-flushing/task/1", 204, ``)
+	m.register("DELETE", "/api/v1/log-flushing/task/1", 204, nil)
+}
+
+func (m *LogFlushingMock) RegisterDeleteTaskErrorMock(id string) {
+	m.registerError("DELETE", "/api/v1/log-flushing/task/"+id, "api error")
 }
 
 func (m *LogFlushingMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
-	resp, ok := m.responses[key]
+	r, ok := m.responses[key]
 	if !ok {
-		return nil, fmt.Errorf("no mock registered for GET %s", path)
+		return nil, errNoMockRegistered
 	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
+	if r.errMsg != "" {
+		return nil, fmt.Errorf("%s", r.errMsg)
 	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+	if result != nil && len(r.rawBody) > 0 {
+		if err := json.Unmarshal(r.rawBody, result); err != nil {
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
 }
 
 func (m *LogFlushingMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	key := "POST " + path
-	resp, ok := m.responses[key]
+	r, ok := m.responses[key]
 	if !ok {
-		return nil, fmt.Errorf("no mock registered for POST %s", path)
+		return nil, errNoMockRegistered
 	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
+	if r.errMsg != "" {
+		return nil, fmt.Errorf("%s", r.errMsg)
 	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+	if result != nil && len(r.rawBody) > 0 {
+		if err := json.Unmarshal(r.rawBody, result); err != nil {
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
 }
 
 func (m *LogFlushingMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
@@ -130,53 +149,53 @@ func (m *LogFlushingMock) PostMultipart(ctx context.Context, path string, fileFi
 
 func (m *LogFlushingMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	key := "PUT " + path
-	resp, ok := m.responses[key]
+	r, ok := m.responses[key]
 	if !ok {
-		return nil, fmt.Errorf("no mock registered for PUT %s", path)
+		return nil, errNoMockRegistered
 	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
+	if r.errMsg != "" {
+		return nil, fmt.Errorf("%s", r.errMsg)
 	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+	if result != nil && len(r.rawBody) > 0 {
+		if err := json.Unmarshal(r.rawBody, result); err != nil {
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
 }
 
 func (m *LogFlushingMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
 	key := "PATCH " + path
-	resp, ok := m.responses[key]
+	r, ok := m.responses[key]
 	if !ok {
-		return nil, fmt.Errorf("no mock registered for PATCH %s", path)
+		return nil, errNoMockRegistered
 	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
+	if r.errMsg != "" {
+		return nil, fmt.Errorf("%s", r.errMsg)
 	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+	if result != nil && len(r.rawBody) > 0 {
+		if err := json.Unmarshal(r.rawBody, result); err != nil {
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
 }
 
 func (m *LogFlushingMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
 	key := "DELETE " + path
-	resp, ok := m.responses[key]
+	r, ok := m.responses[key]
 	if !ok {
-		return nil, fmt.Errorf("no mock registered for DELETE %s", path)
+		return nil, errNoMockRegistered
 	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
+	if r.errMsg != "" {
+		return nil, fmt.Errorf("%s", r.errMsg)
 	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+	if result != nil && len(r.rawBody) > 0 {
+		if err := json.Unmarshal(r.rawBody, result); err != nil {
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
 }
 
 func (m *LogFlushingMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
@@ -186,14 +205,14 @@ func (m *LogFlushingMock) DeleteWithBody(ctx context.Context, path string, body 
 func (m *LogFlushingMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
-	resp, ok := m.responses[key]
+	r, ok := m.responses[key]
 	if !ok {
-		return nil, nil, fmt.Errorf("no mock registered for GET %s", path)
+		return nil, nil, errNoMockRegistered
 	}
-	if resp.errMsg != "" {
-		return nil, nil, fmt.Errorf("%s", resp.errMsg)
+	if r.errMsg != "" {
+		return nil, nil, fmt.Errorf("%s", r.errMsg)
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, resp.rawBody, nil
+	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, r.rawBody, nil
 }
 
 func (m *LogFlushingMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {

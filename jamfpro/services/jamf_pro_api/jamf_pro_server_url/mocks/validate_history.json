@@ -1,0 +1,1 @@
+{"totalCount":2,"results":[{"id":1,"username":"admin","date":"2024-01-15T10:30:00Z","note":"Server URL updated","details":"Changed URL from https://old.example.com to https://jamf.example.com"},{"id":2,"username":"admin","date":"2024-01-16T14:20:00Z","note":"Enrollment URL modified","details":"Updated unsecured enrollment URL"}]}

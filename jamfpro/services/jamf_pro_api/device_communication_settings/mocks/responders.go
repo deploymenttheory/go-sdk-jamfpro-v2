@@ -17,6 +17,7 @@ import (
 type registeredResponse struct {
 	statusCode int
 	rawBody    []byte
+	errMsg     string
 }
 
 type DeviceCommunicationSettingsMock struct {
@@ -48,12 +49,48 @@ func (m *DeviceCommunicationSettingsMock) RegisterGetHistoryMock() {
 	m.register("GET", "/api/v1/device-communication-settings/history", 200, "validate_history.json")
 }
 
+func (m *DeviceCommunicationSettingsMock) RegisterAddHistoryNotesMock() {
+	m.register("POST", "/api/v1/device-communication-settings/history", 201, "validate_add_history_note.json")
+}
+
+func (m *DeviceCommunicationSettingsMock) RegisterGetErrorMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_get.json"))
+	m.responses["GET:/api/v1/device-communication-settings"] = registeredResponse{statusCode: 500, rawBody: body, errMsg: "Jamf Pro API error (500): server error"}
+}
+
+func (m *DeviceCommunicationSettingsMock) RegisterPutErrorMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_get.json"))
+	m.responses["PUT:/api/v1/device-communication-settings"] = registeredResponse{statusCode: 500, rawBody: body, errMsg: "Jamf Pro API error (500): server error"}
+}
+
+func (m *DeviceCommunicationSettingsMock) RegisterGetHistoryErrorMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_history.json"))
+	m.responses["GET:/api/v1/device-communication-settings/history"] = registeredResponse{statusCode: 500, rawBody: body, errMsg: "Jamf Pro API error (500): server error"}
+}
+
+func (m *DeviceCommunicationSettingsMock) RegisterGetHistoryInvalidJSONMock() {
+	m.responses["GET:/api/v1/device-communication-settings/history"] = registeredResponse{statusCode: 200, rawBody: []byte(`{invalid json`)}
+}
+
+func (m *DeviceCommunicationSettingsMock) RegisterGetHistoryInvalidItemMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_history_invalid_item.json"))
+	m.responses["GET:/api/v1/device-communication-settings/history"] = registeredResponse{statusCode: 200, rawBody: body}
+}
+
+func (m *DeviceCommunicationSettingsMock) RegisterAddHistoryNotesErrorMock() {
+	body, _ := os.ReadFile(filepath.Join(mustMocksDir(), "validate_add_history_note.json"))
+	m.responses["POST:/api/v1/device-communication-settings/history"] = registeredResponse{statusCode: 500, rawBody: body, errMsg: "Jamf Pro API error (500): server error"}
+}
+
 func (m *DeviceCommunicationSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{StatusCode: 404, Headers: http.Header{}, Body: nil}, fmt.Errorf("DeviceCommunicationSettingsMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("DeviceCommunicationSettingsMock: no response for %s %s", method, path)
 	}
 	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -105,7 +142,9 @@ func (m *DeviceCommunicationSettingsMock) GetPaginated(ctx context.Context, path
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		_ = mergePage(resp.Body)
+		if err := mergePage(resp.Body); err != nil {
+			return resp, err
+		}
 	}
 	return resp, nil
 }

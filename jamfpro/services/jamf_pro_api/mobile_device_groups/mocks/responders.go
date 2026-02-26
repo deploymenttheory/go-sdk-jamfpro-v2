@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -46,6 +47,10 @@ func (m *MobileDeviceGroupsMock) RegisterMocks() {
 	m.RegisterCreateStaticMock()
 	m.RegisterUpdateStaticMock()
 	m.RegisterDeleteStaticMock()
+	m.RegisterListAllMock()
+	m.RegisterGetStaticGroupMembershipMock()
+	m.RegisterGetSmartGroupMembershipMock()
+	m.RegisterEraseDevicesMock()
 }
 
 // RegisterErrorMocks registers all error responses in one call.
@@ -119,6 +124,22 @@ func (m *MobileDeviceGroupsMock) RegisterDeleteStaticMock() {
 	m.register("DELETE", "/api/v1/mobile-device-groups/static-groups/10", 204, "")
 }
 
+func (m *MobileDeviceGroupsMock) RegisterListAllMock() {
+	m.register("GET", "/api/v1/mobile-device-groups", 200, "validate_list_all.json")
+}
+
+func (m *MobileDeviceGroupsMock) RegisterGetStaticGroupMembershipMock() {
+	m.register("GET", "/api/v1/mobile-device-groups/static-group-membership/10", 200, "validate_get_static_group_membership.json")
+}
+
+func (m *MobileDeviceGroupsMock) RegisterGetSmartGroupMembershipMock() {
+	m.register("GET", "/api/v1/mobile-device-groups/smart-group-membership/1", 200, "validate_get_smart_group_membership.json")
+}
+
+func (m *MobileDeviceGroupsMock) RegisterEraseDevicesMock() {
+	m.register("POST", "/api/v1/mobile-device-groups/1/erase", 200, "")
+}
+
 func (m *MobileDeviceGroupsMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v1/mobile-device-groups/smart-groups/999", 404, "error_not_found.json")
 }
@@ -129,6 +150,26 @@ func (m *MobileDeviceGroupsMock) RegisterGetStaticNotFoundErrorMock() {
 
 func (m *MobileDeviceGroupsMock) RegisterListSmartErrorMock() {
 	m.registerError("GET", "/api/v1/mobile-device-groups/smart-groups", 500, "error_not_found.json")
+}
+
+func (m *MobileDeviceGroupsMock) RegisterListStaticErrorMock() {
+	m.registerError("GET", "/api/v1/mobile-device-groups/static-groups", 500, "error_not_found.json")
+}
+
+func (m *MobileDeviceGroupsMock) RegisterListAllErrorMock() {
+	m.registerError("GET", "/api/v1/mobile-device-groups", 500, "error_not_found.json")
+}
+
+func (m *MobileDeviceGroupsMock) RegisterGetStaticGroupMembershipErrorMock() {
+	m.registerError("GET", "/api/v1/mobile-device-groups/static-group-membership/10", 500, "error_not_found.json")
+}
+
+func (m *MobileDeviceGroupsMock) RegisterGetSmartGroupMembershipErrorMock() {
+	m.registerError("GET", "/api/v1/mobile-device-groups/smart-group-membership/1", 500, "error_not_found.json")
+}
+
+func (m *MobileDeviceGroupsMock) RegisterEraseDevicesErrorMock() {
+	m.registerError("POST", "/api/v1/mobile-device-groups/1/erase", 500, "error_not_found.json")
 }
 
 func (m *MobileDeviceGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
@@ -197,12 +238,7 @@ func (m *MobileDeviceGroupsMock) GetLogger() *zap.Logger                    { re
 func (m *MobileDeviceGroupsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("MobileDeviceGroupsMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("MobileDeviceGroupsMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -225,11 +261,9 @@ func (m *MobileDeviceGroupsMock) dispatch(method, path string, result any) (*int
 }
 
 func loadMockResponse(filename string) ([]byte, error) {
-	dir, err := os.Getwd()
-	if err != nil {
-		return nil, fmt.Errorf("get working directory: %w", err)
-	}
-	data, err := os.ReadFile(filepath.Join(dir, "mocks", filename))
+	_, callerPath, _, _ := runtime.Caller(0)
+	dir := filepath.Dir(callerPath)
+	data, err := os.ReadFile(filepath.Join(dir, filename))
 	if err != nil {
 		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
 	}

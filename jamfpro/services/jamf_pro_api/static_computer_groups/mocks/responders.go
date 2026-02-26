@@ -88,12 +88,7 @@ func (m *StaticComputerGroupsMock) dispatch(method, path string, result any) (*i
 	key := method + ":" + normalizePath(path)
 	r, ok := m.responses[key]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("StaticComputerGroupsMock: no response registered for %s %s", method, path)
+		return nil, fmt.Errorf("StaticComputerGroupsMock: no response registered for %s %s", method, path)
 	}
 
 	resp := &interfaces.Response{
@@ -149,6 +144,14 @@ func (m *StaticComputerGroupsMock) RegisterDeleteMock() {
 
 func (m *StaticComputerGroupsMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v2/computer-groups/static-groups/999", 404, "error_not_found.json")
+}
+
+func (m *StaticComputerGroupsMock) RegisterUpdateNotFoundErrorMock() {
+	m.registerError("PUT", "/api/v2/computer-groups/static-groups/999", 404, "error_not_found.json")
+}
+
+func (m *StaticComputerGroupsMock) RegisterDeleteNotFoundErrorMock() {
+	m.registerError("DELETE", "/api/v2/computer-groups/static-groups/999", 404, "error_not_found.json")
 }
 
 func (m *StaticComputerGroupsMock) RegisterConflictErrorMock() {

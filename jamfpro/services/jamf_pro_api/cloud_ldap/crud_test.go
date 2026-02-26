@@ -44,6 +44,19 @@ func TestUnit_CloudLdap_GetDefaultServerConfigurationV2_Success(t *testing.T) {
 	assert.Equal(t, 60, result.SearchTimeout)
 }
 
+func TestUnit_CloudLdap_GetDefaultServerConfigurationV2_EmptyProviderName(t *testing.T) {
+	mock := mocks.NewCloudLdapMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetDefaultServerConfigurationV2(ctx, "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "providerName is required")
+}
+
 func TestUnit_CloudLdap_GetDefaultMappingsV2_EmptyProviderName(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	svc := NewService(mock)
@@ -99,6 +112,29 @@ func TestUnit_CloudLdap_CreateV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
+func TestUnit_CloudLdap_CreateV2_APICallFails(t *testing.T) {
+	mock := mocks.NewCloudLdapMock()
+	mock.RegisterCreateErrorMock()
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	request := &ResourceCloudLdap{
+		CloudIdPCommon: &CloudIdPCommon{
+			ProviderName: "GOOGLE",
+			DisplayName:  "Test Google LDAP",
+		},
+	}
+
+	result, resp, err := svc.CreateV2(ctx, request)
+
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 500, resp.StatusCode)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "server error")
+}
+
 func TestUnit_CloudLdap_GetByIDV2_Success(t *testing.T) {
 	mock := mocks.NewCloudLdapMock()
 	mock.RegisterGetByIDMock("1")
@@ -129,6 +165,22 @@ func TestUnit_CloudLdap_GetByIDV2_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_CloudLdap_GetByIDV2_APICallFails(t *testing.T) {
+	mock := mocks.NewCloudLdapMock()
+	mock.RegisterGetByIDErrorMock("999")
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByIDV2(ctx, "999")
+
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "not found")
 }
 
 func TestUnit_CloudLdap_UpdateByIDV2_Success(t *testing.T) {

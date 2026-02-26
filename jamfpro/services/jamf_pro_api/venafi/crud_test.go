@@ -343,3 +343,154 @@ func TestUnit_Venafi_GetProxyTrustStore_EmptyID(t *testing.T) {
 	assert.Nil(t, data)
 	assert.Contains(t, err.Error(), "id is required")
 }
+
+func TestUnit_Venafi_RegenerateJamfPublicKeyByIDV1_Success(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	mock.RegisterRegenerateJamfPublicKeyMock("1")
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	resp, err := svc.RegenerateJamfPublicKeyByIDV1(ctx, "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_Venafi_RegenerateJamfPublicKeyByIDV1_EmptyID(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	resp, err := svc.RegenerateJamfPublicKeyByIDV1(ctx, "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_Venafi_UploadProxyTrustStoreByIDV1_Success(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	mock.RegisterUploadProxyTrustStoreMock("1")
+
+	svc := NewService(mock)
+	ctx := context.Background()
+	pemCert := []byte("-----BEGIN CERTIFICATE-----\ndGVzdA==\n-----END CERTIFICATE-----")
+
+	resp, err := svc.UploadProxyTrustStoreByIDV1(ctx, "1", pemCert)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_Venafi_UploadProxyTrustStoreByIDV1_EmptyID(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+	pemCert := []byte("-----BEGIN CERTIFICATE-----")
+
+	resp, err := svc.UploadProxyTrustStoreByIDV1(ctx, "", pemCert)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_Venafi_UploadProxyTrustStoreByIDV1_EmptyPEM(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	resp, err := svc.UploadProxyTrustStoreByIDV1(ctx, "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "pem certificate is required")
+}
+
+func TestUnit_Venafi_UploadProxyTrustStoreByIDV1_EmptyPEMSlice(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	resp, err := svc.UploadProxyTrustStoreByIDV1(ctx, "1", []byte{})
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "pem certificate is required")
+}
+
+func TestUnit_Venafi_DeleteProxyTrustStoreByIDV1_Success(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	mock.RegisterDeleteProxyTrustStoreMock("1")
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	resp, err := svc.DeleteProxyTrustStoreByIDV1(ctx, "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 204, resp.StatusCode)
+}
+
+func TestUnit_Venafi_DeleteProxyTrustStoreByIDV1_EmptyID(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	resp, err := svc.DeleteProxyTrustStoreByIDV1(ctx, "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_Venafi_GetHistory_WithQuery(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	mock.RegisterGetHistoryMock("1")
+
+	svc := NewService(mock)
+	ctx := context.Background()
+	query := map[string]string{"page": "0", "page-size": "100"}
+
+	result, resp, err := svc.GetHistory(ctx, "1", query)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	assert.Len(t, result.Results, 1)
+}
+
+func TestUnit_Venafi_Create_NoMockRegistered(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+	// Do not register any mock
+
+	svc := NewService(mock)
+	ctx := context.Background()
+	request := &ResourceVenafi{Name: "Test", ProxyAddress: "localhost:9443"}
+
+	result, resp, err := svc.Create(ctx, request)
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response for")
+}
+
+func TestUnit_Venafi_GetByID_NoMockRegistered(t *testing.T) {
+	mock := mocks.NewVenafiMock()
+
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByID(ctx, "1")
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no response for")
+}

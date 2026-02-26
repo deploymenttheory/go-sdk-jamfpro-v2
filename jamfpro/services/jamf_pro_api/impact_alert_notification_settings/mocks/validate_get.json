@@ -1,0 +1,6 @@
+{
+	"scopeableObjectsAlertEnabled": true,
+	"scopeableObjectsConfirmationCodeEnabled": false,
+	"deployableObjectsAlertEnabled": true,
+	"deployableObjectsConfirmationCodeEnabled": false
+}

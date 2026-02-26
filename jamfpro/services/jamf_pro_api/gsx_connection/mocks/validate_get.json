@@ -1,0 +1,11 @@
+{
+	"enabled": true,
+	"username": "test@example.com",
+	"serviceAccountNo": "12345",
+	"shipToNo": "67890",
+	"gsxKeystore": {
+		"name": "certificate.p12",
+		"expirationEpoch": 1691954900000,
+		"errorMessage": ""
+	}
+}

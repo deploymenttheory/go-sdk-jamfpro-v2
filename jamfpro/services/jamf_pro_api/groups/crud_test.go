@@ -534,3 +534,110 @@ func TestUnit_Groups_ListV1_EmptyResults(t *testing.T) {
 	assert.Equal(t, 0, result.TotalCount)
 	assert.Len(t, result.Results, 0)
 }
+
+// Error case: no mock registered for GetPaginated
+func TestUnit_Groups_ListV1_ClientError(t *testing.T) {
+	mock := mocks.NewGroupsMock()
+	// Do not register any mock - GetPaginated will return error
+	svc := NewService(mock)
+	result, resp, err := svc.ListV1(context.Background(), nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to list groups")
+}
+
+// Error case: invalid JSON in list response triggers mergePage unmarshal error
+func TestUnit_Groups_ListV1_InvalidJSON(t *testing.T) {
+	mock := mocks.NewGroupsMock()
+	mock.RegisterListInvalidJSONMock()
+	svc := NewService(mock)
+	result, _, err := svc.ListV1(context.Background(), nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to list groups")
+}
+
+// Error case: no mock registered for Get
+func TestUnit_Groups_GetByIDV1_ClientError(t *testing.T) {
+	mock := mocks.NewGroupsMock()
+	// Do not register GetByID - Get will return error
+	svc := NewService(mock)
+	result, resp, err := svc.GetByIDV1(context.Background(), "platform-1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no mock registered")
+}
+
+// Error case: ListV1 fails when GetComputerGroupByNameV1 calls it
+func TestUnit_Groups_GetComputerGroupByNameV1_ListError(t *testing.T) {
+	mock := mocks.NewGroupsMock()
+	// Do not register ListMock - ListV1 will fail
+	svc := NewService(mock)
+	result, _, err := svc.GetComputerGroupByNameV1(context.Background(), "Test Computer Group")
+
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to list groups")
+}
+
+// Error case: ListV1 fails when GetMobileGroupByNameV1 calls it
+func TestUnit_Groups_GetMobileGroupByNameV1_ListError(t *testing.T) {
+	mock := mocks.NewGroupsMock()
+	svc := NewService(mock)
+	result, _, err := svc.GetMobileGroupByNameV1(context.Background(), "Test Mobile Group")
+
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to list groups")
+}
+
+// Error case: ListV1 fails when GetComputerGroupByIDV1 calls it
+func TestUnit_Groups_GetComputerGroupByIDV1_ListError(t *testing.T) {
+	mock := mocks.NewGroupsMock()
+	svc := NewService(mock)
+	result, _, err := svc.GetComputerGroupByIDV1(context.Background(), "101")
+
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to list groups")
+}
+
+// Error case: ListV1 fails when GetMobileGroupByIDV1 calls it
+func TestUnit_Groups_GetMobileGroupByIDV1_ListError(t *testing.T) {
+	mock := mocks.NewGroupsMock()
+	svc := NewService(mock)
+	result, _, err := svc.GetMobileGroupByIDV1(context.Background(), "102")
+
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "failed to list groups")
+}
+
+// Error case: no mock registered for Patch
+func TestUnit_Groups_UpdateByIDV1_ClientError(t *testing.T) {
+	mock := mocks.NewGroupsMock()
+	svc := NewService(mock)
+	req := &RequestUpdateGroup{GroupName: "Test"}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "platform-1", req)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "no mock registered")
+}
+
+// Error case: no mock registered for Delete
+func TestUnit_Groups_DeleteByIDV1_ClientError(t *testing.T) {
+	mock := mocks.NewGroupsMock()
+	svc := NewService(mock)
+	resp, err := svc.DeleteByIDV1(context.Background(), "platform-1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "no mock registered")
+}

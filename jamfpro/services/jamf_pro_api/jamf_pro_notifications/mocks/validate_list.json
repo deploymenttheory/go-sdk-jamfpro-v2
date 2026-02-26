@@ -1,0 +1,10 @@
+[
+  {
+    "type": "SYSTEM_ALERT",
+    "id": "notification-1",
+    "params": {
+      "message": "Test notification",
+      "severity": "info"
+    }
+  }
+]
