@@ -38,7 +38,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_JamfProInformation_Get(t *testing.T) {
+func TestAcceptance_JamfProInformation_get(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.JamfProInformation
 	ctx := context.Background()

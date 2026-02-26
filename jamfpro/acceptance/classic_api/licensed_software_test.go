@@ -19,7 +19,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_LicensedSoftware_Lifecycle(t *testing.T) {
+func TestAcceptance_LicensedSoftware_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicLicensedSoftware
@@ -30,7 +30,7 @@ func TestAcceptance_LicensedSoftware_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test licensed software")
 
-	lsName := acc.UniqueName("acc-test-licensed-software")
+	lsName := acc.UniqueName("sdkv2_acc_acc-test-licensed-software")
 	createReq := &licensed_software.Resource{
 		General: licensed_software.SubsetGeneral{
 			Name:      lsName,
@@ -120,7 +120,7 @@ func TestAcceptance_LicensedSoftware_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-licensed-software-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-licensed-software-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating licensed software ID=%d to name=%q", lsID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -196,13 +196,13 @@ func TestAcceptance_LicensedSoftware_Lifecycle(t *testing.T) {
 // TestAcceptance_LicensedSoftware_DeleteByName creates licensed software then deletes by name.
 // =============================================================================
 
-func TestAcceptance_LicensedSoftware_DeleteByName(t *testing.T) {
+func TestAcceptance_LicensedSoftware_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicLicensedSoftware
 	ctx := context.Background()
 
-	lsName := acc.UniqueName("acc-test-licensed-software-dbn")
+	lsName := acc.UniqueName("sdkv2_acc_acc-test-licensed-software-dbn")
 	createReq := &licensed_software.Resource{
 		General: licensed_software.SubsetGeneral{
 			Name:      lsName,
@@ -243,7 +243,7 @@ func TestAcceptance_LicensedSoftware_DeleteByName(t *testing.T) {
 // TestAcceptance_LicensedSoftware_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_LicensedSoftware_ValidationErrors(t *testing.T) {
+func TestAcceptance_LicensedSoftware_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicLicensedSoftware
@@ -268,7 +268,7 @@ func TestAcceptance_LicensedSoftware_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), 0, &licensed_software.Resource{
-			General: licensed_software.SubsetGeneral{Name: "test", Publisher: "Test", Platform: "Mac"},
+			General: licensed_software.SubsetGeneral{Name: "sdkv2_acc_test", Publisher: "Test", Platform: "Mac"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "licensed software ID must be a positive integer")
@@ -276,7 +276,7 @@ func TestAcceptance_LicensedSoftware_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
 		_, _, err := svc.UpdateByName(context.Background(), "", &licensed_software.Resource{
-			General: licensed_software.SubsetGeneral{Name: "x", Publisher: "Test", Platform: "Mac"},
+			General: licensed_software.SubsetGeneral{Name: "sdkv2_acc_x", Publisher: "Test", Platform: "Mac"},
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "licensed software name cannot be empty")

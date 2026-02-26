@@ -99,7 +99,7 @@ func uniquePackageName(base string) string {
 // lifecycle: CreateAndUpload (create metadata → upload → verify SHA3_512) → List → GetByID → Update → History → Delete.
 // =============================================================================
 
-func TestAcceptance_Packages_Lifecycle(t *testing.T) {
+func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Packages
@@ -254,7 +254,7 @@ func TestAcceptance_Packages_Lifecycle(t *testing.T) {
 // TestAcceptance_Packages_ListWithRSQLFilter
 // =============================================================================
 
-func TestAcceptance_Packages_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Packages_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Packages
@@ -315,7 +315,7 @@ func TestAcceptance_Packages_ListWithRSQLFilter(t *testing.T) {
 // TestAcceptance_Packages_DeleteMultiple
 // =============================================================================
 
-func TestAcceptance_Packages_DeleteMultiple(t *testing.T) {
+func TestAcceptance_Packages_delete_multiple(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Packages
@@ -371,7 +371,7 @@ func TestAcceptance_Packages_DeleteMultiple(t *testing.T) {
 // TestAcceptance_Packages_ValidationErrors
 // =============================================================================
 
-func TestAcceptance_Packages_ValidationErrors(t *testing.T) {
+func TestAcceptance_Packages_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Packages
@@ -389,7 +389,7 @@ func TestAcceptance_Packages_ValidationErrors(t *testing.T) {
 	})
 
 	t.Run("UpdateByIDV1_EmptyID", func(t *testing.T) {
-		_, _, err := svc.UpdateByIDV1(context.Background(), "", &packages.ResourcePackage{PackageName: "x"})
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &packages.ResourcePackage{PackageName: "sdkv2_acc_x"})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})

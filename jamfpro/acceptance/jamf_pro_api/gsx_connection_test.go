@@ -53,7 +53,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_GSXConnection_GetAndUpdate(t *testing.T) {
+func TestAcceptance_GSXConnection_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.GSXConnection
@@ -95,7 +95,7 @@ func TestAcceptance_GSXConnection_GetAndUpdate(t *testing.T) {
 	assert.Equal(t, modified.Enabled, current.Enabled)
 }
 
-func TestAcceptance_GSXConnection_History(t *testing.T) {
+func TestAcceptance_GSXConnection_history(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.GSXConnection
@@ -126,7 +126,7 @@ func TestAcceptance_GSXConnection_History(t *testing.T) {
 	assert.NotNil(t, historyFiltered)
 }
 
-func TestAcceptance_GSXConnection_ValidationErrors(t *testing.T) {
+func TestAcceptance_GSXConnection_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.GSXConnection

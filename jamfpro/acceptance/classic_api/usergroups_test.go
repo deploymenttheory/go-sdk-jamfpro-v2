@@ -19,7 +19,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_UserGroups_Lifecycle(t *testing.T) {
+func TestAcceptance_UserGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicUserGroups
@@ -30,7 +30,7 @@ func TestAcceptance_UserGroups_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test user group")
 
-	groupName := acc.UniqueName("acc-test-usergrp")
+	groupName := acc.UniqueName("sdkv2_acc_acc-test-usergrp")
 	createReq := &usergroups.RequestUserGroup{
 		Name:             groupName,
 		IsSmart:          true,
@@ -135,7 +135,7 @@ func TestAcceptance_UserGroups_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-usergrp-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-usergrp-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating user group ID=%d to name=%q", groupID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -244,13 +244,13 @@ func TestAcceptance_UserGroups_Lifecycle(t *testing.T) {
 // TestAcceptance_UserGroups_DeleteByName creates a user group then deletes by name.
 // =============================================================================
 
-func TestAcceptance_UserGroups_DeleteByName(t *testing.T) {
+func TestAcceptance_UserGroups_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicUserGroups
 	ctx := context.Background()
 
-	groupName := acc.UniqueName("acc-test-usergrp-dbn")
+	groupName := acc.UniqueName("sdkv2_acc_acc-test-usergrp-dbn")
 	createReq := &usergroups.RequestUserGroup{
 		Name:    groupName,
 		IsSmart: false,
@@ -287,7 +287,7 @@ func TestAcceptance_UserGroups_DeleteByName(t *testing.T) {
 // TestAcceptance_UserGroups_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_UserGroups_ValidationErrors(t *testing.T) {
+func TestAcceptance_UserGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicUserGroups

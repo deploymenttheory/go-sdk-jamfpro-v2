@@ -36,7 +36,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_SelfServiceBrandingIOS_Lifecycle(t *testing.T) {
+func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SelfServiceBrandingIOS
@@ -46,7 +46,7 @@ func TestAcceptance_SelfServiceBrandingIOS_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test self-service branding mobile")
 
 	createReq := &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
-		BrandingName:              acc.UniqueName("acc-test-ssb-mobile"),
+		BrandingName:              acc.UniqueName("sdkv2_acc_acc-test-ssb-mobile"),
 		HeaderBackgroundColorCode: "#FFFFFF",
 		MenuIconColorCode:         "#000000",
 		BrandingNameColorCode:     "#333333",
@@ -89,7 +89,7 @@ func TestAcceptance_SelfServiceBrandingIOS_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating branding ID=%s", brandingID)
 
 	updateReq := &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
-		BrandingName:              acc.UniqueName("acc-test-ssb-mobile-updated"),
+		BrandingName:              acc.UniqueName("sdkv2_acc_acc-test-ssb-mobile-updated"),
 		HeaderBackgroundColorCode: "#F0F0F0",
 		MenuIconColorCode:         "#0066CC",
 		BrandingNameColorCode:     "#222222",
@@ -122,7 +122,7 @@ func TestAcceptance_SelfServiceBrandingIOS_Lifecycle(t *testing.T) {
 // TestAcceptance_SelfServiceBrandingIOS_ValidationErrors
 // =============================================================================
 
-func TestAcceptance_SelfServiceBrandingIOS_ValidationErrors(t *testing.T) {
+func TestAcceptance_SelfServiceBrandingIOS_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SelfServiceBrandingIOS

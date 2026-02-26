@@ -10,7 +10,7 @@ import (
 )
 
 // TestAcceptance_Accounts_ListV1 tests listing user accounts with various RSQL queries.
-func TestAcceptance_Accounts_ListV1(t *testing.T) {
+func TestAcceptance_Accounts_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 
@@ -117,7 +117,7 @@ func TestAcceptance_Accounts_ListV1(t *testing.T) {
 // Note: This test is commented out by default as it modifies data.
 // Uncomment and run carefully in a test environment.
 /*
-func TestAcceptance_Accounts_CRUD(t *testing.T) {
+func TestAcceptance_Accounts_crud(t *testing.T) {
 	acceptance.SkipIfNotEnabled(t)
 	client := acceptance.NewClient(t)
 

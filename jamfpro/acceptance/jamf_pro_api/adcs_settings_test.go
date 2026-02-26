@@ -16,14 +16,14 @@ func TestAdcsSettings_Lifecycle(t *testing.T) {
 	svc := acc.Client.AdcsSettings
 	ctx := context.Background()
 
-	displayName := acc.UniqueName("Test ADCS")
+	displayName := acc.UniqueName("sdkv2_acc_Test ADCS")
 
 	revocationEnabled := true
 	outbound := false
 
 	createReq := &adcs_settings.ResourceAdcsSettings{
 		DisplayName:       displayName,
-		CAName:            "TestCA",
+		CAName:            "sdkv2_acc_TestCA",
 		FQDN:              "adcs.example.com",
 		AdcsURL:           "https://adcs.example.com/certsrv",
 		RevocationEnabled: &revocationEnabled,

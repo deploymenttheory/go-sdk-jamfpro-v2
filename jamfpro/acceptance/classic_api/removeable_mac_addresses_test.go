@@ -18,7 +18,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
+func TestAcceptance_RemoveableMacAddresses_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicRemoveableMacAddresses
@@ -29,7 +29,7 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test removeable MAC address")
 
-	macAddress := acc.UniqueName("AA:BB:CC:DD:EE")
+	macAddress := acc.UniqueName("sdkv2_acc_AA:BB:CC:DD:EE")
 	createReq := &removeable_mac_addresses.RequestRemoveableMacAddress{Name: macAddress}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -112,7 +112,7 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("AA:BB:CC:DD:FF")
+	updatedName := acc.UniqueName("sdkv2_acc_AA:BB:CC:DD:FF")
 	acc.LogTestStage(t, "UpdateByID", "Updating removeable MAC address ID=%d to name=%q", macID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -174,13 +174,13 @@ func TestAcceptance_RemoveableMacAddresses_Lifecycle(t *testing.T) {
 // TestAcceptance_RemoveableMacAddresses_DeleteByName creates a removeable MAC address then deletes by name.
 // =============================================================================
 
-func TestAcceptance_RemoveableMacAddresses_DeleteByName(t *testing.T) {
+func TestAcceptance_RemoveableMacAddresses_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicRemoveableMacAddresses
 	ctx := context.Background()
 
-	macAddress := acc.UniqueName("AA:BB:CC:DD:EE")
+	macAddress := acc.UniqueName("sdkv2_acc_AA:BB:CC:DD:EE")
 	createReq := &removeable_mac_addresses.RequestRemoveableMacAddress{Name: macAddress}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -215,7 +215,7 @@ func TestAcceptance_RemoveableMacAddresses_DeleteByName(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_RemoveableMacAddresses_ValidationErrors(t *testing.T) {
+func TestAcceptance_RemoveableMacAddresses_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicRemoveableMacAddresses

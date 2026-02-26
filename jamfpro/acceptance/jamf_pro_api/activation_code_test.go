@@ -10,7 +10,7 @@ import (
 )
 
 // TestAcceptance_ActivationCode_GetHistoryV1 tests retrieving activation code history with various RSQL queries.
-func TestAcceptance_ActivationCode_GetHistoryV1(t *testing.T) {
+func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 

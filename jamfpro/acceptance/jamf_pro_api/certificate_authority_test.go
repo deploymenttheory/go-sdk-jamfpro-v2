@@ -52,7 +52,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_CertificateAuthority_GetV1(t *testing.T) {
+func TestAcceptance_CertificateAuthority_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.CertificateAuthority
 	ctx := context.Background()

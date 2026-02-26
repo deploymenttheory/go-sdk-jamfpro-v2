@@ -42,7 +42,7 @@ func TestCloudLdap_Lifecycle(t *testing.T) {
 
 	svc := acc.Client.CloudLdap
 
-	displayName := acc.UniqueName("Test Google LDAP")
+	displayName := acc.UniqueName("sdkv2_acc_Test Google LDAP")
 
 	createReq := &cloud_ldap.ResourceCloudLdap{
 		CloudIdPCommon: &cloud_ldap.CloudIdPCommon{

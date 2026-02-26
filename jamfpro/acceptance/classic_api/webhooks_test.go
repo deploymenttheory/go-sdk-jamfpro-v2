@@ -18,7 +18,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
+func TestAcceptance_Webhooks_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicWebhooks
@@ -29,7 +29,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test webhook")
 
-	webhookName := acc.UniqueName("acc-test-webhook")
+	webhookName := acc.UniqueName("sdkv2_acc_acc-test-webhook")
 	createReq := &webhooks.RequestWebhook{
 		Name:               webhookName,
 		Enabled:            true,
@@ -122,7 +122,7 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-webhook-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-webhook-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating webhook ID=%d to name=%q", webhookID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -202,13 +202,13 @@ func TestAcceptance_Webhooks_Lifecycle(t *testing.T) {
 // TestAcceptance_Webhooks_DeleteByName creates a webhook then deletes by name.
 // =============================================================================
 
-func TestAcceptance_Webhooks_DeleteByName(t *testing.T) {
+func TestAcceptance_Webhooks_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicWebhooks
 	ctx := context.Background()
 
-	webhookName := acc.UniqueName("acc-test-webhook-dbn")
+	webhookName := acc.UniqueName("sdkv2_acc_acc-test-webhook-dbn")
 	createReq := &webhooks.RequestWebhook{
 		Name:               webhookName,
 		Enabled:            false,
@@ -252,7 +252,7 @@ func TestAcceptance_Webhooks_DeleteByName(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_Webhooks_ValidationErrors(t *testing.T) {
+func TestAcceptance_Webhooks_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicWebhooks

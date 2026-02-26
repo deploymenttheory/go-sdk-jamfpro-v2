@@ -61,7 +61,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_ManagedSoftwareUpdates_GetAvailableUpdates(t *testing.T) {
+func TestAcceptance_ManagedSoftwareUpdates_get_available_updates(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ManagedSoftwareUpdates
 	ctx := context.Background()
@@ -88,7 +88,7 @@ func TestAcceptance_ManagedSoftwareUpdates_GetAvailableUpdates(t *testing.T) {
 	}
 }
 
-func TestAcceptance_ManagedSoftwareUpdates_GetPlans(t *testing.T) {
+func TestAcceptance_ManagedSoftwareUpdates_get_plans(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ManagedSoftwareUpdates
 	ctx := context.Background()
@@ -143,7 +143,7 @@ func TestAcceptance_ManagedSoftwareUpdates_GetPlans(t *testing.T) {
 	}
 }
 
-func TestAcceptance_ManagedSoftwareUpdates_FeatureToggle(t *testing.T) {
+func TestAcceptance_ManagedSoftwareUpdates_feature_toggle(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ManagedSoftwareUpdates
 	ctx := context.Background()
@@ -180,7 +180,7 @@ func TestAcceptance_ManagedSoftwareUpdates_FeatureToggle(t *testing.T) {
 	}
 }
 
-func TestAcceptance_ManagedSoftwareUpdates_CreatePlanByDeviceID(t *testing.T) {
+func TestAcceptance_ManagedSoftwareUpdates_create_plan_by_device_id(t *testing.T) {
 	t.Skip("Skipping create plan test - requires specific device setup")
 
 	acc.RequireClient(t)
@@ -211,7 +211,7 @@ func TestAcceptance_ManagedSoftwareUpdates_CreatePlanByDeviceID(t *testing.T) {
 	acc.LogTestSuccess(t, "Created plan with UUID: %s", result.Plans[0].PlanID)
 }
 
-func TestAcceptance_ManagedSoftwareUpdates_GetPlansByGroupID(t *testing.T) {
+func TestAcceptance_ManagedSoftwareUpdates_get_plans_by_group_id(t *testing.T) {
 	t.Skip("Skipping get plans by group ID test - requires specific group setup")
 
 	acc.RequireClient(t)

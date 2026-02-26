@@ -39,7 +39,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_JamfProVersion_GetV1(t *testing.T) {
+func TestAcceptance_JamfProVersion_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.JamfProVersion
 	ctx := context.Background()

@@ -19,7 +19,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_Users_Lifecycle(t *testing.T) {
+func TestAcceptance_Users_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicUsers
@@ -30,10 +30,10 @@ func TestAcceptance_Users_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test user")
 
-	userName := acc.UniqueName("acc-test-user")
+	userName := acc.UniqueName("sdkv2_acc_acc-test-user")
 	createReq := &users.RequestUser{
 		Name:     userName,
-		FullName: "Acceptance Test User",
+		FullName: "sdkv2_acc_Acceptance Test User",
 		Email:    userName + "@example.com",
 		Sites: []shared.SharedResourceSite{
 			{ID: -1, Name: "None"},
@@ -190,16 +190,16 @@ func TestAcceptance_Users_Lifecycle(t *testing.T) {
 // TestAcceptance_Users_DeleteByName creates a user then deletes by name.
 // =============================================================================
 
-func TestAcceptance_Users_DeleteByName(t *testing.T) {
+func TestAcceptance_Users_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicUsers
 	ctx := context.Background()
 
-	userName := acc.UniqueName("acc-test-user-dbn")
+	userName := acc.UniqueName("sdkv2_acc_acc-test-user-dbn")
 	createReq := &users.RequestUser{
 		Name:     userName,
-		FullName: "Delete By Name Test",
+		FullName: "sdkv2_acc_Delete By Name Test",
 		Email:    userName + "@example.com",
 		Sites: []shared.SharedResourceSite{
 			{ID: -1, Name: "None"},
@@ -237,7 +237,7 @@ func TestAcceptance_Users_DeleteByName(t *testing.T) {
 // TestAcceptance_Users_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_Users_ValidationErrors(t *testing.T) {
+func TestAcceptance_Users_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicUsers

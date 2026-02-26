@@ -39,7 +39,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_DSSDeclarations_GetByUUID(t *testing.T) {
+func TestAcceptance_DSSDeclarations_get_by_uuid(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DSSDeclarations

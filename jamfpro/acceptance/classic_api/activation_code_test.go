@@ -15,7 +15,7 @@ import (
 // with an invalid code.
 // =============================================================================
 
-func TestAcceptance_ActivationCode_GetActivationCode(t *testing.T) {
+func TestAcceptance_ActivationCode_get_activation_code(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicActivationCode
@@ -41,7 +41,7 @@ func TestAcceptance_ActivationCode_GetActivationCode(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_ActivationCode_ValidationErrors(t *testing.T) {
+func TestAcceptance_ActivationCode_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicActivationCode

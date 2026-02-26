@@ -46,7 +46,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_DeviceCommunicationSettings_GetV1(t *testing.T) {
+func TestAcceptance_DeviceCommunicationSettings_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.DeviceCommunicationSettings
 	ctx := context.Background()
@@ -58,7 +58,7 @@ func TestAcceptance_DeviceCommunicationSettings_GetV1(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_DeviceCommunicationSettings_UpdateV1(t *testing.T) {
+func TestAcceptance_DeviceCommunicationSettings_update_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.DeviceCommunicationSettings
 	ctx := context.Background()

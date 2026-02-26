@@ -83,7 +83,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_Enrollment_GetAndUpdateV4(t *testing.T) {
+func TestAcceptance_Enrollment_get_and_update_v4(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Enrollment
@@ -170,7 +170,7 @@ func TestAcceptance_Enrollment_GetAndUpdateV4(t *testing.T) {
 	assert.Equal(t, originalRestrictReenrollment, restored.RestrictReenrollment)
 }
 
-func TestAcceptance_Enrollment_AccessGroupLifecycleV3(t *testing.T) {
+func TestAcceptance_Enrollment_access_group_lifecycle_v3(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Enrollment
@@ -180,7 +180,7 @@ func TestAcceptance_Enrollment_AccessGroupLifecycleV3(t *testing.T) {
 	createRequest := &enrollment.ResourceAccountDrivenUserEnrollmentAccessGroup{
 		GroupID:                            "test-group-id",
 		LdapServerID:                       "1",
-		Name:                               "Test ADUE Access Group",
+		Name:                               "sdkv2_acc_Test ADUE Access Group",
 		SiteID:                             "-1",
 		EnterpriseEnrollmentEnabled:        true,
 		PersonalEnrollmentEnabled:          false,
@@ -212,7 +212,7 @@ func TestAcceptance_Enrollment_AccessGroupLifecycleV3(t *testing.T) {
 	updateRequest := &enrollment.ResourceAccountDrivenUserEnrollmentAccessGroup{
 		GroupID:                            fetched.GroupID,
 		LdapServerID:                       fetched.LdapServerID,
-		Name:                               "Test ADUE Access Group Updated",
+		Name:                               "sdkv2_acc_Test ADUE Access Group Updated",
 		SiteID:                             fetched.SiteID,
 		EnterpriseEnrollmentEnabled:        false,
 		PersonalEnrollmentEnabled:          false,
@@ -239,7 +239,7 @@ func TestAcceptance_Enrollment_AccessGroupLifecycleV3(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 }
 
-func TestAcceptance_Enrollment_ListAccessGroupsV3(t *testing.T) {
+func TestAcceptance_Enrollment_list_access_groups_v3(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Enrollment
@@ -253,7 +253,7 @@ func TestAcceptance_Enrollment_ListAccessGroupsV3(t *testing.T) {
 	assert.GreaterOrEqual(t, listResult.TotalCount, 0)
 }
 
-func TestAcceptance_Enrollment_LanguageMessagesV3(t *testing.T) {
+func TestAcceptance_Enrollment_language_messages_v3(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Enrollment
@@ -284,7 +284,7 @@ func TestAcceptance_Enrollment_LanguageMessagesV3(t *testing.T) {
 	}
 }
 
-func TestAcceptance_Enrollment_HistoryV2(t *testing.T) {
+func TestAcceptance_Enrollment_history_v2(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Enrollment
@@ -298,7 +298,7 @@ func TestAcceptance_Enrollment_HistoryV2(t *testing.T) {
 	assert.GreaterOrEqual(t, history.TotalCount, 0)
 }
 
-func TestAcceptance_Enrollment_ValidationErrors(t *testing.T) {
+func TestAcceptance_Enrollment_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Enrollment

@@ -18,7 +18,7 @@ import (
 // lifecycle: Create → List → GetByID → GetByInvitationID → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_ComputerInvitations_Lifecycle(t *testing.T) {
+func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerInvitations
@@ -140,7 +140,7 @@ func TestAcceptance_ComputerInvitations_Lifecycle(t *testing.T) {
 // TestAcceptance_ComputerInvitations_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_ComputerInvitations_ValidationErrors(t *testing.T) {
+func TestAcceptance_ComputerInvitations_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerInvitations

@@ -18,7 +18,7 @@ import (
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_FileShareDistributionPoints_Lifecycle(t *testing.T) {
+func TestAcceptance_FileShareDistributionPoints_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicFileShareDistributionPoints
@@ -29,7 +29,7 @@ func TestAcceptance_FileShareDistributionPoints_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test file share distribution point")
 
-	dpName := acc.UniqueName("acc-test-fsdp")
+	dpName := acc.UniqueName("sdkv2_acc_acc-test-fsdp")
 	createReq := &file_share_distribution_points.RequestFileShareDistributionPoint{
 		Name:                  dpName,
 		IsMaster:              false,
@@ -123,7 +123,7 @@ func TestAcceptance_FileShareDistributionPoints_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-fsdp-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-fsdp-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating distribution point ID=%d to name=%q", dpID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -208,13 +208,13 @@ func TestAcceptance_FileShareDistributionPoints_Lifecycle(t *testing.T) {
 // distribution point then deletes by name.
 // =============================================================================
 
-func TestAcceptance_FileShareDistributionPoints_DeleteByName(t *testing.T) {
+func TestAcceptance_FileShareDistributionPoints_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicFileShareDistributionPoints
 	ctx := context.Background()
 
-	dpName := acc.UniqueName("acc-test-fsdp-dbn")
+	dpName := acc.UniqueName("sdkv2_acc_acc-test-fsdp-dbn")
 	createReq := &file_share_distribution_points.RequestFileShareDistributionPoint{
 		Name:     dpName,
 		IsMaster: false,
@@ -251,7 +251,7 @@ func TestAcceptance_FileShareDistributionPoints_DeleteByName(t *testing.T) {
 // TestAcceptance_FileShareDistributionPoints_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_FileShareDistributionPoints_ValidationErrors(t *testing.T) {
+func TestAcceptance_FileShareDistributionPoints_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicFileShareDistributionPoints

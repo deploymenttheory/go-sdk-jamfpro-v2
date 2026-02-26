@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_SMTPServer_GetV2(t *testing.T) {
+func TestAcceptance_SMTPServer_get_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SMTPServer
 	ctx := context.Background()

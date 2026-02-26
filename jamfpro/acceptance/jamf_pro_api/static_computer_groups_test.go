@@ -34,7 +34,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_StaticComputerGroups_Lifecycle(t *testing.T) {
+func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.StaticComputerGroups
@@ -44,7 +44,7 @@ func TestAcceptance_StaticComputerGroups_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test static computer group")
 
 	createReq := &static_computer_groups.RequestStaticGroup{
-		Name:        acc.UniqueName("acc-test-static-cg"),
+		Name:        acc.UniqueName("sdkv2_acc_acc-test-static-cg"),
 		Description: "Acceptance test static computer group",
 		Assignments: []string{},
 	}
@@ -91,7 +91,7 @@ func TestAcceptance_StaticComputerGroups_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating static computer group ID=%s", groupID)
 
 	updateReq := &static_computer_groups.RequestStaticGroup{
-		Name:        acc.UniqueName("acc-test-static-cg-updated"),
+		Name:        acc.UniqueName("sdkv2_acc_acc-test-static-cg-updated"),
 		Description: "Updated description",
 		Assignments: []string{},
 	}
@@ -118,7 +118,7 @@ func TestAcceptance_StaticComputerGroups_Lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Static computer group ID=%s deleted", groupID)
 }
 
-func TestAcceptance_StaticComputerGroups_List(t *testing.T) {
+func TestAcceptance_StaticComputerGroups_list(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.StaticComputerGroups
@@ -132,7 +132,7 @@ func TestAcceptance_StaticComputerGroups_List(t *testing.T) {
 	assert.NotNil(t, result.Results)
 }
 
-func TestAcceptance_StaticComputerGroups_ValidationErrors(t *testing.T) {
+func TestAcceptance_StaticComputerGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.StaticComputerGroups

@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_SelfServiceSettings_Get(t *testing.T) {
+func TestAcceptance_SelfServiceSettings_get(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SelfServiceSettings
 	ctx := context.Background()
@@ -21,7 +21,7 @@ func TestAcceptance_SelfServiceSettings_Get(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_SelfServiceSettings_Update(t *testing.T) {
+func TestAcceptance_SelfServiceSettings_update(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SelfServiceSettings
 	ctx := context.Background()

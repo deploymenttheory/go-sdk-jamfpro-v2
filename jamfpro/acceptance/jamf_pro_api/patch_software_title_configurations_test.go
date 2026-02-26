@@ -66,7 +66,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_PatchSoftwareTitleConfigurations_ListV2(t *testing.T) {
+func TestAcceptance_PatchSoftwareTitleConfigurations_list_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PatchSoftwareTitleConfigurations
 	ctx := context.Background()
@@ -79,11 +79,11 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_ListV2(t *testing.T) {
 	assert.GreaterOrEqual(t, len(*result), 0)
 }
 
-func TestAcceptance_PatchSoftwareTitleConfigurations_Lifecycle(t *testing.T) {
+func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PatchSoftwareTitleConfigurations
 	ctx := context.Background()
-	name := acc.UniqueName("acc-patch-config")
+	name := acc.UniqueName("sdkv2_acc_acc-patch-config")
 
 	// Get existing configurations to find a valid software title ID
 	acc.LogTestStage(t, "Pre-check", "Finding valid software title ID")

@@ -75,7 +75,7 @@ import (
 // (verify update) → AddHistoryNotes → GetHistory → Delete.
 // =============================================================================
 
-func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
+func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Scripts
@@ -86,7 +86,7 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test script")
 
-	scriptName := acc.UniqueName("acc-test-script")
+	scriptName := acc.UniqueName("sdkv2_acc_acc-test-script")
 	createReq := &scripts.RequestScript{
 		Name:           scriptName,
 		Priority:       scripts.ScriptPriorityAfter,
@@ -161,7 +161,7 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Update", "Updating script ID=%s", scriptID)
 
-	updatedName := acc.UniqueName("acc-test-script-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-script-updated")
 	updateReq := &scripts.RequestScript{
 		Name:           updatedName,
 		Priority:       scripts.ScriptPriorityBefore,
@@ -260,7 +260,7 @@ func TestAcceptance_Scripts_Lifecycle(t *testing.T) {
 // by the API and the created script appears in the filtered results.
 // =============================================================================
 
-func TestAcceptance_Scripts_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Scripts_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Scripts
@@ -271,7 +271,7 @@ func TestAcceptance_Scripts_ListWithRSQLFilter(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating script for RSQL filter test")
 
-	name := acc.UniqueName("acc-rsql-script")
+	name := acc.UniqueName("sdkv2_acc_acc-rsql-script")
 	createReq := &scripts.RequestScript{
 		Name:           name,
 		Priority:       scripts.ScriptPriorityAfter,
@@ -329,7 +329,7 @@ func TestAcceptance_Scripts_ListWithRSQLFilter(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_Scripts_ValidationErrors(t *testing.T) {
+func TestAcceptance_Scripts_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Scripts

@@ -54,7 +54,7 @@ import (
 // List → GetObjectsByID.
 // =============================================================================
 
-func TestAcceptance_Sites_ListAndGetObjects(t *testing.T) {
+func TestAcceptance_Sites_list_and_get_objects(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Sites
@@ -108,7 +108,7 @@ func TestAcceptance_Sites_ListAndGetObjects(t *testing.T) {
 // TestAcceptance_Sites_GetObjectsWithRSQLFilter
 // =============================================================================
 
-func TestAcceptance_Sites_GetObjectsWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Sites_get_objects_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Sites
@@ -147,7 +147,7 @@ func TestAcceptance_Sites_GetObjectsWithRSQLFilter(t *testing.T) {
 // TestAcceptance_Sites_ValidationErrors
 // =============================================================================
 
-func TestAcceptance_Sites_ValidationErrors(t *testing.T) {
+func TestAcceptance_Sites_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Sites

@@ -19,7 +19,7 @@ import (
 // UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_MacOSConfigurationProfiles_Lifecycle(t *testing.T) {
+func TestAcceptance_MacOSConfigurationProfiles_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMacOSConfigurationProfiles
@@ -30,7 +30,7 @@ func TestAcceptance_MacOSConfigurationProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test macOS configuration profile")
 
-	profileName := acc.UniqueName("acc-test-macos-profile")
+	profileName := acc.UniqueName("sdkv2_acc_acc-test-macos-profile")
 	createReq := &macos_configuration_profiles.RequestResource{
 		General: macos_configuration_profiles.SubsetGeneral{
 			Name:          profileName,
@@ -127,7 +127,7 @@ func TestAcceptance_MacOSConfigurationProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-macos-profile-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-macos-profile-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating profile ID=%d to name=%q", profileID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -218,13 +218,13 @@ func TestAcceptance_MacOSConfigurationProfiles_Lifecycle(t *testing.T) {
 // then deletes by name.
 // =============================================================================
 
-func TestAcceptance_MacOSConfigurationProfiles_DeleteByName(t *testing.T) {
+func TestAcceptance_MacOSConfigurationProfiles_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMacOSConfigurationProfiles
 	ctx := context.Background()
 
-	profileName := acc.UniqueName("acc-test-macos-profile-dbn")
+	profileName := acc.UniqueName("sdkv2_acc_acc-test-macos-profile-dbn")
 	createReq := &macos_configuration_profiles.RequestResource{
 		General: macos_configuration_profiles.SubsetGeneral{
 			Name:          profileName,
@@ -267,7 +267,7 @@ func TestAcceptance_MacOSConfigurationProfiles_DeleteByName(t *testing.T) {
 // TestAcceptance_MacOSConfigurationProfiles_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_MacOSConfigurationProfiles_ValidationErrors(t *testing.T) {
+func TestAcceptance_MacOSConfigurationProfiles_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMacOSConfigurationProfiles

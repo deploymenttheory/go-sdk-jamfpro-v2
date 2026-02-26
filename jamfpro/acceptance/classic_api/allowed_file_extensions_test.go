@@ -19,7 +19,7 @@ import (
 // Note: the Classic API does not support updating allowed file extensions.
 // =============================================================================
 
-func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
+func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAllowedFileExtensions
@@ -139,7 +139,7 @@ func TestAcceptance_AllowedFileExtensions_Lifecycle(t *testing.T) {
 // validation without making any network calls.
 // =============================================================================
 
-func TestAcceptance_AllowedFileExtensions_ValidationErrors(t *testing.T) {
+func TestAcceptance_AllowedFileExtensions_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAllowedFileExtensions

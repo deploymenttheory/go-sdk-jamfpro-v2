@@ -18,7 +18,7 @@ import (
 // GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_AccountGroups_Lifecycle(t *testing.T) {
+func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAccountGroups
@@ -29,7 +29,7 @@ func TestAcceptance_AccountGroups_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test account group")
 
-	groupName := acc.UniqueName("test-account-group")
+	groupName := acc.UniqueName("sdkv2_acc_test-account-group")
 	createReq := &accounts_groups.RequestAccountGroup{
 		Name:         groupName,
 		AccessLevel:  "Full Access",
@@ -91,7 +91,7 @@ func TestAcceptance_AccountGroups_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("updated-account-group")
+	updatedName := acc.UniqueName("sdkv2_acc_updated-account-group")
 	acc.LogTestStage(t, "UpdateByID", "Updating account group ID=%d to name=%q", groupID, updatedName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)

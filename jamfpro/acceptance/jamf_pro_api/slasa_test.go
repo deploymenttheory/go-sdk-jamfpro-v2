@@ -39,7 +39,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_SLASA_GetStatusV1(t *testing.T) {
+func TestAcceptance_SLASA_get_status_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SLASA
 	ctx := context.Background()

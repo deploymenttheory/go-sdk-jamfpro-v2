@@ -62,7 +62,7 @@ import (
 // lifecycle: Create → GetByID → Update → GetByID (verify) → Delete.
 // =============================================================================
 
-func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
+func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DockItems
@@ -72,7 +72,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test dock item")
 
 	createReq := &dock_items.RequestDockItem{
-		Name: acc.UniqueName("acc-test-dock"),
+		Name: acc.UniqueName("sdkv2_acc_acc-test-dock"),
 		Path: "/Applications/Safari.app",
 		Type: dock_items.TypeApp,
 	}
@@ -109,7 +109,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating dock item ID=%s", dockItemID)
 
 	updateReq := &dock_items.RequestDockItem{
-		Name: acc.UniqueName("acc-test-dock-updated"),
+		Name: acc.UniqueName("sdkv2_acc_acc-test-dock-updated"),
 		Path: "/Applications/Google Chrome.app",
 		Type: dock_items.TypeApp,
 	}
@@ -141,7 +141,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 // TestAcceptance_DockItems_ValidationErrors
 // =============================================================================
 
-func TestAcceptance_DockItems_ValidationErrors(t *testing.T) {
+func TestAcceptance_DockItems_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.DockItems
@@ -160,7 +160,7 @@ func TestAcceptance_DockItems_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateDockItemByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.UpdateByIDV1(context.Background(), "", &dock_items.RequestDockItem{
-			Name: "x", Path: "/path", Type: dock_items.TypeApp,
+			Name: "sdkv2_acc_x", Path: "/path", Type: dock_items.TypeApp,
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")

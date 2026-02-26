@@ -18,7 +18,7 @@ import (
 // GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
+func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicRestrictedSoftware
@@ -29,11 +29,11 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test restricted software")
 
-	swName := acc.UniqueName("acc-test-restricted-sw")
+	swName := acc.UniqueName("sdkv2_acc_acc-test-restricted-sw")
 	createReq := &restricted_software.RequestRestrictedSoftware{
 		General: restricted_software.RequestGeneral{
 			Name:                  swName,
-			ProcessName:           "testprocess.exe",
+			ProcessName:           "sdkv2_acc_testprocess.exe",
 			MatchExactProcessName: true,
 			SendNotification:      true,
 			KillProcess:           false,
@@ -133,7 +133,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-restricted-sw-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-restricted-sw-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating restricted software ID=%d to name=%q", swID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -142,7 +142,7 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 	updateReq := &restricted_software.RequestRestrictedSoftware{
 		General: restricted_software.RequestGeneral{
 			Name:                  updatedName,
-			ProcessName:           "updatedprocess.exe",
+			ProcessName:           "sdkv2_acc_updatedprocess.exe",
 			MatchExactProcessName: false,
 			SendNotification:      false,
 			KillProcess:           true,
@@ -202,17 +202,17 @@ func TestAcceptance_RestrictedSoftware_Lifecycle(t *testing.T) {
 // then deletes it by name.
 // =============================================================================
 
-func TestAcceptance_RestrictedSoftware_DeleteByName(t *testing.T) {
+func TestAcceptance_RestrictedSoftware_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicRestrictedSoftware
 	ctx := context.Background()
 
-	swName := acc.UniqueName("acc-test-restricted-sw-dbn")
+	swName := acc.UniqueName("sdkv2_acc_acc-test-restricted-sw-dbn")
 	createReq := &restricted_software.RequestRestrictedSoftware{
 		General: restricted_software.RequestGeneral{
 			Name:                  swName,
-			ProcessName:           "testprocess.exe",
+			ProcessName:           "sdkv2_acc_testprocess.exe",
 			MatchExactProcessName: true,
 			SendNotification:      true,
 			KillProcess:           false,
@@ -257,7 +257,7 @@ func TestAcceptance_RestrictedSoftware_DeleteByName(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_RestrictedSoftware_ValidationErrors(t *testing.T) {
+func TestAcceptance_RestrictedSoftware_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicRestrictedSoftware

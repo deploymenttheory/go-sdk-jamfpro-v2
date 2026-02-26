@@ -39,7 +39,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_SelfServiceBrandingUpload_Upload(t *testing.T) {
+func TestAcceptance_SelfServiceBrandingUpload_upload(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SelfServiceBrandingUpload
 	ctx := context.Background()

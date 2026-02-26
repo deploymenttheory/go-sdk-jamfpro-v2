@@ -75,7 +75,7 @@ import (
 // (verify update) → AddHistoryNotes → GetHistory → Delete.
 // =============================================================================
 
-func TestAcceptance_Categories_Lifecycle(t *testing.T) {
+func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Categories
@@ -87,7 +87,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test category")
 
 	createReq := &categories.RequestCategory{
-		Name:     acc.UniqueName("acc-test-category"),
+		Name:     acc.UniqueName("sdkv2_acc_acc-test-category"),
 		Priority: 7,
 	}
 	created, createResp, err := svc.CreateV1(ctx, createReq)
@@ -157,7 +157,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Update", "Updating category ID=%s", categoryID)
 
-	updatedName := acc.UniqueName("acc-test-category-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-category-updated")
 	updateReq := &categories.RequestCategory{
 		Name:     updatedName,
 		Priority: 2,
@@ -254,7 +254,7 @@ func TestAcceptance_Categories_Lifecycle(t *testing.T) {
 // by the API and the created category appears in the filtered results.
 // =============================================================================
 
-func TestAcceptance_Categories_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Categories_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Categories
@@ -265,7 +265,7 @@ func TestAcceptance_Categories_ListWithRSQLFilter(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating category for RSQL filter test")
 
-	name := acc.UniqueName("acc-rsql-test")
+	name := acc.UniqueName("sdkv2_acc_acc-rsql-test")
 	createReq := &categories.RequestCategory{Name: name, Priority: 5}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -320,7 +320,7 @@ func TestAcceptance_Categories_ListWithRSQLFilter(t *testing.T) {
 // them together via DeleteCategoriesByIDV1.
 // =============================================================================
 
-func TestAcceptance_Categories_BulkDelete(t *testing.T) {
+func TestAcceptance_Categories_bulk_delete(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Categories
@@ -380,7 +380,7 @@ func TestAcceptance_Categories_BulkDelete(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_Categories_ValidationErrors(t *testing.T) {
+func TestAcceptance_Categories_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Categories

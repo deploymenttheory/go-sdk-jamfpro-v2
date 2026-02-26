@@ -38,7 +38,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_EnrollmentSettings_GetV4(t *testing.T) {
+func TestAcceptance_EnrollmentSettings_get_v4(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.EnrollmentSettings
 	ctx := context.Background()

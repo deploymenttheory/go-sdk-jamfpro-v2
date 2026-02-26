@@ -18,7 +18,7 @@ import (
 // GetByUUID → UpdateByID → UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceProvisioningProfiles_Lifecycle(t *testing.T) {
+func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceProvisioningProfiles
@@ -29,7 +29,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test mobile device provisioning profile")
 
-	profileName := acc.UniqueName("acc-test-md-provisioning-profile")
+	profileName := acc.UniqueName("sdkv2_acc_acc-test-md-provisioning-profile")
 	profileUUID := "550e8400-e29b-41d4-a716-" + fmt.Sprintf("%012d", time.Now().Unix()%1000000000000)
 	createReq := &mobile_device_provisioning_profiles.RequestResource{
 		General: mobile_device_provisioning_profiles.SubsetGeneral{
@@ -135,7 +135,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 6. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-md-provisioning-profile-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-md-provisioning-profile-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating profile ID=%d to name=%q", profileID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -210,13 +210,13 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_Lifecycle(t *testing.T) {
 // then deletes by name.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceProvisioningProfiles_DeleteByName(t *testing.T) {
+func TestAcceptance_MobileDeviceProvisioningProfiles_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceProvisioningProfiles
 	ctx := context.Background()
 
-	profileName := acc.UniqueName("acc-test-md-provisioning-profile-dbn")
+	profileName := acc.UniqueName("sdkv2_acc_acc-test-md-provisioning-profile-dbn")
 	profileUUID := "550e8400-e29b-41d4-a716-" + fmt.Sprintf("%012d", time.Now().Unix()%1000000000000)
 	createReq := &mobile_device_provisioning_profiles.RequestResource{
 		General: mobile_device_provisioning_profiles.SubsetGeneral{
@@ -257,7 +257,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_DeleteByName(t *testing.T) 
 // TestAcceptance_MobileDeviceProvisioningProfiles_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_MobileDeviceProvisioningProfiles_ValidationErrors(t *testing.T) {
+func TestAcceptance_MobileDeviceProvisioningProfiles_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDeviceProvisioningProfiles

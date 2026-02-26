@@ -48,7 +48,7 @@ func TestCloudAzure_Lifecycle(t *testing.T) {
 	svc := acc.Client.CloudAzure
 	ctx := context.Background()
 
-	displayName := acc.UniqueName("Test Azure IDP")
+	displayName := acc.UniqueName("sdkv2_acc_Test Azure IDP")
 
 	createReq := &cloud_azure.ResourceCloudAzure{
 		CloudIdPCommon: cloud_azure.CloudIdPCommon{

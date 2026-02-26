@@ -17,7 +17,7 @@ func TestVenafi_Lifecycle(t *testing.T) {
 	svc := acc.Client.Venafi
 	ctx := context.Background()
 
-	name := acc.UniqueName("Test Venafi CA")
+	name := acc.UniqueName("sdkv2_acc_Test Venafi CA")
 	revocationEnabled := true
 
 	createReq := &venafi.ResourceVenafi{

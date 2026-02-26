@@ -63,7 +63,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_APIRoles_ListV1(t *testing.T) {
+func TestAcceptance_APIRoles_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.APIRoles
 	ctx := context.Background()
@@ -76,7 +76,7 @@ func TestAcceptance_APIRoles_ListV1(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_APIRoles_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_APIRoles_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.APIRoles
 	ctx := context.Background()
@@ -123,7 +123,7 @@ func TestAcceptance_APIRoles_ListWithRSQLFilter(t *testing.T) {
 	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target role found=%v", list.TotalCount, found)
 }
 
-func TestAcceptance_APIRoles_Lifecycle(t *testing.T) {
+func TestAcceptance_APIRoles_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.APIRoles
 	ctx := context.Background()

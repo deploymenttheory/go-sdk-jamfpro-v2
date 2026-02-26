@@ -43,7 +43,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_Locales_List(t *testing.T) {
+func TestAcceptance_Locales_list(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Locales
 	ctx := context.Background()

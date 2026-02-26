@@ -14,7 +14,7 @@ import (
 // inventory collection settings.
 // =============================================================================
 
-func TestAcceptance_ComputerInventoryCollection_Get(t *testing.T) {
+func TestAcceptance_ComputerInventoryCollection_get(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerInventoryCollection
@@ -41,7 +41,7 @@ func TestAcceptance_ComputerInventoryCollection_Get(t *testing.T) {
 // to restore it to avoid changing server configuration.
 // =============================================================================
 
-func TestAcceptance_ComputerInventoryCollection_Update(t *testing.T) {
+func TestAcceptance_ComputerInventoryCollection_update(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerInventoryCollection
@@ -74,7 +74,7 @@ func TestAcceptance_ComputerInventoryCollection_Update(t *testing.T) {
 // validation without making any network calls.
 // =============================================================================
 
-func TestAcceptance_ComputerInventoryCollection_ValidationErrors(t *testing.T) {
+func TestAcceptance_ComputerInventoryCollection_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerInventoryCollection

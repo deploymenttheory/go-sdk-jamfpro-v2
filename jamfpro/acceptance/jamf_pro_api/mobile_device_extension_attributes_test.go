@@ -16,7 +16,7 @@ func uniqueNameMDEA(base string) string {
 	return fmt.Sprintf("%s-%d", base, time.Now().UnixMilli())
 }
 
-func TestAcceptance_MobileDeviceExtensionAttributes_Lifecycle(t *testing.T) {
+func TestAcceptance_MobileDeviceExtensionAttributes_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.MobileDeviceExtensionAttributes

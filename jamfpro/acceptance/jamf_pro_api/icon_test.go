@@ -80,7 +80,7 @@ func findValidIconID(t *testing.T) (int, *icons.ResourceIcon, bool) {
 	return 0, nil, false
 }
 
-func TestAcceptance_Icons_GetByID(t *testing.T) {
+func TestAcceptance_Icons_get_by_id(t *testing.T) {
 	id, result, ok := findValidIconID(t)
 	if !ok {
 		t.Skip("no icon with ID in 1–100 found in this environment")
@@ -91,7 +91,7 @@ func TestAcceptance_Icons_GetByID(t *testing.T) {
 	assert.Equal(t, id, result.ID)
 }
 
-// func TestAcceptance_Icons_Download(t *testing.T) {
+// func TestAcceptance_Icons_download(t *testing.T) {
 // 	acc.RequireClient(t)
 // 	svc := acc.Client.Icons
 // 	ctx := context.Background()

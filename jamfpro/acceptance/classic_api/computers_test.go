@@ -22,7 +22,7 @@ import (
 // and MAC address. Adjust or skip if your Jamf instance restricts creation.
 // =============================================================================
 
-func TestAcceptance_Computers_Lifecycle(t *testing.T) {
+func TestAcceptance_Computers_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputers
@@ -33,7 +33,7 @@ func TestAcceptance_Computers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test computer")
 
-	computerName := acc.UniqueName("acc-test-computer")
+	computerName := acc.UniqueName("sdkv2_acc_acc-test-computer")
 	createReq := &computers.ResponseComputer{
 		General: computers.ComputerSubsetGeneral{
 			Name:         computerName,
@@ -129,7 +129,7 @@ func TestAcceptance_Computers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-computer-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-computer-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating computer ID=%s to name=%q", computerID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -221,13 +221,13 @@ func TestAcceptance_Computers_Lifecycle(t *testing.T) {
 // TestAcceptance_Computers_DeleteByName creates a computer then deletes by name.
 // =============================================================================
 
-func TestAcceptance_Computers_DeleteByName(t *testing.T) {
+func TestAcceptance_Computers_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputers
 	ctx := context.Background()
 
-	computerName := acc.UniqueName("acc-test-computer-dbn")
+	computerName := acc.UniqueName("sdkv2_acc_acc-test-computer-dbn")
 	createReq := &computers.ResponseComputer{
 		General: computers.ComputerSubsetGeneral{
 			Name:         computerName,
@@ -271,7 +271,7 @@ func TestAcceptance_Computers_DeleteByName(t *testing.T) {
 // TestAcceptance_Computers_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_Computers_ValidationErrors(t *testing.T) {
+func TestAcceptance_Computers_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputers

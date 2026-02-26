@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_AdueSessionTokenSettings_GetV1(t *testing.T) {
+func TestAcceptance_AdueSessionTokenSettings_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AdueSessionTokenSettings
 	ctx := context.Background()
@@ -21,7 +21,7 @@ func TestAcceptance_AdueSessionTokenSettings_GetV1(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_AdueSessionTokenSettings_UpdateV1(t *testing.T) {
+func TestAcceptance_AdueSessionTokenSettings_update_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.AdueSessionTokenSettings
 	ctx := context.Background()

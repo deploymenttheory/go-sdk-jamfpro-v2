@@ -55,7 +55,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_Engage_SettingsLifecycle(t *testing.T) {
+func TestAcceptance_Engage_settings_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Engage
@@ -110,7 +110,7 @@ func TestAcceptance_Engage_SettingsLifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Verified restoration - IsEnabled: %v (matches original)", verifyRestored.IsEnabled)
 }
 
-func TestAcceptance_Engage_History(t *testing.T) {
+func TestAcceptance_Engage_history(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Engage
@@ -140,7 +140,7 @@ func TestAcceptance_Engage_History(t *testing.T) {
 	}
 }
 
-func TestAcceptance_Engage_HistoryWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Engage_history_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Engage
@@ -173,7 +173,7 @@ func TestAcceptance_Engage_HistoryWithRSQLFilter(t *testing.T) {
 		"Filtered results should be <= total results")
 }
 
-func TestAcceptance_Engage_AddHistoryNotes(t *testing.T) {
+func TestAcceptance_Engage_add_history_notes(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Engage

@@ -20,7 +20,7 @@ import (
 // attachment to it, then deletes the policy.
 // =============================================================================
 
-func TestAcceptance_FileUploads_CreateAttachment(t *testing.T) {
+func TestAcceptance_FileUploads_create_attachment(t *testing.T) {
 	acc.RequireClient(t)
 
 	policySvc := acc.Client.ClassicPolicies
@@ -32,7 +32,7 @@ func TestAcceptance_FileUploads_CreateAttachment(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test policy for file attachment")
 
-	policyName := acc.UniqueName("acc-test-fileupload-policy")
+	policyName := acc.UniqueName("sdkv2_acc_acc-test-fileupload-policy")
 	createReq := &policies.ResourcePolicy{
 		General: policies.PolicySubsetGeneral{
 			Name:      policyName,
@@ -93,7 +93,7 @@ func TestAcceptance_FileUploads_CreateAttachment(t *testing.T) {
 // TestAcceptance_FileUploads_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_FileUploads_ValidationErrors(t *testing.T) {
+func TestAcceptance_FileUploads_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicFileUploads

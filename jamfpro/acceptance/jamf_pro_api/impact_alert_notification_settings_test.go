@@ -46,7 +46,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_ImpactAlertNotificationSettings_GetAndUpdate(t *testing.T) {
+func TestAcceptance_ImpactAlertNotificationSettings_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ImpactAlertNotificationSettings
@@ -90,7 +90,7 @@ func TestAcceptance_ImpactAlertNotificationSettings_GetAndUpdate(t *testing.T) {
 	assert.Equal(t, modified.DeployableObjectsConfirmationCodeEnabled, current.DeployableObjectsConfirmationCodeEnabled)
 }
 
-func TestAcceptance_ImpactAlertNotificationSettings_ValidationErrors(t *testing.T) {
+func TestAcceptance_ImpactAlertNotificationSettings_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ImpactAlertNotificationSettings

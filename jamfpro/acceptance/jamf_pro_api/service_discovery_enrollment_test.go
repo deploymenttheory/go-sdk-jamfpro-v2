@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_ServiceDiscoveryEnrollment_GetV1(t *testing.T) {
+func TestAcceptance_ServiceDiscoveryEnrollment_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	acc.GreaterThanJamfProVersion(t, 11, 25, 0)
 	svc := acc.Client.ServiceDiscoveryEnrollment
@@ -22,7 +22,7 @@ func TestAcceptance_ServiceDiscoveryEnrollment_GetV1(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_ServiceDiscoveryEnrollment_UpdateV1(t *testing.T) {
+func TestAcceptance_ServiceDiscoveryEnrollment_update_v1(t *testing.T) {
 	acc.RequireClient(t)
 	acc.GreaterThanJamfProVersion(t, 11, 25, 0)
 	svc := acc.Client.ServiceDiscoveryEnrollment

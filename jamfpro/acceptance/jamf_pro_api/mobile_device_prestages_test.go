@@ -74,7 +74,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_MobileDevicePrestages_ListV3(t *testing.T) {
+func TestAcceptance_MobileDevicePrestages_list_v3(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.MobileDevicePrestages
 	ctx := context.Background()
@@ -88,11 +88,11 @@ func TestAcceptance_MobileDevicePrestages_ListV3(t *testing.T) {
 	assert.NotNil(t, result.Results)
 }
 
-func TestAcceptance_MobileDevicePrestages_LifecycleWithScope(t *testing.T) {
+func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.MobileDevicePrestages
 	ctx := context.Background()
-	name := acc.UniqueName("acc-mobile-prestage")
+	name := acc.UniqueName("sdkv2_acc_acc-mobile-prestage")
 
 	// Create
 	acc.LogTestStage(t, "Create", "Creating mobile device prestage")

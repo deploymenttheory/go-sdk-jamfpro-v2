@@ -36,7 +36,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_SelfServiceBrandingMacOS_Lifecycle(t *testing.T) {
+func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SelfServiceBrandingMacOS
@@ -46,8 +46,8 @@ func TestAcceptance_SelfServiceBrandingMacOS_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test self-service branding macOS")
 
 	createReq := &self_service_branding_macos.ResourceSelfServiceBrandingMacOS{
-		ApplicationName:       "Self Service",
-		BrandingName:          acc.UniqueName("acc-test-ssb-macos"),
+		ApplicationName:       "sdkv2_acc_Self Service",
+		BrandingName:          acc.UniqueName("sdkv2_acc_acc-test-ssb-macos"),
 		BrandingNameSecondary: "Acceptance Test",
 		HomeHeading:           "Welcome",
 		HomeSubheading:        "Choose an item below",
@@ -92,8 +92,8 @@ func TestAcceptance_SelfServiceBrandingMacOS_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating branding ID=%s", brandingID)
 
 	updateReq := &self_service_branding_macos.ResourceSelfServiceBrandingMacOS{
-		ApplicationName:       "Self Service",
-		BrandingName:          acc.UniqueName("acc-test-ssb-macos-updated"),
+		ApplicationName:       "sdkv2_acc_Self Service",
+		BrandingName:          acc.UniqueName("sdkv2_acc_acc-test-ssb-macos-updated"),
 		BrandingNameSecondary: "Acceptance Test Updated",
 		HomeHeading:           "Welcome Back",
 		HomeSubheading:        "Choose an item below",
@@ -121,7 +121,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_Lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Branding ID=%s deleted", brandingID)
 }
 
-func TestAcceptance_SelfServiceBrandingMacOS_List(t *testing.T) {
+func TestAcceptance_SelfServiceBrandingMacOS_list(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SelfServiceBrandingMacOS
@@ -135,7 +135,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_List(t *testing.T) {
 	assert.NotNil(t, result.Results)
 }
 
-func TestAcceptance_SelfServiceBrandingMacOS_ValidationErrors(t *testing.T) {
+func TestAcceptance_SelfServiceBrandingMacOS_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.SelfServiceBrandingMacOS
@@ -160,7 +160,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_ValidationErrors(t *testing.T) {
 
 	t.Run("UpdateByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.UpdateByID(context.Background(), "", &self_service_branding_macos.ResourceSelfServiceBrandingMacOS{
-			BrandingName: "x",
+			BrandingName: "sdkv2_acc_x",
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")

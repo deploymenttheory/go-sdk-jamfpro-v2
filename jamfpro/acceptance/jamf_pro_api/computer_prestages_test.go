@@ -79,7 +79,7 @@ import (
 // Helper to create bool pointers
 func boolPtr(b bool) *bool { return &b }
 
-func TestAcceptance_ComputerPrestages_ListV3(t *testing.T) {
+func TestAcceptance_ComputerPrestages_list_v3(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
 	ctx := context.Background()
@@ -93,11 +93,11 @@ func TestAcceptance_ComputerPrestages_ListV3(t *testing.T) {
 	assert.NotNil(t, result.Results)
 }
 
-func TestAcceptance_ComputerPrestages_LifecycleReplaceScope(t *testing.T) {
+func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ComputerPrestages
 	ctx := context.Background()
-	name := acc.UniqueName("acc-computer-prestage")
+	name := acc.UniqueName("sdkv2_acc_acc-computer-prestage")
 
 	// Helper to create bool pointers
 	boolPtr := func(b bool) *bool { return &b }

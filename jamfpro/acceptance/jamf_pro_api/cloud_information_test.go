@@ -10,7 +10,7 @@ import (
 )
 
 // TestAcceptance_CloudInformation_GetV1 tests retrieving cloud information.
-func TestAcceptance_CloudInformation_GetV1(t *testing.T) {
+func TestAcceptance_CloudInformation_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_SsoCertificate_GetV2(t *testing.T) {
+func TestAcceptance_SsoCertificate_get_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoCertificate
 	ctx := context.Background()
@@ -23,7 +23,7 @@ func TestAcceptance_SsoCertificate_GetV2(t *testing.T) {
 	}
 }
 
-func TestAcceptance_SsoCertificate_Lifecycle(t *testing.T) {
+func TestAcceptance_SsoCertificate_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoCertificate
 	ctx := context.Background()
@@ -65,7 +65,7 @@ func TestAcceptance_SsoCertificate_Lifecycle(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestAcceptance_SsoCertificate_UpdateV2(t *testing.T) {
+func TestAcceptance_SsoCertificate_update_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoCertificate
 	ctx := context.Background()
@@ -89,7 +89,7 @@ func TestAcceptance_SsoCertificate_UpdateV2(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_SsoCertificate_ParseV2(t *testing.T) {
+func TestAcceptance_SsoCertificate_parse_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoCertificate
 	ctx := context.Background()

@@ -21,7 +21,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
+func TestAcceptance_BYOProfiles_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicBYOProfiles
@@ -32,7 +32,7 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test BYO profile")
 
-	profileName := acc.UniqueName("acc-test-byoprofile")
+	profileName := acc.UniqueName("sdkv2_acc_acc-test-byoprofile")
 	createReq := &byoprofiles.RequestBYOProfile{
 		General: byoprofiles.GeneralSettings{
 			Name:        profileName,
@@ -129,7 +129,7 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-byoprofile-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-byoprofile-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating BYO profile ID=%d to name=%q", profileID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -203,13 +203,13 @@ func TestAcceptance_BYOProfiles_Lifecycle(t *testing.T) {
 // TestAcceptance_BYOProfiles_DeleteByName creates a BYO profile then deletes by name.
 // =============================================================================
 
-func TestAcceptance_BYOProfiles_DeleteByName(t *testing.T) {
+func TestAcceptance_BYOProfiles_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicBYOProfiles
 	ctx := context.Background()
 
-	profileName := acc.UniqueName("acc-test-byoprofile-del")
+	profileName := acc.UniqueName("sdkv2_acc_acc-test-byoprofile-del")
 	createReq := &byoprofiles.RequestBYOProfile{
 		General: byoprofiles.GeneralSettings{
 			Name:        profileName,
@@ -256,7 +256,7 @@ func TestAcceptance_BYOProfiles_DeleteByName(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_BYOProfiles_ValidationErrors(t *testing.T) {
+func TestAcceptance_BYOProfiles_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicBYOProfiles

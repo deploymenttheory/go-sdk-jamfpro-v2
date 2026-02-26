@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_CacheSettings_GetV1(t *testing.T) {
+func TestAcceptance_CacheSettings_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.CacheSettings
 	ctx := context.Background()
@@ -25,7 +25,7 @@ func TestAcceptance_CacheSettings_GetV1(t *testing.T) {
 	assert.NotEmpty(t, result.CacheType)
 }
 
-func TestAcceptance_CacheSettings_UpdateV1(t *testing.T) {
+func TestAcceptance_CacheSettings_update_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.CacheSettings
 	ctx := context.Background()

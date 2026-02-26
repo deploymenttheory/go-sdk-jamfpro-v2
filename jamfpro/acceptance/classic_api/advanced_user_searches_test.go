@@ -23,7 +23,7 @@ func uniqueUserSearchName(prefix string) string {
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
+func TestAcceptance_AdvancedUserSearches_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAdvancedUserSearches
@@ -232,7 +232,7 @@ func TestAcceptance_AdvancedUserSearches_Lifecycle(t *testing.T) {
 // TestAcceptance_AdvancedUserSearches_DeleteByName creates a search then deletes by name.
 // =============================================================================
 
-func TestAcceptance_AdvancedUserSearches_DeleteByName(t *testing.T) {
+func TestAcceptance_AdvancedUserSearches_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAdvancedUserSearches
@@ -287,7 +287,7 @@ func TestAcceptance_AdvancedUserSearches_DeleteByName(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_AdvancedUserSearches_ValidationErrors(t *testing.T) {
+func TestAcceptance_AdvancedUserSearches_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicAdvancedUserSearches

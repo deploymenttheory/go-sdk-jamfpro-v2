@@ -18,7 +18,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_Printers_Lifecycle(t *testing.T) {
+func TestAcceptance_Printers_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPrinters
@@ -29,7 +29,7 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test printer")
 
-	printerName := acc.UniqueName("acc-test-printer")
+	printerName := acc.UniqueName("sdkv2_acc_acc-test-printer")
 	createReq := &printers.RequestPrinter{
 		Name:     printerName,
 		CUPSName: "acc_test_printer",
@@ -118,7 +118,7 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-printer-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-printer-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating printer ID=%d to name=%q", printerID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -192,13 +192,13 @@ func TestAcceptance_Printers_Lifecycle(t *testing.T) {
 // TestAcceptance_Printers_DeleteByName creates a printer then deletes by name.
 // =============================================================================
 
-func TestAcceptance_Printers_DeleteByName(t *testing.T) {
+func TestAcceptance_Printers_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPrinters
 	ctx := context.Background()
 
-	printerName := acc.UniqueName("acc-test-printer-dbn")
+	printerName := acc.UniqueName("sdkv2_acc_acc-test-printer-dbn")
 	createReq := &printers.RequestPrinter{
 		Name:     printerName,
 		CUPSName: "acc_test_printer_dbn",
@@ -237,7 +237,7 @@ func TestAcceptance_Printers_DeleteByName(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_Printers_ValidationErrors(t *testing.T) {
+func TestAcceptance_Printers_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPrinters

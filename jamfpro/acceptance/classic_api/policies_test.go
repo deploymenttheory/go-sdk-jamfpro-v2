@@ -19,7 +19,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_Policies_Lifecycle(t *testing.T) {
+func TestAcceptance_Policies_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPolicies
@@ -30,7 +30,7 @@ func TestAcceptance_Policies_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test policy")
 
-	policyName := acc.UniqueName("acc-test-policy")
+	policyName := acc.UniqueName("sdkv2_acc_acc-test-policy")
 	createReq := &policies.ResourcePolicy{
 		General: policies.PolicySubsetGeneral{
 			Name:      policyName,
@@ -124,7 +124,7 @@ func TestAcceptance_Policies_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-policy-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-policy-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating policy ID=%d to name=%q", policyID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -205,13 +205,13 @@ func TestAcceptance_Policies_Lifecycle(t *testing.T) {
 // TestAcceptance_Policies_DeleteByName creates a policy then deletes by name.
 // =============================================================================
 
-func TestAcceptance_Policies_DeleteByName(t *testing.T) {
+func TestAcceptance_Policies_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPolicies
 	ctx := context.Background()
 
-	policyName := acc.UniqueName("acc-test-policy-del")
+	policyName := acc.UniqueName("sdkv2_acc_acc-test-policy-del")
 	createReq := &policies.ResourcePolicy{
 		General: policies.PolicySubsetGeneral{
 			Name:      policyName,
@@ -255,7 +255,7 @@ func TestAcceptance_Policies_DeleteByName(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_Policies_ValidationErrors(t *testing.T) {
+func TestAcceptance_Policies_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPolicies

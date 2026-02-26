@@ -16,7 +16,7 @@ import (
 // Requires at least one computer in Jamf Pro. Set COMPUTER_ID to skip inventory lookup.
 // =============================================================================
 
-func TestAcceptance_ComputerHistory_GetByID(t *testing.T) {
+func TestAcceptance_ComputerHistory_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerHistory
@@ -53,7 +53,7 @@ func TestAcceptance_ComputerHistory_GetByID(t *testing.T) {
 // computer history by ID.
 // =============================================================================
 
-func TestAcceptance_ComputerHistory_GetByIDAndSubset(t *testing.T) {
+func TestAcceptance_ComputerHistory_get_by_id_and_subset(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerHistory
@@ -89,7 +89,7 @@ func TestAcceptance_ComputerHistory_GetByIDAndSubset(t *testing.T) {
 // TestAcceptance_ComputerHistory_GetByName tests retrieving computer history by name.
 // =============================================================================
 
-func TestAcceptance_ComputerHistory_GetByName(t *testing.T) {
+func TestAcceptance_ComputerHistory_get_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerHistory
@@ -123,7 +123,7 @@ func TestAcceptance_ComputerHistory_GetByName(t *testing.T) {
 // TestAcceptance_ComputerHistory_ValidationErrors tests validation error handling.
 // =============================================================================
 
-func TestAcceptance_ComputerHistory_ValidationErrors(t *testing.T) {
+func TestAcceptance_ComputerHistory_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicComputerHistory

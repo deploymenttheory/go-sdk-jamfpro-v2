@@ -11,7 +11,7 @@ import (
 )
 
 // TestAcceptance_APNSClientPushStatus_ListV1 tests retrieving MDM clients with push notifications disabled.
-func TestAcceptance_APNSClientPushStatus_ListV1(t *testing.T) {
+func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 
@@ -140,7 +140,7 @@ func TestAcceptance_APNSClientPushStatus_ListV1(t *testing.T) {
 }
 
 // TestAcceptance_APNSClientPushStatus_EnableAllClientsV1 tests enabling push for all clients.
-func TestAcceptance_APNSClientPushStatus_EnableAllClientsV1(t *testing.T) {
+func TestAcceptance_APNSClientPushStatus_enable_all_clients_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 
@@ -153,7 +153,7 @@ func TestAcceptance_APNSClientPushStatus_EnableAllClientsV1(t *testing.T) {
 }
 
 // TestAcceptance_APNSClientPushStatus_GetEnableAllClientsStatusV1 tests retrieving enable-all-clients status.
-func TestAcceptance_APNSClientPushStatus_GetEnableAllClientsStatusV1(t *testing.T) {
+func TestAcceptance_APNSClientPushStatus_get_enable_all_clients_status_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 
@@ -174,7 +174,7 @@ func TestAcceptance_APNSClientPushStatus_GetEnableAllClientsStatusV1(t *testing.
 // TestAcceptance_APNSClientPushStatus_EnableClientV1 tests enabling push for a single client.
 // This test requires a valid managementId from a device with push disabled.
 // If no such device exists, the test may fail with 404 - we log and skip in that case.
-func TestAcceptance_APNSClientPushStatus_EnableClientV1(t *testing.T) {
+func TestAcceptance_APNSClientPushStatus_enable_client_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 

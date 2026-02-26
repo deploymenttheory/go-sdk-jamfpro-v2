@@ -36,7 +36,7 @@ import (
 // TestAcceptance_MDM_ValidationErrors
 // =============================================================================
 
-func TestAcceptance_MDM_ValidationErrors(t *testing.T) {
+func TestAcceptance_MDM_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.MDM
@@ -77,7 +77,7 @@ func TestAcceptance_MDM_ValidationErrors(t *testing.T) {
 // =============================================================================
 // Uncomment and set JAMF_MDM_TEST_DEVICE_ID to test blank push against a real device.
 //
-// func TestAcceptance_MDM_BlankPush(t *testing.T) {
+// func TestAcceptance_MDM_blank_push(t *testing.T) {
 // 	acc.RequireClient(t)
 // 	deviceID := os.Getenv("JAMF_MDM_TEST_DEVICE_ID")
 // 	if deviceID == "" {

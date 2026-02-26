@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_ComputerInventory_List(t *testing.T) {
+func TestAcceptance_ComputerInventory_list(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -26,7 +26,7 @@ func TestAcceptance_ComputerInventory_List(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_ComputerInventory_GetByID(t *testing.T) {
+func TestAcceptance_ComputerInventory_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -46,7 +46,7 @@ func TestAcceptance_ComputerInventory_GetByID(t *testing.T) {
 	assert.NotEmpty(t, result.General.Name)
 }
 
-func TestAcceptance_ComputerInventory_Update(t *testing.T) {
+func TestAcceptance_ComputerInventory_update(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -83,7 +83,7 @@ func TestAcceptance_ComputerInventory_Update(t *testing.T) {
 	_, _, _ = svc.UpdateByIDV3(ctx, computerID, restoreReq)
 }
 
-func TestAcceptance_ComputerInventory_FileVault(t *testing.T) {
+func TestAcceptance_ComputerInventory_file_vault(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -112,7 +112,7 @@ func TestAcceptance_ComputerInventory_FileVault(t *testing.T) {
 	}
 }
 
-func TestAcceptance_ComputerInventory_RecoveryLockPassword(t *testing.T) {
+func TestAcceptance_ComputerInventory_recovery_lock_password(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -135,7 +135,7 @@ func TestAcceptance_ComputerInventory_RecoveryLockPassword(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestAcceptance_ComputerInventory_GetDetailByID(t *testing.T) {
+func TestAcceptance_ComputerInventory_get_detail_by_id(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -155,7 +155,7 @@ func TestAcceptance_ComputerInventory_GetDetailByID(t *testing.T) {
 	assert.NotEmpty(t, result.General.Name)
 }
 
-func TestAcceptance_ComputerInventory_DeviceLockPin(t *testing.T) {
+func TestAcceptance_ComputerInventory_device_lock_pin(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
@@ -179,7 +179,7 @@ func TestAcceptance_ComputerInventory_DeviceLockPin(t *testing.T) {
 	assert.NotEmpty(t, result.Pin)
 }
 
-func TestAcceptance_ComputerInventory_Attachments(t *testing.T) {
+func TestAcceptance_ComputerInventory_attachments(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 

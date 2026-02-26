@@ -55,7 +55,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_PatchPolicies_ListV2(t *testing.T) {
+func TestAcceptance_PatchPolicies_list_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PatchPolicies
 	ctx := context.Background()
@@ -103,7 +103,7 @@ func TestAcceptance_PatchPolicies_ListV2(t *testing.T) {
 	}
 }
 
-func TestAcceptance_PatchPolicies_DashboardOperations(t *testing.T) {
+func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PatchPolicies
 	ctx := context.Background()

@@ -36,7 +36,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_PatchManagement_AcceptDisclaimerV2(t *testing.T) {
+func TestAcceptance_PatchManagement_accept_disclaimer_v2(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PatchManagement
 	ctx := context.Background()

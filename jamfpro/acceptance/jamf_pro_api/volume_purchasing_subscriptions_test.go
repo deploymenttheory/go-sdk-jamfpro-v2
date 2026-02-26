@@ -11,7 +11,7 @@ import (
 // TestAcceptance_VolumePurchasingSubscriptions_List verifies that listing volume purchasing
 // subscriptions works against a real Jamf Pro instance. Create/Update/Delete require VPL
 // configuration and are not exercised here.
-func TestAcceptance_VolumePurchasingSubscriptions_ListV1(t *testing.T) {
+func TestAcceptance_VolumePurchasingSubscriptions_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.VolumePurchasingSubscriptions
@@ -26,7 +26,7 @@ func TestAcceptance_VolumePurchasingSubscriptions_ListV1(t *testing.T) {
 }
 
 // TestAcceptance_VolumePurchasingSubscriptions_GetByID fetches a single subscription by ID when at least one exists.
-func TestAcceptance_VolumePurchasingSubscriptions_GetByIDV1(t *testing.T) {
+func TestAcceptance_VolumePurchasingSubscriptions_get_by_idv1(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.VolumePurchasingSubscriptions

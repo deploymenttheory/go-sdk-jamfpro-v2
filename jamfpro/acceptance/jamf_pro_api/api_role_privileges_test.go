@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_APIRolePrivileges_ListV1(t *testing.T) {
+func TestAcceptance_APIRolePrivileges_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.APIRolePrivileges
 	ctx := context.Background()
@@ -22,7 +22,7 @@ func TestAcceptance_APIRolePrivileges_ListV1(t *testing.T) {
 	assert.NotEmpty(t, result.Privileges)
 }
 
-func TestAcceptance_APIRolePrivileges_SearchByNameV1(t *testing.T) {
+func TestAcceptance_APIRolePrivileges_search_by_name_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.APIRolePrivileges
 	ctx := context.Background()

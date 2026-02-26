@@ -56,7 +56,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_Bookmarks_ListV1(t *testing.T) {
+func TestAcceptance_Bookmarks_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Bookmarks
 	ctx := context.Background()
@@ -69,7 +69,7 @@ func TestAcceptance_Bookmarks_ListV1(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_Bookmarks_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Bookmarks_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Bookmarks
 	ctx := context.Background()
@@ -123,7 +123,7 @@ func TestAcceptance_Bookmarks_ListWithRSQLFilter(t *testing.T) {
 	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target bookmark found=%v", list.TotalCount, found)
 }
 
-func TestAcceptance_Bookmarks_Lifecycle(t *testing.T) {
+func TestAcceptance_Bookmarks_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Bookmarks
 	ctx := context.Background()

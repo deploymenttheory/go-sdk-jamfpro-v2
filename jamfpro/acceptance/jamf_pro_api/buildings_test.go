@@ -74,7 +74,7 @@ import (
 // lifecycle: Create → List → GetByID → Update → GetByID (verify) → History → Delete.
 // =============================================================================
 
-func TestAcceptance_Buildings_Lifecycle(t *testing.T) {
+func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Buildings
@@ -84,7 +84,7 @@ func TestAcceptance_Buildings_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test building")
 
 	createReq := &buildings.RequestBuilding{
-		Name:           acc.UniqueName("acc-test-building"),
+		Name:           acc.UniqueName("sdkv2_acc_acc-test-building"),
 		StreetAddress1: "123 Test St",
 		City:           "Austin",
 		StateProvince:  "TX",
@@ -144,7 +144,7 @@ func TestAcceptance_Buildings_Lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Update", "Updating building ID=%s", buildingID)
 
 	updateReq := &buildings.RequestBuilding{
-		Name:           acc.UniqueName("acc-test-building-updated"),
+		Name:           acc.UniqueName("sdkv2_acc_acc-test-building-updated"),
 		StreetAddress1: "456 Updated Ave",
 		City:           "Austin",
 		StateProvince:  "TX",
@@ -197,13 +197,13 @@ func TestAcceptance_Buildings_Lifecycle(t *testing.T) {
 // TestAcceptance_Buildings_ListWithRSQLFilter
 // =============================================================================
 
-func TestAcceptance_Buildings_ListWithRSQLFilter(t *testing.T) {
+func TestAcceptance_Buildings_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Buildings
 	ctx := context.Background()
 
-	name := acc.UniqueName("acc-rsql-building")
+	name := acc.UniqueName("sdkv2_acc_acc-rsql-building")
 	createReq := &buildings.RequestBuilding{
 		Name:    name,
 		City:    "Austin",
@@ -249,7 +249,7 @@ func TestAcceptance_Buildings_ListWithRSQLFilter(t *testing.T) {
 // TestAcceptance_Buildings_ValidationErrors
 // =============================================================================
 
-func TestAcceptance_Buildings_ValidationErrors(t *testing.T) {
+func TestAcceptance_Buildings_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.Buildings

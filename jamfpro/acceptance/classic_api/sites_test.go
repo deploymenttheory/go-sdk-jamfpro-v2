@@ -19,7 +19,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_Sites_Lifecycle(t *testing.T) {
+func TestAcceptance_Sites_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicSites
@@ -30,7 +30,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test site")
 
-	siteName := acc.UniqueName("acc-test-site")
+	siteName := acc.UniqueName("sdkv2_acc_acc-test-site")
 	createReq := &sites.RequestSite{Name: siteName}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -114,7 +114,7 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-site-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-site-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating site ID=%d to name=%q", siteID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -178,13 +178,13 @@ func TestAcceptance_Sites_Lifecycle(t *testing.T) {
 // TestAcceptance_Sites_DeleteByName creates a site then deletes it by name.
 // =============================================================================
 
-func TestAcceptance_Sites_DeleteByName(t *testing.T) {
+func TestAcceptance_Sites_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicSites
 	ctx := context.Background()
 
-	siteName := acc.UniqueName("acc-test-site-dbn")
+	siteName := acc.UniqueName("sdkv2_acc_acc-test-site-dbn")
 	createReq := &sites.RequestSite{Name: siteName}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -219,7 +219,7 @@ func TestAcceptance_Sites_DeleteByName(t *testing.T) {
 // without making any network calls.
 // =============================================================================
 
-func TestAcceptance_Sites_ValidationErrors(t *testing.T) {
+func TestAcceptance_Sites_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicSites

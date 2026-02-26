@@ -18,7 +18,7 @@ import (
 // via Classic API for lifecycle testing. This test focuses on read operations.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_List(t *testing.T) {
+func TestAcceptance_MobileDevices_list(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -41,7 +41,7 @@ func TestAcceptance_MobileDevices_List(t *testing.T) {
 // Skips if no devices are in the instance.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_GetByID(t *testing.T) {
+func TestAcceptance_MobileDevices_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -78,7 +78,7 @@ func TestAcceptance_MobileDevices_GetByID(t *testing.T) {
 // Skips if no devices are in the instance.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_GetByName(t *testing.T) {
+func TestAcceptance_MobileDevices_get_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -122,7 +122,7 @@ func TestAcceptance_MobileDevices_GetByName(t *testing.T) {
 // Skips if no devices are in the instance.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_GetByIDAndDataSubset(t *testing.T) {
+func TestAcceptance_MobileDevices_get_by_id_and_data_subset(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -156,7 +156,7 @@ func TestAcceptance_MobileDevices_GetByIDAndDataSubset(t *testing.T) {
 // TestAcceptance_MobileDevices_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_ValidationErrors(t *testing.T) {
+func TestAcceptance_MobileDevices_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -214,7 +214,7 @@ func TestAcceptance_MobileDevices_ValidationErrors(t *testing.T) {
 // Skips if no devices exist.
 // =============================================================================
 
-func TestAcceptance_MobileDevices_UpdateByID(t *testing.T) {
+func TestAcceptance_MobileDevices_update_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicMobileDevices
@@ -240,7 +240,7 @@ func TestAcceptance_MobileDevices_UpdateByID(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 
-	updatedName := acc.UniqueName("acc-test-mobdev-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-mobdev-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating mobile device ID=%s to device_name=%q", deviceID, updatedName)
 
 	updateReq := &mobile_devices.ResponseMobileDevice{

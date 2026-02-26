@@ -18,7 +18,7 @@ import (
 // UpdateByName → GetByID (verify) → DeleteByID.
 // =============================================================================
 
-func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
+func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicDockItems
@@ -29,7 +29,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "Create", "Creating test dock item")
 
-	itemName := acc.UniqueName("acc-test-dockitem")
+	itemName := acc.UniqueName("sdkv2_acc_acc-test-dockitem")
 	createReq := &dock_items.Request{
 		Name:     itemName,
 		Type:     "App",
@@ -117,7 +117,7 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. UpdateByID
 	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("acc-test-dockitem-updated")
+	updatedName := acc.UniqueName("sdkv2_acc_acc-test-dockitem-updated")
 	acc.LogTestStage(t, "UpdateByID", "Updating dock item ID=%d to name=%q", itemID, updatedName)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -189,13 +189,13 @@ func TestAcceptance_DockItems_Lifecycle(t *testing.T) {
 // TestAcceptance_DockItems_DeleteByName creates a dock item then deletes by name.
 // =============================================================================
 
-func TestAcceptance_DockItems_DeleteByName(t *testing.T) {
+func TestAcceptance_DockItems_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicDockItems
 	ctx := context.Background()
 
-	itemName := acc.UniqueName("acc-test-dockitem-dbn")
+	itemName := acc.UniqueName("sdkv2_acc_acc-test-dockitem-dbn")
 	createReq := &dock_items.Request{
 		Name:     itemName,
 		Type:     "App",
@@ -234,7 +234,7 @@ func TestAcceptance_DockItems_DeleteByName(t *testing.T) {
 // TestAcceptance_DockItems_ValidationErrors validates error handling.
 // =============================================================================
 
-func TestAcceptance_DockItems_ValidationErrors(t *testing.T) {
+func TestAcceptance_DockItems_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicDockItems

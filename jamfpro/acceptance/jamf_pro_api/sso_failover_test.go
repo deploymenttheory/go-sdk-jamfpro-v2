@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_SsoFailover_GetV1(t *testing.T) {
+func TestAcceptance_SsoFailover_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoFailover
 	ctx := context.Background()
@@ -22,7 +22,7 @@ func TestAcceptance_SsoFailover_GetV1(t *testing.T) {
 	assert.NotEmpty(t, result.FailoverURL)
 }
 
-func TestAcceptance_SsoFailover_RegenerateV1(t *testing.T) {
+func TestAcceptance_SsoFailover_regenerate_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoFailover
 	ctx := context.Background()

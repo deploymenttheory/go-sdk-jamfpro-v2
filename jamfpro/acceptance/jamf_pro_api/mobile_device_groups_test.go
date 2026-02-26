@@ -9,7 +9,7 @@ import (
 )
 
 // TestAcceptance_MobileDeviceGroups_Smart_List verifies listing smart mobile device groups.
-func TestAcceptance_MobileDeviceGroups_Smart_List(t *testing.T) {
+func TestAcceptance_MobileDeviceGroups_smart_list(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.MobileDeviceGroups
@@ -24,7 +24,7 @@ func TestAcceptance_MobileDeviceGroups_Smart_List(t *testing.T) {
 }
 
 // TestAcceptance_MobileDeviceGroups_Smart_GetByID fetches a smart group by ID when at least one exists.
-func TestAcceptance_MobileDeviceGroups_Smart_GetByID(t *testing.T) {
+func TestAcceptance_MobileDeviceGroups_smart_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.MobileDeviceGroups
@@ -47,7 +47,7 @@ func TestAcceptance_MobileDeviceGroups_Smart_GetByID(t *testing.T) {
 }
 
 // TestAcceptance_MobileDeviceGroups_Static_List verifies listing static mobile device groups.
-func TestAcceptance_MobileDeviceGroups_Static_List(t *testing.T) {
+func TestAcceptance_MobileDeviceGroups_static_list(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.MobileDeviceGroups
@@ -62,7 +62,7 @@ func TestAcceptance_MobileDeviceGroups_Static_List(t *testing.T) {
 }
 
 // TestAcceptance_MobileDeviceGroups_Static_GetByID fetches a static group by ID when at least one exists.
-func TestAcceptance_MobileDeviceGroups_Static_GetByID(t *testing.T) {
+func TestAcceptance_MobileDeviceGroups_static_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.MobileDeviceGroups

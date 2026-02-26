@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_SsoSettings_GetV3(t *testing.T) {
+func TestAcceptance_SsoSettings_get_v3(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoSettings
 	ctx := context.Background()
@@ -22,7 +22,7 @@ func TestAcceptance_SsoSettings_GetV3(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_SsoSettings_GetEnrollmentCustomizationDependencies(t *testing.T) {
+func TestAcceptance_SsoSettings_get_enrollment_customization_dependencies(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoSettings
 	ctx := context.Background()
@@ -34,7 +34,7 @@ func TestAcceptance_SsoSettings_GetEnrollmentCustomizationDependencies(t *testin
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_SsoSettings_UpdateV3(t *testing.T) {
+func TestAcceptance_SsoSettings_update_v3(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoSettings
 	ctx := context.Background()
@@ -56,7 +56,7 @@ func TestAcceptance_SsoSettings_UpdateV3(t *testing.T) {
 	_, _, _ = svc.UpdateV3(ctx, &request)
 }
 
-func TestAcceptance_SsoSettings_GetHistoryV3(t *testing.T) {
+func TestAcceptance_SsoSettings_get_history_v3(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoSettings
 	ctx := context.Background()
@@ -69,7 +69,7 @@ func TestAcceptance_SsoSettings_GetHistoryV3(t *testing.T) {
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
-func TestAcceptance_SsoSettings_AddHistoryNoteV3(t *testing.T) {
+func TestAcceptance_SsoSettings_add_history_note_v3(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.SsoSettings
 	ctx := context.Background()

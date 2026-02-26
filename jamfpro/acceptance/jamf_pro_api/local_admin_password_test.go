@@ -62,7 +62,7 @@ import (
 // settings read and update operations.
 // =============================================================================
 
-func TestAcceptance_LocalAdminPassword_Settings_GetAndUpdate(t *testing.T) {
+func TestAcceptance_LocalAdminPassword_settings_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.LocalAdminPassword
@@ -118,7 +118,7 @@ func TestAcceptance_LocalAdminPassword_Settings_GetAndUpdate(t *testing.T) {
 // TestAcceptance_LocalAdminPassword_PendingRotations
 // =============================================================================
 
-func TestAcceptance_LocalAdminPassword_PendingRotations(t *testing.T) {
+func TestAcceptance_LocalAdminPassword_pending_rotations(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.LocalAdminPassword
@@ -145,7 +145,7 @@ func TestAcceptance_LocalAdminPassword_PendingRotations(t *testing.T) {
 // TestAcceptance_LocalAdminPassword_ValidationErrors
 // =============================================================================
 
-func TestAcceptance_LocalAdminPassword_ValidationErrors(t *testing.T) {
+func TestAcceptance_LocalAdminPassword_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.LocalAdminPassword

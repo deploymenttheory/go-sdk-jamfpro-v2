@@ -43,7 +43,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_ClientCheckin_Get(t *testing.T) {
+func TestAcceptance_ClientCheckin_get(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.ClientCheckin
 	ctx := context.Background()

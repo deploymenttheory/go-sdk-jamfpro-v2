@@ -41,7 +41,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_JamfProSystemInitialization_Initialize(t *testing.T) {
+func TestAcceptance_JamfProSystemInitialization_initialize(t *testing.T) {
 	if os.Getenv("JAMF_RUN_SYSTEM_INIT_TESTS") != "1" {
 		t.Skip("Skipping system initialization test (set JAMF_RUN_SYSTEM_INIT_TESTS=1 to run)")
 	}
@@ -51,7 +51,7 @@ func TestAcceptance_JamfProSystemInitialization_Initialize(t *testing.T) {
 
 	request := &jamf_pro_system_initialization.ResourceSystemInitialize{
 		ActivationCode:  os.Getenv("JAMF_ACTIVATION_CODE"),
-		InstitutionName: "Acceptance Test Institution",
+		InstitutionName: "sdkv2_acc_Acceptance Test Institution",
 		EulaAccepted:    true,
 		Username:        "admin",
 		Password:        os.Getenv("JAMF_INIT_PASSWORD"),
@@ -68,7 +68,7 @@ func TestAcceptance_JamfProSystemInitialization_Initialize(t *testing.T) {
 	assert.True(t, resp.StatusCode >= 200 && resp.StatusCode < 300, "expected success status")
 }
 
-func TestAcceptance_JamfProSystemInitialization_InitializeDatabaseConnection(t *testing.T) {
+func TestAcceptance_JamfProSystemInitialization_initialize_database_connection(t *testing.T) {
 	if os.Getenv("JAMF_RUN_SYSTEM_INIT_TESTS") != "1" {
 		t.Skip("Skipping database initialization test (set JAMF_RUN_SYSTEM_INIT_TESTS=1 to run)")
 	}

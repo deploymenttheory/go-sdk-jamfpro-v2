@@ -16,7 +16,7 @@ import (
 // operation for clearing MDM commands on individual devices or groups.
 // =============================================================================
 
-func TestAcceptance_CommandFlush_FlushByIDAndStatus(t *testing.T) {
+func TestAcceptance_CommandFlush_flush_by_id_and_status(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicCommandFlush
@@ -73,7 +73,7 @@ func TestAcceptance_CommandFlush_FlushByIDAndStatus(t *testing.T) {
 // for batch clearing MDM commands using XML request body.
 // =============================================================================
 
-func TestAcceptance_CommandFlush_FlushWithXML(t *testing.T) {
+func TestAcceptance_CommandFlush_flush_with_xml(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicCommandFlush
@@ -134,7 +134,7 @@ func TestAcceptance_CommandFlush_FlushWithXML(t *testing.T) {
 // TestAcceptance_CommandFlush_ValidationErrors tests validation error handling.
 // =============================================================================
 
-func TestAcceptance_CommandFlush_ValidationErrors(t *testing.T) {
+func TestAcceptance_CommandFlush_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicCommandFlush

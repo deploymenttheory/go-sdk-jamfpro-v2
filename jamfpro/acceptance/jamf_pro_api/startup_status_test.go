@@ -39,7 +39,7 @@ import (
 //
 // =============================================================================
 
-func TestAcceptance_StartupStatus_GetV1(t *testing.T) {
+func TestAcceptance_StartupStatus_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.StartupStatus
 	ctx := context.Background()

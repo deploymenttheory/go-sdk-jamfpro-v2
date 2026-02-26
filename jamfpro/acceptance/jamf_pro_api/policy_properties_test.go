@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAcceptance_PolicyProperties_Get(t *testing.T) {
+func TestAcceptance_PolicyProperties_get(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PolicyProperties
 	ctx := context.Background()
@@ -20,7 +20,7 @@ func TestAcceptance_PolicyProperties_Get(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestAcceptance_PolicyProperties_Update(t *testing.T) {
+func TestAcceptance_PolicyProperties_update(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.PolicyProperties
 	ctx := context.Background()
