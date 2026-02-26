@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared/plist"
 )
 
 type (
@@ -215,7 +216,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) 
 		}
 
 		if existingProfile.General.Payloads != "" {
-			updatedPayloads, err := preservePlistUUIDs(existingProfile.General.Payloads, req.General.Payloads)
+			updatedPayloads, err := plist.PreservePlistUUIDs(existingProfile.General.Payloads, req.General.Payloads)
 			if err != nil {
 				return nil, nil, fmt.Errorf("failed to preserve plist UUIDs: %w", err)
 			}
@@ -272,7 +273,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 		}
 
 		if existingProfile.General.Payloads != "" {
-			updatedPayloads, err := preservePlistUUIDs(existingProfile.General.Payloads, req.General.Payloads)
+			updatedPayloads, err := plist.PreservePlistUUIDs(existingProfile.General.Payloads, req.General.Payloads)
 			if err != nil {
 				return nil, nil, fmt.Errorf("failed to preserve plist UUIDs: %w", err)
 			}
