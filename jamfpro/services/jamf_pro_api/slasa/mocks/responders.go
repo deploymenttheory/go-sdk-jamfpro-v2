@@ -53,24 +53,24 @@ func (m *SLASAMock) register(method, path string, statusCode int, fixtureFile st
 	}
 }
 
-// RegisterGetStatusAcceptedMock registers GET /api/v1/managed-software-updates/slasa → 200 with ACCEPTED status.
+// RegisterGetStatusAcceptedMock registers GET /api/v1/slasa → 200 with ACCEPTED status.
 func (m *SLASAMock) RegisterGetStatusAcceptedMock() {
-	m.register("GET", "/api/v1/managed-software-updates/slasa", 200, "validate_get_status_accepted.json")
+	m.register("GET", "/api/v1/slasa", 200, "validate_get_status_accepted.json")
 }
 
-// RegisterGetStatusNotAcceptedMock registers GET /api/v1/managed-software-updates/slasa → 200 with NOT_ACCEPTED status.
+// RegisterGetStatusNotAcceptedMock registers GET /api/v1/slasa → 200 with NOT_ACCEPTED status.
 func (m *SLASAMock) RegisterGetStatusNotAcceptedMock() {
-	m.register("GET", "/api/v1/managed-software-updates/slasa", 200, "validate_get_status_not_accepted.json")
+	m.register("GET", "/api/v1/slasa", 200, "validate_get_status_not_accepted.json")
 }
 
-// RegisterAcceptMock registers POST /api/v1/managed-software-updates/slasa → 200 (no body).
+// RegisterAcceptMock registers POST /api/v1/slasa → 200 (no body).
 func (m *SLASAMock) RegisterAcceptMock() {
-	m.register("POST", "/api/v1/managed-software-updates/slasa", 200, "")
+	m.register("POST", "/api/v1/slasa", 200, "")
 }
 
 // RegisterGetStatusErrorMock registers GET with a 500 error.
 func (m *SLASAMock) RegisterGetStatusErrorMock() {
-	m.responses["GET /api/v1/managed-software-updates/slasa"] = registeredResponse{
+	m.responses["GET /api/v1/slasa"] = registeredResponse{
 		statusCode: 500,
 		rawBody:    []byte(`{"error":"internal server error"}`),
 		errMsg:     "request failed: 500 Internal Server Error",

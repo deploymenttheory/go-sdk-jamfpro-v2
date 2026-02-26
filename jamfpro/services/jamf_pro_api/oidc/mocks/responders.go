@@ -78,7 +78,7 @@ func (m *OIDCMock) RegisterGenerateCertificateMock() {
 
 // RegisterGetRedirectURLMock registers a successful response for GetRedirectURLV1.
 func (m *OIDCMock) RegisterGetRedirectURLMock() {
-	m.register("POST", "/api/v1/oidc/dispatch", 200, `{
+	m.register("POST", "/api/v2/oidc/dispatch", 200, `{
 		"redirectUrl": "https://idp.example.com/login?redirect=https://jamf.example.com"
 	}`)
 }
