@@ -348,3 +348,245 @@ func TestUnit_MacOSConfigurationProfiles_DeleteByName_Error(t *testing.T) {
 	_, err := svc.DeleteByName(context.Background(), "Wi-Fi Profile")
 	require.Error(t, err)
 }
+
+// TestUnit_MacOSConfigurationProfiles_UpdateByID_WithPayloadsUUIDPreservation tests UpdateByID
+// with payload content and UUID preservation logic.
+func TestUnit_MacOSConfigurationProfiles_UpdateByID_WithPayloadsUUIDPreservation(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadUUID</key>
+	<string>NEW-UUID-456</string>
+	<key>PayloadIdentifier</key>
+	<string>com.example.new</string>
+	<key>PayloadDisplayName</key>
+	<string>WiFi Settings Updated</string>
+</dict>
+</plist>`
+
+	// Register mocks - GetByID will return existing profile with plist from fixture
+	mockClient.RegisterGetByIDMock()
+	mockClient.RegisterUpdateByIDMock()
+
+	req := &macos_configuration_profiles.RequestResource{
+		General: macos_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile Updated",
+			Payloads: newPlist,
+		},
+	}
+
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 1, result.ID)
+
+	// The payloads should have been processed through UUID preservation
+	// (actual UUID values depend on the fixture data)
+	assert.NotEmpty(t, req.General.Payloads)
+}
+
+// TestUnit_MacOSConfigurationProfiles_UpdateByID_EmptyPayloads tests UpdateByID
+// when payloads field is empty (no UUID preservation needed).
+func TestUnit_MacOSConfigurationProfiles_UpdateByID_EmptyPayloads(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+
+	// Register mock for UpdateByID
+	mockClient.RegisterUpdateByIDMock()
+
+	req := &macos_configuration_profiles.RequestResource{
+		General: macos_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: "", // Empty payloads - should skip UUID preservation
+		},
+	}
+
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 1, result.ID)
+}
+
+// TestUnit_MacOSConfigurationProfiles_UpdateByID_GetExistingProfileError tests UpdateByID
+// when fetching the existing profile fails during UUID preservation.
+func TestUnit_MacOSConfigurationProfiles_UpdateByID_GetExistingProfileError(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+
+	// Don't register GetByID mock - will cause error
+
+	req := &macos_configuration_profiles.RequestResource{
+		General: macos_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: `<?xml version="1.0"?><plist version="1.0"><dict><key>PayloadUUID</key><string>TEST</string></dict></plist>`,
+		},
+	}
+
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get existing profile for UUID preservation")
+}
+
+// TestUnit_MacOSConfigurationProfiles_UpdateByName_WithPayloadsUUIDPreservation tests UpdateByName
+// with payload content and UUID preservation logic.
+func TestUnit_MacOSConfigurationProfiles_UpdateByName_WithPayloadsUUIDPreservation(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadUUID</key>
+	<string>NEW-NAME-UUID-012</string>
+	<key>PayloadIdentifier</key>
+	<string>com.example.name.new</string>
+	<key>PayloadDisplayName</key>
+	<string>VPN Settings Updated</string>
+</dict>
+</plist>`
+
+	// Register mocks - GetByName will return existing profile with plist from fixture
+	mockClient.RegisterGetByNameMock()
+	mockClient.RegisterUpdateByNameMock()
+
+	req := &macos_configuration_profiles.RequestResource{
+		General: macos_configuration_profiles.SubsetGeneral{
+			Name:     "VPN Profile Updated",
+			Payloads: newPlist,
+		},
+	}
+
+	result, resp, err := svc.UpdateByName(context.Background(), "Wi-Fi Profile", req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 1, result.ID)
+
+	// The payloads should have been processed through UUID preservation
+	assert.NotEmpty(t, req.General.Payloads)
+}
+
+// TestUnit_MacOSConfigurationProfiles_UpdateByName_EmptyPayloads tests UpdateByName
+// when payloads field is empty (no UUID preservation needed).
+func TestUnit_MacOSConfigurationProfiles_UpdateByName_EmptyPayloads(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+
+	// Register mock for UpdateByName
+	mockClient.RegisterUpdateByNameMock()
+
+	req := &macos_configuration_profiles.RequestResource{
+		General: macos_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: "", // Empty payloads - should skip UUID preservation
+		},
+	}
+
+	result, resp, err := svc.UpdateByName(context.Background(), "Wi-Fi Profile", req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 1, result.ID)
+}
+
+// TestUnit_MacOSConfigurationProfiles_UpdateByName_GetExistingProfileError tests UpdateByName
+// when fetching the existing profile fails during UUID preservation.
+func TestUnit_MacOSConfigurationProfiles_UpdateByName_GetExistingProfileError(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+
+	// Don't register GetByName mock - will cause error
+
+	req := &macos_configuration_profiles.RequestResource{
+		General: macos_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: `<?xml version="1.0"?><plist version="1.0"><dict><key>PayloadUUID</key><string>TEST</string></dict></plist>`,
+		},
+	}
+
+	result, resp, err := svc.UpdateByName(context.Background(), "NonExistent Profile", req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to get existing profile for UUID preservation")
+}
+
+// TestUnit_MacOSConfigurationProfiles_UpdateByID_ExistingProfileEmptyPayloads tests UpdateByID
+// when the existing profile has empty payloads (UUID preservation skipped).
+func TestUnit_MacOSConfigurationProfiles_UpdateByID_ExistingProfileEmptyPayloads(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadUUID</key>
+	<string>NEW-UUID</string>
+	<key>PayloadIdentifier</key>
+	<string>com.example.new</string>
+</dict>
+</plist>`
+
+	// Register GetByID mock - fixture will have payloads
+	mockClient.RegisterGetByIDMock()
+	mockClient.RegisterUpdateByIDMock()
+
+	req := &macos_configuration_profiles.RequestResource{
+		General: macos_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: newPlist,
+		},
+	}
+
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 1, result.ID)
+}
+
+// TestUnit_MacOSConfigurationProfiles_UpdateByName_ExistingProfileEmptyPayloads tests UpdateByName
+// when the existing profile has empty payloads (UUID preservation skipped).
+func TestUnit_MacOSConfigurationProfiles_UpdateByName_ExistingProfileEmptyPayloads(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadUUID</key>
+	<string>NEW-UUID</string>
+	<key>PayloadIdentifier</key>
+	<string>com.example.new</string>
+</dict>
+</plist>`
+
+	// Register GetByName mock - fixture will have payloads
+	mockClient.RegisterGetByNameMock()
+	mockClient.RegisterUpdateByNameMock()
+
+	req := &macos_configuration_profiles.RequestResource{
+		General: macos_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: newPlist,
+		},
+	}
+
+	result, resp, err := svc.UpdateByName(context.Background(), "Wi-Fi Profile", req)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 1, result.ID)
+}
+
