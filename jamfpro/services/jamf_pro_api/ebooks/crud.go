@@ -58,7 +58,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListV1 returns all ebook objects (Get Ebook objects).
 // URL: GET /api/v1/ebooks
-// Query Params: page, page-size, sort (optional)
+
 // https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks
 func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse

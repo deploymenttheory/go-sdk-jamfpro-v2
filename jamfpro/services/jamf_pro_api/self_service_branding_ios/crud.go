@@ -2,10 +2,12 @@ package self_service_branding_ios
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -69,10 +71,33 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListV1 returns all self-service branding mobile configurations.
 // URL: GET /api/v1/self-service/branding/ios
-// Query Params: page, page-size, sort (optional)
+
 // https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-ios
 func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
 	var result ListResponse
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var itemVar ResourceSelfServiceBrandingMobile
+				if err := mapstructure.Decode(item, &itemVar); err != nil {
+					return fmt.Errorf("failed to decode item: %w", err)
+				}
+				result.Results = append(result.Results, itemVar)
+			}
+		}
+
+		return nil
+	}
 
 	endpoint := EndpointSelfServiceBrandingMobileV1
 
@@ -80,7 +105,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 		"Accept": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}

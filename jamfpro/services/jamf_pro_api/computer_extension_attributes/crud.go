@@ -136,6 +136,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	headers := map[string]string{
 		"Accept": mime.ApplicationJSON,
 	}
+
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list computer extension attributes: %w", err)
