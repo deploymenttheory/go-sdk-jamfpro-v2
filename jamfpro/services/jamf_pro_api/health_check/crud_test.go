@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/health_check/mocks"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -30,4 +31,18 @@ func TestUnit_HealthCheck_GetV1_Error(t *testing.T) {
 	require.Error(t, err)
 	require.False(t, healthy)
 	require.NotNil(t, resp)
+}
+
+func TestUnit_HealthCheck_GetHealthStatusV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetHealthStatusV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.Equal(t, 200, resp.StatusCode)
+	require.NotNil(t, result)
+	assert.Equal(t, 0.75, result.API.ThirtySeconds)
+	assert.Equal(t, 0.75, result.UI.OneMinute)
+	assert.Equal(t, 0.75, result.Enrollment.FiveMinutes)
+	assert.Equal(t, 0.75, result.Device.FifteenMinutes)
+	assert.Equal(t, 0.75, result.Default.ThirtyMinutes)
 }

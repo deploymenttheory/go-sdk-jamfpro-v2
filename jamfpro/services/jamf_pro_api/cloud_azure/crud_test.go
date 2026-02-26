@@ -284,3 +284,121 @@ func TestGetDefaultMappingsV1(t *testing.T) {
 	assert.Equal(t, "userPrincipalName", result.UserName)
 	assert.Equal(t, "displayName", result.RealName)
 }
+
+func TestGetDefaultServerConfigurationV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetDefaultServerConfigurationV1(ctx)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestGetByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByIDV1(ctx, "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestGetByNameV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByNameV1(ctx, "Test Azure IDP")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestCreateV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	request := &ResourceCloudAzure{
+		CloudIdPCommon: CloudIdPCommon{
+			DisplayName:  "Test Azure IDP",
+			ProviderName: "AZURE",
+		},
+	}
+
+	result, resp, err := svc.CreateV1(ctx, request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestUpdateByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	request := &ResourceCloudAzure{
+		CloudIdPCommon: CloudIdPCommon{
+			DisplayName:  "Updated Azure IDP",
+			ProviderName: "AZURE",
+		},
+	}
+
+	result, resp, err := svc.UpdateByIDV1(ctx, "1", request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestUpdateByNameV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	request := &ResourceCloudAzure{
+		CloudIdPCommon: CloudIdPCommon{
+			DisplayName:  "Updated Azure IDP",
+			ProviderName: "AZURE",
+		},
+	}
+
+	result, resp, err := svc.UpdateByNameV1(ctx, "Test Azure IDP", request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestDeleteByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	resp, err := svc.DeleteByIDV1(ctx, "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestDeleteByNameV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	resp, err := svc.DeleteByNameV1(ctx, "Test Azure IDP")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestGetDefaultMappingsV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudAzureMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetDefaultMappingsV1(ctx)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}

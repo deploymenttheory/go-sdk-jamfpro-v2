@@ -64,6 +64,26 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mobile-device-groups-static-groups-id
 		DeleteStaticByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+
+		// ListAllV1 returns all mobile device groups (smart + static) as a simple list.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups
+		ListAllV1(ctx context.Context) ([]ResourceMobileDeviceGroupSummary, *interfaces.Response, error)
+
+		// GetStaticGroupMembershipV1 returns the mobile devices in the specified static group.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-group-membership-id
+		GetStaticGroupMembershipV1(ctx context.Context, id string, rsqlQuery map[string]string) (*GroupMembershipResponse, *interfaces.Response, error)
+
+		// GetSmartGroupMembershipV1 returns the mobile devices in the specified smart group.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-group-membership-id
+		GetSmartGroupMembershipV1(ctx context.Context, id string, rsqlQuery map[string]string) (*GroupMembershipResponse, *interfaces.Response, error)
+
+		// EraseDevicesByGroupIDV1 erases all devices in the specified mobile device group.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-id-erase
+		EraseDevicesByGroupIDV1(ctx context.Context, id string, request *RequestEraseDevices) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the mobile device groups-related methods of the Jamf Pro API.
@@ -371,6 +391,140 @@ func (s *Service) DeleteStaticByIDV1(ctx context.Context, id string) (*interface
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// -----------------------------------------------------------------------------
+// List All, Membership, and Erase (V1)
+// -----------------------------------------------------------------------------
+
+// ListAllV1 returns all mobile device groups (smart + static) as a simple list.
+// URL: GET /api/v1/mobile-device-groups
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups
+func (s *Service) ListAllV1(ctx context.Context) ([]ResourceMobileDeviceGroupSummary, *interfaces.Response, error) {
+	var result []ResourceMobileDeviceGroupSummary
+
+	endpoint := EndpointMobileDeviceGroupsV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetStaticGroupMembershipV1 returns the mobile devices in the specified static group.
+// URL: GET /api/v1/mobile-device-groups/static-group-membership/{id}
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-group-membership-id
+func (s *Service) GetStaticGroupMembershipV1(ctx context.Context, id string, rsqlQuery map[string]string) (*GroupMembershipResponse, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("static group ID is required")
+	}
+
+	var result GroupMembershipResponse
+
+	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupMembershipV1, id)
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var member ResourceMobileDeviceMember
+				if err := mapstructure.Decode(item, &member); err != nil {
+					return fmt.Errorf("failed to decode mobile device member: %w", err)
+				}
+				result.Results = append(result.Results, member)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get static group membership: %w", err)
+	}
+
+	return &result, resp, nil
+}
+
+// GetSmartGroupMembershipV1 returns the mobile devices in the specified smart group.
+// URL: GET /api/v1/mobile-device-groups/smart-group-membership/{id}
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-group-membership-id
+func (s *Service) GetSmartGroupMembershipV1(ctx context.Context, id string, rsqlQuery map[string]string) (*GroupMembershipResponse, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("smart group ID is required")
+	}
+
+	var result GroupMembershipResponse
+
+	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupMembershipV1, id)
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var member ResourceMobileDeviceMember
+				if err := mapstructure.Decode(item, &member); err != nil {
+					return fmt.Errorf("failed to decode mobile device member: %w", err)
+				}
+				result.Results = append(result.Results, member)
+			}
+		}
+
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get smart group membership: %w", err)
+	}
+
+	return &result, resp, nil
+}
+
+// EraseDevicesByGroupIDV1 erases all devices in the specified mobile device group.
+// URL: POST /api/v1/mobile-device-groups/{id}/erase
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-id-erase
+func (s *Service) EraseDevicesByGroupIDV1(ctx context.Context, id string, request *RequestEraseDevices) (*interfaces.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("group ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/erase", EndpointMobileDeviceGroupsV1, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
 	if err != nil {
 		return resp, err
 	}

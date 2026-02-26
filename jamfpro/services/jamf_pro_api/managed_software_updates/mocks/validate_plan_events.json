@@ -1,0 +1,19 @@
+{
+  "events": [
+    {
+      "timestamp": "2024-03-15T14:00:00Z",
+      "type": "PLAN_CREATED",
+      "details": {
+        "action": "create",
+        "deviceId": "12345"
+      }
+    },
+    {
+      "timestamp": "2024-03-15T14:05:00Z",
+      "type": "SCAN_SCHEDULED",
+      "details": {
+        "scheduledAt": "2024-03-15T15:00:00Z"
+      }
+    }
+  ]
+}

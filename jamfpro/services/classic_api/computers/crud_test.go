@@ -275,3 +275,74 @@ func TestUnit_Computers_NotFound(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "Resource not found")
 }
+
+func TestUnit_Computers_List_Error(t *testing.T) {
+	mockClient := mocks.NewComputersMock()
+	svc := computers.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_Computers_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewComputersMock()
+	svc := computers.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "test-computer")
+	require.Error(t, err)
+}
+
+func TestUnit_Computers_Create_Error(t *testing.T) {
+	mockClient := mocks.NewComputersMock()
+	svc := computers.NewService(mockClient)
+	_, _, err := svc.Create(context.Background(), &computers.ResponseComputer{
+		General: computers.ComputerSubsetGeneral{Name: "test"},
+	})
+	require.Error(t, err)
+}
+
+func TestUnit_Computers_UpdateByID_NilComputer(t *testing.T) {
+	mockClient := mocks.NewComputersMock()
+	svc := computers.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "computer is required")
+}
+
+func TestUnit_Computers_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewComputersMock()
+	svc := computers.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), "1", &computers.ResponseComputer{
+		General: computers.ComputerSubsetGeneral{Name: "test"},
+	})
+	require.Error(t, err)
+}
+
+func TestUnit_Computers_UpdateByName_NilComputer(t *testing.T) {
+	mockClient := mocks.NewComputersMock()
+	svc := computers.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "test-computer", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "computer is required")
+}
+
+func TestUnit_Computers_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewComputersMock()
+	svc := computers.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "test-computer", &computers.ResponseComputer{
+		General: computers.ComputerSubsetGeneral{Name: "test"},
+	})
+	require.Error(t, err)
+}
+
+func TestUnit_Computers_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewComputersMock()
+	svc := computers.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestUnit_Computers_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewComputersMock()
+	svc := computers.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "test-computer")
+	require.Error(t, err)
+}

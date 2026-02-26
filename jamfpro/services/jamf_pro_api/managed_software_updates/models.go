@@ -146,3 +146,52 @@ type ErrorDetail struct {
 	Description string `json:"description"`
 	ID          string `json:"id"`
 }
+
+// -----------------------------------------------------------------------------
+// Plan Events (GET /api/v1/managed-software-updates/plans/{id}/events)
+// -----------------------------------------------------------------------------
+
+// ResponsePlanEvents represents the response structure for plan event store.
+type ResponsePlanEvents struct {
+	Events []ResourcePlanEvent `json:"events"`
+}
+
+// ResourcePlanEvent represents a single event in the plan event store.
+type ResourcePlanEvent struct {
+	Timestamp string                 `json:"timestamp,omitempty"`
+	Type      string                 `json:"type,omitempty"`
+	Details   map[string]interface{} `json:"details,omitempty"`
+}
+
+// -----------------------------------------------------------------------------
+// Update Statuses (GET /api/v1/managed-software-updates/update-statuses/*)
+// -----------------------------------------------------------------------------
+
+// ResponseUpdateStatusList represents the paginated response for update statuses.
+type ResponseUpdateStatusList struct {
+	TotalCount int                   `json:"totalCount"`
+	Results    []ResourceUpdateStatus `json:"results"`
+}
+
+// ResourceUpdateStatus represents a managed software update status for a device.
+type ResourceUpdateStatus struct {
+	OsUpdatesStatusId        string              `json:"osUpdatesStatusId,omitempty"`
+	Device                   UpdateStatusDevice  `json:"device,omitempty"`
+	DownloadPercentComplete  float64             `json:"downloadPercentComplete,omitempty"`
+	Downloaded               bool                `json:"downloaded,omitempty"`
+	ProductKey               string              `json:"productKey,omitempty"`
+	Status                   string              `json:"status,omitempty"`
+	DeferralsRemaining       int                 `json:"deferralsRemaining,omitempty"`
+	MaxDeferrals             int                 `json:"maxDeferrals,omitempty"`
+	NextScheduledInstall     string              `json:"nextScheduledInstall,omitempty"`
+	PastNotifications        []string            `json:"pastNotifications,omitempty"`
+	Created                  string              `json:"created,omitempty"`
+	Updated                  string              `json:"updated,omitempty"`
+}
+
+// UpdateStatusDevice represents the device information in an update status.
+type UpdateStatusDevice struct {
+	DeviceId   string `json:"deviceId,omitempty"`
+	ObjectType string `json:"objectType,omitempty"`
+	Href       string `json:"href,omitempty"`
+}

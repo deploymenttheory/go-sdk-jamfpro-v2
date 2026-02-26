@@ -18,6 +18,14 @@ type (
 		//
 		// Note: This endpoint is undocumented.
 		GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*ResourceDeviceComplianceStatus, *interfaces.Response, error)
+
+		// GetDeviceComplianceInformationComputerV1 returns compliance information for a computer device.
+		// URL: GET /api/v1/conditional-access/device-compliance-information/computer/{deviceId}
+		GetDeviceComplianceInformationComputerV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *interfaces.Response, error)
+
+		// GetDeviceComplianceInformationMobileV1 returns compliance information for a mobile device.
+		// URL: GET /api/v1/conditional-access/device-compliance-information/mobile/{deviceId}
+		GetDeviceComplianceInformationMobileV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the Conditional Access-related methods of the Jamf Pro API.
@@ -51,4 +59,44 @@ func (s *Service) GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*Reso
 	}
 
 	return &result, resp, nil
+}
+
+// GetDeviceComplianceInformationComputerV1 returns compliance information for a computer device.
+// URL: GET /api/v1/conditional-access/device-compliance-information/computer/{deviceId}
+func (s *Service) GetDeviceComplianceInformationComputerV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *interfaces.Response, error) {
+	endpoint := fmt.Sprintf("%s/device-compliance-information/computer/%s", EndpointConditionalAccessV1, deviceId)
+
+	var result []ResourceDeviceComplianceInfo
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetDeviceComplianceInformationMobileV1 returns compliance information for a mobile device.
+// URL: GET /api/v1/conditional-access/device-compliance-information/mobile/{deviceId}
+func (s *Service) GetDeviceComplianceInformationMobileV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *interfaces.Response, error) {
+	endpoint := fmt.Sprintf("%s/device-compliance-information/mobile/%s", EndpointConditionalAccessV1, deviceId)
+
+	var result []ResourceDeviceComplianceInfo
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
 }

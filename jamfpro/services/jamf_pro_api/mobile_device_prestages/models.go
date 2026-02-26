@@ -182,11 +182,90 @@ type SubsetAssignmentItem struct {
 // These allow the version_locking helpers to propagate versionLock values
 // across GET → PUT workflows without requiring callers to manage locks manually.
 
+// RequestReplaceScope is the request body for ReplaceScopeByIDV2 (PUT /api/v2/mobile-device-prestages/{id}/scope).
+type RequestReplaceScope struct {
+	SerialNumbers []string `json:"serialNumbers"`
+	VersionLock   int      `json:"versionLock"`
+}
+
+// RequestAddScope is the request body for AddScopeByIDV2 (POST /api/v2/mobile-device-prestages/{id}/scope).
+type RequestAddScope struct {
+	SerialNumbers []string `json:"serialNumbers"`
+	VersionLock   int      `json:"versionLock"`
+}
+
+// RequestRemoveScope is the request body for RemoveScopeByIDV2 (POST /api/v2/mobile-device-prestages/{id}/scope/delete-multiple).
+type RequestRemoveScope struct {
+	SerialNumbers []string `json:"serialNumbers"`
+	VersionLock   int      `json:"versionLock"`
+}
+
+// ResourcePrestageSync represents a prestage sync state (GET /api/v2/mobile-device-prestages/syncs or /{id}/syncs).
+type ResourcePrestageSync struct {
+	PrestageId string `json:"prestageId"`
+	SyncState  string `json:"syncState"`
+	Timestamp  string `json:"timestamp"`
+}
+
+// ResourceAttachment represents an attachment for a mobile device prestage (GET /api/v3/mobile-device-prestages/{id}/attachments).
+type ResourceAttachment struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// ResourceAttachmentUpload represents the response when uploading an attachment (POST /api/v3/mobile-device-prestages/{id}/attachments).
+type ResourceAttachmentUpload struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	FileType string `json:"fileType"`
+}
+
+// RequestDeleteAttachments is the request body for DeleteAttachmentsByIDV3 (POST /api/v3/mobile-device-prestages/{id}/attachments/delete-multiple).
+type RequestDeleteAttachments struct {
+	IDs []string `json:"ids"`
+}
+
+// HistoryObject represents a single history entry.
+type HistoryObject struct {
+	ID       int     `json:"id"`
+	Username string  `json:"username"`
+	Date     string  `json:"date"`
+	Note     string  `json:"note"`
+	Details  *string `json:"details"`
+}
+
+// HistoryResponse is the response for GetHistoryByIDV3.
+type HistoryResponse struct {
+	TotalCount int             `json:"totalCount"`
+	Results    []HistoryObject `json:"results"`
+}
+
+// RequestAddHistoryNote is the request body for AddHistoryNoteByIDV3.
+type RequestAddHistoryNote struct {
+	Note string `json:"note"`
+}
+
+// ResponseAddHistoryNote is the response for AddHistoryNoteByIDV3.
+type ResponseAddHistoryNote struct {
+	ID   string `json:"id"`
+	Href string `json:"href"`
+}
+
+// VersionLocker implementations for version_locking.VersionLocker interface.
 func (r *ResourceMobileDevicePrestage) GetVersionLock() int    { return r.VersionLock }
 func (r *ResourceMobileDevicePrestage) SetVersionLock(lock int) { r.VersionLock = lock }
 
 func (r *ResourceDeviceScope) GetVersionLock() int    { return r.VersionLock }
 func (r *ResourceDeviceScope) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (r *RequestReplaceScope) GetVersionLock() int    { return r.VersionLock }
+func (r *RequestReplaceScope) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (r *RequestAddScope) GetVersionLock() int    { return r.VersionLock }
+func (r *RequestAddScope) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (r *RequestRemoveScope) GetVersionLock() int    { return r.VersionLock }
+func (r *RequestRemoveScope) SetVersionLock(lock int) { r.VersionLock = lock }
 
 func (l *SubsetLocationInformation) GetVersionLock() int    { return l.VersionLock }
 func (l *SubsetLocationInformation) SetVersionLock(lock int) { l.VersionLock = lock }

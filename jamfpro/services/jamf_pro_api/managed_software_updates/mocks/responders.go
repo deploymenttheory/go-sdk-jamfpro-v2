@@ -84,6 +84,30 @@ func (m *ManagedSoftwareUpdatesMock) RegisterEmptyPlansMock() {
 	m.register("GET", "/api/v1/managed-software-updates/plans", 200, "validate_empty_plans_list.json")
 }
 
+func (m *ManagedSoftwareUpdatesMock) RegisterGetPlanEventsByUUIDMock(uuid string) {
+	m.register("GET", "/api/v1/managed-software-updates/plans/"+uuid+"/events", 200, "validate_plan_events.json")
+}
+
+func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesMock() {
+	m.register("GET", "/api/v1/managed-software-updates/update-statuses", 200, "validate_update_statuses.json")
+}
+
+func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesByComputerGroupMock(id string) {
+	m.register("GET", "/api/v1/managed-software-updates/update-statuses/computer-groups/"+id, 200, "validate_update_statuses.json")
+}
+
+func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesByComputerMock(id string) {
+	m.register("GET", "/api/v1/managed-software-updates/update-statuses/computers/"+id, 200, "validate_update_statuses.json")
+}
+
+func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesByMobileDeviceGroupMock(id string) {
+	m.register("GET", "/api/v1/managed-software-updates/update-statuses/mobile-device-groups/"+id, 200, "validate_update_statuses.json")
+}
+
+func (m *ManagedSoftwareUpdatesMock) RegisterGetUpdateStatusesByMobileDeviceMock(id string) {
+	m.register("GET", "/api/v1/managed-software-updates/update-statuses/mobile-devices/"+id, 200, "validate_update_statuses.json")
+}
+
 func (m *ManagedSoftwareUpdatesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

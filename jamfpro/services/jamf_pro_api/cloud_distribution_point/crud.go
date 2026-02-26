@@ -58,6 +58,23 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-files
 		GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (*FilesResponse, *interfaces.Response, error)
+
+		// AddHistoryNoteV1 adds a history note for the cloud distribution point (Add Cloud Distribution Point History Note).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-history
+		AddHistoryNoteV1(ctx context.Context, request *RequestHistoryNoteV1) (*HistoryItem, *interfaces.Response, error)
+
+		// FailUploadV1 marks a specific file upload as failed for the cloud distribution point.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-fail-upload-id
+		FailUploadV1(ctx context.Context, id string, fileName string, fileType string) (*interfaces.Response, error)
+
+		// RefreshInventoryV1 updates inventory data for the cloud distribution point.
+		//
+		// Optional file-name query param: if provided, checks availability of that file; otherwise forces an immediate inventory refresh.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-refresh-inventory
+		RefreshInventoryV1(ctx context.Context, fileName string) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the cloud distribution point methods of the Jamf Pro API.
@@ -278,4 +295,89 @@ func (s *Service) GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (
 	}
 
 	return &result, resp, nil
+}
+
+// AddHistoryNoteV1 adds a history note for the cloud distribution point.
+// URL: POST /api/v1/cloud-distribution-point/history
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-history
+func (s *Service) AddHistoryNoteV1(ctx context.Context, request *RequestHistoryNoteV1) (*HistoryItem, *interfaces.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	var result HistoryItem
+
+	endpoint := EndpointCloudDistributionPointHistoryV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// FailUploadV1 marks a specific file upload as failed for the cloud distribution point.
+// URL: POST /api/v1/cloud-distribution-point/fail-upload/{id}
+// Query params: file-name, type (PACKAGE, EBOOK, MOBILE_DEVICE_APP).
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-fail-upload-id
+func (s *Service) FailUploadV1(ctx context.Context, id string, fileName string, fileType string) (*interfaces.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	if fileName == "" {
+		return nil, fmt.Errorf("fileName is required")
+	}
+	if fileType == "" {
+		return nil, fmt.Errorf("fileType is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s", EndpointCloudDistributionPointFailUploadV1, id)
+
+	queryParams := map[string]string{
+		"file-name": fileName,
+		"type":      fileType,
+	}
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.PostWithQuery(ctx, endpoint, queryParams, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// RefreshInventoryV1 updates inventory data for the cloud distribution point.
+// URL: POST /api/v1/cloud-distribution-point/refresh-inventory
+// Optional query param: file-name (if provided, checks availability of that file; otherwise forces immediate inventory refresh).
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-refresh-inventory
+func (s *Service) RefreshInventoryV1(ctx context.Context, fileName string) (*interfaces.Response, error) {
+	endpoint := EndpointCloudDistributionPointRefreshV1
+
+	var queryParams map[string]string
+	if fileName != "" {
+		queryParams = map[string]string{"file-name": fileName}
+	}
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.PostWithQuery(ctx, endpoint, queryParams, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }

@@ -54,6 +54,11 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-id-history
 		AddDepartmentHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error)
+
+		// DeleteDepartmentsByIDV1 deletes multiple departments by their IDs.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-delete-multiple
+		DeleteDepartmentsByIDV1(ctx context.Context, req *DeleteDepartmentsByIDRequest) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the departments-related methods of the Jamf Pro API.
@@ -275,6 +280,29 @@ func (s *Service) AddDepartmentHistoryNotesV1(ctx context.Context, id string, re
 	}
 
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointDepartmentsV1, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// DeleteDepartmentsByIDV1 deletes multiple departments by their IDs.
+// URL: POST /api/v1/departments/delete-multiple
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-delete-multiple
+func (s *Service) DeleteDepartmentsByIDV1(ctx context.Context, req *DeleteDepartmentsByIDRequest) (*interfaces.Response, error) {
+	if req == nil || len(req.IDs) == 0 {
+		return nil, fmt.Errorf("department IDs are required")
+	}
+
+	endpoint := EndpointDepartmentsV1 + "/delete-multiple"
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,

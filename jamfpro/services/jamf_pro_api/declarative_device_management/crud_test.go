@@ -106,3 +106,41 @@ func TestGetStatusItemByKeyV1_EmptyKey(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "key is required")
 }
+
+func TestForceSyncV1_Error(t *testing.T) {
+	mock := mocks.NewDeclarativeDeviceManagementMock()
+	// No mock response registered — HTTP call will fail.
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	resp, err := svc.ForceSyncV1(ctx, "test-client-id")
+
+	require.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestGetStatusItemsV1_Error(t *testing.T) {
+	mock := mocks.NewDeclarativeDeviceManagementMock()
+	// No mock response registered — HTTP call will fail.
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetStatusItemsV1(ctx, "test-client-id")
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}
+
+func TestGetStatusItemByKeyV1_Error(t *testing.T) {
+	mock := mocks.NewDeclarativeDeviceManagementMock()
+	// No mock response registered — HTTP call will fail.
+	svc := NewService(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetStatusItemByKeyV1(ctx, "test-client-id", "device.model.family")
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+}

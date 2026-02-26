@@ -45,6 +45,14 @@ func (m *SelfServiceSettingsMock) RegisterUpdateMock() {
 	m.register("PUT", "/api/v1/self-service/settings", 200, "validate_get.json")
 }
 
+func (m *SelfServiceSettingsMock) RegisterGetHistoryMock() {
+	m.register("GET", "/api/v1/self-service/settings/history", 200, "validate_history.json")
+}
+
+func (m *SelfServiceSettingsMock) RegisterAddHistoryNotesMock() {
+	m.register("POST", "/api/v1/self-service/settings/history", 201, "validate_add_history_notes.json")
+}
+
 func (m *SelfServiceSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

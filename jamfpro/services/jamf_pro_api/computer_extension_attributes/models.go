@@ -67,3 +67,39 @@ type HistoryResponse struct {
 type AddHistoryNoteRequest struct {
 	Note string `json:"note"`
 }
+
+// ResourceComputerExtensionAttributeTemplate represents a template for computer extension attributes.
+type ResourceComputerExtensionAttributeTemplate struct {
+	ID                  string   `json:"id"`
+	Name                string   `json:"name"`
+	Description         string   `json:"description,omitempty"`
+	DataType            string   `json:"dataType"`
+	Enabled             *bool    `json:"enabled,omitempty"`
+	InventoryDisplayType string   `json:"inventoryDisplayType"`
+	InputType           string   `json:"inputType"`
+	ScriptContents      string   `json:"scriptContents,omitempty"`
+	PopupMenuChoices    []string `json:"popupMenuChoices,omitempty"`
+	TemplateCategory    string   `json:"templateCategory"`
+	ManageExistingData  string   `json:"manageExistingData,omitempty"`
+}
+
+// TemplateListResponse is the response for ListTemplatesV1.
+type TemplateListResponse struct {
+	TotalCount int                                          `json:"totalCount"`
+	Results    []ResourceComputerExtensionAttributeTemplate `json:"results"`
+}
+
+// DataDependencyItem represents a single dependent object (e.g., smart group or advanced search).
+type DataDependencyItem struct {
+	ID               int    `json:"id"`
+	ObjectID         int    `json:"objectId"`
+	NameLocalization string `json:"nameLocalization"`
+	IdentifiableName string `json:"identifiableName"`
+	Hyperlink        string `json:"hyperlink"`
+}
+
+// DataDependencyResponse is the response for GetDataDependencyByIDV1.
+type DataDependencyResponse struct {
+	TotalCount int                  `json:"totalCount"`
+	Results    []DataDependencyItem `json:"results"`
+}

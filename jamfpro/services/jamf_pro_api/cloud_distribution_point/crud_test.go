@@ -121,3 +121,67 @@ func TestUnit_CloudDistributionPoint_UpdateV1_NilRequest(t *testing.T) {
 	require.Nil(t, resp)
 	require.Contains(t, err.Error(), "request is required")
 }
+
+func TestUnit_CloudDistributionPoint_GetV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_CreateV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewService(mock)
+	req := &RequestCloudDistributionPointV1{
+		CdnType: "JAMF_CLOUD",
+		Master:  true,
+	}
+	_, _, err := svc.CreateV1(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_UpdateV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewService(mock)
+	req := &RequestCloudDistributionPointV1{
+		CdnType: "JAMF_CLOUD",
+		Master:  true,
+	}
+	_, _, err := svc.UpdateV1(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_DeleteV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewService(mock)
+	_, err := svc.DeleteV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_GetUploadCapabilityV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetUploadCapabilityV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_GetTestConnectionV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetTestConnectionV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_GetHistoryV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_GetFilesV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetFilesV1(context.Background(), nil)
+	require.Error(t, err)
+}

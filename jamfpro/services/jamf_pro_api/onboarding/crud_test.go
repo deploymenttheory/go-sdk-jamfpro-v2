@@ -140,3 +140,62 @@ func TestUnit_Onboarding_ExportHistoryV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Contains(t, string(data), "id,username,date,note,details")
 }
+
+func TestUnit_Onboarding_GetV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_Onboarding_UpdateV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &ResourceUpdateOnboardingSettings{
+		Enabled: true,
+		OnboardingItems: []SubsetOnboardingItemRequest{
+			{
+				EntityID:              "123",
+				SelfServiceEntityType: "OS_X_POLICY",
+				Priority:              1,
+			},
+		},
+	}
+	_, _, err := svc.UpdateV1(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_Onboarding_GetEligibleAppsV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetEligibleAppsV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_Onboarding_GetEligibleConfigurationProfilesV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetEligibleConfigurationProfilesV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_Onboarding_GetEligiblePoliciesV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetEligiblePoliciesV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_Onboarding_GetHistoryV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_Onboarding_AddHistoryNotesV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestAddHistoryNotes{Note: "Test note"}
+	_, _, err := svc.AddHistoryNotesV1(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_Onboarding_ExportHistoryV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.ExportHistoryV1(context.Background(), "text/csv", nil, nil)
+	require.Error(t, err)
+}

@@ -15,10 +15,34 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v4-enrollment
 	EnrollmentServiceInterface interface {
+		// GetADUESessionTokenSettingsV1 retrieves ADUE (Account Driven User Enrollment) session token settings.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-adue-session-token-settings
+		GetADUESessionTokenSettingsV1(ctx context.Context) (*ResourceADUESessionTokenSettings, *interfaces.Response, error)
+
+		// UpdateADUESessionTokenSettingsV1 updates ADUE session token settings.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-adue-session-token-settings
+		UpdateADUESessionTokenSettingsV1(ctx context.Context, request *ResourceADUESessionTokenSettings) (*ResourceADUESessionTokenSettings, *interfaces.Response, error)
+
 		// GetHistoryV2 retrieves enrollment history with optional sorting.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-history
 		GetHistoryV2(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+
+		// AddHistoryNotesV2 adds notes to enrollment history.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-history
+		AddHistoryNotesV2(ctx context.Context, request *RequestAddHistoryNotes) (*CreateResponse, *interfaces.Response, error)
+
+		// ExportHistoryV2 exports enrollment history in the specified format (JSON or CSV).
+		//
+		// Supports optional RSQL filtering and pagination via rsqlQuery
+		// (keys: filter, sort, page, page-size, export-fields, export-labels).
+		// The acceptHeader determines the export format (application/json or text/csv).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-history-export
+		ExportHistoryV2(ctx context.Context, acceptHeader string, rsqlQuery map[string]string, request *RequestExportHistory) ([]byte, *interfaces.Response, error)
 
 		// ListAccessGroupsV3 lists all ADUE access groups with pagination support.
 		//
@@ -83,6 +107,11 @@ type (
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-language-codes
 		ListLanguageCodesV3(ctx context.Context) ([]ResourceLanguageCode, *interfaces.Response, error)
 
+		// ListFilteredLanguageCodesV3 returns language codes not yet added to enrollment.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-filtered-language-codes
+		ListFilteredLanguageCodesV3(ctx context.Context) ([]ResourceLanguageCode, *interfaces.Response, error)
+
 		// GetV4 retrieves the current enrollment configuration.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
@@ -108,6 +137,52 @@ func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
 }
 
+// GetADUESessionTokenSettingsV1 retrieves ADUE session token settings.
+// URL: GET /api/v1/adue-session-token-settings
+// https://developer.jamf.com/jamf-pro/reference/get_v1-adue-session-token-settings
+func (s *Service) GetADUESessionTokenSettingsV1(ctx context.Context) (*ResourceADUESessionTokenSettings, *interfaces.Response, error) {
+	endpoint := EndpointADUESessionTokenSettingsV1
+
+	var result ResourceADUESessionTokenSettings
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// UpdateADUESessionTokenSettingsV1 updates ADUE session token settings.
+// URL: PUT /api/v1/adue-session-token-settings
+// https://developer.jamf.com/jamf-pro/reference/put_v1-adue-session-token-settings
+func (s *Service) UpdateADUESessionTokenSettingsV1(ctx context.Context, request *ResourceADUESessionTokenSettings) (*ResourceADUESessionTokenSettings, *interfaces.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	endpoint := EndpointADUESessionTokenSettingsV1
+
+	var result ResourceADUESessionTokenSettings
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
 // GetHistoryV2 retrieves enrollment history with optional sorting.
 // URL: GET /api/v2/enrollment/history
 // https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-history
@@ -127,6 +202,64 @@ func (s *Service) GetHistoryV2(ctx context.Context, rsqlQuery map[string]string)
 	}
 
 	return &result, resp, nil
+}
+
+// AddHistoryNotesV2 adds notes to enrollment history.
+// URL: POST /api/v2/enrollment/history
+// https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-history
+func (s *Service) AddHistoryNotesV2(ctx context.Context, request *RequestAddHistoryNotes) (*CreateResponse, *interfaces.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+	if request.Note == "" {
+		return nil, nil, fmt.Errorf("note is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/history", EndpointEnrollmentV2)
+
+	var result CreateResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// ExportHistoryV2 exports enrollment history in the specified format (JSON or CSV).
+// URL: POST /api/v2/enrollment/history/export
+// acceptHeader should be "application/json" or "text/csv".
+// rsqlQuery supports: filter (RSQL), sort, page, page-size, export-fields, export-labels (all optional).
+// https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-history-export
+func (s *Service) ExportHistoryV2(ctx context.Context, acceptHeader string, rsqlQuery map[string]string, request *RequestExportHistory) ([]byte, *interfaces.Response, error) {
+	endpoint := fmt.Sprintf("%s/history/export", EndpointEnrollmentV2)
+
+	if acceptHeader == "" {
+		acceptHeader = mime.ApplicationJSON
+	}
+
+	headers := map[string]string{
+		"Accept":       acceptHeader,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	var body any
+	if request != nil {
+		body = request
+	}
+
+	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, body, headers, nil)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return resp.Body, resp, nil
 }
 
 // ListAccessGroupsV3 lists all ADUE access groups with pagination support.
@@ -417,6 +550,27 @@ func (s *Service) DeleteMultipleLanguageMessagesV3(ctx context.Context, request 
 // https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-language-codes
 func (s *Service) ListLanguageCodesV3(ctx context.Context) ([]ResourceLanguageCode, *interfaces.Response, error) {
 	endpoint := fmt.Sprintf("%s/language-codes", EndpointEnrollmentV3)
+
+	var result []ResourceLanguageCode
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// ListFilteredLanguageCodesV3 returns language codes not yet added to enrollment.
+// URL: GET /api/v3/enrollment/filtered-language-codes
+// https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-filtered-language-codes
+func (s *Service) ListFilteredLanguageCodesV3(ctx context.Context) ([]ResourceLanguageCode, *interfaces.Response, error) {
+	endpoint := fmt.Sprintf("%s/filtered-language-codes", EndpointEnrollmentV3)
 
 	var result []ResourceLanguageCode
 

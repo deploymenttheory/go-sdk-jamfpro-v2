@@ -4,7 +4,9 @@ package cloud_distribution_point
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point
 const (
-	EndpointCloudDistributionPointV1        = "/api/v1/cloud-distribution-point"
-	EndpointCloudDistributionPointHistoryV1 = "/api/v1/cloud-distribution-point/history"
-	EndpointCloudDistributionPointFilesV1   = "/api/v1/cloud-distribution-point/files"
+	EndpointCloudDistributionPointV1          = "/api/v1/cloud-distribution-point"
+	EndpointCloudDistributionPointHistoryV1   = "/api/v1/cloud-distribution-point/history"
+	EndpointCloudDistributionPointFilesV1     = "/api/v1/cloud-distribution-point/files"
+	EndpointCloudDistributionPointFailUploadV1 = "/api/v1/cloud-distribution-point/fail-upload"
+	EndpointCloudDistributionPointRefreshV1   = "/api/v1/cloud-distribution-point/refresh-inventory"
 )

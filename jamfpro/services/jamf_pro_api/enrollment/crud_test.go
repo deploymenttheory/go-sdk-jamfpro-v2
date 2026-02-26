@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -13,6 +14,51 @@ func setupMockService(t *testing.T) (*Service, *mocks.EnrollmentMock) {
 	t.Helper()
 	mock := mocks.NewEnrollmentMock()
 	return NewService(mock), mock
+}
+
+// Tests for V1 API - ADUE Session Token Settings
+func TestUnit_Enrollment_GetADUESessionTokenSettingsV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetADUESessionTokenSettingsV1Mock()
+
+	result, resp, err := svc.GetADUESessionTokenSettingsV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.False(t, result.Enabled)
+	assert.Equal(t, 1, result.ExpirationIntervalDays)
+	assert.Equal(t, 86400, result.ExpirationIntervalSeconds)
+}
+
+func TestUnit_Enrollment_UpdateADUESessionTokenSettingsV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateADUESessionTokenSettingsV1Mock()
+
+	request := &ResourceADUESessionTokenSettings{
+		Enabled:                   true,
+		ExpirationIntervalDays:    1,
+		ExpirationIntervalSeconds: 86400,
+	}
+
+	result, resp, err := svc.UpdateADUESessionTokenSettingsV1(context.Background(), request)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.True(t, result.Enabled)
+}
+
+func TestUnit_Enrollment_UpdateADUESessionTokenSettingsV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.UpdateADUESessionTokenSettingsV1(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
 }
 
 // Tests for V2 API - History
@@ -30,6 +76,92 @@ func TestUnit_Enrollment_GetHistoryV2_Success(t *testing.T) {
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
 	assert.Equal(t, "admin", result.Results[0].Username)
+}
+
+func TestUnit_Enrollment_AddHistoryNotesV2_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNotesV2Mock()
+
+	request := &RequestAddHistoryNotes{Note: "Test note"}
+
+	result, resp, err := svc.AddHistoryNotesV2(context.Background(), request)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, "1", result.ID)
+	assert.NotEmpty(t, result.Href)
+}
+
+func TestUnit_Enrollment_AddHistoryNotesV2_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.AddHistoryNotesV2(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_Enrollment_AddHistoryNotesV2_EmptyNote(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.AddHistoryNotesV2(context.Background(), &RequestAddHistoryNotes{Note: ""})
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "note is required")
+}
+
+func TestUnit_Enrollment_ExportHistoryV2_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportHistoryV2Mock()
+
+	data, resp, err := svc.ExportHistoryV2(context.Background(), mime.TextCSV, nil, nil)
+	require.NoError(t, err)
+	require.NotNil(t, data)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Contains(t, string(data), "Username")
+	assert.Contains(t, string(data), "admin")
+}
+
+func TestUnit_Enrollment_ExportHistoryV2_WithRequest(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportHistoryV2Mock()
+
+	page, pageSize := 0, 100
+	request := &RequestExportHistory{
+		Page:     &page,
+		PageSize: &pageSize,
+		Sort:     []string{"id:desc"},
+	}
+
+	data, resp, err := svc.ExportHistoryV2(context.Background(), mime.ApplicationJSON, nil, request)
+	require.NoError(t, err)
+	require.NotNil(t, data)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_Enrollment_ListFilteredLanguageCodesV3_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListFilteredLanguageCodesV3Mock()
+
+	result, resp, err := svc.ListFilteredLanguageCodesV3(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode)
+	require.Len(t, result, 2)
+	assert.Equal(t, "de", result[0].Value)
+	assert.Equal(t, "German", result[0].Name)
+	assert.Equal(t, "ja", result[1].Value)
+	assert.Equal(t, "Japanese", result[1].Name)
 }
 
 // Tests for V3 API - Access Groups
@@ -364,6 +496,53 @@ func TestUnit_Enrollment_ValidateLanguageCode_Empty(t *testing.T) {
 	err := ValidateLanguageCode("", codes)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "required")
+}
+
+func TestUnit_Enrollment_GetADUESessionTokenSettingsV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetADUESessionTokenSettingsV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_Enrollment_UpdateADUESessionTokenSettingsV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &ResourceADUESessionTokenSettings{Enabled: true}
+	result, resp, err := svc.UpdateADUESessionTokenSettingsV1(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_Enrollment_AddHistoryNotesV2_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &RequestAddHistoryNotes{Note: "Test"}
+	result, resp, err := svc.AddHistoryNotesV2(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_Enrollment_ExportHistoryV2_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	data, resp, err := svc.ExportHistoryV2(context.Background(), mime.ApplicationJSON, nil, nil)
+	require.Error(t, err)
+	assert.Nil(t, data)
+	_ = resp
+}
+
+func TestUnit_Enrollment_ListFilteredLanguageCodesV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.ListFilteredLanguageCodesV3(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
 }
 
 func TestUnit_Enrollment_GetHistoryV2_Error(t *testing.T) {

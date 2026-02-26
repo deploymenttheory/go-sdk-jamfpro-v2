@@ -60,6 +60,54 @@ func (m *PatchSoftwareTitleConfigurationsMock) RegisterEmptyListMock() {
 	m.register("GET", "/api/v2/patch-software-title-configurations", 200, "validate_empty_list.json")
 }
 
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterGetDashboardStatusMock(id string) {
+	m.register("GET", "/api/v2/patch-software-title-configurations/"+id+"/dashboard", 200, "validate_dashboard_status.json")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterAddToDashboardMock(id string) {
+	m.register("POST", "/api/v2/patch-software-title-configurations/"+id+"/dashboard", 204, "")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterRemoveFromDashboardMock(id string) {
+	m.register("DELETE", "/api/v2/patch-software-title-configurations/"+id+"/dashboard", 204, "")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterGetDefinitionsMock(id string) {
+	m.register("GET", "/api/v2/patch-software-title-configurations/"+id+"/definitions", 200, "validate_definitions.json")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterGetDependenciesMock(id string) {
+	m.register("GET", "/api/v2/patch-software-title-configurations/"+id+"/dependencies", 200, "validate_dependencies.json")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterExportReportMock(id string) {
+	m.register("GET", "/api/v2/patch-software-title-configurations/"+id+"/export-report", 200, "validate_export_report.csv")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterGetExtensionAttributesMock(id string) {
+	m.register("GET", "/api/v2/patch-software-title-configurations/"+id+"/extension-attributes", 200, "validate_extension_attributes.json")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterGetPatchReportMock(id string) {
+	m.register("GET", "/api/v2/patch-software-title-configurations/"+id+"/patch-report", 200, "validate_patch_report.json")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterGetPatchSummaryMock(id string) {
+	m.register("GET", "/api/v2/patch-software-title-configurations/"+id+"/patch-summary", 200, "validate_patch_summary.json")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterGetHistoryMock(id string) {
+	m.register("GET", "/api/v2/patch-software-title-configurations/"+id+"/history", 200, "validate_history.json")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterAddHistoryNoteMock(id string) {
+	m.register("POST", "/api/v2/patch-software-title-configurations/"+id+"/history", 201, "validate_add_history_note.json")
+}
+
+func (m *PatchSoftwareTitleConfigurationsMock) RegisterGetPatchVersionsMock(id string) {
+	m.register("GET", "/api/v2/patch-software-title-configurations/"+id+"/patch-summary/versions", 200, "validate_patch_versions.json")
+}
+
 func (m *PatchSoftwareTitleConfigurationsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

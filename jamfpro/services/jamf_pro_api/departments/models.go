@@ -46,3 +46,8 @@ type HistoryResponse struct {
 type AddHistoryNotesRequest struct {
 	Note string `json:"note"`
 }
+
+// DeleteDepartmentsByIDRequest is the body for DeleteDepartmentsByIDV1 (delete multiple).
+type DeleteDepartmentsByIDRequest struct {
+	IDs []string `json:"ids"`
+}

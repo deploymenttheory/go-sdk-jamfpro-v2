@@ -377,3 +377,173 @@ func TestForceStopFeatureToggleProcess(t *testing.T) {
 	assert.Len(t, result.Errors, 1)
 	assert.Equal(t, "PROCESS_STOPPED", result.Errors[0].Code)
 }
+
+// TestGetPlanEventsByUUID tests retrieving plan events by UUID.
+func TestGetPlanEventsByUUID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	uuid := "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+	mock.RegisterGetPlanEventsByUUIDMock(uuid)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetPlanEventsByUUID(context.Background(), uuid)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Events, 2)
+	assert.Equal(t, "PLAN_CREATED", result.Events[0].Type)
+	assert.Equal(t, "SCAN_SCHEDULED", result.Events[1].Type)
+}
+
+// TestGetPlanEventsByUUID_EmptyUUID tests getting plan events with an empty UUID.
+func TestGetPlanEventsByUUID_EmptyUUID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetPlanEventsByUUID(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "uuid is required")
+}
+
+// TestGetUpdateStatuses tests retrieving update statuses with pagination.
+func TestGetUpdateStatuses(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	mock.RegisterGetUpdateStatusesMock()
+
+	svc := NewService(mock)
+	params := url.Values{}
+	result, resp, err := svc.GetUpdateStatuses(context.Background(), params)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	assert.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].OsUpdatesStatusId)
+	assert.Equal(t, "12345", result.Results[0].Device.DeviceId)
+	assert.Equal(t, "COMPUTER", result.Results[0].Device.ObjectType)
+	assert.Equal(t, "DOWNLOADING", result.Results[0].Status)
+	assert.Equal(t, "macOSUpdate19F77", result.Results[0].ProductKey)
+}
+
+// TestGetUpdateStatusesByComputerGroup tests retrieving update statuses by computer group.
+func TestGetUpdateStatusesByComputerGroup(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	groupID := "100"
+	mock.RegisterGetUpdateStatusesByComputerGroupMock(groupID)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByComputerGroup(context.Background(), groupID)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].OsUpdatesStatusId)
+}
+
+// TestGetUpdateStatusesByComputerGroup_EmptyID tests getting update statuses with empty ID.
+func TestGetUpdateStatusesByComputerGroup_EmptyID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetUpdateStatusesByComputerGroup(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetUpdateStatusesByComputer tests retrieving update statuses by computer.
+func TestGetUpdateStatusesByComputer(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	computerID := "12345"
+	mock.RegisterGetUpdateStatusesByComputerMock(computerID)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByComputer(context.Background(), computerID)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Results, 1)
+}
+
+// TestGetUpdateStatusesByComputer_EmptyID tests getting update statuses with empty ID.
+func TestGetUpdateStatusesByComputer_EmptyID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetUpdateStatusesByComputer(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetUpdateStatusesByMobileDeviceGroup tests retrieving update statuses by mobile device group.
+func TestGetUpdateStatusesByMobileDeviceGroup(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	groupID := "200"
+	mock.RegisterGetUpdateStatusesByMobileDeviceGroupMock(groupID)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByMobileDeviceGroup(context.Background(), groupID)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Results, 1)
+}
+
+// TestGetUpdateStatusesByMobileDeviceGroup_EmptyID tests getting update statuses with empty ID.
+func TestGetUpdateStatusesByMobileDeviceGroup_EmptyID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetUpdateStatusesByMobileDeviceGroup(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestGetUpdateStatusesByMobileDevice tests retrieving update statuses by mobile device.
+func TestGetUpdateStatusesByMobileDevice(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	deviceID := "67890"
+	mock.RegisterGetUpdateStatusesByMobileDeviceMock(deviceID)
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetUpdateStatusesByMobileDevice(context.Background(), deviceID)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Len(t, result.Results, 1)
+}
+
+// TestGetUpdateStatusesByMobileDevice_EmptyID tests getting update statuses with empty ID.
+func TestGetUpdateStatusesByMobileDevice_EmptyID(t *testing.T) {
+	mock := mocks.NewManagedSoftwareUpdatesMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetUpdateStatusesByMobileDevice(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}

@@ -55,3 +55,24 @@ func TestDeleteTokenExchangeV1(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
 }
+
+func TestGetTokenExchangeDetailsV1_Error(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetTokenExchangeDetailsV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestGetTenantIDV1_Error(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetTenantIDV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestDeleteTokenExchangeV1_Error(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	svc := NewService(mock)
+	_, err := svc.DeleteTokenExchangeV1(context.Background())
+	require.Error(t, err)
+}

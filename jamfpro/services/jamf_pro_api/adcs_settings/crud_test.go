@@ -321,3 +321,66 @@ func TestAddHistoryNoteByIDV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
 }
+
+func TestCreateV1_Error(t *testing.T) {
+	mock := mocks.NewAdcsSettingsMock()
+	svc := NewService(mock)
+	_, _, err := svc.CreateV1(context.Background(), &ResourceAdcsSettings{DisplayName: "test"})
+	require.Error(t, err)
+}
+
+func TestGetByIDV1_Error(t *testing.T) {
+	mock := mocks.NewAdcsSettingsMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestUpdateByIDV1_Error(t *testing.T) {
+	mock := mocks.NewAdcsSettingsMock()
+	svc := NewService(mock)
+	_, err := svc.UpdateByIDV1(context.Background(), "1", &ResourceAdcsSettings{DisplayName: "test"})
+	require.Error(t, err)
+}
+
+func TestDeleteByIDV1_Error(t *testing.T) {
+	mock := mocks.NewAdcsSettingsMock()
+	svc := NewService(mock)
+	_, err := svc.DeleteByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestValidateServerCertificateV1_Error(t *testing.T) {
+	mock := mocks.NewAdcsSettingsMock()
+	svc := NewService(mock)
+	_, err := svc.ValidateServerCertificateV1(context.Background(), &ValidateCertificateRequest{Filename: "test.p12"})
+	require.Error(t, err)
+}
+
+func TestValidateClientCertificateV1_Error(t *testing.T) {
+	mock := mocks.NewAdcsSettingsMock()
+	svc := NewService(mock)
+	_, err := svc.ValidateClientCertificateV1(context.Background(), &ValidateCertificateRequest{Filename: "test.p12"})
+	require.Error(t, err)
+}
+
+func TestGetDependenciesByIDV1_Error(t *testing.T) {
+	mock := mocks.NewAdcsSettingsMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetDependenciesByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestGetHistoryByIDV1_Error(t *testing.T) {
+	mock := mocks.NewAdcsSettingsMock()
+	svc := NewService(mock)
+	_, _, err := svc.GetHistoryByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+}
+
+func TestAddHistoryNoteByIDV1_HTTPError(t *testing.T) {
+	mock := mocks.NewAdcsSettingsMock()
+	svc := NewService(mock)
+	_, err := svc.AddHistoryNoteByIDV1(context.Background(), "1", &HistoryNoteRequest{Note: "test"})
+	require.Error(t, err)
+}

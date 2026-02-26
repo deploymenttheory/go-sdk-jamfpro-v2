@@ -73,6 +73,38 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-managed-software-updates-plans-feature-toggle-abandon
 		ForceStopFeatureToggleProcess(ctx context.Context) (*ResponseError, *interfaces.Response, error)
+
+		// GetPlanEventsByUUID retrieves the event store for a managed software update plan by its UUID.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-id-events
+		GetPlanEventsByUUID(ctx context.Context, uuid string) (*ResponsePlanEvents, *interfaces.Response, error)
+
+		// GetUpdateStatuses retrieves update statuses with RSQL filter and pagination support.
+		//
+		// Query parameters: filter (RSQL), page, page-size, sort.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses
+		GetUpdateStatuses(ctx context.Context, params url.Values) (*ResponseUpdateStatusList, *interfaces.Response, error)
+
+		// GetUpdateStatusesByComputerGroup retrieves update statuses for a computer group.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-computer-groups-id
+		GetUpdateStatusesByComputerGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error)
+
+		// GetUpdateStatusesByComputer retrieves update statuses for a computer.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-computers-id
+		GetUpdateStatusesByComputer(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error)
+
+		// GetUpdateStatusesByMobileDeviceGroup retrieves update statuses for a mobile device group.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-mobile-device-groups-id
+		GetUpdateStatusesByMobileDeviceGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error)
+
+		// GetUpdateStatusesByMobileDevice retrieves update statuses for a mobile device.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-mobile-devices-id
+		GetUpdateStatusesByMobileDevice(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the managed software updates-related methods of the Jamf Pro API.
@@ -376,6 +408,191 @@ func (s *Service) ForceStopFeatureToggleProcess(ctx context.Context) (*ResponseE
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetPlanEventsByUUID retrieves the event store for a managed software update plan by its UUID.
+// URL: GET /api/v1/managed-software-updates/plans/{id}/events
+// https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-id-events
+func (s *Service) GetPlanEventsByUUID(ctx context.Context, uuid string) (*ResponsePlanEvents, *interfaces.Response, error) {
+	if uuid == "" {
+		return nil, nil, fmt.Errorf("uuid is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/plans/%s/events", EndpointManagedSoftwareUpdates, uuid)
+
+	var result ResponsePlanEvents
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetUpdateStatuses retrieves update statuses with RSQL filter and pagination support.
+// URL: GET /api/v1/managed-software-updates/update-statuses
+// https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses
+func (s *Service) GetUpdateStatuses(ctx context.Context, params url.Values) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+	endpoint := EndpointManagedSoftwareUpdates + "/update-statuses"
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	queryParams := make(map[string]string)
+	for key, values := range params {
+		if len(values) > 0 {
+			queryParams[key] = values[0]
+		}
+	}
+
+	var result ResponseUpdateStatusList
+
+	mergePage := func(pageData []byte) error {
+		var items []any
+		if err := json.Unmarshal(pageData, &items); err == nil {
+			// Real API: pageData is the results array
+			for _, item := range items {
+				var status ResourceUpdateStatus
+				if err := mapstructure.Decode(item, &status); err != nil {
+					return fmt.Errorf("failed to decode update status: %w", err)
+				}
+				result.Results = append(result.Results, status)
+			}
+			return nil
+		}
+		// Mock: pageData is full response { totalCount, results }
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var status ResourceUpdateStatus
+				if err := mapstructure.Decode(item, &status); err != nil {
+					return fmt.Errorf("failed to decode update status: %w", err)
+				}
+				result.Results = append(result.Results, status)
+			}
+		}
+		return nil
+	}
+
+	resp, err := s.client.GetPaginated(ctx, endpoint, queryParams, headers, mergePage)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	result.TotalCount = len(result.Results)
+
+	return &result, resp, nil
+}
+
+// GetUpdateStatusesByComputerGroup retrieves update statuses for a computer group.
+// URL: GET /api/v1/managed-software-updates/update-statuses/computer-groups/{id}
+// https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-computer-groups-id
+func (s *Service) GetUpdateStatusesByComputerGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/update-statuses/computer-groups/%s", EndpointManagedSoftwareUpdates, id)
+
+	var result ResponseUpdateStatusList
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetUpdateStatusesByComputer retrieves update statuses for a computer.
+// URL: GET /api/v1/managed-software-updates/update-statuses/computers/{id}
+// https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-computers-id
+func (s *Service) GetUpdateStatusesByComputer(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/update-statuses/computers/%s", EndpointManagedSoftwareUpdates, id)
+
+	var result ResponseUpdateStatusList
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetUpdateStatusesByMobileDeviceGroup retrieves update statuses for a mobile device group.
+// URL: GET /api/v1/managed-software-updates/update-statuses/mobile-device-groups/{id}
+// https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-mobile-device-groups-id
+func (s *Service) GetUpdateStatusesByMobileDeviceGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/update-statuses/mobile-device-groups/%s", EndpointManagedSoftwareUpdates, id)
+
+	var result ResponseUpdateStatusList
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetUpdateStatusesByMobileDevice retrieves update statuses for a mobile device.
+// URL: GET /api/v1/managed-software-updates/update-statuses/mobile-devices/{id}
+// https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-mobile-devices-id
+func (s *Service) GetUpdateStatusesByMobileDevice(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/update-statuses/mobile-devices/%s", EndpointManagedSoftwareUpdates, id)
+
+	var result ResponseUpdateStatusList
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

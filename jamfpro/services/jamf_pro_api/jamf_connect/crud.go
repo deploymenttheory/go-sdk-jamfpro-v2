@@ -62,6 +62,11 @@ type (
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-history
 		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
 
+		// AddHistoryNoteV1 adds a note to the Jamf Connect history.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-history
+		AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNote) (*interfaces.Response, error)
+
 		// RetryDeploymentTasksByUUIDV1 retries Connect install tasks for specified computers.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-deployments-configprofileuuid-tasks-retry
@@ -319,6 +324,31 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	}
 
 	return &result, resp, nil
+}
+
+// AddHistoryNoteV1 adds a note to the Jamf Connect history.
+// URL: POST /api/v1/jamf-connect/history
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-history
+func (s *Service) AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNote) (*interfaces.Response, error) {
+	if req == nil {
+		return nil, fmt.Errorf("request is required")
+	}
+	if req.Note == "" {
+		return nil, fmt.Errorf("note is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/history", EndpointJamfConnectV1)
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }
 
 // RetryDeploymentTasksByUUIDV1 retries Connect install tasks for specified computers.

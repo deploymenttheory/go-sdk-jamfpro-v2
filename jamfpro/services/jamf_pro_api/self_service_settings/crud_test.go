@@ -56,3 +56,53 @@ func TestUnit_SelfServiceSettings_Update_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
 }
+
+func TestUnit_SelfServiceSettings_GetHistoryV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryMock()
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].ID)
+	assert.Equal(t, "admin", result.Results[0].Username)
+	assert.Equal(t, "Settings updated", result.Results[0].Note)
+}
+
+func TestUnit_SelfServiceSettings_AddHistoryNotesV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNotesMock()
+
+	req := &AddHistoryNotesRequest{Note: "Updated login settings"}
+	result, resp, err := svc.AddHistoryNotesV1(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 42, result.ID)
+	assert.Equal(t, "/api/v1/self-service/settings/history/42", result.Href)
+}
+
+func TestUnit_SelfServiceSettings_AddHistoryNotesV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.AddHistoryNotesV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_SelfServiceSettings_AddHistoryNotesV1_EmptyNote(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.AddHistoryNotesV1(context.Background(), &AddHistoryNotesRequest{Note: ""})
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "note is required")
+}

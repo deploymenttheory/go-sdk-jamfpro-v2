@@ -82,3 +82,10 @@ type FilesResponse struct {
 	TotalCount int        `json:"totalCount"`
 	Results    []FileItem `json:"results"`
 }
+
+// RequestHistoryNoteV1 is the request body for AddHistoryNoteV1.
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-history
+type RequestHistoryNoteV1 struct {
+	Note string `json:"note"`
+}

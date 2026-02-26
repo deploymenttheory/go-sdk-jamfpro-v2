@@ -40,6 +40,14 @@ func (m *ConditionalAccessMock) RegisterGetDeviceComplianceFeatureToggleMock() {
 	m.register("GET", "/api/v1/conditional-access/device-compliance/feature-toggle", 200, "validate_get.json")
 }
 
+func (m *ConditionalAccessMock) RegisterGetDeviceComplianceInformationComputerMock() {
+	m.register("GET", "/api/v1/conditional-access/device-compliance-information/computer/1", 200, "validate_compliance_computer.json")
+}
+
+func (m *ConditionalAccessMock) RegisterGetDeviceComplianceInformationMobileMock() {
+	m.register("GET", "/api/v1/conditional-access/device-compliance-information/mobile/1", 200, "validate_compliance_mobile.json")
+}
+
 func (m *ConditionalAccessMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

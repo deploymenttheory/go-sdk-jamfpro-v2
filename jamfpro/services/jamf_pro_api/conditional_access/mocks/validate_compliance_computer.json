@@ -1,0 +1,13 @@
+[
+  {
+    "deviceId": "1",
+    "applicable": true,
+    "complianceState": "COMPLIANT",
+    "complianceVendor": "Vendor A",
+    "complianceVendorDeviceInformation": [
+      {
+        "deviceIds": ["device-id-1", "device-id-2"]
+      }
+    ]
+  }
+]

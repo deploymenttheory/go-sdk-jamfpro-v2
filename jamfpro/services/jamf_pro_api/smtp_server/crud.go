@@ -2,10 +2,12 @@ package smtp_server
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -22,6 +24,23 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
 		UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error)
+
+		// GetHistoryV1 returns the paginated SMTP server history.
+		//
+		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+
+		// AddHistoryNoteV1 adds a note to the SMTP server history.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-history
+		AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *interfaces.Response, error)
+
+		// TestV1 tests the SMTP server configuration by sending a test email.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-test
+		TestV1(ctx context.Context, req *TestRequest) (*interfaces.Response, error)
 	}
 
 	// Service handles communication with the SMTP server-related methods of the Jamf Pro API.
@@ -82,4 +101,94 @@ func (s *Service) UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*R
 	}
 
 	return &result, resp, nil
+}
+
+// GetHistoryV1 returns the paginated SMTP server history.
+// URL: GET /api/v1/smtp-server/history
+// Query params (optional): page, page-size, sort, filter (RSQL).
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+	var result HistoryResponse
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var history HistoryObject
+				if err := mapstructure.Decode(item, &history); err != nil {
+					return fmt.Errorf("failed to decode history item: %w", err)
+				}
+				result.Results = append(result.Results, history)
+			}
+		}
+
+		return nil
+	}
+
+	endpoint := EndpointSMTPServerHistoryV1
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, nil, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get SMTP server history: %w", err)
+	}
+
+	return &result, resp, nil
+}
+
+// AddHistoryNoteV1 adds a note to the SMTP server history.
+// URL: POST /api/v1/smtp-server/history
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-history
+func (s *Service) AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *interfaces.Response, error) {
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+	if req.Note == "" {
+		return nil, nil, fmt.Errorf("note is required")
+	}
+
+	var result AddHistoryNoteResponse
+	endpoint := EndpointSMTPServerHistoryV1
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// TestV1 tests the SMTP server configuration by sending a test email.
+// URL: POST /api/v1/smtp-server/test
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-test
+func (s *Service) TestV1(ctx context.Context, req *TestRequest) (*interfaces.Response, error) {
+	if req == nil {
+		return nil, fmt.Errorf("request is required")
+	}
+	if req.RecipientEmail == "" {
+		return nil, fmt.Errorf("recipientEmail is required")
+	}
+
+	endpoint := EndpointSMTPServerTestV1
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }

@@ -76,3 +76,42 @@ type CreateStaticResponse struct {
 	ID   string `json:"id"`
 	Href string `json:"href"`
 }
+
+// ResourceMobileDeviceGroupSummary represents a mobile device group in the list-all response.
+// Used by ListAllV1 (GET /api/v1/mobile-device-groups).
+type ResourceMobileDeviceGroupSummary struct {
+	ID           int    `json:"id"`
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	IsSmartGroup bool   `json:"isSmartGroup"`
+}
+
+// ResourceMobileDeviceMember represents a mobile device in group membership responses.
+// Used by GetStaticGroupMembershipV1 and GetSmartGroupMembershipV1.
+type ResourceMobileDeviceMember struct {
+	MobileDeviceID   string `json:"mobileDeviceId"`
+	UDID             string `json:"udid"`
+	DisplayName      string `json:"displayName"`
+	SerialNumber     string `json:"serialNumber"`
+	WifiMacAddress   string `json:"wifiMacAddress"`
+	DevicePhoneNumber string `json:"devicePhoneNumber"`
+	Model            string `json:"model"`
+	ModelIdentifier  string `json:"modelIdentifier"`
+	OSVersion        string `json:"osVersion"`
+	Managed          bool   `json:"managed"`
+	Supervised       bool   `json:"supervised"`
+}
+
+// GroupMembershipResponse is the response for GetStaticGroupMembershipV1 and GetSmartGroupMembershipV1.
+type GroupMembershipResponse struct {
+	TotalCount int                        `json:"totalCount"`
+	Results    []ResourceMobileDeviceMember `json:"results"`
+}
+
+// RequestEraseDevices is the optional request body for EraseDevicesByGroupIDV1.
+type RequestEraseDevices struct {
+	PreserveDataPlan        *bool `json:"preserveDataPlan,omitempty"`
+	DisallowProximitySetup  *bool `json:"disallowProximitySetup,omitempty"`
+	ClearActivationLock     *bool `json:"clearActivationLock,omitempty"`
+	ReturnToService        *bool `json:"returnToService,omitempty"`
+}

@@ -90,3 +90,37 @@ type ResourceLatestSyncState struct {
 	InstanceID string `json:"instanceId"`
 	Timestamp  string `json:"timestamp"`
 }
+
+// ResourceEnrolledDevice represents a device assigned to a device enrollment instance.
+type ResourceEnrolledDevice struct {
+	ID                                string                        `json:"id"`
+	DeviceEnrollmentProgramInstanceId string                        `json:"deviceEnrollmentProgramInstanceId"`
+	PrestageId                        string                        `json:"prestageId,omitempty"`
+	SerialNumber                      string                        `json:"serialNumber"`
+	Description                       string                        `json:"description,omitempty"`
+	Model                             string                        `json:"model,omitempty"`
+	Color                             string                        `json:"color,omitempty"`
+	AssetTag                          string                        `json:"assetTag,omitempty"`
+	ProfileStatus                     string                        `json:"profileStatus"`
+	ProfileUuid                       string                        `json:"profileUuid,omitempty"`
+	ProfileAssignTime                 string                        `json:"profileAssignTime,omitempty"`
+	ProfilePushTime                   string                        `json:"profilePushTime,omitempty"`
+	DeviceAssignedDate                string                        `json:"deviceAssignedDate"`
+	DeviceAssignedBy                  string                        `json:"deviceAssignedBy,omitempty"`
+	Os                                string                        `json:"os,omitempty"`
+	DeviceFamily                      string                        `json:"deviceFamily,omitempty"`
+	SyncState                         *EnrolledDeviceSyncState      `json:"syncState,omitempty"`
+}
+
+// EnrolledDeviceSyncState represents the sync state subset for an enrolled device.
+type EnrolledDeviceSyncState struct {
+	ProfileAssignTime   string `json:"profileAssignTime,omitempty"`
+	ProfilePushTime     string `json:"profilePushTime,omitempty"`
+	DeviceAssignedDate  string `json:"deviceAssignedDate,omitempty"`
+}
+
+// DevicesResponse represents the paginated response for devices assigned to a device enrollment instance.
+type DevicesResponse struct {
+	TotalCount int                      `json:"totalCount"`
+	Results    []ResourceEnrolledDevice `json:"results"`
+}

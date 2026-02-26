@@ -239,3 +239,31 @@ func TestUnit_CommandFlush_FlushWithXML_NoDevices(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "at least one device list")
 }
+
+func TestUnit_CommandFlush_FlushByIDAndStatus_Error(t *testing.T) {
+	mockClient := mocks.NewCommandFlushMock()
+	svc := command_flush.NewService(mockClient)
+	_, err := svc.FlushByIDAndStatus(context.Background(), "computers", "1", "Pending")
+	require.Error(t, err)
+}
+
+func TestUnit_CommandFlush_FlushWithXML_NilRequest(t *testing.T) {
+	mockClient := mocks.NewCommandFlushMock()
+	svc := command_flush.NewService(mockClient)
+	_, err := svc.FlushWithXML(context.Background(), nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request cannot be nil")
+}
+
+func TestUnit_CommandFlush_FlushWithXML_Error(t *testing.T) {
+	mockClient := mocks.NewCommandFlushMock()
+	svc := command_flush.NewService(mockClient)
+	req := &command_flush.RequestCommandFlush{
+		Status: "Pending",
+		MobileDevices: &command_flush.MobileDevices{
+			MobileDevice: []command_flush.DeviceID{{ID: 1}},
+		},
+	}
+	_, err := svc.FlushWithXML(context.Background(), req)
+	require.Error(t, err)
+}

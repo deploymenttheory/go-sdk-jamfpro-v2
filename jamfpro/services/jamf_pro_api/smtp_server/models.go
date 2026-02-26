@@ -52,3 +52,44 @@ type ResourceSMTPServerGoogleMailCredentials struct {
 	ClientSecret    string                               `json:"clientSecret"`
 	Authentications []ResourceSMTPServerAuthentication `json:"authentications,omitempty"`
 }
+
+// HistoryObject represents a single SMTP server history entry.
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
+type HistoryObject struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Date     string `json:"date"`
+	Note     string `json:"note"`
+	Details  string `json:"details"`
+}
+
+// HistoryResponse is the response for GetHistoryV1 (paginated).
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
+type HistoryResponse struct {
+	TotalCount int            `json:"totalCount"`
+	Results    []HistoryObject `json:"results"`
+}
+
+// AddHistoryNoteRequest is the request body for AddHistoryNoteV1.
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-history
+type AddHistoryNoteRequest struct {
+	Note string `json:"note"`
+}
+
+// AddHistoryNoteResponse is the response for AddHistoryNoteV1 (201 Created).
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-history
+type AddHistoryNoteResponse struct {
+	ID   string `json:"id"`
+	Href string `json:"href"`
+}
+
+// TestRequest is the request body for TestV1.
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-test
+type TestRequest struct {
+	RecipientEmail string `json:"recipientEmail"`
+}

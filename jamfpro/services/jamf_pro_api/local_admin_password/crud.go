@@ -34,11 +34,36 @@ type (
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-audit
 		GetPasswordHistoryByClientManagementIDV2(ctx context.Context, clientManagementID string, username string) (*PasswordHistoryResponse, *interfaces.Response, error)
 
+		// GetHistoryByUsernameV2 retrieves the LAPS history for a specific username on a target device.
+		// History includes date created, date last seen, expiration time, and rotational status.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-history
+		GetHistoryByUsernameV2(ctx context.Context, clientManagementID string, username string) (*AccountHistoryResponse, *interfaces.Response, error)
+
 		// GetCurrentPasswordByClientManagementIDV2 retrieves the current LAPS password for a specific username on a target device.
 		// Note: Once viewed, the password will be rotated based on rotation time settings.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-password
 		GetCurrentPasswordByClientManagementIDV2(ctx context.Context, clientManagementID string, username string) (*CurrentPasswordResponse, *interfaces.Response, error)
+
+		// GetAuditByUsernameAndGUIDV2 retrieves the password view history for a specific username and guid on a target device.
+		// Use when multiple accounts share the same username; guid disambiguates them.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-audit
+		GetAuditByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*PasswordHistoryResponse, *interfaces.Response, error)
+
+		// GetHistoryByUsernameAndGUIDV2 retrieves the LAPS history for a specific username and guid on a target device.
+		// Use when multiple accounts share the same username; guid disambiguates them.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-history
+		GetHistoryByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*AccountHistoryResponse, *interfaces.Response, error)
+
+		// GetPasswordByUsernameAndGUIDV2 retrieves the current LAPS password for a specific username and guid on a target device.
+		// Use when multiple accounts share the same username; guid disambiguates them.
+		// Note: Once viewed, the password will be rotated based on rotation time settings.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-password
+		GetPasswordByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*CurrentPasswordResponse, *interfaces.Response, error)
 
 		// GetFullHistoryByClientManagementIDV2 retrieves the complete history of all local admin passwords for all accounts
 		// on a specific device, including both viewing and rotation history.
@@ -184,6 +209,132 @@ func (s *Service) GetCurrentPasswordByClientManagementIDV2(ctx context.Context, 
 	}
 
 	endpoint := fmt.Sprintf("%s/%s/account/%s/password", EndpointLocalAdminPasswordV2, clientManagementID, username)
+
+	var result CurrentPasswordResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetHistoryByUsernameV2 retrieves the LAPS history for a specific username on a target device.
+// History includes date created, date last seen, expiration time, and rotational status.
+// URL: GET /api/v2/local-admin-password/{clientManagementId}/account/{username}/history
+// https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-history
+func (s *Service) GetHistoryByUsernameV2(ctx context.Context, clientManagementID string, username string) (*AccountHistoryResponse, *interfaces.Response, error) {
+	if clientManagementID == "" {
+		return nil, nil, fmt.Errorf("clientManagementID is required")
+	}
+	if username == "" {
+		return nil, nil, fmt.Errorf("username is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/account/%s/history", EndpointLocalAdminPasswordV2, clientManagementID, username)
+
+	var result AccountHistoryResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetAuditByUsernameAndGUIDV2 retrieves the password view history for a specific username and guid on a target device.
+// Use when multiple accounts share the same username; guid disambiguates them.
+// URL: GET /api/v2/local-admin-password/{clientManagementId}/account/{username}/{guid}/audit
+// https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-audit
+func (s *Service) GetAuditByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*PasswordHistoryResponse, *interfaces.Response, error) {
+	if clientManagementID == "" {
+		return nil, nil, fmt.Errorf("clientManagementID is required")
+	}
+	if username == "" {
+		return nil, nil, fmt.Errorf("username is required")
+	}
+	if guid == "" {
+		return nil, nil, fmt.Errorf("guid is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/audit", EndpointLocalAdminPasswordV2, clientManagementID, username, guid)
+
+	var result PasswordHistoryResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetHistoryByUsernameAndGUIDV2 retrieves the LAPS history for a specific username and guid on a target device.
+// Use when multiple accounts share the same username; guid disambiguates them.
+// URL: GET /api/v2/local-admin-password/{clientManagementId}/account/{username}/{guid}/history
+// https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-history
+func (s *Service) GetHistoryByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*AccountHistoryResponse, *interfaces.Response, error) {
+	if clientManagementID == "" {
+		return nil, nil, fmt.Errorf("clientManagementID is required")
+	}
+	if username == "" {
+		return nil, nil, fmt.Errorf("username is required")
+	}
+	if guid == "" {
+		return nil, nil, fmt.Errorf("guid is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/history", EndpointLocalAdminPasswordV2, clientManagementID, username, guid)
+
+	var result AccountHistoryResponse
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// GetPasswordByUsernameAndGUIDV2 retrieves the current LAPS password for a specific username and guid on a target device.
+// Use when multiple accounts share the same username; guid disambiguates them.
+// Note: Once viewed, the password will be rotated based on rotation time settings.
+// URL: GET /api/v2/local-admin-password/{clientManagementId}/account/{username}/{guid}/password
+// https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-password
+func (s *Service) GetPasswordByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*CurrentPasswordResponse, *interfaces.Response, error) {
+	if clientManagementID == "" {
+		return nil, nil, fmt.Errorf("clientManagementID is required")
+	}
+	if username == "" {
+		return nil, nil, fmt.Errorf("username is required")
+	}
+	if guid == "" {
+		return nil, nil, fmt.Errorf("guid is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/password", EndpointLocalAdminPasswordV2, clientManagementID, username, guid)
 
 	var result CurrentPasswordResponse
 

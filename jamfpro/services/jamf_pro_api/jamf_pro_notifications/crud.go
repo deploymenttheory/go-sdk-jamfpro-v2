@@ -23,6 +23,11 @@ type ServiceInterface interface {
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
 	GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotification, *interfaces.Response, error)
+
+	// DeleteByTypeAndIDV1 deletes a notification by type and ID.
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-notifications-type-id
+	DeleteByTypeAndIDV1(ctx context.Context, notificationType, id string) (*interfaces.Response, error)
 }
 
 type (
@@ -59,4 +64,30 @@ func (s *Service) GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotificati
 	}
 
 	return result, resp, nil
+}
+
+// DeleteByTypeAndIDV1 deletes a notification by type and ID.
+// URL: DELETE /api/v1/notifications/{type}/{id}
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-notifications-type-id
+func (s *Service) DeleteByTypeAndIDV1(ctx context.Context, notificationType, id string) (*interfaces.Response, error) {
+	if notificationType == "" {
+		return nil, fmt.Errorf("notification type is required")
+	}
+	if id == "" {
+		return nil, fmt.Errorf("notification id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/%s", EndpointNotificationsV1, notificationType, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }

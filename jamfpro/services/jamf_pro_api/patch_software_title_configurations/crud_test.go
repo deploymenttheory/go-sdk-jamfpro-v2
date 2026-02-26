@@ -346,3 +346,212 @@ func TestDeleteByNameV2_EmptyName(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "name is required")
 }
+
+// TestGetDashboardStatusByIDV2 tests getting dashboard status.
+func TestGetDashboardStatusByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterGetDashboardStatusMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetDashboardStatusByIDV2(context.Background(), "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.True(t, result.OnDashboard)
+}
+
+// TestGetDashboardStatusByIDV2_EmptyID tests getting dashboard status with empty ID.
+func TestGetDashboardStatusByIDV2_EmptyID(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.GetDashboardStatusByIDV2(context.Background(), "")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+// TestAddToDashboardByIDV2 tests adding to dashboard.
+func TestAddToDashboardByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterAddToDashboardMock("1")
+
+	svc := NewService(mock)
+	resp, err := svc.AddToDashboardByIDV2(context.Background(), "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 204, resp.StatusCode)
+}
+
+// TestRemoveFromDashboardByIDV2 tests removing from dashboard.
+func TestRemoveFromDashboardByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterRemoveFromDashboardMock("1")
+
+	svc := NewService(mock)
+	resp, err := svc.RemoveFromDashboardByIDV2(context.Background(), "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 204, resp.StatusCode)
+}
+
+// TestGetDefinitionsByIDV2 tests getting definitions.
+func TestGetDefinitionsByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterGetDefinitionsMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetDefinitionsByIDV2(context.Background(), "1", nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Len(t, result.Results, 1)
+	assert.Equal(t, "10.37.0", result.Results[0].Version)
+	assert.Equal(t, "1", result.Results[0].AbsoluteOrderID)
+}
+
+// TestGetDependenciesByIDV2 tests getting dependencies.
+func TestGetDependenciesByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterGetDependenciesMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetDependenciesByIDV2(context.Background(), "1", nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Len(t, result.Results, 1)
+	assert.Equal(t, "1", result.Results[0].SmartGroupID)
+	assert.Equal(t, "Chrome Out of Date", result.Results[0].SmartGroupName)
+}
+
+// TestExportReportByIDV2 tests exporting report.
+func TestExportReportByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterExportReportMock("1")
+
+	svc := NewService(mock)
+	body, resp, err := svc.ExportReportByIDV2(context.Background(), "1", nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, body)
+	assert.Contains(t, string(body), "computerName")
+}
+
+// TestGetExtensionAttributesByIDV2 tests getting extension attributes.
+func TestGetExtensionAttributesByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterGetExtensionAttributesMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetExtensionAttributesByIDV2(context.Background(), "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Len(t, result, 1)
+	assert.Equal(t, "google-chrome-ea", result[0].EAID)
+	assert.True(t, result[0].Accepted)
+}
+
+// TestGetPatchReportByIDV2 tests getting patch report.
+func TestGetPatchReportByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterGetPatchReportMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetPatchReportByIDV2(context.Background(), "1", nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Len(t, result.Results, 1)
+	assert.Equal(t, "MacBook", result.Results[0].ComputerName)
+	assert.Equal(t, "10.1", result.Results[0].Version)
+}
+
+// TestGetPatchSummaryByIDV2 tests getting patch summary.
+func TestGetPatchSummaryByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterGetPatchSummaryMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetPatchSummaryByIDV2(context.Background(), "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, "1", result.SoftwareTitleID)
+	assert.Equal(t, "Patch title", result.Title)
+	assert.Equal(t, 3, result.UpToDate)
+	assert.Equal(t, 6, result.OutOfDate)
+}
+
+// TestGetHistoryByIDV2 tests getting history.
+func TestGetHistoryByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterGetHistoryMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetHistoryByIDV2(context.Background(), "1", nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Len(t, result.Results, 1)
+	assert.Equal(t, "admin", result.Results[0].Username)
+	assert.Equal(t, "Sso settings update", result.Results[0].Note)
+}
+
+// TestAddHistoryNoteByIDV2 tests adding history note.
+func TestAddHistoryNoteByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterAddHistoryNoteMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.AddHistoryNoteByIDV2(context.Background(), "1", &RequestAddHistoryNote{Note: "Test note"})
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Equal(t, "1", result.ID)
+	assert.Contains(t, result.Href, "/api/v1/resource/1")
+}
+
+// TestAddHistoryNoteByIDV2_EmptyNote tests adding history note with empty note.
+func TestAddHistoryNoteByIDV2_EmptyNote(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	svc := NewService(mock)
+
+	result, resp, err := svc.AddHistoryNoteByIDV2(context.Background(), "1", &RequestAddHistoryNote{Note: ""})
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "note is required")
+}
+
+// TestGetPatchVersionsByIDV2 tests getting patch versions.
+func TestGetPatchVersionsByIDV2(t *testing.T) {
+	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterGetPatchVersionsMock("1")
+
+	svc := NewService(mock)
+	result, resp, err := svc.GetPatchVersionsByIDV2(context.Background(), "1")
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, result)
+	assert.Len(t, result, 1)
+	assert.Equal(t, "1", result[0].AbsoluteOrderID)
+	assert.Equal(t, "3", result[0].Version)
+	assert.Equal(t, 1, result[0].OnVersion)
+}

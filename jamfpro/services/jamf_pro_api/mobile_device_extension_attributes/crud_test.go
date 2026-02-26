@@ -197,3 +197,72 @@ func TestUnit_MobileDeviceExtensionAttributes_AddHistoryNoteByIDV1_NilRequest(t 
 	require.Error(t, err)
 	assert.Nil(t, resp)
 }
+
+func TestUnit_MobileDeviceExtensionAttributes_ListV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.ListV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_CreateV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestMobileDeviceExtensionAttribute{
+		Name:                 "New MDEA",
+		DataType:             "String",
+		InventoryDisplayType: "General",
+		InputType:            "Text Field",
+	}
+	_, _, err := svc.CreateV1(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_UpdateByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestMobileDeviceExtensionAttribute{
+		Name:                 "MDEA One Updated",
+		DataType:             "String",
+		InventoryDisplayType: "General",
+		InputType:            "Text Field",
+	}
+	_, _, err := svc.UpdateByIDV1(context.Background(), "1", req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_DeleteByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.DeleteByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_DeleteMobileDeviceExtensionAttributesByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &DeleteMobileDeviceExtensionAttributesByIDRequest{IDs: []string{"1", "2"}}
+	_, err := svc.DeleteMobileDeviceExtensionAttributesByIDV1(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_GetHistoryByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetHistoryByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_AddHistoryNoteByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &AddHistoryNoteRequest{Note: "Test note"}
+	_, err := svc.AddHistoryNoteByIDV1(context.Background(), "1", req)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_GetDataDependencyByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetDataDependencyByIDV1(context.Background(), "")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device extension attribute ID is required")
+}
+
+func TestUnit_MobileDeviceExtensionAttributes_GetDataDependencyByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetDataDependencyByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}

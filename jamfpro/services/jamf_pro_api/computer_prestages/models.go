@@ -19,6 +19,23 @@ type ReplaceDeviceScopeRequest struct {
 	VersionLock  int      `json:"versionLock"`
 }
 
+// AddDeviceScopeRequest is the request body for AddDeviceScopeByIDV2 (POST /api/v2/computer-prestages/{id}/scope).
+type AddDeviceScopeRequest struct {
+	SerialNumbers []string `json:"serialNumbers"`
+	VersionLock  int      `json:"versionLock"`
+}
+
+// RemoveDeviceScopeRequest is the request body for RemoveDeviceScopeByIDV2 (POST /api/v2/computer-prestages/{id}/scope/delete-multiple).
+type RemoveDeviceScopeRequest struct {
+	SerialNumbers []string `json:"serialNumbers"`
+	VersionLock  int      `json:"versionLock"`
+}
+
+// AllDeviceScopeResponse is the response for GetAllDeviceScopeV2 (GET /api/v2/computer-prestages/scope).
+type AllDeviceScopeResponse struct {
+	Prestages []ResourceDeviceScope `json:"prestages"`
+}
+
 // DeviceScopeSubsetAssignmentItem represents an assignment within the prestage scope.
 type DeviceScopeSubsetAssignmentItem struct {
 	SerialNumber   string `json:"serialNumber"`
@@ -196,6 +213,12 @@ func (r *ResourceDeviceScope) SetVersionLock(lock int) { r.VersionLock = lock }
 
 func (r *ReplaceDeviceScopeRequest) GetVersionLock() int    { return r.VersionLock }
 func (r *ReplaceDeviceScopeRequest) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (r *AddDeviceScopeRequest) GetVersionLock() int    { return r.VersionLock }
+func (r *AddDeviceScopeRequest) SetVersionLock(lock int) { r.VersionLock = lock }
+
+func (r *RemoveDeviceScopeRequest) GetVersionLock() int    { return r.VersionLock }
+func (r *RemoveDeviceScopeRequest) SetVersionLock(lock int) { r.VersionLock = lock }
 
 func (l *LocationInformation) GetVersionLock() int    { return l.VersionLock }
 func (l *LocationInformation) SetVersionLock(lock int) { l.VersionLock = lock }

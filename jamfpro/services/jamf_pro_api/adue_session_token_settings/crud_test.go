@@ -52,3 +52,15 @@ func TestUnit_AdueSessionTokenSettings_UpdateV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
 }
+
+func TestUnit_AdueSessionTokenSettings_GetV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_AdueSessionTokenSettings_UpdateV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.UpdateV1(context.Background(), &ResourceADUETokenSettings{Enabled: true})
+	require.Error(t, err)
+}

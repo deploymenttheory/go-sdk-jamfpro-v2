@@ -398,3 +398,118 @@ func TestTestUserMembershipByIDV1_NilRequest(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "request is required")
 }
+
+func TestListV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudIdpMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.ListV1(ctx, nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestGetByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudIdpMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByIDV1(ctx, "1")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestGetByNameV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudIdpMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetByNameV1(ctx, "Test Azure IDP")
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestExportV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudIdpMock())
+	ctx := context.Background()
+
+	request := &ExportRequest{
+		Fields: []ExportField{
+			{Name: "id"},
+		},
+	}
+
+	resp, data, err := svc.ExportV1(ctx, nil, request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, data)
+}
+
+func TestGetHistoryByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudIdpMock())
+	ctx := context.Background()
+
+	result, resp, err := svc.GetHistoryByIDV1(ctx, "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestAddHistoryNoteByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudIdpMock())
+	ctx := context.Background()
+
+	request := &HistoryNoteRequest{Note: "Test note"}
+
+	resp, err := svc.AddHistoryNoteByIDV1(ctx, "1", request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestTestGroupSearchByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudIdpMock())
+	ctx := context.Background()
+
+	request := &TestGroupSearchRequest{GroupName: "TestGroup"}
+
+	result, resp, err := svc.TestGroupSearchByIDV1(ctx, "1", request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestTestUserSearchByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudIdpMock())
+	ctx := context.Background()
+
+	request := &TestUserSearchRequest{Username: "testuser"}
+
+	result, resp, err := svc.TestUserSearchByIDV1(ctx, "1", request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}
+
+func TestTestUserMembershipByIDV1_Error(t *testing.T) {
+	svc := NewService(mocks.NewCloudIdpMock())
+	ctx := context.Background()
+
+	request := &TestUserMembershipRequest{
+		Username:  "testuser",
+		GroupName: "TestGroup",
+	}
+
+	result, resp, err := svc.TestUserMembershipByIDV1(ctx, "1", request)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+}

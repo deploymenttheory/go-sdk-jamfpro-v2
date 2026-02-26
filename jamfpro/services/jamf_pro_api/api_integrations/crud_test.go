@@ -184,3 +184,51 @@ func TestUnit_ApiIntegrations_RefreshClientCredentialsByIDV1_Success(t *testing.
 	assert.Equal(t, "new-client-id", result.ClientID)
 	assert.Equal(t, "new-client-secret", result.ClientSecret)
 }
+
+func TestUnit_ApiIntegrations_ListV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.ListV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_ApiIntegrations_GetByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestUnit_ApiIntegrations_GetByNameV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetByNameV1(context.Background(), "test")
+	require.Error(t, err)
+}
+
+func TestUnit_ApiIntegrations_CreateV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.CreateV1(context.Background(), &ResourceApiIntegration{DisplayName: "test"})
+	require.Error(t, err)
+}
+
+func TestUnit_ApiIntegrations_UpdateByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.UpdateByIDV1(context.Background(), "1", &ResourceApiIntegration{DisplayName: "test"})
+	require.Error(t, err)
+}
+
+func TestUnit_ApiIntegrations_UpdateByNameV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.UpdateByNameV1(context.Background(), "test", &ResourceApiIntegration{DisplayName: "updated"})
+	require.Error(t, err)
+}
+
+func TestUnit_ApiIntegrations_DeleteByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.DeleteByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}
+
+func TestUnit_ApiIntegrations_RefreshClientCredentialsByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.RefreshClientCredentialsByIDV1(context.Background(), "1")
+	require.Error(t, err)
+}

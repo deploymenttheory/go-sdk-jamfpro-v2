@@ -61,6 +61,24 @@ type (
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history
 		AddBuildingHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error)
+
+		// ExportV1 exports the buildings collection in the specified format (JSON or CSV).
+		//
+		// POST /api/v1/buildings/export. Optional query params: page, page-size, sort, filter,
+		// export-fields, export-labels. Optional body overrides when URI exceeds ~2k chars.
+		// acceptType should be mime.TextCSV or mime.ApplicationJSON.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-export
+		ExportV1(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error)
+
+		// ExportHistoryV1 exports the history for the specified building in the specified format (JSON or CSV).
+		//
+		// POST /api/v1/buildings/{id}/history/export. Optional query params: page, page-size, sort,
+		// filter, export-fields, export-labels. Optional body overrides when URI exceeds ~2k chars.
+		// acceptType should be mime.TextCSV or mime.ApplicationJSON.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history-export
+		ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the buildings-related methods of the Jamf Pro API.
@@ -316,4 +334,71 @@ func (s *Service) AddBuildingHistoryNotesV1(ctx context.Context, id string, req 
 	}
 
 	return resp, nil
+}
+
+// ExportV1 exports the buildings collection in the specified format (JSON or CSV).
+// URL: POST /api/v1/buildings/export
+// Query Params: page, page-size, sort, filter, export-fields, export-labels (optional)
+// Body: optional ExportRequest to override query params when URI exceeds ~2k chars
+// Accept: text/csv or application/json
+// https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-export
+func (s *Service) ExportV1(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error) {
+	endpoint := EndpointBuildingsV1 + "/export"
+
+	if acceptType == "" {
+		acceptType = mime.ApplicationJSON
+	}
+
+	headers := map[string]string{
+		"Accept":       acceptType,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	var body any
+	if req != nil {
+		body = req
+	}
+
+	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, body, headers, nil)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to export buildings: %w", err)
+	}
+
+	return resp.Body, resp, nil
+}
+
+// ExportHistoryV1 exports the history for the specified building in the specified format (JSON or CSV).
+// URL: POST /api/v1/buildings/{id}/history/export
+// Path param: id (building ID)
+// Query Params: page, page-size, sort, filter, export-fields, export-labels (optional)
+// Body: optional ExportRequest to override query params when URI exceeds ~2k chars
+// Accept: text/csv or application/json
+// https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history-export
+func (s *Service) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("building ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/history/export", EndpointBuildingsV1, id)
+
+	if acceptType == "" {
+		acceptType = mime.ApplicationJSON
+	}
+
+	headers := map[string]string{
+		"Accept":       acceptType,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	var body any
+	if req != nil {
+		body = req
+	}
+
+	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, body, headers, nil)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to export building history: %w", err)
+	}
+
+	return resp.Body, resp, nil
 }

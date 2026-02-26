@@ -140,3 +140,43 @@ func TestUnit_StaticMobileDeviceGroups_DeleteByID_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "ID is required")
 }
+
+func TestUnit_StaticMobileDeviceGroups_List_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.List(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_StaticMobileDeviceGroups_GetByID_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetByID(context.Background(), "10")
+	require.Error(t, err)
+}
+
+func TestUnit_StaticMobileDeviceGroups_Create_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestStaticMobileDeviceGroup{
+		Name:        "test",
+		SiteID:      "-1",
+		Assignments: []StaticMobileDeviceGroupAssignment{},
+	}
+	_, _, err := svc.Create(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_StaticMobileDeviceGroups_UpdateByID_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestStaticMobileDeviceGroup{
+		Name:        "test",
+		SiteID:      "-1",
+		Assignments: []StaticMobileDeviceGroupAssignment{},
+	}
+	_, _, err := svc.UpdateByID(context.Background(), "10", req)
+	require.Error(t, err)
+}
+
+func TestUnit_StaticMobileDeviceGroups_DeleteByID_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.DeleteByID(context.Background(), "10")
+	require.Error(t, err)
+}

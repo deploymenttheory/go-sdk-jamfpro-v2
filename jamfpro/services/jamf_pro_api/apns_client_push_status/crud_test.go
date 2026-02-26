@@ -195,3 +195,21 @@ func TestUnit_APNSClientPushStatus_EnableClientV1_EmptyManagementID(t *testing.T
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "managementId is required")
 }
+
+func TestUnit_APNSClientPushStatus_EnableAllClientsV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, err := svc.EnableAllClientsV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_APNSClientPushStatus_GetEnableAllClientsStatusV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetEnableAllClientsStatusV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_APNSClientPushStatus_ListV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.ListV1(context.Background(), nil)
+	require.Error(t, err)
+}

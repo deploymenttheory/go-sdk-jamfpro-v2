@@ -1,4 +1,4 @@
-package self_service_branding_mobile
+package self_service_branding_ios
 
 import (
 	"context"

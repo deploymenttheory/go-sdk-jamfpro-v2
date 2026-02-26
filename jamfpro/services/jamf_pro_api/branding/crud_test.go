@@ -23,3 +23,10 @@ func TestUnit_Branding_DownloadBrandingImageV1_Success(t *testing.T) {
 	require.NotNil(t, body)
 	require.Greater(t, len(body), 0)
 }
+
+func TestUnit_Branding_DownloadBrandingImageV1_Error(t *testing.T) {
+	mock := mocks.NewBrandingMock()
+	svc := NewService(mock)
+	_, _, err := svc.DownloadBrandingImageV1(context.Background(), "test-id")
+	require.Error(t, err)
+}

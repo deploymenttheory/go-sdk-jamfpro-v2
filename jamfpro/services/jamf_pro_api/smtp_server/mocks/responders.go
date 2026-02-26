@@ -43,6 +43,9 @@ func (m *SMTPServerMock) register(method, path string, statusCode int, fixture s
 func (m *SMTPServerMock) RegisterMocks() {
 	m.register("GET", "/api/v2/smtp-server", 200, "validate_get.json")
 	m.register("PUT", "/api/v2/smtp-server", 200, "validate_get.json")
+	m.register("GET", "/api/v1/smtp-server/history", 200, "validate_history.json")
+	m.register("POST", "/api/v1/smtp-server/history", 201, "validate_add_history_note.json")
+	m.register("POST", "/api/v1/smtp-server/test", 202, "")
 }
 
 func (m *SMTPServerMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {

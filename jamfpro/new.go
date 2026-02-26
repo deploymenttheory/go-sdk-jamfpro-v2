@@ -88,20 +88,28 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/csa"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/declarative_device_management"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/digicert"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/devices"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_communication_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_enrollments"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/distribution_point"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dss_declarations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/ebooks"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/engage"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customization_preview"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customizations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/gsx_connection"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icon"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/impact_alert_notification_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/inventory_information"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/inventory_preload"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_connect"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_management_framework"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_package"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_information"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_notifications"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_server_url"
@@ -117,7 +125,10 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/macos_configuration_profile_custom_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/managed_software_updates"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mdm"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mdm_renewal"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_apps"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_enrollment_profile"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/notifications"
@@ -132,8 +143,8 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/reenrollment"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/return_to_service"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_ios"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_macos"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_mobile"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_upload"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_plus_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_settings"
@@ -245,20 +256,28 @@ type Client struct {
 	Csa                                 *csa.Service
 	DeclarativeDeviceManagement         *declarative_device_management.Service
 	Departments                         *departments.Service
+	Devices                             *devices.Service
+	Digicert                            *digicert.Service
 	DeviceCommunicationSettings         *device_communication_settings.Service
 	DeviceEnrollments                   *device_enrollments.Service
 	DistributionPoint                   *distribution_point.Service
 	DockItems                           *dock_items.Service
 	DSSDeclarations                     *dss_declarations.Service
+	Ebooks                              *ebooks.Service
 	Engage                              *engage.Service
 	Enrollment                          *enrollment.Service
+	EnrollmentCustomizationPreview      *enrollment_customization_preview.Service
 	EnrollmentCustomizations            *enrollment_customizations.Service
 	EnrollmentSettings                  *enrollment_settings.Service
 	Groups                              *groups.Service
 	GSXConnection                       *gsx_connection.Service
 	Icon                                *icon.Service
-	ImpactAlertNotificationSettings     *impact_alert_notification_settings.Service
-	JamfConnect                         *jamf_connect.Service
+		ImpactAlertNotificationSettings     *impact_alert_notification_settings.Service
+		InventoryInformation                *inventory_information.Service
+		InventoryPreload                     *inventory_preload.Service
+		JamfConnect                         *jamf_connect.Service
+	JamfManagementFramework            *jamf_management_framework.Service
+	JamfPackage                         *jamf_package.Service
 	JCDS                                *jcds.Service
 	Ldap                                *ldap.Service
 	LocalAdminPassword                  *local_admin_password.Service
@@ -267,9 +286,10 @@ type Client struct {
 	MacOSConfigProfileCustomSettings    *macos_configuration_profile_custom_settings.Service
 	ManagedSoftwareUpdates              *managed_software_updates.Service
 	MDM                                 *mdm.Service
+	MDMRenewal                           *mdm_renewal.Service
 	ServiceDiscoveryEnrollment          *service_discovery_enrollment.Service
+	SelfServiceBrandingIOS              *self_service_branding_ios.Service
 	SelfServiceBrandingMacOS            *self_service_branding_macos.Service
-	SelfServiceBrandingMobile           *self_service_branding_mobile.Service
 	SelfServiceBrandingUpload           *self_service_branding_upload.Service
 	SelfServiceSettings                 *self_service_settings.Service
 	SLASA                               *slasa.Service
@@ -285,6 +305,8 @@ type Client struct {
 	JamfProVersion                      *jamf_pro_version.Service
 	JamfRemoteAssist                    *jamf_remote_assist.Service
 	Locales                             *locales.Service
+	MobileDeviceApps                    *mobile_device_apps.Service
+	MobileDeviceEnrollmentProfile       *mobile_device_enrollment_profile.Service
 	MobileDeviceExtensionAttributes     *mobile_device_extension_attributes.Service
 	MobileDeviceGroups                  *mobile_device_groups.Service
 	StaticMobileDeviceGroups            *static_mobile_device_groups.Service
@@ -406,20 +428,28 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		Csa:                                 csa.NewService(transport),
 		DeclarativeDeviceManagement:         declarative_device_management.NewService(transport),
 		Departments:                         departments.NewService(transport),
+		Devices:                             devices.NewService(transport),
+		Digicert:                            digicert.NewService(transport),
 		DeviceCommunicationSettings:         device_communication_settings.NewService(transport),
 		DeviceEnrollments:                   device_enrollments.NewService(transport),
 		DistributionPoint:                   distribution_point.NewService(transport),
 		DockItems:                           dock_items.NewService(transport),
 		DSSDeclarations:                     dss_declarations.NewService(transport),
+		Ebooks:                              ebooks.NewService(transport),
 		Engage:                              engage.NewService(transport),
 		Enrollment:                          enrollment.NewService(transport),
+		EnrollmentCustomizationPreview:      enrollment_customization_preview.NewService(transport),
 		EnrollmentCustomizations:            enrollment_customizations.NewService(transport),
 		EnrollmentSettings:                  enrollment_settings.NewService(transport),
 		Groups:                              groups.NewService(transport),
 		GSXConnection:                       gsx_connection.NewService(transport),
 		Icon:                                icon.NewService(transport),
 		ImpactAlertNotificationSettings:     impact_alert_notification_settings.NewService(transport),
+		InventoryInformation:                inventory_information.NewService(transport),
+		InventoryPreload:                     inventory_preload.NewService(transport),
 		JamfConnect:                         jamf_connect.NewService(transport),
+		JamfManagementFramework:            jamf_management_framework.NewService(transport),
+		JamfPackage:                         jamf_package.NewService(transport),
 		JCDS:                                jcds.NewService(transport),
 		Ldap:                                ldap.NewService(transport),
 		LocalAdminPassword:                  local_admin_password.NewService(transport),
@@ -428,9 +458,10 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		MacOSConfigProfileCustomSettings:    macos_configuration_profile_custom_settings.NewService(transport),
 		ManagedSoftwareUpdates:              managed_software_updates.NewService(transport),
 		MDM:                                 mdm.NewService(transport),
+		MDMRenewal:                           mdm_renewal.NewService(transport),
 		ServiceDiscoveryEnrollment:          service_discovery_enrollment.NewService(transport),
+		SelfServiceBrandingIOS:              self_service_branding_ios.NewService(transport),
 		SelfServiceBrandingMacOS:            self_service_branding_macos.NewService(transport),
-		SelfServiceBrandingMobile:           self_service_branding_mobile.NewService(transport),
 		SelfServiceBrandingUpload:           self_service_branding_upload.NewService(transport),
 		SelfServiceSettings:                 self_service_settings.NewService(transport),
 		SLASA:                               slasa.NewService(transport),
@@ -446,6 +477,8 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		JamfProVersion:                      jamf_pro_version.NewService(transport),
 		JamfRemoteAssist:                    jamf_remote_assist.NewService(transport),
 		Locales:                             locales.NewService(transport),
+		MobileDeviceApps:                    mobile_device_apps.NewService(transport),
+		MobileDeviceEnrollmentProfile:       mobile_device_enrollment_profile.NewService(transport),
 		MobileDeviceExtensionAttributes:     mobile_device_extension_attributes.NewService(transport),
 		MobileDeviceGroups:                  mobile_device_groups.NewService(transport),
 		StaticMobileDeviceGroups:            static_mobile_device_groups.NewService(transport),

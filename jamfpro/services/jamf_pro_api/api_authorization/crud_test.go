@@ -37,3 +37,9 @@ func TestUnit_ApiAuthorization_GetV1_Success(t *testing.T) {
 	assert.Equal(t, "1", result.Sites[0].ID)
 	assert.Equal(t, "Eau Claire", result.Sites[0].Name)
 }
+
+func TestUnit_ApiAuthorization_GetV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetV1(context.Background())
+	require.Error(t, err)
+}

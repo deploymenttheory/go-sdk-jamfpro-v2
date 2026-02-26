@@ -67,3 +67,18 @@ type CreateStaticResponse struct {
 	ID   string `json:"id"`
 	Href string `json:"href"`
 }
+
+// ResourceGroupV1 represents a computer group in the v1 list response.
+// Used by ListAllV1 (GET /api/v1/computer-groups).
+type ResourceGroupV1 struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	SmartGroup  bool   `json:"smartGroup"`
+}
+
+// SmartGroupMembershipResponse is the response for GetSmartGroupMembershipByIDV2.
+// Contains the computer IDs that are members of the smart group.
+type SmartGroupMembershipResponse struct {
+	Members []int `json:"members"`
+}

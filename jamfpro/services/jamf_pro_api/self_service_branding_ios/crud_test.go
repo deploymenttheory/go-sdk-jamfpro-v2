@@ -1,10 +1,10 @@
-package self_service_branding_mobile
+package self_service_branding_ios
 
 import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_mobile/mocks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_ios/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -113,7 +113,7 @@ func TestUnit_SelfServiceBrandingMobile_CreateV1_Success(t *testing.T) {
 		HeaderBackgroundColorCode: "#FFFFFF",
 		MenuIconColorCode:         "#000000",
 		BrandingNameColorCode:     "#333333",
-		StatusBarTextColor:       "light",
+		StatusBarTextColor:        "light",
 	}
 	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
@@ -144,7 +144,7 @@ func TestUnit_SelfServiceBrandingMobile_CreateV1_Conflict(t *testing.T) {
 		HeaderBackgroundColorCode: "#FFFFFF",
 		MenuIconColorCode:         "#000000",
 		BrandingNameColorCode:     "#333333",
-		StatusBarTextColor:       "light",
+		StatusBarTextColor:        "light",
 	}
 	result, resp, err := svc.CreateV1(context.Background(), req)
 	assert.Error(t, err)
@@ -163,7 +163,7 @@ func TestUnit_SelfServiceBrandingMobile_UpdateByIDV1_Success(t *testing.T) {
 		HeaderBackgroundColorCode: "#F0F0F0",
 		MenuIconColorCode:         "#0066CC",
 		BrandingNameColorCode:     "#222222",
-		StatusBarTextColor:       "dark",
+		StatusBarTextColor:        "dark",
 	}
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
@@ -183,7 +183,7 @@ func TestUnit_SelfServiceBrandingMobile_UpdateByIDV1_EmptyID(t *testing.T) {
 		HeaderBackgroundColorCode: "#FFF",
 		MenuIconColorCode:         "#000",
 		BrandingNameColorCode:     "#333",
-		StatusBarTextColor:       "light",
+		StatusBarTextColor:        "light",
 	}
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "", req)
 	assert.Error(t, err)

@@ -253,3 +253,80 @@ func TestUnit_AppRequest_UpdateSettings_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
 }
+
+// =============================================================================
+// Error path tests (no mock registered → HTTP call fails)
+// =============================================================================
+
+func TestUnit_AppRequest_ListFormInputFields_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.ListFormInputFieldsV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_AppRequest_ReplaceFormInputFields_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	desc := "Some description"
+	req := []RequestFormInputField{{Title: "Field", Description: &desc, Priority: 1}}
+	result, resp, err := svc.ReplaceFormInputFieldsV1(context.Background(), req)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_AppRequest_CreateFormInputField_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	desc := "Some description"
+	req := &RequestFormInputField{Title: "Field", Description: &desc, Priority: 1}
+	result, resp, err := svc.CreateFormInputFieldV1(context.Background(), req)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_AppRequest_GetFormInputFieldByID_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetFormInputFieldByIDV1(context.Background(), 1)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_AppRequest_UpdateFormInputFieldByID_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	desc := "Some description"
+	req := &RequestFormInputField{Title: "Field", Description: &desc, Priority: 1}
+	result, resp, err := svc.UpdateFormInputFieldByIDV1(context.Background(), 1, req)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_AppRequest_DeleteFormInputFieldByID_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteFormInputFieldByIDV1(context.Background(), 1)
+	require.Error(t, err)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_AppRequest_GetSettings_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetSettingsV1(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_AppRequest_UpdateSettings_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &ResourceAppRequestSettings{
+		IsEnabled:      true,
+		AppStoreLocale: "deviceLocale",
+	}
+	result, resp, err := svc.UpdateSettingsV1(context.Background(), req)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+}
