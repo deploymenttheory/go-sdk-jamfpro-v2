@@ -13,22 +13,22 @@ type ResourceAvailableUpdates struct {
 
 // ResponsePlanList represents the paginated response for managed software update plans.
 type ResponsePlanList struct {
-	TotalCount int              `json:"totalCount"`
-	Results    []ResourcePlan   `json:"results"`
+	TotalCount int            `json:"totalCount"`
+	Results    []ResourcePlan `json:"results"`
 }
 
 // ResourcePlan represents a managed software update plan.
 type ResourcePlan struct {
-	PlanUuid                  string               `json:"planUuid,omitempty"`
-	Device                    PlanDevice           `json:"device,omitempty"`
-	UpdateAction              string               `json:"updateAction,omitempty"`
-	VersionType               string               `json:"versionType,omitempty"`
-	SpecificVersion           string               `json:"specificVersion,omitempty"`
-	BuildVersion              string               `json:"buildVersion,omitempty"`
-	MaxDeferrals              int                  `json:"maxDeferrals,omitempty"`
-	ForceInstallLocalDateTime string               `json:"forceInstallLocalDateTime,omitempty"`
-	RecipeId                  string               `json:"recipeId,omitempty"`
-	Status                    PlanStatus           `json:"status,omitempty"`
+	PlanUuid                  string     `json:"planUuid,omitempty"`
+	Device                    PlanDevice `json:"device,omitempty"`
+	UpdateAction              string     `json:"updateAction,omitempty"`
+	VersionType               string     `json:"versionType,omitempty"`
+	SpecificVersion           string     `json:"specificVersion,omitempty"`
+	BuildVersion              string     `json:"buildVersion,omitempty"`
+	MaxDeferrals              int        `json:"maxDeferrals,omitempty"`
+	ForceInstallLocalDateTime string     `json:"forceInstallLocalDateTime,omitempty"`
+	RecipeId                  string     `json:"recipeId,omitempty"`
+	Status                    PlanStatus `json:"status,omitempty"`
 }
 
 // PlanDevice represents the device information in a managed software update plan.
@@ -135,8 +135,8 @@ type RequestFeatureToggle struct {
 
 // ResponseError represents a standard error response.
 type ResponseError struct {
-	HTTPStatus int               `json:"httpStatus"`
-	Errors     []ErrorDetail     `json:"errors"`
+	HTTPStatus int           `json:"httpStatus"`
+	Errors     []ErrorDetail `json:"errors"`
 }
 
 // ErrorDetail represents a single error detail.
@@ -158,9 +158,9 @@ type ResponsePlanEvents struct {
 
 // ResourcePlanEvent represents a single event in the plan event store.
 type ResourcePlanEvent struct {
-	Timestamp string                 `json:"timestamp,omitempty"`
-	Type      string                 `json:"type,omitempty"`
-	Details   map[string]interface{} `json:"details,omitempty"`
+	Timestamp string         `json:"timestamp,omitempty"`
+	Type      string         `json:"type,omitempty"`
+	Details   map[string]any `json:"details,omitempty"`
 }
 
 // -----------------------------------------------------------------------------
@@ -169,24 +169,24 @@ type ResourcePlanEvent struct {
 
 // ResponseUpdateStatusList represents the paginated response for update statuses.
 type ResponseUpdateStatusList struct {
-	TotalCount int                   `json:"totalCount"`
+	TotalCount int                    `json:"totalCount"`
 	Results    []ResourceUpdateStatus `json:"results"`
 }
 
 // ResourceUpdateStatus represents a managed software update status for a device.
 type ResourceUpdateStatus struct {
-	OsUpdatesStatusId        string              `json:"osUpdatesStatusId,omitempty"`
-	Device                   UpdateStatusDevice  `json:"device,omitempty"`
-	DownloadPercentComplete  float64             `json:"downloadPercentComplete,omitempty"`
-	Downloaded               bool                `json:"downloaded,omitempty"`
-	ProductKey               string              `json:"productKey,omitempty"`
-	Status                   string              `json:"status,omitempty"`
-	DeferralsRemaining       int                 `json:"deferralsRemaining,omitempty"`
-	MaxDeferrals             int                 `json:"maxDeferrals,omitempty"`
-	NextScheduledInstall     string              `json:"nextScheduledInstall,omitempty"`
-	PastNotifications        []string            `json:"pastNotifications,omitempty"`
-	Created                  string              `json:"created,omitempty"`
-	Updated                  string              `json:"updated,omitempty"`
+	OsUpdatesStatusId       string             `json:"osUpdatesStatusId,omitempty"`
+	Device                  UpdateStatusDevice `json:"device,omitempty"`
+	DownloadPercentComplete float64            `json:"downloadPercentComplete,omitempty"`
+	Downloaded              bool               `json:"downloaded,omitempty"`
+	ProductKey              string             `json:"productKey,omitempty"`
+	Status                  string             `json:"status,omitempty"`
+	DeferralsRemaining      int                `json:"deferralsRemaining,omitempty"`
+	MaxDeferrals            int                `json:"maxDeferrals,omitempty"`
+	NextScheduledInstall    string             `json:"nextScheduledInstall,omitempty"`
+	PastNotifications       []string           `json:"pastNotifications,omitempty"`
+	Created                 string             `json:"created,omitempty"`
+	Updated                 string             `json:"updated,omitempty"`
 }
 
 // UpdateStatusDevice represents the device information in an update status.
