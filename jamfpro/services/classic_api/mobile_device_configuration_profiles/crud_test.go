@@ -435,3 +435,233 @@ func TestUnit_MobileDeviceConfigurationProfiles_DeleteByName_Error(t *testing.T)
 	_, err := svc.DeleteByName(context.Background(), "Unknown")
 	require.Error(t, err)
 }
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByID_WithPayloadsUUIDPreservation(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	mockClient.RegisterGetByIDMock()
+	mockClient.RegisterUpdateByIDMock()
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array/>
+	<key>PayloadDisplayName</key>
+	<string>New Profile</string>
+	<key>PayloadIdentifier</key>
+	<string>new-identifier</string>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>new-uuid</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>`
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: newPlist,
+		},
+	}
+
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
+	require.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 1, result.ID)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByID_EmptyPayloads(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	mockClient.RegisterUpdateByIDMock()
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: "",
+		},
+	}
+
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
+	require.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 1, result.ID)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByID_GetExistingProfileError(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadUUID</key>
+	<string>new-uuid</string>
+</dict>
+</plist>`
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: newPlist,
+		},
+	}
+
+	_, _, err := svc.UpdateByID(context.Background(), 999, req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to get existing profile for UUID preservation")
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByName_WithPayloadsUUIDPreservation(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	mockClient.RegisterGetByNameMock()
+	mockClient.RegisterUpdateByNameMock()
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array/>
+	<key>PayloadDisplayName</key>
+	<string>New Profile</string>
+	<key>PayloadIdentifier</key>
+	<string>new-identifier</string>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>new-uuid</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>`
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{
+			Name:     "Wi-Fi Profile",
+			Payloads: newPlist,
+		},
+	}
+
+	result, resp, err := svc.UpdateByName(context.Background(), "Wi-Fi Profile", req)
+	require.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 1, result.ID)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByName_EmptyPayloads(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	mockClient.RegisterUpdateByNameMockTestProfile()
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: "",
+		},
+	}
+
+	result, resp, err := svc.UpdateByName(context.Background(), "Test Profile", req)
+	require.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 1, result.ID)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByName_GetExistingProfileError(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadUUID</key>
+	<string>new-uuid</string>
+</dict>
+</plist>`
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: newPlist,
+		},
+	}
+
+	_, _, err := svc.UpdateByName(context.Background(), "Unknown", req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to get existing profile for UUID preservation")
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByID_ExistingProfileEmptyPayloads(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	mockClient.RegisterGetByIDMockEmptyPayloads()
+	mockClient.RegisterUpdateByIDMock()
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadUUID</key>
+	<string>new-uuid</string>
+</dict>
+</plist>`
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: newPlist,
+		},
+	}
+
+	result, resp, err := svc.UpdateByID(context.Background(), 1, req)
+	require.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 1, result.ID)
+}
+
+func TestUnit_MobileDeviceConfigurationProfiles_UpdateByName_ExistingProfileEmptyPayloads(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceConfigurationProfilesMock()
+	svc := mobile_device_configuration_profiles.NewService(mockClient)
+
+	mockClient.RegisterGetByNameMockEmptyPayloads()
+	mockClient.RegisterUpdateByNameMockTestProfile()
+
+	newPlist := `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadUUID</key>
+	<string>new-uuid</string>
+</dict>
+</plist>`
+
+	req := &mobile_device_configuration_profiles.RequestResource{
+		General: mobile_device_configuration_profiles.SubsetGeneral{
+			Name:     "Test Profile",
+			Payloads: newPlist,
+		},
+	}
+
+	result, resp, err := svc.UpdateByName(context.Background(), "Test Profile", req)
+	require.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 1, result.ID)
+}

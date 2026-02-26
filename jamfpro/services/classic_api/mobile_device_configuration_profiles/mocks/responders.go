@@ -111,6 +111,21 @@ func (m *MobileDeviceConfigurationProfilesMock) RegisterDeleteByNameMock() {
 	m.register("DELETE", "/JSSResource/mobiledeviceconfigurationprofiles/name/Wi-Fi Profile", 200, "")
 }
 
+// RegisterGetByIDMockEmptyPayloads registers GET /JSSResource/mobiledeviceconfigurationprofiles/id/1 → 200 with empty payloads.
+func (m *MobileDeviceConfigurationProfilesMock) RegisterGetByIDMockEmptyPayloads() {
+	m.register("GET", "/JSSResource/mobiledeviceconfigurationprofiles/id/1", 200, "validate_get_mobile_device_configuration_profile_empty_payloads.xml")
+}
+
+// RegisterGetByNameMockEmptyPayloads registers GET /JSSResource/mobiledeviceconfigurationprofiles/name/Test Profile → 200 with empty payloads.
+func (m *MobileDeviceConfigurationProfilesMock) RegisterGetByNameMockEmptyPayloads() {
+	m.register("GET", "/JSSResource/mobiledeviceconfigurationprofiles/name/Test Profile", 200, "validate_get_mobile_device_configuration_profile_empty_payloads.xml")
+}
+
+// RegisterUpdateByNameMockTestProfile registers PUT /JSSResource/mobiledeviceconfigurationprofiles/name/Test Profile → 200.
+func (m *MobileDeviceConfigurationProfilesMock) RegisterUpdateByNameMockTestProfile() {
+	m.register("PUT", "/JSSResource/mobiledeviceconfigurationprofiles/name/Test Profile", 200, "validate_update_mobile_device_configuration_profile.xml")
+}
+
 // ---- Error responders ----
 
 // RegisterNotFoundErrorMock registers GET /JSSResource/mobiledeviceconfigurationprofiles/id/999 → 404.

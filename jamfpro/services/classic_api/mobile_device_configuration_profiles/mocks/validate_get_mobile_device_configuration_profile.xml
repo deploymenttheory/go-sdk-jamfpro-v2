@@ -17,7 +17,24 @@
     <deployment_method>Install Automatically</deployment_method>
     <redeploy_on_update>true</redeploy_on_update>
     <redeploy_days_before_certificate_expires>14</redeploy_days_before_certificate_expires>
-    <payloads>Wi-Fi</payloads>
+    <payloads><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array/>
+	<key>PayloadDisplayName</key>
+	<string>Test Profile</string>
+	<key>PayloadIdentifier</key>
+	<string>existing-identifier</string>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>existing-uuid</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>]]></payloads>
   </general>
   <scope>
     <all_mobile_devices>true</all_mobile_devices>
