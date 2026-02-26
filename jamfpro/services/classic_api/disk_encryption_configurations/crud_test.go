@@ -19,7 +19,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.DiskEncryptionConfiguratio
 // ListDiskEncryptionConfigurations
 // =============================================================================
 
-func TestUnitListDiskEncryptionConfigurations_Success(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -39,7 +39,7 @@ func TestUnitListDiskEncryptionConfigurations_Success(t *testing.T) {
 // GetDiskEncryptionConfigurationByID
 // =============================================================================
 
-func TestUnitGetDiskEncryptionConfigurationByID_Success(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -54,21 +54,21 @@ func TestUnitGetDiskEncryptionConfigurationByID_Success(t *testing.T) {
 	assert.Equal(t, "Management Account", result.FileVaultEnabledUsers)
 }
 
-func TestUnitGetDiskEncryptionConfigurationByID_ZeroID(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByID(context.Background(), 0)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 }
 
-func TestUnitGetDiskEncryptionConfigurationByID_NegativeID(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByID(context.Background(), -1)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 }
 
-func TestUnitGetDiskEncryptionConfigurationByID_NotFound(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -81,7 +81,7 @@ func TestUnitGetDiskEncryptionConfigurationByID_NotFound(t *testing.T) {
 // GetDiskEncryptionConfigurationByName
 // =============================================================================
 
-func TestUnitGetDiskEncryptionConfigurationByName_Success(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByNameMock()
 
@@ -94,7 +94,7 @@ func TestUnitGetDiskEncryptionConfigurationByName_Success(t *testing.T) {
 	assert.Equal(t, "FileVault Config", result.Name)
 }
 
-func TestUnitGetDiskEncryptionConfigurationByName_EmptyName(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByName(context.Background(), "")
 	require.Error(t, err)
@@ -105,7 +105,7 @@ func TestUnitGetDiskEncryptionConfigurationByName_EmptyName(t *testing.T) {
 // CreateDiskEncryptionConfiguration
 // =============================================================================
 
-func TestUnitCreateDiskEncryptionConfiguration_Success(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -122,14 +122,14 @@ func TestUnitCreateDiskEncryptionConfiguration_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitCreateDiskEncryptionConfiguration_NilRequest(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.Create(context.Background(), nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateDiskEncryptionConfiguration_Conflict(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -143,7 +143,7 @@ func TestUnitCreateDiskEncryptionConfiguration_Conflict(t *testing.T) {
 // UpdateDiskEncryptionConfigurationByID
 // =============================================================================
 
-func TestUnitUpdateDiskEncryptionConfigurationByID_Success(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByIDMock()
 
@@ -156,14 +156,14 @@ func TestUnitUpdateDiskEncryptionConfigurationByID_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateDiskEncryptionConfigurationByID_ZeroID(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByID(context.Background(), 0, &RequestDiskEncryptionConfiguration{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration ID must be a positive integer")
 }
 
-func TestUnitUpdateDiskEncryptionConfigurationByID_NilRequest(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
 	require.Error(t, err)
@@ -174,7 +174,7 @@ func TestUnitUpdateDiskEncryptionConfigurationByID_NilRequest(t *testing.T) {
 // UpdateDiskEncryptionConfigurationByName
 // =============================================================================
 
-func TestUnitUpdateDiskEncryptionConfigurationByName_Success(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByNameMock()
 
@@ -187,14 +187,14 @@ func TestUnitUpdateDiskEncryptionConfigurationByName_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateDiskEncryptionConfigurationByName_EmptyName(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByName(context.Background(), "", &RequestDiskEncryptionConfiguration{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "disk encryption configuration name is required")
 }
 
-func TestUnitUpdateDiskEncryptionConfigurationByName_NilRequest(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByName(context.Background(), "FileVault Config", nil)
 	require.Error(t, err)
@@ -205,7 +205,7 @@ func TestUnitUpdateDiskEncryptionConfigurationByName_NilRequest(t *testing.T) {
 // DeleteDiskEncryptionConfigurationByID
 // =============================================================================
 
-func TestUnitDeleteDiskEncryptionConfigurationByID_Success(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByIDMock()
 
@@ -214,7 +214,7 @@ func TestUnitDeleteDiskEncryptionConfigurationByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteDiskEncryptionConfigurationByID_ZeroID(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, err := svc.DeleteByID(context.Background(), 0)
 	require.Error(t, err)
@@ -225,7 +225,7 @@ func TestUnitDeleteDiskEncryptionConfigurationByID_ZeroID(t *testing.T) {
 // DeleteDiskEncryptionConfigurationByName
 // =============================================================================
 
-func TestUnitDeleteDiskEncryptionConfigurationByName_Success(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByNameMock()
 
@@ -234,7 +234,7 @@ func TestUnitDeleteDiskEncryptionConfigurationByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteDiskEncryptionConfigurationByName_EmptyName(t *testing.T) {
+func TestUnit_DiskEncryptionConfigurations_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, err := svc.DeleteByName(context.Background(), "")
 	require.Error(t, err)

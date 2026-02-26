@@ -193,3 +193,29 @@ func TestUnit_ActivationCode_AddHistoryNoteV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
 }
+
+func TestUnit_ActivationCode_ExportHistoryV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportHistoryMock()
+
+	queryParams := map[string]string{
+		"page":      "0",
+		"page-size": "100",
+		"sort":      "date:desc",
+	}
+
+	req := &HistoryExportRequest{
+		Sort:   []string{"date:desc"},
+		Filter: stringPtr("username==admin"),
+	}
+
+	result, resp, err := svc.ExportHistoryV1(context.Background(), queryParams, req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+}
+
+func stringPtr(s string) *string {
+	return &s
+}

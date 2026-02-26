@@ -41,6 +41,7 @@ func (m *ActivationCodeMock) RegisterMocks() {
 	m.RegisterUpdateActivationCodeMock()
 	m.RegisterUpdateOrganizationNameMock()
 	m.RegisterAddHistoryNoteMock()
+	m.RegisterExportHistoryMock()
 }
 
 func (m *ActivationCodeMock) register(method, path string, statusCode int, fixture string) {
@@ -73,6 +74,15 @@ func (m *ActivationCodeMock) RegisterUpdateOrganizationNameMock() {
 // RegisterAddHistoryNoteMock registers the add history note response.
 func (m *ActivationCodeMock) RegisterAddHistoryNoteMock() {
 	m.register("POST", "/api/v1/activation-code/history", 201, "validate_add_history_note.json")
+}
+
+// RegisterExportHistoryMock registers the export history response.
+func (m *ActivationCodeMock) RegisterExportHistoryMock() {
+	csvData := "id,username,date,note,details\n1,admin,2019-02-04 21:09:31,Buildings update,Some details\n"
+	m.responses["POST:"+"/api/v1/activation-code/history/export"] = registeredResponse{
+		statusCode: 200,
+		rawBody:    []byte(csvData),
+	}
 }
 
 // loadMockResponse loads a JSON fixture from the mocks directory.
@@ -203,7 +213,18 @@ func (m *ActivationCodeMock) DeleteWithBody(ctx context.Context, path string, bo
 
 // PostWithQuery implements interfaces.HTTPClient.PostWithQuery.
 func (m *ActivationCodeMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
-	return nil, fmt.Errorf("PostWithQuery not implemented in ActivationCodeMock")
+	m.LastRSQLQuery = rsqlQuery
+	key := "POST:" + path
+	resp, ok := m.responses[key]
+	if !ok {
+		return nil, fmt.Errorf("no mock registered for POST %s", path)
+	}
+
+	if resp.errMsg != "" {
+		return &interfaces.Response{StatusCode: resp.statusCode, Body: []byte(resp.errMsg)}, fmt.Errorf("%s", resp.errMsg)
+	}
+
+	return &interfaces.Response{StatusCode: resp.statusCode, Body: resp.rawBody}, nil
 }
 
 // PostForm implements interfaces.HTTPClient.PostForm.

@@ -156,11 +156,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 
 	endpoint := fmt.Sprintf("%s/%s", EndpointAccountsV1, id)
 
-	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.Delete(ctx, endpoint, nil, nil, nil)
 	if err != nil {
 		return resp, err
 	}

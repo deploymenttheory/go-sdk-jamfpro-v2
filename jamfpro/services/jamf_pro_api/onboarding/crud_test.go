@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.OnboardingMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_Onboarding_GetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 	result, resp, err := svc.GetV1(context.Background())
@@ -27,7 +27,7 @@ func TestUnitGetV1_Success(t *testing.T) {
 	assert.Equal(t, "APP", result.OnboardingItems[0].SelfServiceEntityType)
 }
 
-func TestUnitUpdateV1_NilRequest(t *testing.T) {
+func TestUnit_Onboarding_UpdateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.UpdateV1(context.Background(), nil)
 	require.Error(t, err)
@@ -35,7 +35,7 @@ func TestUnitUpdateV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitUpdateV1_Success(t *testing.T) {
+func TestUnit_Onboarding_UpdateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 	req := &ResourceUpdateOnboardingSettings{
@@ -55,7 +55,7 @@ func TestUnitUpdateV1_Success(t *testing.T) {
 	assert.True(t, result.Enabled)
 }
 
-func TestUnitGetEligibleAppsV1_Success(t *testing.T) {
+func TestUnit_Onboarding_GetEligibleAppsV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetEligibleAppsMock()
 	result, resp, err := svc.GetEligibleAppsV1(context.Background(), nil)
@@ -68,7 +68,7 @@ func TestUnitGetEligibleAppsV1_Success(t *testing.T) {
 	assert.Equal(t, "Microsoft Office", result.Results[0].Name)
 }
 
-func TestUnitGetEligibleConfigurationProfilesV1_Success(t *testing.T) {
+func TestUnit_Onboarding_GetEligibleConfigurationProfilesV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetEligibleConfigurationProfilesMock()
 	result, resp, err := svc.GetEligibleConfigurationProfilesV1(context.Background(), nil)
@@ -78,7 +78,7 @@ func TestUnitGetEligibleConfigurationProfilesV1_Success(t *testing.T) {
 	assert.Equal(t, 2, result.TotalCount)
 }
 
-func TestUnitGetEligiblePoliciesV1_Success(t *testing.T) {
+func TestUnit_Onboarding_GetEligiblePoliciesV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetEligiblePoliciesMock()
 	result, resp, err := svc.GetEligiblePoliciesV1(context.Background(), nil)
@@ -88,7 +88,7 @@ func TestUnitGetEligiblePoliciesV1_Success(t *testing.T) {
 	assert.Equal(t, 2, result.TotalCount)
 }
 
-func TestUnitGetHistoryV1_Success(t *testing.T) {
+func TestUnit_Onboarding_GetHistoryV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetHistoryMock()
 	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
@@ -102,7 +102,7 @@ func TestUnitGetHistoryV1_Success(t *testing.T) {
 	assert.NotNil(t, result.Results[0].Details)
 }
 
-func TestUnitAddHistoryNotesV1_NilRequest(t *testing.T) {
+func TestUnit_Onboarding_AddHistoryNotesV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.AddHistoryNotesV1(context.Background(), nil)
 	require.Error(t, err)
@@ -110,7 +110,7 @@ func TestUnitAddHistoryNotesV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitAddHistoryNotesV1_EmptyNote(t *testing.T) {
+func TestUnit_Onboarding_AddHistoryNotesV1_EmptyNote(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestAddHistoryNotes{Note: ""}
 	result, resp, err := svc.AddHistoryNotesV1(context.Background(), req)
@@ -119,7 +119,7 @@ func TestUnitAddHistoryNotesV1_EmptyNote(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitAddHistoryNotesV1_Success(t *testing.T) {
+func TestUnit_Onboarding_AddHistoryNotesV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterAddHistoryNotesMock()
 	req := &RequestAddHistoryNotes{Note: "Test note"}
@@ -131,7 +131,7 @@ func TestUnitAddHistoryNotesV1_Success(t *testing.T) {
 	assert.Equal(t, "/api/v1/onboarding/history/3", result.Href)
 }
 
-func TestUnitExportHistoryV1_Success(t *testing.T) {
+func TestUnit_Onboarding_ExportHistoryV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportHistoryMock()
 	data, resp, err := svc.ExportHistoryV1(context.Background(), "text/csv", nil, nil)

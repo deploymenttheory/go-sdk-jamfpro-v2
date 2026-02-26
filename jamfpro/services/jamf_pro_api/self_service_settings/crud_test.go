@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.SelfServiceSettingsMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGet_Success(t *testing.T) {
+func TestUnit_SelfServiceSettings_Get_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -28,7 +28,7 @@ func TestUnitGet_Success(t *testing.T) {
 	assert.True(t, result.ConfigurationSettings.NotificationsEnabled)
 }
 
-func TestUnitUpdate_Success(t *testing.T) {
+func TestUnit_SelfServiceSettings_Update_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -47,7 +47,7 @@ func TestUnitUpdate_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdate_NilRequest(t *testing.T) {
+func TestUnit_SelfServiceSettings_Update_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Update(context.Background(), nil)

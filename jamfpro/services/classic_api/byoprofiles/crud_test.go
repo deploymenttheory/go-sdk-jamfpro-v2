@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.BYOProfilesMock) {
 // ListBYOProfiles
 // =============================================================================
 
-func TestUnitListBYOProfiles_Success(t *testing.T) {
+func TestUnit_Byoprofiles_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListBYOProfilesMock()
 
@@ -42,7 +42,7 @@ func TestUnitListBYOProfiles_Success(t *testing.T) {
 // GetBYOProfileByID
 // =============================================================================
 
-func TestUnitGetBYOProfileByID_Success(t *testing.T) {
+func TestUnit_Byoprofiles_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetBYOProfileByIDMock()
 
@@ -58,7 +58,7 @@ func TestUnitGetBYOProfileByID_Success(t *testing.T) {
 	assert.True(t, result.General.Enabled)
 }
 
-func TestUnitGetBYOProfileByID_ZeroID(t *testing.T) {
+func TestUnit_Byoprofiles_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -68,7 +68,7 @@ func TestUnitGetBYOProfileByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "BYO profile ID must be a positive integer")
 }
 
-func TestUnitGetBYOProfileByID_NegativeID(t *testing.T) {
+func TestUnit_Byoprofiles_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), -1)
@@ -78,7 +78,7 @@ func TestUnitGetBYOProfileByID_NegativeID(t *testing.T) {
 	assert.Contains(t, err.Error(), "BYO profile ID must be a positive integer")
 }
 
-func TestUnitGetBYOProfileByID_NotFound(t *testing.T) {
+func TestUnit_Byoprofiles_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -93,7 +93,7 @@ func TestUnitGetBYOProfileByID_NotFound(t *testing.T) {
 // GetBYOProfileByName
 // =============================================================================
 
-func TestUnitGetBYOProfileByName_Success(t *testing.T) {
+func TestUnit_Byoprofiles_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetBYOProfileByNameMock()
 
@@ -107,7 +107,7 @@ func TestUnitGetBYOProfileByName_Success(t *testing.T) {
 	assert.Equal(t, "Test BYO Profile 1", result.General.Name)
 }
 
-func TestUnitGetBYOProfileByName_EmptyName(t *testing.T) {
+func TestUnit_Byoprofiles_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -121,7 +121,7 @@ func TestUnitGetBYOProfileByName_EmptyName(t *testing.T) {
 // CreateBYOProfile
 // =============================================================================
 
-func TestUnitCreateBYOProfile_Success(t *testing.T) {
+func TestUnit_Byoprofiles_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateBYOProfileMock()
 
@@ -140,7 +140,7 @@ func TestUnitCreateBYOProfile_Success(t *testing.T) {
 	assert.Equal(t, 100, result.ID)
 }
 
-func TestUnitCreateBYOProfile_NilRequest(t *testing.T) {
+func TestUnit_Byoprofiles_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -150,7 +150,7 @@ func TestUnitCreateBYOProfile_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateBYOProfile_Conflict(t *testing.T) {
+func TestUnit_Byoprofiles_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -170,7 +170,7 @@ func TestUnitCreateBYOProfile_Conflict(t *testing.T) {
 // UpdateBYOProfileByID
 // =============================================================================
 
-func TestUnitUpdateBYOProfileByID_Success(t *testing.T) {
+func TestUnit_Byoprofiles_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateBYOProfileByIDMock()
 
@@ -188,7 +188,7 @@ func TestUnitUpdateBYOProfileByID_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateBYOProfileByID_ZeroID(t *testing.T) {
+func TestUnit_Byoprofiles_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestBYOProfile{
@@ -203,7 +203,7 @@ func TestUnitUpdateBYOProfileByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "BYO profile ID must be a positive integer")
 }
 
-func TestUnitUpdateBYOProfileByID_NilRequest(t *testing.T) {
+func TestUnit_Byoprofiles_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
@@ -217,7 +217,7 @@ func TestUnitUpdateBYOProfileByID_NilRequest(t *testing.T) {
 // UpdateBYOProfileByName
 // =============================================================================
 
-func TestUnitUpdateBYOProfileByName_Success(t *testing.T) {
+func TestUnit_Byoprofiles_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateBYOProfileByNameMock()
 
@@ -235,7 +235,7 @@ func TestUnitUpdateBYOProfileByName_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateBYOProfileByName_EmptyName(t *testing.T) {
+func TestUnit_Byoprofiles_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestBYOProfile{
@@ -250,7 +250,7 @@ func TestUnitUpdateBYOProfileByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "BYO profile name is required")
 }
 
-func TestUnitUpdateBYOProfileByName_NilRequest(t *testing.T) {
+func TestUnit_Byoprofiles_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "Test BYO Profile 1", nil)
@@ -264,7 +264,7 @@ func TestUnitUpdateBYOProfileByName_NilRequest(t *testing.T) {
 // DeleteBYOProfileByID
 // =============================================================================
 
-func TestUnitDeleteBYOProfileByID_Success(t *testing.T) {
+func TestUnit_Byoprofiles_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteBYOProfileByIDMock()
 
@@ -274,7 +274,7 @@ func TestUnitDeleteBYOProfileByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteBYOProfileByID_ZeroID(t *testing.T) {
+func TestUnit_Byoprofiles_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -283,7 +283,7 @@ func TestUnitDeleteBYOProfileByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "BYO profile ID must be a positive integer")
 }
 
-func TestUnitDeleteBYOProfileByID_NegativeID(t *testing.T) {
+func TestUnit_Byoprofiles_DeleteByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), -1)

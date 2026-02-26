@@ -19,7 +19,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.VPPAccountsMock) {
 // ListVPPAccounts
 // =============================================================================
 
-func TestUnitListVPPAccounts_Success(t *testing.T) {
+func TestUnit_VppAccounts_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListVPPAccountsMock()
 
@@ -41,7 +41,7 @@ func TestUnitListVPPAccounts_Success(t *testing.T) {
 // GetVPPAccountByID
 // =============================================================================
 
-func TestUnitGetVPPAccountByID_Success(t *testing.T) {
+func TestUnit_VppAccounts_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetVPPAccountByIDMock()
 
@@ -58,21 +58,21 @@ func TestUnitGetVPPAccountByID_Success(t *testing.T) {
 	assert.True(t, result.NotifyDisassociation)
 }
 
-func TestUnitGetVPPAccountByID_ZeroID(t *testing.T) {
+func TestUnit_VppAccounts_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByID(context.Background(), 0)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "VPP account ID must be a positive integer")
 }
 
-func TestUnitGetVPPAccountByID_NegativeID(t *testing.T) {
+func TestUnit_VppAccounts_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByID(context.Background(), -1)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "VPP account ID must be a positive integer")
 }
 
-func TestUnitGetVPPAccountByID_NotFound(t *testing.T) {
+func TestUnit_VppAccounts_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -85,7 +85,7 @@ func TestUnitGetVPPAccountByID_NotFound(t *testing.T) {
 // CreateVPPAccount
 // =============================================================================
 
-func TestUnitCreateVPPAccount_Success(t *testing.T) {
+func TestUnit_VppAccounts_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateVPPAccountMock()
 
@@ -102,14 +102,14 @@ func TestUnitCreateVPPAccount_Success(t *testing.T) {
 	assert.Equal(t, "Production VPP", result.Name)
 }
 
-func TestUnitCreateVPPAccount_NilRequest(t *testing.T) {
+func TestUnit_VppAccounts_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.Create(context.Background(), nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateVPPAccount_Conflict(t *testing.T) {
+func TestUnit_VppAccounts_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -123,7 +123,7 @@ func TestUnitCreateVPPAccount_Conflict(t *testing.T) {
 // UpdateVPPAccountByID
 // =============================================================================
 
-func TestUnitUpdateVPPAccountByID_Success(t *testing.T) {
+func TestUnit_VppAccounts_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateVPPAccountByIDMock()
 
@@ -137,14 +137,14 @@ func TestUnitUpdateVPPAccountByID_Success(t *testing.T) {
 	assert.Equal(t, "Production VPP Updated", result.Name)
 }
 
-func TestUnitUpdateVPPAccountByID_ZeroID(t *testing.T) {
+func TestUnit_VppAccounts_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByID(context.Background(), 0, &RequestVPPAccount{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "VPP account ID must be a positive integer")
 }
 
-func TestUnitUpdateVPPAccountByID_NilRequest(t *testing.T) {
+func TestUnit_VppAccounts_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
 	require.Error(t, err)
@@ -155,7 +155,7 @@ func TestUnitUpdateVPPAccountByID_NilRequest(t *testing.T) {
 // DeleteVPPAccountByID
 // =============================================================================
 
-func TestUnitDeleteVPPAccountByID_Success(t *testing.T) {
+func TestUnit_VppAccounts_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteVPPAccountByIDMock()
 
@@ -164,7 +164,7 @@ func TestUnitDeleteVPPAccountByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteVPPAccountByID_ZeroID(t *testing.T) {
+func TestUnit_VppAccounts_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, err := svc.DeleteByID(context.Background(), 0)
 	require.Error(t, err)

@@ -19,7 +19,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.PatchExternalSourcesMock) 
 // List
 // =============================================================================
 
-func TestUnitList_Success(t *testing.T) {
+func TestUnit_PatchExternalSources_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListPatchExternalSourcesMock()
 
@@ -41,7 +41,7 @@ func TestUnitList_Success(t *testing.T) {
 // GetByID
 // =============================================================================
 
-func TestUnitGetByID_Success(t *testing.T) {
+func TestUnit_PatchExternalSources_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetPatchExternalSourceByIDMock()
 
@@ -57,21 +57,21 @@ func TestUnitGetByID_Success(t *testing.T) {
 	assert.Equal(t, 443, result.Port)
 }
 
-func TestUnitGetByID_ZeroID(t *testing.T) {
+func TestUnit_PatchExternalSources_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByID(context.Background(), 0)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "patch external source ID must be a positive integer")
 }
 
-func TestUnitGetByID_NegativeID(t *testing.T) {
+func TestUnit_PatchExternalSources_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByID(context.Background(), -1)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "patch external source ID must be a positive integer")
 }
 
-func TestUnitGetByID_NotFound(t *testing.T) {
+func TestUnit_PatchExternalSources_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -84,7 +84,7 @@ func TestUnitGetByID_NotFound(t *testing.T) {
 // GetByName
 // =============================================================================
 
-func TestUnitGetByName_Success(t *testing.T) {
+func TestUnit_PatchExternalSources_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetPatchExternalSourceByNameMock()
 
@@ -97,7 +97,7 @@ func TestUnitGetByName_Success(t *testing.T) {
 	assert.Equal(t, "Primary Patch Source", result.Name)
 }
 
-func TestUnitGetByName_EmptyName(t *testing.T) {
+func TestUnit_PatchExternalSources_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.GetByName(context.Background(), "")
 	require.Error(t, err)
@@ -108,7 +108,7 @@ func TestUnitGetByName_EmptyName(t *testing.T) {
 // Create
 // =============================================================================
 
-func TestUnitCreate_Success(t *testing.T) {
+func TestUnit_PatchExternalSources_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreatePatchExternalSourceMock()
 
@@ -127,14 +127,14 @@ func TestUnitCreate_Success(t *testing.T) {
 	assert.Equal(t, "Primary Patch Source", result.Name)
 }
 
-func TestUnitCreate_NilRequest(t *testing.T) {
+func TestUnit_PatchExternalSources_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.Create(context.Background(), nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreate_Conflict(t *testing.T) {
+func TestUnit_PatchExternalSources_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -148,7 +148,7 @@ func TestUnitCreate_Conflict(t *testing.T) {
 // UpdateByID
 // =============================================================================
 
-func TestUnitUpdateByID_Success(t *testing.T) {
+func TestUnit_PatchExternalSources_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdatePatchExternalSourceByIDMock()
 
@@ -162,14 +162,14 @@ func TestUnitUpdateByID_Success(t *testing.T) {
 	assert.Equal(t, "Primary Patch Source Updated", result.Name)
 }
 
-func TestUnitUpdateByID_ZeroID(t *testing.T) {
+func TestUnit_PatchExternalSources_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByID(context.Background(), 0, &RequestPatchExternalSource{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "patch external source ID must be a positive integer")
 }
 
-func TestUnitUpdateByID_NilRequest(t *testing.T) {
+func TestUnit_PatchExternalSources_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
 	require.Error(t, err)
@@ -180,7 +180,7 @@ func TestUnitUpdateByID_NilRequest(t *testing.T) {
 // UpdateByName
 // =============================================================================
 
-func TestUnitUpdateByName_Success(t *testing.T) {
+func TestUnit_PatchExternalSources_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdatePatchExternalSourceByNameMock()
 
@@ -193,14 +193,14 @@ func TestUnitUpdateByName_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateByName_EmptyName(t *testing.T) {
+func TestUnit_PatchExternalSources_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByName(context.Background(), "", &RequestPatchExternalSource{Name: "x"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "patch external source name is required")
 }
 
-func TestUnitUpdateByName_NilRequest(t *testing.T) {
+func TestUnit_PatchExternalSources_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.UpdateByName(context.Background(), "Primary Patch Source", nil)
 	require.Error(t, err)
@@ -211,7 +211,7 @@ func TestUnitUpdateByName_NilRequest(t *testing.T) {
 // DeleteByID
 // =============================================================================
 
-func TestUnitDeleteByID_Success(t *testing.T) {
+func TestUnit_PatchExternalSources_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeletePatchExternalSourceByIDMock()
 
@@ -220,7 +220,7 @@ func TestUnitDeleteByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteByID_ZeroID(t *testing.T) {
+func TestUnit_PatchExternalSources_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, err := svc.DeleteByID(context.Background(), 0)
 	require.Error(t, err)

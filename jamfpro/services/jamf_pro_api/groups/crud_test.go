@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestListV1(t *testing.T) {
+func TestUnit_Groups_ListV1(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -22,7 +22,7 @@ func TestListV1(t *testing.T) {
 	assert.Len(t, result.Results, 3)
 }
 
-func TestListV1_WithPagination(t *testing.T) {
+func TestUnit_Groups_ListV1_WithPagination(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -40,7 +40,7 @@ func TestListV1_WithPagination(t *testing.T) {
 	assert.Equal(t, 3, result.TotalCount)
 }
 
-func TestGetByIDV1(t *testing.T) {
+func TestUnit_Groups_GetByIDV1(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterGetByIDMock()
 
@@ -54,7 +54,7 @@ func TestGetByIDV1(t *testing.T) {
 	assert.Equal(t, "Test Computer Group", result.GroupName)
 }
 
-func TestGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_Groups_GetByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	svc := NewService(mock)
 
@@ -66,7 +66,7 @@ func TestGetByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "group ID is required")
 }
 
-func TestGetComputerGroupByNameV1(t *testing.T) {
+func TestUnit_Groups_GetComputerGroupByNameV1(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -80,7 +80,7 @@ func TestGetComputerGroupByNameV1(t *testing.T) {
 	assert.Equal(t, "COMPUTER", result.GroupType)
 }
 
-func TestGetComputerGroupByNameV1_EmptyName(t *testing.T) {
+func TestUnit_Groups_GetComputerGroupByNameV1_EmptyName(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	svc := NewService(mock)
 
@@ -92,7 +92,7 @@ func TestGetComputerGroupByNameV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "group name is required")
 }
 
-func TestGetComputerGroupByNameV1_NotFound(t *testing.T) {
+func TestUnit_Groups_GetComputerGroupByNameV1_NotFound(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -105,7 +105,7 @@ func TestGetComputerGroupByNameV1_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "computer group with name")
 }
 
-func TestGetMobileGroupByNameV1(t *testing.T) {
+func TestUnit_Groups_GetMobileGroupByNameV1(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -119,7 +119,7 @@ func TestGetMobileGroupByNameV1(t *testing.T) {
 	assert.Equal(t, "MOBILE", result.GroupType)
 }
 
-func TestGetMobileGroupByNameV1_EmptyName(t *testing.T) {
+func TestUnit_Groups_GetMobileGroupByNameV1_EmptyName(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	svc := NewService(mock)
 
@@ -131,7 +131,7 @@ func TestGetMobileGroupByNameV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "group name is required")
 }
 
-func TestGetMobileGroupByNameV1_NotFound(t *testing.T) {
+func TestUnit_Groups_GetMobileGroupByNameV1_NotFound(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -144,7 +144,7 @@ func TestGetMobileGroupByNameV1_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "mobile group with name")
 }
 
-func TestGetComputerGroupByIDV1(t *testing.T) {
+func TestUnit_Groups_GetComputerGroupByIDV1(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -158,7 +158,7 @@ func TestGetComputerGroupByIDV1(t *testing.T) {
 	assert.Equal(t, "COMPUTER", result.GroupType)
 }
 
-func TestGetComputerGroupByIDV1_EmptyID(t *testing.T) {
+func TestUnit_Groups_GetComputerGroupByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	svc := NewService(mock)
 
@@ -170,7 +170,7 @@ func TestGetComputerGroupByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "group Jamf Pro ID is required")
 }
 
-func TestGetComputerGroupByIDV1_NotFound(t *testing.T) {
+func TestUnit_Groups_GetComputerGroupByIDV1_NotFound(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -183,7 +183,7 @@ func TestGetComputerGroupByIDV1_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "computer group with Jamf Pro ID")
 }
 
-func TestGetMobileGroupByIDV1(t *testing.T) {
+func TestUnit_Groups_GetMobileGroupByIDV1(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -197,7 +197,7 @@ func TestGetMobileGroupByIDV1(t *testing.T) {
 	assert.Equal(t, "MOBILE", result.GroupType)
 }
 
-func TestGetMobileGroupByIDV1_EmptyID(t *testing.T) {
+func TestUnit_Groups_GetMobileGroupByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	svc := NewService(mock)
 
@@ -209,7 +209,7 @@ func TestGetMobileGroupByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "group Jamf Pro ID is required")
 }
 
-func TestGetMobileGroupByIDV1_NotFound(t *testing.T) {
+func TestUnit_Groups_GetMobileGroupByIDV1_NotFound(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -222,7 +222,7 @@ func TestGetMobileGroupByIDV1_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "mobile group with Jamf Pro ID")
 }
 
-func TestUpdateByIDV1(t *testing.T) {
+func TestUnit_Groups_UpdateByIDV1(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterUpdateMock()
 
@@ -239,7 +239,7 @@ func TestUpdateByIDV1(t *testing.T) {
 	assert.Equal(t, "Test Computer Group", result.GroupName)
 }
 
-func TestUpdateByIDV1_EmptyID(t *testing.T) {
+func TestUnit_Groups_UpdateByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	svc := NewService(mock)
 
@@ -252,7 +252,7 @@ func TestUpdateByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "group ID is required")
 }
 
-func TestUpdateByIDV1_NilRequest(t *testing.T) {
+func TestUnit_Groups_UpdateByIDV1_NilRequest(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	svc := NewService(mock)
 
@@ -264,7 +264,7 @@ func TestUpdateByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request body is required")
 }
 
-func TestDeleteByIDV1(t *testing.T) {
+func TestUnit_Groups_DeleteByIDV1(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterDeleteMock()
 
@@ -275,7 +275,7 @@ func TestDeleteByIDV1(t *testing.T) {
 	assert.NotNil(t, resp)
 }
 
-func TestDeleteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_Groups_DeleteByIDV1_EmptyID(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	svc := NewService(mock)
 
@@ -288,7 +288,7 @@ func TestDeleteByIDV1_EmptyID(t *testing.T) {
 
 // Additional comprehensive tests
 
-func TestListV1_WithRSQLFilter(t *testing.T) {
+func TestUnit_Groups_ListV1_WithRSQLFilter(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -304,7 +304,7 @@ func TestListV1_WithRSQLFilter(t *testing.T) {
 	// Mock returns all groups, but in real scenario this would filter
 }
 
-func TestListV1_WithSorting(t *testing.T) {
+func TestUnit_Groups_ListV1_WithSorting(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -319,7 +319,7 @@ func TestListV1_WithSorting(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestListV1_WithComplexRSQL(t *testing.T) {
+func TestUnit_Groups_ListV1_WithComplexRSQL(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -337,7 +337,7 @@ func TestListV1_WithComplexRSQL(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestGetByIDV1_SmartGroupWithCriteria(t *testing.T) {
+func TestUnit_Groups_GetByIDV1_SmartGroupWithCriteria(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterGetByIDMock()
 
@@ -353,7 +353,7 @@ func TestGetByIDV1_SmartGroupWithCriteria(t *testing.T) {
 	assert.NotEmpty(t, result.GroupType)
 }
 
-func TestUpdateByIDV1_SmartGroupCriteria(t *testing.T) {
+func TestUnit_Groups_UpdateByIDV1_SmartGroupCriteria(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterUpdateMock()
 
@@ -389,7 +389,7 @@ func TestUpdateByIDV1_SmartGroupCriteria(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestUpdateByIDV1_StaticGroupAssignments(t *testing.T) {
+func TestUnit_Groups_UpdateByIDV1_StaticGroupAssignments(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterUpdateMock()
 
@@ -419,7 +419,7 @@ func TestUpdateByIDV1_StaticGroupAssignments(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestUpdateByIDV1_OnlyName(t *testing.T) {
+func TestUnit_Groups_UpdateByIDV1_OnlyName(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterUpdateMock()
 
@@ -434,7 +434,7 @@ func TestUpdateByIDV1_OnlyName(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestUpdateByIDV1_OnlyDescription(t *testing.T) {
+func TestUnit_Groups_UpdateByIDV1_OnlyDescription(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterUpdateMock()
 
@@ -449,7 +449,7 @@ func TestUpdateByIDV1_OnlyDescription(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestGetComputerGroupByNameV1_MultipleGroups(t *testing.T) {
+func TestUnit_Groups_GetComputerGroupByNameV1_MultipleGroups(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -464,7 +464,7 @@ func TestGetComputerGroupByNameV1_MultipleGroups(t *testing.T) {
 	assert.Equal(t, "COMPUTER", result.GroupType)
 }
 
-func TestGetMobileGroupByNameV1_WrongType(t *testing.T) {
+func TestUnit_Groups_GetMobileGroupByNameV1_WrongType(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -478,7 +478,7 @@ func TestGetMobileGroupByNameV1_WrongType(t *testing.T) {
 	assert.Contains(t, err.Error(), "mobile group with name")
 }
 
-func TestGetComputerGroupByNameV1_WrongType(t *testing.T) {
+func TestUnit_Groups_GetComputerGroupByNameV1_WrongType(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -492,7 +492,7 @@ func TestGetComputerGroupByNameV1_WrongType(t *testing.T) {
 	assert.Contains(t, err.Error(), "computer group with name")
 }
 
-func TestGetComputerGroupByIDV1_WrongType(t *testing.T) {
+func TestUnit_Groups_GetComputerGroupByIDV1_WrongType(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -506,7 +506,7 @@ func TestGetComputerGroupByIDV1_WrongType(t *testing.T) {
 	assert.Contains(t, err.Error(), "computer group with Jamf Pro ID")
 }
 
-func TestGetMobileGroupByIDV1_WrongType(t *testing.T) {
+func TestUnit_Groups_GetMobileGroupByIDV1_WrongType(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	mock.RegisterListMock()
 
@@ -520,7 +520,7 @@ func TestGetMobileGroupByIDV1_WrongType(t *testing.T) {
 	assert.Contains(t, err.Error(), "mobile group with Jamf Pro ID")
 }
 
-func TestListV1_EmptyResults(t *testing.T) {
+func TestUnit_Groups_ListV1_EmptyResults(t *testing.T) {
 	mock := mocks.NewGroupsMock()
 	// Register a mock that returns empty results
 	mock.RegisterEmptyListMock()
