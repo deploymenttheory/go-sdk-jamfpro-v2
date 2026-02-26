@@ -1,4 +1,4 @@
-package macos_configuration_profiles
+package plist
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 // UUID Preservation Helper Functions
 // -----------------------------------------------------------------------------
 
-// preservePlistUUIDs extracts UUIDs from an existing plist string and injects them into a new plist string.
+// PreservePlistUUIDs extracts UUIDs from an existing plist string and injects them into a new plist string.
 //
 // This function handles nested plist structures and ensures that PayloadUUID and PayloadIdentifier
 // values are preserved from the existing plist to the new one. This prevents Jamf Pro from treating
@@ -22,7 +22,7 @@ import (
 // 1. Copies top-level PayloadUUID and PayloadIdentifier from existing to new
 // 2. Builds UUID maps by PayloadDisplayName for nested payloads
 // 3. Updates nested PayloadUUID and PayloadIdentifier values in new plist
-func preservePlistUUIDs(existingPlist, newPlist string) (string, error) {
+func PreservePlistUUIDs(existingPlist, newPlist string) (string, error) {
 	// Decode existing plist
 	var existingData map[string]any
 	decoder := plist.NewDecoder(strings.NewReader(existingPlist))

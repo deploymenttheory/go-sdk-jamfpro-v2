@@ -1,4 +1,4 @@
-package macos_configuration_profiles
+package plist
 
 import (
 	"strings"
@@ -42,7 +42,7 @@ func TestUnit_MacOSConfigurationProfiles_PreservePlistUUIDs_TopLevelOnly(t *test
 </dict>
 </plist>`
 
-	result, err := preservePlistUUIDs(existingPlist, newPlist)
+	result, err := PreservePlistUUIDs(existingPlist, newPlist)
 	require.NoError(t, err)
 	require.NotEmpty(t, result)
 
@@ -130,7 +130,7 @@ func TestUnit_MacOSConfigurationProfiles_PreservePlistUUIDs_NestedPayloads(t *te
 </dict>
 </plist>`
 
-	result, err := preservePlistUUIDs(existingPlist, newPlist)
+	result, err := PreservePlistUUIDs(existingPlist, newPlist)
 	require.NoError(t, err)
 	require.NotEmpty(t, result)
 
@@ -205,7 +205,7 @@ func TestUnit_MacOSConfigurationProfiles_PreservePlistUUIDs_PayloadTypeFallback(
 </dict>
 </plist>`
 
-	result, err := preservePlistUUIDs(existingPlist, newPlist)
+	result, err := PreservePlistUUIDs(existingPlist, newPlist)
 	require.NoError(t, err)
 	require.NotEmpty(t, result)
 
@@ -286,7 +286,7 @@ func TestUnit_MacOSConfigurationProfiles_PreservePlistUUIDs_DeeplyNestedPayloads
 </dict>
 </plist>`
 
-	result, err := preservePlistUUIDs(existingPlist, newPlist)
+	result, err := PreservePlistUUIDs(existingPlist, newPlist)
 	require.NoError(t, err)
 	require.NotEmpty(t, result)
 
@@ -332,7 +332,7 @@ func TestUnit_MacOSConfigurationProfiles_PreservePlistUUIDs_InvalidExistingPlist
 </dict>
 </plist>`
 
-	result, err := preservePlistUUIDs(invalidPlist, validPlist)
+	result, err := PreservePlistUUIDs(invalidPlist, validPlist)
 	assert.Error(t, err)
 	assert.Empty(t, result)
 	assert.Contains(t, err.Error(), "failed to decode existing plist")
@@ -351,7 +351,7 @@ func TestUnit_MacOSConfigurationProfiles_PreservePlistUUIDs_InvalidNewPlist(t *t
 </plist>`
 	invalidPlist := `This is not a valid plist`
 
-	result, err := preservePlistUUIDs(validPlist, invalidPlist)
+	result, err := PreservePlistUUIDs(validPlist, invalidPlist)
 	assert.Error(t, err)
 	assert.Empty(t, result)
 	assert.Contains(t, err.Error(), "failed to decode new plist")
@@ -380,7 +380,7 @@ func TestUnit_MacOSConfigurationProfiles_PreservePlistUUIDs_MissingUUIDs(t *test
 </dict>
 </plist>`
 
-	result, err := preservePlistUUIDs(existingPlist, newPlist)
+	result, err := PreservePlistUUIDs(existingPlist, newPlist)
 	require.NoError(t, err)
 	require.NotEmpty(t, result)
 
@@ -545,7 +545,7 @@ func TestUnit_MacOSConfigurationProfiles_PreservePlistUUIDs_EmptyPayloadContent(
 </dict>
 </plist>`
 
-	result, err := preservePlistUUIDs(existingPlist, newPlist)
+	result, err := PreservePlistUUIDs(existingPlist, newPlist)
 	require.NoError(t, err)
 	require.NotEmpty(t, result)
 

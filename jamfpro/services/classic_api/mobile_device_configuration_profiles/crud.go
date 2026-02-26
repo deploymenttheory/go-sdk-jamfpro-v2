@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared/plist"
 )
 
 type (
@@ -252,7 +253,17 @@ func (s *Service) Create(ctx context.Context, req *RequestResource) (*CreateUpda
 	return &out, resp, nil
 }
 
-// UpdateByID updates the specified mobile device configuration profile by ID.
+// UpdateByID updates the specified mobile device configuration profile by ID with UUID preservation.
+//
+// This method automatically:
+// 1. Fetches the existing profile from Jamf Pro
+// 2. Extracts PayloadUUID and PayloadIdentifier from the existing plist
+// 3. Injects them into the new plist to maintain UUID continuity
+// 4. Sends the update request with preserved UUIDs
+//
+// Jamf Pro modifies the top-level PayloadUUID and PayloadIdentifier upon profile creation.
+// If these UUIDs are not preserved during updates, Jamf Pro treats the update as a brand
+// new plist, which can cause configuration issues.
 //
 // URL: PUT /JSSResource/mobiledeviceconfigurationprofiles/id/{id}
 //
@@ -266,6 +277,21 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) 
 	}
 	if req.General.Name == "" {
 		return nil, nil, fmt.Errorf("mobile device configuration profile name is required")
+	}
+
+	if req.General.Payloads != "" {
+		existingProfile, _, err := s.GetByID(ctx, id)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to get existing profile for UUID preservation: %w", err)
+		}
+
+		if existingProfile.General.Payloads != "" {
+			updatedPayloads, err := plist.PreservePlistUUIDs(existingProfile.General.Payloads, req.General.Payloads)
+			if err != nil {
+				return nil, nil, fmt.Errorf("failed to preserve plist UUIDs: %w", err)
+			}
+			req.General.Payloads = updatedPayloads
+		}
 	}
 
 	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceConfigurationProfiles, id)
@@ -284,7 +310,17 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) 
 	return &out, resp, nil
 }
 
-// UpdateByName updates the specified mobile device configuration profile by name.
+// UpdateByName updates the specified mobile device configuration profile by name with UUID preservation.
+//
+// This method automatically:
+// 1. Fetches the existing profile from Jamf Pro
+// 2. Extracts PayloadUUID and PayloadIdentifier from the existing plist
+// 3. Injects them into the new plist to maintain UUID continuity
+// 4. Sends the update request with preserved UUIDs
+//
+// Jamf Pro modifies the top-level PayloadUUID and PayloadIdentifier upon profile creation.
+// If these UUIDs are not preserved during updates, Jamf Pro treats the update as a brand
+// new plist, which can cause configuration issues.
 //
 // URL: PUT /JSSResource/mobiledeviceconfigurationprofiles/name/{name}
 //
@@ -298,6 +334,21 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 	}
 	if req.General.Name == "" {
 		return nil, nil, fmt.Errorf("mobile device configuration profile name is required in request")
+	}
+
+	if req.General.Payloads != "" {
+		existingProfile, _, err := s.GetByName(ctx, name)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to get existing profile for UUID preservation: %w", err)
+		}
+
+		if existingProfile.General.Payloads != "" {
+			updatedPayloads, err := plist.PreservePlistUUIDs(existingProfile.General.Payloads, req.General.Payloads)
+			if err != nil {
+				return nil, nil, fmt.Errorf("failed to preserve plist UUIDs: %w", err)
+			}
+			req.General.Payloads = updatedPayloads
+		}
 	}
 
 	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceConfigurationProfiles, name)
