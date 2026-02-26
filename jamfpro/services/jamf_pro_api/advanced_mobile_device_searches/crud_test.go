@@ -100,6 +100,56 @@ func TestUnitDeleteMultipleV1_NilRequest(t *testing.T) {
 	require.Contains(t, err.Error(), "ids are required")
 }
 
+func TestUnit_AdvancedMobileDeviceSearches_DeleteByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_AdvancedMobileDeviceSearches_GetByIDV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterNotFoundErrorMock()
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_AdvancedMobileDeviceSearches_UpdateByIDV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	search := &ResourceAdvancedMobileDeviceSearch{
+		Name:          "All iPhones Updated",
+		Criteria:      []CriteriaJamfProAPI{{Name: "Device Name", Priority: 1, AndOr: "and", SearchType: "like", Value: "iPhone"}},
+		DisplayFields: []string{"Device Name"},
+	}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", search)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode)
+}
+
+func TestUnit_AdvancedMobileDeviceSearches_UpdateByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	search := &ResourceAdvancedMobileDeviceSearch{Name: "Test"}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", search)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_AdvancedMobileDeviceSearches_UpdateByIDV1_NilSearch(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "search is required")
+}
+
 func TestUnitGetChoicesV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetChoicesV1(context.Background(), "Device Name", "-1", "")

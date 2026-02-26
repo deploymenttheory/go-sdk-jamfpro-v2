@@ -55,3 +55,42 @@ func TestUnitUpdateV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
 }
+
+func TestUnitGetV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitUpdateV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &WellKnownSettingsResponseV1{
+		WellKnownSettings: []ResourceWellKnownSettingV1{
+			{OrgName: "Test"},
+		},
+	}
+	result, resp, err := svc.UpdateV1(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitUpdateV1_Non204Response(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateWellKnownSettingsNon204Mock()
+
+	request := &WellKnownSettingsResponseV1{
+		WellKnownSettings: []ResourceWellKnownSettingV1{
+			{OrgName: "Test"},
+		},
+	}
+	result, resp, err := svc.UpdateV1(context.Background(), request)
+	require.NoError(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+}

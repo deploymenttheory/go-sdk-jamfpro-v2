@@ -48,6 +48,11 @@ func (m *SelfServicePlusSettingsMock) RegisterUpdateMock() {
 	m.register("PUT", "/api/v1/self-service-plus/settings", 204, "")
 }
 
+// RegisterUpdateNon204Mock registers a PUT response with 200 status (non-204 success).
+func (m *SelfServicePlusSettingsMock) RegisterUpdateNon204Mock() {
+	m.register("PUT", "/api/v1/self-service-plus/settings", 200, "")
+}
+
 func (m *SelfServicePlusSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {

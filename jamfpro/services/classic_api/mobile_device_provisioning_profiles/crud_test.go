@@ -301,6 +301,220 @@ func TestUnit_MobileDeviceProvisioningProfiles_NotFound(t *testing.T) {
 	assert.Contains(t, err.Error(), "Resource not found")
 }
 
+func TestUnit_MobileDeviceProvisioningProfiles_CreateByName_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	req := &mobile_device_provisioning_profiles.RequestResource{
+		General: mobile_device_provisioning_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.CreateByName(context.Background(), "", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name cannot be empty")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_CreateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, _, err := svc.CreateByName(context.Background(), "New Profile", nil)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_CreateByUUID_EmptyUUID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	req := &mobile_device_provisioning_profiles.RequestResource{
+		General: mobile_device_provisioning_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.CreateByUUID(context.Background(), "", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "UUID cannot be empty")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_CreateByUUID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, _, err := svc.CreateByUUID(context.Background(), "550e8400-e29b-41d4-a716-446655440001", nil)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_UpdateByName_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	req := &mobile_device_provisioning_profiles.RequestResource{
+		General: mobile_device_provisioning_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.UpdateByName(context.Background(), "", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name cannot be empty")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, _, err := svc.UpdateByName(context.Background(), "Test Provisioning Profile", nil)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_UpdateByUUID_EmptyUUID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	req := &mobile_device_provisioning_profiles.RequestResource{
+		General: mobile_device_provisioning_profiles.SubsetGeneral{Name: "Test"},
+	}
+	_, _, err := svc.UpdateByUUID(context.Background(), "", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "UUID cannot be empty")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_UpdateByUUID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, _, err := svc.UpdateByUUID(context.Background(), "550e8400-e29b-41d4-a716-446655440000", nil)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_DeleteByName_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, err := svc.DeleteByName(context.Background(), "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name cannot be empty")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_DeleteByUUID_EmptyUUID(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, err := svc.DeleteByUUID(context.Background(), "")
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "UUID cannot be empty")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_CreateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	req := &mobile_device_provisioning_profiles.RequestResource{
+		General: mobile_device_provisioning_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.CreateByName(context.Background(), "New Profile", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_CreateByUUID_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	req := &mobile_device_provisioning_profiles.RequestResource{
+		General: mobile_device_provisioning_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.CreateByUUID(context.Background(), "550e8400-e29b-41d4-a716-446655440001", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_UpdateByID_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	req := &mobile_device_provisioning_profiles.RequestResource{
+		General: mobile_device_provisioning_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.UpdateByID(context.Background(), 1, req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	req := &mobile_device_provisioning_profiles.RequestResource{
+		General: mobile_device_provisioning_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.UpdateByName(context.Background(), "Test Provisioning Profile", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_UpdateByUUID_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	req := &mobile_device_provisioning_profiles.RequestResource{
+		General: mobile_device_provisioning_profiles.SubsetGeneral{Name: ""},
+	}
+	_, _, err := svc.UpdateByUUID(context.Background(), "550e8400-e29b-41d4-a716-446655440000", req)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "name is required")
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, err := svc.DeleteByName(context.Background(), "nonexistent")
+
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_DeleteByUUID_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, err := svc.DeleteByUUID(context.Background(), "00000000-0000-0000-0000-000000000000")
+
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceProvisioningProfiles_List_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
+	svc := mobile_device_provisioning_profiles.NewService(mockClient)
+
+	_, _, err := svc.List(context.Background())
+
+	require.Error(t, err)
+}
+
 func TestUnit_MobileDeviceProvisioningProfiles_Conflict(t *testing.T) {
 	mockClient := mocks.NewMobileDeviceProvisioningProfilesMock()
 	mockClient.RegisterConflictErrorMock()

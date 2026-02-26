@@ -1,0 +1,16 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "tenantId": "tenant-1",
+      "sessionId": "session-abc",
+      "deviceId": "device-100",
+      "sessionStartedTimestamp": "2025-01-15T10:00:00Z",
+      "sessionEndedTimestamp": "2025-01-15T10:30:00Z",
+      "sessionType": "ATTENDED",
+      "statusType": "FINISHED",
+      "sessionAdminId": "admin-1",
+      "comment": "Support session"
+    }
+  ]
+}

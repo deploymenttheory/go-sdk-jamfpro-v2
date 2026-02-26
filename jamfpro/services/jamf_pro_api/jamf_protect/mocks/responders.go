@@ -198,6 +198,36 @@ func (m *JamfProtectMock) RegisterDeleteIntegrationMock() {
 	m.register("DELETE", "/api/v1/jamf-protect", 204, ``)
 }
 
+// RegisterListDeploymentTasksBadJSONMock registers an invalid JSON response for the tasks endpoint.
+func (m *JamfProtectMock) RegisterListDeploymentTasksBadJSONMock() {
+	m.register("GET", "/api/v1/jamf-protect/deployments/deploy-123/tasks", 200, "not-valid-json")
+}
+
+// RegisterListDeploymentTasksBadResultsMock registers a response with incompatible field types.
+func (m *JamfProtectMock) RegisterListDeploymentTasksBadResultsMock() {
+	m.register("GET", "/api/v1/jamf-protect/deployments/deploy-123/tasks", 200, `{"totalCount": 1, "results": [{"id": ["not", "a", "string"]}]}`)
+}
+
+// RegisterListHistoryBadJSONMock registers an invalid JSON response for the history endpoint.
+func (m *JamfProtectMock) RegisterListHistoryBadJSONMock() {
+	m.register("GET", "/api/v1/jamf-protect/history", 200, "not-valid-json")
+}
+
+// RegisterListHistoryBadResultsMock registers a response with incompatible field types.
+func (m *JamfProtectMock) RegisterListHistoryBadResultsMock() {
+	m.register("GET", "/api/v1/jamf-protect/history", 200, `{"totalCount": 1, "results": [{"id": ["not", "a", "number"]}]}`)
+}
+
+// RegisterListPlansBadJSONMock registers an invalid JSON response for the plans endpoint.
+func (m *JamfProtectMock) RegisterListPlansBadJSONMock() {
+	m.register("GET", "/api/v1/jamf-protect/plans", 200, "not-valid-json")
+}
+
+// RegisterListPlansBadResultsMock registers a response with incompatible field types.
+func (m *JamfProtectMock) RegisterListPlansBadResultsMock() {
+	m.register("GET", "/api/v1/jamf-protect/plans", 200, `{"totalCount": 1, "results": [{"profileId": "not-a-number"}]}`)
+}
+
 // Get implements interfaces.HTTPClient.
 func (m *JamfProtectMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -349,7 +379,25 @@ func (m *JamfProtectMock) GetBytes(ctx context.Context, path string, rsqlQuery m
 
 // GetPaginated implements interfaces.HTTPClient.
 func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
-	return nil, fmt.Errorf("GetPaginated not implemented in JamfProtectMock")
+	key := "GET " + path
+	resp, ok := m.responses[key]
+	if !ok {
+		return nil, fmt.Errorf("no mock registered for GET %s", path)
+	}
+	if resp.errMsg != "" {
+		return nil, fmt.Errorf("%s", resp.errMsg)
+	}
+	ifaceResp := &interfaces.Response{
+		StatusCode: resp.statusCode,
+		Headers:    http.Header{},
+		Body:       resp.rawBody,
+	}
+	if mergePage != nil && len(resp.rawBody) > 0 {
+		if err := mergePage(resp.rawBody); err != nil {
+			return ifaceResp, fmt.Errorf("mergePage: %w", err)
+		}
+	}
+	return ifaceResp, nil
 }
 
 // RSQLBuilder implements interfaces.HTTPClient.

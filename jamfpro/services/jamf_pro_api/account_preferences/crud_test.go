@@ -46,3 +46,32 @@ func TestUnitUpdateV3_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, "en", result.Language)
 }
+
+func TestUnitGetV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetV3(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitUpdateV3_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.UpdateV3(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnitUpdateV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &ResourceAccountPreferencesV2{Language: "en"}
+	result, resp, err := svc.UpdateV3(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}

@@ -46,6 +46,18 @@ func (m *APIRolePrivilegesMock) RegisterMocks() {
 	m.register("GET", "/api/v1/api-role-privileges/search?name=Read&limit=10", 200, "validate_list.json")
 }
 
+func (m *APIRolePrivilegesMock) RegisterSearchDefaultLimitMock() {
+	m.register("GET", "/api/v1/api-role-privileges/search?name=Read&limit=15", 200, "validate_list.json")
+}
+
+func (m *APIRolePrivilegesMock) RegisterListErrorMock() {
+	m.responses["GET:/api/v1/api-role-privileges"] = registeredResponse{
+		statusCode: 500,
+		rawBody:    []byte(`{"code":"INTERNAL","message":"server error"}`),
+		errMsg:     "Jamf Pro API error (500) [INTERNAL]: server error",
+	}
+}
+
 func (m *APIRolePrivilegesMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	return m.dispatch("GET", path, result)
 }

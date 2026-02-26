@@ -1,0 +1,16 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "name": "Test App",
+      "licenseCountTotal": 10,
+      "licenseCountInUse": 3,
+      "licenseCountReported": 3,
+      "iconUrl": "https://example.com/icon.png",
+      "deviceTypes": ["iPhone", "iPad"],
+      "contentType": "App",
+      "pricingParam": "STDQ",
+      "adamId": "12345678"
+    }
+  ]
+}

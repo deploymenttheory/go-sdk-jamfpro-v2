@@ -107,6 +107,10 @@ func (m *ComputerExtensionAttributesMock) RegisterHistoryMock() {
 	m.register("GET", "/api/v1/computer-extension-attributes/1/history", 200, "validate_history.json")
 }
 
+func (m *ComputerExtensionAttributesMock) RegisterAddHistoryNoteMock() {
+	m.register("POST", "/api/v1/computer-extension-attributes/1/history", 201, "")
+}
+
 func (m *ComputerExtensionAttributesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)

@@ -234,3 +234,177 @@ func TestUnit_JamfConnect_GetHistoryV1_Success(t *testing.T) {
 	assert.Equal(t, "1", result.Results[0].ID)
 	assert.Equal(t, "admin", result.Results[0].Username)
 }
+
+func TestUnit_JamfConnect_GetSettingsV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetSettingsV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_ListConfigProfilesV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.ListConfigProfilesV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_ListConfigProfilesV1_BadJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListConfigProfilesBadJSONMock()
+
+	result, resp, err := svc.ListConfigProfilesV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_ListConfigProfilesV1_BadResults(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListConfigProfilesBadResultsMock()
+
+	result, resp, err := svc.ListConfigProfilesV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetConfigProfileByUUIDV1_ListError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetConfigProfileByUUIDV1(context.Background(), "unknown-uuid")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetConfigProfileByUUIDV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListConfigProfilesMock()
+
+	result, resp, err := svc.GetConfigProfileByUUIDV1(context.Background(), "non-existent-uuid")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "no jamf connect config profile found with UUID")
+}
+
+func TestUnit_JamfConnect_GetConfigProfileByIDV1_ListError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetConfigProfileByIDV1(context.Background(), 999)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetConfigProfileByIDV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListConfigProfilesMock()
+
+	result, resp, err := svc.GetConfigProfileByIDV1(context.Background(), 9999)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "no jamf connect config profile found with ID")
+}
+
+func TestUnit_JamfConnect_GetConfigProfileByNameV1_ListError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetConfigProfileByNameV1(context.Background(), "Unknown")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetConfigProfileByNameV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListConfigProfilesMock()
+
+	result, resp, err := svc.GetConfigProfileByNameV1(context.Background(), "Non Existent Profile")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "no jamf connect config profile found with name")
+}
+
+func TestUnit_JamfConnect_UpdateConfigProfileByUUIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &ResourceJamfConnectConfigProfileUpdate{JamfConnectVersion: "2.0.0"}
+	result, resp, err := svc.UpdateConfigProfileByUUIDV1(context.Background(), "123e4567-e89b-12d3-a456-426614174000", request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetDeploymentTasksByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetDeploymentTasksByIDV1(context.Background(), "dep-123", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetDeploymentTasksByIDV1_BadJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetDeploymentTasksBadJSONMock()
+
+	result, resp, err := svc.GetDeploymentTasksByIDV1(context.Background(), "dep-123", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetDeploymentTasksByIDV1_BadResults(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetDeploymentTasksBadResultsMock()
+
+	result, resp, err := svc.GetDeploymentTasksByIDV1(context.Background(), "dep-123", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetHistoryV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetHistoryV1_BadJSON(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryBadJSONMock()
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_GetHistoryV1_BadResults(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryBadResultsMock()
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnit_JamfConnect_RetryDeploymentTasksByUUIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.RetryDeploymentTasksByUUIDV1(context.Background(), "123e4567-e89b-12d3-a456-426614174000", []string{"1"})
+	require.Error(t, err)
+	_ = resp
+}

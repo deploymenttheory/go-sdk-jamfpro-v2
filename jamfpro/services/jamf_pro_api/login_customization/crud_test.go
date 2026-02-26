@@ -28,6 +28,24 @@ func TestUnitGetV1_Success(t *testing.T) {
 	assert.Equal(t, "Accept", result.ActionText)
 }
 
+func TestUnit_LoginCustomization_GetV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetV1(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_LoginCustomization_UpdateV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.UpdateV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
 func TestUnitUpdateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateLoginCustomizationMock()

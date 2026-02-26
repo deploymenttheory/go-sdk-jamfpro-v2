@@ -181,3 +181,103 @@ func TestUnit_VolumePurchasingLocations_RevokeVolumePurchasingLocationLicensesBy
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
 }
+
+func TestUnit_VolumePurchasingLocations_CreateV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.CreateV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_VolumePurchasingLocations_UpdateByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &RequestVolumePurchasingLocation{Name: "Test"}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", req)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_VolumePurchasingLocations_UpdateByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_VolumePurchasingLocations_DeleteByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "ID is required")
+}
+
+func TestUnit_VolumePurchasingLocations_ReclaimByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.ReclaimVolumePurchasingLocationByIDV1(context.Background(), "")
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "ID is required")
+}
+
+func TestUnit_VolumePurchasingLocations_GetContentV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetContentV1(context.Background(), "", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "ID is required")
+}
+
+func TestUnit_VolumePurchasingLocations_GetHistoryV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryV1(context.Background(), "", nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "ID is required")
+}
+
+func TestUnit_VolumePurchasingLocations_RevokeByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.RevokeVolumePurchasingLocationLicensesByIDV1(context.Background(), "")
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "ID is required")
+}
+
+func TestUnit_VolumePurchasingLocations_GetContentV1_WithResults(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetContentWithResultsMock()
+
+	result, resp, err := svc.GetContentV1(context.Background(), "2", nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "Test App", result.Results[0].Name)
+}
+
+func TestUnit_VolumePurchasingLocations_ListV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.ListV1(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}

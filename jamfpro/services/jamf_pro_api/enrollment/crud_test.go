@@ -365,3 +365,215 @@ func TestUnitValidateLanguageCode_Empty(t *testing.T) {
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "required")
 }
+
+func TestUnitGetHistoryV2_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetHistoryV2(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitListAccessGroupsV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.ListAccessGroupsV3(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitGetAccessGroupByIDV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetAccessGroupByIDV3(context.Background(), "2")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitCreateAccessGroupV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &ResourceAccountDrivenUserEnrollmentAccessGroup{Name: "Test"}
+	result, resp, err := svc.CreateAccessGroupV3(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitUpdateAccessGroupByIDV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &ResourceAccountDrivenUserEnrollmentAccessGroup{Name: "Test"}
+	result, resp, err := svc.UpdateAccessGroupByIDV3(context.Background(), "2", request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitDeleteAccessGroupByIDV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.DeleteAccessGroupByIDV3(context.Background(), "2")
+	require.Error(t, err)
+	_ = resp
+}
+
+func TestUnitListLanguageMessagesV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.ListLanguageMessagesV3(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitGetLanguageMessageV3_ListCodesError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetLanguageMessageV3(context.Background(), "en")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitGetLanguageMessageV3_InvalidCode(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListLanguageCodesV3Mock()
+
+	result, resp, err := svc.GetLanguageMessageV3(context.Background(), "xx")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "invalid language code")
+}
+
+func TestUnitGetLanguageMessageV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListLanguageCodesV3Mock()
+
+	result, resp, err := svc.GetLanguageMessageV3(context.Background(), "en")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitUpdateLanguageMessageV3_ListCodesError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &ResourceEnrollmentLanguage{LanguageCode: "en", Name: "English"}
+	result, resp, err := svc.UpdateLanguageMessageV3(context.Background(), "en", request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitUpdateLanguageMessageV3_InvalidCode(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListLanguageCodesV3Mock()
+
+	request := &ResourceEnrollmentLanguage{LanguageCode: "xx", Name: "Unknown"}
+	result, resp, err := svc.UpdateLanguageMessageV3(context.Background(), "xx", request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "invalid language code")
+}
+
+func TestUnitUpdateLanguageMessageV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListLanguageCodesV3Mock()
+
+	request := &ResourceEnrollmentLanguage{LanguageCode: "en", Name: "English"}
+	result, resp, err := svc.UpdateLanguageMessageV3(context.Background(), "en", request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitDeleteLanguageMessageV3_ListCodesError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.DeleteLanguageMessageV3(context.Background(), "en")
+	require.Error(t, err)
+	_ = resp
+}
+
+func TestUnitDeleteLanguageMessageV3_InvalidCode(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListLanguageCodesV3Mock()
+
+	resp, err := svc.DeleteLanguageMessageV3(context.Background(), "xx")
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "invalid language code")
+}
+
+func TestUnitDeleteLanguageMessageV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListLanguageCodesV3Mock()
+
+	resp, err := svc.DeleteLanguageMessageV3(context.Background(), "en")
+	require.Error(t, err)
+	_ = resp
+}
+
+func TestUnitDeleteMultipleLanguageMessagesV3_ListCodesError(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &RequestDeleteMultipleLanguages{IDs: []string{"en"}}
+	resp, err := svc.DeleteMultipleLanguageMessagesV3(context.Background(), request)
+	require.Error(t, err)
+	_ = resp
+}
+
+func TestUnitDeleteMultipleLanguageMessagesV3_InvalidCode(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListLanguageCodesV3Mock()
+
+	request := &RequestDeleteMultipleLanguages{IDs: []string{"xx"}}
+	resp, err := svc.DeleteMultipleLanguageMessagesV3(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "invalid language code")
+}
+
+func TestUnitDeleteMultipleLanguageMessagesV3_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListLanguageCodesV3Mock()
+
+	request := &RequestDeleteMultipleLanguages{IDs: []string{"en", "es"}}
+	resp, err := svc.DeleteMultipleLanguageMessagesV3(context.Background(), request)
+	require.Error(t, err)
+	_ = resp
+}
+
+func TestUnitListLanguageCodesV3_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.ListLanguageCodesV3(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitGetV4_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.GetV4(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}
+
+func TestUnitUpdateV4_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	request := &ResourceEnrollment{ManagementUsername: "admin"}
+	result, resp, err := svc.UpdateV4(context.Background(), request)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	_ = resp
+}

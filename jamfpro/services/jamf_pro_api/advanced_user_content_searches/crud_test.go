@@ -81,10 +81,54 @@ func TestUnitUpdateByIDV1_Success(t *testing.T) {
 	require.Equal(t, "1", result.ID)
 }
 
+func TestUnit_AdvancedUserContentSearches_GetByIDV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterNotFoundErrorMock()
+	result, resp, err := svc.GetByIDV1(context.Background(), "999")
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 404, resp.StatusCode)
+}
+
+func TestUnit_AdvancedUserContentSearches_UpdateByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	search := &ResourceAdvancedUserContentSearch{Name: "Test"}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", search)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_AdvancedUserContentSearches_UpdateByIDV1_NilSearch(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "search is required")
+}
+
+func TestUnit_AdvancedUserContentSearches_DeleteByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteByIDV1(context.Background(), "")
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "id is required")
+}
+
 func TestUnitDeleteByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.Equal(t, 204, resp.StatusCode)
+}
+
+func TestUnit_AdvancedUserContentSearches_DeleteByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteByIDV1(context.Background(), "999")
+	require.Error(t, err)
+	require.NotNil(t, resp)
 }

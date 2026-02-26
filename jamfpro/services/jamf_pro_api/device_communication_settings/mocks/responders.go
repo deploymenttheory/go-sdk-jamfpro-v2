@@ -44,6 +44,10 @@ func (m *DeviceCommunicationSettingsMock) RegisterPutMock() {
 	m.register("PUT", "/api/v1/device-communication-settings", 200, "validate_get.json")
 }
 
+func (m *DeviceCommunicationSettingsMock) RegisterGetHistoryMock() {
+	m.register("GET", "/api/v1/device-communication-settings/history", 200, "validate_history.json")
+}
+
 func (m *DeviceCommunicationSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
