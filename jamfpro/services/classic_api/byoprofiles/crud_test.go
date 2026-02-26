@@ -296,7 +296,7 @@ func TestUnit_Byoprofiles_DeleteByID_NegativeID(t *testing.T) {
 // DeleteBYOProfileByName
 // =============================================================================
 
-func TestUnitDeleteBYOProfileByName_Success(t *testing.T) {
+func TestUnit_Byoprofiles_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteBYOProfileByNameMock()
 
@@ -306,7 +306,7 @@ func TestUnitDeleteBYOProfileByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteBYOProfileByName_EmptyName(t *testing.T) {
+func TestUnit_Byoprofiles_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")

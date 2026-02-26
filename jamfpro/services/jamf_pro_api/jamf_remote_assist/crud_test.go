@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.JamfRemoteAssistMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListSessionsV1_Success(t *testing.T) {
+func TestUnit_JamfRemoteAssist_ListSessionsV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListSessionsV1(context.Background())
 	require.NoError(t, err)
@@ -25,7 +25,7 @@ func TestUnitListSessionsV1_Success(t *testing.T) {
 	require.Equal(t, "session-abc", result[0].SessionID)
 }
 
-func TestUnitGetSessionByIDV1_Success(t *testing.T) {
+func TestUnit_JamfRemoteAssist_GetSessionByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetSessionByIDV1(context.Background(), "session-abc")
 	require.NoError(t, err)
@@ -51,7 +51,7 @@ func TestUnit_JamfRemoteAssist_GetSessionByIDV1_NotFound(t *testing.T) {
 	require.NotNil(t, resp)
 }
 
-func TestUnitListSessionsV2_Success(t *testing.T) {
+func TestUnit_JamfRemoteAssist_ListSessionsV2_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListSessionsV2(context.Background(), nil)
 	require.NoError(t, err)
@@ -61,7 +61,7 @@ func TestUnitListSessionsV2_Success(t *testing.T) {
 	require.Len(t, result.Results, 1)
 }
 
-func TestUnitGetSessionByIDV2_Success(t *testing.T) {
+func TestUnit_JamfRemoteAssist_GetSessionByIDV2_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetSessionByIDV2(context.Background(), "session-abc")
 	require.NoError(t, err)

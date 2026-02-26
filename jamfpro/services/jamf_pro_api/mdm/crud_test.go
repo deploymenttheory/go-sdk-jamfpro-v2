@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.MDMMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitBlankPush_Success(t *testing.T) {
+func TestUnit_Mdm_BlankPush_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterBlankPushMock()
 
@@ -29,7 +29,7 @@ func TestUnitBlankPush_Success(t *testing.T) {
 	assert.Empty(t, result.ErrorUUIDs)
 }
 
-func TestUnitBlankPush_EmptyClientManagementIDs(t *testing.T) {
+func TestUnit_Mdm_BlankPush_EmptyClientManagementIDs(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.BlankPush(context.Background(), []string{})
@@ -39,7 +39,7 @@ func TestUnitBlankPush_EmptyClientManagementIDs(t *testing.T) {
 	assert.Contains(t, err.Error(), "clientManagementIDs is required")
 }
 
-func TestUnitBlankPush_NilClientManagementIDs(t *testing.T) {
+func TestUnit_Mdm_BlankPush_NilClientManagementIDs(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.BlankPush(context.Background(), nil)
@@ -49,7 +49,7 @@ func TestUnitBlankPush_NilClientManagementIDs(t *testing.T) {
 	assert.Contains(t, err.Error(), "clientManagementIDs is required")
 }
 
-func TestUnitSendCommand_Success(t *testing.T) {
+func TestUnit_Mdm_SendCommand_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterSendCommandMock()
 
@@ -71,7 +71,7 @@ func TestUnitSendCommand_Success(t *testing.T) {
 	assert.Equal(t, "/api/v2/mdm/commands/cmd-12345", result.Href)
 }
 
-func TestUnitSendCommand_NilRequest(t *testing.T) {
+func TestUnit_Mdm_SendCommand_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.SendCommand(context.Background(), nil)
@@ -81,7 +81,7 @@ func TestUnitSendCommand_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitSendCommand_NotFound(t *testing.T) {
+func TestUnit_Mdm_SendCommand_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -96,7 +96,7 @@ func TestUnitSendCommand_NotFound(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 }
 
-func TestUnitDeployPackage_Success(t *testing.T) {
+func TestUnit_Mdm_DeployPackage_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeployPackageMock()
 
@@ -125,7 +125,7 @@ func TestUnitDeployPackage_Success(t *testing.T) {
 	assert.Empty(t, result.Errors)
 }
 
-func TestUnitDeployPackage_NilRequest(t *testing.T) {
+func TestUnit_Mdm_DeployPackage_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.DeployPackage(context.Background(), nil)
@@ -135,7 +135,7 @@ func TestUnitDeployPackage_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitRenewProfile_Success(t *testing.T) {
+func TestUnit_Mdm_RenewProfile_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterRenewProfileMock()
 
@@ -152,7 +152,7 @@ func TestUnitRenewProfile_Success(t *testing.T) {
 	assert.Empty(t, result.UDIDsNotProcessed.UDIDs)
 }
 
-func TestUnitRenewProfile_NilRequest(t *testing.T) {
+func TestUnit_Mdm_RenewProfile_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.RenewProfile(context.Background(), nil)

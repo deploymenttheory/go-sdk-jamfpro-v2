@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUnitAcceptDisclaimerV2_Success(t *testing.T) {
+func TestUnit_PatchManagement_AcceptDisclaimerV2_Success(t *testing.T) {
 	mock := mocks.NewPatchManagementMock()
 	mock.RegisterAcceptDisclaimerMock()
 	service := NewService(mock)
@@ -19,7 +19,7 @@ func TestUnitAcceptDisclaimerV2_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitAcceptDisclaimerV2_Error(t *testing.T) {
+func TestUnit_PatchManagement_AcceptDisclaimerV2_Error(t *testing.T) {
 	mock := mocks.NewPatchManagementMock()
 	mock.RegisterAcceptDisclaimerErrorMock()
 	service := NewService(mock)
@@ -30,7 +30,7 @@ func TestUnitAcceptDisclaimerV2_Error(t *testing.T) {
 	assert.Contains(t, err.Error(), "request failed")
 }
 
-func TestUnitAcceptDisclaimerV2_NoMockRegistered(t *testing.T) {
+func TestUnit_PatchManagement_AcceptDisclaimerV2_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewPatchManagementMock()
 	service := NewService(mock)
 

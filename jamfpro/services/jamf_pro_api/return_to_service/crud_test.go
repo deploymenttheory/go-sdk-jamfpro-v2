@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ReturnToServiceMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListV1_Success(t *testing.T) {
+func TestUnit_ReturnToService_ListV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 	result, resp, err := svc.ListV1(context.Background())
@@ -28,7 +28,7 @@ func TestUnitListV1_Success(t *testing.T) {
 	assert.Equal(t, "Default", result.Results[0].DisplayName)
 }
 
-func TestUnitGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_ReturnToService_GetByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	require.Error(t, err)
@@ -36,7 +36,7 @@ func TestUnitGetByIDV1_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitCreateV1_NilRequest(t *testing.T) {
+func TestUnit_ReturnToService_CreateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.CreateV1(context.Background(), nil)
 	require.Error(t, err)
@@ -44,7 +44,7 @@ func TestUnitCreateV1_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitDeleteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_ReturnToService_DeleteByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteByIDV1(context.Background(), "")
 	require.Error(t, err)

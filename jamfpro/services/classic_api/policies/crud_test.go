@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.PoliciesMock) {
 // List
 // =============================================================================
 
-func TestUnitList_Success(t *testing.T) {
+func TestUnit_Policies_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -42,7 +42,7 @@ func TestUnitList_Success(t *testing.T) {
 // GetByID
 // =============================================================================
 
-func TestUnitGetByID_Success(t *testing.T) {
+func TestUnit_Policies_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -59,7 +59,7 @@ func TestUnitGetByID_Success(t *testing.T) {
 	assert.True(t, result.Scope.AllComputers)
 }
 
-func TestUnitGetByID_ZeroID(t *testing.T) {
+func TestUnit_Policies_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -69,7 +69,7 @@ func TestUnitGetByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "policy ID must be a positive integer")
 }
 
-func TestUnitGetByID_NegativeID(t *testing.T) {
+func TestUnit_Policies_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), -1)
@@ -79,7 +79,7 @@ func TestUnitGetByID_NegativeID(t *testing.T) {
 	assert.Contains(t, err.Error(), "policy ID must be a positive integer")
 }
 
-func TestUnitGetByID_NotFound(t *testing.T) {
+func TestUnit_Policies_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -94,7 +94,7 @@ func TestUnitGetByID_NotFound(t *testing.T) {
 // GetByName
 // =============================================================================
 
-func TestUnitGetByName_Success(t *testing.T) {
+func TestUnit_Policies_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByNameMock()
 
@@ -109,7 +109,7 @@ func TestUnitGetByName_Success(t *testing.T) {
 	assert.True(t, result.General.Enabled)
 }
 
-func TestUnitGetByName_EmptyName(t *testing.T) {
+func TestUnit_Policies_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -123,7 +123,7 @@ func TestUnitGetByName_EmptyName(t *testing.T) {
 // Create
 // =============================================================================
 
-func TestUnitCreate_Success(t *testing.T) {
+func TestUnit_Policies_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -147,7 +147,7 @@ func TestUnitCreate_Success(t *testing.T) {
 	assert.Equal(t, 3, result.ID)
 }
 
-func TestUnitCreate_NilRequest(t *testing.T) {
+func TestUnit_Policies_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -157,7 +157,7 @@ func TestUnitCreate_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "policy is required")
 }
 
-func TestUnitCreate_Conflict(t *testing.T) {
+func TestUnit_Policies_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -184,7 +184,7 @@ func TestUnitCreate_Conflict(t *testing.T) {
 // UpdateByID
 // =============================================================================
 
-func TestUnitUpdateByID_Success(t *testing.T) {
+func TestUnit_Policies_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByIDMock()
 
@@ -208,7 +208,7 @@ func TestUnitUpdateByID_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateByID_ZeroID(t *testing.T) {
+func TestUnit_Policies_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &ResourcePolicy{
@@ -226,7 +226,7 @@ func TestUnitUpdateByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "policy ID must be a positive integer")
 }
 
-func TestUnitUpdateByID_NilRequest(t *testing.T) {
+func TestUnit_Policies_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
@@ -240,7 +240,7 @@ func TestUnitUpdateByID_NilRequest(t *testing.T) {
 // UpdateByName
 // =============================================================================
 
-func TestUnitUpdateByName_Success(t *testing.T) {
+func TestUnit_Policies_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByNameMock()
 
@@ -264,7 +264,7 @@ func TestUnitUpdateByName_Success(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 }
 
-func TestUnitUpdateByName_EmptyName(t *testing.T) {
+func TestUnit_Policies_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &ResourcePolicy{
@@ -282,7 +282,7 @@ func TestUnitUpdateByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "policy name is required")
 }
 
-func TestUnitUpdateByName_NilRequest(t *testing.T) {
+func TestUnit_Policies_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "Test Policy", nil)
@@ -296,7 +296,7 @@ func TestUnitUpdateByName_NilRequest(t *testing.T) {
 // DeleteByID
 // =============================================================================
 
-func TestUnitDeleteByID_Success(t *testing.T) {
+func TestUnit_Policies_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByIDMock()
 
@@ -307,7 +307,7 @@ func TestUnitDeleteByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteByID_ZeroID(t *testing.T) {
+func TestUnit_Policies_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -316,7 +316,7 @@ func TestUnitDeleteByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "policy ID must be a positive integer")
 }
 
-func TestUnitDeleteByID_NegativeID(t *testing.T) {
+func TestUnit_Policies_DeleteByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), -1)
@@ -329,7 +329,7 @@ func TestUnitDeleteByID_NegativeID(t *testing.T) {
 // DeleteByName
 // =============================================================================
 
-func TestUnitDeleteByName_Success(t *testing.T) {
+func TestUnit_Policies_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByNameMock()
 
@@ -340,7 +340,7 @@ func TestUnitDeleteByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteByName_EmptyName(t *testing.T) {
+func TestUnit_Policies_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")
@@ -353,7 +353,7 @@ func TestUnitDeleteByName_EmptyName(t *testing.T) {
 // GetByCreatedBy
 // =============================================================================
 
-func TestUnitGetByCreatedBy_Success_JSS(t *testing.T) {
+func TestUnit_Policies_GetByCreatedBy_Success_JSS(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByCreatedByMock()
 
@@ -367,7 +367,7 @@ func TestUnitGetByCreatedBy_Success_JSS(t *testing.T) {
 	require.Len(t, result.Results, 2)
 }
 
-func TestUnitGetByCreatedBy_EmptyCreatedBy(t *testing.T) {
+func TestUnit_Policies_GetByCreatedBy_EmptyCreatedBy(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByCreatedBy(context.Background(), "")
@@ -377,7 +377,7 @@ func TestUnitGetByCreatedBy_EmptyCreatedBy(t *testing.T) {
 	assert.Contains(t, err.Error(), "createdBy is required")
 }
 
-func TestUnitGetByCreatedBy_InvalidCreatedBy(t *testing.T) {
+func TestUnit_Policies_GetByCreatedBy_InvalidCreatedBy(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByCreatedBy(context.Background(), "invalid")
@@ -391,7 +391,7 @@ func TestUnitGetByCreatedBy_InvalidCreatedBy(t *testing.T) {
 // GetByCategory
 // =============================================================================
 
-func TestUnitGetByCategory_Success(t *testing.T) {
+func TestUnit_Policies_GetByCategory_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByCategoryMock()
 
@@ -405,7 +405,7 @@ func TestUnitGetByCategory_Success(t *testing.T) {
 	require.Len(t, result.Results, 2)
 }
 
-func TestUnitGetByCategory_EmptyCategory(t *testing.T) {
+func TestUnit_Policies_GetByCategory_EmptyCategory(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByCategory(context.Background(), "")
@@ -419,7 +419,7 @@ func TestUnitGetByCategory_EmptyCategory(t *testing.T) {
 // GetByIDWithSubset
 // =============================================================================
 
-func TestUnitGetByIDWithSubset_Success(t *testing.T) {
+func TestUnit_Policies_GetByIDWithSubset_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDWithSubsetMock()
 
@@ -433,7 +433,7 @@ func TestUnitGetByIDWithSubset_Success(t *testing.T) {
 	assert.Equal(t, "Test Policy", result.General.Name)
 }
 
-func TestUnitGetByIDWithSubset_ZeroID(t *testing.T) {
+func TestUnit_Policies_GetByIDWithSubset_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDWithSubset(context.Background(), 0, "General")
@@ -443,7 +443,7 @@ func TestUnitGetByIDWithSubset_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "policy ID must be a positive integer")
 }
 
-func TestUnitGetByIDWithSubset_EmptySubset(t *testing.T) {
+func TestUnit_Policies_GetByIDWithSubset_EmptySubset(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDWithSubset(context.Background(), 1, "")
@@ -453,7 +453,7 @@ func TestUnitGetByIDWithSubset_EmptySubset(t *testing.T) {
 	assert.Contains(t, err.Error(), "subset is required")
 }
 
-func TestUnitGetByIDWithSubset_MultipleSubsets(t *testing.T) {
+func TestUnit_Policies_GetByIDWithSubset_MultipleSubsets(t *testing.T) {
 	svc, mock := setupMockService(t)
 	// Register a mock for combined subsets
 	mock.Register("GET", "/JSSResource/policies/id/1/subset/General&Scope", 200, "validate_get_policy.xml")
@@ -471,7 +471,7 @@ func TestUnitGetByIDWithSubset_MultipleSubsets(t *testing.T) {
 // GetByNameWithSubset
 // =============================================================================
 
-func TestUnitGetByNameWithSubset_Success(t *testing.T) {
+func TestUnit_Policies_GetByNameWithSubset_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByNameWithSubsetMock()
 
@@ -485,7 +485,7 @@ func TestUnitGetByNameWithSubset_Success(t *testing.T) {
 	assert.Equal(t, "Test Policy", result.General.Name)
 }
 
-func TestUnitGetByNameWithSubset_EmptyName(t *testing.T) {
+func TestUnit_Policies_GetByNameWithSubset_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByNameWithSubset(context.Background(), "", "General")
@@ -495,7 +495,7 @@ func TestUnitGetByNameWithSubset_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "policy name is required")
 }
 
-func TestUnitGetByNameWithSubset_EmptySubset(t *testing.T) {
+func TestUnit_Policies_GetByNameWithSubset_EmptySubset(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByNameWithSubset(context.Background(), "Test Policy", "")
@@ -505,7 +505,7 @@ func TestUnitGetByNameWithSubset_EmptySubset(t *testing.T) {
 	assert.Contains(t, err.Error(), "subset is required")
 }
 
-func TestUnitGetByNameWithSubset_MultipleSubsets(t *testing.T) {
+func TestUnit_Policies_GetByNameWithSubset_MultipleSubsets(t *testing.T) {
 	svc, mock := setupMockService(t)
 	// Register a mock for combined subsets
 	mock.Register("GET", "/JSSResource/policies/name/Test Policy/subset/General&Scope", 200, "validate_get_policy.xml")

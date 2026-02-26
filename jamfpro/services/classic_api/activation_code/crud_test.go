@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ActivationCodeMock) {
 // GetActivationCode
 // =============================================================================
 
-func TestUnitGetActivationCode_Success(t *testing.T) {
+func TestUnit_ActivationCode_Get_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetActivationCodeMock()
 
@@ -38,7 +38,7 @@ func TestUnitGetActivationCode_Success(t *testing.T) {
 // UpdateActivationCode
 // =============================================================================
 
-func TestUnitUpdateActivationCode_Success(t *testing.T) {
+func TestUnit_ActivationCode_Update_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateActivationCodeMock()
 
@@ -53,11 +53,24 @@ func TestUnitUpdateActivationCode_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateActivationCode_NilRequest(t *testing.T) {
+func TestUnit_ActivationCode_Update_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.UpdateActivationCode(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_ActivationCode_Get_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.GetActivationCode(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_ActivationCode_Update_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestActivationCode{OrganizationName: "Test", Code: "ABCD-1234"}
+	_, err := svc.UpdateActivationCode(context.Background(), req)
+	require.Error(t, err)
 }

@@ -268,3 +268,77 @@ func TestUnit_MobileDeviceGroups_Conflict(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "already exists")
 }
+
+func TestUnit_MobileDeviceGroups_List_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceGroups_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "All Mobile Devices")
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceGroups_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceGroups_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &mobile_device_groups.RequestMobileDeviceGroup{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device group name is required")
+}
+
+func TestUnit_MobileDeviceGroups_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &mobile_device_groups.RequestMobileDeviceGroup{Name: "Test"})
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceGroups_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "All Mobile Devices", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDeviceGroups_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "All Mobile Devices", &mobile_device_groups.RequestMobileDeviceGroup{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "mobile device group name is required in request")
+}
+
+func TestUnit_MobileDeviceGroups_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "All Mobile Devices", &mobile_device_groups.RequestMobileDeviceGroup{Name: "Updated"})
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceGroups_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_MobileDeviceGroups_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewMobileDeviceGroupsMock()
+	svc := mobile_device_groups.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "All Mobile Devices")
+	require.Error(t, err)
+}

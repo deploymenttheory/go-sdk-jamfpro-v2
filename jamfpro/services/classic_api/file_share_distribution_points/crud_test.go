@@ -248,3 +248,77 @@ func TestUnit_FileShareDistributionPoints_Conflict(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "distribution point with that name already exists")
 }
+
+func TestUnit_FileShareDistributionPoints_List_Error(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_FileShareDistributionPoints_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "Main File Share DP")
+	require.Error(t, err)
+}
+
+func TestUnit_FileShareDistributionPoints_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_FileShareDistributionPoints_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &file_share_distribution_points.RequestFileShareDistributionPoint{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "distribution point name is required")
+}
+
+func TestUnit_FileShareDistributionPoints_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &file_share_distribution_points.RequestFileShareDistributionPoint{Name: "Test"})
+	require.Error(t, err)
+}
+
+func TestUnit_FileShareDistributionPoints_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Main File Share DP", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_FileShareDistributionPoints_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Main File Share DP", &file_share_distribution_points.RequestFileShareDistributionPoint{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "distribution point name is required in request")
+}
+
+func TestUnit_FileShareDistributionPoints_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Main File Share DP", &file_share_distribution_points.RequestFileShareDistributionPoint{Name: "Updated"})
+	require.Error(t, err)
+}
+
+func TestUnit_FileShareDistributionPoints_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_FileShareDistributionPoints_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewFileShareDistributionPointsMock()
+	svc := file_share_distribution_points.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "Main File Share DP")
+	require.Error(t, err)
+}

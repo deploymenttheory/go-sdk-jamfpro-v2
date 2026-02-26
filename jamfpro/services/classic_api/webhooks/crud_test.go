@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.WebhooksMock) {
 // ListWebhooks
 // =============================================================================
 
-func TestUnitListWebhooks_Success(t *testing.T) {
+func TestUnit_Webhooks_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -42,7 +42,7 @@ func TestUnitListWebhooks_Success(t *testing.T) {
 // GetWebhookByID
 // =============================================================================
 
-func TestUnitGetWebhookByID_Success(t *testing.T) {
+func TestUnit_Webhooks_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByIDMock()
 
@@ -59,7 +59,7 @@ func TestUnitGetWebhookByID_Success(t *testing.T) {
 	assert.Equal(t, "ComputerAdded", result.Event)
 }
 
-func TestUnitGetWebhookByID_ZeroID(t *testing.T) {
+func TestUnit_Webhooks_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -69,7 +69,7 @@ func TestUnitGetWebhookByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "webhook ID must be a positive integer")
 }
 
-func TestUnitGetWebhookByID_NegativeID(t *testing.T) {
+func TestUnit_Webhooks_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), -1)
@@ -79,7 +79,7 @@ func TestUnitGetWebhookByID_NegativeID(t *testing.T) {
 	assert.Contains(t, err.Error(), "webhook ID must be a positive integer")
 }
 
-func TestUnitGetWebhookByID_NotFound(t *testing.T) {
+func TestUnit_Webhooks_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -94,7 +94,7 @@ func TestUnitGetWebhookByID_NotFound(t *testing.T) {
 // GetWebhookByName
 // =============================================================================
 
-func TestUnitGetWebhookByName_Success(t *testing.T) {
+func TestUnit_Webhooks_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetByNameMock()
 
@@ -108,7 +108,7 @@ func TestUnitGetWebhookByName_Success(t *testing.T) {
 	assert.Equal(t, "Computer Enrolled", result.Name)
 }
 
-func TestUnitGetWebhookByName_EmptyName(t *testing.T) {
+func TestUnit_Webhooks_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -122,7 +122,7 @@ func TestUnitGetWebhookByName_EmptyName(t *testing.T) {
 // CreateWebhook
 // =============================================================================
 
-func TestUnitCreateWebhook_Success(t *testing.T) {
+func TestUnit_Webhooks_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -142,7 +142,7 @@ func TestUnitCreateWebhook_Success(t *testing.T) {
 	assert.Equal(t, "New Webhook", result.Name)
 }
 
-func TestUnitCreateWebhook_NilRequest(t *testing.T) {
+func TestUnit_Webhooks_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -152,7 +152,7 @@ func TestUnitCreateWebhook_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateWebhook_Conflict(t *testing.T) {
+func TestUnit_Webhooks_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -168,7 +168,7 @@ func TestUnitCreateWebhook_Conflict(t *testing.T) {
 // UpdateWebhookByID
 // =============================================================================
 
-func TestUnitUpdateWebhookByID_Success(t *testing.T) {
+func TestUnit_Webhooks_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByIDMock()
 
@@ -183,7 +183,7 @@ func TestUnitUpdateWebhookByID_Success(t *testing.T) {
 	assert.Equal(t, "Computer Enrolled Updated", result.Name)
 }
 
-func TestUnitUpdateWebhookByID_ZeroID(t *testing.T) {
+func TestUnit_Webhooks_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 0, &RequestWebhook{Name: "x"})
@@ -193,7 +193,7 @@ func TestUnitUpdateWebhookByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "webhook ID must be a positive integer")
 }
 
-func TestUnitUpdateWebhookByID_NilRequest(t *testing.T) {
+func TestUnit_Webhooks_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
@@ -207,7 +207,7 @@ func TestUnitUpdateWebhookByID_NilRequest(t *testing.T) {
 // UpdateWebhookByName
 // =============================================================================
 
-func TestUnitUpdateWebhookByName_Success(t *testing.T) {
+func TestUnit_Webhooks_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByNameMock()
 
@@ -222,7 +222,7 @@ func TestUnitUpdateWebhookByName_Success(t *testing.T) {
 	assert.Equal(t, "Computer Enrolled Updated", result.Name)
 }
 
-func TestUnitUpdateWebhookByName_EmptyName(t *testing.T) {
+func TestUnit_Webhooks_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "", &RequestWebhook{Name: "x"})
@@ -232,7 +232,7 @@ func TestUnitUpdateWebhookByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "webhook name is required")
 }
 
-func TestUnitUpdateWebhookByName_NilRequest(t *testing.T) {
+func TestUnit_Webhooks_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "Computer Enrolled", nil)
@@ -246,7 +246,7 @@ func TestUnitUpdateWebhookByName_NilRequest(t *testing.T) {
 // DeleteWebhookByID
 // =============================================================================
 
-func TestUnitDeleteWebhookByID_Success(t *testing.T) {
+func TestUnit_Webhooks_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByIDMock()
 
@@ -256,7 +256,7 @@ func TestUnitDeleteWebhookByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteWebhookByID_ZeroID(t *testing.T) {
+func TestUnit_Webhooks_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -269,7 +269,7 @@ func TestUnitDeleteWebhookByID_ZeroID(t *testing.T) {
 // DeleteWebhookByName
 // =============================================================================
 
-func TestUnitDeleteWebhookByName_Success(t *testing.T) {
+func TestUnit_Webhooks_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteByNameMock()
 
@@ -279,7 +279,7 @@ func TestUnitDeleteWebhookByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteWebhookByName_EmptyName(t *testing.T) {
+func TestUnit_Webhooks_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")

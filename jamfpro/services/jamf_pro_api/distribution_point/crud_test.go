@@ -29,7 +29,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.DistributionPointMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListV1_Success(t *testing.T) {
+func TestUnit_DistributionPoint_ListV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
@@ -42,7 +42,7 @@ func TestUnitListV1_Success(t *testing.T) {
 	assert.Equal(t, "Test DP", result.Results[0].Name)
 }
 
-func TestUnitCreateV1_Success(t *testing.T) {
+func TestUnit_DistributionPoint_CreateV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestDistributionPoint{
 		Name:                  "Test DP",
@@ -59,7 +59,7 @@ func TestUnitCreateV1_Success(t *testing.T) {
 	assert.Equal(t, "1", result.ID)
 }
 
-func TestUnitCreateV1_NilRequest(t *testing.T) {
+func TestUnit_DistributionPoint_CreateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.CreateV1(context.Background(), nil)
 	assert.Error(t, err)
@@ -68,7 +68,7 @@ func TestUnitCreateV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitDeleteMultipleV1_Success(t *testing.T) {
+func TestUnit_DistributionPoint_DeleteMultipleV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteMultipleV1(context.Background(), []string{"1", "2"})
 	require.NoError(t, err)
@@ -76,7 +76,7 @@ func TestUnitDeleteMultipleV1_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteMultipleV1_EmptyIDs(t *testing.T) {
+func TestUnit_DistributionPoint_DeleteMultipleV1_EmptyIDs(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteMultipleV1(context.Background(), []string{})
 	assert.Error(t, err)
@@ -84,7 +84,7 @@ func TestUnitDeleteMultipleV1_EmptyIDs(t *testing.T) {
 	assert.Contains(t, err.Error(), "at least one ID is required")
 }
 
-func TestUnitGetByIDV1_Success(t *testing.T) {
+func TestUnit_DistributionPoint_GetByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
@@ -95,7 +95,7 @@ func TestUnitGetByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "Test DP", result.Name)
 }
 
-func TestUnitGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DistributionPoint_GetByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	assert.Error(t, err)
@@ -104,7 +104,7 @@ func TestUnitGetByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "distribution point ID is required")
 }
 
-func TestUnitGetByIDV1_NotFound(t *testing.T) {
+func TestUnit_DistributionPoint_GetByIDV1_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 	result, resp, err := svc.GetByIDV1(context.Background(), "999")
@@ -114,7 +114,7 @@ func TestUnitGetByIDV1_NotFound(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 }
 
-func TestUnitUpdateByIDV1_Success(t *testing.T) {
+func TestUnit_DistributionPoint_UpdateByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestDistributionPoint{
 		Name:                      "Test DP Updated",
@@ -131,7 +131,7 @@ func TestUnitUpdateByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "1", result.ID)
 }
 
-func TestUnitUpdateByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DistributionPoint_UpdateByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestDistributionPoint{Name: "x", ServerName: "y", FileSharingConnectionType: "NONE"}
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "", req)
@@ -141,7 +141,7 @@ func TestUnitUpdateByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "distribution point ID is required")
 }
 
-func TestUnitUpdateByIDV1_NilRequest(t *testing.T) {
+func TestUnit_DistributionPoint_UpdateByIDV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
 	assert.Error(t, err)
@@ -150,7 +150,7 @@ func TestUnitUpdateByIDV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitDeleteByIDV1_Success(t *testing.T) {
+func TestUnit_DistributionPoint_DeleteByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
@@ -158,7 +158,7 @@ func TestUnitDeleteByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DistributionPoint_DeleteByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteByIDV1(context.Background(), "")
 	assert.Error(t, err)
@@ -166,7 +166,7 @@ func TestUnitDeleteByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "distribution point ID is required")
 }
 
-func TestUnitPatchByIDV1_Success(t *testing.T) {
+func TestUnit_DistributionPoint_PatchByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestDistributionPoint{
 		Name:                      "Test DP Patched",
@@ -183,7 +183,7 @@ func TestUnitPatchByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "1", result.ID)
 }
 
-func TestUnitPatchByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DistributionPoint_PatchByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestDistributionPoint{Name: "x", ServerName: "y", FileSharingConnectionType: "NONE"}
 	result, resp, err := svc.PatchByIDV1(context.Background(), "", req)
@@ -193,7 +193,7 @@ func TestUnitPatchByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "distribution point ID is required")
 }
 
-func TestUnitGetHistoryByIDV1_Success(t *testing.T) {
+func TestUnit_DistributionPoint_GetHistoryByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetHistoryByIDV1(context.Background(), "1", nil)
 	require.NoError(t, err)
@@ -206,7 +206,7 @@ func TestUnitGetHistoryByIDV1_Success(t *testing.T) {
 	assert.Equal(t, "admin", result.Results[0].Username)
 }
 
-func TestUnitGetHistoryByIDV1_EmptyID(t *testing.T) {
+func TestUnit_DistributionPoint_GetHistoryByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetHistoryByIDV1(context.Background(), "", nil)
 	assert.Error(t, err)
@@ -215,7 +215,7 @@ func TestUnitGetHistoryByIDV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "distribution point ID is required")
 }
 
-func TestUnitCreateHistoryNoteV1_Success(t *testing.T) {
+func TestUnit_DistributionPoint_CreateHistoryNoteV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.CreateHistoryNoteV1(context.Background(), "1", "Test note")
 	require.NoError(t, err)
@@ -226,7 +226,7 @@ func TestUnitCreateHistoryNoteV1_Success(t *testing.T) {
 	assert.Equal(t, "Test note", result.Note)
 }
 
-func TestUnitCreateHistoryNoteV1_EmptyID(t *testing.T) {
+func TestUnit_DistributionPoint_CreateHistoryNoteV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.CreateHistoryNoteV1(context.Background(), "", "note")
 	assert.Error(t, err)
@@ -235,7 +235,7 @@ func TestUnitCreateHistoryNoteV1_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "distribution point ID is required")
 }
 
-func TestUnitCreateHistoryNoteV1_EmptyNote(t *testing.T) {
+func TestUnit_DistributionPoint_CreateHistoryNoteV1_EmptyNote(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.CreateHistoryNoteV1(context.Background(), "1", "")
 	assert.Error(t, err)

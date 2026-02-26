@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.APIRolesMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListV1_Success(t *testing.T) {
+func TestUnit_ApiRoles_ListV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
@@ -27,7 +27,7 @@ func TestUnitListV1_Success(t *testing.T) {
 	require.Equal(t, "Administrator", result.Results[0].DisplayName)
 }
 
-func TestUnitGetByIDV1_Success(t *testing.T) {
+func TestUnit_ApiRoles_GetByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
@@ -37,7 +37,7 @@ func TestUnitGetByIDV1_Success(t *testing.T) {
 	require.Equal(t, "Administrator", result.DisplayName)
 }
 
-func TestUnitGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_ApiRoles_GetByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	require.Error(t, err)
@@ -45,7 +45,7 @@ func TestUnitGetByIDV1_EmptyID(t *testing.T) {
 	require.Nil(t, resp)
 }
 
-func TestUnitCreateV1_Success(t *testing.T) {
+func TestUnit_ApiRoles_CreateV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestAPIRole{DisplayName: "Custom Role", Privileges: []string{"Read Computers"}}
 	result, resp, err := svc.CreateV1(context.Background(), req)
@@ -56,7 +56,7 @@ func TestUnitCreateV1_Success(t *testing.T) {
 	require.Equal(t, "Custom Role", result.DisplayName)
 }
 
-func TestUnitCreateV1_NilRequest(t *testing.T) {
+func TestUnit_ApiRoles_CreateV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.CreateV1(context.Background(), nil)
 	require.Error(t, err)
@@ -64,7 +64,7 @@ func TestUnitCreateV1_NilRequest(t *testing.T) {
 	require.Nil(t, resp)
 }
 
-func TestUnitDeleteByIDV1_Success(t *testing.T) {
+func TestUnit_ApiRoles_DeleteByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)

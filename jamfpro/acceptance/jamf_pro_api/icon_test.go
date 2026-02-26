@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icons"
+	icons "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icon"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -61,7 +61,7 @@ import (
 func findValidIconID(t *testing.T) (int, *icons.ResourceIcon, bool) {
 	t.Helper()
 	acc.RequireClient(t)
-	svc := acc.Client.Icons
+	svc := acc.Client.Icon
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Icons", "Finding icon: trying IDs 1–100 until GetByID returns 200")

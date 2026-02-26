@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.AppInstallersMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListTitlesV1_Success(t *testing.T) {
+func TestUnit_AppInstallers_ListTitlesV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListTitlesV1(context.Background(), nil)
 	require.NoError(t, err)
@@ -26,7 +26,7 @@ func TestUnitListTitlesV1_Success(t *testing.T) {
 	require.Equal(t, "1", result.Results[0].ID)
 }
 
-func TestUnitGetTitleByIDV1_Success(t *testing.T) {
+func TestUnit_AppInstallers_GetTitleByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetTitleByIDV1(context.Background(), "1")
 	require.NoError(t, err)

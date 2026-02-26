@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUnitGetStatusV1_Accepted(t *testing.T) {
+func TestUnit_Slasa_GetStatusV1_Accepted(t *testing.T) {
 	mock := mocks.NewSLASAMock()
 	mock.RegisterGetStatusAcceptedMock()
 	service := NewService(mock)
@@ -21,7 +21,7 @@ func TestUnitGetStatusV1_Accepted(t *testing.T) {
 	assert.Equal(t, "ACCEPTED", result.SLASAAcceptanceStatus)
 }
 
-func TestUnitGetStatusV1_NotAccepted(t *testing.T) {
+func TestUnit_Slasa_GetStatusV1_NotAccepted(t *testing.T) {
 	mock := mocks.NewSLASAMock()
 	mock.RegisterGetStatusNotAcceptedMock()
 	service := NewService(mock)
@@ -33,7 +33,7 @@ func TestUnitGetStatusV1_NotAccepted(t *testing.T) {
 	assert.Equal(t, "NOT_ACCEPTED", result.SLASAAcceptanceStatus)
 }
 
-func TestUnitGetStatusV1_Error(t *testing.T) {
+func TestUnit_Slasa_GetStatusV1_Error(t *testing.T) {
 	mock := mocks.NewSLASAMock()
 	mock.RegisterGetStatusErrorMock()
 	service := NewService(mock)
@@ -45,7 +45,7 @@ func TestUnitGetStatusV1_Error(t *testing.T) {
 	assert.Contains(t, err.Error(), "request failed")
 }
 
-func TestUnitGetStatusV1_NoMockRegistered(t *testing.T) {
+func TestUnit_Slasa_GetStatusV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewSLASAMock()
 	service := NewService(mock)
 
@@ -56,7 +56,7 @@ func TestUnitGetStatusV1_NoMockRegistered(t *testing.T) {
 	assert.Contains(t, err.Error(), "no mock registered")
 }
 
-func TestUnitAcceptV1_Success(t *testing.T) {
+func TestUnit_Slasa_AcceptV1_Success(t *testing.T) {
 	mock := mocks.NewSLASAMock()
 	mock.RegisterAcceptMock()
 	service := NewService(mock)
@@ -66,7 +66,7 @@ func TestUnitAcceptV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitAcceptV1_NoMockRegistered(t *testing.T) {
+func TestUnit_Slasa_AcceptV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewSLASAMock()
 	service := NewService(mock)
 

@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUnitGetPackagesV1_Success(t *testing.T) {
+func TestUnit_Jcds_GetPackagesV1_Success(t *testing.T) {
 	mock := mocks.NewJCDSMock()
 	mock.RegisterGetPackagesMock()
 	service := NewService(mock)
@@ -23,7 +23,7 @@ func TestUnitGetPackagesV1_Success(t *testing.T) {
 	assert.Equal(t, int64(1024000), result[0].Length)
 }
 
-func TestUnitGetPackageURIByNameV1_Success(t *testing.T) {
+func TestUnit_Jcds_GetPackageURIByNameV1_Success(t *testing.T) {
 	mock := mocks.NewJCDSMock()
 	mock.RegisterGetPackageURIByNameMock()
 	service := NewService(mock)
@@ -35,7 +35,7 @@ func TestUnitGetPackageURIByNameV1_Success(t *testing.T) {
 	assert.Equal(t, "s3://jamf-bucket/path/test-package.pkg", result.URI)
 }
 
-func TestUnitGetPackageURIByNameV1_EmptyName(t *testing.T) {
+func TestUnit_Jcds_GetPackageURIByNameV1_EmptyName(t *testing.T) {
 	mock := mocks.NewJCDSMock()
 	service := NewService(mock)
 
@@ -46,7 +46,7 @@ func TestUnitGetPackageURIByNameV1_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "package name is required")
 }
 
-func TestUnitRenewCredentialsV1_Success(t *testing.T) {
+func TestUnit_Jcds_RenewCredentialsV1_Success(t *testing.T) {
 	mock := mocks.NewJCDSMock()
 	mock.RegisterRenewCredentialsMock()
 	service := NewService(mock)
@@ -60,7 +60,7 @@ func TestUnitRenewCredentialsV1_Success(t *testing.T) {
 	assert.Equal(t, "jamf-bucket", result.BucketName)
 }
 
-func TestUnitRefreshInventoryV1_Success(t *testing.T) {
+func TestUnit_Jcds_RefreshInventoryV1_Success(t *testing.T) {
 	mock := mocks.NewJCDSMock()
 	mock.RegisterRefreshInventoryMock()
 	service := NewService(mock)

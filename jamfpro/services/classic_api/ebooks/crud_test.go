@@ -298,3 +298,84 @@ func TestUnit_Ebooks_Conflict(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "ebook with that name already exists")
 }
+
+func TestUnit_Ebooks_List_Error(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_Ebooks_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "Sample Ebook")
+	require.Error(t, err)
+}
+
+func TestUnit_Ebooks_GetByNameAndSubset_Error(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, _, err := svc.GetByNameAndSubset(context.Background(), "Sample Ebook", "General")
+	require.Error(t, err)
+}
+
+func TestUnit_Ebooks_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_Ebooks_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &ebooks.Resource{General: ebooks.SubsetGeneral{Name: ""}})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "ebook name is required")
+}
+
+func TestUnit_Ebooks_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &ebooks.Resource{General: ebooks.SubsetGeneral{Name: "Sample Ebook"}})
+	require.Error(t, err)
+}
+
+func TestUnit_Ebooks_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Sample Ebook", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_Ebooks_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Sample Ebook", &ebooks.Resource{General: ebooks.SubsetGeneral{Name: ""}})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "ebook name is required in request")
+}
+
+func TestUnit_Ebooks_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Sample Ebook", &ebooks.Resource{General: ebooks.SubsetGeneral{Name: "Updated"}})
+	require.Error(t, err)
+}
+
+func TestUnit_Ebooks_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_Ebooks_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewEbooksMock()
+	svc := ebooks.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "Sample Ebook")
+	require.Error(t, err)
+}

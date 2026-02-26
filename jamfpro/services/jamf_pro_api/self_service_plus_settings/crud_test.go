@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.SelfServicePlusSettingsMoc
 	return NewService(mock), mock
 }
 
-func TestUnitGet_Success(t *testing.T) {
+func TestUnit_SelfServicePlusSettings_Get_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 	result, resp, err := svc.GetV1(context.Background())
@@ -25,7 +25,7 @@ func TestUnitGet_Success(t *testing.T) {
 	assert.False(t, result.Enabled)
 }
 
-func TestUnitUpdate_Success(t *testing.T) {
+func TestUnit_SelfServicePlusSettings_Update_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 	result, resp, err := svc.UpdateV1(context.Background(), &ResourceSelfServicePlusSettings{Enabled: true})
@@ -35,7 +35,7 @@ func TestUnitUpdate_Success(t *testing.T) {
 	assert.Nil(t, result)
 }
 
-func TestUnitUpdate_NilRequest(t *testing.T) {
+func TestUnit_SelfServicePlusSettings_Update_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.UpdateV1(context.Background(), nil)
 	require.Error(t, err)

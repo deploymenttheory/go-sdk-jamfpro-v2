@@ -270,3 +270,81 @@ func TestUnit_MacOSConfigurationProfiles_Conflict(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "configuration profile with that name already exists")
 }
+
+func TestUnit_MacOSConfigurationProfiles_List_Error(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_MacOSConfigurationProfiles_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "Wi-Fi Profile")
+	require.Error(t, err)
+}
+
+func TestUnit_MacOSConfigurationProfiles_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MacOSConfigurationProfiles_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	req := &macos_configuration_profiles.RequestResource{General: macos_configuration_profiles.SubsetGeneral{Name: ""}}
+	_, _, err := svc.UpdateByID(context.Background(), 1, req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "macOS configuration profile name is required")
+}
+
+func TestUnit_MacOSConfigurationProfiles_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	req := &macos_configuration_profiles.RequestResource{General: macos_configuration_profiles.SubsetGeneral{Name: "Test"}}
+	_, _, err := svc.UpdateByID(context.Background(), 1, req)
+	require.Error(t, err)
+}
+
+func TestUnit_MacOSConfigurationProfiles_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Wi-Fi Profile", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MacOSConfigurationProfiles_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	req := &macos_configuration_profiles.RequestResource{General: macos_configuration_profiles.SubsetGeneral{Name: ""}}
+	_, _, err := svc.UpdateByName(context.Background(), "Wi-Fi Profile", req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "macOS configuration profile name is required in request")
+}
+
+func TestUnit_MacOSConfigurationProfiles_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	req := &macos_configuration_profiles.RequestResource{General: macos_configuration_profiles.SubsetGeneral{Name: "Updated"}}
+	_, _, err := svc.UpdateByName(context.Background(), "Wi-Fi Profile", req)
+	require.Error(t, err)
+}
+
+func TestUnit_MacOSConfigurationProfiles_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_MacOSConfigurationProfiles_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewMacOSConfigurationProfilesMock()
+	svc := macos_configuration_profiles.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "Wi-Fi Profile")
+	require.Error(t, err)
+}

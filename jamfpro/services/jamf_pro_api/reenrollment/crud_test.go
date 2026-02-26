@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ReenrollmentMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGet_Success(t *testing.T) {
+func TestUnit_Reenrollment_Get_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -28,7 +28,7 @@ func TestUnitGet_Success(t *testing.T) {
 	assert.False(t, result.FlushPolicyHistory)
 }
 
-func TestUnitUpdate_Success(t *testing.T) {
+func TestUnit_Reenrollment_Update_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -44,7 +44,7 @@ func TestUnitUpdate_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdate_NilRequest(t *testing.T) {
+func TestUnit_Reenrollment_Update_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Update(context.Background(), nil)
@@ -54,7 +54,7 @@ func TestUnitUpdate_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitGetHistory_Success(t *testing.T) {
+func TestUnit_Reenrollment_GetHistory_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetHistoryMock()
 
@@ -68,7 +68,7 @@ func TestUnitGetHistory_Success(t *testing.T) {
 	assert.Equal(t, "Test note", result.Results[0].Note)
 }
 
-func TestUnitAddHistoryNotes_Success(t *testing.T) {
+func TestUnit_Reenrollment_AddHistoryNotes_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterAddHistoryNotesMock()
 
@@ -81,7 +81,7 @@ func TestUnitAddHistoryNotes_Success(t *testing.T) {
 	assert.Equal(t, "Acceptance test note", result.Note)
 }
 
-func TestUnitAddHistoryNotes_NilRequest(t *testing.T) {
+func TestUnit_Reenrollment_AddHistoryNotes_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.AddHistoryNotes(context.Background(), nil)

@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.JamfConnectMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetJamfConnectSettings_Success(t *testing.T) {
+func TestUnit_JamfConnect_GetSettings_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetSettingsMock()
 
@@ -31,7 +31,7 @@ func TestUnitGetJamfConnectSettings_Success(t *testing.T) {
 	assert.Equal(t, "2.0.0", result.Version)
 }
 
-func TestUnitListConfigProfiles_Success(t *testing.T) {
+func TestUnit_JamfConnect_ListConfigProfiles_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListConfigProfilesMock()
 
@@ -48,7 +48,7 @@ func TestUnitListConfigProfiles_Success(t *testing.T) {
 	assert.Equal(t, 1, result.Results[0].ProfileID)
 }
 
-func TestUnitGetConfigProfileByUUID_Success(t *testing.T) {
+func TestUnit_JamfConnect_GetConfigProfileByUUID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListConfigProfilesMock()
 
@@ -62,7 +62,7 @@ func TestUnitGetConfigProfileByUUID_Success(t *testing.T) {
 	assert.Equal(t, "Test Profile 1", result.ProfileName)
 }
 
-func TestUnitGetConfigProfileByUUID_EmptyUUID(t *testing.T) {
+func TestUnit_JamfConnect_GetConfigProfileByUUID_EmptyUUID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetConfigProfileByUUIDV1(context.Background(), "")
@@ -72,7 +72,7 @@ func TestUnitGetConfigProfileByUUID_EmptyUUID(t *testing.T) {
 	assert.Contains(t, err.Error(), "uuid is required")
 }
 
-func TestUnitGetConfigProfileByID_Success(t *testing.T) {
+func TestUnit_JamfConnect_GetConfigProfileByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListConfigProfilesMock()
 
@@ -86,7 +86,7 @@ func TestUnitGetConfigProfileByID_Success(t *testing.T) {
 	assert.Equal(t, "Test Profile 1", result.ProfileName)
 }
 
-func TestUnitGetConfigProfileByID_InvalidID(t *testing.T) {
+func TestUnit_JamfConnect_GetConfigProfileByID_InvalidID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetConfigProfileByIDV1(context.Background(), 0)
@@ -120,7 +120,7 @@ func TestUnitGetConfigProfileByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "name is required")
 }
 
-func TestUnitUpdateConfigProfileByUUID_Success(t *testing.T) {
+func TestUnit_JamfConnect_UpdateConfigProfileByUUID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateConfigProfileMock()
 
@@ -139,7 +139,7 @@ func TestUnitUpdateConfigProfileByUUID_Success(t *testing.T) {
 	assert.Equal(t, "2.1.0", result.Version)
 }
 
-func TestUnitUpdateConfigProfileByUUID_EmptyUUID(t *testing.T) {
+func TestUnit_JamfConnect_UpdateConfigProfileByUUID_EmptyUUID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	request := &ResourceJamfConnectConfigProfileUpdate{
@@ -153,7 +153,7 @@ func TestUnitUpdateConfigProfileByUUID_EmptyUUID(t *testing.T) {
 	assert.Contains(t, err.Error(), "uuid is required")
 }
 
-func TestUnitUpdateConfigProfileByUUID_NilRequest(t *testing.T) {
+func TestUnit_JamfConnect_UpdateConfigProfileByUUID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateConfigProfileByUUIDV1(context.Background(), "123e4567-e89b-12d3-a456-426614174000", nil)

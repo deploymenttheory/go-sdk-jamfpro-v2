@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.AppRequestMock) {
 // ListFormInputFieldsV1
 // =============================================================================
 
-func TestUnitListFormInputFields_Success(t *testing.T) {
+func TestUnit_AppRequest_ListFormInputFields_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListFormInputFieldsMock()
 
@@ -42,7 +42,7 @@ func TestUnitListFormInputFields_Success(t *testing.T) {
 	assert.Equal(t, 2, result.Results[1].Priority)
 }
 
-func TestUnitListFormInputFields_WithQueryParams(t *testing.T) {
+func TestUnit_AppRequest_ListFormInputFields_WithQueryParams(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListFormInputFieldsMock()
 

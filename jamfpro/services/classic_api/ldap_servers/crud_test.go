@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.LDAPServersMock) {
 // ListLDAPServers
 // =============================================================================
 
-func TestUnitListLDAPServers_Success(t *testing.T) {
+func TestUnit_LdapServers_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListLDAPServersMock()
 
@@ -42,7 +42,7 @@ func TestUnitListLDAPServers_Success(t *testing.T) {
 // GetLDAPServerByID
 // =============================================================================
 
-func TestUnitGetLDAPServerByID_Success(t *testing.T) {
+func TestUnit_LdapServers_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLDAPServerByIDMock()
 
@@ -58,7 +58,7 @@ func TestUnitGetLDAPServerByID_Success(t *testing.T) {
 	assert.Equal(t, 389, result.Connection.Port)
 }
 
-func TestUnitGetLDAPServerByID_ZeroID(t *testing.T) {
+func TestUnit_LdapServers_GetByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), 0)
@@ -68,7 +68,7 @@ func TestUnitGetLDAPServerByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "LDAP server ID must be a positive integer")
 }
 
-func TestUnitGetLDAPServerByID_NegativeID(t *testing.T) {
+func TestUnit_LdapServers_GetByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByID(context.Background(), -1)
@@ -78,7 +78,7 @@ func TestUnitGetLDAPServerByID_NegativeID(t *testing.T) {
 	assert.Contains(t, err.Error(), "LDAP server ID must be a positive integer")
 }
 
-func TestUnitGetLDAPServerByID_NotFound(t *testing.T) {
+func TestUnit_LdapServers_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -93,7 +93,7 @@ func TestUnitGetLDAPServerByID_NotFound(t *testing.T) {
 // GetLDAPServerByName
 // =============================================================================
 
-func TestUnitGetLDAPServerByName_Success(t *testing.T) {
+func TestUnit_LdapServers_GetByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetLDAPServerByNameMock()
 
@@ -108,7 +108,7 @@ func TestUnitGetLDAPServerByName_Success(t *testing.T) {
 	assert.Equal(t, "ldap.example.com", result.Connection.Hostname)
 }
 
-func TestUnitGetLDAPServerByName_EmptyName(t *testing.T) {
+func TestUnit_LdapServers_GetByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByName(context.Background(), "")
@@ -122,7 +122,7 @@ func TestUnitGetLDAPServerByName_EmptyName(t *testing.T) {
 // CreateLDAPServer
 // =============================================================================
 
-func TestUnitCreateLDAPServer_Success(t *testing.T) {
+func TestUnit_LdapServers_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateLDAPServerMock()
 
@@ -143,7 +143,7 @@ func TestUnitCreateLDAPServer_Success(t *testing.T) {
 	assert.Equal(t, "Test LDAP Server", result.Name)
 }
 
-func TestUnitCreateLDAPServer_NilRequest(t *testing.T) {
+func TestUnit_LdapServers_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.Create(context.Background(), nil)
@@ -153,7 +153,7 @@ func TestUnitCreateLDAPServer_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateLDAPServer_Conflict(t *testing.T) {
+func TestUnit_LdapServers_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -175,7 +175,7 @@ func TestUnitCreateLDAPServer_Conflict(t *testing.T) {
 // UpdateLDAPServerByID
 // =============================================================================
 
-func TestUnitUpdateLDAPServerByID_Success(t *testing.T) {
+func TestUnit_LdapServers_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateLDAPServerByIDMock()
 
@@ -197,7 +197,7 @@ func TestUnitUpdateLDAPServerByID_Success(t *testing.T) {
 	assert.Equal(t, "ldap2.example.com", result.Connection.Hostname)
 }
 
-func TestUnitUpdateLDAPServerByID_ZeroID(t *testing.T) {
+func TestUnit_LdapServers_UpdateByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestLDAPServer{
@@ -212,7 +212,7 @@ func TestUnitUpdateLDAPServerByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "LDAP server ID must be a positive integer")
 }
 
-func TestUnitUpdateLDAPServerByID_NilRequest(t *testing.T) {
+func TestUnit_LdapServers_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByID(context.Background(), 1, nil)
@@ -226,7 +226,7 @@ func TestUnitUpdateLDAPServerByID_NilRequest(t *testing.T) {
 // UpdateLDAPServerByName
 // =============================================================================
 
-func TestUnitUpdateLDAPServerByName_Success(t *testing.T) {
+func TestUnit_LdapServers_UpdateByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateLDAPServerByNameMock()
 
@@ -247,7 +247,7 @@ func TestUnitUpdateLDAPServerByName_Success(t *testing.T) {
 	assert.Equal(t, "Updated LDAP Server", result.Connection.Name)
 }
 
-func TestUnitUpdateLDAPServerByName_EmptyName(t *testing.T) {
+func TestUnit_LdapServers_UpdateByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	req := &RequestLDAPServer{
@@ -262,7 +262,7 @@ func TestUnitUpdateLDAPServerByName_EmptyName(t *testing.T) {
 	assert.Contains(t, err.Error(), "LDAP server name is required")
 }
 
-func TestUnitUpdateLDAPServerByName_NilRequest(t *testing.T) {
+func TestUnit_LdapServers_UpdateByName_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByName(context.Background(), "Test LDAP Server", nil)
@@ -276,7 +276,7 @@ func TestUnitUpdateLDAPServerByName_NilRequest(t *testing.T) {
 // DeleteLDAPServerByID
 // =============================================================================
 
-func TestUnitDeleteLDAPServerByID_Success(t *testing.T) {
+func TestUnit_LdapServers_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteLDAPServerByIDMock()
 
@@ -286,7 +286,7 @@ func TestUnitDeleteLDAPServerByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteLDAPServerByID_ZeroID(t *testing.T) {
+func TestUnit_LdapServers_DeleteByID_ZeroID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), 0)
@@ -295,7 +295,7 @@ func TestUnitDeleteLDAPServerByID_ZeroID(t *testing.T) {
 	assert.Contains(t, err.Error(), "LDAP server ID must be a positive integer")
 }
 
-func TestUnitDeleteLDAPServerByID_NegativeID(t *testing.T) {
+func TestUnit_LdapServers_DeleteByID_NegativeID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByID(context.Background(), -1)
@@ -308,7 +308,7 @@ func TestUnitDeleteLDAPServerByID_NegativeID(t *testing.T) {
 // DeleteLDAPServerByName
 // =============================================================================
 
-func TestUnitDeleteLDAPServerByName_Success(t *testing.T) {
+func TestUnit_LdapServers_DeleteByName_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteLDAPServerByNameMock()
 
@@ -318,7 +318,7 @@ func TestUnitDeleteLDAPServerByName_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDeleteLDAPServerByName_EmptyName(t *testing.T) {
+func TestUnit_LdapServers_DeleteByName_EmptyName(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByName(context.Background(), "")

@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.AdvancedMobileDeviceSearch
 	return NewService(mock), mock
 }
 
-func TestUnitListV1_Success(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_ListV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
@@ -27,7 +27,7 @@ func TestUnitListV1_Success(t *testing.T) {
 	require.Equal(t, "All iPhones", result.Results[0].Name)
 }
 
-func TestUnitGetByIDV1_Success(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_GetByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
@@ -37,7 +37,7 @@ func TestUnitGetByIDV1_Success(t *testing.T) {
 	require.Equal(t, "All iPhones", result.Name)
 }
 
-func TestUnitGetByIDV1_EmptyID(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_GetByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
 	require.Error(t, err)
@@ -45,7 +45,7 @@ func TestUnitGetByIDV1_EmptyID(t *testing.T) {
 	require.Nil(t, resp)
 }
 
-func TestUnitCreateV1_Success(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_CreateV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	search := &ResourceAdvancedMobileDeviceSearch{
 		Name:          "Test Search",
@@ -59,7 +59,7 @@ func TestUnitCreateV1_Success(t *testing.T) {
 	require.Equal(t, "2", result.ID)
 }
 
-func TestUnitCreateV1_NilSearch(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_CreateV1_NilSearch(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.CreateV1(context.Background(), nil)
 	require.Error(t, err)
@@ -67,7 +67,7 @@ func TestUnitCreateV1_NilSearch(t *testing.T) {
 	require.Nil(t, resp)
 }
 
-func TestUnitDeleteByIDV1_Success(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_DeleteByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
@@ -75,7 +75,7 @@ func TestUnitDeleteByIDV1_Success(t *testing.T) {
 	require.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteMultipleV1_Success(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_DeleteMultipleV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &DeleteAdvancedMobileDeviceSearchesByIDRequest{IDs: []string{"1", "2"}}
 	resp, err := svc.DeleteMultipleV1(context.Background(), req)
@@ -84,7 +84,7 @@ func TestUnitDeleteMultipleV1_Success(t *testing.T) {
 	require.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteMultipleV1_EmptyIDs(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_DeleteMultipleV1_EmptyIDs(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteMultipleV1(context.Background(), &DeleteAdvancedMobileDeviceSearchesByIDRequest{IDs: []string{}})
 	require.Error(t, err)
@@ -92,7 +92,7 @@ func TestUnitDeleteMultipleV1_EmptyIDs(t *testing.T) {
 	require.Contains(t, err.Error(), "ids are required")
 }
 
-func TestUnitDeleteMultipleV1_NilRequest(t *testing.T) {
+func TestUnit_AdvancedMobileDeviceSearches_DeleteMultipleV1_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 	resp, err := svc.DeleteMultipleV1(context.Background(), nil)
 	require.Error(t, err)

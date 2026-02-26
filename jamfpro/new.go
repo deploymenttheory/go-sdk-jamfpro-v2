@@ -15,13 +15,13 @@ import (
 	classic_command_flush "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/command_flush"
 	classic_computer_groups "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_groups"
 	classic_computer_history "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_history"
-	classic_computers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computers"
-	classic_computer_invitations "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_invitations"
 	classic_computer_inventory_collection "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_inventory_collection"
+	classic_computer_invitations "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_invitations"
+	classic_computers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computers"
 	classic_directory_bindings "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/directory_bindings"
+	classic_disk_encryption_configurations "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/disk_encryption_configurations"
 	classic_dock_items "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/dock_items"
 	classic_ebooks "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ebooks"
-	classic_disk_encryption_configurations "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/disk_encryption_configurations"
 	classic_file_share_distribution_points "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/file_share_distribution_points"
 	classic_file_uploads "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/file_uploads"
 	classic_ibeacons "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ibeacons"
@@ -43,28 +43,28 @@ import (
 	classic_restricted_software "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/restricted_software"
 	classic_sites "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/sites"
 	classic_software_update_servers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/software_update_servers"
-	classic_vpp_accounts "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_accounts"
-	classic_vpp_assignments "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_assignments"
-	classic_users "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/users"
 	classic_user_extension_attributes "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/user_extension_attributes"
 	classic_usergroups "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/usergroups"
+	classic_users "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/users"
+	classic_vpp_accounts "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_accounts"
+	classic_vpp_assignments "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_assignments"
 	classic_webhooks "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/webhooks"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/access_management_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/account_preferences"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/accounts"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/activation_code"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/apns_client_push_status"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/adcs_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/adue_session_token_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/advanced_mobile_device_searches"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/advanced_user_content_searches"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_integrations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_authorization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_integrations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_role_privileges"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/apns_client_push_status"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_installers"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_request"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_store_country_codes"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_installers"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/bookmarks"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/branding"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
@@ -99,16 +99,16 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/gsx_connection"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icons"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icon"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/impact_alert_notification_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_connect"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jcds"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_information"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_notifications"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_server_url"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_system_initialization"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_version"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_remote_assist"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jcds"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/ldap"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/local_admin_password"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/locales"
@@ -119,7 +119,6 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mdm"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/notifications"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/oauth2_session_tokens"
@@ -133,21 +132,22 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/reenrollment"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/return_to_service"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_computer_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_computer_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_mobile_device_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_upload"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_macos"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_mobile"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_upload"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_plus_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/service_discovery_enrollment"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/slasa"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smtp_server"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_certificate"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_failover"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/startup_status"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/time_zones"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/venafi"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/volume_purchasing_locations"
@@ -160,51 +160,51 @@ type Client struct {
 	transport *client.Transport
 
 	// Classic API services
-	ClassicAccounts                     *classic_accounts.Service
-	ClassicAccountGroups                *classic_accounts_groups.Service
-	ClassicActivationCode               *classic_activation_code.Service
-	ClassicAdvancedComputerSearches     *classic_advanced_computer_searches.Service
-	ClassicAdvancedUserSearches         *classic_advanced_user_searches.Service
-	ClassicAllowedFileExtensions        *classic_allowed_file_extensions.Service
-	ClassicBYOProfiles                  *classic_byoprofiles.Service
-	ClassicClasses                      *classic_classes.Service
-	ClassicCommandFlush                 *classic_command_flush.Service
-	ClassicComputerGroups               *classic_computer_groups.Service
-	ClassicComputers                    *classic_computers.Service
-	ClassicComputerHistory              *classic_computer_history.Service
-	ClassicComputerInvitations          *classic_computer_invitations.Service
-	ClassicComputerInventoryCollection   *classic_computer_inventory_collection.Service
-	ClassicDirectoryBindings             *classic_directory_bindings.Service
-	ClassicDockItems                    *classic_dock_items.Service
-	ClassicEbooks                        *classic_ebooks.Service
-	ClassicDiskEncryptionConfigurations *classic_disk_encryption_configurations.Service
-	ClassicFileShareDistributionPoints   *classic_file_share_distribution_points.Service
-	ClassicFileUploads                   *classic_file_uploads.Service
-	ClassicIBeacons                     *classic_ibeacons.Service
-	ClassicLdapServers                  *classic_ldap_servers.Service
-	ClassicLicensedSoftware             *classic_licensed_software.Service
-	ClassicMacApplications              *classic_mac_applications.Service
-	ClassicMacOSConfigurationProfiles   *classic_macos_configuration_profiles.Service
-	ClassicMobileDeviceApplications           *classic_mobile_device_applications.Service
-	ClassicMobileDeviceConfigurationProfiles   *classic_mobile_device_configuration_profiles.Service
-	ClassicMobileDeviceEnrollmentProfiles      *classic_mobile_device_enrollment_profiles.Service
-	ClassicMobileDeviceGroups                 *classic_mobile_device_groups.Service
-	ClassicMobileDeviceProvisioningProfiles   *classic_mobile_device_provisioning_profiles.Service
-	ClassicMobileDevices               *classic_mobile_devices.Service
-	ClassicNetworkSegments              *classic_network_segments.Service
-	ClassicPatchExternalSources         *classic_patch_external_sources.Service
-	ClassicPolicies                     *classic_policies.Service
-	ClassicPrinters                     *classic_printers.Service
-	ClassicRemoveableMacAddresses       *classic_removeable_mac_addresses.Service
-	ClassicRestrictedSoftware           *classic_restricted_software.Service
-	ClassicSites                        *classic_sites.Service
-	ClassicSoftwareUpdateServers        *classic_software_update_servers.Service
-	ClassicUsers                        *classic_users.Service
-	ClassicUserExtensionAttributes      *classic_user_extension_attributes.Service
-	ClassicUserGroups                   *classic_usergroups.Service
-	ClassicVPPAccounts                  *classic_vpp_accounts.Service
-	ClassicVPPAssignments                *classic_vpp_assignments.Service
-	ClassicWebhooks                     *classic_webhooks.Service
+	ClassicAccounts                          *classic_accounts.Service
+	ClassicAccountGroups                     *classic_accounts_groups.Service
+	ClassicActivationCode                    *classic_activation_code.Service
+	ClassicAdvancedComputerSearches          *classic_advanced_computer_searches.Service
+	ClassicAdvancedUserSearches              *classic_advanced_user_searches.Service
+	ClassicAllowedFileExtensions             *classic_allowed_file_extensions.Service
+	ClassicBYOProfiles                       *classic_byoprofiles.Service
+	ClassicClasses                           *classic_classes.Service
+	ClassicCommandFlush                      *classic_command_flush.Service
+	ClassicComputerGroups                    *classic_computer_groups.Service
+	ClassicComputers                         *classic_computers.Service
+	ClassicComputerHistory                   *classic_computer_history.Service
+	ClassicComputerInvitations               *classic_computer_invitations.Service
+	ClassicComputerInventoryCollection       *classic_computer_inventory_collection.Service
+	ClassicDirectoryBindings                 *classic_directory_bindings.Service
+	ClassicDockItems                         *classic_dock_items.Service
+	ClassicEbooks                            *classic_ebooks.Service
+	ClassicDiskEncryptionConfigurations      *classic_disk_encryption_configurations.Service
+	ClassicFileShareDistributionPoints       *classic_file_share_distribution_points.Service
+	ClassicFileUploads                       *classic_file_uploads.Service
+	ClassicIBeacons                          *classic_ibeacons.Service
+	ClassicLdapServers                       *classic_ldap_servers.Service
+	ClassicLicensedSoftware                  *classic_licensed_software.Service
+	ClassicMacApplications                   *classic_mac_applications.Service
+	ClassicMacOSConfigurationProfiles        *classic_macos_configuration_profiles.Service
+	ClassicMobileDeviceApplications          *classic_mobile_device_applications.Service
+	ClassicMobileDeviceConfigurationProfiles *classic_mobile_device_configuration_profiles.Service
+	ClassicMobileDeviceEnrollmentProfiles    *classic_mobile_device_enrollment_profiles.Service
+	ClassicMobileDeviceGroups                *classic_mobile_device_groups.Service
+	ClassicMobileDeviceProvisioningProfiles  *classic_mobile_device_provisioning_profiles.Service
+	ClassicMobileDevices                     *classic_mobile_devices.Service
+	ClassicNetworkSegments                   *classic_network_segments.Service
+	ClassicPatchExternalSources              *classic_patch_external_sources.Service
+	ClassicPolicies                          *classic_policies.Service
+	ClassicPrinters                          *classic_printers.Service
+	ClassicRemoveableMacAddresses            *classic_removeable_mac_addresses.Service
+	ClassicRestrictedSoftware                *classic_restricted_software.Service
+	ClassicSites                             *classic_sites.Service
+	ClassicSoftwareUpdateServers             *classic_software_update_servers.Service
+	ClassicUsers                             *classic_users.Service
+	ClassicUserExtensionAttributes           *classic_user_extension_attributes.Service
+	ClassicUserGroups                        *classic_usergroups.Service
+	ClassicVPPAccounts                       *classic_vpp_accounts.Service
+	ClassicVPPAssignments                    *classic_vpp_assignments.Service
+	ClassicWebhooks                          *classic_webhooks.Service
 
 	// Jamf Pro API services
 	AccessManagementSettings            *access_management_settings.Service
@@ -256,7 +256,7 @@ type Client struct {
 	EnrollmentSettings                  *enrollment_settings.Service
 	Groups                              *groups.Service
 	GSXConnection                       *gsx_connection.Service
-	Icons                               *icons.Service
+	Icon                                *icon.Service
 	ImpactAlertNotificationSettings     *impact_alert_notification_settings.Service
 	JamfConnect                         *jamf_connect.Service
 	JCDS                                *jcds.Service
@@ -268,10 +268,10 @@ type Client struct {
 	ManagedSoftwareUpdates              *managed_software_updates.Service
 	MDM                                 *mdm.Service
 	ServiceDiscoveryEnrollment          *service_discovery_enrollment.Service
-	SelfServiceBrandingMacOS             *self_service_branding_macos.Service
-	SelfServiceBrandingMobile            *self_service_branding_mobile.Service
-	SelfServiceBrandingUpload            *self_service_branding_upload.Service
-	SelfServiceSettings                  *self_service_settings.Service
+	SelfServiceBrandingMacOS            *self_service_branding_macos.Service
+	SelfServiceBrandingMobile           *self_service_branding_mobile.Service
+	SelfServiceBrandingUpload           *self_service_branding_upload.Service
+	SelfServiceSettings                 *self_service_settings.Service
 	SLASA                               *slasa.Service
 	Reenrollment                        *reenrollment.Service
 	AdueSessionTokenSettings            *adue_session_token_settings.Service
@@ -287,7 +287,7 @@ type Client struct {
 	Locales                             *locales.Service
 	MobileDeviceExtensionAttributes     *mobile_device_extension_attributes.Service
 	MobileDeviceGroups                  *mobile_device_groups.Service
-	StaticMobileDeviceGroups           *static_mobile_device_groups.Service
+	StaticMobileDeviceGroups            *static_mobile_device_groups.Service
 	MobileDevicePrestages               *mobile_device_prestages.Service
 	Notifications                       *notifications.Service
 	OAuth2SessionTokens                 *oauth2_session_tokens.Service
@@ -322,51 +322,51 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		transport: transport,
 
 		// Classic API services
-		ClassicAccounts:                     classic_accounts.NewService(transport),
-		ClassicAccountGroups:                classic_accounts_groups.NewService(transport),
-		ClassicActivationCode:               classic_activation_code.NewService(transport),
-		ClassicAdvancedComputerSearches:     classic_advanced_computer_searches.NewService(transport),
-		ClassicAdvancedUserSearches:         classic_advanced_user_searches.NewService(transport),
-		ClassicAllowedFileExtensions:        classic_allowed_file_extensions.NewService(transport),
-		ClassicBYOProfiles:                  classic_byoprofiles.NewService(transport),
-		ClassicClasses:                      classic_classes.NewService(transport),
-		ClassicCommandFlush:                 classic_command_flush.NewService(transport),
-		ClassicComputerGroups:               classic_computer_groups.NewService(transport),
-		ClassicComputers:                    classic_computers.NewService(transport),
-		ClassicComputerHistory:              classic_computer_history.NewService(transport),
-		ClassicComputerInvitations:          classic_computer_invitations.NewService(transport),
-		ClassicComputerInventoryCollection:   classic_computer_inventory_collection.NewService(transport),
-		ClassicDirectoryBindings:             classic_directory_bindings.NewService(transport),
-		ClassicDockItems:                    classic_dock_items.NewService(transport),
-		ClassicEbooks:                        classic_ebooks.NewService(transport),
-		ClassicDiskEncryptionConfigurations: classic_disk_encryption_configurations.NewService(transport),
-		ClassicFileShareDistributionPoints:   classic_file_share_distribution_points.NewService(transport),
-		ClassicFileUploads:                   classic_file_uploads.NewService(transport),
-		ClassicIBeacons:                     classic_ibeacons.NewService(transport),
-		ClassicLdapServers:                  classic_ldap_servers.NewService(transport),
-		ClassicLicensedSoftware:             classic_licensed_software.NewService(transport),
-		ClassicMacApplications:              classic_mac_applications.NewService(transport),
-		ClassicMacOSConfigurationProfiles:   classic_macos_configuration_profiles.NewService(transport),
-		ClassicMobileDeviceApplications:           classic_mobile_device_applications.NewService(transport),
+		ClassicAccounts:                          classic_accounts.NewService(transport),
+		ClassicAccountGroups:                     classic_accounts_groups.NewService(transport),
+		ClassicActivationCode:                    classic_activation_code.NewService(transport),
+		ClassicAdvancedComputerSearches:          classic_advanced_computer_searches.NewService(transport),
+		ClassicAdvancedUserSearches:              classic_advanced_user_searches.NewService(transport),
+		ClassicAllowedFileExtensions:             classic_allowed_file_extensions.NewService(transport),
+		ClassicBYOProfiles:                       classic_byoprofiles.NewService(transport),
+		ClassicClasses:                           classic_classes.NewService(transport),
+		ClassicCommandFlush:                      classic_command_flush.NewService(transport),
+		ClassicComputerGroups:                    classic_computer_groups.NewService(transport),
+		ClassicComputers:                         classic_computers.NewService(transport),
+		ClassicComputerHistory:                   classic_computer_history.NewService(transport),
+		ClassicComputerInvitations:               classic_computer_invitations.NewService(transport),
+		ClassicComputerInventoryCollection:       classic_computer_inventory_collection.NewService(transport),
+		ClassicDirectoryBindings:                 classic_directory_bindings.NewService(transport),
+		ClassicDockItems:                         classic_dock_items.NewService(transport),
+		ClassicEbooks:                            classic_ebooks.NewService(transport),
+		ClassicDiskEncryptionConfigurations:      classic_disk_encryption_configurations.NewService(transport),
+		ClassicFileShareDistributionPoints:       classic_file_share_distribution_points.NewService(transport),
+		ClassicFileUploads:                       classic_file_uploads.NewService(transport),
+		ClassicIBeacons:                          classic_ibeacons.NewService(transport),
+		ClassicLdapServers:                       classic_ldap_servers.NewService(transport),
+		ClassicLicensedSoftware:                  classic_licensed_software.NewService(transport),
+		ClassicMacApplications:                   classic_mac_applications.NewService(transport),
+		ClassicMacOSConfigurationProfiles:        classic_macos_configuration_profiles.NewService(transport),
+		ClassicMobileDeviceApplications:          classic_mobile_device_applications.NewService(transport),
 		ClassicMobileDeviceConfigurationProfiles: classic_mobile_device_configuration_profiles.NewService(transport),
 		ClassicMobileDeviceEnrollmentProfiles:    classic_mobile_device_enrollment_profiles.NewService(transport),
 		ClassicMobileDeviceGroups:                classic_mobile_device_groups.NewService(transport),
 		ClassicMobileDeviceProvisioningProfiles:  classic_mobile_device_provisioning_profiles.NewService(transport),
-		ClassicMobileDevices:               classic_mobile_devices.NewService(transport),
-		ClassicNetworkSegments:              classic_network_segments.NewService(transport),
-		ClassicPatchExternalSources:         classic_patch_external_sources.NewService(transport),
-		ClassicPolicies:                     classic_policies.NewService(transport),
-		ClassicPrinters:                     classic_printers.NewService(transport),
-		ClassicRemoveableMacAddresses:       classic_removeable_mac_addresses.NewService(transport),
-		ClassicRestrictedSoftware:           classic_restricted_software.NewService(transport),
-		ClassicSites:                        classic_sites.NewService(transport),
-		ClassicSoftwareUpdateServers:        classic_software_update_servers.NewService(transport),
-		ClassicUsers:                        classic_users.NewService(transport),
-		ClassicUserExtensionAttributes:      classic_user_extension_attributes.NewService(transport),
-		ClassicUserGroups:                   classic_usergroups.NewService(transport),
-		ClassicVPPAccounts:                  classic_vpp_accounts.NewService(transport),
-		ClassicVPPAssignments:                classic_vpp_assignments.NewService(transport),
-		ClassicWebhooks:                     classic_webhooks.NewService(transport),
+		ClassicMobileDevices:                     classic_mobile_devices.NewService(transport),
+		ClassicNetworkSegments:                   classic_network_segments.NewService(transport),
+		ClassicPatchExternalSources:              classic_patch_external_sources.NewService(transport),
+		ClassicPolicies:                          classic_policies.NewService(transport),
+		ClassicPrinters:                          classic_printers.NewService(transport),
+		ClassicRemoveableMacAddresses:            classic_removeable_mac_addresses.NewService(transport),
+		ClassicRestrictedSoftware:                classic_restricted_software.NewService(transport),
+		ClassicSites:                             classic_sites.NewService(transport),
+		ClassicSoftwareUpdateServers:             classic_software_update_servers.NewService(transport),
+		ClassicUsers:                             classic_users.NewService(transport),
+		ClassicUserExtensionAttributes:           classic_user_extension_attributes.NewService(transport),
+		ClassicUserGroups:                        classic_usergroups.NewService(transport),
+		ClassicVPPAccounts:                       classic_vpp_accounts.NewService(transport),
+		ClassicVPPAssignments:                    classic_vpp_assignments.NewService(transport),
+		ClassicWebhooks:                          classic_webhooks.NewService(transport),
 
 		// Jamf Pro API services
 		AccessManagementSettings:            access_management_settings.NewService(transport),
@@ -417,7 +417,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		EnrollmentSettings:                  enrollment_settings.NewService(transport),
 		Groups:                              groups.NewService(transport),
 		GSXConnection:                       gsx_connection.NewService(transport),
-		Icons:                               icons.NewService(transport),
+		Icon:                                icon.NewService(transport),
 		ImpactAlertNotificationSettings:     impact_alert_notification_settings.NewService(transport),
 		JamfConnect:                         jamf_connect.NewService(transport),
 		JCDS:                                jcds.NewService(transport),
@@ -448,7 +448,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		Locales:                             locales.NewService(transport),
 		MobileDeviceExtensionAttributes:     mobile_device_extension_attributes.NewService(transport),
 		MobileDeviceGroups:                  mobile_device_groups.NewService(transport),
-		StaticMobileDeviceGroups:           static_mobile_device_groups.NewService(transport),
+		StaticMobileDeviceGroups:            static_mobile_device_groups.NewService(transport),
 		MobileDevicePrestages:               mobile_device_prestages.NewService(transport),
 		Notifications:                       notifications.NewService(transport),
 		OAuth2SessionTokens:                 oauth2_session_tokens.NewService(transport),

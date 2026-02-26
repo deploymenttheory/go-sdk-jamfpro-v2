@@ -20,7 +20,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.CategoriesMock) {
 // ListCategoriesV1
 // =============================================================================
 
-func TestUnitListCategories_Success(t *testing.T) {
+func TestUnit_Categories_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListCategoriesMock()
 
@@ -40,7 +40,7 @@ func TestUnitListCategories_Success(t *testing.T) {
 	assert.Equal(t, 1, result.Results[1].Priority)
 }
 
-func TestUnitListCategories_WithrsqlQuery(t *testing.T) {
+func TestUnit_Categories_List_WithrsqlQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListCategoriesMock()
 
@@ -51,7 +51,7 @@ func TestUnitListCategories_WithrsqlQuery(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitListCategories_WithRSQLFilter(t *testing.T) {
+func TestUnit_Categories_List_WithRSQLFilter(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListCategoriesRSQLMock()
 
@@ -76,7 +76,7 @@ func TestUnitListCategories_WithRSQLFilter(t *testing.T) {
 // GetCategoryByIDV1
 // =============================================================================
 
-func TestUnitGetCategoryByID_Success(t *testing.T) {
+func TestUnit_Categories_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetCategoryMock()
 
@@ -91,7 +91,7 @@ func TestUnitGetCategoryByID_Success(t *testing.T) {
 	assert.Equal(t, 9, result.Priority)
 }
 
-func TestUnitGetCategoryByID_EmptyID(t *testing.T) {
+func TestUnit_Categories_GetByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
@@ -101,7 +101,7 @@ func TestUnitGetCategoryByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "category ID is required")
 }
 
-func TestUnitGetCategoryByID_NotFound(t *testing.T) {
+func TestUnit_Categories_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -116,7 +116,7 @@ func TestUnitGetCategoryByID_NotFound(t *testing.T) {
 // CreateCategoryV1
 // =============================================================================
 
-func TestUnitCreateCategory_Success(t *testing.T) {
+func TestUnit_Categories_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateCategoryMock()
 
@@ -131,7 +131,7 @@ func TestUnitCreateCategory_Success(t *testing.T) {
 	assert.Contains(t, result.Href, "/api/v1/categories/3")
 }
 
-func TestUnitCreateCategory_NilRequest(t *testing.T) {
+func TestUnit_Categories_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateV1(context.Background(), nil)
@@ -141,7 +141,7 @@ func TestUnitCreateCategory_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitCreateCategory_Conflict(t *testing.T) {
+func TestUnit_Categories_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
@@ -157,7 +157,7 @@ func TestUnitCreateCategory_Conflict(t *testing.T) {
 // UpdateCategoryByIDV1
 // =============================================================================
 
-func TestUnitUpdateCategoryByID_Success(t *testing.T) {
+func TestUnit_Categories_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateCategoryMock()
 
@@ -173,7 +173,7 @@ func TestUnitUpdateCategoryByID_Success(t *testing.T) {
 	assert.Equal(t, 5, result.Priority)
 }
 
-func TestUnitUpdateCategoryByID_EmptyID(t *testing.T) {
+func TestUnit_Categories_UpdateByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &RequestCategory{Name: "x"})
@@ -183,7 +183,7 @@ func TestUnitUpdateCategoryByID_EmptyID(t *testing.T) {
 	assert.Contains(t, err.Error(), "id is required")
 }
 
-func TestUnitUpdateCategoryByID_NilRequest(t *testing.T) {
+func TestUnit_Categories_UpdateByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
@@ -197,7 +197,7 @@ func TestUnitUpdateCategoryByID_NilRequest(t *testing.T) {
 // DeleteCategoryByIDV1
 // =============================================================================
 
-func TestUnitDeleteCategoryByID_Success(t *testing.T) {
+func TestUnit_Categories_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteCategoryMock()
 
@@ -207,7 +207,7 @@ func TestUnitDeleteCategoryByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteCategoryByID_EmptyID(t *testing.T) {
+func TestUnit_Categories_DeleteByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteByIDV1(context.Background(), "")

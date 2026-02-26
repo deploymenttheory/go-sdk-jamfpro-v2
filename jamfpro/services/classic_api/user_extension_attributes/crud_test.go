@@ -267,3 +267,77 @@ func TestUnit_UserExtensionAttributes_Conflict(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "user extension attribute with that name already exists")
 }
+
+func TestUnit_UserExtensionAttributes_List_Error(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_UserExtensionAttributes_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "Department")
+	require.Error(t, err)
+}
+
+func TestUnit_UserExtensionAttributes_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_UserExtensionAttributes_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &user_extension_attributes.RequestUserExtensionAttribute{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "user extension attribute name is required")
+}
+
+func TestUnit_UserExtensionAttributes_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &user_extension_attributes.RequestUserExtensionAttribute{Name: "Test"})
+	require.Error(t, err)
+}
+
+func TestUnit_UserExtensionAttributes_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Department", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_UserExtensionAttributes_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Department", &user_extension_attributes.RequestUserExtensionAttribute{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "user extension attribute name is required in request")
+}
+
+func TestUnit_UserExtensionAttributes_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Department", &user_extension_attributes.RequestUserExtensionAttribute{Name: "Updated"})
+	require.Error(t, err)
+}
+
+func TestUnit_UserExtensionAttributes_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_UserExtensionAttributes_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewUserExtensionAttributesMock()
+	svc := user_extension_attributes.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "Department")
+	require.Error(t, err)
+}

@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.SSOFailoverMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_SsoFailover_GetV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
@@ -24,7 +24,7 @@ func TestUnitGetV1_Success(t *testing.T) {
 	require.Equal(t, "https://sso.example.com/failover?key=abc123", result.FailoverURL)
 }
 
-func TestUnitRegenerateV1_Success(t *testing.T) {
+func TestUnit_SsoFailover_RegenerateV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.RegenerateV1(context.Background())
 	require.NoError(t, err)

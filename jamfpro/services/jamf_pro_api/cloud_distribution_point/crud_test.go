@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.CloudDistributionPointMock
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_CloudDistributionPoint_GetV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
@@ -65,7 +65,7 @@ func TestUnitCreateV1_Success(t *testing.T) {
 	require.Equal(t, "JCDS", result.CdnType)
 }
 
-func TestUnitUpdateV1_Success(t *testing.T) {
+func TestUnit_CloudDistributionPoint_UpdateV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestCloudDistributionPointV1{
 		CdnType: "JAMF_CLOUD",

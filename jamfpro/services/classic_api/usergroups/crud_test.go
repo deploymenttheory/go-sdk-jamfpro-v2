@@ -269,3 +269,77 @@ func TestUnit_UserGroups_Conflict(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "user group with that name already exists")
 }
+
+func TestUnit_UserGroups_List_Error(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_UserGroups_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "All Users")
+	require.Error(t, err)
+}
+
+func TestUnit_UserGroups_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_UserGroups_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &usergroups.RequestUserGroup{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "user group name is required")
+}
+
+func TestUnit_UserGroups_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &usergroups.RequestUserGroup{Name: "Test"})
+	require.Error(t, err)
+}
+
+func TestUnit_UserGroups_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "All Users", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_UserGroups_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "All Users", &usergroups.RequestUserGroup{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "user group name is required in request")
+}
+
+func TestUnit_UserGroups_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "All Users", &usergroups.RequestUserGroup{Name: "Updated"})
+	require.Error(t, err)
+}
+
+func TestUnit_UserGroups_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_UserGroups_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewUserGroupsMock()
+	svc := usergroups.NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "All Users")
+	require.Error(t, err)
+}

@@ -1,4 +1,4 @@
-package icons
+package icon
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icons/mocks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icon/mocks"
 	"github.com/stretchr/testify/require"
 )
 
@@ -17,7 +17,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.IconsMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetByIDV1_Success(t *testing.T) {
+func TestUnit_Icon_GetByIDV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetByIDV1(context.Background(), 1)
 	require.NoError(t, err)
@@ -27,7 +27,7 @@ func TestUnitGetByIDV1_Success(t *testing.T) {
 	require.Equal(t, "icon.png", result.Name)
 }
 
-func TestUnitUploadV1_Success(t *testing.T) {
+func TestUnit_Icon_UploadV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	r := strings.NewReader("fake png bytes")
 	result, resp, err := svc.UploadV1(context.Background(), r, 14, "test.png")
@@ -38,7 +38,7 @@ func TestUnitUploadV1_Success(t *testing.T) {
 	require.Equal(t, "uploaded.png", result.Name)
 }
 
-func TestUnitDownloadV1_Success(t *testing.T) {
+func TestUnit_Icon_DownloadV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	body, resp, err := svc.DownloadV1(context.Background(), 1, "original", "0")
 	require.NoError(t, err)
@@ -47,7 +47,7 @@ func TestUnitDownloadV1_Success(t *testing.T) {
 	require.Greater(t, len(body), 0)
 }
 
-func TestUnitDownloadV1_Defaults(t *testing.T) {
+func TestUnit_Icon_DownloadV1_Defaults(t *testing.T) {
 	svc, _ := setupMockService(t)
 	body, resp, err := svc.DownloadV1(context.Background(), 1, "", "")
 	require.NoError(t, err)

@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.GSXConnectionMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetGSXConnection_Success(t *testing.T) {
+func TestUnit_GsxConnection_Get_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetGSXConnectionMock()
 
@@ -33,7 +33,7 @@ func TestUnitGetGSXConnection_Success(t *testing.T) {
 	assert.Equal(t, int64(1691954900000), result.GsxKeystore.ExpirationEpoch)
 }
 
-func TestUnitUpdateGSXConnection_Success(t *testing.T) {
+func TestUnit_GsxConnection_Update_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateGSXConnectionMock()
 
@@ -60,7 +60,7 @@ func TestUnitUpdateGSXConnection_Success(t *testing.T) {
 	assert.Equal(t, "54321", result.ServiceAccountNo)
 }
 
-func TestUnitUpdateGSXConnection_NilRequest(t *testing.T) {
+func TestUnit_GsxConnection_Update_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.UpdateV1(context.Background(), nil)
@@ -70,7 +70,7 @@ func TestUnitUpdateGSXConnection_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
-func TestUnitGetGSXConnectionHistory_Success(t *testing.T) {
+func TestUnit_GsxConnection_GetHistory_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetHistoryMock()
 
@@ -89,7 +89,7 @@ func TestUnitGetGSXConnectionHistory_Success(t *testing.T) {
 	assert.Equal(t, "Updated service account", result.Results[1].Note)
 }
 
-func TestUnitGetGSXConnectionHistory_WithRSQLQuery(t *testing.T) {
+func TestUnit_GsxConnection_GetHistory_WithRSQLQuery(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetHistoryMock()
 

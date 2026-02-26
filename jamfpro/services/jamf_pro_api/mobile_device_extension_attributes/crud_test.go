@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.MobileDeviceExtensionAttri
 	return NewService(mock), mock
 }
 
-func TestUnitListMobileDeviceExtensionAttributes_Success(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_List_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListMock()
 
@@ -31,7 +31,7 @@ func TestUnitListMobileDeviceExtensionAttributes_Success(t *testing.T) {
 	assert.Equal(t, "MDEA One", result.Results[0].Name)
 }
 
-func TestUnitGetMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_GetByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -46,7 +46,7 @@ func TestUnitGetMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
 	assert.Equal(t, "String", result.DataType)
 }
 
-func TestUnitGetMobileDeviceExtensionAttributeByID_EmptyID(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_GetByID_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetByIDV1(context.Background(), "")
@@ -55,7 +55,7 @@ func TestUnitGetMobileDeviceExtensionAttributeByID_EmptyID(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitGetMobileDeviceExtensionAttributeByID_NotFound(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_GetByID_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterNotFoundErrorMock()
 
@@ -66,7 +66,7 @@ func TestUnitGetMobileDeviceExtensionAttributeByID_NotFound(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 }
 
-func TestUnitCreateMobileDeviceExtensionAttribute_Success(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -86,7 +86,7 @@ func TestUnitCreateMobileDeviceExtensionAttribute_Success(t *testing.T) {
 	assert.NotEmpty(t, result.Href)
 }
 
-func TestUnitCreateMobileDeviceExtensionAttribute_NilRequest(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_Create_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.CreateV1(context.Background(), nil)
@@ -95,7 +95,7 @@ func TestUnitCreateMobileDeviceExtensionAttribute_NilRequest(t *testing.T) {
 	assert.Nil(t, resp)
 }
 
-func TestUnitUpdateMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_UpdateByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -116,7 +116,7 @@ func TestUnitUpdateMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
 	assert.Equal(t, "MDEA One Updated", result.Name)
 }
 
-func TestUnitDeleteMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_DeleteByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 
@@ -126,7 +126,7 @@ func TestUnitDeleteMobileDeviceExtensionAttributeByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteMobileDeviceExtensionAttributesByID_Success(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_DeleteMultipleByID_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMultipleMock()
 
@@ -137,7 +137,7 @@ func TestUnitDeleteMobileDeviceExtensionAttributesByID_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
-func TestUnitDeleteMobileDeviceExtensionAttributesByID_NilRequest(t *testing.T) {
+func TestUnit_MobileDeviceExtensionAttributes_DeleteMultipleByID_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.DeleteMobileDeviceExtensionAttributesByIDV1(context.Background(), nil)

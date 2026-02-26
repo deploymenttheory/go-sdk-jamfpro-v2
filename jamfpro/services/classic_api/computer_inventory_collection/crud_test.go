@@ -21,7 +21,7 @@ func setupMockService(t *testing.T) (*computer_inventory_collection.Service, *mo
 // Get
 // =============================================================================
 
-func TestUnitGet_Success(t *testing.T) {
+func TestUnit_ComputerInventoryCollection_Get_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -46,7 +46,7 @@ func TestUnitGet_Success(t *testing.T) {
 // Update
 // =============================================================================
 
-func TestUnitUpdate_Success(t *testing.T) {
+func TestUnit_ComputerInventoryCollection_Update_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateMock()
 
@@ -71,7 +71,7 @@ func TestUnitUpdate_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdate_NilSettings(t *testing.T) {
+func TestUnit_ComputerInventoryCollection_Update_NilSettings(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.Update(context.Background(), nil)

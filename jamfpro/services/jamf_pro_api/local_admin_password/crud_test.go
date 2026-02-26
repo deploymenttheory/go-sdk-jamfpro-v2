@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.LocalAdminPasswordMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetPendingRotationsV2_Success(t *testing.T) {
+func TestUnit_LocalAdminPassword_GetPendingRotationsV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetPendingRotationsMock()
 
@@ -31,7 +31,7 @@ func TestUnitGetPendingRotationsV2_Success(t *testing.T) {
 	assert.Equal(t, "admin", result.Results[0].LapsUser.Username)
 }
 
-func TestUnitGetSettingsV2_Success(t *testing.T) {
+func TestUnit_LocalAdminPassword_GetSettingsV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetSettingsMock()
 
@@ -47,7 +47,7 @@ func TestUnitGetSettingsV2_Success(t *testing.T) {
 	assert.Equal(t, 7, result.AutoRotateExpirationTime)
 }
 
-func TestUnitUpdateSettingsV2_Success(t *testing.T) {
+func TestUnit_LocalAdminPassword_UpdateSettingsV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateSettingsMock()
 
@@ -63,7 +63,7 @@ func TestUnitUpdateSettingsV2_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateSettingsV2_NilRequest(t *testing.T) {
+func TestUnit_LocalAdminPassword_UpdateSettingsV2_NilRequest(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	resp, err := svc.UpdateSettingsV2(context.Background(), nil)
@@ -72,7 +72,7 @@ func TestUnitUpdateSettingsV2_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "settings is required")
 }
 
-func TestUnitGetPasswordHistoryByClientManagementIDV2_Success(t *testing.T) {
+func TestUnit_LocalAdminPassword_GetPasswordHistoryByClientManagementIDV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetPasswordHistoryMock()
 
@@ -89,7 +89,7 @@ func TestUnitGetPasswordHistoryByClientManagementIDV2_Success(t *testing.T) {
 	assert.Equal(t, "admin@example.com", result.Results[0].Audits[0].ViewedBy)
 }
 
-func TestUnitGetPasswordHistoryByClientManagementIDV2_EmptyClientManagementID(t *testing.T) {
+func TestUnit_LocalAdminPassword_GetPasswordHistoryByClientManagementIDV2_EmptyClientManagementID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetPasswordHistoryByClientManagementIDV2(context.Background(), "", "admin")
@@ -99,7 +99,7 @@ func TestUnitGetPasswordHistoryByClientManagementIDV2_EmptyClientManagementID(t 
 	assert.Contains(t, err.Error(), "clientManagementID is required")
 }
 
-func TestUnitGetPasswordHistoryByClientManagementIDV2_EmptyUsername(t *testing.T) {
+func TestUnit_LocalAdminPassword_GetPasswordHistoryByClientManagementIDV2_EmptyUsername(t *testing.T) {
 	svc, _ := setupMockService(t)
 
 	result, resp, err := svc.GetPasswordHistoryByClientManagementIDV2(context.Background(), "device-001", "")

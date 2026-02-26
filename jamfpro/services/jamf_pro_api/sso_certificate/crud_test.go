@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.SsoCertificateMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGet_Success(t *testing.T) {
+func TestUnit_SsoCertificate_Get_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetMock()
 
@@ -27,7 +27,7 @@ func TestUnitGet_Success(t *testing.T) {
 	assert.Equal(t, "SELF_SERVICE", result.Keystore.Type)
 }
 
-func TestUnitCreate_Success(t *testing.T) {
+func TestUnit_SsoCertificate_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
@@ -38,7 +38,7 @@ func TestUnitCreate_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitDelete_Success(t *testing.T) {
+func TestUnit_SsoCertificate_Delete_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterDeleteMock()
 

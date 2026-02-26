@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.NotificationsMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitListV1_Success(t *testing.T) {
+func TestUnit_Notifications_ListV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)

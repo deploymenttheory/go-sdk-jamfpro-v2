@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.StartupStatusMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV1_Success(t *testing.T) {
+func TestUnit_StartupStatus_GetV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetStartupStatusMock()
 

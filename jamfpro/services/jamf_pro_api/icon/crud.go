@@ -1,4 +1,4 @@
-package icons
+package icon
 
 import (
 	"context"
@@ -11,10 +11,10 @@ import (
 )
 
 type (
-	// IconsServiceInterface defines the interface for icon operations.
+	// IconServiceInterface defines the interface for icon operations.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
-	IconsServiceInterface interface {
+	IconServiceInterface interface {
 		// GetByIDV1 returns icon metadata by ID (Get Icon).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-id
@@ -40,7 +40,7 @@ type (
 	}
 )
 
-var _ IconsServiceInterface = (*Service)(nil)
+var _ IconServiceInterface = (*Service)(nil)
 
 func NewService(client interfaces.HTTPClient) *Service {
 	return &Service{client: client}
@@ -50,7 +50,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/icon/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-id
 func (s *Service) GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *interfaces.Response, error) {
-	endpoint := fmt.Sprintf("%s/%d", EndpointIconsV1, id)
+	endpoint := fmt.Sprintf("%s/%d", EndpointIconV1, id)
 	var result ResourceIcon
 
 	headers := map[string]string{
@@ -73,9 +73,15 @@ func (s *Service) UploadV1(ctx context.Context, fileReader io.Reader, fileSize i
 	if fileName == "" {
 		fileName = "icon.png"
 	}
-	headers := map[string]string{"Content-Type": "multipart/form-data"}
+	endpoint := EndpointIconV1
+
+	headers := map[string]string{
+		"Content-Type": "multipart/form-data",
+	}
+
 	var result ResourceIcon
-	resp, err := s.client.PostMultipart(ctx, EndpointIconsV1, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
+
+	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -109,11 +115,17 @@ func (s *Service) DownloadV1(ctx context.Context, id int, res, scale string) ([]
 	if res == "" {
 		res = "original"
 	}
+
 	if scale == "" {
 		scale = "0"
 	}
+
 	rsqlQuery := map[string]string{"res": res, "scale": scale}
-	headers := map[string]string{"Accept": "image/*"}
+
+	headers := map[string]string{
+		"Accept": "image/*",
+	}
+
 	resp, body, err := s.client.GetBytes(ctx, endpoint, rsqlQuery, headers)
 	if err != nil {
 		return nil, resp, err

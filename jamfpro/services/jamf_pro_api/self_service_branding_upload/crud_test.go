@@ -17,7 +17,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.SelfServiceBrandingUploadM
 	return NewService(mock), mock
 }
 
-func TestUnitUpload_Success(t *testing.T) {
+func TestUnit_SelfServiceBrandingUpload_Upload_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	r := strings.NewReader("fake png bytes")
 	result, resp, err := svc.Upload(context.Background(), r, 14, "branding.png")
@@ -28,7 +28,7 @@ func TestUnitUpload_Success(t *testing.T) {
 	require.Contains(t, result.URL, "uploaded-branding.png")
 }
 
-func TestUnitUpload_DefaultFileName(t *testing.T) {
+func TestUnit_SelfServiceBrandingUpload_Upload_DefaultFileName(t *testing.T) {
 	svc, _ := setupMockService(t)
 	r := strings.NewReader("fake png bytes")
 	result, resp, err := svc.Upload(context.Background(), r, 14, "")
@@ -38,7 +38,7 @@ func TestUnitUpload_DefaultFileName(t *testing.T) {
 	require.NotEmpty(t, result.URL)
 }
 
-func TestUnitUploadFromFile_FileNotFound(t *testing.T) {
+func TestUnit_SelfServiceBrandingUpload_UploadFromFile_FileNotFound(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.UploadFromFile(context.Background(), "/nonexistent/path/branding.png")
 	require.Error(t, err)

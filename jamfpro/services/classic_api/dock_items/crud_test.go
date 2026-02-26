@@ -252,3 +252,77 @@ func TestUnit_DockItems_Conflict(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "dock item with that name already exists")
 }
+
+func TestUnit_DockItems_List_Error(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, _, err := svc.List(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_DockItems_GetByName_Error(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, _, err := svc.GetByName(context.Background(), "Safari")
+	require.Error(t, err)
+}
+
+func TestUnit_DockItems_UpdateByID_NilRequest(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_DockItems_UpdateByID_EmptyName(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &Request{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "dock item name is required")
+}
+
+func TestUnit_DockItems_UpdateByID_Error(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, _, err := svc.UpdateByID(context.Background(), 1, &Request{Name: "Safari"})
+	require.Error(t, err)
+}
+
+func TestUnit_DockItems_UpdateByName_NilRequest(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Safari", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_DockItems_UpdateByName_EmptyReqName(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Safari", &Request{Name: ""})
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "dock item name is required in request")
+}
+
+func TestUnit_DockItems_UpdateByName_Error(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, _, err := svc.UpdateByName(context.Background(), "Safari", &Request{Name: "Updated"})
+	require.Error(t, err)
+}
+
+func TestUnit_DockItems_DeleteByID_Error(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, err := svc.DeleteByID(context.Background(), 1)
+	require.Error(t, err)
+}
+
+func TestUnit_DockItems_DeleteByName_Error(t *testing.T) {
+	mockClient := mocks.NewDockItemsMock()
+	svc := NewService(mockClient)
+	_, err := svc.DeleteByName(context.Background(), "Safari")
+	require.Error(t, err)
+}

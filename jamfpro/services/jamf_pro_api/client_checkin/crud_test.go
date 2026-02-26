@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.ClientCheckinMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitGetV3_Success(t *testing.T) {
+func TestUnit_ClientCheckin_GetV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.GetV3(context.Background())
 	require.NoError(t, err)
@@ -25,7 +25,7 @@ func TestUnitGetV3_Success(t *testing.T) {
 	require.True(t, result.CreateHooks)
 }
 
-func TestUnitUpdateV3_Success(t *testing.T) {
+func TestUnit_ClientCheckin_UpdateV3_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	settings := &ResourceClientCheckinSettings{CheckInFrequency: 30, CreateHooks: true}
 	result, resp, err := svc.UpdateV3(context.Background(), settings)
@@ -34,7 +34,7 @@ func TestUnitUpdateV3_Success(t *testing.T) {
 	require.Equal(t, 200, resp.StatusCode)
 }
 
-func TestUnitUpdateV3_NilSettings(t *testing.T) {
+func TestUnit_ClientCheckin_UpdateV3_NilSettings(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.UpdateV3(context.Background(), nil)
 	require.Error(t, err)

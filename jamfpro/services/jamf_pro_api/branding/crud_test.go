@@ -15,7 +15,7 @@ func setupMockService(t *testing.T) (*Service, *mocks.BrandingMock) {
 	return NewService(mock), mock
 }
 
-func TestUnitDownloadBrandingImageV1_Success(t *testing.T) {
+func TestUnit_Branding_DownloadBrandingImageV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	body, resp, err := svc.DownloadBrandingImageV1(context.Background(), "test-id")
 	require.NoError(t, err)

@@ -118,7 +118,7 @@ func TestUnit_JamfProtect_ListHistoryV1_Success(t *testing.T) {
 	require.Len(t, result.Results, 2)
 }
 
-func TestUnitCreateHistoryNoteV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_CreateHistoryNoteV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	request := &RequestJamfProtectHistoryNote{
 		Note:    "Test note",
@@ -140,7 +140,7 @@ func TestUnit_JamfProtect_CreateHistoryNoteV1_NilRequest(t *testing.T) {
 	require.Contains(t, err.Error(), "cannot be nil")
 }
 
-func TestUnitListPlansV1_Success(t *testing.T) {
+func TestUnit_JamfProtect_ListPlansV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	result, resp, err := svc.ListPlansV1(context.Background(), nil)
 	require.NoError(t, err)
