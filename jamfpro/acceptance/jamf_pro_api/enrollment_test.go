@@ -103,30 +103,30 @@ func TestAcceptance_Enrollment_get_and_update_v4(t *testing.T) {
 	// Update settings (toggle a setting and toggle back)
 	originalRestrictReenrollment := result.RestrictReenrollment
 	updateRequest := &enrollment.ResourceEnrollment{
-		InstallSingleProfile:             result.InstallSingleProfile,
-		SigningMdmProfileEnabled:         result.SigningMdmProfileEnabled,
-		MdmSigningCertificate:            result.MdmSigningCertificate,
-		RestrictReenrollment:             !originalRestrictReenrollment,
-		FlushLocationInformation:         result.FlushLocationInformation,
-		FlushLocationHistoryInformation:  result.FlushLocationHistoryInformation,
-		FlushPolicyHistory:               result.FlushPolicyHistory,
-		FlushExtensionAttributes:         result.FlushExtensionAttributes,
-		FlushSoftwareUpdatePlans:         result.FlushSoftwareUpdatePlans,
-		MacOsEnterpriseEnrollmentEnabled: result.MacOsEnterpriseEnrollmentEnabled,
-		ManagementUsername:               result.ManagementUsername,
-		CreateManagementAccount:          result.CreateManagementAccount,
-		HideManagementAccount:            result.HideManagementAccount,
-		AllowSshOnlyManagementAccount:    result.AllowSshOnlyManagementAccount,
-		EnsureSshRunning:                 result.EnsureSshRunning,
-		LaunchSelfService:                result.LaunchSelfService,
-		SignQuickAdd:                     result.SignQuickAdd,
-		DeveloperCertificateIdentity:     result.DeveloperCertificateIdentity,
+		InstallSingleProfile:                result.InstallSingleProfile,
+		SigningMdmProfileEnabled:            result.SigningMdmProfileEnabled,
+		MdmSigningCertificate:               result.MdmSigningCertificate,
+		RestrictReenrollment:                !originalRestrictReenrollment,
+		FlushLocationInformation:            result.FlushLocationInformation,
+		FlushLocationHistoryInformation:     result.FlushLocationHistoryInformation,
+		FlushPolicyHistory:                  result.FlushPolicyHistory,
+		FlushExtensionAttributes:            result.FlushExtensionAttributes,
+		FlushSoftwareUpdatePlans:            result.FlushSoftwareUpdatePlans,
+		MacOsEnterpriseEnrollmentEnabled:    result.MacOsEnterpriseEnrollmentEnabled,
+		ManagementUsername:                  result.ManagementUsername,
+		CreateManagementAccount:             result.CreateManagementAccount,
+		HideManagementAccount:               result.HideManagementAccount,
+		AllowSshOnlyManagementAccount:       result.AllowSshOnlyManagementAccount,
+		EnsureSshRunning:                    result.EnsureSshRunning,
+		LaunchSelfService:                   result.LaunchSelfService,
+		SignQuickAdd:                        result.SignQuickAdd,
+		DeveloperCertificateIdentity:        result.DeveloperCertificateIdentity,
 		DeveloperCertificateIdentityDetails: result.DeveloperCertificateIdentityDetails,
-		MdmSigningCertificateDetails:     result.MdmSigningCertificateDetails,
-		IosEnterpriseEnrollmentEnabled:   result.IosEnterpriseEnrollmentEnabled,
-		IosPersonalEnrollmentEnabled:     result.IosPersonalEnrollmentEnabled,
-		PersonalDeviceEnrollmentType:     result.PersonalDeviceEnrollmentType,
-		AccountDrivenUserEnrollmentEnabled: result.AccountDrivenUserEnrollmentEnabled,
+		MdmSigningCertificateDetails:        result.MdmSigningCertificateDetails,
+		IosEnterpriseEnrollmentEnabled:      result.IosEnterpriseEnrollmentEnabled,
+		IosPersonalEnrollmentEnabled:        result.IosPersonalEnrollmentEnabled,
+		PersonalDeviceEnrollmentType:        result.PersonalDeviceEnrollmentType,
+		AccountDrivenUserEnrollmentEnabled:  result.AccountDrivenUserEnrollmentEnabled,
 	}
 
 	updated, resp, err := svc.UpdateV4(ctx, updateRequest)
@@ -137,30 +137,30 @@ func TestAcceptance_Enrollment_get_and_update_v4(t *testing.T) {
 
 	// Restore original setting
 	restoreRequest := &enrollment.ResourceEnrollment{
-		InstallSingleProfile:             result.InstallSingleProfile,
-		SigningMdmProfileEnabled:         result.SigningMdmProfileEnabled,
-		MdmSigningCertificate:            result.MdmSigningCertificate,
-		RestrictReenrollment:             originalRestrictReenrollment,
-		FlushLocationInformation:         result.FlushLocationInformation,
-		FlushLocationHistoryInformation:  result.FlushLocationHistoryInformation,
-		FlushPolicyHistory:               result.FlushPolicyHistory,
-		FlushExtensionAttributes:         result.FlushExtensionAttributes,
-		FlushSoftwareUpdatePlans:         result.FlushSoftwareUpdatePlans,
-		MacOsEnterpriseEnrollmentEnabled: result.MacOsEnterpriseEnrollmentEnabled,
-		ManagementUsername:               result.ManagementUsername,
-		CreateManagementAccount:          result.CreateManagementAccount,
-		HideManagementAccount:            result.HideManagementAccount,
-		AllowSshOnlyManagementAccount:    result.AllowSshOnlyManagementAccount,
-		EnsureSshRunning:                 result.EnsureSshRunning,
-		LaunchSelfService:                result.LaunchSelfService,
-		SignQuickAdd:                     result.SignQuickAdd,
-		DeveloperCertificateIdentity:     result.DeveloperCertificateIdentity,
+		InstallSingleProfile:                result.InstallSingleProfile,
+		SigningMdmProfileEnabled:            result.SigningMdmProfileEnabled,
+		MdmSigningCertificate:               result.MdmSigningCertificate,
+		RestrictReenrollment:                originalRestrictReenrollment,
+		FlushLocationInformation:            result.FlushLocationInformation,
+		FlushLocationHistoryInformation:     result.FlushLocationHistoryInformation,
+		FlushPolicyHistory:                  result.FlushPolicyHistory,
+		FlushExtensionAttributes:            result.FlushExtensionAttributes,
+		FlushSoftwareUpdatePlans:            result.FlushSoftwareUpdatePlans,
+		MacOsEnterpriseEnrollmentEnabled:    result.MacOsEnterpriseEnrollmentEnabled,
+		ManagementUsername:                  result.ManagementUsername,
+		CreateManagementAccount:             result.CreateManagementAccount,
+		HideManagementAccount:               result.HideManagementAccount,
+		AllowSshOnlyManagementAccount:       result.AllowSshOnlyManagementAccount,
+		EnsureSshRunning:                    result.EnsureSshRunning,
+		LaunchSelfService:                   result.LaunchSelfService,
+		SignQuickAdd:                        result.SignQuickAdd,
+		DeveloperCertificateIdentity:        result.DeveloperCertificateIdentity,
 		DeveloperCertificateIdentityDetails: result.DeveloperCertificateIdentityDetails,
-		MdmSigningCertificateDetails:     result.MdmSigningCertificateDetails,
-		IosEnterpriseEnrollmentEnabled:   result.IosEnterpriseEnrollmentEnabled,
-		IosPersonalEnrollmentEnabled:     result.IosPersonalEnrollmentEnabled,
-		PersonalDeviceEnrollmentType:     result.PersonalDeviceEnrollmentType,
-		AccountDrivenUserEnrollmentEnabled: result.AccountDrivenUserEnrollmentEnabled,
+		MdmSigningCertificateDetails:        result.MdmSigningCertificateDetails,
+		IosEnterpriseEnrollmentEnabled:      result.IosEnterpriseEnrollmentEnabled,
+		IosPersonalEnrollmentEnabled:        result.IosPersonalEnrollmentEnabled,
+		PersonalDeviceEnrollmentType:        result.PersonalDeviceEnrollmentType,
+		AccountDrivenUserEnrollmentEnabled:  result.AccountDrivenUserEnrollmentEnabled,
 	}
 
 	restored, resp, err := svc.UpdateV4(ctx, restoreRequest)
@@ -273,8 +273,8 @@ func TestAcceptance_Enrollment_language_messages_v3(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 
 	// If English exists, test get by code
-	if len(messages) > 0 {
-		firstMessage := messages[0]
+	if len(messages.Results) > 0 {
+		firstMessage := messages.Results[0]
 
 		message, resp, err := svc.GetLanguageMessageV3(ctx, firstMessage.LanguageCode)
 		require.NoError(t, err)
