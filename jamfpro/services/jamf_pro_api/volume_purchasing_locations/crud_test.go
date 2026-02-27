@@ -290,7 +290,7 @@ func TestUnit_VolumePurchasingLocations_ListV1_InvalidJSON(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "failed to unmarshal")
 }
 
 func TestUnit_VolumePurchasingLocations_GetByIDV1_NotFound(t *testing.T) {

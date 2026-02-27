@@ -117,7 +117,15 @@ func (m *AccountsMock) GetPaginated(ctx context.Context, path string, query map[
 	}
 
 	if len(resp.rawBody) > 0 {
-		if err := mergePage(resp.rawBody); err != nil {
+		// Parse the paginated response structure to extract the results field
+		var pageResp struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.rawBody, &pageResp); err != nil {
+			return nil, fmt.Errorf("failed to unmarshal paginated response: %w", err)
+		}
+		
+		if err := mergePage(pageResp.Results); err != nil {
 			return nil, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
