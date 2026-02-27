@@ -2,11 +2,13 @@ package computer_prestages
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -101,11 +103,34 @@ func (s *Service) ListV3(ctx context.Context, query map[string]string) (*ListRes
 
 	endpoint := EndpointComputerPrestagesV3
 
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var prestage ResourceComputerPrestage
+				if err := mapstructure.Decode(item, &prestage); err != nil {
+					return fmt.Errorf("failed to decode computer prestage: %w", err)
+				}
+				result.Results = append(result.Results, prestage)
+			}
+		}
+
+		return nil
+	}
+
 	headers := map[string]string{
 		"Accept": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}

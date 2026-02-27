@@ -31,14 +31,16 @@ type (
 		Create(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *interfaces.Response, error)
 
 		// UpdateByID updates the specified account group by ID.
+		// Returns only the updated account group's ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyid
-		UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*UpdateResponse, *interfaces.Response, error)
 
 		// UpdateByName updates the specified account group by name.
+		// Returns only the updated account group's ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyname
-		UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*UpdateResponse, *interfaces.Response, error)
 
 		// DeleteByID removes the specified account group by ID.
 		//
@@ -149,7 +151,7 @@ func (s *Service) Create(ctx context.Context, req *RequestAccountGroup) (*Create
 // UpdateByID updates the specified account group by ID.
 // URL: PUT /JSSResource/accounts/groupid/{id}
 // https://developer.jamf.com/jamf-pro/reference/updateaccountbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*UpdateResponse, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("account group ID must be a positive integer")
 	}
@@ -159,7 +161,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAccountGro
 
 	endpoint := fmt.Sprintf("%s/groupid/%d", EndpointClassicAccounts, id)
 
-	var result ResourceAccountGroup
+	var result UpdateResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,
@@ -177,7 +179,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAccountGro
 // UpdateByName updates the specified account group by name.
 // URL: PUT /JSSResource/accounts/groupname/{name}
 // https://developer.jamf.com/jamf-pro/reference/updateaccountbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*ResourceAccountGroup, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*UpdateResponse, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("account group name is required")
 	}
@@ -187,7 +189,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAcc
 
 	endpoint := fmt.Sprintf("%s/groupname/%s", EndpointClassicAccounts, name)
 
-	var result ResourceAccountGroup
+	var result UpdateResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,

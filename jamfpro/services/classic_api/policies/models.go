@@ -145,7 +145,7 @@ type PolicySubsetSelfService struct {
 	ReinstallButtonText         string                            `xml:"reinstall_button_text"`
 	SelfServiceDescription      string                            `xml:"self_service_description"`
 	ForceUsersToViewDescription bool                              `xml:"force_users_to_view_description"`
-	SelfServiceIcon             *PolicySubsetSelfServiceIcon      `xml:"self_service_icon"`
+	SelfServiceIcon             *PolicySubsetSelfServiceIcon      `xml:"self_service_icon,omitempty"`
 	FeatureOnMainPage           bool                              `xml:"feature_on_main_page"`
 	SelfServiceCategories       []PolicySubsetSelfServiceCategory `xml:"self_service_categories>category"`
 	Notification                bool                              `xml:"notification"`

@@ -2,10 +2,12 @@ package jamf_pro_server_url
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -101,17 +103,41 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceJamfProServerUR
 
 // GetHistoryV1 retrieves the Jamf Pro server URL settings history.
 // URL: GET /api/v1/jamf-pro-server-url/history
-// Query Params: page, page-size, sort (optional)
+
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-server-url-history
 func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
 	endpoint := EndpointJamfProServerURLV1 + "/history"
 
 	var result HistoryResponse
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var historyObj HistoryObject
+				if err := mapstructure.Decode(item, &historyObj); err != nil {
+					return fmt.Errorf("failed to decode history object: %w", err)
+				}
+				result.Results = append(result.Results, historyObj)
+			}
+		}
+
+		return nil
+	}
+
 	headers := map[string]string{
 		"Accept": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get Jamf Pro server URL history: %w", err)
 	}

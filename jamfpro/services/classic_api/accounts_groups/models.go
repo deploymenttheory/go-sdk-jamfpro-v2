@@ -7,6 +7,8 @@ import (
 )
 
 // ResourceAccountGroup represents a Jamf Pro Classic API account group resource.
+// Note: GET operations return <group>, while CREATE returns <user_group>
+// This struct is used for GET operations
 type ResourceAccountGroup struct {
 	XMLName      xml.Name                   `xml:"group"`
 	ID           int                        `xml:"id,omitempty"`
@@ -34,8 +36,17 @@ type RequestAccountGroup struct {
 
 // CreateResponse is the response from creating an account group.
 // The Classic API returns only the ID when creating an account group.
+// Note: CREATE/UPDATE operations return <user_group>, while GET returns <group>
 type CreateResponse struct {
-	XMLName xml.Name `xml:"group"`
+	XMLName xml.Name `xml:"user_group"`
+	ID      int      `xml:"id,omitempty"`
+}
+
+// UpdateResponse is the response from updating an account group.
+// The Classic API returns only the ID when updating an account group.
+// Note: UPDATE operations return <user_group>, while GET returns <group>
+type UpdateResponse struct {
+	XMLName xml.Name `xml:"user_group"`
 	ID      int      `xml:"id,omitempty"`
 }
 

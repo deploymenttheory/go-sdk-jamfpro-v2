@@ -90,8 +90,8 @@ func TestUnit_Users_GetByEmail(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 1, resp.ID)
-	assert.Equal(t, "admin", resp.Name)
+	assert.Equal(t, 1, resp.Results[0].ID)
+	assert.Equal(t, "admin", resp.Results[0].Name)
 }
 
 func TestUnit_Users_GetByEmail_EmptyEmail(t *testing.T) {
@@ -440,4 +440,3 @@ func TestUnit_Users_DeleteByEmail_Error(t *testing.T) {
 	_, err := svc.DeleteByEmail(context.Background(), "admin@example.com")
 	require.Error(t, err)
 }
-

@@ -2,7 +2,6 @@ package command_flush
 
 import (
 	"context"
-	"encoding/xml"
 	"fmt"
 	"strings"
 
@@ -95,21 +94,12 @@ func (s *Service) FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*
 
 	endpoint := EndpointCommandFlush
 
-	xmlData, err := xml.Marshal(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal command flush request: %w", err)
-	}
-
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,
 		"Content-Type": mime.ApplicationXML,
 	}
 
-	bodyMap := map[string]string{
-		"body": string(xmlData),
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, bodyMap, headers, nil)
+	resp, err := s.client.DeleteWithBody(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to flush commands with XML request: %w", err)
 	}

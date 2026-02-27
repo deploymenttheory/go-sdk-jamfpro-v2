@@ -186,7 +186,7 @@ func (m *SsoSettingsMock) GetBytes(ctx context.Context, path string, _ map[strin
 func (m *SsoSettingsMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
 		_ = mergePage(resp.Body)

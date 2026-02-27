@@ -31,16 +31,22 @@ func TestAcceptance_FileShareDistributionPoints_lifecycle(t *testing.T) {
 
 	dpName := acc.UniqueName("sdkv2_acc_acc-test-fsdp")
 	createReq := &file_share_distribution_points.RequestFileShareDistributionPoint{
-		Name:                  dpName,
-		IsMaster:              false,
-		LocalPath:             "/path/to/share",
-		ConnectionType:        "SMB",
-		ShareName:             "JamfShare",
-		SharePort:             445,
-		HTTPDownloadsEnabled:  true,
-		HTTPURL:               "http://192.168.1.100:8080",
+		Name:                     dpName,
+		IsMaster:                 false,
+		LocalPath:                "/path/to/share",
+		ConnectionType:           "SMB",
+		ShareName:                "JamfShare",
+		SharePort:                445,
+		ReadOnlyUsername:         "readonly_user",
+		ReadOnlyPassword:         "readonly_pass",
+		ReadWriteUsername:        "readwrite_user",
+		ReadWritePassword:        "readwrite_pass",
+		HTTPDownloadsEnabled:     true,
+		HTTPURL:                  "http://192.168.1.100:8080",
+		HTTPUsername:             "http_user",
+		HTTPPassword:             "http_pass",
 		NoAuthenticationRequired: false,
-		UsernamePasswordRequired:  true,
+		UsernamePasswordRequired: true,
 	}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -216,8 +222,18 @@ func TestAcceptance_FileShareDistributionPoints_delete_by_name(t *testing.T) {
 
 	dpName := acc.UniqueName("sdkv2_acc_acc-test-fsdp-dbn")
 	createReq := &file_share_distribution_points.RequestFileShareDistributionPoint{
-		Name:     dpName,
-		IsMaster: false,
+		Name:                     dpName,
+		IsMaster:                 false,
+		ShareName:                "JamfShare",
+		ReadOnlyUsername:         "readonly_user",
+		ReadOnlyPassword:         "readonly_pass",
+		ReadWriteUsername:        "readwrite_user",
+		ReadWritePassword:        "readwrite_pass",
+		HTTPUsername:             "http_user",
+		HTTPPassword:             "http_pass",
+		ConnectionType:           "SMB",
+		NoAuthenticationRequired: false,
+		UsernamePasswordRequired: true,
 	}
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)

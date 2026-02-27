@@ -80,8 +80,8 @@ func (m *UsersMock) RegisterGetUserByNameMock() {
 
 // RegisterGetUserByEmailMock registers GET /JSSResource/users/email/{admin@example.com|admin%40example.com} → 200.
 func (m *UsersMock) RegisterGetUserByEmailMock() {
-	m.register("GET", "/JSSResource/users/email/admin@example.com", 200, "validate_get_user.xml")
-	m.register("GET", "/JSSResource/users/email/admin%40example.com", 200, "validate_get_user.xml")
+	m.register("GET", "/JSSResource/users/email/admin@example.com", 200, "validate_list_users.xml")
+	m.register("GET", "/JSSResource/users/email/admin%40example.com", 200, "validate_list_users.xml")
 }
 
 // RegisterCreateUserMock registers POST /JSSResource/users/id/0 → 201.

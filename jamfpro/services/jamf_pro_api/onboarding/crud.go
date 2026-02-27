@@ -2,10 +2,12 @@ package onboarding
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -119,9 +121,33 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceUpdateOnboardin
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-eligible-apps
 func (s *Service) GetEligibleAppsV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *interfaces.Response, error) {
 	var result ResponseEligibilityList
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var itemVar ResourceEligibilityListItem
+				if err := mapstructure.Decode(item, &itemVar); err != nil {
+					return fmt.Errorf("failed to decode item: %w", err)
+				}
+				result.Results = append(result.Results, itemVar)
+			}
+		}
+
+		return nil
+	}
+
 	endpoint := EndpointEligibleApps
 	headers := map[string]string{"Accept": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -133,9 +159,33 @@ func (s *Service) GetEligibleAppsV1(ctx context.Context, query map[string]string
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-eligible-configuration-profiles
 func (s *Service) GetEligibleConfigurationProfilesV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *interfaces.Response, error) {
 	var result ResponseEligibilityList
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var itemVar ResourceEligibilityListItem
+				if err := mapstructure.Decode(item, &itemVar); err != nil {
+					return fmt.Errorf("failed to decode item: %w", err)
+				}
+				result.Results = append(result.Results, itemVar)
+			}
+		}
+
+		return nil
+	}
+
 	endpoint := EndpointEligibleConfigurationProfiles
 	headers := map[string]string{"Accept": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -147,9 +197,33 @@ func (s *Service) GetEligibleConfigurationProfilesV1(ctx context.Context, query 
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-eligible-policies
 func (s *Service) GetEligiblePoliciesV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *interfaces.Response, error) {
 	var result ResponseEligibilityList
+
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var itemVar ResourceEligibilityListItem
+				if err := mapstructure.Decode(item, &itemVar); err != nil {
+					return fmt.Errorf("failed to decode item: %w", err)
+				}
+				result.Results = append(result.Results, itemVar)
+			}
+		}
+
+		return nil
+	}
+
 	endpoint := EndpointEligiblePolicies
 	headers := map[string]string{"Accept": mime.ApplicationJSON}
-	resp, err := s.client.Get(ctx, endpoint, query, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -165,11 +239,34 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 
 	var result HistoryResponse
 
+	mergePage := func(pageData []byte) error {
+		var rawData map[string]any
+		if err := json.Unmarshal(pageData, &rawData); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+
+		if totalCount, ok := rawData["totalCount"].(float64); ok {
+			result.TotalCount = int(totalCount)
+		}
+
+		if results, ok := rawData["results"].([]any); ok {
+			for _, item := range results {
+				var itemVar ResourceHistoryEntry
+				if err := mapstructure.Decode(item, &itemVar); err != nil {
+					return fmt.Errorf("failed to decode item: %w", err)
+				}
+				result.Results = append(result.Results, itemVar)
+			}
+		}
+
+		return nil
+	}
+
 	headers := map[string]string{
 		"Accept": mime.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}

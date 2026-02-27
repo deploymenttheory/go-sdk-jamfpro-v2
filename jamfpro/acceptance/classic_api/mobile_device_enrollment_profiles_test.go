@@ -45,9 +45,25 @@ func TestAcceptance_MobileDeviceEnrollmentProfiles_lifecycle(t *testing.T) {
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
-	assert.Positive(t, created.General.ID, "created profile ID should be a positive integer")
 
-	profileID := created.General.ID
+	// Classic API may return ID=0 in create response, so fetch from list
+	var profileID int
+	if created.General.ID > 0 {
+		profileID = created.General.ID
+	} else {
+		// Fetch ID from list
+		listCtx, listCancel := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+		defer listCancel()
+		list, _, listErr := svc.List(listCtx)
+		require.NoError(t, listErr, "List after create should not error")
+		for _, item := range list.Results {
+			if item.Name == profileName {
+				profileID = item.ID
+				break
+			}
+		}
+		require.Positive(t, profileID, "should find created profile in list")
+	}
 	acc.LogTestSuccess(t, "Mobile device enrollment profile created with ID=%d name=%q", profileID, profileName)
 
 	acc.Cleanup(t, func() {

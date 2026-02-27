@@ -6,11 +6,9 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/file_uploads"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/policies"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -33,36 +31,9 @@ func TestAcceptance_FileUploads_create_attachment(t *testing.T) {
 	acc.LogTestStage(t, "Create", "Creating test policy for file attachment")
 
 	policyName := acc.UniqueName("sdkv2_acc_acc-test-fileupload-policy")
-	createReq := &policies.ResourcePolicy{
-		General: policies.PolicySubsetGeneral{
-			Name:      policyName,
-			Enabled:   true,
-			Frequency: "Once per computer",
-		},
-		Scope: policies.PolicySubsetScope{
-			AllComputers: true,
-		},
-	}
+	createReq := createMinimalPolicy(t, policyName)
 
-	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel1()
-
-	created, createResp, err := policySvc.Create(ctx1, createReq)
-	require.NoError(t, err, "Create policy should not return an error")
-	require.NotNil(t, created)
-	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
-	assert.Positive(t, created.ID, "created policy ID should be positive")
-
-	policyID := created.ID
-	acc.LogTestSuccess(t, "Policy created with ID=%d name=%q", policyID, policyName)
-
-	acc.Cleanup(t, func() {
-		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		_, delErr := policySvc.DeleteByID(cleanupCtx, policyID)
-		acc.LogCleanupDeleteError(t, "policy", fmt.Sprintf("%d", policyID), delErr)
-	})
+	_, policyID := createPolicyWithCleanup(t, ctx, policySvc, createReq)
 
 	// ------------------------------------------------------------------
 	// 2. Create a temporary file to upload
@@ -71,7 +42,7 @@ func TestAcceptance_FileUploads_create_attachment(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	tmpFile := filepath.Join(tmpDir, "attachment.txt")
-	err = os.WriteFile(tmpFile, []byte("Acceptance test file attachment content"), 0644)
+	err := os.WriteFile(tmpFile, []byte("Acceptance test file attachment content"), 0644)
 	require.NoError(t, err)
 
 	// ------------------------------------------------------------------

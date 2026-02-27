@@ -163,7 +163,6 @@ func TestUnit_AccountsGroups_UpdateByID_Success(t *testing.T) {
 
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, 1, result.ID)
-	assert.Equal(t, "updatedgroup", result.Name)
 }
 
 func TestUnit_AccountsGroups_UpdateByID_ZeroID(t *testing.T) {
@@ -207,7 +206,6 @@ func TestUnit_AccountsGroups_UpdateByName_Success(t *testing.T) {
 
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, 1, result.ID)
-	assert.Equal(t, "updatedgroup", result.Name)
 }
 
 func TestUnit_AccountsGroups_UpdateByName_EmptyName(t *testing.T) {

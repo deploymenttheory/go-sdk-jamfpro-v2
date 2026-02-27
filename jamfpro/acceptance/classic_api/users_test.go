@@ -129,9 +129,9 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	require.NoError(t, err, "GetByEmail should not return an error")
 	require.NotNil(t, fetchedByEmail)
 	assert.Equal(t, 200, fetchByEmailResp.StatusCode)
-	assert.Equal(t, userID, fetchedByEmail.ID)
-	assert.Equal(t, userName, fetchedByEmail.Name)
-	acc.LogTestSuccess(t, "GetByEmail: ID=%d email=%q", fetchedByEmail.ID, createReq.Email)
+	assert.Equal(t, userID, fetchedByEmail.Results[0].ID)
+	assert.Equal(t, userName, fetchedByEmail.Results[0].Name)
+	acc.LogTestSuccess(t, "GetByEmail: ID=%d email=%q", fetchedByEmail.Results[0].ID, createReq.Email)
 
 	// ------------------------------------------------------------------
 	// 6. UpdateByID

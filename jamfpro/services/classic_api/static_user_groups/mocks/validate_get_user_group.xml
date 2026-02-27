@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user_group>
+  <id>1</id>
+  <name>Static Test Group</name>
+  <is_smart>false</is_smart>
+  <is_notify_on_change>false</is_notify_on_change>
+  <site>
+    <id>-1</id>
+    <name>None</name>
+  </site>
+  <users>
+    <user>
+      <id>1</id>
+      <username>testuser</username>
+      <full_name>Test User</full_name>
+      <phone_number></phone_number>
+      <email_address>test@example.com</email_address>
+    </user>
+  </users>
+</user_group>
