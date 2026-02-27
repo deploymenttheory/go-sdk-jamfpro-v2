@@ -8,6 +8,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/disk_encryption_configurations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/dock_items"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/policies"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
@@ -745,25 +746,38 @@ func TestAcceptance_Policies_disk_encryption_institutional(t *testing.T) {
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
-	// 1. Check if any disk encryption configurations exist
+	// 1. Create a disk encryption configuration as a prerequisite
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "Prerequisite", "Checking for disk encryption configurations")
+	acc.LogTestStage(t, "Prerequisite", "Creating disk encryption configuration")
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 
-	diskEncList, _, err := diskEncSvc.List(ctx1)
-	if err != nil || diskEncList == nil || diskEncList.Size == 0 {
-		t.Skip("No disk encryption configurations found - skipping institutional key test")
+	diskEncName := acc.UniqueName("sdkv2_acc_diskenc-for-policy")
+	diskEncReq := &disk_encryption_configurations.RequestDiskEncryptionConfiguration{
+		Name:                  diskEncName,
+		KeyType:               "Individual",
+		FileVaultEnabledUsers: "Management Account",
 	}
+	createdDiskEnc, _, err := diskEncSvc.Create(ctx1, diskEncReq)
+	require.NoError(t, err, "Create disk encryption configuration should not return an error")
+	require.NotNil(t, createdDiskEnc)
+	require.Positive(t, createdDiskEnc.ID)
 
-	diskEncID := diskEncList.Results[0].ID
-	acc.LogTestSuccess(t, "Found disk encryption configuration ID=%d", diskEncID)
+	diskEncID := createdDiskEnc.ID
+	acc.LogTestSuccess(t, "Created disk encryption configuration ID=%d name=%q", diskEncID, diskEncName)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := diskEncSvc.DeleteByID(cleanupCtx, diskEncID)
+		acc.LogCleanupDeleteError(t, "disk encryption configuration", fmt.Sprintf("%d", diskEncID), delErr)
+	})
 
 	// ------------------------------------------------------------------
-	// 2. Create policy with institutional key
+	// 2. Create policy with disk encryption settings
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "Create", "Creating policy with disk encryption (institutional key)")
+	acc.LogTestStage(t, "Create", "Creating policy with disk encryption settings")
 
 	policyName := acc.UniqueName("sdkv2_acc_policy_disk_enc_institutional")
 	policyReq := createMinimalPolicy(t, policyName)
@@ -771,7 +785,7 @@ func TestAcceptance_Policies_disk_encryption_institutional(t *testing.T) {
 		Action:                                 "remediate",
 		DiskEncryptionConfigurationID:          diskEncID,
 		AuthRestart:                            false,
-		RemediateKeyType:                       "Institutional",
+		RemediateKeyType:                       "Individual",
 		RemediateDiskEncryptionConfigurationID: diskEncID,
 	}
 
@@ -790,8 +804,8 @@ func TestAcceptance_Policies_disk_encryption_institutional(t *testing.T) {
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
 	assert.Equal(t, "remediate", fetched.DiskEncryption.Action)
-	assert.Equal(t, "Institutional", fetched.DiskEncryption.RemediateKeyType)
-	acc.LogTestSuccess(t, "Disk encryption (institutional) policy verified")
+	assert.Equal(t, "Individual", fetched.DiskEncryption.RemediateKeyType)
+	acc.LogTestSuccess(t, "Disk encryption policy verified")
 }
 
 // =============================================================================

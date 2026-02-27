@@ -156,3 +156,102 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Account group ID=%d deleted", groupID)
 }
+
+// =============================================================================
+// TestAcceptance_AccountGroups_delete_by_name creates an account group then
+// deletes it by name.
+// =============================================================================
+
+func TestAcceptance_AccountGroups_delete_by_name(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ClassicAccountGroups
+	ctx := context.Background()
+
+	groupName := acc.UniqueName("sdkv2_acc_test-account-group-dbn")
+	createReq := &accounts_groups.RequestAccountGroup{
+		Name:         groupName,
+		AccessLevel:  "Full Access",
+		PrivilegeSet: "Administrator",
+	}
+
+	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel1()
+
+	created, _, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	groupID := created.ID
+	acc.LogTestSuccess(t, "Created account group ID=%d name=%q for delete-by-name test", groupID, groupName)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteByID(cleanupCtx, groupID)
+		acc.LogCleanupDeleteError(t, "account group", fmt.Sprintf("%d", groupID), delErr)
+	})
+
+	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel2()
+
+	deleteResp, err := svc.DeleteByName(ctx2, groupName)
+	require.NoError(t, err, "DeleteByName should not return an error")
+	require.NotNil(t, deleteResp)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	acc.LogTestSuccess(t, "Account group %q deleted by name", groupName)
+}
+
+// =============================================================================
+// TestAcceptance_AccountGroups_validation_errors validates error handling.
+// =============================================================================
+
+func TestAcceptance_AccountGroups_validation_errors(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ClassicAccountGroups
+
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "account group ID must be a positive integer")
+	})
+
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "account group name is required")
+	})
+
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		req := &accounts_groups.RequestAccountGroup{Name: "sdkv2_acc_test"}
+		_, _, err := svc.UpdateByID(context.Background(), 0, req)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "account group ID must be a positive integer")
+	})
+
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
+		req := &accounts_groups.RequestAccountGroup{Name: "sdkv2_acc_test"}
+		_, _, err := svc.UpdateByName(context.Background(), "", req)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "account group name is required")
+	})
+
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "account group ID must be a positive integer")
+	})
+
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "account group name is required")
+	})
+}

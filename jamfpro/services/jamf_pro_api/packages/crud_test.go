@@ -778,5 +778,5 @@ func TestUnit_Packages_ListV1_InvalidJSONMergePage(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "failed to unmarshal")
 }

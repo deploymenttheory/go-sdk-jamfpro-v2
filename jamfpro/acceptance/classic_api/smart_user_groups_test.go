@@ -242,6 +242,67 @@ func TestAcceptance_SmartUserGroups_lifecycle(t *testing.T) {
 }
 
 // =============================================================================
+// TestAcceptance_SmartUserGroups_delete_by_name creates a smart user group
+// then deletes it by name.
+// =============================================================================
+
+func TestAcceptance_SmartUserGroups_delete_by_name(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ClassicSmartUserGroups
+	ctx := context.Background()
+
+	groupName := acc.UniqueName("sdkv2_acc_smart-usergrp-dbn")
+	createReq := &smart_user_groups.RequestSmartUserGroup{
+		Name:             groupName,
+		IsSmart:          true,
+		IsNotifyOnChange: false,
+		Site: &shared.SharedResourceSite{
+			ID:   -1,
+			Name: "None",
+		},
+		Criteria: &smart_user_groups.CriteriaContainer{
+			Size: 1,
+			Criterion: []shared.SharedSubsetCriteria{
+				{
+					Name:       "Email Address",
+					Priority:   0,
+					AndOr:      "and",
+					SearchType: "like",
+					Value:      "@example.com",
+				},
+			},
+		},
+	}
+
+	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel1()
+
+	created, _, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	groupID := created.ID
+	acc.LogTestSuccess(t, "Created smart user group ID=%d name=%q for delete-by-name test", groupID, groupName)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteByID(cleanupCtx, groupID)
+		acc.LogCleanupDeleteError(t, "smart user group", fmt.Sprintf("%d", groupID), delErr)
+	})
+
+	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel2()
+
+	deleteResp, err := svc.DeleteByName(ctx2, groupName)
+	require.NoError(t, err, "DeleteByName should not return an error")
+	require.NotNil(t, deleteResp)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	acc.LogTestSuccess(t, "Smart user group %q deleted by name", groupName)
+}
+
+// =============================================================================
 // TestAcceptance_SmartUserGroups_validation_errors validates error handling.
 // =============================================================================
 

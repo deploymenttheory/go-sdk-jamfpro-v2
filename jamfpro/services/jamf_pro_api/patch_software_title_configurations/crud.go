@@ -437,7 +437,6 @@ func (s *Service) GetDefinitionsByIDV2(ctx context.Context, id string, query map
 		result.TotalCount = rawResp.TotalCount
 	}
 	if result.TotalCount == 0 && len(result.Results) > 0 {
-		result.TotalCount = len(result.Results)
 	}
 
 	return &result, resp, nil
@@ -481,7 +480,6 @@ func (s *Service) GetDependenciesByIDV2(ctx context.Context, id string, query ma
 		result.TotalCount = rawResp.TotalCount
 	}
 	if result.TotalCount == 0 && len(result.Results) > 0 {
-		result.TotalCount = len(result.Results)
 	}
 
 	return &result, resp, nil
@@ -569,7 +567,6 @@ func (s *Service) GetPatchReportByIDV2(ctx context.Context, id string, query map
 		result.TotalCount = rawResp.TotalCount
 	}
 	if result.TotalCount == 0 && len(result.Results) > 0 {
-		result.TotalCount = len(result.Results)
 	}
 
 	return &result, resp, nil
@@ -640,7 +637,6 @@ func (s *Service) GetHistoryByIDV2(ctx context.Context, id string, query map[str
 		result.TotalCount = rawResp.TotalCount
 	}
 	if result.TotalCount == 0 && len(result.Results) > 0 {
-		result.TotalCount = len(result.Results)
 	}
 
 	return &result, resp, nil

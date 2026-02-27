@@ -109,9 +109,6 @@ func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Respon
 	if err != nil {
 		return nil, resp, err
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 

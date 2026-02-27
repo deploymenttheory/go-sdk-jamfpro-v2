@@ -227,6 +227,55 @@ func TestAcceptance_Departments_list_with_rsql_filter(t *testing.T) {
 }
 
 // =============================================================================
+// TestAcceptance_Departments_bulk_delete
+// =============================================================================
+
+func TestAcceptance_Departments_bulk_delete(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.Departments
+	ctx := context.Background()
+
+	// Create two departments to bulk delete
+	acc.LogTestStage(t, "Create", "Creating two departments for bulk delete")
+
+	d1, _, err := svc.CreateV1(ctx, &departments.RequestDepartment{
+		Name: acc.UniqueName("sdkv2_acc_bulk-del-dept-1"),
+	})
+	require.NoError(t, err)
+	require.NotNil(t, d1)
+
+	d2, _, err := svc.CreateV1(ctx, &departments.RequestDepartment{
+		Name: acc.UniqueName("sdkv2_acc_bulk-del-dept-2"),
+	})
+	require.NoError(t, err)
+	require.NotNil(t, d2)
+
+	acc.LogTestSuccess(t, "Created departments ID=%s and ID=%s", d1.ID, d2.ID)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, _ = svc.DeleteByIDV1(cleanupCtx, d1.ID)
+		_, _ = svc.DeleteByIDV1(cleanupCtx, d2.ID)
+	})
+
+	// Bulk delete both departments
+	acc.LogTestStage(t, "BulkDelete", "Bulk deleting departments ID=%s and ID=%s", d1.ID, d2.ID)
+
+	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel2()
+
+	deleteResp, err := svc.DeleteDepartmentsByIDV1(ctx2, &departments.DeleteDepartmentsByIDRequest{
+		IDs: []string{d1.ID, d2.ID},
+	})
+	require.NoError(t, err)
+	require.NotNil(t, deleteResp)
+	assert.Equal(t, 204, deleteResp.StatusCode)
+	acc.LogTestSuccess(t, "Bulk delete completed, status=%d", deleteResp.StatusCode)
+}
+
+// =============================================================================
 // TestAcceptance_Departments_validation_errors
 // =============================================================================
 

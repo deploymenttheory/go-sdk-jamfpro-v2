@@ -122,11 +122,12 @@ func (s *Service) GetEligibleAppsV1(ctx context.Context, query map[string]string
 	var result ResponseEligibilityList
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourceEligibilityListItem
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ResponseEligibilityList
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -136,7 +137,6 @@ func (s *Service) GetEligibleAppsV1(ctx context.Context, query map[string]string
 	if err != nil {
 		return nil, resp, err
 	}
-	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -147,11 +147,12 @@ func (s *Service) GetEligibleConfigurationProfilesV1(ctx context.Context, query 
 	var result ResponseEligibilityList
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourceEligibilityListItem
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ResponseEligibilityList
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -161,7 +162,6 @@ func (s *Service) GetEligibleConfigurationProfilesV1(ctx context.Context, query 
 	if err != nil {
 		return nil, resp, err
 	}
-	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -172,11 +172,12 @@ func (s *Service) GetEligiblePoliciesV1(ctx context.Context, query map[string]st
 	var result ResponseEligibilityList
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourceEligibilityListItem
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ResponseEligibilityList
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -186,7 +187,6 @@ func (s *Service) GetEligiblePoliciesV1(ctx context.Context, query map[string]st
 	if err != nil {
 		return nil, resp, err
 	}
-	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -200,11 +200,12 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourceHistoryEntry
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse HistoryResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -216,8 +217,6 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	if err != nil {
 		return nil, resp, err
 	}
-
-	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

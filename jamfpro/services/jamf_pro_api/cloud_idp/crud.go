@@ -94,11 +94,12 @@ func (s *Service) ListV1(ctx context.Context, query map[string]string) (*ListRes
 	}
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourceCloudIdProvider
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ListResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -106,8 +107,6 @@ func (s *Service) ListV1(ctx context.Context, query map[string]string) (*ListRes
 	if err != nil {
 		return nil, resp, err
 	}
-
-	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -204,11 +203,12 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []HistoryItem
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse HistoryResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -219,9 +219,6 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get cloud IDP history: %w", err)
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 

@@ -247,11 +247,12 @@ func (s *Service) GetHistory(ctx context.Context, id string, query map[string]st
 	var result ResponseHistory
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []HistoryItem
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ResponseHistory
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -263,8 +264,6 @@ func (s *Service) GetHistory(ctx context.Context, id string, query map[string]st
 	if err != nil {
 		return nil, resp, err
 	}
-
-	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

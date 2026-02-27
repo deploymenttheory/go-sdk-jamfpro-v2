@@ -100,11 +100,12 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []HistoryObject
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse HistoryResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -115,8 +116,5 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get GSX connection history: %w", err)
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }

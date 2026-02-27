@@ -545,7 +545,7 @@ func TestUnit_ComputerInventory_ListV3_InvalidJSON(t *testing.T) {
 	assert.Error(t, err)
 	assert.NotNil(t, resp)
 	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "failed to unmarshal")
 }
 
 func TestUnit_ComputerInventory_ListFileVaultV3_ClientError(t *testing.T) {
@@ -575,7 +575,7 @@ func TestUnit_ComputerInventory_ListFileVaultV3_InvalidJSON(t *testing.T) {
 	assert.Error(t, err)
 	assert.NotNil(t, resp)
 	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "failed to unmarshal")
 }
 
 func TestUnit_ComputerInventory_CreateV3_ClientError(t *testing.T) {

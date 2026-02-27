@@ -2,6 +2,7 @@ package jamf_pro_api
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -119,6 +120,60 @@ func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Branding ID=%s deleted", brandingID)
+}
+
+// =============================================================================
+// TestAcceptance_SelfServiceBrandingMacOS_list_with_rsql_filter
+// =============================================================================
+
+func TestAcceptance_SelfServiceBrandingMacOS_list_with_rsql_filter(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.SelfServiceBrandingMacOS
+	ctx := context.Background()
+
+	name := acc.UniqueName("sdkv2_acc_rsql-ssb-macos")
+	createReq := &self_service_branding_macos.ResourceSelfServiceBrandingMacOS{
+		ApplicationName:       "sdkv2_acc_Self Service",
+		BrandingName:          name,
+		BrandingNameSecondary: "RSQL Test",
+		HomeHeading:           "Welcome",
+		HomeSubheading:        "Choose an item below",
+	}
+
+	created, _, err := svc.Create(ctx, createReq)
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	brandingID := created.ID
+	acc.LogTestSuccess(t, "Created self-service branding macOS ID=%s name=%q", brandingID, name)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteByID(cleanupCtx, brandingID)
+		acc.LogCleanupDeleteError(t, "self-service branding macOS", brandingID, delErr)
+	})
+
+	rsqlQuery := map[string]string{
+		"filter": fmt.Sprintf(`brandingName=="%s"`, name),
+	}
+
+	list, listResp, err := svc.List(ctx, rsqlQuery)
+	require.NoError(t, err)
+	require.NotNil(t, list)
+	assert.Equal(t, 200, listResp.StatusCode)
+
+	found := false
+	for _, b := range list.Results {
+		if b.ID == brandingID {
+			found = true
+			assert.Equal(t, name, b.BrandingName)
+			break
+		}
+	}
+	assert.True(t, found, "self-service branding macOS should appear in RSQL-filtered results")
+	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target branding found=%v", list.TotalCount, found)
 }
 
 func TestAcceptance_SelfServiceBrandingMacOS_list(t *testing.T) {

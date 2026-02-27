@@ -102,11 +102,12 @@ func (s *Service) ListSmartV2(ctx context.Context, rsqlQuery map[string]string) 
 	endpoint := EndpointSmartGroupsV2
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourceSmartGroup
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ListSmartResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -118,9 +119,6 @@ func (s *Service) ListSmartV2(ctx context.Context, rsqlQuery map[string]string) 
 	if err != nil {
 		return nil, resp, err
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 
@@ -232,11 +230,12 @@ func (s *Service) ListStaticV2(ctx context.Context, rsqlQuery map[string]string)
 	endpoint := EndpointStaticGroupsV2
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourceStaticGroup
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ListStaticResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -248,9 +247,6 @@ func (s *Service) ListStaticV2(ctx context.Context, rsqlQuery map[string]string)
 	if err != nil {
 		return nil, resp, err
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 

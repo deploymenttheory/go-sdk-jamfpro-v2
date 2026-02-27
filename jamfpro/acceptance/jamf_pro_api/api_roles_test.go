@@ -63,6 +63,49 @@ import (
 //
 // =============================================================================
 
+// =============================================================================
+// TestAcceptance_APIRoles_validation_errors
+// =============================================================================
+
+func TestAcceptance_APIRoles_validation_errors(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.APIRoles
+
+	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
+		_, _, err := svc.GetByIDV1(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "API role ID is required")
+	})
+
+	t.Run("CreateV1_NilRequest", func(t *testing.T) {
+		_, _, err := svc.CreateV1(context.Background(), nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	t.Run("UpdateByIDV1_EmptyID", func(t *testing.T) {
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &api_roles.RequestAPIRole{
+			DisplayName: "x",
+			Privileges:  []string{"Read Computers"},
+		})
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "id is required")
+	})
+
+	t.Run("UpdateByIDV1_NilRequest", func(t *testing.T) {
+		_, _, err := svc.UpdateByIDV1(context.Background(), "1", nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	t.Run("DeleteByIDV1_EmptyID", func(t *testing.T) {
+		_, err := svc.DeleteByIDV1(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "API role ID is required")
+	})
+}
+
 func TestAcceptance_APIRoles_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.APIRoles

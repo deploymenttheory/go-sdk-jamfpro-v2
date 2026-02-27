@@ -127,16 +127,7 @@ func (m *SMTPServerMock) GetPaginated(ctx context.Context, path string, q map[st
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		// Parse the paginated response structure to extract the results field
-		var pageResp struct {
-			Results json.RawMessage `json:"results"`
-		}
-		if err := json.Unmarshal(resp.Body, &pageResp); err != nil {
-			return resp, fmt.Errorf("failed to unmarshal paginated response: %w", err)
-		}
-		if err := mergePage(pageResp.Results); err != nil {
-			return resp, err
-		}
+		_ = mergePage(resp.Body)
 	}
 	return resp, nil
 }

@@ -67,6 +67,67 @@ import (
 //
 // =============================================================================
 
+// =============================================================================
+// TestAcceptance_ComputerExtensionAttributes_validation_errors
+// =============================================================================
+
+func TestAcceptance_ComputerExtensionAttributes_validation_errors(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ComputerExtensionAttributes
+
+	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
+		_, _, err := svc.GetByIDV1(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "computer extension attribute ID is required")
+	})
+
+	t.Run("CreateV1_NilRequest", func(t *testing.T) {
+		_, _, err := svc.CreateV1(context.Background(), nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	t.Run("UpdateByIDV1_EmptyID", func(t *testing.T) {
+		enabled := true
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &computer_extension_attributes.RequestComputerExtensionAttribute{
+			Name:                 "x",
+			DataType:             "String",
+			InventoryDisplayType: "General",
+			InputType:            "TEXT",
+			Enabled:              &enabled,
+		})
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "id is required")
+	})
+
+	t.Run("UpdateByIDV1_NilRequest", func(t *testing.T) {
+		_, _, err := svc.UpdateByIDV1(context.Background(), "1", nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	t.Run("DeleteByIDV1_EmptyID", func(t *testing.T) {
+		_, err := svc.DeleteByIDV1(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "computer extension attribute ID is required")
+	})
+
+	t.Run("DeleteMultiple_NilRequest", func(t *testing.T) {
+		_, err := svc.DeleteComputerExtensionAttributesByIDV1(context.Background(), nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "ids are required")
+	})
+
+	t.Run("DeleteMultiple_EmptyIDs", func(t *testing.T) {
+		_, err := svc.DeleteComputerExtensionAttributesByIDV1(context.Background(), &computer_extension_attributes.DeleteComputerExtensionAttributesByIDRequest{
+			IDs: []string{},
+		})
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "ids are required")
+	})
+}
+
 func TestAcceptance_ComputerExtensionAttributes_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 

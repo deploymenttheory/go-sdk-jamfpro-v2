@@ -115,11 +115,12 @@ func (s *Service) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string
 	var result ListResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourceJamfConnectConfigProfile
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ListResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -130,9 +131,6 @@ func (s *Service) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf connect config profiles: %w", err)
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 
@@ -245,11 +243,12 @@ func (s *Service) GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQ
 	var result DeploymentTasksResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []DeploymentTask
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse DeploymentTasksResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -260,9 +259,6 @@ func (s *Service) GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQ
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get deployment tasks: %w", err)
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 
@@ -276,11 +272,12 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []HistoryItem
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse HistoryResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -291,9 +288,6 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get jamf connect history: %w", err)
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 
