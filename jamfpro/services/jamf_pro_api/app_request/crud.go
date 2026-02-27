@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -83,25 +82,11 @@ func (s *Service) ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[strin
 	endpoint := EndpointFormInputFieldsV1
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceFormInputField
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var field ResourceFormInputField
-				if err := mapstructure.Decode(item, &field); err != nil {
-					return fmt.Errorf("failed to decode form input field: %w", err)
-				}
-				result.Results = append(result.Results, field)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -112,6 +97,8 @@ func (s *Service) ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[strin
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list form input fields: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

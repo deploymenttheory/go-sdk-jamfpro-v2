@@ -37,5 +37,5 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Mobile Device Provisioning Profile ID %d updated: Name=%q\n", updated.General.ID, updated.General.Name)
+	fmt.Printf("Mobile Device Provisioning Profile ID %d updated\n", updated.ID)
 }

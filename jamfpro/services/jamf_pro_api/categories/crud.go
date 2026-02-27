@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -102,25 +101,11 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointCategoriesV1
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceCategory
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var category ResourceCategory
-				if err := mapstructure.Decode(item, &category); err != nil {
-					return fmt.Errorf("failed to decode category: %w", err)
-				}
-				result.Results = append(result.Results, category)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -131,6 +116,8 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list categories: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -275,25 +262,11 @@ func (s *Service) GetCategoryHistoryV1(ctx context.Context, id string, rsqlQuery
 	var result CategoryHistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []HistoryObject
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var history HistoryObject
-				if err := mapstructure.Decode(item, &history); err != nil {
-					return fmt.Errorf("failed to decode category history item: %w", err)
-				}
-				result.Results = append(result.Results, history)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -304,6 +277,8 @@ func (s *Service) GetCategoryHistoryV1(ctx context.Context, id string, rsqlQuery
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get category history: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

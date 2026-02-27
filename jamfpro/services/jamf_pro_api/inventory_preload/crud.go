@@ -9,7 +9,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -281,31 +280,27 @@ func (s *Service) AddHistoryNote(ctx context.Context, req *AddHistoryNoteRequest
 // URL: GET /api/v2/inventory-preload/records
 func (s *Service) ListRecords(ctx context.Context, rsqlQuery map[string]string) (*RecordListResponse, *interfaces.Response, error) {
 	endpoint := EndpointInventoryPreloadV2 + "/records"
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
 	var result RecordListResponse
+
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []InventoryPreloadRecord
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var rec InventoryPreloadRecord
-				if err := mapstructure.Decode(item, &rec); err != nil {
-					return fmt.Errorf("failed to decode record: %w", err)
-				}
-				result.Results = append(result.Results, rec)
-			}
-		}
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
+
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("list inventory preload records: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -315,12 +310,16 @@ func (s *Service) CreateRecord(ctx context.Context, record *InventoryPreloadReco
 	if record == nil {
 		return nil, nil, fmt.Errorf("record is required")
 	}
+
 	endpoint := EndpointInventoryPreloadV2 + "/records"
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
+
 	var result CreateRecordResponse
+
 	resp, err := s.client.Post(ctx, endpoint, record, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -332,11 +331,16 @@ func (s *Service) CreateRecord(ctx context.Context, record *InventoryPreloadReco
 // URL: POST /api/v2/inventory-preload/records/delete-all
 func (s *Service) DeleteAllRecords(ctx context.Context) (*interfaces.Response, error) {
 	endpoint := EndpointInventoryPreloadV2 + "/records/delete-all"
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }
 
@@ -347,8 +351,13 @@ func (s *Service) GetRecordByID(ctx context.Context, id string) (*InventoryPrelo
 		return nil, nil, fmt.Errorf("id is required")
 	}
 	endpoint := fmt.Sprintf("%s/records/%s", EndpointInventoryPreloadV2, id)
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
 	var result InventoryPreloadRecord
+
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -366,11 +375,13 @@ func (s *Service) UpdateRecord(ctx context.Context, id string, record *Inventory
 		return nil, nil, fmt.Errorf("record is required")
 	}
 	endpoint := fmt.Sprintf("%s/records/%s", EndpointInventoryPreloadV2, id)
+
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
 		"Content-Type": mime.ApplicationJSON,
 	}
 	var result InventoryPreloadRecord
+
 	resp, err := s.client.Put(ctx, endpoint, record, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -385,7 +396,11 @@ func (s *Service) DeleteRecord(ctx context.Context, id string) (*interfaces.Resp
 		return nil, fmt.Errorf("id is required")
 	}
 	endpoint := fmt.Sprintf("%s/records/%s", EndpointInventoryPreloadV2, id)
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err

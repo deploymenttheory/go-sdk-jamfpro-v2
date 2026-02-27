@@ -3,6 +3,9 @@ package classic_api
 import (
 	"context"
 	"fmt"
+	"image"
+	"image/color"
+	"image/png"
 	"os"
 	"path/filepath"
 	"testing"
@@ -36,14 +39,19 @@ func TestAcceptance_FileUploads_create_attachment(t *testing.T) {
 	_, policyID := createPolicyWithCleanup(t, ctx, policySvc, createReq)
 
 	// ------------------------------------------------------------------
-	// 2. Create a temporary file to upload
+	// 2. Create a temporary PNG file to upload
+	// Policy attachments require a supported file format; PNG is accepted as an icon.
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "Prepare", "Creating temporary file for upload")
+	acc.LogTestStage(t, "Prepare", "Creating temporary PNG file for upload")
 
 	tmpDir := t.TempDir()
-	tmpFile := filepath.Join(tmpDir, "attachment.txt")
-	err := os.WriteFile(tmpFile, []byte("Acceptance test file attachment content"), 0644)
+	tmpFile := filepath.Join(tmpDir, "attachment.png")
+	pngFile, err := os.Create(tmpFile)
 	require.NoError(t, err)
+	img := image.NewRGBA(image.Rect(0, 0, 1, 1))
+	img.Set(0, 0, color.RGBA{R: 255, G: 0, B: 0, A: 255})
+	require.NoError(t, png.Encode(pngFile, img))
+	pngFile.Close()
 
 	// ------------------------------------------------------------------
 	// 3. Upload file to the policy

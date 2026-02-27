@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -111,25 +110,11 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []HistoryObject
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var historyObj HistoryObject
-				if err := mapstructure.Decode(item, &historyObj); err != nil {
-					return fmt.Errorf("failed to decode history object: %w", err)
-				}
-				result.Results = append(result.Results, historyObj)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -141,6 +126,8 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get Jamf Pro server URL history: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

@@ -148,21 +148,14 @@ func TestAcceptance_MobileDeviceGroups_lifecycle(t *testing.T) {
 			Name: "None",
 		},
 		Criteria: &mobile_device_groups.CriteriaContainer{
-			Size: 2,
+			Size: 1,
 			Criterion: []shared.SharedSubsetCriteria{
 				{
 					Name:       "Model",
 					Priority:   0,
 					AndOr:      "and",
 					SearchType: "like",
-					Value:      "iPhone",
-				},
-				{
-					Name:       "Device Name",
-					Priority:   1,
-					AndOr:      "and",
-					SearchType: "like",
-					Value:      "test",
+					Value:      "iPad",
 				},
 			},
 		},

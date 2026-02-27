@@ -74,7 +74,7 @@ func TestUnit_ApiIntegrations_CreateV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterCreateMock()
 
-	request := &ResourceApiIntegration{DisplayName: "New Integration", Enabled: true}
+	request := &RequestApiIntegration{DisplayName: "New Integration", Enabled: true}
 	result, resp, err := svc.CreateV1(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -85,7 +85,7 @@ func TestUnit_ApiIntegrations_CreateV1_Success(t *testing.T) {
 func TestUnit_ApiIntegrations_UpdateByIDV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &ResourceApiIntegration{})
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &RequestApiIntegration{})
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -95,7 +95,7 @@ func TestUnit_ApiIntegrations_UpdateByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterUpdateByIDMock("1")
 
-	request := &ResourceApiIntegration{DisplayName: "Updated", Enabled: true}
+	request := &RequestApiIntegration{DisplayName: "Updated", Enabled: true}
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -125,7 +125,7 @@ func TestUnit_ApiIntegrations_UpdateByNameV1_Success(t *testing.T) {
 	mock.RegisterListMock()
 	mock.RegisterUpdateByIDMock("1")
 
-	request := &ResourceApiIntegration{DisplayName: "Updated", Enabled: true}
+	request := &RequestApiIntegration{DisplayName: "Updated", Enabled: true}
 	result, resp, err := svc.UpdateByNameV1(context.Background(), "Test Integration", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -205,19 +205,19 @@ func TestUnit_ApiIntegrations_GetByNameV1_Error(t *testing.T) {
 
 func TestUnit_ApiIntegrations_CreateV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.CreateV1(context.Background(), &ResourceApiIntegration{DisplayName: "test"})
+	_, _, err := svc.CreateV1(context.Background(), &RequestApiIntegration{DisplayName: "test"})
 	require.Error(t, err)
 }
 
 func TestUnit_ApiIntegrations_UpdateByIDV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateByIDV1(context.Background(), "1", &ResourceApiIntegration{DisplayName: "test"})
+	_, _, err := svc.UpdateByIDV1(context.Background(), "1", &RequestApiIntegration{DisplayName: "test"})
 	require.Error(t, err)
 }
 
 func TestUnit_ApiIntegrations_UpdateByNameV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
-	_, _, err := svc.UpdateByNameV1(context.Background(), "test", &ResourceApiIntegration{DisplayName: "updated"})
+	_, _, err := svc.UpdateByNameV1(context.Background(), "test", &RequestApiIntegration{DisplayName: "updated"})
 	require.Error(t, err)
 }
 

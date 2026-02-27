@@ -111,7 +111,7 @@ func TestAcceptance_ApiIntegrations_list_with_rsql_filter(t *testing.T) {
 	})
 
 	// Create API integration
-	created, _, err := svc.CreateV1(ctx, &api_integrations.ResourceApiIntegration{
+	created, _, err := svc.CreateV1(ctx, &api_integrations.RequestApiIntegration{
 		DisplayName:                name,
 		Enabled:                    true,
 		AuthorizationScopes:        []string{roleName},
@@ -179,7 +179,7 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	})
 
 	// Create API integration using the valid role name
-	created, resp, err := svc.CreateV1(ctx, &api_integrations.ResourceApiIntegration{
+	created, resp, err := svc.CreateV1(ctx, &api_integrations.RequestApiIntegration{
 		DisplayName:                name,
 		Enabled:                    true,
 		AuthorizationScopes:        []string{roleName},
@@ -212,7 +212,7 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	assert.NotEmpty(t, creds.ClientID)
 	assert.NotEmpty(t, creds.ClientSecret)
 
-	updated, resp, err := svc.UpdateByIDV1(ctx, idStr, &api_integrations.ResourceApiIntegration{
+	updated, resp, err := svc.UpdateByIDV1(ctx, idStr, &api_integrations.RequestApiIntegration{
 		DisplayName:                name,
 		Enabled:                    false,
 		AuthorizationScopes:        created.AuthorizationScopes,

@@ -15,7 +15,6 @@ type ResourceAccountPreferencesV2 struct {
 	ComputerSearchMethod                 string `json:"computerSearchMethod"`
 	ComputerApplicationSearchMethod      string `json:"computerApplicationSearchMethod"`
 	ComputerApplicationUsageSearchMethod string `json:"computerApplicationUsageSearchMethod"`
-	ComputerFontSearchMethod             string `json:"computerFontSearchMethod"`
 	ComputerPluginSearchMethod           string `json:"computerPluginSearchMethod"`
 	ComputerLocalUserAccountSearchMethod string `json:"computerLocalUserAccountSearchMethod"`
 	ComputerSoftwareUpdateSearchMethod   string `json:"computerSoftwareUpdateSearchMethod"`

@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -123,25 +122,11 @@ func (s *Service) GetEligibleAppsV1(ctx context.Context, query map[string]string
 	var result ResponseEligibilityList
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceEligibilityListItem
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var itemVar ResourceEligibilityListItem
-				if err := mapstructure.Decode(item, &itemVar); err != nil {
-					return fmt.Errorf("failed to decode item: %w", err)
-				}
-				result.Results = append(result.Results, itemVar)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -151,6 +136,7 @@ func (s *Service) GetEligibleAppsV1(ctx context.Context, query map[string]string
 	if err != nil {
 		return nil, resp, err
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -161,25 +147,11 @@ func (s *Service) GetEligibleConfigurationProfilesV1(ctx context.Context, query 
 	var result ResponseEligibilityList
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceEligibilityListItem
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var itemVar ResourceEligibilityListItem
-				if err := mapstructure.Decode(item, &itemVar); err != nil {
-					return fmt.Errorf("failed to decode item: %w", err)
-				}
-				result.Results = append(result.Results, itemVar)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -189,6 +161,7 @@ func (s *Service) GetEligibleConfigurationProfilesV1(ctx context.Context, query 
 	if err != nil {
 		return nil, resp, err
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -199,25 +172,11 @@ func (s *Service) GetEligiblePoliciesV1(ctx context.Context, query map[string]st
 	var result ResponseEligibilityList
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceEligibilityListItem
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var itemVar ResourceEligibilityListItem
-				if err := mapstructure.Decode(item, &itemVar); err != nil {
-					return fmt.Errorf("failed to decode item: %w", err)
-				}
-				result.Results = append(result.Results, itemVar)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -227,6 +186,7 @@ func (s *Service) GetEligiblePoliciesV1(ctx context.Context, query map[string]st
 	if err != nil {
 		return nil, resp, err
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -240,25 +200,11 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceHistoryEntry
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var itemVar ResourceHistoryEntry
-				if err := mapstructure.Decode(item, &itemVar); err != nil {
-					return fmt.Errorf("failed to decode item: %w", err)
-				}
-				result.Results = append(result.Results, itemVar)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -270,6 +216,8 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	if err != nil {
 		return nil, resp, err
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

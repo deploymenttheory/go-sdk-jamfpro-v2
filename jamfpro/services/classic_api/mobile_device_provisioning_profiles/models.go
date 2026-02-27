@@ -21,6 +21,13 @@ type MobileDeviceProvisioningProfileListItem struct {
 	UUID        string `xml:"uuid"`
 }
 
+// CreateUpdateResponse is the response from Create and Update operations.
+// The Classic API returns only the assigned ID at the root level, not the full resource.
+type CreateUpdateResponse struct {
+	XMLName xml.Name `xml:"mobile_device_provisioning_profile"`
+	ID      int      `xml:"id"`
+}
+
 // Resource represents the detailed structure of a mobile device provisioning profile.
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofilesbyid

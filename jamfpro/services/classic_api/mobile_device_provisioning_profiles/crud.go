@@ -34,37 +34,40 @@ type (
 		GetByUUID(ctx context.Context, uuid string) (*Resource, *interfaces.Response, error)
 
 		// CreateByID creates a new mobile device provisioning profile by ID (use 0 for new).
-		// Returns the created profile.
+		// Returns the assigned ID from the Classic API response.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyid
-		CreateByID(ctx context.Context, id int, req *RequestResource) (*Resource, *interfaces.Response, error)
+		CreateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
 
 		// CreateByName creates a new mobile device provisioning profile by name.
-		// Returns the created profile.
+		// Returns the assigned ID from the Classic API response.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyname
-		CreateByName(ctx context.Context, name string, req *RequestResource) (*Resource, *interfaces.Response, error)
+		CreateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
 
 		// CreateByUUID creates a new mobile device provisioning profile by UUID.
-		// Returns the created profile.
+		// Returns the assigned ID from the Classic API response.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyuuid
-		CreateByUUID(ctx context.Context, uuid string, req *RequestResource) (*Resource, *interfaces.Response, error)
+		CreateByUUID(ctx context.Context, uuid string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
 
 		// UpdateByID updates the specified mobile device provisioning profile by ID.
+		// Returns the assigned ID from the Classic API response.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyid
-		UpdateByID(ctx context.Context, id int, req *RequestResource) (*Resource, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
 
 		// UpdateByName updates the specified mobile device provisioning profile by name.
+		// Returns the assigned ID from the Classic API response.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyname
-		UpdateByName(ctx context.Context, name string, req *RequestResource) (*Resource, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
 
 		// UpdateByUUID updates the specified mobile device provisioning profile by UUID.
+		// Returns the assigned ID from the Classic API response.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyuuid
-		UpdateByUUID(ctx context.Context, uuid string, req *RequestResource) (*Resource, *interfaces.Response, error)
+		UpdateByUUID(ctx context.Context, uuid string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
 
 		// DeleteByID removes the specified mobile device provisioning profile by ID.
 		//
@@ -198,7 +201,7 @@ func (s *Service) GetByUUID(ctx context.Context, uuid string) (*Resource, *inter
 // CreateByID creates a new mobile device provisioning profile by ID (use 0 for new).
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyid
-func (s *Service) CreateByID(ctx context.Context, id int, req *RequestResource) (*Resource, *interfaces.Response, error) {
+func (s *Service) CreateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if id < 0 {
 		return nil, nil, fmt.Errorf("mobile device provisioning profile ID must be a non-negative integer")
 	}
@@ -211,7 +214,7 @@ func (s *Service) CreateByID(ctx context.Context, id int, req *RequestResource) 
 
 	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
 
-	var out Resource
+	var out CreateUpdateResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,
@@ -228,7 +231,7 @@ func (s *Service) CreateByID(ctx context.Context, id int, req *RequestResource) 
 // CreateByName creates a new mobile device provisioning profile by name.
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyname
-func (s *Service) CreateByName(ctx context.Context, name string, req *RequestResource) (*Resource, *interfaces.Response, error) {
+func (s *Service) CreateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name cannot be empty")
 	}
@@ -241,7 +244,7 @@ func (s *Service) CreateByName(ctx context.Context, name string, req *RequestRes
 
 	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
 
-	var out Resource
+	var out CreateUpdateResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,
@@ -258,7 +261,7 @@ func (s *Service) CreateByName(ctx context.Context, name string, req *RequestRes
 // CreateByUUID creates a new mobile device provisioning profile by UUID.
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyuuid
-func (s *Service) CreateByUUID(ctx context.Context, uuid string, req *RequestResource) (*Resource, *interfaces.Response, error) {
+func (s *Service) CreateByUUID(ctx context.Context, uuid string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if uuid == "" {
 		return nil, nil, fmt.Errorf("mobile device provisioning profile UUID cannot be empty")
 	}
@@ -271,7 +274,7 @@ func (s *Service) CreateByUUID(ctx context.Context, uuid string, req *RequestRes
 
 	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
 
-	var out Resource
+	var out CreateUpdateResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,
@@ -290,7 +293,7 @@ func (s *Service) CreateByUUID(ctx context.Context, uuid string, req *RequestRes
 // URL: PUT /JSSResource/mobiledeviceprovisioningprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) (*Resource, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("mobile device provisioning profile ID must be a positive integer")
 	}
@@ -303,7 +306,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) 
 
 	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
 
-	var out Resource
+	var out CreateUpdateResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,
@@ -322,7 +325,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) 
 // URL: PUT /JSSResource/mobiledeviceprovisioningprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestResource) (*Resource, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name cannot be empty")
 	}
@@ -335,7 +338,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 
 	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
 
-	var out Resource
+	var out CreateUpdateResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,
@@ -354,7 +357,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 // URL: PUT /JSSResource/mobiledeviceprovisioningprofiles/uuid/{uuid}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyuuid
-func (s *Service) UpdateByUUID(ctx context.Context, uuid string, req *RequestResource) (*Resource, *interfaces.Response, error) {
+func (s *Service) UpdateByUUID(ctx context.Context, uuid string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
 	if uuid == "" {
 		return nil, nil, fmt.Errorf("mobile device provisioning profile UUID cannot be empty")
 	}
@@ -367,7 +370,7 @@ func (s *Service) UpdateByUUID(ctx context.Context, uuid string, req *RequestRes
 
 	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
 
-	var out Resource
+	var out CreateUpdateResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,

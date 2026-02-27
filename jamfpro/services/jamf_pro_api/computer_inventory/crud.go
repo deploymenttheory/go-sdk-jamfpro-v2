@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -154,20 +153,11 @@ func (s *Service) ListV3(ctx context.Context, rsqlQuery map[string]string) (*Res
 	}
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceComputerInventory
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var computer ResourceComputerInventory
-				if err := mapstructure.Decode(item, &computer); err != nil {
-					return fmt.Errorf("failed to decode computer: %w", err)
-				}
-				result.Results = append(result.Results, computer)
-			}
-		}
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -300,20 +290,11 @@ func (s *Service) ListFileVaultV3(ctx context.Context) (*FileVaultInventoryList,
 	}
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []FileVaultInventory
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var fv FileVaultInventory
-				if err := mapstructure.Decode(item, &fv); err != nil {
-					return fmt.Errorf("failed to decode FileVault record: %w", err)
-				}
-				result.Results = append(result.Results, fv)
-			}
-		}
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
