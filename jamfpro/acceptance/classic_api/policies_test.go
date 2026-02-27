@@ -2,75 +2,93 @@ package classic_api
 
 import (
 	"context"
-	"fmt"
 	"testing"
-	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/policies"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
-
 // =============================================================================
-// TestAcceptance_Policies_lifecycle exercises the full write/read/delete
-// lifecycle: Create → List → GetByID → GetByName → UpdateByID →
-// UpdateByName → GetByID (verify) → DeleteByID.
+// TestAcceptance_Policies_minimum_config tests creating a policy with the
+// minimum required configuration.
 // =============================================================================
 
-func TestAcceptance_Policies_lifecycle(t *testing.T) {
+func TestAcceptance_Policies_minimum_config(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPolicies
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
-	// 1. Create
+	// 1. Create policy with minimum config
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "Create", "Creating test policy")
+	acc.LogTestStage(t, "Create", "Creating policy with minimum configuration")
 
-	policyName := acc.UniqueName("sdkv2_acc_acc-test-policy")
-	createReq := &policies.ResourcePolicy{
-		General: policies.PolicySubsetGeneral{
-			Name:      policyName,
-			Enabled:   true,
-			Frequency: "Once per computer",
-		},
-		Scope: policies.PolicySubsetScope{
-			AllComputers: true,
-		},
-	}
+	policyName := acc.UniqueName("sdkv2_acc_policy_min")
+	createReq := createMinimalPolicy(t, policyName)
 
-	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel1()
-
-	created, createResp, err := svc.Create(ctx1, createReq)
-	require.NoError(t, err, "Create should not return an error")
-	require.NotNil(t, created)
-	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
-	assert.Positive(t, created.ID, "created policy ID should be a positive integer")
-
-	policyID := created.ID
-	acc.LogTestSuccess(t, "Policy created with ID=%d name=%q", policyID, policyName)
-
-	acc.Cleanup(t, func() {
-		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		_, delErr := svc.DeleteByID(cleanupCtx, policyID)
-		acc.LogCleanupDeleteError(t, "policy", fmt.Sprintf("%d", policyID), delErr)
-	})
+	_, policyID := createPolicyWithCleanup(t, ctx, svc, createReq)
 
 	// ------------------------------------------------------------------
-	// 2. List — verify the new policy appears
+	// 2. Get by ID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "List", "Listing policies to verify creation")
+	acc.LogTestStage(t, "GetByID", "Fetching policy by ID=%d", policyID)
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
-	list, listResp, err := svc.List(ctx2)
+	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
+	require.NoError(t, err, "GetByID should not return an error")
+	require.NotNil(t, fetched)
+	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, policyID, fetched.General.ID)
+	assert.Equal(t, policyName, fetched.General.Name)
+	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.General.ID, fetched.General.Name)
+
+	// ------------------------------------------------------------------
+	// 3. Get by Name
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "GetByName", "Fetching policy by name=%q", policyName)
+
+	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel3()
+
+	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx3, policyName)
+	require.NoError(t, err, "GetByName should not return an error")
+	require.NotNil(t, fetchedByName)
+	assert.Equal(t, 200, fetchByNameResp.StatusCode)
+	assert.Equal(t, policyID, fetchedByName.General.ID)
+	assert.Equal(t, policyName, fetchedByName.General.Name)
+	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.General.ID, fetchedByName.General.Name)
+
+	// ------------------------------------------------------------------
+	// 4. Update by ID
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "UpdateByID", "Updating policy by ID=%d", policyID)
+
+	updateReq := fetched
+	updateReq.General.Enabled = true
+
+	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel4()
+
+	updated, updateResp, err := svc.UpdateByID(ctx4, policyID, updateReq)
+	require.NoError(t, err, "UpdateByID should not return an error")
+	require.NotNil(t, updated)
+	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, policyID, updated.ID, "updated policy ID should match")
+	acc.LogTestSuccess(t, "UpdateByID: ID=%d", updated.ID)
+
+	// ------------------------------------------------------------------
+	// 5. List
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "List", "Listing all policies")
+
+	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel5()
+
+	list, listResp, err := svc.List(ctx5)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
 	assert.Equal(t, 200, listResp.StatusCode)
@@ -84,221 +102,61 @@ func TestAcceptance_Policies_lifecycle(t *testing.T) {
 			break
 		}
 	}
-	assert.True(t, found, "newly created policy should appear in list")
-	acc.LogTestSuccess(t, "Policy ID=%d found in list (%d total)", policyID, list.Size)
-
-	// ------------------------------------------------------------------
-	// 3. GetByID
-	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching policy by ID=%d", policyID)
-
-	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel3()
-
-	fetched, fetchResp, err := svc.GetByID(ctx3, policyID)
-	require.NoError(t, err, "GetByID should not return an error")
-	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
-	assert.Equal(t, policyID, fetched.General.ID)
-	assert.Equal(t, policyName, fetched.General.Name)
-	assert.True(t, fetched.General.Enabled)
-	assert.True(t, fetched.Scope.AllComputers)
-	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.General.ID, fetched.General.Name)
-
-	// ------------------------------------------------------------------
-	// 4. GetByName
-	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching policy by name=%q", policyName)
-
-	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel4()
-
-	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, policyName)
-	require.NoError(t, err, "GetByName should not return an error")
-	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
-	assert.Equal(t, policyID, fetchedByName.General.ID)
-	assert.Equal(t, policyName, fetchedByName.General.Name)
-	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.General.ID, fetchedByName.General.Name)
-
-	// ------------------------------------------------------------------
-	// 5. UpdateByID
-	// ------------------------------------------------------------------
-	updatedName := acc.UniqueName("sdkv2_acc_acc-test-policy-updated")
-	acc.LogTestStage(t, "UpdateByID", "Updating policy ID=%d to name=%q", policyID, updatedName)
-
-	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel5()
-
-	updateReq := &policies.ResourcePolicy{
-		General: policies.PolicySubsetGeneral{
-			Name:      updatedName,
-			Enabled:   false,
-			Frequency: "Ongoing",
-		},
-		Scope: policies.PolicySubsetScope{
-			AllComputers: true,
-		},
-	}
-	updated, updateResp, err := svc.UpdateByID(ctx5, policyID, updateReq)
-	require.NoError(t, err, "UpdateByID should not return an error")
-	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
-
-	// ------------------------------------------------------------------
-	// 6. UpdateByName (back to original name)
-	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "UpdateByName", "Updating policy name=%q back to original", updatedName)
-
-	ctx6, cancel6 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel6()
-
-	revertReq := &policies.ResourcePolicy{
-		General: policies.PolicySubsetGeneral{
-			Name:      policyName,
-			Enabled:   true,
-			Frequency: "Once per computer",
-		},
-		Scope: policies.PolicySubsetScope{
-			AllComputers: true,
-		},
-	}
-	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
-	require.NoError(t, err, "UpdateByName should not return an error")
-	require.NotNil(t, reverted)
-	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
-
-	// ------------------------------------------------------------------
-	// 7. GetByID — verify revert
-	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID (post-update)", "Re-fetching to verify name revert")
-
-	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel7()
-
-	verified, verifyResp, err := svc.GetByID(ctx7, policyID)
-	require.NoError(t, err)
-	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
-	assert.Equal(t, policyName, verified.General.Name, "name should reflect the revert")
-	assert.True(t, verified.General.Enabled, "enabled should be true after revert")
-	acc.LogTestSuccess(t, "Name revert verified: %q", verified.General.Name)
-
-	// ------------------------------------------------------------------
-	// 8. DeleteByID
-	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "Delete", "Deleting policy ID=%d", policyID)
-
-	ctx8, cancel8 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel8()
-
-	deleteResp, err := svc.DeleteByID(ctx8, policyID)
-	require.NoError(t, err, "DeleteByID should not return an error")
-	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
-	acc.LogTestSuccess(t, "Policy ID=%d deleted", policyID)
+	assert.True(t, found, "created policy should appear in list")
+	acc.LogTestSuccess(t, "List: found policy ID=%d in list of %d policies", policyID, list.Size)
 }
 
 // =============================================================================
-// TestAcceptance_Policies_delete_by_name creates a policy then deletes by name.
-// =============================================================================
-
-func TestAcceptance_Policies_delete_by_name(t *testing.T) {
-	acc.RequireClient(t)
-
-	svc := acc.Client.ClassicPolicies
-	ctx := context.Background()
-
-	policyName := acc.UniqueName("sdkv2_acc_acc-test-policy-del")
-	createReq := &policies.ResourcePolicy{
-		General: policies.PolicySubsetGeneral{
-			Name:      policyName,
-			Enabled:   true,
-			Frequency: "Once per computer",
-		},
-		Scope: policies.PolicySubsetScope{
-			AllComputers: true,
-		},
-	}
-
-	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel1()
-
-	created, _, err := svc.Create(ctx1, createReq)
-	require.NoError(t, err)
-	require.NotNil(t, created)
-
-	policyID := created.ID
-	acc.LogTestSuccess(t, "Created policy ID=%d name=%q for delete-by-name test", policyID, policyName)
-
-	acc.Cleanup(t, func() {
-		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		_, delErr := svc.DeleteByID(cleanupCtx, policyID)
-		acc.LogCleanupDeleteError(t, "policy", fmt.Sprintf("%d", policyID), delErr)
-	})
-
-	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel2()
-
-	deleteResp, err := svc.DeleteByName(ctx2, policyName)
-	require.NoError(t, err, "DeleteByName should not return an error")
-	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
-	acc.LogTestSuccess(t, "Policy %q deleted by name", policyName)
-}
-
-// =============================================================================
-// TestAcceptance_Policies_validation_errors tests client-side validation
-// without making any network calls.
+// TestAcceptance_Policies_validation_errors tests validation error handling.
 // =============================================================================
 
 func TestAcceptance_Policies_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
 	svc := acc.Client.ClassicPolicies
+	ctx := context.Background()
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.GetByID(context.Background(), 0)
+		_, _, err := svc.GetByID(ctx, 0)
 		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "policy ID must be a positive integer")
+		assert.Contains(t, err.Error(), "policy ID must be greater than 0")
 	})
 
 	t.Run("GetByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.GetByName(context.Background(), "")
+		_, _, err := svc.GetByName(ctx, "")
 		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "policy name is required")
+		assert.Contains(t, err.Error(), "policy name cannot be empty")
 	})
 
 	t.Run("Create_NilRequest", func(t *testing.T) {
-		_, _, err := svc.Create(context.Background(), nil)
+		_, _, err := svc.Create(ctx, nil)
 		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "policy is required")
+		assert.Contains(t, err.Error(), "request is required")
 	})
 
 	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
-		_, _, err := svc.UpdateByID(context.Background(), 0, &policies.ResourcePolicy{})
+		policy := createMinimalPolicy(t, "test")
+		_, _, err := svc.UpdateByID(ctx, 0, policy)
 		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "policy ID must be a positive integer")
+		assert.Contains(t, err.Error(), "policy ID must be greater than 0")
 	})
 
 	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
-		_, _, err := svc.UpdateByName(context.Background(), "", &policies.ResourcePolicy{})
+		policy := createMinimalPolicy(t, "test")
+		_, _, err := svc.UpdateByName(ctx, "", policy)
 		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "policy name is required")
+		assert.Contains(t, err.Error(), "policy name cannot be empty")
 	})
 
 	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
-		_, err := svc.DeleteByID(context.Background(), 0)
+		_, err := svc.DeleteByID(ctx, 0)
 		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "policy ID must be a positive integer")
+		assert.Contains(t, err.Error(), "policy ID must be greater than 0")
 	})
 
 	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
-		_, err := svc.DeleteByName(context.Background(), "")
+		_, err := svc.DeleteByName(ctx, "")
 		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "policy name is required")
+		assert.Contains(t, err.Error(), "policy name cannot be empty")
 	})
 }

@@ -35,12 +35,20 @@ func TestAcceptance_FileUploads_create_attachment(t *testing.T) {
 	policyName := acc.UniqueName("sdkv2_acc_acc-test-fileupload-policy")
 	createReq := &policies.ResourcePolicy{
 		General: policies.PolicySubsetGeneral{
-			Name:      policyName,
-			Enabled:   true,
-			Frequency: "Once per computer",
+			Name:          policyName,
+			Enabled:       false,
+			TriggerOther:  "EVENT",
+			Frequency:     "Once per computer",
+			TargetDrive:   "/",
+			RetryEvent:    "none",
+			RetryAttempts: -1,
 		},
 		Scope: policies.PolicySubsetScope{
-			AllComputers: true,
+			AllComputers: false,
+		},
+		SelfService: policies.PolicySubsetSelfService{
+			UseForSelfService: true,
+			InstallButtonText: "Install",
 		},
 	}
 
