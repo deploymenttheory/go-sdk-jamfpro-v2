@@ -267,7 +267,7 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse TemplateListResponse
+		var pageResponse HistoryResponse
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}

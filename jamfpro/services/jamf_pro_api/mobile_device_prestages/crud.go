@@ -642,7 +642,7 @@ func (s *Service) GetHistoryByIDV3(ctx context.Context, id string, query map[str
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
+		var pageResponse HistoryResponse
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}

@@ -409,7 +409,7 @@ func (s *Service) GetStaticGroupMembershipV1(ctx context.Context, id string, rsq
 	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupMembershipV1, id)
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryResponse
+		var pageResponse GroupMembershipResponse
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
@@ -421,10 +421,12 @@ func (s *Service) GetStaticGroupMembershipV1(ctx context.Context, id string, rsq
 	headers := map[string]string{
 		"Accept": mime.ApplicationJSON,
 	}
+
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get static group membership: %w", err)
 	}
+
 	return &result, resp, nil
 }
 
@@ -441,7 +443,7 @@ func (s *Service) GetSmartGroupMembershipV1(ctx context.Context, id string, rsql
 	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupMembershipV1, id)
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryResponse
+		var pageResponse GroupMembershipResponse
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}

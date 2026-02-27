@@ -192,7 +192,7 @@ func (s *Service) GetHistoryV2(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
+		var pageResponse HistoryResponse
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
@@ -411,7 +411,10 @@ func (s *Service) ListLanguageMessagesV3(ctx context.Context) ([]ResourceEnrollm
 	}
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryResponse
+		var pageResponse struct {
+			TotalCount int
+			Results    []ResourceEnrollmentLanguage
+		}
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}

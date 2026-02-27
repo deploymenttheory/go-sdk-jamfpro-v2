@@ -250,7 +250,7 @@ func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string
 	var result ListResponseJamfProtectDeploymentTasks
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
+		var pageResponse ListResponseJamfProtectDeploymentTasks
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
@@ -301,7 +301,7 @@ func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string
 	var result ListResponseJamfProtectHistory
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
+		var pageResponse ListResponseJamfProtectHistory
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
@@ -354,7 +354,7 @@ func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) 
 	var result ListResponseJamfProtectPlans
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
+		var pageResponse ListResponseJamfProtectPlans
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
