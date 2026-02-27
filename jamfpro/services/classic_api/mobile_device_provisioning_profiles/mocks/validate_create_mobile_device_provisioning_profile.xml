@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mobile_device_provisioning_profile>
-  <general>
-    <id>123</id>
-    <name>Created Provisioning Profile</name>
-    <display_name>Created Provisioning Profile</display_name>
-    <uuid>550e8400-e29b-41d4-a716-446655440001</uuid>
-  </general>
+  <id>123</id>
 </mobile_device_provisioning_profile>

@@ -17,6 +17,15 @@ type ResourceApiIntegration struct {
 	ClientID                   string   `json:"clientId"`
 }
 
+// RequestApiIntegration represents the request body for creating/updating an API integration.
+type RequestApiIntegration struct {
+	AuthorizationScopes        []string `json:"authorizationScopes"`
+	DisplayName                string   `json:"displayName"`
+	Enabled                    bool     `json:"enabled"`
+	AccessTokenLifetimeSeconds int      `json:"accessTokenLifetimeSeconds,omitempty"`
+	AppType                    string   `json:"appType,omitempty"`
+}
+
 // ResourceClientCredentials represents API client credentials returned by RefreshClientCredentials.
 type ResourceClientCredentials struct {
 	ClientID     string `json:"clientId"`

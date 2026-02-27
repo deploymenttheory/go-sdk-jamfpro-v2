@@ -8,7 +8,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -36,15 +35,15 @@ type (
 		// CreateV1 creates a new API integration (Create API Integration).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateapiintegration
-		CreateV1(ctx context.Context, request *ResourceApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error)
 
 		// UpdateByIDV1 updates the API integration by ID (Update API Integration by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/putupdateapiintegration
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error)
 
 		// UpdateByNameV1 updates the API integration by display name.
-		UpdateByNameV1(ctx context.Context, name string, request *ResourceApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error)
+		UpdateByNameV1(ctx context.Context, name string, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error)
 
 		// DeleteByIDV1 deletes the API integration by ID (Delete API Integration by ID).
 		//
@@ -90,25 +89,11 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	}
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceApiIntegration
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var integration ResourceApiIntegration
-				if err := mapstructure.Decode(item, &integration); err != nil {
-					return fmt.Errorf("failed to decode api integration: %w", err)
-				}
-				result.Results = append(result.Results, integration)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -116,6 +101,8 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, err
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -160,7 +147,7 @@ func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceApiInt
 // CreateV1 creates a new API integration.
 // URL: POST /api/v1/api-integrations
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateapiintegration
-func (s *Service) CreateV1(ctx context.Context, request *ResourceApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -184,7 +171,7 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceApiIntegration)
 // UpdateByIDV1 updates the API integration by ID.
 // URL: PUT /api/v1/api-integrations/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/putupdateapiintegration
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -208,7 +195,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *Resource
 }
 
 // UpdateByNameV1 updates the API integration by display name.
-func (s *Service) UpdateByNameV1(ctx context.Context, name string, request *ResourceApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error) {
+func (s *Service) UpdateByNameV1(ctx context.Context, name string, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error) {
 	existing, resp, err := s.GetByNameV1(ctx, name)
 	if err != nil {
 		return nil, resp, err

@@ -36,5 +36,5 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Mobile Device Provisioning Profile Created: ID=%d Name=%q\n", created.General.ID, created.General.Name)
+	fmt.Printf("Mobile Device Provisioning Profile Created: ID=%d\n", created.ID)
 }

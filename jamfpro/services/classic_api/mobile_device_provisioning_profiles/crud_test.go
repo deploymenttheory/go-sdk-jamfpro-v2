@@ -114,8 +114,7 @@ func TestUnit_MobileDeviceProvisioningProfiles_CreateByID(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 123, resp.General.ID)
-	assert.Equal(t, "Created Provisioning Profile", resp.General.Name)
+	assert.Equal(t, 123, resp.ID)
 }
 
 func TestUnit_MobileDeviceProvisioningProfiles_CreateByID_NilRequest(t *testing.T) {
@@ -159,7 +158,7 @@ func TestUnit_MobileDeviceProvisioningProfiles_CreateByName(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 123, resp.General.ID)
+	assert.Equal(t, 123, resp.ID)
 }
 
 func TestUnit_MobileDeviceProvisioningProfiles_CreateByUUID(t *testing.T) {
@@ -178,7 +177,7 @@ func TestUnit_MobileDeviceProvisioningProfiles_CreateByUUID(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 123, resp.General.ID)
+	assert.Equal(t, 123, resp.ID)
 }
 
 func TestUnit_MobileDeviceProvisioningProfiles_UpdateByID(t *testing.T) {
@@ -196,8 +195,7 @@ func TestUnit_MobileDeviceProvisioningProfiles_UpdateByID(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 1, resp.General.ID)
-	assert.Equal(t, "Updated Provisioning Profile", resp.General.Name)
+	assert.Equal(t, 1, resp.ID)
 }
 
 func TestUnit_MobileDeviceProvisioningProfiles_UpdateByID_ZeroID(t *testing.T) {
@@ -229,7 +227,7 @@ func TestUnit_MobileDeviceProvisioningProfiles_UpdateByName(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 1, resp.General.ID)
+	assert.Equal(t, 1, resp.ID)
 }
 
 func TestUnit_MobileDeviceProvisioningProfiles_UpdateByUUID(t *testing.T) {
@@ -247,7 +245,7 @@ func TestUnit_MobileDeviceProvisioningProfiles_UpdateByUUID(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 1, resp.General.ID)
+	assert.Equal(t, 1, resp.ID)
 }
 
 func TestUnit_MobileDeviceProvisioningProfiles_DeleteByID(t *testing.T) {

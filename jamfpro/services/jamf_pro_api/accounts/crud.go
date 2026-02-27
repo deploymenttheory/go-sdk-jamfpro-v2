@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -70,20 +69,11 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	}
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceAccount
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var account ResourceAccount
-				if err := mapstructure.Decode(item, &account); err != nil {
-					return fmt.Errorf("failed to decode account: %w", err)
-				}
-				result.Results = append(result.Results, account)
-			}
-		}
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 

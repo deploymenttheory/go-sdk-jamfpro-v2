@@ -47,9 +47,9 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
-	assert.Positive(t, created.General.ID, "created profile ID should be a positive integer")
+	assert.Positive(t, created.ID, "created profile ID should be a positive integer")
 
-	profileID := created.General.ID
+	profileID := created.ID
 	acc.LogTestSuccess(t, "mobile device provisioning profile created with ID=%d name=%q", profileID, profileName)
 
 	acc.Cleanup(t, func() {
@@ -233,7 +233,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_delete_by_name(t *testing.T
 	require.NoError(t, err)
 	require.NotNil(t, created)
 
-	profileID := created.General.ID
+	profileID := created.ID
 	acc.LogTestSuccess(t, "Created profile ID=%d name=%q for delete-by-name test", profileID, profileName)
 
 	acc.Cleanup(t, func() {

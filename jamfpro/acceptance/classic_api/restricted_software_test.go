@@ -175,7 +175,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	require.NotNil(t, verified, "GetByID (post-update): verified is nil")
 	require.Equal(t, 200, verifyResp.StatusCode, "GetByID (post-update): status code")
 	require.Equal(t, updatedName, verified.General.Name, "GetByID (post-update): name should reflect the update, got %q", verified.General.Name)
-	require.Equal(t, "updatedprocess.exe", verified.General.ProcessName, "GetByID (post-update): ProcessName")
+	require.Equal(t, "sdkv2_acc_updatedprocess.exe", verified.General.ProcessName, "GetByID (post-update): ProcessName")
 	require.False(t, verified.General.MatchExactProcessName, "GetByID (post-update): MatchExactProcessName")
 	require.False(t, verified.General.SendNotification, "GetByID (post-update): SendNotification")
 	// KillProcess and DeleteExecutable are not asserted: the Classic API may not persist or return them on update.
