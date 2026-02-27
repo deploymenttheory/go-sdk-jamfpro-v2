@@ -126,7 +126,16 @@ func (m *JamfProServerURLMock) GetBytes(ctx context.Context, path string, _ map[
 }
 
 func (m *JamfProServerURLMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
-	return nil, fmt.Errorf("GetPaginated not implemented in JamfProServerURLMock")
+	resp, err := m.dispatch("GET", path, nil)
+	if err != nil {
+		return resp, err
+	}
+	if mergePage != nil {
+		if err := mergePage(resp.Body); err != nil {
+			return resp, err
+		}
+	}
+	return resp, nil
 }
 
 func (m *JamfProServerURLMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }

@@ -185,7 +185,25 @@ func (m *EnrollmentCustomizationsMock) GetBytes(ctx context.Context, endpoint st
 }
 
 func (m *EnrollmentCustomizationsMock) GetPaginated(ctx context.Context, endpoint string, rsqlQuery map[string]string, headers map[string]string, mergePage func(page []byte) error) (*interfaces.Response, error) {
-	return &interfaces.Response{StatusCode: http.StatusMethodNotAllowed}, nil
+	body, status, found := m.dispatch("GET", endpoint)
+	if !found {
+		return nil, errNoMockRegistered
+	}
+
+	resp := &interfaces.Response{
+		StatusCode: status,
+		Status:     fmt.Sprintf("%d", status),
+		Headers:    http.Header{"Content-Type": {"application/json"}},
+		Body:       body,
+	}
+
+	if mergePage != nil {
+		if err := mergePage(body); err != nil {
+			return resp, err
+		}
+	}
+
+	return resp, nil
 }
 
 func (m *EnrollmentCustomizationsMock) GetLogger() *zap.Logger {
