@@ -44,7 +44,8 @@ import (
 	classic_sites "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/sites"
 	classic_software_update_servers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/software_update_servers"
 	classic_user_extension_attributes "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/user_extension_attributes"
-	classic_usergroups "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/usergroups"
+	classic_smart_user_groups "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/smart_user_groups"
+	classic_static_user_groups "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/static_user_groups"
 	classic_users "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/users"
 	classic_vpp_accounts "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_accounts"
 	classic_vpp_assignments "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_assignments"
@@ -215,7 +216,8 @@ type Client struct {
 	ClassicSoftwareUpdateServers             *classic_software_update_servers.Service
 	ClassicUsers                             *classic_users.Service
 	ClassicUserExtensionAttributes           *classic_user_extension_attributes.Service
-	ClassicUserGroups                        *classic_usergroups.Service
+	ClassicSmartUserGroups                   *classic_smart_user_groups.Service
+	ClassicStaticUserGroups                  *classic_static_user_groups.Service
 	ClassicVPPAccounts                       *classic_vpp_accounts.Service
 	ClassicVPPAssignments                    *classic_vpp_assignments.Service
 	ClassicWebhooks                          *classic_webhooks.Service
@@ -391,7 +393,8 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		ClassicSoftwareUpdateServers:             classic_software_update_servers.NewService(transport),
 		ClassicUsers:                             classic_users.NewService(transport),
 		ClassicUserExtensionAttributes:           classic_user_extension_attributes.NewService(transport),
-		ClassicUserGroups:                        classic_usergroups.NewService(transport),
+		ClassicSmartUserGroups:                   classic_smart_user_groups.NewService(transport),
+		ClassicStaticUserGroups:                  classic_static_user_groups.NewService(transport),
 		ClassicVPPAccounts:                       classic_vpp_accounts.NewService(transport),
 		ClassicVPPAssignments:                    classic_vpp_assignments.NewService(transport),
 		ClassicWebhooks:                          classic_webhooks.NewService(transport),

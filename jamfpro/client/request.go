@@ -31,7 +31,7 @@ func toInterfaceResponse(resp *resty.Response) *interfaces.Response {
 
 // Get executes a GET request.
 func (t *Transport) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
-	req := t.client.R().SetContext(ctx).SetResult(result)
+	req := t.client.R().SetContext(ctx).SetResult(result).SetResponseBodyUnlimitedReads(true)
 	for k, v := range rsqlQuery {
 		if v != "" {
 			req.SetQueryParam(k, v)
@@ -43,7 +43,7 @@ func (t *Transport) Get(ctx context.Context, path string, rsqlQuery map[string]s
 
 // Post executes a POST request with JSON body.
 func (t *Transport) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
-	req := t.client.R().SetContext(ctx).SetResult(result)
+	req := t.client.R().SetContext(ctx).SetResult(result).SetResponseBodyUnlimitedReads(true)
 	if body != nil {
 		req.SetBody(body)
 	}
@@ -121,7 +121,7 @@ func (t *Transport) PostMultipart(ctx context.Context, path string, fileField st
 
 // Put executes a PUT request.
 func (t *Transport) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
-	req := t.client.R().SetContext(ctx).SetResult(result)
+	req := t.client.R().SetContext(ctx).SetResult(result).SetResponseBodyUnlimitedReads(true)
 	if body != nil {
 		req.SetBody(body)
 	}

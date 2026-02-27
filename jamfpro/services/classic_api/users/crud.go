@@ -30,10 +30,11 @@ type (
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyname
 		GetByName(ctx context.Context, name string) (*ResourceUser, *interfaces.Response, error)
 
-		// GetByEmail returns the specified user by email.
+		// GetByEmail returns users matching the specified email.
+		// Note: Returns a list response even for a single match.
 		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyemail
-		GetByEmail(ctx context.Context, email string) (*ResourceUser, *interfaces.Response, error)
+		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyemailaddress
+		GetByEmail(ctx context.Context, email string) (*ListResponse, *interfaces.Response, error)
 
 		// Create creates a new user.
 		//
@@ -164,19 +165,21 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUser, *i
 	return &out, resp, nil
 }
 
-// GetByEmail returns the specified user by email.
+// GetByEmail returns users matching the specified email.
+// Note: The API returns a list response (<users>) even for a single match.
+// Because email addresses may not be unique, this operation may return a list of users.
 //
 // URL: GET /JSSResource/users/email/{email}
 //
-// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyemail
-func (s *Service) GetByEmail(ctx context.Context, email string) (*ResourceUser, *interfaces.Response, error) {
+// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyemailaddress
+func (s *Service) GetByEmail(ctx context.Context, email string) (*ListResponse, *interfaces.Response, error) {
 	if email == "" {
 		return nil, nil, fmt.Errorf("user email cannot be empty")
 	}
 
 	endpoint := fmt.Sprintf("%s/email/%s", EndpointUsers, url.PathEscape(email))
 
-	var out ResourceUser
+	var out ListResponse
 
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,
