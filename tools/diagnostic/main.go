@@ -8,8 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/smart_user_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/static_user_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/policies"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 )
 
@@ -24,143 +23,170 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
-	// Test 1: Create Smart User Group and check response
-	fmt.Println("=== Test 1: Smart User Group Create ===")
-	smartGroupReq := &smart_user_groups.RequestSmartUserGroup{
-		Name:             fmt.Sprintf("diagnostic-smart-%d", time.Now().Unix()),
-		IsSmart:          true,
-		IsNotifyOnChange: false,
-		Site: &shared.SharedResourceSite{
-			ID:   -1,
-			Name: "None",
-		},
-		Criteria: &smart_user_groups.CriteriaContainer{
-			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
-				{
-					Name:       "Email Address",
-					Priority:   0,
-					AndOr:      "and",
-					SearchType: "like",
-					Value:      "@example.com",
-				},
+	// Test: Create Policy with minimum config
+	fmt.Println("=== Test: Policy Create with Minimum Config ===")
+	policyReq := &policies.ResourcePolicy{
+		General: policies.PolicySubsetGeneral{
+			Name:                       fmt.Sprintf("diagnostic-policy-%d", time.Now().Unix()),
+			Enabled:                    false,
+			TriggerCheckin:             false,
+			TriggerEnrollmentComplete:  false,
+			TriggerLogin:               false,
+			TriggerLogout:              false,
+			TriggerNetworkStateChanged: false,
+			TriggerStartup:             false,
+			TriggerOther:               "EVENT",
+			Frequency:                  "Once per computer",
+			RetryEvent:                 "none",
+			RetryAttempts:              -1,
+			NotifyOnEachFailedRetry:    false,
+			LocationUserOnly:           false,
+			TargetDrive:                "/",
+			Offline:                    false,
+			Category: &shared.SharedResourceCategory{
+				ID:   -1,
+				Name: "No category assigned",
 			},
-		},
-	}
-
-	createdSmart, resp1, err := jamfClient.ClassicSmartUserGroups.Create(ctx, smartGroupReq)
-	if err != nil {
-		fmt.Printf("Smart Create Error: %v\n", err)
-	}
-	if resp1 != nil {
-		fmt.Printf("Smart Create Status: %d\n", resp1.StatusCode)
-		fmt.Printf("Smart Create Response Body:\n%s\n\n", string(resp1.Body))
-	}
-	
-	if createdSmart != nil && createdSmart.ID > 0 {
-		smartGroupID := createdSmart.ID
-		fmt.Printf("Created Smart Group ID: %d\n\n", smartGroupID)
-		
-		fmt.Println("=== Test 1b: Smart User Group GET ===")
-		time.Sleep(1 * time.Second)
-		_, resp1b, err := jamfClient.ClassicSmartUserGroups.GetByID(ctx, smartGroupID)
-		if err != nil {
-			fmt.Printf("Smart GET Error: %v\n", err)
-		}
-		if resp1b != nil {
-			fmt.Printf("Smart GET Status: %d\n", resp1b.StatusCode)
-			fmt.Printf("Smart GET Response Body:\n%s\n\n", string(resp1b.Body))
-		}
-		
-		fmt.Println("=== Test 1c: Smart User Group UPDATE ===")
-		updateReq := &smart_user_groups.RequestSmartUserGroup{
-			Name:             fmt.Sprintf("diagnostic-smart-updated-%d", time.Now().Unix()),
-			IsSmart:          true,
-			IsNotifyOnChange: true,
+			NetworkLimitations: &policies.PolicySubsetGeneralNetworkLimitations{
+				MinimumNetworkConnection: "No Minimum",
+				AnyIPAddress:             false,
+				NetworkSegments:          "",
+			},
+			NetworkRequirements: "Any",
 			Site: &shared.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},
-			Criteria: &smart_user_groups.CriteriaContainer{
-				Size: 1,
-				Criterion: []shared.SharedSubsetCriteria{
-					{
-						Name:       "Email Address",
-						Priority:   0,
-						AndOr:      "and",
-						SearchType: "like",
-						Value:      "@example.com",
-					},
-				},
-			},
-		}
-		_, resp1c, err := jamfClient.ClassicSmartUserGroups.UpdateByID(ctx, smartGroupID, updateReq)
-		if err != nil {
-			fmt.Printf("Smart UPDATE Error: %v\n", err)
-		}
-		if resp1c != nil {
-			fmt.Printf("Smart UPDATE Status: %d\n", resp1c.StatusCode)
-			fmt.Printf("Smart UPDATE Response Body:\n%s\n\n", string(resp1c.Body))
-		}
-		
-		jamfClient.ClassicSmartUserGroups.DeleteByID(ctx, smartGroupID)
-	}
-
-	// Test 2: Create Static User Group and check response
-	fmt.Println("=== Test 2: Static User Group Create ===")
-	staticGroupReq := &static_user_groups.RequestStaticUserGroup{
-		Name:             fmt.Sprintf("diagnostic-static-%d", time.Now().Unix()),
-		IsSmart:          false,
-		IsNotifyOnChange: false,
-		Site: &shared.SharedResourceSite{
-			ID:   -1,
-			Name: "None",
+		},
+		Scope: policies.PolicySubsetScope{
+			AllComputers: false,
+			AllJSSUsers:  false,
+		},
+		SelfService: policies.PolicySubsetSelfService{
+			UseForSelfService:           true,
+			InstallButtonText:           "Install",
+			ReinstallButtonText:         "Reinstall",
+			ForceUsersToViewDescription: false,
+			FeatureOnMainPage:           false,
+			Notification:                false,
+		},
+		PackageConfiguration: policies.PolicySubsetPackageConfiguration{
+			Packages:              []policies.PolicySubsetPackageConfigurationPackage{},
+			DistributionPoint:     "",
+		},
+		Scripts: []policies.PolicySubsetScript{},
+		Printers: policies.PolicySubsetPrinters{
+			LeaveExistingDefault: false,
+		},
+		DockItems:              []policies.PolicySubsetDockItem{},
+		AccountMaintenance: policies.PolicySubsetAccountMaintenance{},
+		Maintenance: policies.PolicySubsetMaintenance{
+			Recon:                    false,
+			ResetName:                false,
+			InstallAllCachedPackages: false,
+			Heal:                     false,
+			Prebindings:              false,
+			Permissions:              false,
+			Byhost:                   false,
+			SystemCache:              false,
+			UserCache:                false,
+			Verify:                   false,
+		},
+		FilesProcesses: policies.PolicySubsetFilesProcesses{
+			SearchByPath:         "",
+			DeleteFile:           false,
+			LocateFile:           "",
+			UpdateLocateDatabase: false,
+			SpotlightSearch:      "",
+			SearchForProcess:     "",
+			KillProcess:          false,
+			RunCommand:           "",
+		},
+		UserInteraction: policies.PolicySubsetUserInteraction{
+			MessageStart:          "",
+			AllowUsersToDefer:     false,
+			AllowDeferralUntilUtc: "",
+			AllowDeferralMinutes:  0,
+			MessageFinish:         "",
+		},
+		DiskEncryption: policies.PolicySubsetDiskEncryption{
+			Action:                        "",
+			DiskEncryptionConfigurationID: 0,
+			AuthRestart:                   false,
+			RemediateKeyType:              "Individual",
+			RemediateDiskEncryptionConfigurationID: 0,
+		},
+		Reboot: policies.PolicySubsetReboot{
+			Message:                      "",
+			StartupDisk:                  "Current Startup Disk",
+			SpecifyStartup:               "",
+			NoUserLoggedIn:               "Do not restart",
+			UserLoggedIn:                 "Do not restart",
+			MinutesUntilReboot:           5,
+			StartRebootTimerImmediately:  false,
+			FileVault2Reboot:             false,
 		},
 	}
 
-	createdStatic, resp2, err := jamfClient.ClassicStaticUserGroups.Create(ctx, staticGroupReq)
+	created, resp, err := jamfClient.ClassicPolicies.Create(ctx, policyReq)
 	if err != nil {
-		fmt.Printf("Static Create Error: %v\n", err)
+		fmt.Printf("Policy Create Error: %v\n", err)
 	}
-	if resp2 != nil {
-		fmt.Printf("Static Create Status: %d\n", resp2.StatusCode)
-		fmt.Printf("Static Create Response Body:\n%s\n\n", string(resp2.Body))
+	if resp != nil {
+		fmt.Printf("Policy Create Status: %d\n", resp.StatusCode)
+		fmt.Printf("Policy Create Response Body:\n%s\n\n", string(resp.Body))
 	}
 	
-	if createdStatic != nil && createdStatic.ID > 0 {
-		staticGroupID := createdStatic.ID
-		fmt.Printf("Created Static Group ID: %d\n\n", staticGroupID)
+	if created != nil && created.ID > 0 {
+		policyID := created.ID
+		fmt.Printf("Created Policy ID: %d\n\n", policyID)
 		
-		fmt.Println("=== Test 2b: Static User Group GET ===")
+		// Test GET
+		fmt.Println("=== Test: Policy GET ===")
 		time.Sleep(1 * time.Second)
-		_, resp2b, err := jamfClient.ClassicStaticUserGroups.GetByID(ctx, staticGroupID)
+		fetched, resp2, err := jamfClient.ClassicPolicies.GetByID(ctx, policyID)
 		if err != nil {
-			fmt.Printf("Static GET Error: %v\n", err)
+			fmt.Printf("Policy GET Error: %v\n", err)
 		}
-		if resp2b != nil {
-			fmt.Printf("Static GET Status: %d\n", resp2b.StatusCode)
-			fmt.Printf("Static GET Response Body:\n%s\n\n", string(resp2b.Body))
+		if resp2 != nil {
+			fmt.Printf("Policy GET Status: %d\n", resp2.StatusCode)
+			fmt.Printf("Policy GET Response Body (first 2000 chars):\n%s\n\n", string(resp2.Body[:min(2000, len(resp2.Body))]))
 		}
 		
-		fmt.Println("=== Test 2c: Static User Group UPDATE ===")
-		updateReq := &static_user_groups.RequestStaticUserGroup{
-			Name:             fmt.Sprintf("diagnostic-static-updated-%d", time.Now().Unix()),
-			IsSmart:          false,
-			IsNotifyOnChange: true,
-			Site: &shared.SharedResourceSite{
-				ID:   -1,
-				Name: "None",
-			},
-		}
-		_, resp2c, err := jamfClient.ClassicStaticUserGroups.UpdateByID(ctx, staticGroupID, updateReq)
-		if err != nil {
-			fmt.Printf("Static UPDATE Error: %v\n", err)
-		}
-		if resp2c != nil {
-			fmt.Printf("Static UPDATE Status: %d\n", resp2c.StatusCode)
-			fmt.Printf("Static UPDATE Response Body:\n%s\n\n", string(resp2c.Body))
+		// Test UPDATE
+		if fetched != nil {
+			fmt.Println("=== Test: Policy UPDATE ===")
+			fmt.Printf("DiskEncryption.RemediateKeyType before update: %q\n", fetched.DiskEncryption.RemediateKeyType)
+			fmt.Printf("DiskEncryption.Action before update: %q\n", fetched.DiskEncryption.Action)
+			
+			fetched.General.Enabled = true
+			fetched.SelfService.SelfServiceIcon = nil
+			fetched.DiskEncryption = policies.PolicySubsetDiskEncryption{
+				Action:                        "",
+				DiskEncryptionConfigurationID: 0,
+				AuthRestart:                   false,
+				RemediateKeyType:              "Individual",
+				RemediateDiskEncryptionConfigurationID: 0,
+			}
+			
+			_, resp3, err := jamfClient.ClassicPolicies.UpdateByID(ctx, policyID, fetched)
+			if err != nil {
+				fmt.Printf("Policy UPDATE Error: %v\n", err)
+			}
+			if resp3 != nil {
+				fmt.Printf("Policy UPDATE Status: %d\n", resp3.StatusCode)
+				fmt.Printf("Policy UPDATE Response Body:\n%s\n\n", string(resp3.Body))
+			}
 		}
 		
-		jamfClient.ClassicStaticUserGroups.DeleteByID(ctx, staticGroupID)
+		// Clean up
+		jamfClient.ClassicPolicies.DeleteByID(ctx, policyID)
 	}
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }

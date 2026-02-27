@@ -106,7 +106,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	require.Equal(t, 200, fetchResp.StatusCode, "GetByID: status code")
 	require.Equal(t, swID, fetched.General.ID, "GetByID: ID")
 	require.Equal(t, swName, fetched.General.Name, "GetByID: Name")
-	require.Equal(t, "testprocess.exe", fetched.General.ProcessName, "GetByID: ProcessName")
+	require.Equal(t, "sdkv2_acc_testprocess.exe", fetched.General.ProcessName, "GetByID: ProcessName")
 	require.True(t, fetched.General.MatchExactProcessName, "GetByID: MatchExactProcessName")
 	require.True(t, fetched.General.SendNotification, "GetByID: SendNotification")
 	require.False(t, fetched.General.KillProcess, "GetByID: KillProcess")
