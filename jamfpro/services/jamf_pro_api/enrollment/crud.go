@@ -72,8 +72,10 @@ type (
 
 		// ListLanguageMessagesV3 returns all configured enrollment language messages.
 		//
+		// Automatically fetches all pages. The API supports pagination and sorting but not RSQL filtering.
+		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-languages
-		ListLanguageMessagesV3(ctx context.Context) ([]ResourceEnrollmentLanguage, *interfaces.Response, error)
+		ListLanguageMessagesV3(ctx context.Context) (*ListResponseLanguageMessages, *interfaces.Response, error)
 
 		// GetLanguageMessageV3 retrieves enrollment messaging for a specific language code.
 		//
@@ -402,19 +404,13 @@ func (s *Service) DeleteAccessGroupByIDV3(ctx context.Context, id string) (*inte
 // ListLanguageMessagesV3 returns all configured enrollment language messages.
 // URL: GET /api/v3/enrollment/languages
 // https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-languages
-func (s *Service) ListLanguageMessagesV3(ctx context.Context) ([]ResourceEnrollmentLanguage, *interfaces.Response, error) {
+func (s *Service) ListLanguageMessagesV3(ctx context.Context) (*ListResponseLanguageMessages, *interfaces.Response, error) {
 	endpoint := fmt.Sprintf("%s/languages", EndpointEnrollmentV3)
 
-	var result struct {
-		TotalCount int
-		Results    []ResourceEnrollmentLanguage
-	}
+	var result ListResponseLanguageMessages
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse struct {
-			TotalCount int
-			Results    []ResourceEnrollmentLanguage
-		}
+		var pageResponse ListResponseLanguageMessages
 		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
@@ -429,9 +425,9 @@ func (s *Service) ListLanguageMessagesV3(ctx context.Context) ([]ResourceEnrollm
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, nil, headers, mergePage)
 	if err != nil {
-		return nil, resp, err
+		return nil, resp, fmt.Errorf("failed to list enrollment language messages: %w", err)
 	}
-	return result.Results, resp, nil
+	return &result, resp, nil
 }
 
 // GetLanguageMessageV3 retrieves enrollment messaging for a specific language code.

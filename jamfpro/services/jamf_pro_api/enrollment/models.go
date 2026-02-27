@@ -136,6 +136,12 @@ type ListResponseAccessGroups struct {
 	Results    []ResourceAccountDrivenUserEnrollmentAccessGroup `json:"results"`
 }
 
+// ListResponseLanguageMessages is the response for ListLanguageMessagesV3.
+type ListResponseLanguageMessages struct {
+	TotalCount int                         `json:"totalCount"`
+	Results    []ResourceEnrollmentLanguage `json:"results"`
+}
+
 // CreateResponse is the response for CreateAccessGroupV3.
 type CreateResponse struct {
 	ID   string `json:"id"`
