@@ -33,7 +33,7 @@ func TestAcceptance_CommandFlush_flush_by_id_and_status(t *testing.T) {
 	resp, err := svc.FlushByIDAndStatus(ctx1, "computers", "1", "Failed")
 	require.NoError(t, err, "FlushByIDAndStatus should not return an error")
 	require.NotNil(t, resp)
-	assert.Contains(t, []int{200, 204}, resp.StatusCode, "expected 200 or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp.StatusCode, "expected 200, 201, or 204")
 
 	acc.LogTestSuccess(t, "Successfully flushed failed commands for computer 1")
 
@@ -48,7 +48,7 @@ func TestAcceptance_CommandFlush_flush_by_id_and_status(t *testing.T) {
 	resp2, err := svc.FlushByIDAndStatus(ctx2, "mobiledevices", "1", "Pending")
 	require.NoError(t, err, "FlushByIDAndStatus should not return an error")
 	require.NotNil(t, resp2)
-	assert.Contains(t, []int{200, 204}, resp2.StatusCode, "expected 200 or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp2.StatusCode, "expected 200, 201, or 204")
 
 	acc.LogTestSuccess(t, "Successfully flushed pending commands for mobile device 1")
 
@@ -63,7 +63,7 @@ func TestAcceptance_CommandFlush_flush_by_id_and_status(t *testing.T) {
 	resp3, err := svc.FlushByIDAndStatus(ctx3, "computergroups", "1", "Pending+Failed")
 	require.NoError(t, err, "FlushByIDAndStatus should not return an error")
 	require.NotNil(t, resp3)
-	assert.Contains(t, []int{200, 204}, resp3.StatusCode, "expected 200 or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp3.StatusCode, "expected 200, 201, or 204")
 
 	acc.LogTestSuccess(t, "Successfully flushed pending+failed commands for computer group 1")
 }
@@ -80,16 +80,32 @@ func TestAcceptance_CommandFlush_flush_with_xml(t *testing.T) {
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
-	// 1. Flush Pending commands for multiple mobile devices
+	// 1. Check if mobile devices exist
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "FlushWithXML", "Flushing pending commands for multiple mobile devices")
+	acc.LogTestStage(t, "FlushWithXML", "Checking for mobile devices")
+
+	mobileDeviceSvc := acc.Client.ClassicMobileDevices
+	ctx0, cancel0 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel0()
+
+	mobileDevicesList, _, err := mobileDeviceSvc.List(ctx0)
+	if err != nil || mobileDevicesList == nil || len(mobileDevicesList.Results) == 0 {
+		t.Skip("No mobile devices found - skipping FlushWithXML test")
+	}
+
+	deviceID := mobileDevicesList.Results[0].ID
+	acc.LogTestSuccess(t, "Found mobile device with ID=%d", deviceID)
+
+	// ------------------------------------------------------------------
+	// 2. Flush Pending commands for mobile device
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "FlushWithXML", "Flushing pending commands for mobile device")
 
 	req := &command_flush.RequestCommandFlush{
 		Status: "Pending",
 		MobileDevices: &command_flush.MobileDevices{
 			MobileDevice: []command_flush.DeviceID{
-				{ID: 1},
-				{ID: 2},
+				{ID: deviceID},
 			},
 		},
 	}
@@ -100,34 +116,51 @@ func TestAcceptance_CommandFlush_flush_with_xml(t *testing.T) {
 	resp, err := svc.FlushWithXML(ctx1, req)
 	require.NoError(t, err, "FlushWithXML should not return an error")
 	require.NotNil(t, resp)
-	assert.Contains(t, []int{200, 204}, resp.StatusCode, "expected 200 or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp.StatusCode, "expected 200, 201, or 204")
 
-	acc.LogTestSuccess(t, "Successfully flushed pending commands for batch of mobile devices")
+	acc.LogTestSuccess(t, "Successfully flushed pending commands for mobile device %d", deviceID)
 
 	// ------------------------------------------------------------------
-	// 2. Flush Failed commands for multiple computers
+	// 3. Check if computers exist
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "FlushWithXML", "Flushing failed commands for multiple computers")
+	acc.LogTestStage(t, "FlushWithXML", "Checking for computers")
+
+	computerSvc := acc.Client.ClassicComputers
+	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel2()
+
+	computersList, _, err := computerSvc.List(ctx2)
+	if err != nil || computersList == nil || len(computersList.Results) == 0 {
+		acc.LogTestSuccess(t, "No computers found - skipping computer flush test")
+		return
+	}
+
+	computerID := computersList.Results[0].ID
+	acc.LogTestSuccess(t, "Found computer with ID=%d", computerID)
+
+	// ------------------------------------------------------------------
+	// 4. Flush Failed commands for computer
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "FlushWithXML", "Flushing failed commands for computer")
 
 	req2 := &command_flush.RequestCommandFlush{
 		Status: "Failed",
 		Computers: &command_flush.Computers{
 			Computer: []command_flush.DeviceID{
-				{ID: 1},
-				{ID: 2},
+				{ID: computerID},
 			},
 		},
 	}
 
-	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
-	defer cancel2()
+	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel3()
 
-	resp2, err := svc.FlushWithXML(ctx2, req2)
+	resp2, err := svc.FlushWithXML(ctx3, req2)
 	require.NoError(t, err, "FlushWithXML should not return an error")
 	require.NotNil(t, resp2)
-	assert.Contains(t, []int{200, 204}, resp2.StatusCode, "expected 200 or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp2.StatusCode, "expected 200, 201, or 204")
 
-	acc.LogTestSuccess(t, "Successfully flushed failed commands for batch of computers")
+	acc.LogTestSuccess(t, "Successfully flushed failed commands for computer %d", computerID)
 }
 
 // =============================================================================

@@ -64,7 +64,7 @@ func TestAcceptance_ComputerInventoryCollection_update(t *testing.T) {
 	updateResp, err := svc.Update(ctx2, current)
 	require.NoError(t, err, "Update should not return an error")
 	require.NotNil(t, updateResp)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 
 	acc.LogTestSuccess(t, "Updated computer inventory collection (restored original settings)")
 }

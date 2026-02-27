@@ -85,7 +85,8 @@ type RequestFileShareDistributionPoint struct {
 
 // CreateUpdateResponse represents the response from Create/Update operations.
 // The Classic API returns only the ID for these operations.
+// Note: The API returns <file_share_distribution_point> for Create/Update operations.
 type CreateUpdateResponse struct {
-	XMLName xml.Name `xml:"distribution_point"`
+	XMLName xml.Name `xml:"file_share_distribution_point"`
 	ID      int      `xml:"id"`
 }

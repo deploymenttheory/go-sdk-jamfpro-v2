@@ -47,8 +47,13 @@ func TestAcceptance_BYOProfiles_lifecycle(t *testing.T) {
 	created, createResp, err := svc.Create(ctx1, createReq)
 	if err != nil {
 		var apiErr *client.APIError
-		if errors.As(err, &apiErr) && apiErr.StatusCode == 409 && strings.Contains(apiErr.Message, "Unable to update the database") {
-			t.Skip("BYO profile create returned 409 in this environment; skipping lifecycle")
+		if errors.As(err, &apiErr) {
+			if apiErr.StatusCode == 404 {
+				t.Skip("BYO profiles endpoint not available on this tenant (404); skipping test")
+			}
+			if apiErr.StatusCode == 409 && strings.Contains(apiErr.Message, "Unable to update the database") {
+				t.Skip("BYO profile create returned 409 in this environment; skipping lifecycle")
+			}
 		}
 		require.NoError(t, err, "Create should not return an error")
 	}
@@ -224,8 +229,13 @@ func TestAcceptance_BYOProfiles_delete_by_name(t *testing.T) {
 	created, _, err := svc.Create(ctx1, createReq)
 	if err != nil {
 		var apiErr *client.APIError
-		if errors.As(err, &apiErr) && apiErr.StatusCode == 409 && strings.Contains(apiErr.Message, "Unable to update the database") {
-			t.Skip("BYO profile create returned 409 in this environment; skipping delete-by-name")
+		if errors.As(err, &apiErr) {
+			if apiErr.StatusCode == 404 {
+				t.Skip("BYO profiles endpoint not available on this tenant (404); skipping test")
+			}
+			if apiErr.StatusCode == 409 && strings.Contains(apiErr.Message, "Unable to update the database") {
+				t.Skip("BYO profile create returned 409 in this environment; skipping delete-by-name")
+			}
 		}
 		require.NoError(t, err)
 	}
