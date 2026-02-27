@@ -126,16 +126,8 @@ func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, quer
 		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
 	}
 
-	if len(resp.rawBody) > 0 {
-		// Parse the paginated response structure to extract the results field
-		var pageResp struct {
-			Results json.RawMessage `json:"results"`
-		}
-		if err := json.Unmarshal(resp.rawBody, &pageResp); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal paginated response: %w", err)
-		}
-		
-		if err := mergePage(pageResp.Results); err != nil {
+	if mergePage != nil && len(resp.rawBody) > 0 {
+		if err := mergePage(resp.rawBody); err != nil {
 			return nil, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

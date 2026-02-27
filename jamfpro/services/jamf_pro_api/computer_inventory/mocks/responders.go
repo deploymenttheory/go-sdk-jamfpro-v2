@@ -184,26 +184,21 @@ func (m *ComputerInventoryMock) GetBytes(ctx context.Context, path string, _ map
 	}
 	return resp, resp.Body, nil
 }
+
 func (m *ComputerInventoryMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
 	if mergePage != nil && resp != nil && len(resp.Body) > 0 {
-		// Parse the paginated response structure to extract the results field
-		var pageResp struct {
-			Results json.RawMessage `json:"results"`
-		}
-		if err := json.Unmarshal(resp.Body, &pageResp); err != nil {
-			return resp, fmt.Errorf("failed to unmarshal paginated response: %w", err)
-		}
-		if err := mergePage(pageResp.Results); err != nil {
-			return resp, err
+		if err := mergePage(resp.Body); err != nil {
+			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
 	return resp, nil
 }
+
 func (m *ComputerInventoryMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
-func (m *ComputerInventoryMock) InvalidateToken() error                     { return nil }
-func (m *ComputerInventoryMock) KeepAliveToken() error                      { return nil }
-func (m *ComputerInventoryMock) GetLogger() *zap.Logger                     { return m.logger }
+func (m *ComputerInventoryMock) InvalidateToken() error                    { return nil }
+func (m *ComputerInventoryMock) KeepAliveToken() error                     { return nil }
+func (m *ComputerInventoryMock) GetLogger() *zap.Logger                    { return m.logger }

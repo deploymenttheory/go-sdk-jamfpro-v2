@@ -1,1 +1,16 @@
-[{"osUpdatesStatusId":"2","device":{"deviceId":"99999","objectType":"COMPUTER","href":"/v1/computers-inventory/99999"},"productKey":"macOSUpdate20A123","status":"PENDING","downloadPercentComplete":0.5}]
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "osUpdatesStatusId": "2",
+      "device": {
+        "deviceId": "99999",
+        "objectType": "COMPUTER",
+        "href": "/v1/computers-inventory/99999"
+      },
+      "productKey": "macOSUpdate20A123",
+      "status": "PENDING",
+      "downloadPercentComplete": 0.5
+    }
+  ]
+}
