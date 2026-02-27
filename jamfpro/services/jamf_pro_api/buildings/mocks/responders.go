@@ -224,7 +224,9 @@ func (m *BuildingsMock) GetPaginated(ctx context.Context, path string, rsqlQuery
 		return resp, err
 	}
 	if mergePage != nil {
-		_ = mergePage(resp.Body)
+		if err := mergePage(resp.Body); err != nil {
+			return resp, fmt.Errorf("mergePage failed: %w", err)
+		}
 	}
 	return resp, nil
 }

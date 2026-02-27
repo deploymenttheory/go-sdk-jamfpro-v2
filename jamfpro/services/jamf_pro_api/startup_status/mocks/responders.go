@@ -96,7 +96,9 @@ func (m *StartupStatusMock) GetPaginated(ctx context.Context, path string, _ map
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		_ = mergePage(resp.Body)
+		if err := mergePage(resp.Body); err != nil {
+			return resp, fmt.Errorf("mergePage failed: %w", err)
+		}
 	}
 	return resp, nil
 }
