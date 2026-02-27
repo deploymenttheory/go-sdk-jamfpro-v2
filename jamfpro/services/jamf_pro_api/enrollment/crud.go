@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -193,25 +192,11 @@ func (s *Service) GetHistoryV2(ctx context.Context, rsqlQuery map[string]string)
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []HistoryObject
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var itemVar HistoryObject
-				if err := mapstructure.Decode(item, &itemVar); err != nil {
-					return fmt.Errorf("failed to decode item: %w", err)
-				}
-				result.Results = append(result.Results, itemVar)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -223,6 +208,8 @@ func (s *Service) GetHistoryV2(ctx context.Context, rsqlQuery map[string]string)
 	if err != nil {
 		return nil, resp, err
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -294,25 +281,11 @@ func (s *Service) ListAccessGroupsV3(ctx context.Context, rsqlQuery map[string]s
 	var result ListResponseAccessGroups
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceAccountDrivenUserEnrollmentAccessGroup
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var itemVar ResourceAccountDrivenUserEnrollmentAccessGroup
-				if err := mapstructure.Decode(item, &itemVar); err != nil {
-					return fmt.Errorf("failed to decode item: %w", err)
-				}
-				result.Results = append(result.Results, itemVar)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -324,6 +297,8 @@ func (s *Service) ListAccessGroupsV3(ctx context.Context, rsqlQuery map[string]s
 	if err != nil {
 		return nil, resp, err
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -440,25 +415,11 @@ func (s *Service) ListLanguageMessagesV3(ctx context.Context) ([]ResourceEnrollm
 	}
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceEnrollmentLanguage
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var itemVar ResourceEnrollmentLanguage
-				if err := mapstructure.Decode(item, &itemVar); err != nil {
-					return fmt.Errorf("failed to decode item: %w", err)
-				}
-				result.Results = append(result.Results, itemVar)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -470,6 +431,8 @@ func (s *Service) ListLanguageMessagesV3(ctx context.Context) ([]ResourceEnrollm
 	if err != nil {
 		return nil, resp, err
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return result.Results, resp, nil
 }

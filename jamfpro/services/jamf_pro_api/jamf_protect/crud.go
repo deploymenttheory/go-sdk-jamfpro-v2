@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 // ServiceInterface defines the interface for Jamf Protect operations.
@@ -251,25 +250,11 @@ func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string
 	var result ListResponseJamfProtectDeploymentTasks
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceJamfProtectDeploymentTask
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var task ResourceJamfProtectDeploymentTask
-				if err := mapstructure.Decode(item, &task); err != nil {
-					return fmt.Errorf("failed to decode deployment task: %w", err)
-				}
-				result.Results = append(result.Results, task)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -280,6 +265,8 @@ func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect deployment tasks: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -316,25 +303,11 @@ func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string
 	var result ListResponseJamfProtectHistory
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceJamfProtectHistory
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var history ResourceJamfProtectHistory
-				if err := mapstructure.Decode(item, &history); err != nil {
-					return fmt.Errorf("failed to decode history item: %w", err)
-				}
-				result.Results = append(result.Results, history)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -346,6 +319,8 @@ func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect history: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -383,25 +358,11 @@ func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) 
 	var result ListResponseJamfProtectPlans
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceJamfProtectPlan
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var plan ResourceJamfProtectPlan
-				if err := mapstructure.Decode(item, &plan); err != nil {
-					return fmt.Errorf("failed to decode plan: %w", err)
-				}
-				result.Results = append(result.Results, plan)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -412,6 +373,8 @@ func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) 
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect plans: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -262,25 +261,11 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 	}
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []HistoryItem
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var entry HistoryItem
-				if err := mapstructure.Decode(item, &entry); err != nil {
-					return fmt.Errorf("failed to decode history item: %w", err)
-				}
-				result.Results = append(result.Results, entry)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -288,6 +273,8 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 	if err != nil {
 		return nil, resp, err
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

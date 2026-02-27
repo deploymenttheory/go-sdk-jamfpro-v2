@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -88,35 +87,24 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointMobileDeviceExtensionAttributesV1
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceMobileDeviceExtensionAttribute
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var attr ResourceMobileDeviceExtensionAttribute
-				if err := mapstructure.Decode(item, &attr); err != nil {
-					return fmt.Errorf("failed to decode mobile device extension attribute: %w", err)
-				}
-				result.Results = append(result.Results, attr)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
 	headers := map[string]string{
 		"Accept": mime.ApplicationJSON,
 	}
+
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list mobile device extension attributes: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -258,25 +246,11 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []HistoryItem
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var history HistoryItem
-				if err := mapstructure.Decode(item, &history); err != nil {
-					return fmt.Errorf("failed to decode history item: %w", err)
-				}
-				result.Results = append(result.Results, history)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -287,6 +261,8 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get mobile device extension attribute history: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

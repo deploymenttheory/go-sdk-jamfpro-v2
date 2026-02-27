@@ -8,7 +8,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -111,25 +110,11 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointComputerExtensionAttributesV1
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceComputerExtensionAttribute
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var attr ResourceComputerExtensionAttribute
-				if err := mapstructure.Decode(item, &attr); err != nil {
-					return fmt.Errorf("failed to decode computer extension attribute: %w", err)
-				}
-				result.Results = append(result.Results, attr)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -141,6 +126,8 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list computer extension attributes: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -282,25 +269,11 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []HistoryItem
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var history HistoryItem
-				if err := mapstructure.Decode(item, &history); err != nil {
-					return fmt.Errorf("failed to decode history item: %w", err)
-				}
-				result.Results = append(result.Results, history)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -311,6 +284,8 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get computer extension attribute history: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -350,25 +325,11 @@ func (s *Service) ListTemplatesV1(ctx context.Context, rsqlQuery map[string]stri
 	endpoint := EndpointComputerExtensionAttributesV1 + "/templates"
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceComputerExtensionAttributeTemplate
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var template ResourceComputerExtensionAttributeTemplate
-				if err := mapstructure.Decode(item, &template); err != nil {
-					return fmt.Errorf("failed to decode template: %w", err)
-				}
-				result.Results = append(result.Results, template)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -379,6 +340,8 @@ func (s *Service) ListTemplatesV1(ctx context.Context, rsqlQuery map[string]stri
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list computer extension attribute templates: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

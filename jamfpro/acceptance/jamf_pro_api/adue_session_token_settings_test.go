@@ -32,11 +32,7 @@ func TestAcceptance_AdueSessionTokenSettings_update_v1(t *testing.T) {
 
 	request := *current
 	request.Enabled = !request.Enabled
-	if request.ExpirationIntervalDays > 0 {
-		request.ExpirationIntervalDays = request.ExpirationIntervalDays
-	} else if request.ExpirationIntervalSeconds > 0 {
-		request.ExpirationIntervalSeconds = request.ExpirationIntervalSeconds
-	} else {
+	if request.ExpirationIntervalDays == 0 && request.ExpirationIntervalSeconds == 0 {
 		request.ExpirationIntervalDays = 1
 	}
 	updated, resp, err := svc.UpdateV1(ctx, &request)

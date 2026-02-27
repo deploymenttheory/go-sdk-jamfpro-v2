@@ -7,7 +7,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -73,25 +72,11 @@ func (s *Service) ListCommandsV2(ctx context.Context, rsqlQuery map[string]strin
 	var result ListCommandsResponse
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []CommandInfo
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var cmd CommandInfo
-				if err := mapstructure.Decode(item, &cmd); err != nil {
-					return fmt.Errorf("failed to decode command info: %w", err)
-				}
-				result.Results = append(result.Results, cmd)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -102,6 +87,8 @@ func (s *Service) ListCommandsV2(ctx context.Context, rsqlQuery map[string]strin
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list MDM commands: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }

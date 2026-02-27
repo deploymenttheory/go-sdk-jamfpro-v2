@@ -8,7 +8,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -157,7 +156,6 @@ func (s *Service) GetPlans(ctx context.Context, params url.Values) (*ResponsePla
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	// Convert URL params to map for the client
 	queryParams := make(map[string]string)
 	for key, values := range params {
 		if len(values) > 0 {
@@ -165,25 +163,14 @@ func (s *Service) GetPlans(ctx context.Context, params url.Values) (*ResponsePla
 		}
 	}
 
-	// Use GetPaginated for the paginated endpoint
 	var result ResponsePlanList
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourcePlan
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		// Extract results array from the response
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var plan ResourcePlan
-				if err := mapstructure.Decode(item, &plan); err != nil {
-					return fmt.Errorf("failed to decode plan: %w", err)
-				}
-				result.Results = append(result.Results, plan)
-			}
-		}
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -454,32 +441,11 @@ func (s *Service) GetUpdateStatuses(ctx context.Context, params url.Values) (*Re
 	var result ResponseUpdateStatusList
 
 	mergePage := func(pageData []byte) error {
-		var items []any
-		if err := json.Unmarshal(pageData, &items); err == nil {
-			// Real API: pageData is the results array
-			for _, item := range items {
-				var status ResourceUpdateStatus
-				if err := mapstructure.Decode(item, &status); err != nil {
-					return fmt.Errorf("failed to decode update status: %w", err)
-				}
-				result.Results = append(result.Results, status)
-			}
-			return nil
-		}
-		// Mock: pageData is full response { totalCount, results }
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceUpdateStatus
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var status ResourceUpdateStatus
-				if err := mapstructure.Decode(item, &status); err != nil {
-					return fmt.Errorf("failed to decode update status: %w", err)
-				}
-				result.Results = append(result.Results, status)
-			}
-		}
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 

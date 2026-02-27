@@ -8,7 +8,6 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
-	"github.com/mitchellh/mapstructure"
 )
 
 type (
@@ -113,25 +112,11 @@ func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointEnrollmentCustomizationsV2
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceEnrollmentCustomization
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var customization ResourceEnrollmentCustomization
-				if err := mapstructure.Decode(item, &customization); err != nil {
-					return fmt.Errorf("failed to decode enrollment customization: %w", err)
-				}
-				result.Results = append(result.Results, customization)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -143,6 +128,8 @@ func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, err
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
@@ -290,25 +277,11 @@ func (s *Service) GetHistoryV2(ctx context.Context, id string, rsqlQuery map[str
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var rawData map[string]any
-		if err := json.Unmarshal(pageData, &rawData); err != nil {
+		var pageResults []ResourceHistoryEntry
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-
-		if totalCount, ok := rawData["totalCount"].(float64); ok {
-			result.TotalCount = int(totalCount)
-		}
-
-		if results, ok := rawData["results"].([]any); ok {
-			for _, item := range results {
-				var historyEntry ResourceHistoryEntry
-				if err := mapstructure.Decode(item, &historyEntry); err != nil {
-					return fmt.Errorf("failed to decode history entry: %w", err)
-				}
-				result.Results = append(result.Results, historyEntry)
-			}
-		}
-
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -320,6 +293,8 @@ func (s *Service) GetHistoryV2(ctx context.Context, id string, rsqlQuery map[str
 	if err != nil {
 		return nil, resp, err
 	}
+
+	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
 }
