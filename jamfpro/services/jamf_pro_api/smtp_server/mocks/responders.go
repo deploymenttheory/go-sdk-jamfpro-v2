@@ -128,7 +128,7 @@ func (m *SMTPServerMock) GetPaginated(ctx context.Context, path string, q map[st
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
 		if err := mergePage(resp.Body); err != nil {
-			return resp, err
+			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
 	return resp, nil

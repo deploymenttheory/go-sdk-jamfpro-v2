@@ -313,9 +313,10 @@ func TestUnit_Enrollment_ListLanguageMessagesV3_Success(t *testing.T) {
 	require.NotNil(t, resp)
 
 	assert.Equal(t, 200, resp.StatusCode)
-	require.Len(t, result, 1)
-	assert.Equal(t, "en", result[0].LanguageCode)
-	assert.Equal(t, "English", result[0].Name)
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "en", result.Results[0].LanguageCode)
+	assert.Equal(t, "English", result.Results[0].Name)
 }
 
 func TestUnit_Enrollment_ListLanguageCodesV3_Success(t *testing.T) {
@@ -355,13 +356,13 @@ func TestUnit_Enrollment_UpdateLanguageMessageV3_Success(t *testing.T) {
 	mock.RegisterUpdateLanguageMessageV3Mock()
 
 	request := &ResourceEnrollmentLanguage{
-		LanguageCode:      "en",
-		Name:              "English",
-		Title:             "Updated Enrollment",
-		LoginDescription:  "Updated description",
-		Username:          "Username",
-		Password:          "Password",
-		LoginButton:       "Login",
+		LanguageCode:     "en",
+		Name:             "English",
+		Title:            "Updated Enrollment",
+		LoginDescription: "Updated description",
+		Username:         "Username",
+		Password:         "Password",
+		LoginButton:      "Login",
 	}
 
 	result, resp, err := svc.UpdateLanguageMessageV3(context.Background(), "en", request)

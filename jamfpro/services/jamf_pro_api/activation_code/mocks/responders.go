@@ -126,7 +126,7 @@ func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, quer
 		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
 	}
 
-	if len(resp.rawBody) > 0 {
+	if mergePage != nil && len(resp.rawBody) > 0 {
 		if err := mergePage(resp.rawBody); err != nil {
 			return nil, fmt.Errorf("mergePage failed: %w", err)
 		}

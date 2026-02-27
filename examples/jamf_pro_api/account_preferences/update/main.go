@@ -36,7 +36,6 @@ func main() {
 		ComputerSearchMethod:                 "CONTAINS",
 		ComputerApplicationSearchMethod:      "CONTAINS",
 		ComputerApplicationUsageSearchMethod: "CONTAINS",
-		ComputerFontSearchMethod:             "CONTAINS",
 		ComputerPluginSearchMethod:           "CONTAINS",
 		ComputerLocalUserAccountSearchMethod: "CONTAINS",
 		ComputerSoftwareUpdateSearchMethod:   "CONTAINS",
@@ -49,7 +48,7 @@ func main() {
 		UserSearchMethod:                     "CONTAINS",
 		UserAllContentSearchMethod:           "CONTAINS",
 		UserMobileDeviceAppSearchMethod:      "CONTAINS",
-		UserMacAppStoreAppSearchMethod:      "CONTAINS",
+		UserMacAppStoreAppSearchMethod:       "CONTAINS",
 		UserEbookSearchMethod:                "CONTAINS",
 	}
 

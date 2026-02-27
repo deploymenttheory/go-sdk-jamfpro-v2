@@ -2,6 +2,7 @@ package jamf_pro_api
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -116,6 +117,60 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Self-service branding mobile ID=%s deleted", brandingID)
+}
+
+// =============================================================================
+// TestAcceptance_SelfServiceBrandingIOS_list_with_rsql_filter
+// =============================================================================
+
+func TestAcceptance_SelfServiceBrandingIOS_list_with_rsql_filter(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.SelfServiceBrandingIOS
+	ctx := context.Background()
+
+	name := acc.UniqueName("sdkv2_acc_rsql-ssb-mobile")
+	createReq := &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
+		BrandingName:              name,
+		HeaderBackgroundColorCode: "#FFFFFF",
+		MenuIconColorCode:         "#000000",
+		BrandingNameColorCode:     "#333333",
+		StatusBarTextColor:        "light",
+	}
+
+	created, _, err := svc.CreateV1(ctx, createReq)
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	brandingID := created.ID
+	acc.LogTestSuccess(t, "Created self-service branding mobile ID=%s name=%q", brandingID, name)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, brandingID)
+		acc.LogCleanupDeleteError(t, "self-service branding mobile", brandingID, delErr)
+	})
+
+	rsqlQuery := map[string]string{
+		"filter": fmt.Sprintf(`brandingName=="%s"`, name),
+	}
+
+	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
+	require.NoError(t, err)
+	require.NotNil(t, list)
+	assert.Equal(t, 200, listResp.StatusCode)
+
+	found := false
+	for _, b := range list.Results {
+		if b.ID == brandingID {
+			found = true
+			assert.Equal(t, name, b.BrandingName)
+			break
+		}
+	}
+	assert.True(t, found, "self-service branding mobile should appear in RSQL-filtered results")
+	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target branding found=%v", list.TotalCount, found)
 }
 
 // =============================================================================

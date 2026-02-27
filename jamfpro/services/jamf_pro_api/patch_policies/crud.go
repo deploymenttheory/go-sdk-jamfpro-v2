@@ -97,11 +97,12 @@ func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Respon
 	}
 
 	mergePage := func(pageData []byte) error {
-		var page []ResourcePatchPolicy
-		if err := json.Unmarshal(pageData, &page); err != nil {
+		var pageResponse ListResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, page...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -109,9 +110,6 @@ func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Respon
 	if err != nil {
 		return nil, resp, err
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 

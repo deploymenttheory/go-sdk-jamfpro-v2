@@ -2,6 +2,7 @@ package jamf_pro_api
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -130,6 +131,62 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 	require.NotNil(t, deleteResp)
 	assert.Equal(t, 204, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "Static mobile device group ID=%s deleted", groupID)
+}
+
+// =============================================================================
+// TestAcceptance_StaticMobileDeviceGroups_list_with_rsql_filter
+// =============================================================================
+
+func TestAcceptance_StaticMobileDeviceGroups_list_with_rsql_filter(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.StaticMobileDeviceGroups
+	ctx := context.Background()
+
+	name := acc.UniqueName("sdkv2_acc_rsql-static-md")
+	createReq := &static_mobile_device_groups.RequestStaticMobileDeviceGroup{
+		Name:        name,
+		Description: "Acceptance test RSQL filter static mobile device group",
+		SiteID:      "-1",
+		Assignments: []static_mobile_device_groups.StaticMobileDeviceGroupAssignment{},
+	}
+
+	created, createResp, err := svc.Create(ctx, createReq)
+	if err != nil && createResp != nil && createResp.StatusCode == 500 {
+		t.Skip("Static mobile device group create returned 500 in this environment; skipping RSQL filter test")
+	}
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	groupID := created.ID
+	acc.LogTestSuccess(t, "Created static mobile device group ID=%s name=%q", groupID, name)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteByID(cleanupCtx, groupID)
+		acc.LogCleanupDeleteError(t, "static mobile device group", groupID, delErr)
+	})
+
+	rsqlQuery := map[string]string{
+		"filter": fmt.Sprintf(`name=="%s"`, name),
+	}
+
+	list, listResp, err := svc.List(ctx, rsqlQuery)
+	require.NoError(t, err)
+	require.NotNil(t, list)
+	assert.Equal(t, 200, listResp.StatusCode)
+
+	found := false
+	for _, g := range list.Results {
+		if g.ID == groupID {
+			found = true
+			assert.Equal(t, name, g.Name)
+			break
+		}
+	}
+	assert.True(t, found, "static mobile device group should appear in RSQL-filtered results")
+	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target group found=%v", list.TotalCount, found)
 }
 
 // =============================================================================

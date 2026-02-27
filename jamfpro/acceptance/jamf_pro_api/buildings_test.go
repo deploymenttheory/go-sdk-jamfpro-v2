@@ -246,6 +246,59 @@ func TestAcceptance_Buildings_list_with_rsql_filter(t *testing.T) {
 }
 
 // =============================================================================
+// TestAcceptance_Buildings_bulk_delete
+// =============================================================================
+
+func TestAcceptance_Buildings_bulk_delete(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.Buildings
+	ctx := context.Background()
+
+	// Create two buildings to bulk delete
+	acc.LogTestStage(t, "Create", "Creating two buildings for bulk delete")
+
+	b1, _, err := svc.CreateV1(ctx, &buildings.RequestBuilding{
+		Name:    acc.UniqueName("sdkv2_acc_bulk-del-building-1"),
+		City:    "Austin",
+		Country: "United States",
+	})
+	require.NoError(t, err)
+	require.NotNil(t, b1)
+
+	b2, _, err := svc.CreateV1(ctx, &buildings.RequestBuilding{
+		Name:    acc.UniqueName("sdkv2_acc_bulk-del-building-2"),
+		City:    "Austin",
+		Country: "United States",
+	})
+	require.NoError(t, err)
+	require.NotNil(t, b2)
+
+	acc.LogTestSuccess(t, "Created buildings ID=%s and ID=%s", b1.ID, b2.ID)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, _ = svc.DeleteByIDV1(cleanupCtx, b1.ID)
+		_, _ = svc.DeleteByIDV1(cleanupCtx, b2.ID)
+	})
+
+	// Bulk delete both buildings
+	acc.LogTestStage(t, "BulkDelete", "Bulk deleting buildings ID=%s and ID=%s", b1.ID, b2.ID)
+
+	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel2()
+
+	deleteResp, err := svc.DeleteBuildingsByIDV1(ctx2, &buildings.DeleteBuildingsByIDRequest{
+		IDs: []string{b1.ID, b2.ID},
+	})
+	require.NoError(t, err)
+	require.NotNil(t, deleteResp)
+	assert.Equal(t, 204, deleteResp.StatusCode)
+	acc.LogTestSuccess(t, "Bulk delete completed, status=%d", deleteResp.StatusCode)
+}
+
+// =============================================================================
 // TestAcceptance_Buildings_validation_errors
 // =============================================================================
 

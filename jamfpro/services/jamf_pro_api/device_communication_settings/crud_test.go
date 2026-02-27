@@ -108,7 +108,7 @@ func TestUnit_DeviceCommunicationSettings_GetHistoryV1_InvalidHistoryItem(t *tes
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to decode history item")
+	assert.Contains(t, err.Error(), "failed to unmarshal")
 }
 
 func TestUnit_DeviceCommunicationSettings_GetV1_ApiError(t *testing.T) {

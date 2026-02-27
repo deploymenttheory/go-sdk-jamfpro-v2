@@ -176,3 +176,111 @@ func TestAcceptance_LDAPServers_lifecycle(t *testing.T) {
 	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "LDAP server ID=%d deleted", serverID)
 }
+
+// =============================================================================
+// TestAcceptance_LDAPServers_delete_by_name creates an LDAP server then
+// deletes it by name.
+// =============================================================================
+
+func TestAcceptance_LDAPServers_delete_by_name(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ClassicLdapServers
+	ctx := context.Background()
+
+	serverName := acc.UniqueName("sdkv2_acc_acc-test-ldap-dbn")
+	createReq := &ldap_servers.RequestLDAPServer{
+		Connection: ldap_servers.RequestConnection{
+			Name:               serverName,
+			Hostname:           "ldap.example.com",
+			ServerType:         "Open Directory",
+			Port:               389,
+			UseSSL:             false,
+			AuthenticationType: "none",
+		},
+	}
+
+	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel1()
+
+	created, _, err := svc.Create(ctx1, createReq)
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	serverID := created.ID
+	acc.LogTestSuccess(t, "Created LDAP server ID=%d name=%q for delete-by-name test", serverID, serverName)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteByID(cleanupCtx, serverID)
+		acc.LogCleanupDeleteError(t, "LDAP server", fmt.Sprintf("%d", serverID), delErr)
+	})
+
+	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancel2()
+
+	deleteResp, err := svc.DeleteByName(ctx2, serverName)
+	require.NoError(t, err, "DeleteByName should not return an error")
+	require.NotNil(t, deleteResp)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	acc.LogTestSuccess(t, "LDAP server %q deleted by name", serverName)
+}
+
+// =============================================================================
+// TestAcceptance_LDAPServers_validation_errors validates error handling.
+// =============================================================================
+
+func TestAcceptance_LDAPServers_validation_errors(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.ClassicLdapServers
+
+	t.Run("GetByID_ZeroID", func(t *testing.T) {
+		_, _, err := svc.GetByID(context.Background(), 0)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "LDAP server ID must be a positive integer")
+	})
+
+	t.Run("GetByName_EmptyName", func(t *testing.T) {
+		_, _, err := svc.GetByName(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "LDAP server name is required")
+	})
+
+	t.Run("Create_NilRequest", func(t *testing.T) {
+		_, _, err := svc.Create(context.Background(), nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	t.Run("UpdateByID_ZeroID", func(t *testing.T) {
+		req := &ldap_servers.RequestLDAPServer{
+			Connection: ldap_servers.RequestConnection{Name: "sdkv2_acc_test"},
+		}
+		_, _, err := svc.UpdateByID(context.Background(), 0, req)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "LDAP server ID must be a positive integer")
+	})
+
+	t.Run("UpdateByName_EmptyName", func(t *testing.T) {
+		req := &ldap_servers.RequestLDAPServer{
+			Connection: ldap_servers.RequestConnection{Name: "sdkv2_acc_test"},
+		}
+		_, _, err := svc.UpdateByName(context.Background(), "", req)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "LDAP server name is required")
+	})
+
+	t.Run("DeleteByID_ZeroID", func(t *testing.T) {
+		_, err := svc.DeleteByID(context.Background(), 0)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "LDAP server ID must be a positive integer")
+	})
+
+	t.Run("DeleteByName_EmptyName", func(t *testing.T) {
+		_, err := svc.DeleteByName(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "LDAP server name is required")
+	})
+}

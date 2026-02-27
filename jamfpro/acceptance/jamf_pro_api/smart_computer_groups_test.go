@@ -2,6 +2,7 @@ package jamf_pro_api
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -145,6 +146,63 @@ func TestAcceptance_SmartComputerGroups_list(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 	assert.NotNil(t, result.Results)
+}
+
+// =============================================================================
+// TestAcceptance_SmartComputerGroups_list_with_rsql_filter
+// =============================================================================
+
+func TestAcceptance_SmartComputerGroups_list_with_rsql_filter(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.SmartComputerGroups
+	ctx := context.Background()
+
+	name := acc.UniqueName("sdkv2_acc_rsql-smart-cg")
+	createReq := &smart_computer_groups.RequestSmartGroup{
+		Name:        name,
+		Description: "Acceptance test RSQL filter smart computer group",
+		Criteria: []smart_computer_groups.SubsetCriteria{
+			{Name: "Computer Name", Priority: 1, AndOr: "and", SearchType: "is", Value: "*"},
+		},
+	}
+
+	created, createResp, err := svc.Create(ctx, createReq)
+	if err != nil && createResp != nil && createResp.StatusCode == 500 {
+		t.Skip("Smart computer group create returned 500 in this environment; skipping RSQL filter test")
+	}
+	require.NoError(t, err)
+	require.NotNil(t, created)
+
+	groupID := created.ID
+	acc.LogTestSuccess(t, "Created smart computer group ID=%s name=%q", groupID, name)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteByID(cleanupCtx, groupID)
+		acc.LogCleanupDeleteError(t, "smart computer group", groupID, delErr)
+	})
+
+	rsqlQuery := map[string]string{
+		"filter": fmt.Sprintf(`name=="%s"`, name),
+	}
+
+	list, listResp, err := svc.List(ctx, rsqlQuery)
+	require.NoError(t, err)
+	require.NotNil(t, list)
+	assert.Equal(t, 200, listResp.StatusCode)
+
+	found := false
+	for _, g := range list.Results {
+		if g.ID == groupID {
+			found = true
+			assert.Equal(t, name, g.Name)
+			break
+		}
+	}
+	assert.True(t, found, "smart computer group should appear in RSQL-filtered results")
+	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target group found=%v", list.TotalCount, found)
 }
 
 func TestAcceptance_SmartComputerGroups_validation_errors(t *testing.T) {

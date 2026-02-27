@@ -165,7 +165,7 @@ func (m *VolumePurchasingSubscriptionsMock) GetPaginated(ctx context.Context, pa
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
 		if err := mergePage(resp.Body); err != nil {
-			return resp, err
+			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
 	return resp, nil

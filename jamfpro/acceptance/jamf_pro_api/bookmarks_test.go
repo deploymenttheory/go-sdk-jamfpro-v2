@@ -123,6 +123,52 @@ func TestAcceptance_Bookmarks_list_with_rsql_filter(t *testing.T) {
 	acc.LogTestSuccess(t, "RSQL filter returned %d result(s); target bookmark found=%v", list.TotalCount, found)
 }
 
+// =============================================================================
+// TestAcceptance_Bookmarks_validation_errors
+// =============================================================================
+
+func TestAcceptance_Bookmarks_validation_errors(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.Bookmarks
+
+	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
+		_, _, err := svc.GetByIDV1(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "id is required")
+	})
+
+	t.Run("CreateV1_NilRequest", func(t *testing.T) {
+		_, _, err := svc.CreateV1(context.Background(), nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	t.Run("UpdateByIDV1_EmptyID", func(t *testing.T) {
+		displayInBrowser := true
+		_, _, err := svc.UpdateByIDV1(context.Background(), "", &bookmarks.ResourceBookmark{
+			Name:             "x",
+			URL:              "https://example.com",
+			SiteID:           "-1",
+			DisplayInBrowser: &displayInBrowser,
+		})
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "id is required")
+	})
+
+	t.Run("UpdateByIDV1_NilRequest", func(t *testing.T) {
+		_, _, err := svc.UpdateByIDV1(context.Background(), "1", nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	t.Run("DeleteByIDV1_EmptyID", func(t *testing.T) {
+		_, err := svc.DeleteByIDV1(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "id is required")
+	})
+}
+
 func TestAcceptance_Bookmarks_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 	svc := acc.Client.Bookmarks

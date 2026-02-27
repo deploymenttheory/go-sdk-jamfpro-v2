@@ -167,14 +167,8 @@ func (m *PatchPoliciesMock) GetPaginated(ctx context.Context, path string, _ map
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		// Extract the results array from the response for pagination
-		var wrapper struct {
-			Results json.RawMessage `json:"results"`
-		}
-		if err := json.Unmarshal(resp.Body, &wrapper); err == nil {
-			if err := mergePage(wrapper.Results); err != nil {
-				return resp, err
-			}
+		if err := mergePage(resp.Body); err != nil {
+			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
 	return resp, nil

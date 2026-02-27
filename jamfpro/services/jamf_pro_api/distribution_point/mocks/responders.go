@@ -149,7 +149,7 @@ func (m *DistributionPointMock) GetPaginated(ctx context.Context, path string, q
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
 		if err := mergePage(resp.Body); err != nil {
-			return resp, err
+			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
 	return resp, nil

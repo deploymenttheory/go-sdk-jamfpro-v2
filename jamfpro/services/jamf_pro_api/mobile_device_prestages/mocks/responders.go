@@ -9,7 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
@@ -174,24 +173,13 @@ func (m *MobileDevicePrestagesMock) GetPaginated(ctx context.Context, path strin
 		return nil, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		var pageData []byte
-		if strings.Contains(path, "/history") {
-			pageData = resp.Body
-		} else {
-			var wrapper struct {
-				Results json.RawMessage `json:"results"`
-			}
-			if err := json.Unmarshal(resp.Body, &wrapper); err == nil {
-				pageData = wrapper.Results
-			}
-		}
-		if len(pageData) > 0 {
-			_ = mergePage(pageData)
+		if err := mergePage(resp.Body); err != nil {
+			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
 	return resp, nil
 }
 func (m *MobileDevicePrestagesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
-func (m *MobileDevicePrestagesMock) InvalidateToken() error                     { return nil }
-func (m *MobileDevicePrestagesMock) KeepAliveToken() error                      { return nil }
-func (m *MobileDevicePrestagesMock) GetLogger() *zap.Logger                     { return m.logger }
+func (m *MobileDevicePrestagesMock) InvalidateToken() error                    { return nil }
+func (m *MobileDevicePrestagesMock) KeepAliveToken() error                     { return nil }
+func (m *MobileDevicePrestagesMock) GetLogger() *zap.Logger                    { return m.logger }

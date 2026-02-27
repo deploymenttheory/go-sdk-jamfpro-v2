@@ -166,11 +166,12 @@ func (s *Service) GetPlans(ctx context.Context, params url.Values) (*ResponsePla
 	var result ResponsePlanList
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourcePlan
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ResponsePlanList
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -178,9 +179,6 @@ func (s *Service) GetPlans(ctx context.Context, params url.Values) (*ResponsePla
 	if err != nil {
 		return nil, resp, err
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 
@@ -441,11 +439,12 @@ func (s *Service) GetUpdateStatuses(ctx context.Context, params url.Values) (*Re
 	var result ResponseUpdateStatusList
 
 	mergePage := func(pageData []byte) error {
-		var pageResults []ResourceUpdateStatus
-		if err := json.Unmarshal(pageData, &pageResults); err != nil {
+		var pageResponse ResponseUpdateStatusList
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResults...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -453,9 +452,6 @@ func (s *Service) GetUpdateStatuses(ctx context.Context, params url.Values) (*Re
 	if err != nil {
 		return nil, resp, err
 	}
-
-	result.TotalCount = len(result.Results)
-
 	return &result, resp, nil
 }
 
