@@ -104,10 +104,12 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/gsx_connection"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/health_check"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icon"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/impact_alert_notification_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/inventory_information"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/inventory_preload"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_account_preferences"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_connect"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_management_framework"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_package"
@@ -115,7 +117,9 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_notifications"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_server_url"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_system_initialization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_user_account_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_version"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_protect"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_remote_assist"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jcds"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/ldap"
@@ -276,11 +280,13 @@ type Client struct {
 	EnrollmentSettings                  *enrollment_settings.Service
 	Groups                              *groups.Service
 	GSXConnection                       *gsx_connection.Service
+	HealthCheck                         *health_check.Service
 	Icon                                *icon.Service
 		ImpactAlertNotificationSettings     *impact_alert_notification_settings.Service
 		InventoryInformation                *inventory_information.Service
 		InventoryPreload                     *inventory_preload.Service
-		JamfConnect                         *jamf_connect.Service
+		JamfAccountPreferences              *jamf_account_preferences.Service
+	JamfConnect                         *jamf_connect.Service
 	JamfManagementFramework            *jamf_management_framework.Service
 	JamfPackage                         *jamf_package.Service
 	JCDS                                *jcds.Service
@@ -307,7 +313,9 @@ type Client struct {
 	JamfProNotifications                *jamf_pro_notifications.Service
 	JamfProServerURL                    *jamf_pro_server_url.Service
 	JamfProSystemInitialization         *jamf_pro_system_initialization.Service
+	JamfProUserAccountSettings          *jamf_pro_user_account_settings.Service
 	JamfProVersion                      *jamf_pro_version.Service
+	JamfProtect                         *jamf_protect.Service
 	JamfRemoteAssist                    *jamf_remote_assist.Service
 	Locales                             *locales.Service
 	MobileDeviceApps                    *mobile_device_apps.Service
@@ -453,10 +461,12 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		EnrollmentSettings:                  enrollment_settings.NewService(transport),
 		Groups:                              groups.NewService(transport),
 		GSXConnection:                       gsx_connection.NewService(transport),
+		HealthCheck:                         health_check.NewService(transport),
 		Icon:                                icon.NewService(transport),
 		ImpactAlertNotificationSettings:     impact_alert_notification_settings.NewService(transport),
 		InventoryInformation:                inventory_information.NewService(transport),
 		InventoryPreload:                     inventory_preload.NewService(transport),
+		JamfAccountPreferences:              jamf_account_preferences.NewService(transport),
 		JamfConnect:                         jamf_connect.NewService(transport),
 		JamfManagementFramework:            jamf_management_framework.NewService(transport),
 		JamfPackage:                         jamf_package.NewService(transport),
@@ -484,7 +494,9 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		JamfProNotifications:                jamf_pro_notifications.NewService(transport),
 		JamfProServerURL:                    jamf_pro_server_url.NewService(transport),
 		JamfProSystemInitialization:         jamf_pro_system_initialization.NewService(transport),
+		JamfProUserAccountSettings:          jamf_pro_user_account_settings.NewService(transport),
 		JamfProVersion:                      jamf_pro_version.NewService(transport),
+		JamfProtect:                         jamf_protect.NewService(transport),
 		JamfRemoteAssist:                    jamf_remote_assist.NewService(transport),
 		Locales:                             locales.NewService(transport),
 		MobileDeviceApps:                    mobile_device_apps.NewService(transport),
