@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.4.0...v0.5.0) (2026-02-28)
+
+
+### Features
+
+* add ApiAuthorization service and enhance test assertions ([46adc88](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/46adc88be5e6024a7a82224e078e8f4fb5a43ec7))
+
+
+### Bug Fixes
+
+* correct error handling in GetPaginated method of SsoSettingsMock ([4a93dae](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/4a93dae08bc7ca77b7b1f5db7acc845347099ad6))
+* implement paginated API responses across multiple services ([59ebd31](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/59ebd31b5f6cf19a3685eaf516f2edbbc895f6f9))
+* split smart and static classic api services ([a916db3](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/a916db33608521bb5e9fda4e94da1168b0364612))
+* standardised history structs and pagination (again) ([d23761e](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/d23761e197db69593d76cfc9b63cde44d4727e19))
+* update mock responders for GetUserByEmail to use correct response files ([12af7a1](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/12af7a18b83cbbc7036342384f8255705e4fbc61))
+
 ## [0.4.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.3.0...v0.4.0) (2026-02-26)
 
 
