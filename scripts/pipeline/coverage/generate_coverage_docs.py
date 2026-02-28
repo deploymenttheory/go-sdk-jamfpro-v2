@@ -8,23 +8,22 @@ showing test coverage, examples, and API documentation for each service.
 
 import os
 import re
-import json
 import subprocess
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
-from dataclasses import dataclass, asdict
+from typing import Dict, List, Optional
+from dataclasses import dataclass
 
 
 @dataclass
-class FunctionInfo:
+class FunctionInfo:  # pylint: disable=too-many-instance-attributes
     """Information about a service function."""
     name: str
     endpoint: str
     doc_url: Optional[str]
     example_path: Optional[str]
-    unit_test_status: str  # "pass", "fail", "not_tested"
-    acceptance_test_status: str  # "pass", "fail", "not_tested"
+    unit_test_status: str
+    acceptance_test_status: str
     is_helper: bool = False
     description: str = ""
 
@@ -34,6 +33,7 @@ class ServiceInfo:
     """Information about a service."""
     name: str
     service_path: str
+    api_type: str
     functions: List[FunctionInfo]
     total_functions: int = 0
     unit_tests_passing: int = 0
@@ -48,18 +48,15 @@ class CoverageGenerator:
     def __init__(self, repo_root: Path, jamf_version: Optional[str] = None):
         self.repo_root = repo_root
         self.jamf_version = jamf_version or self.get_jamf_version()
-        self.services_path = repo_root / "jamfpro" / "services" / "jamf_pro_api"
-        self.examples_path = repo_root / "examples" / "jamf_pro_api"
+        self.services_base_path = repo_root / "jamfpro" / "services"
+        self.examples_base_path = repo_root / "examples"
         self.output_path = repo_root / "docs" / "coverage"
     
     def get_jamf_version(self) -> str:
-        """Get Jamf Pro version from live instance or use default."""
-        # Try to get version from environment variable first
         env_version = os.environ.get('JAMF_PRO_VERSION')
         if env_version:
             return env_version
         
-        # Try to get version from live instance using SDK
         print("  Attempting to fetch Jamf Pro version from live instance...")
         try:
             script_dir = Path(__file__).parent
@@ -70,7 +67,8 @@ class CoverageGenerator:
                 cwd=self.repo_root,
                 capture_output=True,
                 text=True,
-                timeout=15
+                timeout=15,
+                check=False
             )
             
             if result.returncode == 0:
@@ -78,11 +76,10 @@ class CoverageGenerator:
                 if version and version != "unknown":
                     print(f"  ✅ Detected Jamf Pro version: {version}")
                     return version
-                else:
-                    print(f"  ℹ️  Using default version (no live instance available)")
+                print("  ℹ️  Using default version (no live instance available)")
             else:
                 print(f"  ℹ️  Using default version (error: {result.stderr.strip()[:100]})")
-        except Exception as e:
+        except (subprocess.TimeoutExpired, subprocess.SubprocessError, OSError) as e:
             print(f"  ℹ️  Using default version (exception: {str(e)[:100]})")
         
         return "unknown"
@@ -110,22 +107,28 @@ class CoverageGenerator:
         """Discover all services in the codebase."""
         services = []
         
-        for service_dir in sorted(self.services_path.iterdir()):
-            if not service_dir.is_dir():
-                continue
-            if service_dir.name in ["mocks", "__pycache__"]:
-                continue
-                
-            crud_file = service_dir / "crud.go"
-            if not crud_file.exists():
+        for api_type in ["jamf_pro_api", "classic_api"]:
+            api_path = self.services_base_path / api_type
+            if not api_path.exists():
                 continue
             
-            service = ServiceInfo(
-                name=service_dir.name,
-                service_path=str(service_dir.relative_to(self.repo_root)),
-                functions=[]
-            )
-            services.append(service)
+            for service_dir in sorted(api_path.iterdir()):
+                if not service_dir.is_dir():
+                    continue
+                if service_dir.name in ["mocks", "__pycache__"]:
+                    continue
+                    
+                crud_file = service_dir / "crud.go"
+                if not crud_file.exists():
+                    continue
+                
+                service = ServiceInfo(
+                    name=service_dir.name,
+                    service_path=str(service_dir.relative_to(self.repo_root)),
+                    api_type=api_type,
+                    functions=[]
+                )
+                services.append(service)
         
         return services
     
@@ -136,27 +139,25 @@ class CoverageGenerator:
             "acceptance": {}
         }
         
-        # Run unit tests
         print("  Running unit tests...")
         try:
             cmd = [
                 "go", "test", "-v",
-                "./jamfpro/services/jamf_pro_api/..."
+                "./jamfpro/services/..."
             ]
             result = subprocess.run(
                 cmd,
                 cwd=self.repo_root,
                 capture_output=True,
                 text=True,
-                timeout=300
+                timeout=300,
+                check=False
             )
             results["unit"] = self.parse_test_output_verbose(result.stdout)
             print(f"  ✅ Parsed {len(results['unit'])} test results")
-        except Exception as e:
+        except (subprocess.TimeoutExpired, subprocess.SubprocessError, OSError) as e:
             print(f"  ⚠️  Unit tests failed: {e}")
         
-        # Note: Acceptance tests require environment variables
-        # We'll mark them as "not_tested" for now
         print("  ⚠️  Acceptance tests require live environment (marked as not_tested)")
         
         return results
@@ -168,52 +169,50 @@ class CoverageGenerator:
         for line in output.splitlines():
             line = line.strip()
             
-            # Look for PASS/FAIL lines with test names
-            if line.startswith("--- PASS:") or line.startswith("--- FAIL:"):
-                parts = line.split()
-                if len(parts) >= 3:
-                    status = "pass" if "PASS" in parts[1] else "fail"
-                    test_name = parts[2]
-                    
-                    # Extract service and function from TestUnit_ServiceName_FunctionName_TestCase
-                    # Example: TestUnit_Accounts_ListV1_Success
-                    if test_name.startswith("TestUnit_"):
-                        # Remove TestUnit_ prefix
-                        remaining = test_name[9:]  # len("TestUnit_") = 9
-                        
-                        # Split on underscore: [ServiceName, FunctionName, TestCase, ...]
-                        parts = remaining.split("_")
-                        if len(parts) >= 2:
-                            service = parts[0].lower()
-                            function = parts[1]  # The function name is always the second part
-                            
-                            key = f"{service}.{function}"
-                            # Mark as pass if any test for this function passes
-                            if key not in test_status or status == "pass":
-                                test_status[key] = status
+            if not (line.startswith("--- PASS:") or line.startswith("--- FAIL:")):
+                continue
+            
+            parts = line.split()
+            if len(parts) < 3:
+                continue
+            
+            status = "pass" if "PASS" in parts[1] else "fail"
+            test_name = parts[2]
+            
+            if not test_name.startswith("TestUnit_"):
+                continue
+            
+            remaining = test_name[9:]
+            parts = remaining.split("_")
+            if len(parts) < 2:
+                continue
+            
+            service = parts[0].lower()
+            function = parts[1]
+            
+            key = f"{service}.{function}"
+            if key not in test_status or status == "pass":
+                test_status[key] = status
         
         return test_status
     
     def analyze_service(self, service: ServiceInfo, test_results: Dict):
         """Analyze a service to extract function information."""
-        crud_file = self.services_path / service.name / "crud.go"
+        crud_file = self.services_base_path / service.api_type / service.name / "crud.go"
         
-        with open(crud_file, 'r') as f:
+        with open(crud_file, 'r', encoding='utf-8') as f:
             content = f.read()
         
-        # Extract functions with their documentation
-        functions = self.extract_functions(content, service.name)
+        functions = self.extract_functions(content)
         
-        # Check for examples
         for func in functions:
-            func.example_path = self.find_example(service.name, func.name)
+            func.example_path = self.find_example(service.api_type, service.name, func.name)
             if func.example_path:
                 service.examples_available += 1
             
-            # Check test status
             test_key = f"{service.name}.{func.name}"
             func.unit_test_status = test_results["unit"].get(test_key, "not_tested")
-            func.acceptance_test_status = "not_tested"  # Would need env vars
+            func.acceptance_test_status = "not_tested"
             
             if func.unit_test_status == "pass":
                 service.unit_tests_passing += 1
@@ -224,54 +223,39 @@ class CoverageGenerator:
         service.functions = functions
         service.total_functions = len(functions)
     
-    def extract_functions(self, content: str, service_name: str) -> List[FunctionInfo]:
+    def extract_functions(self, content: str) -> List[FunctionInfo]:
         """Extract function information from Go source code."""
         functions = []
-        
-        # Pattern to match function declarations with comments
         pattern = r'//\s*(.+?)\n(?://.*\n)*func\s+\([^)]+\)\s+(\w+)\s*\([^)]*\)'
         
         for match in re.finditer(pattern, content, re.MULTILINE):
-            comment_first_line = match.group(1).strip()
             func_name = match.group(2)
             
-            # Skip unexported functions
             if not func_name[0].isupper():
                 continue
             
-            # Extract full comment block
-            func_pos = match.start(2)
-            comment_start = content.rfind('//', 0, func_pos - 50)
-            if comment_start != -1:
-                comment_block = content[comment_start:func_pos].strip()
-            else:
-                comment_block = comment_first_line
+            comment_block = self._extract_comment_block(content, match)
             
-            # Extract doc URL
-            doc_url = self.extract_doc_url(comment_block)
-            
-            # Extract endpoint
-            endpoint = self.extract_endpoint(comment_block, func_name)
-            
-            # Determine if helper function
-            is_helper = self.is_helper_function(func_name, comment_block)
-            
-            # Extract description
-            description = self.extract_description(comment_block, func_name)
-            
-            func_info = FunctionInfo(
+            functions.append(FunctionInfo(
                 name=func_name,
-                endpoint=endpoint,
-                doc_url=doc_url,
+                endpoint=self.extract_endpoint(comment_block, func_name),
+                doc_url=self.extract_doc_url(comment_block),
                 example_path=None,
                 unit_test_status="not_tested",
                 acceptance_test_status="not_tested",
-                is_helper=is_helper,
-                description=description
-            )
-            functions.append(func_info)
+                is_helper=self.is_helper_function(func_name, comment_block),
+                description=self.extract_description(comment_block, func_name)
+            ))
         
         return functions
+    
+    def _extract_comment_block(self, content: str, match: re.Match) -> str:
+        """Extract comment block for a function match."""
+        func_pos = match.start(2)
+        comment_start = content.rfind('//', 0, func_pos - 50)
+        if comment_start != -1:
+            return content[comment_start:func_pos].strip()
+        return match.group(1).strip()
     
     def extract_doc_url(self, comment: str) -> Optional[str]:
         """Extract Jamf Pro API documentation URL from comment."""
@@ -281,17 +265,14 @@ class CoverageGenerator:
     
     def extract_endpoint(self, comment: str, func_name: str) -> str:
         """Extract API endpoint from comment or infer from function name."""
-        # Look for URL: pattern
         url_match = re.search(r'URL:\s*(\w+\s+/[^\n]+)', comment)
         if url_match:
             return url_match.group(1).strip()
         
-        # Look for endpoint pattern
         endpoint_match = re.search(r'(GET|POST|PUT|PATCH|DELETE)\s+/api/[^\n\s]+', comment)
         if endpoint_match:
             return endpoint_match.group(0).strip()
         
-        # Check if it's a helper function
         if any(x in func_name for x in ["ByName", "Helper"]):
             return "Helper"
         
@@ -309,9 +290,7 @@ class CoverageGenerator:
         for line in lines:
             line = line.strip().lstrip('/').strip()
             if line.startswith(func_name):
-                # Remove function name and return the rest
                 desc = line[len(func_name):].strip()
-                # Remove leading verb connectors
                 for prefix in [' returns', ' gets', ' creates', ' updates', ' deletes', ' lists']:
                     if desc.lower().startswith(prefix):
                         desc = desc[len(prefix):].strip()
@@ -319,26 +298,21 @@ class CoverageGenerator:
                 return desc
         return ""
     
-    def find_example(self, service_name: str, func_name: str) -> Optional[str]:
+    def find_example(self, api_type: str, service_name: str, func_name: str) -> Optional[str]:
         """Find example file for a function."""
-        service_examples = self.examples_path / service_name
+        service_examples = self.examples_base_path / api_type / service_name
         if not service_examples.exists():
             return None
         
-        # Try exact match first (converted to snake_case)
         func_dir = self.function_name_to_dir(func_name)
         example_file = service_examples / func_dir / "main.go"
         if example_file.exists():
             return str(example_file.relative_to(self.repo_root))
         
-        # Try fuzzy matching - look for directories that might match
-        # Remove version suffix and split camelCase into words
         func_base = re.sub(r'V\d+$', '', func_name)
-        # Split camelCase: "DeleteBuildingsByID" -> ["Delete", "Buildings", "By", "ID"]
         func_words_list = re.sub('([A-Z][a-z]+)', r' \1', func_base).split()
         func_words = set(w.lower() for w in func_words_list if w)
         
-        # Find all potential matches and score them
         matches = []
         for subdir in service_examples.iterdir():
             if not subdir.is_dir():
@@ -350,21 +324,14 @@ class CoverageGenerator:
             if not main_file.exists():
                 continue
             
-            # Check if the function name contains key words from the directory name
-            # e.g., "Delete Buildings By ID" contains "delete" and matches "delete_multiple"
-            # or "Get Building History" contains "get" and "history" and matches "get_history"
             dir_words = set(dir_name.split('_'))
             overlap = len(dir_words & func_words)
             threshold = len(dir_words) * 0.7
             
-            # If most directory words are in the function name, it's a potential match
             if dir_words and overlap >= threshold:
-                # Score: prefer matches with more overlapping words and fewer total dir words
-                # This prefers "get_history" (2/2 match) over "get" (1/1 match) for "GetBuildingHistory"
                 score = overlap / len(dir_words)
                 matches.append((score, overlap, dir_name, main_file))
         
-        # Return the best match (highest score, then most overlapping words)
         if matches:
             matches.sort(key=lambda x: (x[0], x[1]), reverse=True)
             return str(matches[0][3].relative_to(self.repo_root))
@@ -373,11 +340,8 @@ class CoverageGenerator:
     
     def function_name_to_dir(self, func_name: str) -> str:
         """Convert function name to example directory name."""
-        # Remove version suffix
         name = re.sub(r'V\d+$', '', func_name)
         
-        # Handle common patterns first
-        # GetByID -> get, GetByName -> get_by_name, etc.
         patterns = [
             (r'^GetByID$', 'get'),
             (r'^GetByName$', 'get_by_name'),
@@ -398,32 +362,27 @@ class CoverageGenerator:
             if re.match(pattern, name):
                 return replacement
         
-        # Convert camelCase to snake_case for other cases
         name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         name = re.sub('([a-z0-9])([A-Z])', r'\1_\2', name)
-        result = name.lower()
-        
-        # Remove redundant service name prefixes (e.g., delete_buildings_by_id -> delete_multiple)
-        # This is a heuristic: if the result contains the pattern "service_name" in it, simplify
-        # For now, just return the snake_case conversion
-        return result
+        return name.lower()
     
     def generate_service_doc(self, service: ServiceInfo):
         """Generate markdown documentation for a service."""
         output_file = self.output_path / "services" / f"{service.name}.md"
+        output_file.parent.mkdir(parents=True, exist_ok=True)
         
-        # Separate API functions from helpers
         api_functions = [f for f in service.functions if not f.is_helper]
         helper_functions = [f for f in service.functions if f.is_helper]
         
-        # Calculate percentages
         unit_pct = (service.unit_tests_passing / service.total_functions * 100) if service.total_functions > 0 else 0
         acc_pct = (service.acceptance_tests_passing / service.total_functions * 100) if service.total_functions > 0 else 0
         example_pct = (service.examples_available / service.total_functions * 100) if service.total_functions > 0 else 0
         doc_pct = (service.docs_available / service.total_functions * 100) if service.total_functions > 0 else 0
         
+        api_label = "Jamf Pro API" if service.api_type == "jamf_pro_api" else "Classic API"
         content = f"""# {service.name.replace('_', ' ').title()} Service
 
+**API Type:** {api_label}  
 **Service Path:** `{service.service_path}`  
 **Last Updated:** {datetime.now().strftime('%Y-%m-%d')}  
 **Tested Against:** Jamf Pro {self.jamf_version}
@@ -475,11 +434,12 @@ class CoverageGenerator:
 **Tests Legend:** First ✅/❌/⚠️ = Unit Test, Second ✅/❌/⚠️ = Acceptance Test
 """
         
-        with open(output_file, 'w') as f:
+        with open(output_file, 'w', encoding='utf-8') as f:
             f.write(content)
     
     def generate_index(self, services: List[ServiceInfo]):
         """Generate index README for all services."""
+        self.output_path.mkdir(parents=True, exist_ok=True)
         output_file = self.output_path / "README.md"
         
         total_functions = sum(s.total_functions for s in services)
@@ -504,17 +464,18 @@ class CoverageGenerator:
 
 ## 📚 Services
 
-| Service | Functions | Unit Tests | Examples | Docs |
-|---------|-----------|------------|----------|------|
+| Service | API Type | Functions | Unit Tests | Examples | Docs |
+|---------|----------|-----------|------------|----------|------|
 """
         
-        for service in sorted(services, key=lambda s: s.name):
+        for service in sorted(services, key=lambda s: (s.api_type, s.name)):
             unit_pct = (service.unit_tests_passing / service.total_functions * 100) if service.total_functions > 0 else 0
             example_pct = (service.examples_available / service.total_functions * 100) if service.total_functions > 0 else 0
             doc_pct = (service.docs_available / service.total_functions * 100) if service.total_functions > 0 else 0
             
+            api_label = "Pro" if service.api_type == "jamf_pro_api" else "Classic"
             service_link = f"[{service.name}](services/{service.name}.md)"
-            content += f"| {service_link} | {service.total_functions} | {unit_pct:.0f}% | {example_pct:.0f}% | {doc_pct:.0f}% |\n"
+            content += f"| {service_link} | {api_label} | {service.total_functions} | {unit_pct:.0f}% | {example_pct:.0f}% | {doc_pct:.0f}% |\n"
         
         content += """
 ## Legend
@@ -540,19 +501,15 @@ To improve coverage:
 3. Add missing acceptance tests in `jamfpro/acceptance/jamf_pro_api/<service>_test.go`
 """
         
-        with open(output_file, 'w') as f:
+        with open(output_file, 'w', encoding='utf-8') as f:
             f.write(content)
 
 
 def main():
     """Main entry point."""
-    import sys
-    
-    # Get repo root (script is in scripts/pipeline/coverage)
     script_dir = Path(__file__).parent
     repo_root = script_dir.parent.parent.parent
-    
-    # Jamf Pro version will be auto-detected by CoverageGenerator
+
     generator = CoverageGenerator(repo_root)
     generator.run()
 
