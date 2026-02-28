@@ -1,0 +1,4 @@
+[
+  {"id":"1","filename":"JamfProtect-1.0.pkg","version":"1.0","created":"2024-01-01T00:00:00Z","url":"https://example.com/pkg1.pkg"},
+  {"id":"2","filename":"JamfProtect-2.0.pkg","version":"2.0","created":"2024-02-01T00:00:00Z","url":"https://example.com/pkg2.pkg"}
+]
