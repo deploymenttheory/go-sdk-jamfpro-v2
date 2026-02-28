@@ -1,0 +1,7 @@
+{
+  "displayName": "Jamf Protect",
+  "releaseHistoryUrl": "https://docs.jamf.com/jamf-protect/release-notes/",
+  "artifacts": [
+    {"id":"1","filename":"JamfProtect-1.0.pkg","version":"1.0","created":"2024-01-01T00:00:00Z","url":"https://example.com/pkg1.pkg"}
+  ]
+}

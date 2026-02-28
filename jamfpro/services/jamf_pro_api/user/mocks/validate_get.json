@@ -1,0 +1,1 @@
+{"id":1,"username":"admin","realName":"Administrator","email":"admin@example.com","preferences":{"theme":"dark"},"isMultiSiteAdmin":true,"accessLevel":"FullAccess","privilegeSet":"ADMINISTRATOR","privilegesBySite":{"1":"ADMINISTRATOR"},"groupIds":[1,2],"currentSiteId":1}

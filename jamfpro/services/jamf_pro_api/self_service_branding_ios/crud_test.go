@@ -251,6 +251,34 @@ func TestUnit_SelfServiceBrandingMobile_DeleteByNameV1_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode)
 }
 
+func TestUnit_SelfServiceBrandingMobile_UpdateByNameV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+
+	req := &ResourceSelfServiceBrandingMobile{
+		BrandingName:              "Updated",
+		HeaderBackgroundColorCode: "#F0F0F0",
+		MenuIconColorCode:         "#0066CC",
+		BrandingNameColorCode:     "#222222",
+		StatusBarTextColor:        "dark",
+	}
+	result, resp, err := svc.UpdateByNameV1(context.Background(), "NonExistent", req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "was not found")
+}
+
+func TestUnit_SelfServiceBrandingMobile_DeleteByNameV1_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterListMock()
+
+	resp, err := svc.DeleteByNameV1(context.Background(), "NonExistent")
+	assert.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "was not found")
+}
+
 func intPtr(i int) *int {
 	return &i
 }

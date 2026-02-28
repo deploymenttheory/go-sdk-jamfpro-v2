@@ -1,0 +1,9 @@
+{
+  "id": "1",
+  "clientManagementId": "abc-123-client-mgmt-id",
+  "renewMdmProfileStartDate": "2024-01-15T00:00:00Z",
+  "mdmProfileNeedsRenewalDueToCaRenewed": false,
+  "mdmProfileNeedsRenewalDueToDeviceIdentityCertExpiring": true,
+  "mdmCheckinUrl": "https://checkin.example.com",
+  "mdmServerUrl": "https://mdm.example.com"
+}

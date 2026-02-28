@@ -1,0 +1,21 @@
+[
+  {
+    "error": {
+      "mdmRenewalErrorId": "err-1",
+      "clientManagementId": "abc-123-client-mgmt-id",
+      "mdmRenewalErrorType": "SERVER_ERROR",
+      "errorTimeStamp": "2024-01-15T10:00:00Z",
+      "failureCount": 2
+    },
+    "strategies": [
+      {
+        "id": "strat-1",
+        "mdmRenewalErrorId": "err-1",
+        "mdmRenewalStrategyType": "RETURN_NO_CHECK_IN_INVITATION",
+        "strategyTimeStamp": "2024-01-15T10:05:00Z",
+        "mdmRenewalCheckInUrl": "https://renewal.example.com",
+        "mdmRenewalServerUrl": "https://mdm.example.com"
+      }
+    ]
+  }
+]
