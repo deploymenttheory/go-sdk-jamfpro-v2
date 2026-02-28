@@ -411,6 +411,7 @@ func NewClient(authConfig *client.AuthConfig, options ...client.ClientOption) (*
 		ApiIntegrations:                     api_integrations.NewService(transport),
 		APIRolePrivileges:                   api_role_privileges.NewService(transport),
 		APIRoles:                            api_roles.NewService(transport),
+		ApiAuthorization:                    api_authorization.NewService(transport),
 		AppRequest:                          app_request.NewService(transport),
 		AppStoreCountryCodes:                app_store_country_codes.NewService(transport),
 		CertificateAuthority:                certificate_authority.NewService(transport),
