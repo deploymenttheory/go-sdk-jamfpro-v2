@@ -55,11 +55,66 @@ jobs:
           echo "::endgroup::"
           echo ""
 
-          go test -v -race -coverprofile=coverage.out -covermode=atomic $(go list ./... | grep -v '/acceptance' | grep -v '/examples')
+          go test -v -race -coverprofile=coverage.out -covermode=atomic $(go list ./... | grep -v '/acceptance' | grep -v '/examples') 2>&1 | tee test_output.txt
 
           echo ""
           echo "::group::📊 Coverage Summary"
           go tool cover -func=coverage.out | tail -1
+          echo "::endgroup::"
+
+      - name: Generate Test Statistics
+        if: always()
+        run: |
+          echo "::group::📈 Test Statistics"
+          echo "========================================================================"
+          echo "  Unit Test Statistics by Service"
+          echo "========================================================================"
+          echo ""
+          
+          # Parse test output to count tests per service and save to temp file
+          grep "^=== RUN" test_output.txt | awk '
+          {
+            # Extract service name from test name (e.g., TestUnit_Accounts_List -> accounts)
+            test_name = $3
+            if (test_name ~ /^TestUnit_/) {
+              # Remove TestUnit_ prefix
+              sub(/^TestUnit_/, "", test_name)
+              # Extract first part before underscore
+              split(test_name, parts, "_")
+              service = tolower(parts[1])
+              service_tests[service]++
+              total_tests++
+            }
+          }
+          END {
+            # Output service counts for sorting
+            for (service in service_tests) {
+              printf "%s %d\n", service, service_tests[service]
+            }
+            # Output totals on stderr to preserve them
+            printf "TOTAL_SERVICES:%d\n", length(service_tests) > "/dev/stderr"
+            printf "TOTAL_TESTS:%d\n", total_tests > "/dev/stderr"
+          }
+          ' 2> test_stats_totals.txt | sort -k1,1 > test_stats_sorted.txt
+          
+          # Print header
+          printf "%-50s %s\n" "Service" "Tests"
+          printf "%-50s %s\n" "-------" "-----"
+          
+          # Print sorted services
+          awk '{printf "%-50s %5d\n", $1, $2}' test_stats_sorted.txt
+          
+          # Print footer with totals
+          echo ""
+          printf "%-50s %s\n" "========================================" "====="
+          grep "TOTAL_SERVICES:" test_stats_totals.txt | awk -F: '{printf "%-50s %5d\n", "Total Services with Tests:", $2}'
+          grep "TOTAL_TESTS:" test_stats_totals.txt | awk -F: '{printf "%-50s %5d\n", "Total Unit Tests:", $2}'
+          printf "%-50s %s\n" "========================================" "====="
+          
+          # Cleanup temp files
+          rm -f test_output.txt test_stats_sorted.txt test_stats_totals.txt
+          
+          echo ""
           echo "::endgroup::"
 
       - name: Generate Coverage Report
