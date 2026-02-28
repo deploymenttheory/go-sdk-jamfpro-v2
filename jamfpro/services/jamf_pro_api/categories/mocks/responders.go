@@ -201,7 +201,14 @@ func (m *CategoriesMock) GetPaginated(ctx context.Context, path string, rsqlQuer
 		return resp, err
 	}
 	if mergePage != nil {
-		if err := mergePage(resp.Body); err != nil {
+		// Extract "results" field from the response body before calling mergePage
+		var envelope struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &envelope); err != nil {
+			return resp, fmt.Errorf("failed to extract results field: %w", err)
+		}
+		if err := mergePage(envelope.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

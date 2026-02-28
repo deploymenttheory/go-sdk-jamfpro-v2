@@ -253,12 +253,19 @@ func (m *ComputerGroupsMock) GetPaginated(ctx context.Context, path string, rsql
 		return resp, err
 	}
 	if mergePage != nil {
-		if err := mergePage(resp.Body); err != nil {
+		var pageResp struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &pageResp); err != nil {
+			return resp, fmt.Errorf("failed to extract results field: %w", err)
+		}
+		if err := mergePage(pageResp.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
 	return resp, nil
 }
+
 
 func (m *ComputerGroupsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
 func (m *ComputerGroupsMock) InvalidateToken() error                    { return nil }

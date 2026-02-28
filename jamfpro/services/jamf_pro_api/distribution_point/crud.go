@@ -94,12 +94,11 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []ResourceDistributionPoint
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -110,6 +109,10 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list distribution points: %w", err)
 	}
+	
+	// Set totalCount to the actual number of results retrieved
+	result.TotalCount = len(result.Results)
+	
 	return &result, resp, nil
 }
 
@@ -280,12 +283,11 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	var result HistoryListResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []HistoryEntry
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -296,6 +298,10 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get distribution point history: %w", err)
 	}
+	
+	// Set totalCount to the actual number of results retrieved
+	result.TotalCount = len(result.Results)
+	
 	return &result, resp, nil
 }
 

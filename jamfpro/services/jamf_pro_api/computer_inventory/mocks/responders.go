@@ -191,7 +191,13 @@ func (m *ComputerInventoryMock) GetPaginated(ctx context.Context, path string, _
 		return resp, err
 	}
 	if mergePage != nil && resp != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
+		var wrapper struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &wrapper); err != nil {
+			return resp, fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+		if err := mergePage(wrapper.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

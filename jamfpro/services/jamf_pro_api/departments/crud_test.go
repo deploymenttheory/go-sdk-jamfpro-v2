@@ -2,6 +2,7 @@ package departments
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments/mocks"
@@ -200,7 +201,7 @@ func TestUnit_Departments_GetHistoryV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
-	assert.Equal(t, "1", string(result.Results[0].ID))
+	assert.Equal(t, 1, result.Results[0].ID)
 	assert.Equal(t, "admin", result.Results[0].Username)
 	assert.Equal(t, "Department created", result.Results[0].Note)
 }
@@ -281,7 +282,8 @@ func TestUnit_Departments_ListV1_InvalidJSON(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	errMsg := err.Error()
+	assert.True(t, strings.Contains(errMsg, "failed to unmarshal page") || strings.Contains(errMsg, "extract results field"), "error should contain JSON parsing error")
 }
 
 func TestUnit_Departments_ListV1_APIError(t *testing.T) {
@@ -303,7 +305,8 @@ func TestUnit_Departments_GetDepartmentHistoryV1_InvalidJSON(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	errMsg := err.Error()
+	assert.True(t, strings.Contains(errMsg, "failed to unmarshal page") || strings.Contains(errMsg, "extract results field"), "error should contain JSON parsing error")
 }
 
 func TestUnit_Departments_GetDepartmentHistoryV1_APIError(t *testing.T) {

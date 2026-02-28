@@ -82,12 +82,11 @@ func (s *Service) ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[strin
 	endpoint := EndpointFormInputFieldsV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse FormInputFieldListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []ResourceFormInputField
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -98,6 +97,7 @@ func (s *Service) ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[strin
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list form input fields: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 

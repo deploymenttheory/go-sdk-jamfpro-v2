@@ -245,7 +245,7 @@ func TestUnit_Buildings_GetHistoryV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
-	assert.Equal(t, "1", string(result.Results[0].ID))
+	assert.Equal(t, 1, result.Results[0].ID)
 	assert.Equal(t, "admin", result.Results[0].Username)
 	assert.Equal(t, "Building created", result.Results[0].Note)
 	require.NotNil(t, result.Results[0].Details)

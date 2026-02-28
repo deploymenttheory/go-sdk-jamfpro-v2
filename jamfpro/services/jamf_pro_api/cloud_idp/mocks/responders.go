@@ -125,8 +125,18 @@ func (m *CloudIdpMock) GetPaginated(ctx context.Context, path string, _ map[stri
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
-			return resp, fmt.Errorf("mergePage failed: %w", err)
+		var pageResponse map[string]interface{}
+		if err := json.Unmarshal(resp.Body, &pageResponse); err != nil {
+			return resp, fmt.Errorf("failed to unmarshal response: %w", err)
+		}
+		if results, ok := pageResponse["results"]; ok {
+			resultsJSON, err := json.Marshal(results)
+			if err != nil {
+				return resp, fmt.Errorf("failed to marshal results: %w", err)
+			}
+			if err := mergePage(resultsJSON); err != nil {
+				return resp, fmt.Errorf("mergePage failed: %w", err)
+			}
 		}
 	}
 	return resp, nil

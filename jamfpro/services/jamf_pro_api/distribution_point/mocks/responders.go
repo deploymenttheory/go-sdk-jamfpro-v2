@@ -148,7 +148,18 @@ func (m *DistributionPointMock) GetPaginated(ctx context.Context, path string, q
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
+		// Extract "results" field from the response body before calling mergePage
+		// to match the behavior of the real GetPaginated implementation
+		var pageResp struct {
+			TotalCount int             `json:"totalCount"`
+			Results    json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &pageResp); err != nil {
+			return resp, fmt.Errorf("unmarshal page response: %w", err)
+		}
+		
+		// Pass only the "results" array to mergePage, matching real API behavior
+		if err := mergePage(pageResp.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

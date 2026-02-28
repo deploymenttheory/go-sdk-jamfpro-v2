@@ -215,8 +215,14 @@ func (m *SmartComputerGroupsMock) GetPaginated(ctx context.Context, path string,
 	if err != nil {
 		return resp, err
 	}
-	if mergePage != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
+	if mergePage != nil {
+		var pageResp struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &pageResp); err != nil {
+			return resp, fmt.Errorf("failed to extract results field: %w", err)
+		}
+		if err := mergePage(pageResp.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

@@ -1,7 +1,7 @@
 package departments
 
 import (
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/normalization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 )
 
 // ResourceDepartment represents a department resource.
@@ -28,24 +28,13 @@ type CreateResponse struct {
 }
 
 // HistoryObject represents a department history entry.
-type HistoryObject struct {
-	ID       normalization.IDAsString `json:"id"`
-	Username string                   `json:"username"`
-	Date     string                   `json:"date"`
-	Note     string                   `json:"note"`
-	Details  string                   `json:"details"`
-}
+type HistoryObject = shared.SharedHistoryItem
 
 // HistoryResponse is the response for GetDepartmentHistoryV1.
-type HistoryResponse struct {
-	TotalCount int             `json:"totalCount"`
-	Results    []HistoryObject `json:"results"`
-}
+type HistoryResponse = shared.SharedHistoryResponse
 
 // AddHistoryNotesRequest is the body for AddDepartmentHistoryNotesV1.
-type AddHistoryNotesRequest struct {
-	Note string `json:"note"`
-}
+type AddHistoryNotesRequest = shared.SharedHistoryNoteRequest
 
 // DeleteDepartmentsByIDRequest is the body for DeleteDepartmentsByIDV1 (delete multiple).
 type DeleteDepartmentsByIDRequest struct {

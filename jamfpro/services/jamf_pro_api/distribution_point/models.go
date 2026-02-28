@@ -1,5 +1,7 @@
 package distribution_point
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceDistributionPoint represents a file share distribution point in Jamf Pro.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points-id
@@ -80,25 +82,14 @@ type DeleteMultipleRequest struct {
 // HistoryEntry represents a single history entry for a distribution point.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points-id-history
-type HistoryEntry struct {
-	ID       int     `json:"id"`
-	Username string  `json:"username"`
-	Date     string  `json:"date"`
-	Note     string  `json:"note"`
-	Details  *string `json:"details"` // Can be null
-}
+type HistoryEntry = shared.SharedHistoryItem
 
 // HistoryListResponse is the response for history list operations.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points-id-history
-type HistoryListResponse struct {
-	TotalCount int            `json:"totalCount"`
-	Results    []HistoryEntry `json:"results"`
-}
+type HistoryListResponse = shared.SharedHistoryResponse
 
 // CreateHistoryNoteRequest represents the request body for creating a history note.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points-id-history
-type CreateHistoryNoteRequest struct {
-	Note string `json:"note"`
-}
+type CreateHistoryNoteRequest = shared.SharedHistoryNoteRequest

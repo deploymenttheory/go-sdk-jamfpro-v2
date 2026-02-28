@@ -98,17 +98,19 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v3/computer-prestages
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computer-prestages
 func (s *Service) ListV3(ctx context.Context, query map[string]string) (*ListResponse, *interfaces.Response, error) {
-	var result ListResponse
+	result := &ListResponse{
+		Results: []ResourceComputerPrestage{},
+	}
 
 	endpoint := EndpointComputerPrestagesV3
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageResults []ResourceComputerPrestage
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageResults...)
+		result.TotalCount = len(result.Results)
 		return nil
 	}
 
@@ -120,7 +122,7 @@ func (s *Service) ListV3(ctx context.Context, query map[string]string) (*ListRes
 	if err != nil {
 		return nil, resp, err
 	}
-	return &result, resp, nil
+	return result, resp, nil
 }
 
 // GetByIDV3 returns the computer prestage by ID.

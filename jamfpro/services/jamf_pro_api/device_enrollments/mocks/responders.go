@@ -169,7 +169,17 @@ func (m *DeviceEnrollmentsMock) GetPaginated(ctx context.Context, endpoint strin
 		return nil, errNoMockRegistered
 	}
 	if mergePage != nil && body != nil {
-		if err := mergePage(body); err != nil {
+		// Extract "results" field from the response
+		var wrapper map[string]json.RawMessage
+		if err := json.Unmarshal(body, &wrapper); err != nil {
+			return &interfaces.Response{StatusCode: http.StatusInternalServerError}, err
+		}
+		resultsData, ok := wrapper["results"]
+		if !ok {
+			return &interfaces.Response{StatusCode: http.StatusInternalServerError}, fmt.Errorf("results field not found")
+		}
+		
+		if err := mergePage(resultsData); err != nil {
 			return &interfaces.Response{StatusCode: http.StatusInternalServerError}, err
 		}
 	}

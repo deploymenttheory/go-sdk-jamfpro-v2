@@ -88,12 +88,11 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointDepartmentsV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageResults []ResourceDepartment
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -104,6 +103,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list departments: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -223,12 +223,11 @@ func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQue
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageResults []HistoryObject
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -239,6 +238,7 @@ func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQue
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get department history: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 

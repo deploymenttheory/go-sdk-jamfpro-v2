@@ -105,7 +105,14 @@ func (m *AdvancedUserContentSearchesMock) GetPaginated(ctx context.Context, path
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
+		// Extract the "results" field from the response body before calling mergePage
+		var wrapper struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &wrapper); err != nil {
+			return resp, fmt.Errorf("failed to extract results field: %w", err)
+		}
+		if err := mergePage(wrapper.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

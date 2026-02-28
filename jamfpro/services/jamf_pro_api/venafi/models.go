@@ -1,5 +1,7 @@
 package venafi
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceVenafi represents the writable Venafi PKI configuration payload.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi
 type ResourceVenafi struct {
@@ -45,22 +47,11 @@ type ResponseDependentProfiles struct {
 	Results    []DependentProfile `json:"results"`
 }
 
-// HistoryItem represents a single history entry.
-type HistoryItem struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryItem is an alias to the shared history item struct (uses int ID).
+type HistoryItem = shared.SharedHistoryItem
 
-// ResponseHistory represents the paginated history for a Venafi configuration.
-type ResponseHistory struct {
-	TotalCount int           `json:"totalCount"`
-	Results    []HistoryItem `json:"results"`
-}
+// ResponseHistory is an alias to the shared history response struct.
+type ResponseHistory = shared.SharedHistoryResponse
 
-// HistoryNoteRequest represents the request for adding a history note.
-type HistoryNoteRequest struct {
-	Note string `json:"note"`
-}
+// HistoryNoteRequest is an alias to the shared history note request struct.
+type HistoryNoteRequest = shared.SharedHistoryNoteRequest
