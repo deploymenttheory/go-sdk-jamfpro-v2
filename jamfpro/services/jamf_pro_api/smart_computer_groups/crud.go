@@ -72,12 +72,13 @@ func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListR
 	var result ListResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+	result.Results = []ListItem{}
+
+		var pageResults []ListItem
+		if err := json.Unmarshal(pageData, &pageResults); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageResults...)
 		return nil
 	}
 
@@ -85,10 +86,27 @@ func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListR
 	headers := map[string]string{
 		"Accept": mime.ApplicationJSON,
 	}
+
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list smart computer groups: %w", err)
 	}
+
+	// Extract totalCount from response body if available
+	if resp != nil && len(resp.Body) > 0 {
+		var pageResp struct {
+			TotalCount int `json:"totalCount"`
+		}
+		if err := json.Unmarshal(resp.Body, &pageResp); err == nil {
+			result.TotalCount = pageResp.TotalCount
+		}
+	}
+
+	// Fallback: if totalCount wasn't extracted, use length of results
+	if result.TotalCount == 0 {
+		result.TotalCount = len(result.Results)
+	}
+
 	return &result, resp, nil
 }
 

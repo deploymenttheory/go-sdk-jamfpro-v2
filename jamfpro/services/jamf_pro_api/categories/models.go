@@ -1,7 +1,7 @@
 package categories
 
 import (
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/normalization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 )
 
 // ResourceCategory represents a category resource.
@@ -38,21 +38,10 @@ type DeleteCategoriesByIDRequest struct {
 }
 
 // HistoryObject represents a category history entry.
-type HistoryObject struct {
-	ID       normalization.IDAsString `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+type HistoryObject = shared.SharedHistoryItem
 
 // CategoryHistoryResponse is the response for GetCategoryHistory.
-type CategoryHistoryResponse struct {
-	TotalCount int             `json:"totalCount"`
-	Results    []HistoryObject `json:"results"`
-}
+type CategoryHistoryResponse = shared.SharedHistoryResponse
 
 // AddCategoryHistoryNotesRequest is the body for AddCategoryHistoryNotes.
-type AddCategoryHistoryNotesRequest struct {
-	Note string `json:"note"`
-}
+type AddCategoryHistoryNotesRequest = shared.SharedHistoryNoteRequest

@@ -38,3 +38,24 @@ type SharedSubsetCriteria struct {
 	OpeningParen bool   `xml:"opening_paren,omitempty"`
 	ClosingParen bool   `xml:"closing_paren,omitempty"`
 }
+
+// SharedHistoryItem represents a history entry from Jamf Pro API.
+// All history endpoints return the same structure with integer IDs.
+type SharedHistoryItem struct {
+	ID       int     `json:"id"`
+	Username string  `json:"username"`
+	Date     string  `json:"date"`
+	Note     string  `json:"note"`
+	Details  *string `json:"details,omitempty"`
+}
+
+// SharedHistoryResponse represents a paginated history response.
+type SharedHistoryResponse struct {
+	TotalCount int                 `json:"totalCount"`
+	Results    []SharedHistoryItem `json:"results"`
+}
+
+// SharedHistoryNoteRequest represents a request to add a history note.
+type SharedHistoryNoteRequest struct {
+	Note string `json:"note"`
+}

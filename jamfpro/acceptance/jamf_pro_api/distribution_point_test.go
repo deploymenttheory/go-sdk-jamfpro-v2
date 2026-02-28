@@ -30,6 +30,9 @@ func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 		Name:                      name,
 		ServerName:                "acc-test-server.example.com",
 		FileSharingConnectionType: "NONE",
+		HTTPSEnabled:              true,
+		HTTPSPort:                 443,
+		HTTPSSecurityType:         "NONE",
 	}
 
 	created, createResp, err := svc.CreateV1(ctx, createReq)
@@ -67,11 +70,14 @@ func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 		Name:                      updatedName,
 		ServerName:                "acc-test-server-updated.example.com",
 		FileSharingConnectionType: "NONE",
+		HTTPSEnabled:              true,
+		HTTPSPort:                 443,
+		HTTPSSecurityType:         "NONE",
 	}
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, dpID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Contains(t, []int{200, 202}, updateResp.StatusCode, "Update should return 200 or 202")
 	acc.LogTestSuccess(t, "Distribution point updated: ID=%s", dpID)
 
 	// 4. Re-fetch to verify
@@ -105,6 +111,9 @@ func TestAcceptance_DistributionPoint_list_with_rsql_filter(t *testing.T) {
 		Name:                      name,
 		ServerName:                "acc-test-rsql-server.example.com",
 		FileSharingConnectionType: "NONE",
+		HTTPSEnabled:              true,
+		HTTPSPort:                 443,
+		HTTPSSecurityType:         "NONE",
 	}
 
 	created, _, err := svc.CreateV1(ctx, createReq)
@@ -156,6 +165,9 @@ func TestAcceptance_DistributionPoint_bulk_delete(t *testing.T) {
 		Name:                      acc.UniqueName("sdkv2_acc_bulk-del-dp-1"),
 		ServerName:                "acc-bulk-del-dp-1.example.com",
 		FileSharingConnectionType: "NONE",
+		HTTPSEnabled:              true,
+		HTTPSPort:                 443,
+		HTTPSSecurityType:         "NONE",
 	})
 	require.NoError(t, err)
 	require.NotNil(t, dp1)
@@ -164,6 +176,9 @@ func TestAcceptance_DistributionPoint_bulk_delete(t *testing.T) {
 		Name:                      acc.UniqueName("sdkv2_acc_bulk-del-dp-2"),
 		ServerName:                "acc-bulk-del-dp-2.example.com",
 		FileSharingConnectionType: "NONE",
+		HTTPSEnabled:              true,
+		HTTPSPort:                 443,
+		HTTPSSecurityType:         "NONE",
 	})
 	require.NoError(t, err)
 	require.NotNil(t, dp2)

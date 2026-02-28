@@ -231,7 +231,13 @@ func (m *DepartmentsMock) GetPaginated(ctx context.Context, path string, rsqlQue
 		return resp, err
 	}
 	if mergePage != nil {
-		if err := mergePage(resp.Body); err != nil {
+		var wrapper struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &wrapper); err != nil {
+			return resp, fmt.Errorf("extract results field: %w", err)
+		}
+		if err := mergePage(wrapper.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

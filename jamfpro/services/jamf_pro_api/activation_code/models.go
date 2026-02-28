@@ -1,5 +1,7 @@
 package activation_code
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ActivationCodeRequest is the body for updating the activation code.
 type ActivationCodeRequest struct {
 	ActivationCode string `json:"activationCode"` // Length between 32 and 39 characters. Hyphens are optional.
@@ -11,24 +13,13 @@ type OrganizationNameRequest struct {
 }
 
 // HistoryEntry represents a single activation code history record.
-type HistoryEntry struct {
-	ID       int     `json:"id"`       // Integer ≥ 1
-	Username string  `json:"username"`
-	Date     string  `json:"date"`     // ISO 8601 timestamp
-	Note     string  `json:"note"`
-	Details  *string `json:"details"`  // Nullable; may be null in API response
-}
+type HistoryEntry = shared.SharedHistoryItem
 
 // HistoryResponse is the response for listing activation code history.
-type HistoryResponse struct {
-	TotalCount int            `json:"totalCount"`
-	Results    []HistoryEntry `json:"results"`
-}
+type HistoryResponse = shared.SharedHistoryResponse
 
 // HistoryNoteRequest is the body for adding a note to activation code history.
-type HistoryNoteRequest struct {
-	Note string `json:"note"`
-}
+type HistoryNoteRequest = shared.SharedHistoryNoteRequest
 
 // ExportField represents a field configuration for export.
 type ExportField struct {

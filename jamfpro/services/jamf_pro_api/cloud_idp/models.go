@@ -1,5 +1,7 @@
 package cloud_idp
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ListResponse represents the paginated response for Cloud Identity Providers.
 type ListResponse struct {
 	TotalCount int                       `json:"totalCount"`
@@ -37,24 +39,13 @@ type ExportField struct {
 }
 
 // HistoryResponse represents the paginated history for a Cloud Identity Provider.
-type HistoryResponse struct {
-	TotalCount int           `json:"totalCount"`
-	Results    []HistoryItem `json:"results"`
-}
+type HistoryResponse = shared.SharedHistoryResponse
 
 // HistoryItem represents a single history entry.
-type HistoryItem struct {
-	ID       int     `json:"id"`
-	Username string  `json:"username"`
-	Date     string  `json:"date"`
-	Note     string  `json:"note"`
-	Details  *string `json:"details,omitempty"`
-}
+type HistoryItem = shared.SharedHistoryItem
 
 // HistoryNoteRequest represents the request for adding a history note.
-type HistoryNoteRequest struct {
-	Note string `json:"note"`
-}
+type HistoryNoteRequest = shared.SharedHistoryNoteRequest
 
 // TestGroupSearchRequest represents the request for testing group search.
 type TestGroupSearchRequest struct {

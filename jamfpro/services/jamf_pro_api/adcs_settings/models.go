@@ -1,5 +1,7 @@
 package adcs_settings
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceAdcsSettings represents the writable AD CS configuration payload.
 type ResourceAdcsSettings struct {
 	ID                string                `json:"id,omitempty"`
@@ -71,22 +73,11 @@ type DependencyItem struct {
 	ConfigProfileType string `json:"configProfileType"`
 }
 
-// HistoryResponse represents the paginated history for an AD CS Settings configuration.
-type HistoryResponse struct {
-	TotalCount int           `json:"totalCount"`
-	Results    []HistoryItem `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct.
+type HistoryResponse = shared.SharedHistoryResponse
 
-// HistoryItem represents a single history entry.
-type HistoryItem struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryItem is an alias to the shared history item struct (uses int ID).
+type HistoryItem = shared.SharedHistoryItem
 
-// HistoryNoteRequest represents the request for adding a history note.
-type HistoryNoteRequest struct {
-	Note string `json:"note"` // required
-}
+// HistoryNoteRequest is an alias to the shared history note request struct.
+type HistoryNoteRequest = shared.SharedHistoryNoteRequest

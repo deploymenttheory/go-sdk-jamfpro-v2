@@ -110,12 +110,11 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointComputerExtensionAttributesV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []ResourceComputerExtensionAttribute
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -127,6 +126,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list computer extension attributes: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -267,12 +267,11 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []HistoryItem
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -283,6 +282,7 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get computer extension attribute history: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -321,12 +321,11 @@ func (s *Service) ListTemplatesV1(ctx context.Context, rsqlQuery map[string]stri
 	endpoint := EndpointComputerExtensionAttributesV1 + "/templates"
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse TemplateListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []ResourceComputerExtensionAttributeTemplate
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -337,6 +336,7 @@ func (s *Service) ListTemplatesV1(ctx context.Context, rsqlQuery map[string]stri
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list computer extension attribute templates: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 

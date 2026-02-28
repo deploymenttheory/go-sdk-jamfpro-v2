@@ -117,7 +117,14 @@ func (m *APNSClientPushStatusMock) GetPaginated(ctx context.Context, path string
 	}
 
 	if mergePage != nil && len(resp.rawBody) > 0 {
-		if err := mergePage(resp.rawBody); err != nil {
+		// Extract "results" field from the response, just like the real GetPaginated does
+		var pageResp struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.rawBody, &pageResp); err != nil {
+			return nil, fmt.Errorf("failed to unmarshal paginated response: %w", err)
+		}
+		if err := mergePage(pageResp.Results); err != nil {
 			return nil, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

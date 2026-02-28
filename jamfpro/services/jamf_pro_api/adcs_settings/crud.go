@@ -261,12 +261,11 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 	}
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []HistoryItem
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -274,6 +273,7 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 	if err != nil {
 		return nil, resp, err
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 

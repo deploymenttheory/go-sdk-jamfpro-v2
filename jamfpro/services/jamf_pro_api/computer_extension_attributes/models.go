@@ -1,5 +1,7 @@
 package computer_extension_attributes
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceComputerExtensionAttribute represents a computer extension attribute resource.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id
@@ -49,24 +51,13 @@ type DeleteComputerExtensionAttributesByIDRequest struct {
 }
 
 // HistoryItem represents a single computer extension attribute history entry.
-type HistoryItem struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+type HistoryItem = shared.SharedHistoryItem
 
 // HistoryResponse is the response for GetHistoryByIDV1.
-type HistoryResponse struct {
-	TotalCount int           `json:"totalCount"`
-	Results    []HistoryItem `json:"results"`
-}
+type HistoryResponse = shared.SharedHistoryResponse
 
 // AddHistoryNoteRequest is the body for AddHistoryNoteByIDV1.
-type AddHistoryNoteRequest struct {
-	Note string `json:"note"`
-}
+type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
 
 // ResourceComputerExtensionAttributeTemplate represents a template for computer extension attributes.
 type ResourceComputerExtensionAttributeTemplate struct {

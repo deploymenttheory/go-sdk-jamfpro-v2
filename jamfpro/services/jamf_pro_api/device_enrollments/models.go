@@ -1,5 +1,7 @@
 package device_enrollments
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ListResponse represents the paginated response for device enrollments list.
 type ListResponse struct {
 	TotalCount int                        `json:"totalCount"`
@@ -7,10 +9,7 @@ type ListResponse struct {
 }
 
 // HistoryResponse represents the paginated response for device enrollment history.
-type HistoryResponse struct {
-	TotalCount int                       `json:"totalCount"`
-	Results    []ResourceHistoryEntry    `json:"results"`
-}
+type HistoryResponse = shared.SharedHistoryResponse
 
 // ResourceDeviceEnrollment represents a single device enrollment instance.
 type ResourceDeviceEnrollment struct {
@@ -29,13 +28,7 @@ type ResourceDeviceEnrollment struct {
 }
 
 // ResourceHistoryEntry represents a single device enrollment history entry.
-type ResourceHistoryEntry struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+type ResourceHistoryEntry = shared.SharedHistoryItem
 
 // ResourceSyncState represents a single device enrollment sync state instance.
 type ResourceSyncState struct {
@@ -74,9 +67,7 @@ type ResponseDisown struct {
 }
 
 // RequestAddHistoryNotes represents the request body for adding history notes.
-type RequestAddHistoryNotes struct {
-	Note string `json:"note"`
-}
+type RequestAddHistoryNotes = shared.SharedHistoryNoteRequest
 
 // ResponseAddHistoryNotes represents the response after adding history notes.
 type ResponseAddHistoryNotes struct {

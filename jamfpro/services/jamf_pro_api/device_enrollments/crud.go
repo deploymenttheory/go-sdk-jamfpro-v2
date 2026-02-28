@@ -133,12 +133,11 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointDeviceEnrollmentsV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []ResourceDeviceEnrollment
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -149,6 +148,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list device enrollments: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -211,12 +211,11 @@ func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[str
 	endpoint := fmt.Sprintf("%s/%s/history", EndpointDeviceEnrollmentsV1, id)
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []ResourceHistoryEntry
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -227,6 +226,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[str
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device enrollment history for ID %s: %w", id, err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -308,8 +308,7 @@ func (s *Service) GetPublicKeyV1(ctx context.Context) ([]byte, *interfaces.Respo
 		"Accept": mime.ApplicationXPEMFile,
 	}
 
-	var result []byte
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, result, err := s.client.GetBytes(ctx, endpoint, nil, headers)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device enrollments public key: %w", err)
 	}

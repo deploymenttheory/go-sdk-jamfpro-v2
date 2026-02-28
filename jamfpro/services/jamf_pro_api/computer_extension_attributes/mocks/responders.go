@@ -189,12 +189,19 @@ func (m *ComputerExtensionAttributesMock) GetBytes(ctx context.Context, path str
 }
 
 func (m *ComputerExtensionAttributesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+	m.LastRSQLQuery = rsqlQuery
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
+		var page struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &page); err != nil {
+			return resp, fmt.Errorf("failed to unmarshal paginated response: %w", err)
+		}
+		if err := mergePage(page.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
