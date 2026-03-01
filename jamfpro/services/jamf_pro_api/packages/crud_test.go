@@ -780,3 +780,188 @@ func TestUnit_Packages_ListV1_InvalidJSONMergePage(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "failed to unmarshal")
 }
+
+// -----------------------------------------------------------------------------
+// UpdateAndUpload tests
+// -----------------------------------------------------------------------------
+
+func TestUnit_Packages_UpdateAndUpload_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+
+	tmp := t.TempDir()
+	pkgPath := filepath.Join(tmp, "updated.pkg")
+	content := []byte("updated content")
+	require.NoError(t, os.WriteFile(pkgPath, content, 0644))
+
+	hash, err := crypto.CalculateSHA3_512(pkgPath)
+	require.NoError(t, err)
+
+	mock.RegisterUpdatePackageMock()
+	mock.RegisterUploadPackageMockForID("1")
+	mock.RegisterGetPackageWithHashMock("1", hash)
+
+	req := &ResourcePackage{
+		PackageName:          "Updated Package",
+		FileName:             "updated.pkg",
+		CategoryID:           "1",
+		Priority:             15,
+		FillUserTemplate:     BoolPtr(false),
+		RebootRequired:       BoolPtr(false),
+		OSInstall:            BoolPtr(false),
+		SuppressUpdates:      BoolPtr(false),
+		SuppressFromDock:     BoolPtr(false),
+		SuppressEula:         BoolPtr(false),
+		SuppressRegistration: BoolPtr(false),
+	}
+
+	result, resp, err := svc.UpdateAndUpload(context.Background(), "1", pkgPath, req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, "1", result.ID)
+	assert.Equal(t, "Firefox Updated", result.PackageName)
+}
+
+func TestUnit_Packages_UpdateAndUpload_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	tmp := t.TempDir()
+	pkgPath := filepath.Join(tmp, "test.pkg")
+	require.NoError(t, os.WriteFile(pkgPath, []byte("x"), 0644))
+
+	req := &ResourcePackage{PackageName: "x", FileName: "x.pkg", CategoryID: "1", Priority: 1}
+	result, resp, err := svc.UpdateAndUpload(context.Background(), "", pkgPath, req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "package ID is required")
+}
+
+func TestUnit_Packages_UpdateAndUpload_EmptyFilePath(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &ResourcePackage{PackageName: "x", FileName: "x.pkg", CategoryID: "1", Priority: 1}
+	result, resp, err := svc.UpdateAndUpload(context.Background(), "1", "", req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "file path is required")
+}
+
+func TestUnit_Packages_UpdateAndUpload_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	tmp := t.TempDir()
+	pkgPath := filepath.Join(tmp, "test.pkg")
+	require.NoError(t, os.WriteFile(pkgPath, []byte("x"), 0644))
+
+	result, resp, err := svc.UpdateAndUpload(context.Background(), "1", pkgPath, nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_Packages_UpdateAndUpload_FileNotFound(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &ResourcePackage{PackageName: "x", FileName: "x.pkg", CategoryID: "1", Priority: 1}
+	result, resp, err := svc.UpdateAndUpload(context.Background(), "1", "/nonexistent/path.pkg", req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "SHA3_512")
+}
+
+func TestUnit_Packages_UpdateAndUpload_HashVerificationFailed(t *testing.T) {
+	svc, mock := setupMockService(t)
+
+	tmp := t.TempDir()
+	pkgPath := filepath.Join(tmp, "test.pkg")
+	require.NoError(t, os.WriteFile(pkgPath, []byte("test content"), 0644))
+
+	mock.RegisterUpdatePackageMock()
+	mock.RegisterUploadPackageMockForID("1")
+	mock.RegisterGetPackageWithHashMock("1", "wrong-hash-value")
+
+	req := &ResourcePackage{
+		PackageName:          "Test",
+		FileName:             "test.pkg",
+		CategoryID:           "1",
+		Priority:             1,
+		FillUserTemplate:     BoolPtr(false),
+		RebootRequired:       BoolPtr(false),
+		OSInstall:            BoolPtr(false),
+		SuppressUpdates:      BoolPtr(false),
+		SuppressFromDock:     BoolPtr(false),
+		SuppressEula:         BoolPtr(false),
+		SuppressRegistration: BoolPtr(false),
+	}
+
+	result, resp, err := svc.UpdateAndUpload(context.Background(), "1", pkgPath, req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "hash verification failed")
+}
+
+func TestUnit_Packages_UpdateAndUpload_UpdateError(t *testing.T) {
+	svc, mock := setupMockService(t)
+
+	tmp := t.TempDir()
+	pkgPath := filepath.Join(tmp, "test.pkg")
+	require.NoError(t, os.WriteFile(pkgPath, []byte("x"), 0644))
+
+	mock.RegisterAPIError("PUT", "/api/v1/packages/1", 500, "update failed")
+
+	req := &ResourcePackage{
+		PackageName:          "Test",
+		FileName:             "test.pkg",
+		CategoryID:           "1",
+		Priority:             1,
+		FillUserTemplate:     BoolPtr(false),
+		RebootRequired:       BoolPtr(false),
+		OSInstall:            BoolPtr(false),
+		SuppressUpdates:      BoolPtr(false),
+		SuppressFromDock:     BoolPtr(false),
+		SuppressEula:         BoolPtr(false),
+		SuppressRegistration: BoolPtr(false),
+	}
+
+	result, resp, err := svc.UpdateAndUpload(context.Background(), "1", pkgPath, req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "update metadata")
+}
+
+func TestUnit_Packages_UpdateAndUpload_UploadError(t *testing.T) {
+	svc, mock := setupMockService(t)
+
+	tmp := t.TempDir()
+	pkgPath := filepath.Join(tmp, "test.pkg")
+	require.NoError(t, os.WriteFile(pkgPath, []byte("x"), 0644))
+
+	mock.RegisterUpdatePackageMock()
+	mock.RegisterAPIError("POST", "/api/v1/packages/1/upload", 500, "upload failed")
+
+	req := &ResourcePackage{
+		PackageName:          "Test",
+		FileName:             "test.pkg",
+		CategoryID:           "1",
+		Priority:             1,
+		FillUserTemplate:     BoolPtr(false),
+		RebootRequired:       BoolPtr(false),
+		OSInstall:            BoolPtr(false),
+		SuppressUpdates:      BoolPtr(false),
+		SuppressFromDock:     BoolPtr(false),
+		SuppressEula:         BoolPtr(false),
+		SuppressRegistration: BoolPtr(false),
+	}
+
+	result, resp, err := svc.UpdateAndUpload(context.Background(), "1", pkgPath, req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "upload file")
+}

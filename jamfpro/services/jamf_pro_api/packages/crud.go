@@ -111,6 +111,13 @@ type (
 		// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Create metadata (FileName, MD5 set from file);
 		// 3) Upload file; 4) Poll until HashType==SHA3_512 and HashValue populated; 5) Verify hash.
 		CreateAndUpload(ctx context.Context, filePath string, req *RequestPackage) (*CreateResponse, *interfaces.Response, error)
+
+		// UpdateAndUpload updates package metadata, uploads a new file, and verifies SHA3_512.
+		// Convenience method for updating and uploading a package.
+		//
+		// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Update metadata (FileName, MD5 set from file);
+		// 3) Upload file; 4) Poll until HashType==SHA3_512 and HashValue populated; 5) Verify hash.
+		UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *interfaces.Response, error)
 	}
 
 	// Service handles communication with the packages-related methods of the Jamf Pro API.
@@ -554,4 +561,67 @@ func (s *Service) CreateAndUpload(ctx context.Context, filePath string, req *Req
 	}
 
 	return created, resp, nil
+}
+
+// UpdateAndUpload updates package metadata, uploads a new file, and verifies SHA3_512.
+// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Update metadata; 3) Upload file;
+// 4) Poll until HashType==SHA3_512; 5) Verify hash.
+func (s *Service) UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *interfaces.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("package ID is required")
+	}
+	if filePath == "" {
+		return nil, nil, fmt.Errorf("file path is required")
+	}
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	initialHash, err := crypto.CalculateSHA3_512(filePath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("SHA3_512: %w", err)
+	}
+	md5Hash, err := crypto.CalculateMD5(filePath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("MD5: %w", err)
+	}
+
+	updateReq := *req
+	updateReq.FileName = filepath.Base(filePath)
+	updateReq.MD5 = md5Hash
+
+	updated, resp, err := s.UpdateByIDV1(ctx, id, &updateReq)
+	if err != nil {
+		return nil, resp, fmt.Errorf("update metadata: %w", err)
+	}
+
+	_, resp, err = s.UploadV1(ctx, id, filePath)
+	if err != nil {
+		return nil, resp, fmt.Errorf("upload file: %w", err)
+	}
+
+	const maxAttempts = 10
+	const sleepBetween = 2 * time.Second
+	var uploaded *ResourcePackage
+	for i := 1; i <= maxAttempts; i++ {
+		uploaded, resp, err = s.GetByIDV1(ctx, id)
+		if err != nil {
+			return nil, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
+		}
+		if uploaded.HashType == "SHA3_512" && uploaded.HashValue != "" {
+			break
+		}
+		if i < maxAttempts {
+			time.Sleep(sleepBetween)
+		}
+	}
+
+	if uploaded.HashType != "SHA3_512" || uploaded.HashValue == "" {
+		return nil, resp, fmt.Errorf("timed out waiting for SHA3_512")
+	}
+	if uploaded.HashValue != initialHash {
+		return nil, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.HashValue)
+	}
+
+	return updated, resp, nil
 }
