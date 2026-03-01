@@ -34,6 +34,7 @@ import (
 //   • AssignManifestToPackageV1(ctx, id, manifestPath) - Assigns manifest to package
 //   • DeletePackageManifestV1(ctx, id) - Removes manifest from package
 //   • CreateAndUpload(ctx, filePath, request) - Helper: create + upload + verify SHA3_512
+//   • UpdateAndUpload(ctx, id, filePath, request) - Helper: update + upload + verify SHA3_512
 //
 // Test Strategies Applied
 // -----------------------------------------------------------------------------
@@ -57,6 +58,11 @@ import (
 //     -- Tests: TestAcceptance_Packages_validation_errors
 //     -- Cases: Empty IDs, nil requests, missing required fields
 //
+//   ✓ Pattern 8: Update and Upload
+//     -- Reason: Service provides UpdateAndUpload for updating metadata and uploading new file
+//     -- Tests: TestAcceptance_Packages_update_and_upload
+//     -- Flow: CreateAndUpload (download → create → upload) → UpdateAndUpload (download → update → upload) → Verify hash
+//
 // Test Coverage
 // -----------------------------------------------------------------------------
 //   ✓ Create operations (metadata creation via CreateAndUpload)
@@ -67,6 +73,7 @@ import (
 //   ✓ Delete operations (single delete)
 //   ✓ Bulk delete operations (multiple packages)
 //   ✓ History operations (add notes, retrieve history)
+//   ✓ Update and upload operations (UpdateAndUpload helper)
 //   ✓ Input validation and error handling
 //   ✓ Cleanup and resource management
 //   ✗ Manifest operations (not yet tested - should be added)
@@ -75,8 +82,10 @@ import (
 // -----------------------------------------------------------------------------
 //   • RSQL testing is mandatory because ListV1 supports filtering
 //   • All tests register cleanup handlers to remove test packages
-//   • Lifecycle test downloads real package from Mozilla Firefox FTP (147.0)
+//   • Lifecycle test downloads Firefox 147.0 from Mozilla Firefox FTP
+//   • UpdateAndUpload test downloads Firefox 147.0 for create and Firefox 148.0 for update to validate different app versions
 //   • CreateAndUpload helper verifies SHA3_512 hash after upload
+//   • UpdateAndUpload helper verifies SHA3_512 hash after upload
 //   • Package upload is multipart with application/octet-stream
 //   • Update only modifies metadata - file re-upload requires separate call
 //   • Seven boolean fields required: FillUserTemplate, FillExistingUsers, RebootRequired,
@@ -88,7 +97,10 @@ import (
 //
 // =============================================================================
 
-const acceptanceTestPackageURL = "https://ftp.mozilla.org/pub/firefox/releases/147.0/mac/en-GB/Firefox%20147.0.pkg"
+const (
+	acceptanceTestPackageURL147 = "https://ftp.mozilla.org/pub/firefox/releases/147.0/mac/en-GB/Firefox%20147.0.pkg"
+	acceptanceTestPackageURL148 = "https://ftp.mozilla.org/pub/firefox/releases/148.0/mac/en-GB/Firefox%20148.0.pkg"
+)
 
 func uniquePackageName(base string) string {
 	return fmt.Sprintf("%s-%d", base, time.Now().UnixMilli())
@@ -112,7 +124,7 @@ func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	tmpDir := t.TempDir()
 	pkgPath := filepath.Join(tmpDir, "Firefox_147.0.pkg")
 	func() {
-		resp, err := http.Get(acceptanceTestPackageURL)
+		resp, err := http.Get(acceptanceTestPackageURL147)
 		require.NoError(t, err, "download package from web source")
 		defer resp.Body.Close()
 		require.Equal(t, http.StatusOK, resp.StatusCode, "web source must return 200")
@@ -417,4 +429,155 @@ func TestAcceptance_Packages_validation_errors(t *testing.T) {
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "request body is required")
 	})
+
+	t.Run("UpdateAndUpload_EmptyID", func(t *testing.T) {
+		tmp := t.TempDir()
+		pkgPath := filepath.Join(tmp, "test.pkg")
+		require.NoError(t, os.WriteFile(pkgPath, []byte("x"), 0644))
+
+		_, _, err := svc.UpdateAndUpload(context.Background(), "", pkgPath, &packages.ResourcePackage{PackageName: "x"})
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "package ID is required")
+	})
+
+	t.Run("UpdateAndUpload_EmptyFilePath", func(t *testing.T) {
+		_, _, err := svc.UpdateAndUpload(context.Background(), "1", "", &packages.ResourcePackage{PackageName: "x"})
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "file path is required")
+	})
+
+	t.Run("UpdateAndUpload_NilRequest", func(t *testing.T) {
+		tmp := t.TempDir()
+		pkgPath := filepath.Join(tmp, "test.pkg")
+		require.NoError(t, os.WriteFile(pkgPath, []byte("x"), 0644))
+
+		_, _, err := svc.UpdateAndUpload(context.Background(), "1", pkgPath, nil)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+}
+
+// =============================================================================
+// TestAcceptance_Packages_update_and_upload exercises UpdateAndUpload:
+// download Firefox 147.0 → CreateAndUpload → download Firefox 148.0 → UpdateAndUpload → verify SHA3_512.
+// Uses different Firefox versions (147.0 and 148.0) to validate handling of separate app versions.
+// =============================================================================
+
+func TestAcceptance_Packages_update_and_upload(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.Packages
+	ctx := context.Background()
+
+	acc.LogTestStage(t, "CreateAndUpload", "Downloading Firefox 147.0 from web source, creating metadata, uploading file")
+
+	tmpDir := t.TempDir()
+	initialPkgPath := filepath.Join(tmpDir, "Firefox_147.0_initial.pkg")
+	func() {
+		resp, err := http.Get(acceptanceTestPackageURL147)
+		require.NoError(t, err, "download initial package (147.0) from web source")
+		defer resp.Body.Close()
+		require.Equal(t, http.StatusOK, resp.StatusCode, "web source must return 200")
+		out, err := os.Create(initialPkgPath)
+		require.NoError(t, err)
+		defer out.Close()
+		_, err = io.Copy(out, resp.Body)
+		require.NoError(t, err)
+	}()
+
+	createReq := &packages.RequestPackage{
+		PackageName:          uniquePackageName("acc-update-upload"),
+		FileName:             "",
+		CategoryID:           "-1",
+		Info:                 "Initial package for UpdateAndUpload test",
+		Notes:                "Created by SDK acceptance test",
+		Priority:             10,
+		FillUserTemplate:     packages.BoolPtr(false),
+		FillExistingUsers:    packages.BoolPtr(false),
+		RebootRequired:       packages.BoolPtr(false),
+		OSInstall:            packages.BoolPtr(false),
+		SuppressUpdates:      packages.BoolPtr(false),
+		SuppressFromDock:     packages.BoolPtr(false),
+		SuppressEula:         packages.BoolPtr(false),
+		SuppressRegistration: packages.BoolPtr(false),
+	}
+
+	created, createResp, err := svc.CreateAndUpload(ctx, initialPkgPath, createReq)
+	require.NoError(t, err)
+	require.NotNil(t, created)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	assert.NotEmpty(t, created.ID)
+
+	packageID := created.ID
+	acc.LogTestSuccess(t, "Initial package created with ID=%s", packageID)
+
+	acc.Cleanup(t, func() {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		_, delErr := svc.DeleteByIDV1(cleanupCtx, packageID)
+		acc.LogCleanupDeleteError(t, "package", packageID, delErr)
+	})
+
+	acc.LogTestStage(t, "UpdateAndUpload", "Downloading Firefox 148.0 from web source, updating metadata, uploading new file")
+
+	updatedPkgPath := filepath.Join(tmpDir, "Firefox_148.0_updated.pkg")
+	func() {
+		resp, err := http.Get(acceptanceTestPackageURL148)
+		require.NoError(t, err, "download updated package (148.0) from web source")
+		defer resp.Body.Close()
+		require.Equal(t, http.StatusOK, resp.StatusCode, "web source must return 200")
+		out, err := os.Create(updatedPkgPath)
+		require.NoError(t, err)
+		defer out.Close()
+		_, err = io.Copy(out, resp.Body)
+		require.NoError(t, err)
+	}()
+
+	fetched, _, err := svc.GetByIDV1(ctx, packageID)
+	require.NoError(t, err)
+
+	updateReq := &packages.ResourcePackage{
+		ID:                   fetched.ID,
+		PackageName:          uniquePackageName("acc-update-upload-modified"),
+		FileName:             "",
+		CategoryID:           fetched.CategoryID,
+		Info:                 "Updated package info",
+		Notes:                "Updated by SDK acceptance test via UpdateAndUpload",
+		Priority:             20,
+		FillUserTemplate:     packages.BoolPtr(false),
+		FillExistingUsers:    packages.BoolPtr(false),
+		RebootRequired:       fetched.RebootRequired,
+		OSInstall:            fetched.OSInstall,
+		SuppressUpdates:      fetched.SuppressUpdates,
+		SuppressFromDock:     fetched.SuppressFromDock,
+		SuppressEula:         fetched.SuppressEula,
+		SuppressRegistration: fetched.SuppressRegistration,
+	}
+
+	updated, updateResp, err := svc.UpdateAndUpload(ctx, packageID, updatedPkgPath, updateReq)
+	require.NoError(t, err)
+	require.NotNil(t, updated)
+	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, updateReq.PackageName, updated.PackageName)
+	assert.Equal(t, 20, updated.Priority)
+	acc.LogTestSuccess(t, "Package updated and new file uploaded with ID=%s", packageID)
+
+	acc.LogTestStage(t, "Verify", "Verifying updated package metadata and hash")
+
+	verified, _, err := svc.GetByIDV1(ctx, packageID)
+	require.NoError(t, err)
+	assert.Equal(t, updateReq.PackageName, verified.PackageName)
+	assert.Equal(t, "Updated package info", verified.Info)
+	assert.Equal(t, 20, verified.Priority)
+	assert.Equal(t, "SHA3_512", verified.HashType)
+	assert.NotEmpty(t, verified.HashValue)
+	acc.LogTestSuccess(t, "UpdateAndUpload verified: packageName=%q hashType=%s", verified.PackageName, verified.HashType)
+
+	acc.LogTestStage(t, "Delete", "Deleting package ID=%s", packageID)
+
+	deleteResp, err := svc.DeleteByIDV1(ctx, packageID)
+	require.NoError(t, err)
+	require.NotNil(t, deleteResp)
+	assert.Equal(t, 204, deleteResp.StatusCode)
+	acc.LogTestSuccess(t, "Package ID=%s deleted", packageID)
 }
