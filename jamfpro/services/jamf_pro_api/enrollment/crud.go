@@ -281,12 +281,11 @@ func (s *Service) ListAccessGroupsV3(ctx context.Context, rsqlQuery map[string]s
 	var result ListResponseAccessGroups
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponseAccessGroups
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceAccountDrivenUserEnrollmentAccessGroup
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -298,6 +297,7 @@ func (s *Service) ListAccessGroupsV3(ctx context.Context, rsqlQuery map[string]s
 	if err != nil {
 		return nil, resp, err
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -410,12 +410,11 @@ func (s *Service) ListLanguageMessagesV3(ctx context.Context) (*ListResponseLang
 	var result ListResponseLanguageMessages
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponseLanguageMessages
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceEnrollmentLanguage
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -427,6 +426,7 @@ func (s *Service) ListLanguageMessagesV3(ctx context.Context) (*ListResponseLang
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list enrollment language messages: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
