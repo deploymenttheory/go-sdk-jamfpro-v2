@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.6.0...v0.7.0) (2026-03-01)
+
+
+### Features
+
+* implement UpdateAndUpload functionality for package management ([e0e2fc7](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/e0e2fc74d8ad422c578e47e043ed3b90915cae52))
+* implement UpdateAndUpload functionality for package management ([1b331cf](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/1b331cfb79e8e611718164d64ff162ae0b8c681c))
+
 ## [0.6.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.5.0...v0.6.0) (2026-02-28)
 
 
