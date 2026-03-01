@@ -250,12 +250,11 @@ func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string
 	var result ListResponseJamfProtectDeploymentTasks
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponseJamfProtectDeploymentTasks
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceJamfProtectDeploymentTask
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -266,6 +265,7 @@ func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect deployment tasks: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -301,12 +301,11 @@ func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string
 	var result ListResponseJamfProtectHistory
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponseJamfProtectHistory
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceJamfProtectHistory
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -318,6 +317,7 @@ func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect history: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -354,12 +354,11 @@ func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) 
 	var result ListResponseJamfProtectPlans
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponseJamfProtectPlans
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceJamfProtectPlan
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -370,6 +369,7 @@ func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) 
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect plans: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 

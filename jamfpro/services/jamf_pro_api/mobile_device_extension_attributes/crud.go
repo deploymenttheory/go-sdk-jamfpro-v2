@@ -87,12 +87,11 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointMobileDeviceExtensionAttributesV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceMobileDeviceExtensionAttribute
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -104,6 +103,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list mobile device extension attributes: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -244,12 +244,11 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []HistoryItem
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -260,6 +259,7 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get mobile device extension attribute history: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
