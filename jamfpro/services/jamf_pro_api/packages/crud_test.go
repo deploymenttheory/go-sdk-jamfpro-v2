@@ -501,6 +501,7 @@ func TestUnit_Packages_CreateAndUpload_Success(t *testing.T) {
 
 	mock.RegisterCreatePackageMock()
 	mock.RegisterUploadPackageMockForID("3")
+	mock.RegisterRefreshCloudDistributionPointMock()
 	mock.RegisterGetPackageWithHashMock("3", hash)
 
 	req := &RequestPackage{
@@ -569,6 +570,7 @@ func TestUnit_Packages_CreateAndUpload_HashVerificationFailed(t *testing.T) {
 
 	mock.RegisterCreatePackageMock()
 	mock.RegisterUploadPackageMockForID("3")
+	mock.RegisterRefreshCloudDistributionPointMock()
 	// Return wrong hash - verification should fail
 	mock.RegisterGetPackageWithHashMock("3", "wrong-hash-value")
 
@@ -798,6 +800,7 @@ func TestUnit_Packages_UpdateAndUpload_Success(t *testing.T) {
 
 	mock.RegisterUpdatePackageMock()
 	mock.RegisterUploadPackageMockForID("1")
+	mock.RegisterRefreshCloudDistributionPointMock()
 	mock.RegisterGetPackageWithHashMock("1", hash)
 
 	req := &ResourcePackage{
@@ -882,6 +885,7 @@ func TestUnit_Packages_UpdateAndUpload_HashVerificationFailed(t *testing.T) {
 
 	mock.RegisterUpdatePackageMock()
 	mock.RegisterUploadPackageMockForID("1")
+	mock.RegisterRefreshCloudDistributionPointMock()
 	mock.RegisterGetPackageWithHashMock("1", "wrong-hash-value")
 
 	req := &ResourcePackage{
