@@ -182,6 +182,10 @@ func (m *PackagesMock) RegisterExportHistoryMock() {
 	m.register("POST", "/api/v1/packages/1/history/export", 200, "validate_export_history.json")
 }
 
+func (m *PackagesMock) RegisterRefreshCloudDistributionPointMock() {
+	m.register("POST", "/api/v1/cloud-distribution-point/refresh-inventory", 204, "")
+}
+
 // RegisterGetPackageWithHashMock registers a GET response for the package with the given ID,
 // returning a package that has HashType=SHA3_512 and the given HashValue. Used for CreateAndUpload tests.
 func (m *PackagesMock) RegisterGetPackageWithHashMock(id string, hashValue string) {

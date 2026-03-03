@@ -11,6 +11,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/crypto"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_distribution_point"
 )
 
 type (
@@ -124,14 +125,18 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages
 	Service struct {
-		client interfaces.HTTPClient
+		client                 interfaces.HTTPClient
+		cloudDistributionPoint cloud_distribution_point.CloudDistributionPointServiceInterface
 	}
 )
 
 var _ PackagesServiceInterface = (*Service)(nil)
 
 func NewService(client interfaces.HTTPClient) *Service {
-	return &Service{client: client}
+	return &Service{
+		client:                 client,
+		cloudDistributionPoint: cloud_distribution_point.NewService(client),
+	}
 }
 
 // -----------------------------------------------------------------------------
@@ -148,11 +153,12 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	endpoint := EndpointPackagesV1
 
 	mergePage := func(pageData []byte) error {
-		var pageItems []ResourcePackage
-		if err := json.Unmarshal(pageData, &pageItems); err != nil {
+		var pageResponse ListResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageItems...)
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
 		return nil
 	}
 
@@ -163,7 +169,6 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list packages: %w", err)
 	}
-	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -504,7 +509,7 @@ func (s *Service) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[
 
 // CreateAndUpload creates package metadata, uploads the file, and verifies SHA3_512.
 // Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Create metadata; 3) Upload file;
-// 4) Poll until HashType==SHA3_512; 5) Verify hash.
+// 4) Refresh cloud distribution point inventory (forces immediate hash recalculation); 5) Poll until HashType==SHA3_512; 6) Verify hash.
 func (s *Service) CreateAndUpload(ctx context.Context, filePath string, req *RequestPackage) (*CreateResponse, *interfaces.Response, error) {
 	if filePath == "" {
 		return nil, nil, fmt.Errorf("file path is required")
@@ -541,6 +546,11 @@ func (s *Service) CreateAndUpload(ctx context.Context, filePath string, req *Req
 	const sleepBetween = 2 * time.Second
 	var uploaded *ResourcePackage
 	for i := 1; i <= maxAttempts; i++ {
+
+		_, refreshErr := s.cloudDistributionPoint.RefreshInventoryV1(ctx, createReq.FileName)
+		if refreshErr != nil {
+			return nil, resp, fmt.Errorf("refresh cloud distribution point inventory: %w", refreshErr)
+		}
 		uploaded, resp, err = s.GetByIDV1(ctx, packageID)
 		if err != nil {
 			return nil, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
@@ -565,7 +575,7 @@ func (s *Service) CreateAndUpload(ctx context.Context, filePath string, req *Req
 
 // UpdateAndUpload updates package metadata, uploads a new file, and verifies SHA3_512.
 // Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Update metadata; 3) Upload file;
-// 4) Poll until HashType==SHA3_512; 5) Verify hash.
+// 4) Refresh cloud distribution point inventory (forces immediate hash recalculation); 5) Poll until HashType==SHA3_512; 6) Verify hash.
 func (s *Service) UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *interfaces.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
@@ -604,6 +614,12 @@ func (s *Service) UpdateAndUpload(ctx context.Context, id string, filePath strin
 	const sleepBetween = 2 * time.Second
 	var uploaded *ResourcePackage
 	for i := 1; i <= maxAttempts; i++ {
+
+		_, refreshErr := s.cloudDistributionPoint.RefreshInventoryV1(ctx, updateReq.FileName)
+		if refreshErr != nil {
+			return nil, resp, fmt.Errorf("refresh cloud distribution point inventory: %w", refreshErr)
+		}
+
 		uploaded, resp, err = s.GetByIDV1(ctx, id)
 		if err != nil {
 			return nil, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
