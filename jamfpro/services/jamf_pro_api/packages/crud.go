@@ -537,8 +537,8 @@ func (s *Service) CreateAndUpload(ctx context.Context, filePath string, req *Req
 		return nil, resp, fmt.Errorf("upload file: %w", err)
 	}
 
-	const maxAttempts = 10
-	const sleepBetween = 2 * time.Second
+	const maxAttempts = 60
+	const sleepBetween = 3 * time.Second
 	var uploaded *ResourcePackage
 	for i := 1; i <= maxAttempts; i++ {
 		uploaded, resp, err = s.GetByIDV1(ctx, packageID)
@@ -554,7 +554,7 @@ func (s *Service) CreateAndUpload(ctx context.Context, filePath string, req *Req
 	}
 
 	if uploaded.HashType != "SHA3_512" || uploaded.HashValue == "" {
-		return nil, resp, fmt.Errorf("timed out waiting for SHA3_512")
+		return nil, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
 	}
 	if uploaded.HashValue != initialHash {
 		return nil, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.HashValue)
@@ -600,8 +600,8 @@ func (s *Service) UpdateAndUpload(ctx context.Context, id string, filePath strin
 		return nil, resp, fmt.Errorf("upload file: %w", err)
 	}
 
-	const maxAttempts = 10
-	const sleepBetween = 2 * time.Second
+	const maxAttempts = 60
+	const sleepBetween = 3 * time.Second
 	var uploaded *ResourcePackage
 	for i := 1; i <= maxAttempts; i++ {
 		uploaded, resp, err = s.GetByIDV1(ctx, id)
@@ -617,7 +617,7 @@ func (s *Service) UpdateAndUpload(ctx context.Context, id string, filePath strin
 	}
 
 	if uploaded.HashType != "SHA3_512" || uploaded.HashValue == "" {
-		return nil, resp, fmt.Errorf("timed out waiting for SHA3_512")
+		return nil, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
 	}
 	if uploaded.HashValue != initialHash {
 		return nil, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.HashValue)

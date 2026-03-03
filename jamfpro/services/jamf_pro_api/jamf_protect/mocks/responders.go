@@ -158,7 +158,7 @@ func (m *JamfProtectMock) RegisterListHistoryMock() {
 // RegisterCreateHistoryNoteMock registers a successful response for CreateHistoryNoteV1.
 func (m *JamfProtectMock) RegisterCreateHistoryNoteMock() {
 	m.register("POST", "/api/v1/jamf-protect/history", 201, `{
-		"id": 3,
+		"id": "3",
 		"username": "admin",
 		"date": "2025-01-15T11:00:00Z",
 		"note": "Test note",

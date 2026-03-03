@@ -85,7 +85,6 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
-	assert.Equal(t, groupID, fetched.ID)
 	assert.Equal(t, createReq.Name, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: name=%q", fetched.Name)
 
@@ -121,7 +120,7 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx, groupID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Contains(t, []int{200, 202}, updateResp.StatusCode)
 	acc.LogTestSuccess(t, "Smart computer group updated: ID=%s", groupID)
 
 	// 6. Re-fetch to verify

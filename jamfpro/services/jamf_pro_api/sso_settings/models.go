@@ -60,11 +60,11 @@ type EnrollmentCustomizationDependency struct {
 	HumanReadableName string `json:"humanReadableName"`
 }
 
-// HistoryEntry is an alias to the shared history item struct with integer IDs.
-type HistoryEntry = shared.SharedHistoryItem
+// HistoryEntry is an alias to the shared history item struct with string IDs.
+type HistoryEntry = shared.SharedHistoryItemString
 
-// HistoryListResponse is an alias to the shared history response struct with integer IDs.
-type HistoryListResponse = shared.SharedHistoryResponse
+// HistoryListResponse is an alias to the shared history response struct with string IDs.
+type HistoryListResponse = shared.SharedHistoryResponseString
 
 // AddHistoryNoteRequest is an alias to the shared history note request struct.
 type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
