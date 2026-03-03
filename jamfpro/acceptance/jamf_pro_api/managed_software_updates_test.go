@@ -67,6 +67,9 @@ func TestAcceptance_ManagedSoftwareUpdates_get_available_updates(t *testing.T) {
 	ctx := context.Background()
 
 	result, resp, err := svc.GetAvailableUpdates(ctx)
+	if err != nil && resp != nil && resp.StatusCode == 503 {
+		t.Skip("Managed Software Update Plans toggle is off (503)")
+	}
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -95,6 +98,9 @@ func TestAcceptance_ManagedSoftwareUpdates_get_plans(t *testing.T) {
 
 	params := url.Values{}
 	result, resp, err := svc.GetPlans(ctx, params)
+	if err != nil && resp != nil && resp.StatusCode == 503 {
+		t.Skip("Managed Software Update Plans toggle is off (503)")
+	}
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

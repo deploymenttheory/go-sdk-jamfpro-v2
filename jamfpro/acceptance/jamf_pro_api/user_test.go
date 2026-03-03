@@ -46,7 +46,7 @@ func TestAcceptance_User_get(t *testing.T) {
 	svc := acc.Client.User
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get", "Fetching current authenticated user")
+	acc.LogTestStage(t, "Get", "Getting current authenticated user")
 
 	u, resp, err := svc.Get(ctx)
 	if err != nil {

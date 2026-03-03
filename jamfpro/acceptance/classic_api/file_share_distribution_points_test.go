@@ -97,7 +97,7 @@ func TestAcceptance_FileShareDistributionPoints_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching distribution point by ID=%d", dpID)
+	acc.LogTestStage(t, "GetByID", "Getting distribution point by ID=%d", dpID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -113,7 +113,7 @@ func TestAcceptance_FileShareDistributionPoints_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching distribution point by name=%q", dpName)
+	acc.LogTestStage(t, "GetByName", "Getting distribution point by name=%q", dpName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

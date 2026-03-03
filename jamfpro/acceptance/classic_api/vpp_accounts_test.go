@@ -86,7 +86,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching VPP account by ID=%d", accountID)
+	acc.LogTestStage(t, "GetByID", "Getting VPP account by ID=%d", accountID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()

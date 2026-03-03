@@ -43,7 +43,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 		},
 		Scope: &mobile_device_configuration_profiles.SubsetScope{
 			AllMobileDevices: true,
-			AllJSSUsers:     false,
+			AllJSSUsers:      false,
 		},
 	}
 
@@ -94,7 +94,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching profile by ID=%d", profileID)
+	acc.LogTestStage(t, "GetByID", "Getting profile by ID=%d", profileID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -110,7 +110,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching profile by name=%q", profileName)
+	acc.LogTestStage(t, "GetByName", "Getting profile by name=%q", profileName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
@@ -126,7 +126,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. GetByIDWithSubset
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByIDWithSubset", "Fetching profile by ID=%d with subset General", profileID)
+	acc.LogTestStage(t, "GetByIDWithSubset", "Getting profile by ID=%d with subset General", profileID)
 
 	ctx5a, cancel5a := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5a()
@@ -159,7 +159,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 		},
 		Scope: &mobile_device_configuration_profiles.SubsetScope{
 			AllMobileDevices: true,
-			AllJSSUsers:     false,
+			AllJSSUsers:      false,
 		},
 	}
 	updated, updateResp, err := svc.UpdateByID(ctx5, profileID, updateReq)
@@ -188,7 +188,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 		},
 		Scope: &mobile_device_configuration_profiles.SubsetScope{
 			AllMobileDevices: true,
-			AllJSSUsers:     false,
+			AllJSSUsers:      false,
 		},
 	}
 	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
@@ -250,7 +250,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_delete_by_name(t *testing.
 		},
 		Scope: &mobile_device_configuration_profiles.SubsetScope{
 			AllMobileDevices: true,
-			AllJSSUsers:     false,
+			AllJSSUsers:      false,
 		},
 	}
 

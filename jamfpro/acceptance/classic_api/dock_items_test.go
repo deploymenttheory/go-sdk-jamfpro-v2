@@ -85,7 +85,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching dock item by ID=%d", itemID)
+	acc.LogTestStage(t, "GetByID", "Getting dock item by ID=%d", itemID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -101,7 +101,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching dock item by name=%q", itemName)
+	acc.LogTestStage(t, "GetByName", "Getting dock item by name=%q", itemName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

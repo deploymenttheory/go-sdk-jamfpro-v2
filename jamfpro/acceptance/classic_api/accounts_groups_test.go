@@ -59,7 +59,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 2. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching account group by ID=%d", groupID)
+	acc.LogTestStage(t, "GetByID", "Getting account group by ID=%d", groupID)
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
@@ -75,7 +75,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching account group by name=%q", groupName)
+	acc.LogTestStage(t, "GetByName", "Getting account group by name=%q", groupName)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()

@@ -45,7 +45,7 @@ func TestAcceptance_ApiAuthorization_get_v1(t *testing.T) {
 	svc := acc.Client.ApiAuthorization
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get", "Fetching API authorization details")
+	acc.LogTestStage(t, "Get", "Getting API authorization details")
 
 	result, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)

@@ -90,7 +90,7 @@ func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching allowed file extension by ID=%d", extID)
+	acc.LogTestStage(t, "GetByID", "Getting allowed file extension by ID=%d", extID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -106,7 +106,7 @@ func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByExtension
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByExtension", "Fetching allowed file extension by extension=%q", extension)
+	acc.LogTestStage(t, "GetByExtension", "Getting allowed file extension by extension=%q", extension)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

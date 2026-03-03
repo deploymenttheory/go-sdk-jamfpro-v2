@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_ios"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -48,9 +49,9 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 
 	createReq := &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
 		BrandingName:              acc.UniqueName("sdkv2_acc_acc-test-ssb-mobile"),
-		HeaderBackgroundColorCode: "#FFFFFF",
-		MenuIconColorCode:         "#000000",
-		BrandingNameColorCode:     "#333333",
+		HeaderBackgroundColorCode: "FFFFFF",
+		MenuIconColorCode:         "000000",
+		BrandingNameColorCode:     "333333",
 		StatusBarTextColor:        "light",
 	}
 	created, createResp, err := svc.CreateV1(ctx, createReq)
@@ -69,10 +70,16 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 		acc.LogCleanupDeleteError(t, "self-service branding mobile", brandingID, delErr)
 	})
 
-	// 2. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching branding by ID=%s", brandingID)
+	// 2. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting branding by ID=%s", brandingID)
 
-	fetched, fetchResp, err := svc.GetByIDV1(ctx, brandingID)
+	var fetched *self_service_branding_ios.ResourceSelfServiceBrandingMobile
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, brandingID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -91,9 +98,9 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 
 	updateReq := &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
 		BrandingName:              acc.UniqueName("sdkv2_acc_acc-test-ssb-mobile-updated"),
-		HeaderBackgroundColorCode: "#F0F0F0",
-		MenuIconColorCode:         "#0066CC",
-		BrandingNameColorCode:     "#222222",
+		HeaderBackgroundColorCode: "F0F0F0",
+		MenuIconColorCode:         "0066CC",
+		BrandingNameColorCode:     "222222",
 		StatusBarTextColor:        "dark",
 	}
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, brandingID, updateReq)
@@ -132,9 +139,9 @@ func TestAcceptance_SelfServiceBrandingIOS_list_with_rsql_filter(t *testing.T) {
 	name := acc.UniqueName("sdkv2_acc_rsql-ssb-mobile")
 	createReq := &self_service_branding_ios.ResourceSelfServiceBrandingMobile{
 		BrandingName:              name,
-		HeaderBackgroundColorCode: "#FFFFFF",
-		MenuIconColorCode:         "#000000",
-		BrandingNameColorCode:     "#333333",
+		HeaderBackgroundColorCode: "FFFFFF",
+		MenuIconColorCode:         "000000",
+		BrandingNameColorCode:     "333333",
 		StatusBarTextColor:        "light",
 	}
 

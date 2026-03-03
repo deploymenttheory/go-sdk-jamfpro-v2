@@ -54,7 +54,12 @@ func TestAcceptance_AdvancedMobileDeviceSearches_lifecycle(t *testing.T) {
 		_, _ = svc.DeleteByIDV1(cleanupCtx, searchID)
 	})
 
-	fetched, _, err := svc.GetByIDV1(ctx, searchID)
+	var fetched *advanced_mobile_device_searches.ResourceAdvancedMobileDeviceSearch
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, _, getErr = svc.GetByIDV1(ctx, searchID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, name, fetched.Name)

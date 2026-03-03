@@ -12,7 +12,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-
 // =============================================================================
 // TestAcceptance_Sites_lifecycle exercises the full write/read/delete
 // lifecycle: Create → List → GetByID → GetByName → UpdateByID →
@@ -82,7 +81,7 @@ func TestAcceptance_Sites_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching site by ID=%d", siteID)
+	acc.LogTestStage(t, "GetByID", "Getting site by ID=%d", siteID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -98,7 +97,7 @@ func TestAcceptance_Sites_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching site by name=%q", siteName)
+	acc.LogTestStage(t, "GetByName", "Getting site by name=%q", siteName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

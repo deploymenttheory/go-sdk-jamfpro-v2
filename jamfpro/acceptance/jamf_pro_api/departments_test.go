@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -119,10 +120,16 @@ func TestAcceptance_Departments_lifecycle(t *testing.T) {
 	assert.True(t, found, "newly created department should appear in list")
 	acc.LogTestSuccess(t, "Department ID=%s found in list (%d total)", departmentID, list.TotalCount)
 
-	// 3. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching department by ID=%s", departmentID)
+	// 3. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting department by ID=%s", departmentID)
 
-	fetched, fetchResp, err := svc.GetByIDV1(ctx, departmentID)
+	var fetched *departments.ResourceDepartment
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, departmentID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)

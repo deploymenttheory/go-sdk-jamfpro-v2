@@ -85,7 +85,7 @@ func TestAcceptance_PatchExternalSources_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching patch external source by ID=%d", sourceID)
+	acc.LogTestStage(t, "GetByID", "Getting patch external source by ID=%d", sourceID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -101,7 +101,7 @@ func TestAcceptance_PatchExternalSources_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching patch external source by name=%q", sourceName)
+	acc.LogTestStage(t, "GetByName", "Getting patch external source by name=%q", sourceName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

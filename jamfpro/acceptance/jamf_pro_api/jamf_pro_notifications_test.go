@@ -43,7 +43,7 @@ func TestAcceptance_JamfProNotifications_get_v1(t *testing.T) {
 	svc := acc.Client.JamfProNotifications
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "GetForUserAndSiteV1", "Fetching notifications for current user and site")
+	acc.LogTestStage(t, "GetForUserAndSiteV1", "Getting notifications for current user and site")
 
 	notifications, resp, err := svc.GetForUserAndSiteV1(ctx)
 	require.NoError(t, err)

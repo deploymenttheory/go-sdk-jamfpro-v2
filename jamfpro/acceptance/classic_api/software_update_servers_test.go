@@ -84,7 +84,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching software update server by ID=%d", serverID)
+	acc.LogTestStage(t, "GetByID", "Getting software update server by ID=%d", serverID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -100,7 +100,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching software update server by name=%q", serverName)
+	acc.LogTestStage(t, "GetByName", "Getting software update server by name=%q", serverName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

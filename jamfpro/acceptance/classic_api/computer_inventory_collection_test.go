@@ -20,7 +20,7 @@ func TestAcceptance_ComputerInventoryCollection_get(t *testing.T) {
 	svc := acc.Client.ClassicComputerInventoryCollection
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get", "Fetching computer inventory collection settings")
+	acc.LogTestStage(t, "Get", "Getting computer inventory collection settings")
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
@@ -47,7 +47,7 @@ func TestAcceptance_ComputerInventoryCollection_update(t *testing.T) {
 	svc := acc.Client.ClassicComputerInventoryCollection
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get", "Fetching current computer inventory collection settings")
+	acc.LogTestStage(t, "Get", "Getting current computer inventory collection settings")
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()

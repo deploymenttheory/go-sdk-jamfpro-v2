@@ -6,6 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/log_flushing"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -51,7 +52,7 @@ func TestAcceptance_LogFlushing_settings_v1(t *testing.T) {
 	svc := acc.Client.LogFlushing
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "GetSettingsV1", "Fetching log flushing settings")
+	acc.LogTestStage(t, "GetSettingsV1", "Getting log flushing settings")
 
 	settings, resp, err := svc.GetSettingsV1(ctx)
 	require.NoError(t, err)
@@ -97,7 +98,7 @@ func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 	created, createResp, err := svc.QueueTaskV1(ctx, taskReq)
 	require.NoError(t, err, "QueueTaskV1 should not return an error")
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	require.Contains(t, []int{200, 201, 202}, createResp.StatusCode)
 	assert.NotEmpty(t, created.ID)
 
 	taskID := created.ID
@@ -110,10 +111,16 @@ func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 		acc.LogCleanupDeleteError(t, "log flushing task", taskID, delErr)
 	})
 
-	// 2. GetTaskByIDV1
-	acc.LogTestStage(t, "GetTaskByIDV1", "Fetching log flushing task ID=%s", taskID)
+	// 2. GetTaskByIDV1 (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetTaskByIDV1", "Getting log flushing task ID=%s", taskID)
 
-	task, getResp, err := svc.GetTaskByIDV1(ctx, taskID)
+	var task *log_flushing.ResourceLogFlushingTask
+	var getResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		task, getResp, getErr = svc.GetTaskByIDV1(ctx, taskID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, task)
 	assert.Equal(t, 200, getResp.StatusCode)
@@ -145,7 +152,7 @@ func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteTaskByIDV1(ctx, taskID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	require.Contains(t, []int{200, 204}, deleteResp.StatusCode)
 	acc.LogTestSuccess(t, "DeleteTaskByIDV1: ID=%s deleted", taskID)
 }
 

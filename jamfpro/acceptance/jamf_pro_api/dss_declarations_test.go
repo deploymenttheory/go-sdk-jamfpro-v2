@@ -47,7 +47,7 @@ func TestAcceptance_DSSDeclarations_get_by_uuid(t *testing.T) {
 
 	testUUID := "550e8400-e29b-41d4-a716-446655440000"
 
-	acc.LogTestStage(t, "GetByUUID", "Fetching DSS declaration by UUID=%s", testUUID)
+	acc.LogTestStage(t, "GetByUUID", "Getting DSS declaration by UUID=%s", testUUID)
 	declaration, resp, err := svc.GetByUUIDV1(ctx, testUUID)
 
 	if err != nil {

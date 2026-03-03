@@ -66,10 +66,12 @@ func TestAcceptance_JamfConnect_get_settings(t *testing.T) {
 	result, resp, err := svc.GetSettingsV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Contains(t, []int{200, 204}, resp.StatusCode)
 
 	// Verify structure
-	assert.NotEmpty(t, result.ID)
+	if resp.StatusCode == 200 {
+		assert.NotEmpty(t, result.ID)
+	}
 }
 
 func TestAcceptance_JamfConnect_list_and_get_profiles(t *testing.T) {

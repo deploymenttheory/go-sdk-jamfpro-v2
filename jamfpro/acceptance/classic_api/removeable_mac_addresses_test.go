@@ -80,7 +80,7 @@ func TestAcceptance_RemoveableMacAddresses_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching removeable MAC address by ID=%d", macID)
+	acc.LogTestStage(t, "GetByID", "Getting removeable MAC address by ID=%d", macID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -96,7 +96,7 @@ func TestAcceptance_RemoveableMacAddresses_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching removeable MAC address by name=%q", macAddress)
+	acc.LogTestStage(t, "GetByName", "Getting removeable MAC address by name=%q", macAddress)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

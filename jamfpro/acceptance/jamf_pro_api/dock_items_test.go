@@ -6,6 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -92,10 +93,16 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 		acc.LogCleanupDeleteError(t, "dock item", dockItemID, delErr)
 	})
 
-	// 2. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching dock item by ID=%s", dockItemID)
+	// 2. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting dock item by ID=%s", dockItemID)
 
-	fetched, fetchResp, err := svc.GetByIDV1(ctx, dockItemID)
+	var fetched *dock_items.ResourceDockItem
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, dockItemID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)

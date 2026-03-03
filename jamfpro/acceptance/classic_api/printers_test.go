@@ -86,7 +86,7 @@ func TestAcceptance_Printers_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching printer by ID=%d", printerID)
+	acc.LogTestStage(t, "GetByID", "Getting printer by ID=%d", printerID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -102,7 +102,7 @@ func TestAcceptance_Printers_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching printer by name=%q", printerName)
+	acc.LogTestStage(t, "GetByName", "Getting printer by name=%q", printerName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

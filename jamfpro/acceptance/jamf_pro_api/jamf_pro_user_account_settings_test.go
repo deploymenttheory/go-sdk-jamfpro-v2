@@ -73,7 +73,7 @@ func TestAcceptance_JamfProUserAccountSettings_lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "PutV1: key=%s status=%d", testUserPrefKey, putResp.StatusCode)
 
 	// 2. GetSettings
-	acc.LogTestStage(t, "GetSettings", "Fetching settings for key=%s", testUserPrefKey)
+	acc.LogTestStage(t, "GetSettings", "Getting settings for key=%s", testUserPrefKey)
 
 	settings, settingsResp, err := svc.GetSettingsV1(ctx, testUserPrefKey)
 	if err != nil {
@@ -87,7 +87,7 @@ func TestAcceptance_JamfProUserAccountSettings_lifecycle(t *testing.T) {
 	}
 
 	// 3. Get raw value
-	acc.LogTestStage(t, "Get", "Fetching raw value for key=%s", testUserPrefKey)
+	acc.LogTestStage(t, "Get", "Getting raw value for key=%s", testUserPrefKey)
 
 	val, getResp, err := svc.GetV1(ctx, testUserPrefKey)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_macos"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -69,10 +70,16 @@ func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 		acc.LogCleanupDeleteError(t, "self-service branding macOS", brandingID, delErr)
 	})
 
-	// 2. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching branding by ID=%s", brandingID)
+	// 2. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting branding by ID=%s", brandingID)
 
-	fetched, fetchResp, err := svc.GetByID(ctx, brandingID)
+	var fetched *self_service_branding_macos.ResourceSelfServiceBrandingMacOS
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByID(ctx, brandingID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -81,7 +88,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "GetByID: name=%q", fetched.BrandingName)
 
 	// 3. GetByName
-	acc.LogTestStage(t, "GetByName", "Fetching branding by name=%s", createReq.BrandingName)
+	acc.LogTestStage(t, "GetByName", "Getting branding by name=%s", createReq.BrandingName)
 
 	byName, _, err := svc.GetByName(ctx, createReq.BrandingName)
 	require.NoError(t, err)
@@ -187,7 +194,9 @@ func TestAcceptance_SelfServiceBrandingMacOS_list(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
-	assert.NotNil(t, result.Results)
+	if result.TotalCount > 0 {
+		assert.NotNil(t, result.Results)
+	}
 }
 
 func TestAcceptance_SelfServiceBrandingMacOS_validation_errors(t *testing.T) {

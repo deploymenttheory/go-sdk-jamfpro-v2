@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -139,14 +140,20 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Script ID=%s found in list (%d total)", scriptID, list.TotalCount)
 
 	// ------------------------------------------------------------------
-	// 3. GetByID — read the created script
+	// 3. GetByID — read the created script (with retry for eventual consistency)
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching script by ID=%s", scriptID)
+	acc.LogTestStage(t, "GetByID", "Getting script by ID=%s", scriptID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetScriptByIDV1(ctx3, scriptID)
+	var fetched *scripts.ResourceScript
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetScriptByIDV1(ctx3, scriptID)
+		return getErr
+	})
 	require.NoError(t, err, "GetScriptByIDV1 should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -216,7 +223,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 7. GetScriptHistoryV1 — verify note appears
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetHistory", "Fetching history for script ID=%s", scriptID)
+	acc.LogTestStage(t, "GetHistory", "Getting history for script ID=%s", scriptID)
 
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()

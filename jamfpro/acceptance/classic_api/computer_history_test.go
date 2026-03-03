@@ -34,7 +34,7 @@ func TestAcceptance_ComputerHistory_get_by_id(t *testing.T) {
 		computerID = list.Results[0].ID
 	}
 
-	acc.LogTestStage(t, "GetByID", "Fetching computer history by ID=%s", computerID)
+	acc.LogTestStage(t, "GetByID", "Getting computer history by ID=%s", computerID)
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
@@ -71,7 +71,7 @@ func TestAcceptance_ComputerHistory_get_by_id_and_subset(t *testing.T) {
 		computerID = list.Results[0].ID
 	}
 
-	acc.LogTestStage(t, "GetByIDAndSubset", "Fetching computer history subset General by ID=%s", computerID)
+	acc.LogTestStage(t, "GetByIDAndSubset", "Getting computer history subset General by ID=%s", computerID)
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
@@ -105,7 +105,7 @@ func TestAcceptance_ComputerHistory_get_by_name(t *testing.T) {
 		computerName = list.Results[0].General.Name
 	}
 
-	acc.LogTestStage(t, "GetByName", "Fetching computer history by name=%q", computerName)
+	acc.LogTestStage(t, "GetByName", "Getting computer history by name=%q", computerName)
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()

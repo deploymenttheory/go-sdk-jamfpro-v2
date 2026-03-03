@@ -21,7 +21,7 @@ func TestAcceptance_ActivationCode_get_activation_code(t *testing.T) {
 	svc := acc.Client.ClassicActivationCode
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get", "Fetching current activation code")
+	acc.LogTestStage(t, "Get", "Getting current activation code")
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()

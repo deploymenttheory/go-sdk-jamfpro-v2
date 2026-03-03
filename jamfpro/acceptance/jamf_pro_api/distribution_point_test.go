@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/distribution_point"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -51,10 +52,16 @@ func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 		acc.LogCleanupDeleteError(t, "distribution point", dpID, delErr)
 	})
 
-	// 2. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching distribution point by ID=%s", dpID)
+	// 2. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting distribution point by ID=%s", dpID)
 
-	fetched, fetchResp, err := svc.GetByIDV1(ctx, dpID)
+	var fetched *distribution_point.ResourceDistributionPoint
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, dpID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)

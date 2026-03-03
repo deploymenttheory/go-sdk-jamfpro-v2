@@ -102,7 +102,7 @@ func TestAcceptance_SmartUserGroups_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching smart user group by ID=%d", groupID)
+	acc.LogTestStage(t, "GetByID", "Getting smart user group by ID=%d", groupID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -119,7 +119,7 @@ func TestAcceptance_SmartUserGroups_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching smart user group by name=%q", groupName)
+	acc.LogTestStage(t, "GetByName", "Getting smart user group by name=%q", groupName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

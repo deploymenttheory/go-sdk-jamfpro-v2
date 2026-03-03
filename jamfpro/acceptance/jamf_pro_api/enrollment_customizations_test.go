@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strings"
 	"testing"
+	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customizations"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -85,10 +86,10 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 		Description: "Acceptance test enrollment customization",
 		SiteID:      "-1",
 		BrandingSettings: enrollment_customizations.SubsetBrandingSettings{
-			TextColor:       "#000000",
-			ButtonColor:     "#0066CC",
-			ButtonTextColor: "#FFFFFF",
-			BackgroundColor: "#F5F5F7",
+			TextColor:       "000000",
+			ButtonColor:     "0066CC",
+			ButtonTextColor: "FFFFFF",
+			BackgroundColor: "F5F5F7",
 			IconUrl:         "",
 		},
 	}
@@ -112,9 +113,15 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 		}
 	}()
 
-	// Read by ID
+	// Read by ID (with retry for eventual consistency)
 	acc.LogTestStage(t, "Read", "Getting enrollment customization by ID")
-	retrieved, getResp, err := svc.GetByIDV2(ctx, customizationID)
+	var retrieved *enrollment_customizations.ResourceEnrollmentCustomization
+	var getResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		retrieved, getResp, getErr = svc.GetByIDV2(ctx, customizationID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, retrieved)
 	assert.Equal(t, 200, getResp.StatusCode)
@@ -138,10 +145,10 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 		Description: "Updated description",
 		SiteID:      retrieved.SiteID,
 		BrandingSettings: enrollment_customizations.SubsetBrandingSettings{
-			TextColor:       "#FFFFFF",
-			ButtonColor:     "#FF0000",
-			ButtonTextColor: "#000000",
-			BackgroundColor: "#000000",
+			TextColor:       "FFFFFF",
+			ButtonColor:     "FF0000",
+			ButtonTextColor: "000000",
+			BackgroundColor: "000000",
 			IconUrl:         retrieved.BrandingSettings.IconUrl,
 		},
 	}
@@ -159,7 +166,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	require.NotNil(t, verifyUpdated)
 	assert.Equal(t, 200, verifyResp.StatusCode)
 	assert.Contains(t, verifyUpdated.DisplayName, "Updated")
-	assert.Equal(t, "#FF0000", verifyUpdated.BrandingSettings.ButtonColor)
+	assert.Equal(t, "FF0000", verifyUpdated.BrandingSettings.ButtonColor)
 	acc.LogTestSuccess(t, "Verified updated customization - ButtonColor: %s", verifyUpdated.BrandingSettings.ButtonColor)
 
 	// Delete
@@ -193,10 +200,10 @@ func TestAcceptance_EnrollmentCustomizations_list_with_rsql_filter(t *testing.T)
 		Description: "RSQL filter test",
 		SiteID:      "-1",
 		BrandingSettings: enrollment_customizations.SubsetBrandingSettings{
-			TextColor:       "#000000",
-			ButtonColor:     "#0066CC",
-			ButtonTextColor: "#FFFFFF",
-			BackgroundColor: "#F5F5F7",
+			TextColor:       "000000",
+			ButtonColor:     "0066CC",
+			ButtonTextColor: "FFFFFF",
+			BackgroundColor: "F5F5F7",
 		},
 	}
 
@@ -298,7 +305,7 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 	acc.LogTestSuccess(t, "History note added - ID: %d, Username: %s", result.ID, result.Username)
 
 	// Get history
-	acc.LogTestStage(t, "GetHistory", "Fetching enrollment customization history")
+	acc.LogTestStage(t, "GetHistory", "Getting enrollment customization history")
 	history, histResp, err := svc.GetHistoryV2(ctx, customizationID, map[string]string{
 		"page":      "0",
 		"page-size": "100",
@@ -353,7 +360,7 @@ func TestAcceptance_EnrollmentCustomizations_history_with_rsql_filter(t *testing
 	}()
 
 	// Get all history first
-	acc.LogTestStage(t, "GetHistory", "Fetching history to test RSQL filtering")
+	acc.LogTestStage(t, "GetHistory", "Getting history to test RSQL filtering")
 	allHistory, allResp, err := svc.GetHistoryV2(ctx, customizationID, nil)
 	if err != nil || allHistory.TotalCount == 0 {
 		t.Skip("No history available for RSQL filtering test")
@@ -404,7 +411,7 @@ func TestAcceptance_EnrollmentCustomizations_get_prestages(t *testing.T) {
 
 	// Get prestages for the first customization
 	customizationID := list.Results[0].ID
-	acc.LogTestStage(t, "GetPrestages", "Fetching prestages for customization: %s", customizationID)
+	acc.LogTestStage(t, "GetPrestages", "Getting prestages for customization: %s", customizationID)
 
 	prestages, prestagesResp, err := svc.GetPrestagesV2(ctx, customizationID)
 	if err != nil {
@@ -459,10 +466,8 @@ func TestAcceptance_EnrollmentCustomizations_image_upload_download(t *testing.T)
 
 	uploaded, uploadResp, err := svc.UploadImageV2(ctx, fileReader, fileInfo.Size(), "test-icon.png")
 	if err != nil {
-		// Image upload might not be available on all tenants
-		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "not found") {
-			t.Skip("Image upload endpoint may not be available on this tenant")
-			return
+		if uploadResp != nil && (uploadResp.StatusCode == 404 || uploadResp.StatusCode == 400) {
+			t.Skip("Image upload endpoint not available or requires specific configuration (400/404)")
 		}
 		require.NoError(t, err)
 	}

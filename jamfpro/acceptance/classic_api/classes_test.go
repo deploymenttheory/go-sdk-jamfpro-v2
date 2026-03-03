@@ -94,7 +94,7 @@ func TestAcceptance_Classes_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching class by ID=%d", classID)
+	acc.LogTestStage(t, "GetByID", "Getting class by ID=%d", classID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -111,7 +111,7 @@ func TestAcceptance_Classes_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching class by name=%q", className)
+	acc.LogTestStage(t, "GetByName", "Getting class by name=%q", className)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

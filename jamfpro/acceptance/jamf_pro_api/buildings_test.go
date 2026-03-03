@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -129,10 +130,16 @@ func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	assert.True(t, found, "newly created building should appear in list")
 	acc.LogTestSuccess(t, "Building ID=%s found in list (%d total)", buildingID, list.TotalCount)
 
-	// 3. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching building by ID=%s", buildingID)
+	// 3. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting building by ID=%s", buildingID)
 
-	fetched, fetchResp, err := svc.GetByIDV1(ctx, buildingID)
+	var fetched *buildings.ResourceBuilding
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, buildingID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)

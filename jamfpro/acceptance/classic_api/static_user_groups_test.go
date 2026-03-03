@@ -90,7 +90,7 @@ func TestAcceptance_StaticUserGroups_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching static user group by ID=%d", groupID)
+	acc.LogTestStage(t, "GetByID", "Getting static user group by ID=%d", groupID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -107,7 +107,7 @@ func TestAcceptance_StaticUserGroups_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching static user group by name=%q", groupName)
+	acc.LogTestStage(t, "GetByName", "Getting static user group by name=%q", groupName)
 
 	ctx4b, cancel4b := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4b()

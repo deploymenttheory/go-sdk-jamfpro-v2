@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/venafi"
@@ -39,7 +40,12 @@ func TestVenafi_Lifecycle(t *testing.T) {
 		svc.DeleteByID(ctx, created.ID)
 	})
 
-	fetched, _, err := svc.GetByID(ctx, created.ID)
+	var fetched *venafi.ResponseVenafi
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, _, getErr = svc.GetByID(ctx, created.ID)
+		return getErr
+	})
 	require.NoError(t, err)
 	assert.Equal(t, created.ID, fmt.Sprintf("%d", fetched.ID))
 	assert.Equal(t, name, fetched.Name)

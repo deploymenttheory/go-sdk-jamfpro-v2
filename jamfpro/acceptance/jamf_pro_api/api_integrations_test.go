@@ -8,6 +8,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_integrations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
 	"github.com/stretchr/testify/assert"
@@ -236,10 +237,16 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 		_, _ = svc.DeleteByIDV1(ctx, idStr)
 	})
 
-	getByID, resp, err := svc.GetByIDV1(ctx, idStr)
+	var getByID *api_integrations.ResourceApiIntegration
+	var getResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		getByID, getResp, getErr = svc.GetByIDV1(ctx, idStr)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, getByID)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode)
 	assert.Equal(t, name, getByID.DisplayName)
 
 	byName, resp, err := svc.GetByNameV1(ctx, name)

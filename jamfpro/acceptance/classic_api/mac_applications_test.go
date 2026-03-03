@@ -104,7 +104,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching Mac application by ID=%d", appID)
+	acc.LogTestStage(t, "GetByID", "Getting Mac application by ID=%d", appID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -120,7 +120,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching Mac application by name=%q", appName)
+	acc.LogTestStage(t, "GetByName", "Getting Mac application by name=%q", appName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
@@ -136,7 +136,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. GetByIDAndSubset
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByIDAndSubset", "Fetching Mac application ID=%d subset=General", appID)
+	acc.LogTestStage(t, "GetByIDAndSubset", "Getting Mac application ID=%d subset=General", appID)
 
 	ctx5a, cancel5a := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5a()

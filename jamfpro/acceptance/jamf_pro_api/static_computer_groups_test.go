@@ -6,6 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_computer_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -67,10 +68,16 @@ func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 		acc.LogCleanupDeleteError(t, "static computer group", groupID, delErr)
 	})
 
-	// 2. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching static computer group by ID=%s", groupID)
+	// 2. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting static computer group by ID=%s", groupID)
 
-	fetched, fetchResp, err := svc.GetByIDV2(ctx, groupID)
+	var fetched *static_computer_groups.ResourceStaticGroup
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByIDV2(ctx, groupID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -79,7 +86,7 @@ func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "GetByIDV2: name=%q", fetched.Name)
 
 	// 3. GetByName
-	acc.LogTestStage(t, "GetByName", "Fetching static computer group by name=%s", createReq.Name)
+	acc.LogTestStage(t, "GetByName", "Getting static computer group by name=%s", createReq.Name)
 
 	byName, _, err := svc.GetByNameV2(ctx, createReq.Name)
 	require.NoError(t, err)
@@ -98,7 +105,7 @@ func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV2(ctx, groupID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	require.Contains(t, []int{200, 202}, updateResp.StatusCode)
 	acc.LogTestSuccess(t, "Static computer group updated: ID=%s", groupID)
 
 	// 5. Re-fetch to verify

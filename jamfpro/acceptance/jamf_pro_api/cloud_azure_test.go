@@ -3,6 +3,7 @@ package jamf_pro_api
 import (
 	"context"
 	"testing"
+	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_azure"
@@ -85,7 +86,12 @@ func TestCloudAzure_Lifecycle(t *testing.T) {
 		svc.DeleteByIDV1(ctx, created.ID)
 	})
 
-	fetched, _, err := svc.GetByIDV1(ctx, created.ID)
+	var fetched *cloud_azure.ResourceCloudAzure
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, _, getErr = svc.GetByIDV1(ctx, created.ID)
+		return getErr
+	})
 	require.NoError(t, err)
 	assert.Equal(t, created.ID, fetched.Server.ID)
 	assert.Equal(t, displayName, fetched.CloudIdPCommon.DisplayName)
