@@ -101,7 +101,7 @@ func TestAcceptance_ComputerGroups_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching computer group by ID=%d", groupID)
+	acc.LogTestStage(t, "GetByID", "Getting computer group by ID=%d", groupID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -118,7 +118,7 @@ func TestAcceptance_ComputerGroups_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching computer group by name=%q", groupName)
+	acc.LogTestStage(t, "GetByName", "Getting computer group by name=%q", groupName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

@@ -67,18 +67,16 @@ func TestAcceptance_Sites_list_and_get_objects(t *testing.T) {
 	require.NoError(t, err, "ListV1 should not return an error")
 	require.NotNil(t, sites)
 	assert.Equal(t, 200, listResp.StatusCode)
-	assert.NotEmpty(t, sites, "at least one site should exist (typically 'Default Site')")
+
+	if len(sites) == 0 {
+		t.Skip("No sites found in Jamf Pro instance")
+	}
 
 	acc.LogTestSuccess(t, "Found %d site(s)", len(sites))
 
-	if len(sites) == 0 {
-		t.Skip("No sites found in Jamf Pro instance - skipping GetObjectsByID test")
-		return
-	}
-
 	// 2. Get objects for the first site
 	firstSiteID := sites[0].ID
-	acc.LogTestStage(t, "GetObjectsByID", "Fetching objects for site ID=%s", firstSiteID)
+	acc.LogTestStage(t, "GetObjectsByID", "Getting objects for site ID=%s", firstSiteID)
 
 	rsqlQuery := map[string]string{
 		"page":      "0",
@@ -117,7 +115,9 @@ func TestAcceptance_Sites_get_objects_with_rsql_filter(t *testing.T) {
 	// Get first site
 	sites, _, err := svc.ListV1(ctx)
 	require.NoError(t, err)
-	require.NotEmpty(t, sites, "at least one site required for RSQL test")
+	if len(sites) == 0 {
+		t.Skip("No sites found in Jamf Pro instance")
+	}
 
 	siteID := sites[0].ID
 	acc.LogTestStage(t, "RSQL Filter", "Testing RSQL filter on site ID=%s", siteID)

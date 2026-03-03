@@ -69,7 +69,7 @@ func TestAcceptance_LocalAdminPassword_settings_get_and_update(t *testing.T) {
 	ctx := context.Background()
 
 	// 1. Get current settings
-	acc.LogTestStage(t, "Get", "Fetching current LAPS settings")
+	acc.LogTestStage(t, "Get", "Getting current LAPS settings")
 
 	originalSettings, getResp, err := svc.GetSettingsV2(ctx)
 	require.NoError(t, err, "GetSettingsV2 should not return an error")
@@ -124,7 +124,7 @@ func TestAcceptance_LocalAdminPassword_pending_rotations(t *testing.T) {
 	svc := acc.Client.LocalAdminPassword
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "List", "Fetching pending LAPS rotations")
+	acc.LogTestStage(t, "List", "Getting pending LAPS rotations")
 
 	result, resp, err := svc.GetPendingRotationsV2(ctx)
 	require.NoError(t, err, "GetPendingRotationsV2 should not return an error")

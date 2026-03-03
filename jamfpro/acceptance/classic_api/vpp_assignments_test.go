@@ -111,7 +111,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching VPP assignment by ID=%d", assignmentID)
+	acc.LogTestStage(t, "GetByID", "Getting VPP assignment by ID=%d", assignmentID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()

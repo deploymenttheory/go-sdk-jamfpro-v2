@@ -190,7 +190,12 @@ func TestAcceptance_APIRoles_lifecycle(t *testing.T) {
 		_, _ = svc.DeleteByIDV1(cleanupCtx, roleID)
 	})
 
-	fetched, _, err := svc.GetByIDV1(ctx, roleID)
+	var fetched *api_roles.ResourceAPIRole
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, _, getErr = svc.GetByIDV1(ctx, roleID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, name, fetched.DisplayName)

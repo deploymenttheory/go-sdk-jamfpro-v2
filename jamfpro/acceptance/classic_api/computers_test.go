@@ -97,7 +97,7 @@ func TestAcceptance_Computers_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching computer by ID=%s", computerID)
+	acc.LogTestStage(t, "GetByID", "Getting computer by ID=%s", computerID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -113,7 +113,7 @@ func TestAcceptance_Computers_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching computer by name=%q", computerName)
+	acc.LogTestStage(t, "GetByName", "Getting computer by name=%q", computerName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
@@ -137,18 +137,18 @@ func TestAcceptance_Computers_lifecycle(t *testing.T) {
 
 	updateReq := &computers.ResponseComputer{
 		General: computers.ComputerSubsetGeneral{
-			ID:            created.General.ID,
-			Name:          updatedName,
-			MacAddress:    fetched.General.MacAddress,
-			SerialNumber:  fetched.General.SerialNumber,
-			Site:          shared.SharedResourceSite{ID: -1, Name: "none"},
+			ID:           created.General.ID,
+			Name:         updatedName,
+			MacAddress:   fetched.General.MacAddress,
+			SerialNumber: fetched.General.SerialNumber,
+			Site:         shared.SharedResourceSite{ID: -1, Name: "none"},
 		},
-		Location:    fetched.Location,
-		Purchasing:  fetched.Purchasing,
-		Peripherals: fetched.Peripherals,
-		Hardware:    fetched.Hardware,
-		Security:    fetched.Security,
-		Software:    fetched.Software,
+		Location:       fetched.Location,
+		Purchasing:     fetched.Purchasing,
+		Peripherals:    fetched.Peripherals,
+		Hardware:       fetched.Hardware,
+		Security:       fetched.Security,
+		Software:       fetched.Software,
 		GroupsAccounts: fetched.GroupsAccounts,
 	}
 	updated, updateResp, err := svc.UpdateByID(ctx5, computerID, updateReq)
@@ -167,18 +167,18 @@ func TestAcceptance_Computers_lifecycle(t *testing.T) {
 
 	revertReq := &computers.ResponseComputer{
 		General: computers.ComputerSubsetGeneral{
-			ID:            created.General.ID,
-			Name:          computerName,
-			MacAddress:    fetched.General.MacAddress,
-			SerialNumber:  fetched.General.SerialNumber,
-			Site:          shared.SharedResourceSite{ID: -1, Name: "none"},
+			ID:           created.General.ID,
+			Name:         computerName,
+			MacAddress:   fetched.General.MacAddress,
+			SerialNumber: fetched.General.SerialNumber,
+			Site:         shared.SharedResourceSite{ID: -1, Name: "none"},
 		},
-		Location:    fetched.Location,
-		Purchasing:  fetched.Purchasing,
-		Peripherals: fetched.Peripherals,
-		Hardware:    fetched.Hardware,
-		Security:    fetched.Security,
-		Software:    fetched.Software,
+		Location:       fetched.Location,
+		Purchasing:     fetched.Purchasing,
+		Peripherals:    fetched.Peripherals,
+		Hardware:       fetched.Hardware,
+		Security:       fetched.Security,
+		Software:       fetched.Software,
 		GroupsAccounts: fetched.GroupsAccounts,
 	}
 	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)

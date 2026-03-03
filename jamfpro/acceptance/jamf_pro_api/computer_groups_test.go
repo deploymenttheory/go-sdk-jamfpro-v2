@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -146,10 +147,16 @@ func TestAcceptance_ComputerGroups_smart_lifecycle(t *testing.T) {
 	assert.True(t, found, "newly created smart group should appear in list")
 	acc.LogTestSuccess(t, "Smart group ID=%s found in list (%d total)", groupID, list.TotalCount)
 
-	// 3. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching smart group by ID=%s", groupID)
+	// 3. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting smart group by ID=%s", groupID)
 
-	fetched, fetchResp, err := svc.GetSmartByIDV2(ctx, groupID)
+	var fetched *computer_groups.ResourceSmartGroup
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetSmartByIDV2(ctx, groupID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -249,10 +256,16 @@ func TestAcceptance_ComputerGroups_static_lifecycle(t *testing.T) {
 	assert.True(t, found, "newly created static group should appear in list")
 	acc.LogTestSuccess(t, "Static group ID=%s found in list (%d total)", groupID, list.TotalCount)
 
-	// 3. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching static group by ID=%s", groupID)
+	// 3. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting static group by ID=%s", groupID)
 
-	fetched, fetchResp, err := svc.GetStaticByIDV2(ctx, groupID)
+	var fetched *computer_groups.ResourceStaticGroup
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetStaticByIDV2(ctx, groupID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)

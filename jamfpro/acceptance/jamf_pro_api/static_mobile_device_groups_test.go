@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_mobile_device_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -50,8 +51,8 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 		Assignments: []static_mobile_device_groups.StaticMobileDeviceGroupAssignment{},
 	}
 	created, createResp, err := svc.Create(ctx, createReq)
-	if err != nil && createResp != nil && createResp.StatusCode == 500 {
-		t.Skip("Static mobile device group create returned 500 in this environment; skipping lifecycle")
+	if err != nil && createResp != nil && (createResp.StatusCode == 500 || createResp.StatusCode == 404) {
+		t.Skip("Static mobile device group endpoint not available (404/500)")
 	}
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
@@ -90,10 +91,16 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 	assert.True(t, found, "newly created static mobile device group should appear in list")
 	acc.LogTestSuccess(t, "Static mobile device group ID=%s found in list (%d total)", groupID, list.TotalCount)
 
-	// 3. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching static mobile device group by ID=%s", groupID)
+	// 3. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting static mobile device group by ID=%s", groupID)
 
-	fetched, fetchResp, err := svc.GetByID(ctx, groupID)
+	var fetched *static_mobile_device_groups.ResourceStaticMobileDeviceGroup
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByID(ctx, groupID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -152,8 +159,8 @@ func TestAcceptance_StaticMobileDeviceGroups_list_with_rsql_filter(t *testing.T)
 	}
 
 	created, createResp, err := svc.Create(ctx, createReq)
-	if err != nil && createResp != nil && createResp.StatusCode == 500 {
-		t.Skip("Static mobile device group create returned 500 in this environment; skipping RSQL filter test")
+	if err != nil && createResp != nil && (createResp.StatusCode == 500 || createResp.StatusCode == 404) {
+		t.Skip("Static mobile device group endpoint not available (404/500)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, created)

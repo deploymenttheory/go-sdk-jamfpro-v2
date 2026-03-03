@@ -150,16 +150,7 @@ func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Respon
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	mergePage := func(pageData []byte) error {
-		var page []ResourcePatchSoftwareTitleConfiguration
-		if err := json.Unmarshal(pageData, &page); err != nil {
-			return fmt.Errorf("failed to unmarshal page: %w", err)
-		}
-		result = append(result, page...)
-		return nil
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, nil, headers, mergePage)
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

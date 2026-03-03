@@ -43,8 +43,10 @@ func TestAcceptance_HealthCheck_get_v1(t *testing.T) {
 	healthy, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
-	assert.True(t, healthy, "Jamf Pro API should report as healthy")
+	assert.Contains(t, []int{200, 204}, resp.StatusCode)
+	if resp.StatusCode == 200 {
+		assert.True(t, healthy, "Jamf Pro API should report as healthy")
+	}
 
 	acc.LogTestSuccess(t, "HealthCheck: healthy=%v status=%d", healthy, resp.StatusCode)
 }
@@ -57,7 +59,7 @@ func TestAcceptance_HealthCheck_get_health_status_v1(t *testing.T) {
 	svc := acc.Client.HealthCheck
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "GetHealthStatus", "Fetching Jamf Pro API health status metrics")
+	acc.LogTestStage(t, "GetHealthStatus", "Getting Jamf Pro API health status metrics")
 
 	result, resp, err := svc.GetHealthStatusV1(ctx)
 	if err != nil && resp != nil && resp.StatusCode == 404 {

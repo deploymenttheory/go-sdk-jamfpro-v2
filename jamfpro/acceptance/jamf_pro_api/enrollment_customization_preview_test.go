@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customization_preview"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customizations"
 	"github.com/stretchr/testify/assert"
@@ -82,8 +83,8 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 		DisplayName: ecName,
 		Description: "Acceptance test EC for panel preview",
 		BrandingSettings: enrollment_customizations.SubsetBrandingSettings{
-			ButtonColor:     "#0066CC",
-			ButtonTextColor: "#FFFFFF",
+			ButtonColor:     "0066CC",
+			ButtonTextColor: "FFFFFF",
 		},
 	})
 	require.NoError(t, err, "failed to create enrollment customization")
@@ -144,10 +145,16 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 	}
 	assert.True(t, found, "created panel should appear in GetAllPanels")
 
-	// 3. GetTextPanel
-	acc.LogTestStage(t, "GetTextPanel", "Fetching text panel ID=%s", panelID)
+	// 3. GetTextPanel (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetTextPanel", "Getting text panel ID=%s", panelID)
 
-	fetchedPanel, fetchPanelResp, err := previewSvc.GetTextPanel(ctx, ecID, panelID)
+	var fetchedPanel *enrollment_customization_preview.ResourceTextPanel
+	var fetchPanelResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetchedPanel, fetchPanelResp, getErr = previewSvc.GetTextPanel(ctx, ecID, panelID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetchedPanel)
 	assert.Equal(t, 200, fetchPanelResp.StatusCode)

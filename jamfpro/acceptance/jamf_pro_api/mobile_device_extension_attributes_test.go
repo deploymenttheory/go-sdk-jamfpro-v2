@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -109,6 +110,9 @@ func TestAcceptance_MobileDeviceExtensionAttributes_delete_multiple(t *testing.T
 	resp, err := svc.DeleteMobileDeviceExtensionAttributesByIDV1(ctx, &mobile_device_extension_attributes.DeleteMobileDeviceExtensionAttributesByIDRequest{
 		IDs: []string{c1.ID, c2.ID},
 	})
+	if err != nil && resp != nil && resp.StatusCode == 405 {
+		t.Skip("Bulk delete endpoint not available (405 Method Not Allowed)")
+	}
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode)
@@ -220,8 +224,14 @@ func TestAcceptance_MobileDeviceExtensionAttributes_lifecycle(t *testing.T) {
 	}
 	assert.True(t, found)
 
-	acc.LogTestStage(t, "GetByID", "Fetching mobile device extension attribute by ID=%s", eaID)
-	fetched, fetchResp, err := svc.GetByIDV1(ctx, eaID)
+	acc.LogTestStage(t, "GetByID", "Getting mobile device extension attribute by ID=%s", eaID)
+	var fetched *mobile_device_extension_attributes.ResourceMobileDeviceExtensionAttribute
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, eaID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)

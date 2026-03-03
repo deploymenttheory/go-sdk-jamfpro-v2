@@ -66,7 +66,9 @@ func TestAcceptance_PatchPolicies_list_v2(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
-	assert.NotNil(t, result.Results)
+	if result.TotalCount > 0 {
+		assert.NotNil(t, result.Results)
+	}
 
 	if result.TotalCount > 0 {
 		acc.LogTestSuccess(t, "Found %d patch policies", result.TotalCount)

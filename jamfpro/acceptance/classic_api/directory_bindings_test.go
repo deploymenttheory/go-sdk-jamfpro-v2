@@ -89,7 +89,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching directory binding by ID=%d", bindingID)
+	acc.LogTestStage(t, "GetByID", "Getting directory binding by ID=%d", bindingID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -105,7 +105,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching directory binding by name=%q", bindingName)
+	acc.LogTestStage(t, "GetByName", "Getting directory binding by name=%q", bindingName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

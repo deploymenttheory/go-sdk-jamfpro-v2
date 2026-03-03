@@ -80,7 +80,7 @@ func TestAcceptance_JamfRemoteAssist_list_sessions(t *testing.T) {
 	}
 
 	// GetSessionByIDV1
-	acc.LogTestStage(t, "GetSessionByIDV1", "Fetching session ID=%s (v1)", sessionID)
+	acc.LogTestStage(t, "GetSessionByIDV1", "Getting session ID=%s (v1)", sessionID)
 
 	sessionV1, getV1Resp, err := svc.GetSessionByIDV1(ctx, sessionID)
 	require.NoError(t, err)
@@ -90,7 +90,7 @@ func TestAcceptance_JamfRemoteAssist_list_sessions(t *testing.T) {
 	acc.LogTestSuccess(t, "GetSessionByIDV1: sessionID=%s statusType=%s", sessionV1.SessionID, sessionV1.StatusType)
 
 	// GetSessionByIDV2
-	acc.LogTestStage(t, "GetSessionByIDV2", "Fetching session ID=%s (v2)", sessionID)
+	acc.LogTestStage(t, "GetSessionByIDV2", "Getting session ID=%s (v2)", sessionID)
 
 	sessionV2, getV2Resp, err := svc.GetSessionByIDV2(ctx, sessionID)
 	require.NoError(t, err)

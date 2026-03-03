@@ -137,7 +137,7 @@ func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching computer invitation by ID=%s", invitationID)
+	acc.LogTestStage(t, "GetByID", "Getting computer invitation by ID=%s", invitationID)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
@@ -153,7 +153,7 @@ func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. GetByInvitationID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByInvitationID", "Fetching computer invitation by invitation=%q", created.Invitation)
+	acc.LogTestStage(t, "GetByInvitationID", "Getting computer invitation by invitation=%q", created.Invitation)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5()

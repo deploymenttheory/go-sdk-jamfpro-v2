@@ -60,7 +60,7 @@ func TestAcceptance_JamfProtect_get_settings_v1(t *testing.T) {
 	svc := acc.Client.JamfProtect
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "GetSettings", "Fetching Jamf Protect integration settings")
+	acc.LogTestStage(t, "GetSettings", "Getting Jamf Protect integration settings")
 
 	result, resp, err := svc.GetSettingsV1(ctx)
 	if err != nil {

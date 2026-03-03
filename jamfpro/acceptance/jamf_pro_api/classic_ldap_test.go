@@ -50,7 +50,7 @@ func TestAcceptance_ClassicLdap_get_mappings_v1(t *testing.T) {
 
 	// Use the first LDAP server's ID
 	ldapID := fmt.Sprintf("%d", servers[0].ID)
-	acc.LogTestStage(t, "GetMappings", "Fetching LDAP mappings for server ID=%s", ldapID)
+	acc.LogTestStage(t, "GetMappings", "Getting LDAP mappings for server ID=%s", ldapID)
 
 	result, resp, err := svc.GetMappingsByIDV1(ctx, ldapID)
 	require.NoError(t, err)

@@ -95,7 +95,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching restricted software by ID=%d", swID)
+	acc.LogTestStage(t, "GetByID", "Getting restricted software by ID=%d", swID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -117,7 +117,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching restricted software by name=%q", swName)
+	acc.LogTestStage(t, "GetByName", "Getting restricted software by name=%q", swName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

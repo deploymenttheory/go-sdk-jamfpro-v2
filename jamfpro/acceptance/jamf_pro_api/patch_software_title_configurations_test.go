@@ -3,8 +3,10 @@ package jamf_pro_api
 import (
 	"context"
 	"testing"
+	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/patch_software_title_configurations"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -122,9 +124,15 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 		_, _ = svc.DeleteByIDV2(ctx, created.ID)
 	})
 
-	// GetByID
+	// GetByID (with retry for eventual consistency)
 	acc.LogTestStage(t, "Read", "Getting patch software title configuration by ID: %s", created.ID)
-	retrieved, resp, err := svc.GetByIDV2(ctx, created.ID)
+	var retrieved *patch_software_title_configurations.ResourcePatchSoftwareTitleConfiguration
+	var getResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		retrieved, getResp, getErr = svc.GetByIDV2(ctx, created.ID)
+		return getErr
+	})
 	require.NoError(t, err, "Failed to get patch software title configuration by ID")
 	require.NotNil(t, retrieved)
 	assert.Equal(t, created.ID, retrieved.ID)
@@ -133,7 +141,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	assert.True(t, retrieved.UINotifications)
 	assert.False(t, retrieved.EmailNotifications)
 	assert.Len(t, retrieved.ExtensionAttributes, 1)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode)
 
 	// GetByName
 	acc.LogTestStage(t, "Read", "Getting patch software title configuration by name: %s", name)

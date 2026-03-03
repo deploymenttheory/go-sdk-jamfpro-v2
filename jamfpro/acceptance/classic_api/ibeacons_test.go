@@ -86,7 +86,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching iBeacon by ID=%d", beaconID)
+	acc.LogTestStage(t, "GetByID", "Getting iBeacon by ID=%d", beaconID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -103,7 +103,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching iBeacon by name=%q", beaconName)
+	acc.LogTestStage(t, "GetByName", "Getting iBeacon by name=%q", beaconName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

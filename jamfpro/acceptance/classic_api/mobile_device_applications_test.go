@@ -50,7 +50,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 		},
 		Scope: mobile_device_applications.SubsetScope{
 			AllMobileDevices: boolPtr(true),
-			AllJSSUsers:     boolPtr(false),
+			AllJSSUsers:      boolPtr(false),
 		},
 		SelfService: mobile_device_applications.SubsetSelfService{
 			SelfServiceDescription: "Safari web browser for iOS",
@@ -105,7 +105,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching mobile device application by ID=%d", appID)
+	acc.LogTestStage(t, "GetByID", "Getting mobile device application by ID=%d", appID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -121,7 +121,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching mobile device application by name=%q", appName)
+	acc.LogTestStage(t, "GetByName", "Getting mobile device application by name=%q", appName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
@@ -137,7 +137,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. GetByIDAndSubset
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByIDAndSubset", "Fetching mobile device application ID=%d subset=General", appID)
+	acc.LogTestStage(t, "GetByIDAndSubset", "Getting mobile device application ID=%d subset=General", appID)
 
 	ctx5a, cancel5a := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5a()
@@ -173,7 +173,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 		},
 		Scope: mobile_device_applications.SubsetScope{
 			AllMobileDevices: boolPtr(true),
-			AllJSSUsers:     boolPtr(false),
+			AllJSSUsers:      boolPtr(false),
 		},
 		SelfService: mobile_device_applications.SubsetSelfService{
 			SelfServiceDescription: "Safari web browser for iOS (updated)",
@@ -208,7 +208,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 		},
 		Scope: mobile_device_applications.SubsetScope{
 			AllMobileDevices: boolPtr(true),
-			AllJSSUsers:     boolPtr(false),
+			AllJSSUsers:      boolPtr(false),
 		},
 		SelfService: mobile_device_applications.SubsetSelfService{
 			SelfServiceDescription: "Safari web browser for iOS",
@@ -282,7 +282,7 @@ func TestAcceptance_MobileDeviceApplications_delete_by_name(t *testing.T) {
 		},
 		Scope: mobile_device_applications.SubsetScope{
 			AllMobileDevices: boolPtr(true),
-			AllJSSUsers:     boolPtr(false),
+			AllJSSUsers:      boolPtr(false),
 		},
 		SelfService: mobile_device_applications.SubsetSelfService{
 			SelfServiceDescription: "Test app for delete-by-name",

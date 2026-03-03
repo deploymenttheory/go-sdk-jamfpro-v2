@@ -6,6 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_prestages"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -214,10 +215,16 @@ func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 		_, _ = svc.DeleteByIDV3(cleanupCtx, id)
 	})
 
-	getByID, resp, err := svc.GetByIDV3(ctx, id)
+	var getByID *computer_prestages.ResourceComputerPrestage
+	var getResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		getByID, getResp, getErr = svc.GetByIDV3(ctx, id)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, getByID)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode)
 	assert.Equal(t, name, getByID.DisplayName)
 
 	byName, resp, err := svc.GetByNameV3(ctx, name)

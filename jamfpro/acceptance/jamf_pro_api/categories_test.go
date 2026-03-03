@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -136,14 +137,20 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "Category ID=%s found in list (%d total)", categoryID, list.TotalCount)
 
 	// ------------------------------------------------------------------
-	// 3. GetByID — read the created category
+	// 3. GetByID — read the created category (with retry for eventual consistency)
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching category by ID=%s", categoryID)
+	acc.LogTestStage(t, "GetByID", "Getting category by ID=%s", categoryID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
 
-	fetched, fetchResp, err := svc.GetByIDV1(ctx3, categoryID)
+	var fetched *categories.ResourceCategory
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByIDV1(ctx3, categoryID)
+		return getErr
+	})
 	require.NoError(t, err, "GetCategoryByIDV1 should not return an error")
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -210,7 +217,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 7. GetCategoryHistoryV1 — verify note appears
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetHistory", "Fetching history for category ID=%s", categoryID)
+	acc.LogTestStage(t, "GetHistory", "Getting history for category ID=%s", categoryID)
 
 	ctx7, cancel7 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel7()

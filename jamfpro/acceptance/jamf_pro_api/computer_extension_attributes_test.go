@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_extension_attributes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -179,8 +180,14 @@ func TestAcceptance_ComputerExtensionAttributes_lifecycle(t *testing.T) {
 	}
 	assert.True(t, found)
 
-	acc.LogTestStage(t, "GetByID", "Fetching computer extension attribute by ID=%s", eaID)
-	fetched, fetchResp, err := svc.GetByIDV1(ctx, eaID)
+	acc.LogTestStage(t, "GetByID", "Getting computer extension attribute by ID=%s", eaID)
+	var fetched *computer_extension_attributes.ResourceComputerExtensionAttribute
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, eaID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)

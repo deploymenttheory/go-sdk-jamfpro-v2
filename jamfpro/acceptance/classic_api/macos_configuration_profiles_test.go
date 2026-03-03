@@ -95,7 +95,7 @@ func TestAcceptance_MacOSConfigurationProfiles_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching profile by ID=%d", profileID)
+	acc.LogTestStage(t, "GetByID", "Getting profile by ID=%d", profileID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -111,7 +111,7 @@ func TestAcceptance_MacOSConfigurationProfiles_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching profile by name=%q", profileName)
+	acc.LogTestStage(t, "GetByName", "Getting profile by name=%q", profileName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

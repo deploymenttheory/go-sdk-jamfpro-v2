@@ -88,7 +88,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching user by ID=%d", userID)
+	acc.LogTestStage(t, "GetByID", "Getting user by ID=%d", userID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -104,7 +104,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching user by name=%q", userName)
+	acc.LogTestStage(t, "GetByName", "Getting user by name=%q", userName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()
@@ -120,7 +120,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 5. GetByEmail
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByEmail", "Fetching user by email=%q", createReq.Email)
+	acc.LogTestStage(t, "GetByEmail", "Getting user by email=%q", createReq.Email)
 
 	ctx5, cancel5 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel5()

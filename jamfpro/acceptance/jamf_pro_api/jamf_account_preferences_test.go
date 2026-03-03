@@ -39,7 +39,7 @@ func TestAcceptance_JamfAccountPreferences_get_v3(t *testing.T) {
 	svc := acc.Client.JamfAccountPreferences
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get", "Fetching Jamf account preferences")
+	acc.LogTestStage(t, "Get", "Getting Jamf account preferences")
 
 	result, resp, err := svc.GetV3(ctx)
 	require.NoError(t, err)
@@ -60,7 +60,7 @@ func TestAcceptance_JamfAccountPreferences_get_and_update_v3(t *testing.T) {
 	ctx := context.Background()
 
 	// 1. Get current
-	acc.LogTestStage(t, "Get", "Fetching current Jamf account preferences")
+	acc.LogTestStage(t, "Get", "Getting current Jamf account preferences")
 
 	current, _, err := svc.GetV3(ctx)
 	require.NoError(t, err)

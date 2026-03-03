@@ -97,7 +97,7 @@ func TestAcceptance_DeviceEnrollments_list_and_get(t *testing.T) {
 	enrollmentID := firstEnrollment.ID
 	enrollmentName := firstEnrollment.Name
 
-	acc.LogTestStage(t, "GetByID", "Fetching device enrollment by ID=%s", enrollmentID)
+	acc.LogTestStage(t, "GetByID", "Getting device enrollment by ID=%s", enrollmentID)
 	enrollment, getResp, err := svc.GetByIDV1(ctx, enrollmentID)
 	require.NoError(t, err)
 	require.NotNil(t, enrollment)
@@ -106,7 +106,7 @@ func TestAcceptance_DeviceEnrollments_list_and_get(t *testing.T) {
 	assert.Equal(t, enrollmentName, enrollment.Name)
 	acc.LogTestSuccess(t, "GetByID: name=%q", enrollment.Name)
 
-	acc.LogTestStage(t, "GetByName", "Fetching device enrollment by name=%q", enrollmentName)
+	acc.LogTestStage(t, "GetByName", "Getting device enrollment by name=%q", enrollmentName)
 	enrollmentByName, getNameResp, err := svc.GetByNameV1(ctx, enrollmentName)
 	require.NoError(t, err)
 	require.NotNil(t, enrollmentByName)
@@ -140,7 +140,7 @@ func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 	assert.Equal(t, 201, addRespHTTP.StatusCode)
 	acc.LogTestSuccess(t, "Added history note with ID: %s", addResp.ID)
 
-	acc.LogTestStage(t, "GetHistory", "Fetching history for device enrollment ID=%s", enrollmentID)
+	acc.LogTestStage(t, "GetHistory", "Getting history for device enrollment ID=%s", enrollmentID)
 	history, histResp, err := svc.GetHistoryV1(ctx, enrollmentID, map[string]string{
 		"page":      "0",
 		"page-size": "100",
@@ -179,14 +179,14 @@ func TestAcceptance_DeviceEnrollments_sync_states(t *testing.T) {
 
 	enrollmentID := list.Results[0].ID
 
-	acc.LogTestStage(t, "GetSyncStates", "Fetching sync states for device enrollment ID=%s", enrollmentID)
+	acc.LogTestStage(t, "GetSyncStates", "Getting sync states for device enrollment ID=%s", enrollmentID)
 	syncStates, syncResp, err := svc.GetSyncStatesV1(ctx, enrollmentID)
 	require.NoError(t, err)
 	require.NotNil(t, syncStates)
 	assert.Equal(t, 200, syncResp.StatusCode)
 	acc.LogTestSuccess(t, "Retrieved %d sync state(s)", len(syncStates))
 
-	acc.LogTestStage(t, "GetLatestSyncState", "Fetching latest sync state for device enrollment ID=%s", enrollmentID)
+	acc.LogTestStage(t, "GetLatestSyncState", "Getting latest sync state for device enrollment ID=%s", enrollmentID)
 	latestSync, latestResp, err := svc.GetLatestSyncStateV1(ctx, enrollmentID)
 	require.NoError(t, err)
 	require.NotNil(t, latestSync)
@@ -202,7 +202,7 @@ func TestAcceptance_DeviceEnrollments_all_sync_states(t *testing.T) {
 	svc := acc.Client.DeviceEnrollments
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "GetAllSyncStates", "Fetching all sync states for all device enrollments")
+	acc.LogTestStage(t, "GetAllSyncStates", "Getting all sync states for all device enrollments")
 	allSyncStates, allSyncResp, err := svc.GetAllSyncStatesV1(ctx)
 
 	if err != nil {
@@ -221,7 +221,7 @@ func TestAcceptance_DeviceEnrollments_public_key(t *testing.T) {
 	svc := acc.Client.DeviceEnrollments
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "GetPublicKey", "Fetching device enrollments public key")
+	acc.LogTestStage(t, "GetPublicKey", "Getting device enrollments public key")
 	publicKey, keyResp, err := svc.GetPublicKeyV1(ctx)
 
 	if err != nil {

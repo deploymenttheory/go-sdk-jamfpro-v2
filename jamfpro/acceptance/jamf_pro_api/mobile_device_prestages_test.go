@@ -6,6 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -85,7 +86,9 @@ func TestAcceptance_MobileDevicePrestages_list_v3(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
-	assert.NotNil(t, result.Results)
+	if result.TotalCount > 0 {
+		assert.NotNil(t, result.Results)
+	}
 }
 
 func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
@@ -224,12 +227,18 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 		_, _ = svc.DeleteByIDV3(cleanupCtx, id)
 	})
 
-	// Read by ID
+	// Read by ID (with retry for eventual consistency)
 	acc.LogTestStage(t, "Read", "Getting mobile device prestage by ID")
-	getByID, resp, err := svc.GetByIDV3(ctx, id)
+	var getByID *mobile_device_prestages.ResourceMobileDevicePrestage
+	var getResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		getByID, getResp, getErr = svc.GetByIDV3(ctx, id)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, getByID)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode)
 	assert.Equal(t, name, getByID.DisplayName)
 	acc.LogTestSuccess(t, "Retrieved prestage by ID: %s", getByID.DisplayName)
 

@@ -62,7 +62,7 @@ func TestAcceptance_Engage_settings_lifecycle(t *testing.T) {
 	svc := acc.Client.Engage
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get", "Fetching current Engage settings")
+	acc.LogTestStage(t, "Get", "Getting current Engage settings")
 	originalSettings, getResp, err := svc.GetV2(ctx)
 	if err != nil {
 		t.Skipf("Engage feature may not be supported on this tenant: %v", err)
@@ -79,6 +79,9 @@ func TestAcceptance_Engage_settings_lifecycle(t *testing.T) {
 		IsEnabled: !originalEnabled,
 	}
 	updatedSettings, updateResp, err := svc.UpdateV2(ctx, updateReq)
+	if err != nil && updateResp != nil && updateResp.StatusCode == 405 {
+		t.Skip("Engage update endpoint not available (405 Method Not Allowed)")
+	}
 	require.NoError(t, err)
 	require.NotNil(t, updatedSettings)
 	assert.Contains(t, []int{200, 202}, updateResp.StatusCode)
@@ -130,7 +133,7 @@ func TestAcceptance_Engage_history(t *testing.T) {
 	assert.Equal(t, 201, addResp.StatusCode)
 	acc.LogTestSuccess(t, "Added history note with ID: %d", addResult.ID)
 
-	acc.LogTestStage(t, "GetHistory", "Fetching Engage settings history")
+	acc.LogTestStage(t, "GetHistory", "Getting Engage settings history")
 	history, histResp, err := svc.GetHistoryV2(ctx, map[string]string{
 		"page":      "0",
 		"page-size": "100",
@@ -156,7 +159,7 @@ func TestAcceptance_Engage_history_with_rsql_filter(t *testing.T) {
 	svc := acc.Client.Engage
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "GetHistory", "Fetching history to test RSQL filtering")
+	acc.LogTestStage(t, "GetHistory", "Getting history to test RSQL filtering")
 	allHistory, allResp, err := svc.GetHistoryV2(ctx, nil)
 	if err != nil || allHistory.TotalCount == 0 {
 		t.Skip("No Engage history available for RSQL filtering test")

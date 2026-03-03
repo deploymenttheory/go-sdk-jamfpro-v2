@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_computer_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -49,7 +50,7 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 		Name:        acc.UniqueName("sdkv2_acc_acc-test-smart-cg"),
 		Description: "Acceptance test smart computer group",
 		Criteria: []smart_computer_groups.SubsetCriteria{
-			{Name: "Computer Name", Priority: 1, AndOr: "and", SearchType: "is", Value: "*"},
+			{Name: "Computer Name", Priority: 0, AndOr: "and", SearchType: "is", Value: "*"},
 		},
 	}
 	created, createResp, err := svc.Create(ctx, createReq)
@@ -71,10 +72,16 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 		acc.LogCleanupDeleteError(t, "smart computer group", groupID, delErr)
 	})
 
-	// 2. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching smart computer group by ID=%s", groupID)
+	// 2. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting smart computer group by ID=%s", groupID)
 
-	fetched, fetchResp, err := svc.GetByID(ctx, groupID)
+	var fetched *smart_computer_groups.ResourceSmartGroup
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetByID(ctx, groupID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -83,7 +90,7 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "GetByID: name=%q", fetched.Name)
 
 	// 3. GetByName
-	acc.LogTestStage(t, "GetByName", "Fetching smart computer group by name=%s", createReq.Name)
+	acc.LogTestStage(t, "GetByName", "Getting smart computer group by name=%s", createReq.Name)
 
 	byName, _, err := svc.GetByName(ctx, createReq.Name)
 	require.NoError(t, err)
@@ -92,7 +99,7 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	acc.LogTestSuccess(t, "GetByName: ID=%s", byName.ID)
 
 	// 4. GetMembership
-	acc.LogTestStage(t, "GetMembership", "Fetching membership for smart computer group ID=%s", groupID)
+	acc.LogTestStage(t, "GetMembership", "Getting membership for smart computer group ID=%s", groupID)
 
 	membership, memResp, err := svc.GetMembership(ctx, groupID)
 	require.NoError(t, err)
@@ -108,7 +115,7 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 		Name:        acc.UniqueName("sdkv2_acc_acc-test-smart-cg-updated"),
 		Description: "Updated description",
 		Criteria: []smart_computer_groups.SubsetCriteria{
-			{Name: "Computer Name", Priority: 1, AndOr: "and", SearchType: "is", Value: "*"},
+			{Name: "Computer Name", Priority: 0, AndOr: "and", SearchType: "is", Value: "*"},
 		},
 	}
 	updated, updateResp, err := svc.UpdateByID(ctx, groupID, updateReq)
@@ -163,7 +170,7 @@ func TestAcceptance_SmartComputerGroups_list_with_rsql_filter(t *testing.T) {
 		Name:        name,
 		Description: "Acceptance test RSQL filter smart computer group",
 		Criteria: []smart_computer_groups.SubsetCriteria{
-			{Name: "Computer Name", Priority: 1, AndOr: "and", SearchType: "is", Value: "*"},
+			{Name: "Computer Name", Priority: 0, AndOr: "and", SearchType: "is", Value: "*"},
 		},
 	}
 

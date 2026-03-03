@@ -121,6 +121,36 @@ func PollUntil(t *testing.T, timeout, interval time.Duration, fn func() bool) bo
 	return false
 }
 
+// RetryOnNotFound retries a GET operation when receiving 404 errors, with exponential backoff.
+// This handles eventual consistency in the Jamf Pro API after CREATE operations.
+// Returns the last error if all retries fail.
+func RetryOnNotFound(t *testing.T, maxRetries int, initialDelay time.Duration, fn func() error) error {
+	t.Helper()
+	var lastErr error
+	delay := initialDelay
+	
+	for i := 0; i < maxRetries; i++ {
+		lastErr = fn()
+		if lastErr == nil {
+			return nil
+		}
+		
+		if !client.IsNotFound(lastErr) {
+			return lastErr
+		}
+		
+		if i < maxRetries-1 {
+			if Config.Verbose {
+				t.Logf("Resource not found (404), retry %d/%d: waiting %v before next attempt", i+1, maxRetries, delay)
+			}
+			time.Sleep(delay)
+			delay *= 2
+		}
+	}
+	
+	return lastErr
+}
+
 func isGitHubActions() bool {
 	return os.Getenv("GITHUB_ACTIONS") == "true"
 }

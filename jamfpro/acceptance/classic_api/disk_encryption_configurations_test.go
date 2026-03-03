@@ -84,7 +84,7 @@ func TestAcceptance_DiskEncryptionConfigurations_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching disk encryption configuration by ID=%d", configID)
+	acc.LogTestStage(t, "GetByID", "Getting disk encryption configuration by ID=%d", configID)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -100,7 +100,7 @@ func TestAcceptance_DiskEncryptionConfigurations_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 4. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching disk encryption configuration by name=%q", configName)
+	acc.LogTestStage(t, "GetByName", "Getting disk encryption configuration by name=%q", configName)
 
 	ctx4, cancel4 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel4()

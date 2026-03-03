@@ -81,7 +81,7 @@ func TestAcceptance_ServiceName_Lifecycle(t *testing.T) {
     acc.LogTestSuccess(t, "Resource ID=%s found in list (%d total)", resourceID, list.TotalCount)
 
     // 3. GetByID
-    acc.LogTestStage(t, "GetByID", "Fetching resource by ID=%s", resourceID)
+    acc.LogTestStage(t, "GetByID", "Getting resource by ID=%s", resourceID)
     fetched, fetchResp, err := svc.GetByIDV1(ctx, resourceID)
     require.NoError(t, err)
     require.NotNil(t, fetched)
@@ -156,7 +156,7 @@ func TestAcceptance_SettingsName_GetAndUpdate(t *testing.T) {
     ctx := context.Background()
 
     // 1. Get and store current settings
-    acc.LogTestStage(t, "Get", "Fetching current settings")
+    acc.LogTestStage(t, "Get", "Getting current settings")
     original, resp, err := svc.GetV1(ctx)
     require.NoError(t, err)
     require.NotNil(t, original)

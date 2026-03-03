@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/inventory_preload"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -79,10 +80,16 @@ func TestAcceptance_InventoryPreload_record_lifecycle(t *testing.T) {
 		acc.LogCleanupDeleteError(t, "inventory preload record", recordID, delErr)
 	})
 
-	// 2. GetRecordByID
-	acc.LogTestStage(t, "GetRecordByID", "Fetching record ID=%s", recordID)
+	// 2. GetRecordByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetRecordByID", "Getting record ID=%s", recordID)
 
-	fetched, fetchResp, err := svc.GetRecordByID(ctx, recordID)
+	var fetched *inventory_preload.InventoryPreloadRecord
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetRecordByID(ctx, recordID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)

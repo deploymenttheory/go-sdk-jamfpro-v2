@@ -45,7 +45,7 @@ func TestAcceptance_InventoryInformation_get_v1(t *testing.T) {
 	svc := acc.Client.InventoryInformation
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "Get", "Fetching inventory information")
+	acc.LogTestStage(t, "Get", "Getting inventory information")
 
 	result, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)

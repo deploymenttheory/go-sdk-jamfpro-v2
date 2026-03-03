@@ -40,7 +40,7 @@ func TestAcceptance_Policies_minimum_config(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 2. Get by ID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching policy by ID=%d", policyID)
+	acc.LogTestStage(t, "GetByID", "Getting policy by ID=%d", policyID)
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
@@ -56,7 +56,7 @@ func TestAcceptance_Policies_minimum_config(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. Get by Name
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching policy by name=%q", policyName)
+	acc.LogTestStage(t, "GetByName", "Getting policy by name=%q", policyName)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
@@ -857,9 +857,9 @@ func TestAcceptance_Policies_account_management(t *testing.T) {
 	policyReq := createMinimalPolicy(t, policyName)
 	policyReq.AccountMaintenance = policies.PolicySubsetAccountMaintenance{
 		ManagementAccount: &policies.PolicySubsetAccountMaintenanceManagementAccount{
-			Action:                 "doNotChange",
-			ManagedPassword:        "",
-			ManagedPasswordLength:  0,
+			Action:                "doNotChange",
+			ManagedPassword:       "",
+			ManagedPasswordLength: 0,
 		},
 	}
 
@@ -1091,7 +1091,7 @@ func TestAcceptance_Policies_efi_password_set(t *testing.T) {
 	policyReq := createMinimalPolicy(t, policyName)
 	policyReq.AccountMaintenance = policies.PolicySubsetAccountMaintenance{
 		OpenFirmwareEfiPassword: &policies.PolicySubsetAccountMaintenanceOpenFirmwareEfiPassword{
-			OfMode:   "command",
+			OfMode:     "command",
 			OfPassword: "test123",
 		},
 	}
@@ -1128,7 +1128,7 @@ func TestAcceptance_Policies_efi_password_remove(t *testing.T) {
 	policyReq := createMinimalPolicy(t, policyName)
 	policyReq.AccountMaintenance = policies.PolicySubsetAccountMaintenance{
 		OpenFirmwareEfiPassword: &policies.PolicySubsetAccountMaintenanceOpenFirmwareEfiPassword{
-			OfMode:   "none",
+			OfMode:     "none",
 			OfPassword: "",
 		},
 	}

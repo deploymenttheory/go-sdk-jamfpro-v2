@@ -60,7 +60,7 @@ func TestAcceptance_MobileDevices_get_by_id(t *testing.T) {
 	}
 
 	deviceID := fmt.Sprintf("%d", list.Results[0].ID)
-	acc.LogTestStage(t, "GetByID", "Fetching mobile device by ID=%s", deviceID)
+	acc.LogTestStage(t, "GetByID", "Getting mobile device by ID=%s", deviceID)
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
@@ -105,7 +105,7 @@ func TestAcceptance_MobileDevices_get_by_name(t *testing.T) {
 		return
 	}
 
-	acc.LogTestStage(t, "GetByName", "Fetching mobile device by name=%q", deviceName)
+	acc.LogTestStage(t, "GetByName", "Getting mobile device by name=%q", deviceName)
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
@@ -139,7 +139,7 @@ func TestAcceptance_MobileDevices_get_by_id_and_data_subset(t *testing.T) {
 	}
 
 	deviceID := fmt.Sprintf("%d", list.Results[0].ID)
-	acc.LogTestStage(t, "GetByIDAndDataSubset", "Fetching mobile device ID=%s subset=General", deviceID)
+	acc.LogTestStage(t, "GetByIDAndDataSubset", "Getting mobile device ID=%s subset=General", deviceID)
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
@@ -231,7 +231,7 @@ func TestAcceptance_MobileDevices_update_by_id(t *testing.T) {
 	}
 
 	deviceID := fmt.Sprintf("%d", list.Results[0].ID)
-	acc.LogTestStage(t, "GetByID", "Fetching mobile device by ID=%s", deviceID)
+	acc.LogTestStage(t, "GetByID", "Getting mobile device by ID=%s", deviceID)
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()

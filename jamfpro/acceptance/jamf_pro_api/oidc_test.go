@@ -49,7 +49,7 @@ func TestAcceptance_OIDC_public_endpoints_v1(t *testing.T) {
 	ctx := context.Background()
 
 	// GetPublicFeaturesV1 — always returns whether Jamf ID auth is enabled
-	acc.LogTestStage(t, "GetPublicFeaturesV1", "Fetching public OIDC features")
+	acc.LogTestStage(t, "GetPublicFeaturesV1", "Getting public OIDC features")
 
 	features, featuresResp, err := svc.GetPublicFeaturesV1(ctx)
 	require.NoError(t, err)
@@ -59,7 +59,7 @@ func TestAcceptance_OIDC_public_endpoints_v1(t *testing.T) {
 	acc.LogTestSuccess(t, "GetPublicFeaturesV1: jamfIdAuthEnabled=%v", features.JamfIdAuthenticationEnabled)
 
 	// GetPublicKeyV1 — returns the JWKS public key set
-	acc.LogTestStage(t, "GetPublicKeyV1", "Fetching OIDC public key (JWKS)")
+	acc.LogTestStage(t, "GetPublicKeyV1", "Getting OIDC public key (JWKS)")
 
 	pubKey, pubKeyResp, err := svc.GetPublicKeyV1(ctx)
 	require.NoError(t, err)
@@ -69,7 +69,7 @@ func TestAcceptance_OIDC_public_endpoints_v1(t *testing.T) {
 	acc.LogTestSuccess(t, "GetPublicKeyV1: %d key(s) in JWKS", len(pubKey.Keys))
 
 	// GetDirectIdPLoginURLV1 — may fail if OIDC IdP is not configured
-	acc.LogTestStage(t, "GetDirectIdPLoginURLV1", "Fetching direct IdP login URL")
+	acc.LogTestStage(t, "GetDirectIdPLoginURLV1", "Getting direct IdP login URL")
 
 	loginURL, loginResp, err := svc.GetDirectIdPLoginURLV1(ctx)
 	if err != nil {

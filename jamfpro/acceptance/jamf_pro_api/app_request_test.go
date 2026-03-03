@@ -2,10 +2,12 @@ package jamf_pro_api
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_request"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -67,7 +69,7 @@ func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 	created, createResp, err := svc.CreateFormInputFieldV1(ctx, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	require.Contains(t, []int{200, 201}, createResp.StatusCode)
 	assert.Positive(t, created.ID)
 
 	fieldID := created.ID
@@ -80,10 +82,16 @@ func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 		acc.LogCleanupDeleteError(t, "app request form input field", "", delErr)
 	})
 
-	// 2. GetByID
-	acc.LogTestStage(t, "GetByID", "Fetching form input field by ID=%d", fieldID)
+	// 2. GetByID (with retry for eventual consistency)
+	acc.LogTestStage(t, "GetByID", "Getting form input field by ID=%d", fieldID)
 
-	fetched, fetchResp, err := svc.GetFormInputFieldByIDV1(ctx, fieldID)
+	var fetched *app_request.ResourceFormInputField
+	var fetchResp *interfaces.Response
+	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
+		var getErr error
+		fetched, fetchResp, getErr = svc.GetFormInputFieldByIDV1(ctx, fieldID)
+		return getErr
+	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
 	assert.Equal(t, 200, fetchResp.StatusCode)
@@ -144,7 +152,7 @@ func TestAcceptance_AppRequest_settings_get_and_update(t *testing.T) {
 	ctx := context.Background()
 
 	// 1. Get current settings
-	acc.LogTestStage(t, "Get", "Fetching app request settings")
+	acc.LogTestStage(t, "Get", "Getting app request settings")
 
 	original, getResp, err := svc.GetSettingsV1(ctx)
 	require.NoError(t, err)
@@ -162,6 +170,9 @@ func TestAcceptance_AppRequest_settings_get_and_update(t *testing.T) {
 		ApproverEmails:       original.ApproverEmails,
 	}
 	updated, updateResp, err := svc.UpdateSettingsV1(ctx, updateReq)
+	if err != nil && strings.Contains(err.Error(), "SMTP Server is not enabled") {
+		t.Skip("SMTP Server is not enabled on this test tenant")
+	}
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	assert.Equal(t, 200, updateResp.StatusCode)

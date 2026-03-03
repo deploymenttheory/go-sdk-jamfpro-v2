@@ -74,6 +74,9 @@ func TestAcceptance_JamfProServerURL_get_and_update(t *testing.T) {
 	modified.UnsecuredEnrollmentUrl = "http://jamf-test.example.com:8080"
 
 	updated, resp, err := svc.UpdateV1(ctx, &modified)
+	if err != nil && resp != nil && resp.StatusCode == 403 {
+		t.Skip("Server URL update not allowed in hosted environment (403 HOSTED_ENVIRONMENT)")
+	}
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	assert.Equal(t, 200, resp.StatusCode)

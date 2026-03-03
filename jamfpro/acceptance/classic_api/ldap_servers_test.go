@@ -65,7 +65,7 @@ func TestAcceptance_LDAPServers_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 2. GetByID
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByID", "Fetching LDAP server by ID=%d", serverID)
+	acc.LogTestStage(t, "GetByID", "Getting LDAP server by ID=%d", serverID)
 
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
@@ -81,7 +81,7 @@ func TestAcceptance_LDAPServers_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	// 3. GetByName
 	// ------------------------------------------------------------------
-	acc.LogTestStage(t, "GetByName", "Fetching LDAP server by name=%q", serverName)
+	acc.LogTestStage(t, "GetByName", "Getting LDAP server by name=%q", serverName)
 
 	ctx3, cancel3 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel3()
