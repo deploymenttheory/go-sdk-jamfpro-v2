@@ -33,6 +33,8 @@ func main() {
 		fmt.Printf("  Username: %s\n", entry.Username)
 		fmt.Printf("  Date: %s\n", entry.Date)
 		fmt.Printf("  Note: %s\n", entry.Note)
-		fmt.Printf("  Details: %s\n", entry.Details)
+		if entry.Details != nil {
+			fmt.Printf("  Details: %s\n", *entry.Details)
+		}
 	}
 }

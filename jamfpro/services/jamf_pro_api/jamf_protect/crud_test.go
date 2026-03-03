@@ -128,7 +128,7 @@ func TestUnit_JamfProtect_CreateHistoryNoteV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.Contains(t, []int{200, 201}, resp.StatusCode)
-	require.Equal(t, 3, result.ID)
+	require.Equal(t, "3", result.ID)
 }
 
 func TestUnit_JamfProtect_CreateHistoryNoteV1_NilRequest(t *testing.T) {
