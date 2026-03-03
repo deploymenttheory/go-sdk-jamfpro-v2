@@ -64,12 +64,24 @@ func TestAcceptance_VolumePurchasingLocations_get_history_v1(t *testing.T) {
 		t.Skip("No volume purchasing locations exist; skipping GetHistoryV1")
 	}
 
-	history, resp, err := svc.GetHistoryV1(ctx, list.Results[0].ID, nil)
+	locationID := list.Results[0].ID
+
+	// Add history note first
+	noteReq := &volume_purchasing_locations.AddHistoryNotesRequest{
+		ObjectHistoryNote: "Acceptance test history note for volume purchasing location",
+	}
+	addResp, err := svc.AddHistoryNotesV1(ctx, locationID, noteReq)
+	require.NoError(t, err)
+	require.NotNil(t, addResp)
+	require.Contains(t, []int{200, 201, 204}, addResp.StatusCode)
+	t.Logf("Added history note successfully")
+
+	history, resp, err := svc.GetHistoryV1(ctx, locationID, nil)
 	require.NoError(t, err)
 	require.NotNil(t, history)
 	require.NotNil(t, resp)
 	require.Equal(t, 200, resp.StatusCode)
-	require.GreaterOrEqual(t, history.TotalCount, 0)
+	require.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 }
 
 // TestAcceptance_VolumePurchasingLocations_add_history_notes_v1 adds a history note to a volume purchasing location.

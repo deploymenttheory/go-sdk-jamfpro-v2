@@ -1,5 +1,7 @@
 package cloud_distribution_point
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // RequestCloudDistributionPointV1 is the body for CreateV1 and UpdateV1 (PATCH).
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point
@@ -53,20 +55,11 @@ type TestConnectionV1 struct {
 	Message                string `json:"message"`
 }
 
-// HistoryItem represents a single cloud distribution point history entry.
-type HistoryItem struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryItem is an alias to the shared history item struct.
+type HistoryItem = shared.SharedHistoryItem
 
-// HistoryResponse is the response for GetHistoryV1.
-type HistoryResponse struct {
-	TotalCount int           `json:"totalCount"`
-	Results    []HistoryItem `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct.
+type HistoryResponse = shared.SharedHistoryResponse
 
 // FileItem represents a single cloud distribution point inventory file.
 type FileItem struct {

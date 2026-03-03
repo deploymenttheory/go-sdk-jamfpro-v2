@@ -159,12 +159,11 @@ func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string)
 	endpoint := EndpointHistoryV3
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse HistoryListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []HistoryEntry
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -177,6 +176,7 @@ func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string)
 		return nil, resp, err
 	}
 
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 

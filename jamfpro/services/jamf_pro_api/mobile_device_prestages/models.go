@@ -1,5 +1,7 @@
 package mobile_device_prestages
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ListResponse represents the paginated response for mobile device prestages.
 type ListResponse struct {
 	TotalCount int                            `json:"totalCount"`
@@ -225,25 +227,14 @@ type RequestDeleteAttachments struct {
 	IDs []string `json:"ids"`
 }
 
-// HistoryObject represents a single history entry.
-type HistoryObject struct {
-	ID       int     `json:"id"`
-	Username string  `json:"username"`
-	Date     string  `json:"date"`
-	Note     string  `json:"note"`
-	Details  *string `json:"details"`
-}
+// HistoryObject is an alias to the shared history item struct.
+type HistoryObject = shared.SharedHistoryItem
 
-// HistoryResponse is the response for GetHistoryByIDV3.
-type HistoryResponse struct {
-	TotalCount int             `json:"totalCount"`
-	Results    []HistoryObject `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct.
+type HistoryResponse = shared.SharedHistoryResponse
 
-// RequestAddHistoryNote is the request body for AddHistoryNoteByIDV3.
-type RequestAddHistoryNote struct {
-	Note string `json:"note"`
-}
+// RequestAddHistoryNote is an alias to the shared history note request struct.
+type RequestAddHistoryNote = shared.SharedHistoryNoteRequest
 
 // ResponseAddHistoryNote is the response for AddHistoryNoteByIDV3.
 type ResponseAddHistoryNote struct {

@@ -1,5 +1,7 @@
 package volume_purchasing_locations
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceVolumePurchasingLocation represents a volume purchasing location resource.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id
@@ -64,20 +66,11 @@ type ContentListResponse struct {
 	Results    []VolumePurchasingSubsetContent `json:"results"`
 }
 
-// HistoryListResponse is the response for GetHistoryV1.
-type HistoryListResponse struct {
-	TotalCount int            `json:"totalCount"`
-	Results    []HistoryEntry `json:"results"`
-}
+// HistoryEntry is an alias to the shared history item struct with string IDs.
+type HistoryEntry = shared.SharedHistoryItemString
 
-// HistoryEntry represents an individual history record.
-type HistoryEntry struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryListResponse is an alias to the shared history response struct with string IDs.
+type HistoryListResponse = shared.SharedHistoryResponseString
 
 // AddHistoryNotesRequest is the request for AddHistoryNotesV1.
 type AddHistoryNotesRequest struct {

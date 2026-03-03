@@ -156,7 +156,7 @@ func TestUnit_GsxConnection_GetHistory_InvalidJSON(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Contains(t, err.Error(), "failed to get GSX connection history")
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 func TestUnit_GsxConnection_NewService(t *testing.T) {

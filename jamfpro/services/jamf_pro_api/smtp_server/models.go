@@ -1,5 +1,7 @@
 package smtp_server
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceSMTPServer represents the SMTP server configuration (singleton).
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
@@ -53,31 +55,14 @@ type ResourceSMTPServerGoogleMailCredentials struct {
 	Authentications []ResourceSMTPServerAuthentication `json:"authentications,omitempty"`
 }
 
-// HistoryObject represents a single SMTP server history entry.
-//
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
-type HistoryObject struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryObject is an alias to the shared history item struct with string IDs.
+type HistoryObject = shared.SharedHistoryItemString
 
-// HistoryResponse is the response for GetHistoryV1 (paginated).
-//
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
-type HistoryResponse struct {
-	TotalCount int            `json:"totalCount"`
-	Results    []HistoryObject `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct with string IDs.
+type HistoryResponse = shared.SharedHistoryResponseString
 
-// AddHistoryNoteRequest is the request body for AddHistoryNoteV1.
-//
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-history
-type AddHistoryNoteRequest struct {
-	Note string `json:"note"`
-}
+// AddHistoryNoteRequest is an alias to the shared history note request struct.
+type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
 
 // AddHistoryNoteResponse is the response for AddHistoryNoteV1 (201 Created).
 //

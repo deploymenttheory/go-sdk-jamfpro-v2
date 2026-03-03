@@ -149,8 +149,14 @@ func (m *GroupsMock) GetPaginated(ctx context.Context, endpoint string, params m
 	if !ok {
 		return nil, fmt.Errorf("no mock registered for GET %s", endpoint)
 	}
-	if mergePage != nil && data != nil {
-		if err := mergePage(data); err != nil {
+	if mergePage != nil && data != nil && len(data) > 0 {
+		var page struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(data, &page); err != nil {
+			return &interfaces.Response{StatusCode: http.StatusInternalServerError}, err
+		}
+		if err := mergePage(page.Results); err != nil {
 			return &interfaces.Response{StatusCode: http.StatusInternalServerError}, err
 		}
 	}

@@ -85,7 +85,7 @@ type ServiceInterface interface {
 	// Adds a new audit log entry with note and details to the Jamf Protect history.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-history
-	CreateHistoryNoteV1(ctx context.Context, request *RequestJamfProtectHistoryNote) (*ResourceJamfProtectHistory, *interfaces.Response, error)
+	CreateHistoryNoteV1(ctx context.Context, request *RequestJamfProtectHistoryNote) (*ResourceJamfProtectHistoryCreate, *interfaces.Response, error)
 
 	// ListPlansV1 retrieves paginated list of Jamf Protect plans.
 	//
@@ -324,7 +324,7 @@ func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string
 // CreateHistoryNoteV1 creates a new history note for Jamf Protect.
 // URL: POST /api/v1/jamf-protect/history
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-history
-func (s *Service) CreateHistoryNoteV1(ctx context.Context, request *RequestJamfProtectHistoryNote) (*ResourceJamfProtectHistory, *interfaces.Response, error) {
+func (s *Service) CreateHistoryNoteV1(ctx context.Context, request *RequestJamfProtectHistoryNote) (*ResourceJamfProtectHistoryCreate, *interfaces.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("Jamf Protect history note request cannot be nil")
 	}
@@ -336,7 +336,7 @@ func (s *Service) CreateHistoryNoteV1(ctx context.Context, request *RequestJamfP
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	var result ResourceJamfProtectHistory
+	var result ResourceJamfProtectHistoryCreate
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to create Jamf Protect history note: %w", err)

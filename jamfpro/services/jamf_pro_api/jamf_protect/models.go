@@ -1,5 +1,7 @@
 package jamf_protect
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceJamfProtectSettings represents the Jamf Protect integration settings.
 type ResourceJamfProtectSettings struct {
 	ID             string `json:"id"`
@@ -63,7 +65,7 @@ type RequestJamfProtectDeployment struct {
 	TargetComputers []string `json:"targetComputers"`
 }
 
-// ResourceJamfProtectHistory represents a Jamf Protect history entry.
+// ResourceJamfProtectHistory represents a Jamf Protect history entry from list operations.
 type ResourceJamfProtectHistory struct {
 	ID       int    `json:"id"`
 	Username string `json:"username"`
@@ -72,14 +74,14 @@ type ResourceJamfProtectHistory struct {
 	Details  string `json:"details"`
 }
 
+// ResourceJamfProtectHistoryCreate is an alias to the shared history note response.
+type ResourceJamfProtectHistoryCreate = shared.SharedHistoryNoteResponse
+
 // ListResponseJamfProtectHistory represents a paginated list of Jamf Protect history entries.
 type ListResponseJamfProtectHistory struct {
 	TotalCount int                          `json:"totalCount"`
 	Results    []ResourceJamfProtectHistory `json:"results"`
 }
 
-// RequestJamfProtectHistoryNote represents a request to add a history note.
-type RequestJamfProtectHistoryNote struct {
-	Note    string `json:"note"`
-	Details string `json:"details"`
-}
+// RequestJamfProtectHistoryNote is an alias to the shared history note request.
+type RequestJamfProtectHistoryNote = shared.SharedHistoryNoteRequest

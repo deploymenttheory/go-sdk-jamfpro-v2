@@ -97,7 +97,7 @@ func TestUnit_DeviceCommunicationSettings_GetHistoryV1_InvalidJSON(t *testing.T)
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 func TestUnit_DeviceCommunicationSettings_GetHistoryV1_InvalidHistoryItem(t *testing.T) {

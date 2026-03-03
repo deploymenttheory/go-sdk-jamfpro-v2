@@ -99,7 +99,13 @@ func (m *SitesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 		return nil, fmt.Errorf("%s", resp.errMsg)
 	}
 	if mergePage != nil && len(resp.rawBody) > 0 {
-		if err := mergePage(resp.rawBody); err != nil {
+		var page struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.rawBody, &page); err != nil {
+			return nil, fmt.Errorf("merge page failed: %w", err)
+		}
+		if err := mergePage(page.Results); err != nil {
 			return nil, fmt.Errorf("merge page failed: %w", err)
 		}
 	}

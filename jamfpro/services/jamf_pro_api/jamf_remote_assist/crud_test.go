@@ -141,7 +141,7 @@ func TestUnit_JamfRemoteAssist_ListSessionsV2_MergePageError(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.NotNil(t, resp)
-	require.Contains(t, err.Error(), "failed to unmarshal page")
+	require.Contains(t, err.Error(), "mergePage failed")
 }
 
 func TestUnit_JamfRemoteAssist_GetSessionByIDV2_NotFound(t *testing.T) {

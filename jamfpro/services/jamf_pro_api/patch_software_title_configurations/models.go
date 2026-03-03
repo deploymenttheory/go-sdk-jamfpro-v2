@@ -1,5 +1,7 @@
 package patch_software_title_configurations
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ListResponse represents a list of patch software title configurations.
 type ListResponse []ResourcePatchSoftwareTitleConfiguration
 
@@ -119,25 +121,14 @@ type ResourcePatchSummary struct {
 	SoftwareTitleConfigurationID string `json:"softwareTitleConfigurationId,omitempty"`
 }
 
-// ResourceHistoryItem represents a history entry for a patch software title configuration.
-type ResourceHistoryItem struct {
-	ID       int    `json:"id,omitempty"`
-	Username string `json:"username,omitempty"`
-	Date     string `json:"date,omitempty"`
-	Note     string `json:"note,omitempty"`
-	Details  string `json:"details,omitempty"`
-}
+// ResourceHistoryItem is an alias to the shared history item struct.
+type ResourceHistoryItem = shared.SharedHistoryItem
 
-// HistoryResponse is the paginated response for GetHistoryByIDV2.
-type HistoryResponse struct {
-	TotalCount int                   `json:"totalCount"`
-	Results    []ResourceHistoryItem `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct.
+type HistoryResponse = shared.SharedHistoryResponse
 
-// RequestAddHistoryNote is the request body for AddHistoryNoteByIDV2.
-type RequestAddHistoryNote struct {
-	Note string `json:"note"`
-}
+// RequestAddHistoryNote is an alias to the shared history note request struct.
+type RequestAddHistoryNote = shared.SharedHistoryNoteRequest
 
 // ResponseAddHistoryNote is the response for AddHistoryNoteByIDV2.
 type ResponseAddHistoryNote struct {

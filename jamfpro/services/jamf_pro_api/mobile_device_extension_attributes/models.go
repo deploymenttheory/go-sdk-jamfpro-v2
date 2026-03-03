@@ -1,5 +1,7 @@
 package mobile_device_extension_attributes
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceMobileDeviceExtensionAttribute represents a mobile device extension attribute resource.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id
@@ -45,25 +47,14 @@ type DeleteMobileDeviceExtensionAttributesByIDRequest struct {
 	IDs []string `json:"ids"`
 }
 
-// HistoryItem represents a single mobile device extension attribute history entry.
-type HistoryItem struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryItem is an alias to the shared history item struct with string IDs.
+type HistoryItem = shared.SharedHistoryItemString
 
-// HistoryResponse is the response for GetHistoryByIDV1.
-type HistoryResponse struct {
-	TotalCount int           `json:"totalCount"`
-	Results    []HistoryItem `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct with string IDs.
+type HistoryResponse = shared.SharedHistoryResponseString
 
-// AddHistoryNoteRequest is the body for AddHistoryNoteByIDV1.
-type AddHistoryNoteRequest struct {
-	Note string `json:"note"`
-}
+// AddHistoryNoteRequest is an alias to the shared history note request struct.
+type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
 
 // DataDependencyItem represents a single dependent object (e.g., smart group).
 type DataDependencyItem struct {

@@ -71,12 +71,11 @@ func (s *Service) GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map
 	var result ObjectsListResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ObjectsListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceSiteObject
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -88,5 +87,6 @@ func (s *Service) GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map
 		return nil, resp, fmt.Errorf("failed to get site objects: %w", err)
 	}
 
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }

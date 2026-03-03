@@ -1,5 +1,7 @@
 package inventory_preload
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // InventoryPreloadRecord represents an inventory preload record.
 // DeviceType: "Computer", "Mobile Device", or "Unknown".
 type InventoryPreloadRecord struct {
@@ -88,25 +90,14 @@ type ExtensionAttributeColumnResult struct {
 	Results    []ExtensionAttributeColumn  `json:"results"`
 }
 
-// HistoryObject represents an inventory preload history entry.
-type HistoryObject struct {
-	ID       int     `json:"id"`
-	Username string  `json:"username"`
-	Date     string  `json:"date"`
-	Note     string  `json:"note"`
-	Details  *string `json:"details,omitempty"`
-}
+// HistoryObject is an alias to the shared history item struct.
+type HistoryObject = shared.SharedHistoryItem
 
-// HistoryListResponse is the paginated response for listing history.
-type HistoryListResponse struct {
-	TotalCount int             `json:"totalCount"`
-	Results    []HistoryObject `json:"results"`
-}
+// HistoryListResponse is an alias to the shared history response struct.
+type HistoryListResponse = shared.SharedHistoryResponse
 
-// AddHistoryNoteRequest is the body for adding a history note.
-type AddHistoryNoteRequest struct {
-	Note string `json:"note"`
-}
+// AddHistoryNoteRequest is an alias to the shared history note request struct.
+type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
 
 // AddHistoryNoteResponse is the response for adding a history note.
 type AddHistoryNoteResponse struct {

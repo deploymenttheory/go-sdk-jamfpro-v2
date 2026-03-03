@@ -6,6 +6,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -290,12 +291,22 @@ func TestAcceptance_Enrollment_history_v2(t *testing.T) {
 	svc := acc.Client.Enrollment
 	ctx := context.Background()
 
+	// Add history note first
+	noteReq := &shared.SharedHistoryNoteRequest{
+		Note: "Acceptance test history note for enrollment",
+	}
+	addResult, addResp, err := svc.AddHistoryNotesV2(ctx, noteReq)
+	require.NoError(t, err)
+	require.NotNil(t, addResult)
+	assert.Equal(t, 201, addResp.StatusCode)
+	t.Logf("Added history note with ID: %s", addResult.ID)
+
 	// Get enrollment history
 	history, resp, err := svc.GetHistoryV2(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, history)
 	assert.Equal(t, 200, resp.StatusCode)
-	assert.GreaterOrEqual(t, history.TotalCount, 0)
+	assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 }
 
 func TestAcceptance_Enrollment_validation_errors(t *testing.T) {

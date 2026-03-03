@@ -359,7 +359,7 @@ func TestUnit_InventoryPreload_ListRecords_InvalidJSON(t *testing.T) {
 	_, resp, err := svc.ListRecords(context.Background(), nil)
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 func TestUnit_InventoryPreload_CreateRecord_Success(t *testing.T) {

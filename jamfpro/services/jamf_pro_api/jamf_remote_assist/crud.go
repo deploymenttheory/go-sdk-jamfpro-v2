@@ -126,12 +126,11 @@ func (s *Service) ListSessionsV2(ctx context.Context, rsqlQuery map[string]strin
 	var result ListSessionsResponse
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListSessionsResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []SessionHistory
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -143,6 +142,7 @@ func (s *Service) ListSessionsV2(ctx context.Context, rsqlQuery map[string]strin
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf remote assist sessions (v2): %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
