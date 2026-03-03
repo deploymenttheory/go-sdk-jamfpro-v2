@@ -98,7 +98,7 @@ func TestUnit_Ebooks_ListV1_InvalidJSON(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 func TestUnit_Ebooks_GetByIDV1_Success(t *testing.T) {

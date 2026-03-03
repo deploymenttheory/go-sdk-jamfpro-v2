@@ -1,5 +1,7 @@
 package scripts
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceScript represents a script resource returned by the Jamf Pro API.
 type ResourceScript struct {
 	ID             string `json:"id"`
@@ -67,7 +69,5 @@ type ScriptHistoryResponse struct {
 	Results    []HistoryObject `json:"results"`
 }
 
-// AddScriptHistoryNotesRequest is the request body for AddScriptHistoryNotes.
-type AddScriptHistoryNotesRequest struct {
-	Note string `json:"note"`
-}
+// AddScriptHistoryNotesRequest is an alias to the shared history note request.
+type AddScriptHistoryNotesRequest = shared.SharedHistoryNoteRequest

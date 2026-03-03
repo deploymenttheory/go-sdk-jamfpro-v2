@@ -1,5 +1,7 @@
 package client_checkin
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceClientCheckinSettings represents client check-in settings (singleton).
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in
@@ -15,28 +17,17 @@ type ResourceClientCheckinSettings struct {
 	EnableLocalConfigurationProfiles bool `json:"enableLocalConfigurationProfiles"`
 }
 
-// ResourceClientCheckinHistoryEntry represents a single client check-in history entry.
-type ResourceClientCheckinHistoryEntry struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// ResourceClientCheckinHistoryEntry is an alias to the shared history item struct with string IDs.
+type ResourceClientCheckinHistoryEntry = shared.SharedHistoryItemString
+
+// ResourceClientCheckinHistory is an alias to the shared history response struct with string IDs.
+type ResourceClientCheckinHistory = shared.SharedHistoryResponseString
+
+// RequestClientCheckinHistoryNote is an alias to the shared history note request struct.
+type RequestClientCheckinHistoryNote = shared.SharedHistoryNoteRequest
 
 // CreateHistoryResponse is the response for AddHistoryNoteV3 (POST history).
 type CreateHistoryResponse struct {
 	ID   string `json:"id"`
 	HREF string `json:"href"`
-}
-
-// ResourceClientCheckinHistory is the response for GetHistoryV3.
-type ResourceClientCheckinHistory struct {
-	TotalCount int                                `json:"totalCount"`
-	Results    []ResourceClientCheckinHistoryEntry `json:"results"`
-}
-
-// RequestClientCheckinHistoryNote is the body for AddHistoryNoteV3.
-type RequestClientCheckinHistoryNote struct {
-	Note string `json:"note"`
 }

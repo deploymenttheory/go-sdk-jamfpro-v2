@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -129,6 +130,16 @@ func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 
 	enrollmentID := list.Results[0].ID
 
+	acc.LogTestStage(t, "AddHistoryNote", "Adding history note for device enrollment ID=%s", enrollmentID)
+	noteReq := &shared.SharedHistoryNoteRequest{
+		Note: "Acceptance test history note for device enrollment",
+	}
+	addResp, addRespHTTP, err := svc.AddHistoryNotesV1(ctx, enrollmentID, noteReq)
+	require.NoError(t, err)
+	require.NotNil(t, addResp)
+	assert.Equal(t, 201, addRespHTTP.StatusCode)
+	acc.LogTestSuccess(t, "Added history note with ID: %s", addResp.ID)
+
 	acc.LogTestStage(t, "GetHistory", "Fetching history for device enrollment ID=%s", enrollmentID)
 	history, histResp, err := svc.GetHistoryV1(ctx, enrollmentID, map[string]string{
 		"page":      "0",
@@ -139,7 +150,7 @@ func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, history)
 	assert.Equal(t, 200, histResp.StatusCode)
-	assert.GreaterOrEqual(t, history.TotalCount, 0)
+	assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 	acc.LogTestSuccess(t, "History entries: %d", history.TotalCount)
 
 	if history.TotalCount > 0 {

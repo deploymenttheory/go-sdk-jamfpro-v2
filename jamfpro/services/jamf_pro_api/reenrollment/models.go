@@ -1,5 +1,7 @@
 package reenrollment
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceReenrollmentSettings is the re-enrollment settings resource (get/update).
 type ResourceReenrollmentSettings struct {
 	FlushPolicyHistory              bool   `json:"isFlushPolicyHistoryEnabled"`
@@ -10,25 +12,14 @@ type ResourceReenrollmentSettings struct {
 	FlushMdmQueue                   string `json:"flushMDMQueue"`
 }
 
-// ReenrollmentHistoryObject is a single re-enrollment history entry.
-type ReenrollmentHistoryObject struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details,omitempty"`
-}
+// ReenrollmentHistoryObject is an alias to the shared history item struct.
+type ReenrollmentHistoryObject = shared.SharedHistoryItem
 
-// ReenrollmentHistoryResponse is the response for GET /api/v1/reenrollment/history.
-type ReenrollmentHistoryResponse struct {
-	TotalCount int                        `json:"totalCount"`
-	Results    []ReenrollmentHistoryObject `json:"results"`
-}
+// ReenrollmentHistoryResponse is an alias to the shared history response struct.
+type ReenrollmentHistoryResponse = shared.SharedHistoryResponse
 
-// AddReenrollmentHistoryNotesRequest is the body for POST /api/v1/reenrollment/history.
-type AddReenrollmentHistoryNotesRequest struct {
-	Note string `json:"note"`
-}
+// AddReenrollmentHistoryNotesRequest is an alias to the shared history note request struct.
+type AddReenrollmentHistoryNotesRequest = shared.SharedHistoryNoteRequest
 
 // ExportReenrollmentHistoryRequest is the optional body for POST .../history/export (override query when URI exceeds ~2k chars).
 type ExportReenrollmentHistoryRequest struct {

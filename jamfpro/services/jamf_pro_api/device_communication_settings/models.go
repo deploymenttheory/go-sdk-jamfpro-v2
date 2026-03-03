@@ -1,5 +1,7 @@
 package device_communication_settings
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceDeviceCommunicationSettings represents the device communication settings resource.
 type ResourceDeviceCommunicationSettings struct {
 	AutoRenewMobileDeviceMdmProfileWhenCaRenewed                   bool `json:"autoRenewMobileDeviceMdmProfileWhenCaRenewed"`
@@ -10,25 +12,14 @@ type ResourceDeviceCommunicationSettings struct {
 	MdmProfileComputerExpirationLimitInDays                       int  `json:"mdmProfileComputerExpirationLimitInDays"`
 }
 
-// HistoryItem represents a single device communication settings history entry.
-type HistoryItem struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryItem is an alias to the shared history item struct with string IDs.
+type HistoryItem = shared.SharedHistoryItemString
 
-// HistoryResponse is the response for GetHistoryV1.
-type HistoryResponse struct {
-	TotalCount int           `json:"totalCount"`
-	Results    []HistoryItem `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct with string IDs.
+type HistoryResponse = shared.SharedHistoryResponseString
 
-// RequestAddHistoryNotes is the request body for AddHistoryNotesV1.
-type RequestAddHistoryNotes struct {
-	Note string `json:"note"`
-}
+// RequestAddHistoryNotes is an alias to the shared history note request struct.
+type RequestAddHistoryNotes = shared.SharedHistoryNoteRequest
 
 // ResponseAddHistoryNotes is the response for AddHistoryNotesV1 (201 Created).
 type ResponseAddHistoryNotes struct {

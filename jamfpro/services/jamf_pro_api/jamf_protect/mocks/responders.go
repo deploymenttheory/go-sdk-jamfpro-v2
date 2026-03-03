@@ -393,7 +393,13 @@ func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQue
 		Body:       resp.rawBody,
 	}
 	if mergePage != nil && len(resp.rawBody) > 0 {
-		if err := mergePage(resp.rawBody); err != nil {
+		var page struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.rawBody, &page); err != nil {
+			return ifaceResp, fmt.Errorf("mergePage: %w", err)
+		}
+		if err := mergePage(page.Results); err != nil {
 			return ifaceResp, fmt.Errorf("mergePage: %w", err)
 		}
 	}

@@ -112,12 +112,11 @@ func (s *Service) ListSmartV1(ctx context.Context, rsqlQuery map[string]string) 
 	endpoint := EndpointSmartGroupsV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListSmartResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceSmartMobileDeviceGroup
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -129,6 +128,7 @@ func (s *Service) ListSmartV1(ctx context.Context, rsqlQuery map[string]string) 
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list smart mobile device groups: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -245,12 +245,11 @@ func (s *Service) ListStaticV1(ctx context.Context, rsqlQuery map[string]string)
 	endpoint := EndpointStaticGroupsV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListStaticResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceStaticMobileDeviceGroup
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -261,6 +260,7 @@ func (s *Service) ListStaticV1(ctx context.Context, rsqlQuery map[string]string)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list static mobile device groups: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -409,12 +409,11 @@ func (s *Service) GetStaticGroupMembershipV1(ctx context.Context, id string, rsq
 	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupMembershipV1, id)
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse GroupMembershipResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceMobileDeviceMember
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -427,6 +426,7 @@ func (s *Service) GetStaticGroupMembershipV1(ctx context.Context, id string, rsq
 		return nil, resp, fmt.Errorf("failed to get static group membership: %w", err)
 	}
 
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
@@ -443,12 +443,11 @@ func (s *Service) GetSmartGroupMembershipV1(ctx context.Context, id string, rsql
 	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupMembershipV1, id)
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse GroupMembershipResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceMobileDeviceMember
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -459,6 +458,7 @@ func (s *Service) GetSmartGroupMembershipV1(ctx context.Context, id string, rsql
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get smart group membership: %w", err)
 	}
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 

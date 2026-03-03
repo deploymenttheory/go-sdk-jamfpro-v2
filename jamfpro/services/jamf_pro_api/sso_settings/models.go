@@ -1,5 +1,7 @@
 package sso_settings
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceSsoSettings is the SSO settings resource (get/update).
 type ResourceSsoSettings struct {
 	SsoEnabled                                      bool                 `json:"ssoEnabled"`
@@ -58,25 +60,14 @@ type EnrollmentCustomizationDependency struct {
 	HumanReadableName string `json:"humanReadableName"`
 }
 
-// HistoryListResponse represents the paginated history for SSO settings.
-type HistoryListResponse struct {
-	TotalCount int            `json:"totalCount"`
-	Results    []HistoryEntry `json:"results"`
-}
+// HistoryEntry is an alias to the shared history item struct with integer IDs.
+type HistoryEntry = shared.SharedHistoryItem
 
-// HistoryEntry represents a single history entry.
-type HistoryEntry struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryListResponse is an alias to the shared history response struct with integer IDs.
+type HistoryListResponse = shared.SharedHistoryResponse
 
-// AddHistoryNoteRequest represents the request for adding a history note.
-type AddHistoryNoteRequest struct {
-	Note string `json:"note"`
-}
+// AddHistoryNoteRequest is an alias to the shared history note request struct.
+type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
 
 // CreateResponse captures the identifier returned after creating a resource.
 type CreateResponse struct {

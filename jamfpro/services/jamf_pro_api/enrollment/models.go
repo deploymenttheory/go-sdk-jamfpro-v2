@@ -1,5 +1,7 @@
 package enrollment
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceEnrollment represents the enrollment settings (API v4).
 type ResourceEnrollment struct {
 	InstallSingleProfile                         bool                           `json:"installSingleProfile"`
@@ -115,20 +117,11 @@ type ResourceLanguageCode struct {
 	Name  string `json:"name"`
 }
 
-// HistoryResponse is the response for GetHistoryV2.
-type HistoryResponse struct {
-	TotalCount int             `json:"totalCount"`
-	Results    []HistoryObject `json:"results"`
-}
+// HistoryObject is an alias to the shared history item struct.
+type HistoryObject = shared.SharedHistoryItem
 
-// HistoryObject represents an individual enrollment history entry (API v2).
-type HistoryObject struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryResponse is an alias to the shared history response struct.
+type HistoryResponse = shared.SharedHistoryResponse
 
 // ListResponseAccessGroups is the response for ListAccessGroupsV3.
 type ListResponseAccessGroups struct {
@@ -161,10 +154,8 @@ type ResourceADUESessionTokenSettings struct {
 	ExpirationIntervalSeconds int  `json:"expirationIntervalSeconds,omitempty"`
 }
 
-// RequestAddHistoryNotes represents the request body for adding enrollment history notes (API v2).
-type RequestAddHistoryNotes struct {
-	Note string `json:"note"`
-}
+// RequestAddHistoryNotes is an alias to the shared history note request struct.
+type RequestAddHistoryNotes = shared.SharedHistoryNoteRequest
 
 // RequestExportHistory represents the optional request body for exporting enrollment history (API v2).
 // Overrides query parameters when URI would exceed ~2k characters.

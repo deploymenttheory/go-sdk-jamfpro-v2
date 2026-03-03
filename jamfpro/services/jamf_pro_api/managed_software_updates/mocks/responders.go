@@ -189,7 +189,13 @@ func (m *ManagedSoftwareUpdatesMock) GetPaginated(ctx context.Context, path stri
 		return nil, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
+		var page struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &page); err != nil {
+			return nil, fmt.Errorf("mergePage failed: %w", err)
+		}
+		if err := mergePage(page.Results); err != nil {
 			return nil, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

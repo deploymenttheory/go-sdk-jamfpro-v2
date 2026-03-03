@@ -1,5 +1,7 @@
 package self_service_settings
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceSelfServiceSettings is the self-service settings resource (get/update).
 type ResourceSelfServiceSettings struct {
 	InstallSettings       InstallSettings       `json:"installSettings"`
@@ -30,25 +32,14 @@ type ConfigurationSettings struct {
 	BookmarksName         string `json:"bookmarksName"`
 }
 
-// HistoryObject represents a single Self Service settings history entry.
-type HistoryObject struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryObject is an alias to the shared history item struct with string IDs.
+type HistoryObject = shared.SharedHistoryItemString
 
-// HistoryResponse is the response for GetHistoryV1.
-type HistoryResponse struct {
-	TotalCount int            `json:"totalCount"`
-	Results    []HistoryObject `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct with string IDs.
+type HistoryResponse = shared.SharedHistoryResponseString
 
-// AddHistoryNotesRequest is the request body for AddHistoryNotesV1.
-type AddHistoryNotesRequest struct {
-	Note string `json:"note"`
-}
+// AddHistoryNotesRequest is an alias to the shared history note request struct.
+type AddHistoryNotesRequest = shared.SharedHistoryNoteRequest
 
 // AddHistoryNotesResponse is the response for AddHistoryNotesV1 (201 Created).
 type AddHistoryNotesResponse struct {

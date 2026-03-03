@@ -85,12 +85,11 @@ func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string)
 	endpoint := EndpointClientCheckinHistoryV3
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ResourceClientCheckinHistory
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var pageItems []ResourceClientCheckinHistoryEntry
+		if err := json.Unmarshal(pageData, &pageItems); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, pageItems...)
 		return nil
 	}
 
@@ -102,6 +101,7 @@ func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string)
 		return nil, resp, fmt.Errorf("failed to get client check-in history: %w", err)
 	}
 
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 

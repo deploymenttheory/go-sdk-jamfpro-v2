@@ -290,7 +290,7 @@ func TestUnit_VolumePurchasingLocations_ListV1_InvalidJSON(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 func TestUnit_VolumePurchasingLocations_GetByIDV1_NotFound(t *testing.T) {
@@ -366,7 +366,7 @@ func TestUnit_VolumePurchasingLocations_GetContentV1_InvalidJSON(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 func TestUnit_VolumePurchasingLocations_GetHistoryV1_Error(t *testing.T) {
@@ -386,7 +386,7 @@ func TestUnit_VolumePurchasingLocations_GetHistoryV1_InvalidJSON(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, err.Error(), "failed to unmarshal")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 func TestUnit_VolumePurchasingLocations_AddHistoryNotesV1_Error(t *testing.T) {

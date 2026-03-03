@@ -142,7 +142,13 @@ func (m *DeviceCommunicationSettingsMock) GetPaginated(ctx context.Context, path
 		return resp, err
 	}
 	if mergePage != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
+		var page struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(resp.Body, &page); err != nil {
+			return resp, fmt.Errorf("mergePage failed: %w", err)
+		}
+		if err := mergePage(page.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}

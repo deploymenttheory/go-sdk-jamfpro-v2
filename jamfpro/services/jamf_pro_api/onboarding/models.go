@@ -1,5 +1,7 @@
 package onboarding
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResponseOnboardingSettings is the response for Get (onboarding configuration).
 type ResponseOnboardingSettings struct {
 	ID              string                 `json:"id"`
@@ -46,22 +48,14 @@ type ResourceEligibilityListItem struct {
 	SiteDescription  string `json:"siteDescription"`
 }
 
-type HistoryResponse struct {
-	TotalCount int                    `json:"totalCount"`
-	Results    []ResourceHistoryEntry `json:"results"`
-}
+// ResourceHistoryEntry is an alias to the shared history item struct.
+type ResourceHistoryEntry = shared.SharedHistoryItem
 
-type ResourceHistoryEntry struct {
-	ID       int     `json:"id"`
-	Username string  `json:"username"`
-	Date     string  `json:"date"`
-	Note     string  `json:"note"`
-	Details  *string `json:"details"`
-}
+// HistoryResponse is an alias to the shared history response struct.
+type HistoryResponse = shared.SharedHistoryResponse
 
-type RequestAddHistoryNotes struct {
-	Note string `json:"note"`
-}
+// RequestAddHistoryNotes is an alias to the shared history note request struct.
+type RequestAddHistoryNotes = shared.SharedHistoryNoteRequest
 
 type ResponseAddHistoryNotes struct {
 	ID   string `json:"id"`

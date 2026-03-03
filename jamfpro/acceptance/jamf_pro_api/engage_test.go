@@ -6,6 +6,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/engage"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -116,6 +117,19 @@ func TestAcceptance_Engage_history(t *testing.T) {
 	svc := acc.Client.Engage
 	ctx := context.Background()
 
+	acc.LogTestStage(t, "AddHistoryNote", "Adding history note for Engage settings")
+	noteReq := &shared.SharedHistoryNoteRequest{
+		Note: "Acceptance test history note for Engage",
+	}
+	addResult, addResp, err := svc.AddHistoryNotesV2(ctx, noteReq)
+	if err != nil {
+		t.Skipf("Adding history notes may not be supported on this tenant: %v", err)
+		return
+	}
+	require.NotNil(t, addResult)
+	assert.Equal(t, 201, addResp.StatusCode)
+	acc.LogTestSuccess(t, "Added history note with ID: %d", addResult.ID)
+
 	acc.LogTestStage(t, "GetHistory", "Fetching Engage settings history")
 	history, histResp, err := svc.GetHistoryV2(ctx, map[string]string{
 		"page":      "0",
@@ -123,14 +137,10 @@ func TestAcceptance_Engage_history(t *testing.T) {
 		"sort":      "date:desc",
 	})
 
-	if err != nil {
-		t.Skipf("Engage history may not be available on this tenant: %v", err)
-		return
-	}
-
+	require.NoError(t, err)
 	require.NotNil(t, history)
 	assert.Equal(t, 200, histResp.StatusCode)
-	assert.GreaterOrEqual(t, history.TotalCount, 0)
+	assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 	acc.LogTestSuccess(t, "Found %d history entries", history.TotalCount)
 
 	if history.TotalCount > 0 {
@@ -171,56 +181,4 @@ func TestAcceptance_Engage_history_with_rsql_filter(t *testing.T) {
 	// Verify filtering worked
 	assert.GreaterOrEqual(t, allHistory.TotalCount, filteredHistory.TotalCount,
 		"Filtered results should be <= total results")
-}
-
-func TestAcceptance_Engage_add_history_notes(t *testing.T) {
-	acc.RequireClient(t)
-
-	svc := acc.Client.Engage
-	ctx := context.Background()
-
-	acc.LogTestStage(t, "AddHistoryNotes", "Adding note to Engage history")
-	noteReq := &engage.RequestAddHistoryNotes{
-		Note: "Acceptance test note - automated testing",
-	}
-
-	result, resp, err := svc.AddHistoryNotesV2(ctx, noteReq)
-	if err != nil {
-		t.Skipf("Adding history notes may not be supported on this tenant: %v", err)
-		return
-	}
-
-	require.NotNil(t, result)
-	assert.Equal(t, 201, resp.StatusCode)
-	assert.NotZero(t, result.ID)
-	assert.NotEmpty(t, result.Username)
-	acc.LogTestSuccess(t, "History note added - ID: %d, Username: %s, Date: %s", result.ID, result.Username, result.Date)
-
-	// Verify the note appears in history
-	acc.LogTestStage(t, "Verify", "Verifying note appears in history")
-	history, histResp, err := svc.GetHistoryV2(ctx, map[string]string{
-		"page":      "0",
-		"page-size": "10",
-		"sort":      "date:desc",
-	})
-
-	require.NoError(t, err)
-	require.NotNil(t, history)
-	assert.Equal(t, 200, histResp.StatusCode)
-
-	if history.TotalCount > 0 {
-		// The most recent entry should contain our note
-		found := false
-		for _, entry := range history.Results {
-			if entry.Note == noteReq.Note {
-				found = true
-				acc.LogTestSuccess(t, "Found our note in history - Username: %s, Date: %s",
-					entry.Username, entry.Date)
-				break
-			}
-		}
-		if !found {
-			t.Logf("Note not found in first page of history results (may be on later page)")
-		}
-	}
 }

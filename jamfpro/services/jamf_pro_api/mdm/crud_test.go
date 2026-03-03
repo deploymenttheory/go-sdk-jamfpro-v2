@@ -211,7 +211,7 @@ func TestUnit_Mdm_ListCommandsV2_InvalidJSON(t *testing.T) {
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 func TestUnit_Mdm_BlankPush_Error(t *testing.T) {

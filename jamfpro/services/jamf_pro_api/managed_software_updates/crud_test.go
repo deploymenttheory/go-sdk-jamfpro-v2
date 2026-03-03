@@ -108,7 +108,7 @@ func TestUnit_ManagedSoftwareUpdates_GetPlans_InvalidJSON(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 // TestGetPlans_Empty tests listing plans when empty.
@@ -648,7 +648,7 @@ func TestUnit_ManagedSoftwareUpdates_GetUpdateStatuses_InvalidJSON(t *testing.T)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "failed to unmarshal page")
+	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
 // TestGetUpdateStatuses tests retrieving update statuses with pagination.

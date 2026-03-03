@@ -1,5 +1,7 @@
 package jamf_connect
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceJamfConnect represents the Jamf Connect settings.
 type ResourceJamfConnect struct {
 	ID             string `json:"id,omitempty"`
@@ -67,22 +69,11 @@ type DeploymentTasksResponse struct {
 	Results    []DeploymentTask `json:"results"`
 }
 
-// HistoryItem represents a single Jamf Connect history entry.
-type HistoryItem struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryItem is an alias to the shared history item struct with string IDs.
+type HistoryItem = shared.SharedHistoryItemString
 
-// HistoryResponse is the response for GetHistoryV1.
-type HistoryResponse struct {
-	TotalCount int           `json:"totalCount"`
-	Results    []HistoryItem `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct with string IDs.
+type HistoryResponse = shared.SharedHistoryResponseString
 
-// RequestAddHistoryNote is the request body for AddHistoryNoteV1.
-type RequestAddHistoryNote struct {
-	Note string `json:"note"`
-}
+// RequestAddHistoryNote is an alias to the shared history note request struct.
+type RequestAddHistoryNote = shared.SharedHistoryNoteRequest

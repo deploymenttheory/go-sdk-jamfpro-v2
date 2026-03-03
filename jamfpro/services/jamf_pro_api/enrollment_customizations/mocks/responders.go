@@ -197,8 +197,14 @@ func (m *EnrollmentCustomizationsMock) GetPaginated(ctx context.Context, endpoin
 		Body:       body,
 	}
 
-	if mergePage != nil {
-		if err := mergePage(body); err != nil {
+	if mergePage != nil && len(body) > 0 {
+		var page struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(body, &page); err != nil {
+			return resp, err
+		}
+		if err := mergePage(page.Results); err != nil {
 			return resp, err
 		}
 	}

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_protect"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -84,20 +85,31 @@ func TestAcceptance_JamfProtect_list_history_v1(t *testing.T) {
 	svc := acc.Client.JamfProtect
 	ctx := context.Background()
 
-	acc.LogTestStage(t, "ListHistory", "Listing Jamf Protect history")
-
-	result, resp, err := svc.ListHistoryV1(ctx, nil)
+	// Add history note first
+	acc.LogTestStage(t, "CreateHistoryNote", "Adding history note for Jamf Protect")
+	noteReq := &jamf_protect.RequestJamfProtectHistoryNote{
+		Note: "Acceptance test history note for Jamf Protect",
+	}
+	addResult, addResp, err := svc.CreateHistoryNoteV1(ctx, noteReq)
 	if err != nil {
-		if resp != nil && (resp.StatusCode == 404 || resp.StatusCode == 400) {
-			t.Logf("ListHistoryV1 returned %d - Jamf Protect not configured, skipping", resp.StatusCode)
+		if addResp != nil && (addResp.StatusCode == 404 || addResp.StatusCode == 400) {
+			t.Skipf("CreateHistoryNoteV1 returned %d - Jamf Protect not configured, skipping", addResp.StatusCode)
 			return
 		}
 		require.NoError(t, err)
 	}
+	require.NotNil(t, addResult)
+	assert.Equal(t, 201, addResp.StatusCode)
+	acc.LogTestSuccess(t, "Added history note with ID: %s", addResult.ID)
+
+	acc.LogTestStage(t, "ListHistory", "Listing Jamf Protect history")
+
+	result, resp, err := svc.ListHistoryV1(ctx, nil)
+	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	assert.GreaterOrEqual(t, result.TotalCount, 0)
+	assert.GreaterOrEqual(t, result.TotalCount, 1, "Should have at least the note we just added")
 
 	acc.LogTestSuccess(t, "ListHistoryV1: found %d history entries", result.TotalCount)
 }

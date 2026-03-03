@@ -1,7 +1,7 @@
 package packages
 
 import (
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/normalization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 )
 
 // ResourcePackage represents a package resource (get/list/update).
@@ -80,25 +80,14 @@ type CreateResponse struct {
 	Href string `json:"href"`
 }
 
-// HistoryObject represents a package history entry.
-type HistoryObject struct {
-	ID       normalization.IDAsString `json:"id"`
-	Username string                   `json:"username"`
-	Date     string                   `json:"date"`
-	Note     string                   `json:"note"`
-	Details  string                   `json:"details"`
-}
+// HistoryObject is an alias to the shared history item struct with string IDs.
+type HistoryObject = shared.SharedHistoryItemString
 
-// HistoryResponse is the response for GetHistoryV1.
-type HistoryResponse struct {
-	TotalCount int             `json:"totalCount"`
-	Results    []HistoryObject `json:"results"`
-}
+// HistoryResponse is an alias to the shared history response struct with string IDs.
+type HistoryResponse = shared.SharedHistoryResponseString
 
-// AddHistoryNotesRequest is the body for AddHistoryNotesV1.
-type AddHistoryNotesRequest struct {
-	Note string `json:"note"`
-}
+// AddHistoryNotesRequest is an alias to the shared history note request struct.
+type AddHistoryNotesRequest = shared.SharedHistoryNoteRequest
 
 // DeletePackagesByIDRequest is the body for DeletePackagesByIDV1 (delete multiple).
 type DeletePackagesByIDRequest struct {

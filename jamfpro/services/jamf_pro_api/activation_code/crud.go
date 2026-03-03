@@ -130,10 +130,10 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 	if err != nil {
 		return nil, resp, err
 	}
-	
+
 	// Set TotalCount to the number of results we collected
 	result.TotalCount = len(result.Results)
-	
+
 	return &result, resp, nil
 }
 

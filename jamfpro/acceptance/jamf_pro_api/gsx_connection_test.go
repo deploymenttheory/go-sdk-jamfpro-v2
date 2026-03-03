@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/gsx_connection"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -16,8 +17,11 @@ import (
 // Service Operations Available
 // -----------------------------------------------------------------------------
 //   • GetV1(ctx) - Retrieves GSX connection settings
+//   • ReplaceV1(ctx, request) - Replaces GSX connection settings via PUT
 //   • UpdateV1(ctx, request) - Updates GSX connection settings via PATCH
 //   • GetHistoryV1(ctx, rsqlQuery) - Retrieves GSX connection history
+//   • AddHistoryNoteV1(ctx, request) - Adds a history note
+//   • TestV1(ctx) - Tests GSX connection functionality
 //
 // Test Strategies Applied
 // -----------------------------------------------------------------------------
@@ -65,6 +69,11 @@ func TestAcceptance_GSXConnection_get_and_update(t *testing.T) {
 	require.NotNil(t, original)
 	assert.Equal(t, 200, resp.StatusCode)
 
+	// Skip test if GSX connection is not properly configured
+	if original.Username == "" || original.ServiceAccountNo == "" || original.GsxKeystore.Name == "" {
+		t.Skip("GSX connection is not properly configured on this test tenant")
+	}
+
 	// Register cleanup to restore original settings
 	t.Cleanup(func() {
 		_, _, err := svc.UpdateV1(ctx, original)
@@ -101,29 +110,45 @@ func TestAcceptance_GSXConnection_history(t *testing.T) {
 	svc := acc.Client.GSXConnection
 	ctx := context.Background()
 
+	// First, add a history note to ensure we have data to test with
+	t.Run("AddHistoryNote", func(t *testing.T) {
+		noteReq := &gsx_connection.AddHistoryNoteRequest{
+			Note: "Acceptance test history note for GSX connection",
+		}
+		result, resp, err := svc.AddHistoryNoteV1(ctx, noteReq)
+		require.NoError(t, err)
+		require.NotNil(t, result)
+		require.NotNil(t, resp)
+		assert.Equal(t, 201, resp.StatusCode)
+		assert.NotEmpty(t, result.ID)
+		t.Logf("Added history note with ID: %s", result.ID)
+	})
+
 	// Get history without filtering
-	history, resp, err := svc.GetHistoryV1(ctx, nil)
-	require.NoError(t, err)
-	require.NotNil(t, history)
-	assert.Equal(t, 200, resp.StatusCode)
+	t.Run("GetAll", func(t *testing.T) {
+		history, resp, err := svc.GetHistoryV1(ctx, nil)
+		require.NoError(t, err)
+		require.NotNil(t, history)
+		assert.Equal(t, 200, resp.StatusCode)
+		assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 
-	// Verify response structure
-	assert.GreaterOrEqual(t, history.TotalCount, 0)
-
-	// If there are history entries, verify structure
-	if history.TotalCount > 0 && len(history.Results) > 0 {
-		entry := history.Results[0]
-		assert.NotEmpty(t, entry.ID)
-		assert.NotEmpty(t, entry.Username)
-		assert.NotEmpty(t, entry.Date)
-	}
+		if len(history.Results) > 0 {
+			entry := history.Results[0]
+			assert.NotEmpty(t, entry.ID)
+			assert.NotEmpty(t, entry.Username)
+			assert.NotEmpty(t, entry.Date)
+		}
+	})
 
 	// Test with sorting parameter
-	rsqlQuery := map[string]string{"sort": "date:desc"}
-	historyFiltered, resp, err := svc.GetHistoryV1(ctx, rsqlQuery)
-	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
-	assert.NotNil(t, historyFiltered)
+	t.Run("GetWithSort", func(t *testing.T) {
+		rsqlQuery := map[string]string{"sort": "date:desc"}
+		historyFiltered, resp, err := svc.GetHistoryV1(ctx, rsqlQuery)
+		require.NoError(t, err)
+		assert.Equal(t, 200, resp.StatusCode)
+		assert.NotNil(t, historyFiltered)
+		assert.GreaterOrEqual(t, historyFiltered.TotalCount, 1)
+	})
 }
 
 func TestAcceptance_GSXConnection_validation_errors(t *testing.T) {
@@ -132,10 +157,30 @@ func TestAcceptance_GSXConnection_validation_errors(t *testing.T) {
 	svc := acc.Client.GSXConnection
 	ctx := context.Background()
 
-	// Test nil request validation
-	result, resp, err := svc.UpdateV1(ctx, nil)
-	assert.Error(t, err)
-	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "request is required")
+	// Test nil request validation for UpdateV1
+	t.Run("UpdateV1_NilRequest", func(t *testing.T) {
+		result, resp, err := svc.UpdateV1(ctx, nil)
+		assert.Error(t, err)
+		assert.Nil(t, result)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	// Test nil request validation for ReplaceV1
+	t.Run("ReplaceV1_NilRequest", func(t *testing.T) {
+		result, resp, err := svc.ReplaceV1(ctx, nil)
+		assert.Error(t, err)
+		assert.Nil(t, result)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	// Test nil request validation for AddHistoryNoteV1
+	t.Run("AddHistoryNoteV1_NilRequest", func(t *testing.T) {
+		result, resp, err := svc.AddHistoryNoteV1(ctx, nil)
+		assert.Error(t, err)
+		assert.Nil(t, result)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "request is required")
+	})
 }

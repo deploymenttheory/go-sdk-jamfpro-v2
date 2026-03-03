@@ -1,32 +1,34 @@
 package gsx_connection
 
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+
 // ResourceGSXConnection represents the GSX connection settings.
 type ResourceGSXConnection struct {
 	Enabled          bool        `json:"enabled"`
 	Username         string      `json:"username"`
 	ServiceAccountNo string      `json:"serviceAccountNo"`
-	ShipToNo         string      `json:"shipToNo"`
+	ShipToNo         string      `json:"shipToNo,omitempty"`
+	Token            string      `json:"token,omitempty"`
 	GsxKeystore      GsxKeystore `json:"gsxKeystore"`
 }
 
 // GsxKeystore represents the GSX keystore details.
 type GsxKeystore struct {
-	Name            string `json:"name"`
-	ExpirationEpoch int64  `json:"expirationEpoch"`
-	ErrorMessage    string `json:"errorMessage"`
+	Name             string `json:"name"`
+	ExpirationEpoch  int64  `json:"expirationEpoch,omitempty"`
+	ErrorMessage     string `json:"errorMessage,omitempty"`
+	KeystoreBytes    string `json:"keystoreBytes,omitempty"`
+	KeystorePassword string `json:"keystorePassword,omitempty"`
 }
 
-// HistoryResponse is the response for GetHistoryV1.
-type HistoryResponse struct {
-	TotalCount int             `json:"totalCount"`
-	Results    []HistoryObject `json:"results"`
-}
+// HistoryObject is an alias to the shared history item struct with string IDs.
+type HistoryObject = shared.SharedHistoryItemString
 
-// HistoryObject represents a single GSX connection history entry.
-type HistoryObject struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Date     string `json:"date"`
-	Note     string `json:"note"`
-	Details  string `json:"details"`
-}
+// HistoryResponse is an alias to the shared history response struct with string IDs.
+type HistoryResponse = shared.SharedHistoryResponseString
+
+// AddHistoryNoteRequest is an alias to the shared history note request struct.
+type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
+
+// AddHistoryNoteResponse represents the response after adding a history note.
+type AddHistoryNoteResponse = shared.SharedHistoryNoteResponse

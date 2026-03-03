@@ -257,10 +257,10 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 		Description: "History test",
 		SiteID:      "-1",
 		BrandingSettings: enrollment_customizations.SubsetBrandingSettings{
-			TextColor:       "#000000",
-			ButtonColor:     "#0066CC",
-			ButtonTextColor: "#FFFFFF",
-			BackgroundColor: "#F5F5F7",
+			TextColor:       "000000",
+			ButtonColor:     "0066CC",
+			ButtonTextColor: "FFFFFF",
+			BackgroundColor: "F5F5F7",
 		},
 	}
 
@@ -281,6 +281,22 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 		}
 	}()
 
+	// Add history note first
+	acc.LogTestStage(t, "AddHistoryNotes", "Adding note to history")
+	noteReq := &enrollment_customizations.RequestAddHistoryNotes{
+		Note: "Acceptance test note - automated testing",
+	}
+
+	result, noteResp, err := svc.AddHistoryNotesV2(ctx, customizationID, noteReq)
+	if err != nil {
+		t.Skipf("Adding history notes may not be supported: %v", err)
+		return
+	}
+	require.NotNil(t, result)
+	assert.Equal(t, 201, noteResp.StatusCode)
+	assert.NotZero(t, result.ID)
+	acc.LogTestSuccess(t, "History note added - ID: %d, Username: %s", result.ID, result.Username)
+
 	// Get history
 	acc.LogTestStage(t, "GetHistory", "Fetching enrollment customization history")
 	history, histResp, err := svc.GetHistoryV2(ctx, customizationID, map[string]string{
@@ -289,36 +305,16 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 		"sort":      "date:desc",
 	})
 
-	if err != nil {
-		t.Skipf("History may not be available for this customization: %v", err)
-		return
-	}
-
+	require.NoError(t, err)
 	require.NotNil(t, history)
 	assert.Equal(t, 200, histResp.StatusCode)
-	assert.GreaterOrEqual(t, history.TotalCount, 0)
+	assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 	acc.LogTestSuccess(t, "Found %d history entries", history.TotalCount)
 
 	if history.TotalCount > 0 {
 		firstEntry := history.Results[0]
 		acc.LogTestSuccess(t, "Latest history entry - Username: %s, Date: %s, Note: %s",
 			firstEntry.Username, firstEntry.Date, firstEntry.Note)
-	}
-
-	// Add history notes
-	acc.LogTestStage(t, "AddHistoryNotes", "Adding note to history")
-	noteReq := &enrollment_customizations.RequestAddHistoryNotes{
-		Note: "Acceptance test note - automated testing",
-	}
-
-	result, noteResp, err := svc.AddHistoryNotesV2(ctx, customizationID, noteReq)
-	if err != nil {
-		t.Logf("Adding history notes may not be supported: %v", err)
-	} else {
-		require.NotNil(t, result)
-		assert.Equal(t, 201, noteResp.StatusCode)
-		assert.NotZero(t, result.ID)
-		acc.LogTestSuccess(t, "History note added - ID: %d, Username: %s", result.ID, result.Username)
 	}
 }
 
@@ -335,10 +331,10 @@ func TestAcceptance_EnrollmentCustomizations_history_with_rsql_filter(t *testing
 		Description: "History RSQL test",
 		SiteID:      "-1",
 		BrandingSettings: enrollment_customizations.SubsetBrandingSettings{
-			TextColor:       "#000000",
-			ButtonColor:     "#0066CC",
-			ButtonTextColor: "#FFFFFF",
-			BackgroundColor: "#F5F5F7",
+			TextColor:       "000000",
+			ButtonColor:     "0066CC",
+			ButtonTextColor: "FFFFFF",
+			BackgroundColor: "F5F5F7",
 		},
 	}
 
