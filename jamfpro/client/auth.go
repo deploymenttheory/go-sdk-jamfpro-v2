@@ -1,11 +1,7 @@
 package client
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"net/url"
 	"strings"
 	"sync"
@@ -82,7 +78,7 @@ type tokenHolder struct {
 	buffer            time.Duration
 	auth              *AuthConfig
 	logger            *zap.Logger
-	http              *http.Client
+	restyClient       *resty.Client
 	baseURL           string
 	hideSensitiveData bool
 	fetchFn           func() (string, time.Time, error)
@@ -128,21 +124,17 @@ func (h *tokenHolder) invalidate() error {
 	}
 
 	endpoint := strings.TrimSuffix(h.baseURL, "/") + invalidateTokenEndpoint
-	req, err := http.NewRequest(http.MethodPost, endpoint, nil)
-	if err != nil {
-		return fmt.Errorf("invalidate token: build request: %w", err)
-	}
-	req.Header.Set("Authorization", "Bearer "+currentToken)
 
-	resp, err := h.http.Do(req)
+	resp, err := h.restyClient.R().
+		SetAuthToken(currentToken).
+		Post(endpoint)
+
 	if err != nil {
 		return fmt.Errorf("invalidate token: request failed: %w", err)
 	}
-	defer resp.Body.Close()
 
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("invalidate token: unexpected status %d: %s", resp.StatusCode, string(body))
+	if resp.StatusCode() < 200 || resp.StatusCode() > 299 {
+		return fmt.Errorf("invalidate token: unexpected status %d: %s", resp.StatusCode(), resp.String())
 	}
 
 	h.mu.Lock()
@@ -166,40 +158,31 @@ func (h *tokenHolder) keepAlive() error {
 	}
 
 	endpoint := strings.TrimSuffix(h.baseURL, "/") + keepAliveTokenEndpoint
-	req, err := http.NewRequest(http.MethodPost, endpoint, nil)
-	if err != nil {
-		return fmt.Errorf("keep-alive: build request: %w", err)
-	}
-	req.Header.Set("Authorization", "Bearer "+currentToken)
 
-	resp, err := h.http.Do(req)
-	if err != nil {
-		return fmt.Errorf("keep-alive: request failed: %w", err)
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("keep-alive: read response: %w", err)
-	}
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		return fmt.Errorf("keep-alive: unexpected status %d: %s", resp.StatusCode, string(body))
-	}
-
-	var out struct {
+	var result struct {
 		Token   string    `json:"token"`
 		Expires time.Time `json:"expires"`
 	}
-	if err := json.Unmarshal(body, &out); err != nil {
-		return fmt.Errorf("keep-alive: decode response: %w", err)
+
+	resp, err := h.restyClient.R().
+		SetAuthToken(currentToken).
+		SetResult(&result).
+		Post(endpoint)
+
+	if err != nil {
+		return fmt.Errorf("keep-alive: request failed: %w", err)
+	}
+
+	if resp.StatusCode() < 200 || resp.StatusCode() > 299 {
+		return fmt.Errorf("keep-alive: unexpected status %d: %s", resp.StatusCode(), resp.String())
 	}
 
 	h.mu.Lock()
-	h.token = out.Token
-	h.expiry = out.Expires
+	h.token = result.Token
+	h.expiry = result.Expires
 	h.mu.Unlock()
 
-	h.logger.Info("Bearer token keep-alive successful", zap.Time("new_expiry", out.Expires))
+	h.logger.Info("Bearer token keep-alive successful", zap.Time("new_expiry", result.Expires))
 	return nil
 }
 
@@ -211,84 +194,98 @@ func (h *tokenHolder) fetchOAuth2() (string, time.Time, error) {
 	data.Set("client_secret", h.auth.ClientSecret)
 	data.Set("grant_type", "client_credentials")
 
-	req, err := http.NewRequest(http.MethodPost, endpoint, strings.NewReader(data.Encode()))
-	if err != nil {
-		return "", time.Time{}, err
-	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-	resp, err := h.http.Do(req)
-	if err != nil {
-		return "", time.Time{}, err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", time.Time{}, err
-	}
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		return "", time.Time{}, fmt.Errorf("oauth2 token request failed: %d %s", resp.StatusCode, string(body))
-	}
-
-	var out struct {
+	var result struct {
 		AccessToken string `json:"access_token"`
 		ExpiresIn   int64  `json:"expires_in"`
 	}
-	if err := json.Unmarshal(body, &out); err != nil {
-		return "", time.Time{}, fmt.Errorf("decode oauth2 response: %w", err)
+
+	resp, err := h.restyClient.R().
+		SetHeader("Content-Type", "application/x-www-form-urlencoded").
+		SetFormDataFromValues(data).
+		SetResult(&result).
+		Post(endpoint)
+
+	if err != nil {
+		return "", time.Time{}, err
 	}
-	if out.AccessToken == "" {
+
+	if resp.StatusCode() < 200 || resp.StatusCode() > 299 {
+		return "", time.Time{}, fmt.Errorf("oauth2 token request failed: %d %s", resp.StatusCode(), resp.String())
+	}
+
+	if result.AccessToken == "" {
 		return "", time.Time{}, fmt.Errorf("empty access_token in oauth2 response")
 	}
 
-	expiry := time.Now().Add(time.Duration(out.ExpiresIn) * time.Second)
+	expiry := time.Now().Add(time.Duration(result.ExpiresIn) * time.Second)
+	
+	var stickySessionCookie string
+	var allCookies []string
+	var cookieDetails []string
+	for _, cookie := range resp.Cookies() {
+		allCookies = append(allCookies, cookie.Name)
+		cookieDetails = append(cookieDetails, fmt.Sprintf("%s=%s (Path:%s, Domain:%s, Secure:%v, HttpOnly:%v)", 
+			cookie.Name, cookie.Value, cookie.Path, cookie.Domain, cookie.Secure, cookie.HttpOnly))
+		if cookie.Name == "jpro-ingress" || cookie.Name == "APBALANCEID" || cookie.Name == "JSESSIONID" {
+			stickySessionCookie = fmt.Sprintf("%s=%s", cookie.Name, cookie.Value)
+		}
+	}
+	
 	h.logger.Info("OAuth2 bearer token obtained",
 		zap.Time("expiry", expiry),
 		zap.String("token", h.logToken()),
+		zap.String("sticky_session_cookie", stickySessionCookie),
+		zap.Strings("all_cookies_from_auth", allCookies),
+		zap.Strings("cookie_details", cookieDetails),
 	)
-	return out.AccessToken, expiry, nil
+	return result.AccessToken, expiry, nil
 }
 
 func (h *tokenHolder) fetchBasic() (string, time.Time, error) {
 	endpoint := strings.TrimSuffix(h.baseURL, "/") + bearerTokenEndpoint
 
-	req, err := http.NewRequest(http.MethodPost, endpoint, nil)
-	if err != nil {
-		return "", time.Time{}, err
-	}
-	req.SetBasicAuth(h.auth.Username, h.auth.Password)
-
-	resp, err := h.http.Do(req)
-	if err != nil {
-		return "", time.Time{}, err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", time.Time{}, err
-	}
-	if resp.StatusCode != http.StatusOK {
-		return "", time.Time{}, fmt.Errorf("basic auth token request failed: %d %s", resp.StatusCode, string(body))
-	}
-
-	var out struct {
+	var result struct {
 		Token   string    `json:"token"`
 		Expires time.Time `json:"expires"`
 	}
-	if err := json.NewDecoder(bytes.NewReader(body)).Decode(&out); err != nil {
-		return "", time.Time{}, fmt.Errorf("decode basic auth response: %w", err)
+
+	resp, err := h.restyClient.R().
+		SetBasicAuth(h.auth.Username, h.auth.Password).
+		SetResult(&result).
+		Post(endpoint)
+
+	if err != nil {
+		return "", time.Time{}, err
 	}
-	if out.Token == "" {
+
+	if resp.StatusCode() != 200 {
+		return "", time.Time{}, fmt.Errorf("basic auth token request failed: %d %s", resp.StatusCode(), resp.String())
+	}
+
+	if result.Token == "" {
 		return "", time.Time{}, fmt.Errorf("empty token in basic auth response")
 	}
 
+	var stickySessionCookie string
+	var allCookies []string
+	var cookieDetails []string
+	for _, cookie := range resp.Cookies() {
+		allCookies = append(allCookies, cookie.Name)
+		cookieDetails = append(cookieDetails, fmt.Sprintf("%s=%s (Path:%s, Domain:%s, Secure:%v, HttpOnly:%v)", 
+			cookie.Name, cookie.Value, cookie.Path, cookie.Domain, cookie.Secure, cookie.HttpOnly))
+		if cookie.Name == "jpro-ingress" || cookie.Name == "APBALANCEID" || cookie.Name == "JSESSIONID" {
+			stickySessionCookie = fmt.Sprintf("%s=%s", cookie.Name, cookie.Value)
+		}
+	}
+
 	h.logger.Info("Basic auth bearer token obtained",
-		zap.Time("expiry", out.Expires),
+		zap.Time("expiry", result.Expires),
 		zap.String("token", h.logToken()),
+		zap.String("sticky_session_cookie", stickySessionCookie),
+		zap.Strings("all_cookies_from_auth", allCookies),
+		zap.Strings("cookie_details", cookieDetails),
 	)
-	return out.Token, out.Expires, nil
+	return result.Token, result.Expires, nil
 }
 
 // SetupAuthentication configures the resty client with Jamf Pro bearer token
@@ -313,7 +310,7 @@ func SetupAuthentication(restyClient *resty.Client, authConfig *AuthConfig, logg
 	holder := &tokenHolder{
 		auth:              authConfig,
 		logger:            logger,
-		http:              &http.Client{Timeout: 30 * time.Second},
+		restyClient:       restyClient,
 		baseURL:           baseURL,
 		buffer:            buffer,
 		hideSensitiveData: authConfig.HideSensitiveData,

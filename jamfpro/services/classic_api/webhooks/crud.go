@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,44 +17,44 @@ type (
 		// List returns all webhooks.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooks
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified webhook by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooksbyid
-		GetByID(ctx context.Context, id int) (*ResourceWebhook, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceWebhook, *resty.Response, error)
 
 		// GetByName returns the specified webhook by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooksbyname
-		GetByName(ctx context.Context, name string) (*ResourceWebhook, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceWebhook, *resty.Response, error)
 
 		// Create creates a new webhook.
 		//
 		// Returns the created webhook with its assigned ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createwebhookbyid
-		Create(ctx context.Context, req *RequestWebhook) (*ResourceWebhook, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error)
 
 		// UpdateByID updates the specified webhook by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatewebhookbyid
-		UpdateByID(ctx context.Context, id int, req *RequestWebhook) (*ResourceWebhook, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error)
 
 		// UpdateByName updates the specified webhook by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatewebhookbyname
-		UpdateByName(ctx context.Context, name string, req *RequestWebhook) (*ResourceWebhook, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error)
 
 		// DeleteByID removes the specified webhook by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletewebhookbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified webhook by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletewebhookbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the webhook-related Classic API methods.
@@ -78,7 +79,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // List returns all webhooks.
 // URL: GET /JSSResource/webhooks
 // https://developer.jamf.com/jamf-pro/reference/findwebhooks
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicWebhooks
@@ -99,7 +100,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // GetByID returns the specified webhook by ID.
 // URL: GET /JSSResource/webhooks/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findwebhooksbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceWebhook, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceWebhook, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("webhook ID must be a positive integer")
 	}
@@ -124,7 +125,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceWebhook, *inter
 // GetByName returns the specified webhook by name.
 // URL: GET /JSSResource/webhooks/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findwebhooksbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceWebhook, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceWebhook, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("webhook name is required")
 	}
@@ -150,7 +151,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceWebhook,
 // URL: POST /JSSResource/webhooks/id/0
 // Returns the created webhook with its assigned ID.
 // https://developer.jamf.com/jamf-pro/reference/createwebhookbyid
-func (s *Service) Create(ctx context.Context, req *RequestWebhook) (*ResourceWebhook, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -175,7 +176,7 @@ func (s *Service) Create(ctx context.Context, req *RequestWebhook) (*ResourceWeb
 // UpdateByID updates the specified webhook by ID.
 // URL: PUT /JSSResource/webhooks/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updatewebhookbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestWebhook) (*ResourceWebhook, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("webhook ID must be a positive integer")
 	}
@@ -203,7 +204,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestWebhook) (
 // UpdateByName updates the specified webhook by name.
 // URL: PUT /JSSResource/webhooks/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updatewebhookbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestWebhook) (*ResourceWebhook, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("webhook name is required")
 	}
@@ -231,7 +232,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestWeb
 // DeleteByID removes the specified webhook by ID.
 // URL: DELETE /JSSResource/webhooks/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deletewebhookbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("webhook ID must be a positive integer")
 	}
@@ -254,7 +255,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // DeleteByName removes the specified webhook by name.
 // URL: DELETE /JSSResource/webhooks/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deletewebhookbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("webhook name is required")
 	}

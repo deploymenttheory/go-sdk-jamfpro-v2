@@ -26,7 +26,7 @@ func TestUnit_ComputerExtensionAttributes_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -43,7 +43,7 @@ func TestUnit_ComputerExtensionAttributes_List_WithrsqlQuery(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerExtensionAttributes_GetByID_Success(t *testing.T) {
@@ -55,7 +55,7 @@ func TestUnit_ComputerExtensionAttributes_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "EA One", result.Name)
 	assert.Equal(t, "STRING", result.DataType)
@@ -80,7 +80,7 @@ func TestUnit_ComputerExtensionAttributes_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_ComputerExtensionAttributes_Create_Success(t *testing.T) {
@@ -98,7 +98,7 @@ func TestUnit_ComputerExtensionAttributes_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.NotEmpty(t, result.Href)
 }
@@ -128,7 +128,7 @@ func TestUnit_ComputerExtensionAttributes_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "EA One Updated", result.Name)
 	assert.Equal(t, "Updated", result.Description)
@@ -160,7 +160,7 @@ func TestUnit_ComputerExtensionAttributes_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ComputerExtensionAttributes_DeleteByID_EmptyID(t *testing.T) {
@@ -179,7 +179,7 @@ func TestUnit_ComputerExtensionAttributes_DeleteMultipleByID_Success(t *testing.
 	resp, err := svc.DeleteComputerExtensionAttributesByIDV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ComputerExtensionAttributes_DeleteMultipleByID_NilRequest(t *testing.T) {
@@ -207,7 +207,7 @@ func TestUnit_ComputerExtensionAttributes_GetHistoryByIDV1_Success(t *testing.T)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -233,7 +233,7 @@ func TestUnit_ComputerExtensionAttributes_AddHistoryNoteByIDV1_Success(t *testin
 	resp, err := svc.AddHistoryNoteByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_ComputerExtensionAttributes_AddHistoryNoteByIDV1_EmptyID(t *testing.T) {
@@ -284,7 +284,7 @@ func TestUnit_ComputerExtensionAttributes_ListTemplatesV1_Success(t *testing.T) 
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -301,7 +301,7 @@ func TestUnit_ComputerExtensionAttributes_ListTemplatesV1_WithRsqlQuery(t *testi
 	result, resp, err := svc.ListTemplatesV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerExtensionAttributes_ListTemplatesV1_InvalidJSON(t *testing.T) {
@@ -324,7 +324,7 @@ func TestUnit_ComputerExtensionAttributes_GetTemplateByIDV1_Success(t *testing.T
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Template One", result.Name)
 	assert.Equal(t, "STRING", result.DataType)
@@ -353,7 +353,7 @@ func TestUnit_ComputerExtensionAttributes_UploadV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "EA One", result.Name)
 }
@@ -388,7 +388,7 @@ func TestUnit_ComputerExtensionAttributes_GetDataDependencyByIDV1_Success(t *tes
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -416,7 +416,7 @@ func TestUnit_ComputerExtensionAttributes_DownloadByIDV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result)
 	assert.Contains(t, string(result), "<computer_extension_attribute>")
 	assert.Contains(t, string(result), "<id>1</id>")

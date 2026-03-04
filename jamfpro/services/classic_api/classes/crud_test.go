@@ -29,7 +29,7 @@ func TestUnit_Classes_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -51,7 +51,7 @@ func TestUnit_Classes_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Test Class 1", result.Name)
 	assert.Equal(t, "Test class description", result.Description)
@@ -85,7 +85,7 @@ func TestUnit_Classes_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -101,7 +101,7 @@ func TestUnit_Classes_GetByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Test Class 1", result.Name)
 }
@@ -130,7 +130,7 @@ func TestUnit_Classes_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 100, result.ID)
 }
 
@@ -153,7 +153,7 @@ func TestUnit_Classes_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 // =============================================================================
@@ -170,7 +170,7 @@ func TestUnit_Classes_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -209,7 +209,7 @@ func TestUnit_Classes_UpdateByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -245,7 +245,7 @@ func TestUnit_Classes_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Classes_DeleteByID_ZeroID(t *testing.T) {
@@ -277,7 +277,7 @@ func TestUnit_Classes_DeleteByName_Success(t *testing.T) {
 	resp, err := svc.DeleteByName(context.Background(), "Test Class 1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Classes_DeleteByName_EmptyName(t *testing.T) {

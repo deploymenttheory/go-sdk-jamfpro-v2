@@ -24,7 +24,7 @@ func TestUnit_Mdm_BlankPush_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result.ErrorUUIDs)
 	assert.Empty(t, result.ErrorUUIDs)
 }
@@ -66,7 +66,7 @@ func TestUnit_Mdm_SendCommand_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "cmd-12345", result.ID)
 	assert.Equal(t, "/api/v2/mdm/commands/cmd-12345", result.Href)
 }
@@ -93,7 +93,7 @@ func TestUnit_Mdm_SendCommand_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_Mdm_DeployPackage_Success(t *testing.T) {
@@ -116,7 +116,7 @@ func TestUnit_Mdm_DeployPackage_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.QueuedCommands, 2)
 	assert.Equal(t, 1001, result.QueuedCommands[0].Device)
 	assert.Equal(t, "uuid-abc-123", result.QueuedCommands[0].CommandUUID)
@@ -147,7 +147,7 @@ func TestUnit_Mdm_RenewProfile_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result.UDIDsNotProcessed.UDIDs)
 	assert.Empty(t, result.UDIDsNotProcessed.UDIDs)
 }
@@ -171,7 +171,7 @@ func TestUnit_MDM_ListCommandsV2_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "cmd-uuid-001", result.Results[0].UUID)
@@ -187,7 +187,7 @@ func TestUnit_Mdm_ListCommandsV2_Error(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "failed to list MDM commands")
 }
 
@@ -210,7 +210,7 @@ func TestUnit_Mdm_ListCommandsV2_InvalidJSON(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Contains(t, err.Error(), "mergePage failed")
 }
 
@@ -222,7 +222,7 @@ func TestUnit_Mdm_BlankPush_Error(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_Mdm_DeployPackage_Error(t *testing.T) {
@@ -239,7 +239,7 @@ func TestUnit_Mdm_DeployPackage_Error(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_Mdm_RenewProfile_Error(t *testing.T) {
@@ -251,5 +251,5 @@ func TestUnit_Mdm_RenewProfile_Error(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }

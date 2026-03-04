@@ -7,21 +7,22 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 // APNSClientPushStatusServiceInterface defines the interface for APNS client push status operations.
 type APNSClientPushStatusServiceInterface interface {
 	// ListV1 retrieves MDM clients with push notifications disabled.
-	ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+	ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 	// EnableAllClientsV1 creates a request to enable push notifications for all MDM clients with push disabled.
-	EnableAllClientsV1(ctx context.Context) (*interfaces.Response, error)
+	EnableAllClientsV1(ctx context.Context) (*resty.Response, error)
 
 	// GetEnableAllClientsStatusV1 retrieves the status of the most recent enable-all-clients request.
-	GetEnableAllClientsStatusV1(ctx context.Context) (*EnableAllClientsStatusResponse, *interfaces.Response, error)
+	GetEnableAllClientsStatusV1(ctx context.Context) (*EnableAllClientsStatusResponse, *resty.Response, error)
 
 	// EnableClientV1 enables push notifications for a single MDM client by management ID.
-	EnableClientV1(ctx context.Context, req *EnableClientRequest) (*interfaces.Response, error)
+	EnableClientV1(ctx context.Context, req *EnableClientRequest) (*resty.Response, error)
 }
 
 // Service provides methods for interacting with APNS client push status endpoints.
@@ -38,7 +39,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListV1 retrieves MDM clients with push notifications disabled with optional RSQL filtering.
 // See: https://developer.jamf.com/jamf-pro/reference/get_v1-apns-client-push-status
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointAPNSClientPushStatusV1
 	var result ListResponse
 
@@ -65,7 +66,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // EnableAllClientsV1 creates a request to enable push notifications for all MDM clients with push disabled.
 // POST /api/v1/apns-client-push-status/enable-all-clients
 // This is an asynchronous operation; use GetEnableAllClientsStatusV1 to check progress.
-func (s *Service) EnableAllClientsV1(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) EnableAllClientsV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointEnableAllClientsV1
 
 	headers := map[string]string{
@@ -83,7 +84,7 @@ func (s *Service) EnableAllClientsV1(ctx context.Context) (*interfaces.Response,
 // GetEnableAllClientsStatusV1 retrieves the status of the most recent enable-all-clients request.
 // GET /api/v1/apns-client-push-status/enable-all-clients/status
 // Returns 404 if no recent request exists.
-func (s *Service) GetEnableAllClientsStatusV1(ctx context.Context) (*EnableAllClientsStatusResponse, *interfaces.Response, error) {
+func (s *Service) GetEnableAllClientsStatusV1(ctx context.Context) (*EnableAllClientsStatusResponse, *resty.Response, error) {
 	endpoint := EndpointEnableAllClientsStatusV1
 
 	headers := map[string]string{
@@ -102,7 +103,7 @@ func (s *Service) GetEnableAllClientsStatusV1(ctx context.Context) (*EnableAllCl
 // EnableClientV1 enables push notifications for a single MDM client by management ID.
 // POST /api/v1/apns-client-push-status/enable-client
 // Returns 204 No Content on success.
-func (s *Service) EnableClientV1(ctx context.Context, req *EnableClientRequest) (*interfaces.Response, error) {
+func (s *Service) EnableClientV1(ctx context.Context, req *EnableClientRequest) (*resty.Response, error) {
 	if req == nil {
 		return nil, fmt.Errorf("request is required")
 	}

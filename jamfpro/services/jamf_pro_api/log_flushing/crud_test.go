@@ -17,7 +17,7 @@ func TestUnit_LogFlushing_GetSettingsV1_Success(t *testing.T) {
 	result, resp, err := service.GetSettingsV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.HourOfDay)
 	assert.Len(t, result.RetentionPolicies, 1)
 	assert.Equal(t, "Jamf Pro Server Logs", result.RetentionPolicies[0].DisplayName)
@@ -31,7 +31,7 @@ func TestUnit_LogFlushing_ListTasksV1_Success(t *testing.T) {
 	result, resp, err := service.ListTasksV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Len(t, result, 1)
 	assert.Equal(t, "1", result[0].ID)
 	assert.Equal(t, "COMPLETED", result[0].State)
@@ -45,7 +45,7 @@ func TestUnit_LogFlushing_GetTaskByIDV1_Success(t *testing.T) {
 	result, resp, err := service.GetTaskByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "JAMFSoftwareServer", result.Qualifier)
 	assert.Equal(t, "COMPLETED", result.State)
@@ -76,7 +76,7 @@ func TestUnit_LogFlushing_QueueTaskV1_Success(t *testing.T) {
 	result, resp, err := service.QueueTaskV1(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "2", result.ID)
 	assert.Equal(t, "/api/v1/log-flushing/task/2", result.Href)
 }
@@ -99,7 +99,7 @@ func TestUnit_LogFlushing_DeleteTaskByIDV1_Success(t *testing.T) {
 
 	resp, err := service.DeleteTaskByIDV1(context.Background(), "1")
 	require.NoError(t, err)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_LogFlushing_DeleteTaskByIDV1_EmptyID(t *testing.T) {

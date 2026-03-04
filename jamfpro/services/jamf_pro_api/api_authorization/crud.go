@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// GetV1 returns the current authorization details associated with the API token.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-auth
-		GetV1(ctx context.Context) (*ResourceAuthV1, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceAuthV1, *resty.Response, error)
 	}
 
 	// Service handles communication with the API authorization-related methods of the Jamf Pro API.
@@ -35,7 +36,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 returns the current authorization details associated with the API token.
 // URL: GET /api/v1/auth
 // https://developer.jamf.com/jamf-pro/reference/get_v1-auth
-func (s *Service) GetV1(ctx context.Context) (*ResourceAuthV1, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceAuthV1, *resty.Response, error) {
 	var result ResourceAuthV1
 
 	endpoint := EndpointAuthV1

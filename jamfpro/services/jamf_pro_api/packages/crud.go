@@ -12,6 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_distribution_point"
+	"resty.dev/v3"
 )
 
 type (
@@ -25,12 +26,12 @@ type (
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the specified package by ID (Get specified Package object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id
-		GetByIDV1(ctx context.Context, id string) (*ResourcePackage, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourcePackage, *resty.Response, error)
 
 		// CreateV1 creates a new package record (Create Package record).
 		//
@@ -38,7 +39,7 @@ type (
 		// Required: PackageName, FileName, CategoryID, Priority, and the seven *bool fields.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages
-		CreateV1(ctx context.Context, request *RequestPackage) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestPackage) (*CreateResponse, *resty.Response, error)
 
 		// UploadV1 uploads a package file to an existing package record.
 		//
@@ -46,7 +47,7 @@ type (
 		// filePath is the path to the package file on disk.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-upload
-		UploadV1(ctx context.Context, id string, filePath string) (*CreateResponse, *interfaces.Response, error)
+		UploadV1(ctx context.Context, id string, filePath string) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV1 updates the specified package by ID (Update specified Package object).
 		//
@@ -54,39 +55,39 @@ type (
 		// Metadata only; no file upload.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-packages-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourcePackage) (*ResourcePackage, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *ResourcePackage) (*ResourcePackage, *resty.Response, error)
 
 		// AssignManifestToPackageV1 assigns a manifest file to an existing package.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-manifest
-		AssignManifestToPackageV1(ctx context.Context, id string, manifestPath string) (*CreateResponse, *interfaces.Response, error)
+		AssignManifestToPackageV1(ctx context.Context, id string, manifestPath string) (*CreateResponse, *resty.Response, error)
 
 		// DeletePackageManifestV1 removes the manifest from a package.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-packages-id-manifest
-		DeletePackageManifestV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeletePackageManifestV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteByIDV1 removes the specified package by ID (Remove specified Package record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-packages-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeletePackagesByIDV1 deletes multiple packages by their IDs (Delete multiple Packages by their IDs).
 		//
 		// Sends a POST to /api/v1/packages/delete-multiple with a body containing package IDs.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-delete-multiple
-		DeletePackagesByIDV1(ctx context.Context, req *DeletePackagesByIDRequest) (*interfaces.Response, error)
+		DeletePackagesByIDV1(ctx context.Context, req *DeletePackagesByIDRequest) (*resty.Response, error)
 
 		// GetHistoryV1 returns the history object for the specified package.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id-history
-		GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNotesV1 adds notes to the specified package history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history
-		AddHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error)
+		AddHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error)
 
 		// ExportV1 exports the packages collection as CSV or JSON.
 		//
@@ -95,7 +96,7 @@ type (
 		// Accept header: text/csv or application/json. Returns raw bytes.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-export
-		ExportV1(ctx context.Context, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error)
+		ExportV1(ctx context.Context, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
 
 		// ExportHistoryV1 exports the package history for a specified package as CSV or JSON.
 		//
@@ -104,21 +105,21 @@ type (
 		// Accept header: text/csv or application/json. Returns raw bytes.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history-export
-		ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error)
+		ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
 
 		// CreateAndUpload creates package metadata, uploads the file, and verifies SHA3_512.
 		// Convenience method for creating and uploading a package.
 		//
 		// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Create metadata (FileName, MD5 set from file);
 		// 3) Upload file; 4) Poll until HashType==SHA3_512 and HashValue populated; 5) Verify hash.
-		CreateAndUpload(ctx context.Context, filePath string, req *RequestPackage) (*CreateResponse, *interfaces.Response, error)
+		CreateAndUpload(ctx context.Context, filePath string, req *RequestPackage) (*CreateResponse, *resty.Response, error)
 
 		// UpdateAndUpload updates package metadata, uploads a new file, and verifies SHA3_512.
 		// Convenience method for updating and uploading a package.
 		//
 		// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Update metadata (FileName, MD5 set from file);
 		// 3) Upload file; 4) Poll until HashType==SHA3_512 and HashValue populated; 5) Verify hash.
-		UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *interfaces.Response, error)
+		UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *resty.Response, error)
 	}
 
 	// Service handles communication with the packages-related methods of the Jamf Pro API.
@@ -147,7 +148,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/packages
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-packages
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointPackagesV1
@@ -175,7 +176,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 returns the specified package by ID (Get specified Package object).
 // URL: GET /api/v1/packages/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourcePackage, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourcePackage, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
 	}
@@ -200,7 +201,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourcePackage, *
 // URL: POST /api/v1/packages
 // Body: JSON with metadata (name, category, info, notes, priority, etc.) - no file upload
 // https://developer.jamf.com/jamf-pro/reference/post_v1-packages
-func (s *Service) CreateV1(ctx context.Context, request *RequestPackage) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestPackage) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -225,7 +226,7 @@ func (s *Service) CreateV1(ctx context.Context, request *RequestPackage) (*Creat
 // UploadV1 uploads a package file to an existing package record.
 // URL: POST /api/v1/packages/{id}/upload
 // https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-upload
-func (s *Service) UploadV1(ctx context.Context, id string, filePath string) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) UploadV1(ctx context.Context, id string, filePath string) (*CreateResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
 	}
@@ -268,7 +269,7 @@ func (s *Service) UploadV1(ctx context.Context, id string, filePath string) (*Cr
 // URL: PUT /api/v1/packages/{id}
 // Body: JSON with full ResourcePackage - no file upload
 // https://developer.jamf.com/jamf-pro/reference/put_v1-packages-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourcePackage) (*ResourcePackage, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourcePackage) (*ResourcePackage, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -297,7 +298,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *Resource
 // AssignManifestToPackageV1 assigns a manifest file to an existing package.
 // URL: POST /api/v1/packages/{id}/manifest
 // https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-manifest
-func (s *Service) AssignManifestToPackageV1(ctx context.Context, id string, manifestPath string) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) AssignManifestToPackageV1(ctx context.Context, id string, manifestPath string) (*CreateResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
 	}
@@ -339,7 +340,7 @@ func (s *Service) AssignManifestToPackageV1(ctx context.Context, id string, mani
 // DeletePackageManifestV1 removes the manifest from a package.
 // URL: DELETE /api/v1/packages/{id}/manifest
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-packages-id-manifest
-func (s *Service) DeletePackageManifestV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeletePackageManifestV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("package ID is required")
 	}
@@ -361,7 +362,7 @@ func (s *Service) DeletePackageManifestV1(ctx context.Context, id string) (*inte
 // DeleteByIDV1 removes the specified package by ID (Remove specified Package record).
 // URL: DELETE /api/v1/packages/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-packages-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("package ID is required")
 	}
@@ -384,7 +385,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 // URL: POST /api/v1/packages/delete-multiple
 // Body: JSON with ids (array of package IDs)
 // https://developer.jamf.com/jamf-pro/reference/post_v1-packages-delete-multiple
-func (s *Service) DeletePackagesByIDV1(ctx context.Context, req *DeletePackagesByIDRequest) (*interfaces.Response, error) {
+func (s *Service) DeletePackagesByIDV1(ctx context.Context, req *DeletePackagesByIDRequest) (*resty.Response, error) {
 	if req == nil || len(req.IDs) == 0 {
 		return nil, fmt.Errorf("ids are required")
 	}
@@ -408,7 +409,7 @@ func (s *Service) DeletePackagesByIDV1(ctx context.Context, req *DeletePackagesB
 // URL: GET /api/v1/packages/{id}/history
 // Query Params: filter, sort, page, page-size (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id-history
-func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
 	}
@@ -433,7 +434,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[str
 // URL: POST /api/v1/packages/{id}/history
 // Body: JSON with note
 // https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history
-func (s *Service) AddHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error) {
+func (s *Service) AddHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("package ID is required")
 	}
@@ -460,7 +461,7 @@ func (s *Service) AddHistoryNotesV1(ctx context.Context, id string, req *AddHist
 // URL: POST /api/v1/packages/export
 // Query params: export-fields, export-labels, page, page-size, sort, filter
 // https://developer.jamf.com/jamf-pro/reference/post_v1-packages-export
-func (s *Service) ExportV1(ctx context.Context, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error) {
+func (s *Service) ExportV1(ctx context.Context, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *resty.Response, error) {
 	endpoint := EndpointPackagesExport
 	if acceptType == "" {
 		acceptType = mime.ApplicationJSON
@@ -477,14 +478,14 @@ func (s *Service) ExportV1(ctx context.Context, rsqlQuery map[string]string, bod
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to export packages: %w", err)
 	}
-	return resp.Body, resp, nil
+	return resp.Bytes(), resp, nil
 }
 
 // ExportHistoryV1 exports the package history for a specified package as CSV or JSON.
 // URL: POST /api/v1/packages/{id}/history/export
 // Query params: export-fields, export-labels, page, page-size, sort, filter
 // https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history-export
-func (s *Service) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error) {
+func (s *Service) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
 	}
@@ -504,13 +505,13 @@ func (s *Service) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to export package history: %w", err)
 	}
-	return resp.Body, resp, nil
+	return resp.Bytes(), resp, nil
 }
 
 // CreateAndUpload creates package metadata, uploads the file, and verifies SHA3_512.
 // Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Create metadata; 3) Upload file;
 // 4) Refresh cloud distribution point inventory (forces immediate hash recalculation); 5) Poll until HashType==SHA3_512; 6) Verify hash.
-func (s *Service) CreateAndUpload(ctx context.Context, filePath string, req *RequestPackage) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateAndUpload(ctx context.Context, filePath string, req *RequestPackage) (*CreateResponse, *resty.Response, error) {
 	if filePath == "" {
 		return nil, nil, fmt.Errorf("file path is required")
 	}
@@ -576,7 +577,7 @@ func (s *Service) CreateAndUpload(ctx context.Context, filePath string, req *Req
 // UpdateAndUpload updates package metadata, uploads a new file, and verifies SHA3_512.
 // Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Update metadata; 3) Upload file;
 // 4) Refresh cloud distribution point inventory (forces immediate hash recalculation); 5) Poll until HashType==SHA3_512; 6) Verify hash.
-func (s *Service) UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *interfaces.Response, error) {
+func (s *Service) UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
 	}

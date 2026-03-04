@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// GetV1 returns the Jamf Pro server version (Get Jamf Pro Version).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-version
-		GetV1(ctx context.Context) (*ResourceJamfProVersion, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceJamfProVersion, *resty.Response, error)
 	}
 
 	// Service handles communication with the Jamf Pro version-related methods of the Jamf Pro API.
@@ -39,7 +40,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 returns the Jamf Pro server version.
 // URL: GET /api/v1/jamf-pro-version
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-version
-func (s *Service) GetV1(ctx context.Context) (*ResourceJamfProVersion, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceJamfProVersion, *resty.Response, error) {
 	var result ResourceJamfProVersion
 
 	endpoint := EndpointJamfProVersionV1

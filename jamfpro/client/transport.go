@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	"fmt"
-	"net/http/cookiejar"
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
@@ -62,17 +61,12 @@ func NewTransport(authConfig *AuthConfig, options ...ClientOption) (*Transport, 
 	baseURL = trimTrailingSlash(baseURL)
 	userAgent := fmt.Sprintf("%s/%s", UserAgentBase, Version)
 
-	// Cookie jar enables sticky sessions automatically.
+	// Resty creates a cookie jar by default, which enables sticky sessions automatically.
 	// Jamf Cloud sets jpro-ingress / APBALANCEID / JSESSIONID in Set-Cookie
 	// headers; resty resends them on subsequent requests without extra logic.
 	// See: https://developer.jamf.com/jamf-pro/docs/sticky-sessions-for-jamf-cloud
-	jar, err := cookiejar.New(nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create cookie jar: %w", err)
-	}
-
 	restyClient := resty.New()
-	restyClient.SetCookieJar(jar)
+	restyClient.SetBaseURL(baseURL)
 	restyClient.SetTimeout(DefaultTimeout)
 	restyClient.SetRetryCount(MaxRetries)
 	restyClient.SetRetryWaitTime(RetryWaitTime)
@@ -101,14 +95,7 @@ func NewTransport(authConfig *AuthConfig, options ...ClientOption) (*Transport, 
 		}
 	}
 
-	// Wire authentication — returns tokenHolder for InvalidateToken/KeepAliveToken.
-	holder, err := SetupAuthentication(restyClient, authConfig, transport.logger)
-	if err != nil {
-		return nil, fmt.Errorf("failed to setup authentication: %w", err)
-	}
-	transport.holder = holder
-
-	// Log deprecated endpoint warnings via resty response middleware (native).
+	// Log deprecated endpoint warnings and cookie usage via resty response middleware.
 	restyClient.AddResponseMiddleware(func(_ *resty.Client, r *resty.Response) error {
 		if dep := r.Header().Get("Deprecation"); dep != "" {
 			transport.logger.Warn("Jamf Pro API endpoint is deprecated",
@@ -117,10 +104,29 @@ func NewTransport(authConfig *AuthConfig, options ...ClientOption) (*Transport, 
 				zap.String("sunset", r.Header().Get("Sunset")),
 			)
 		}
+
+		if r.Request != nil && r.Request.Header != nil {
+			cookieHeader := r.Request.Header.Get("Cookie")
+			transport.logger.Info("Request cookie status",
+				zap.String("method", r.Request.Method),
+				zap.String("path", r.Request.URL),
+				zap.String("cookie_sent", cookieHeader),
+				zap.Bool("has_cookie", cookieHeader != ""),
+			)
+		}
+
 		return nil
 	})
 
-	restyClient.SetBaseURL(transport.BaseURL)
+	// Wire authentication — returns tokenHolder for InvalidateToken/KeepAliveToken.
+	// The OAuth token request (first request) captures the sticky session cookie automatically.
+	// IMPORTANT: This must happen AFTER SetBaseURL so the cookie jar associates the cookie
+	// with the correct domain for all subsequent requests.
+	holder, err := SetupAuthentication(restyClient, authConfig, transport.logger)
+	if err != nil {
+		return nil, fmt.Errorf("failed to setup authentication: %w", err)
+	}
+	transport.holder = holder
 
 	transport.logger.Info("Jamf Pro API transport created",
 		zap.String("base_url", transport.BaseURL),
@@ -167,7 +173,7 @@ func (t *Transport) KeepAliveToken() error {
 // executeRequest is the central request executor used by all HTTP verb methods.
 // It applies the concurrency semaphore, total-retry deadline, mandatory
 // per-request delay, and adaptive response-time throttling.
-func (t *Transport) executeRequest(req *resty.Request, method, path string) (*interfaces.Response, error) {
+func (t *Transport) executeRequest(req *resty.Request, method, path string) (*resty.Response, error) {
 	ctx := req.Context()
 	if ctx == nil {
 		ctx = context.Background()
@@ -187,33 +193,14 @@ func (t *Transport) executeRequest(req *resty.Request, method, path string) (*in
 	// Acquire concurrency slot — blocks until available or context cancelled.
 	if t.sem != nil {
 		if err := t.sem.acquire(ctx); err != nil {
-			return toInterfaceResponse(nil), fmt.Errorf("concurrency limit: %w", err)
+			return nil, fmt.Errorf("concurrency limit: %w", err)
 		}
 		defer t.sem.release()
 	}
 
 	t.logger.Debug("Executing API request", zap.String("method", method), zap.String("path", path))
 
-	var (
-		resp    *resty.Response
-		execErr error
-	)
-	switch method {
-	case "GET":
-		resp, execErr = req.Get(path)
-	case "POST":
-		resp, execErr = req.Post(path)
-	case "PUT":
-		resp, execErr = req.Put(path)
-	case "PATCH":
-		resp, execErr = req.Patch(path)
-	case "DELETE":
-		resp, execErr = req.Delete(path)
-	default:
-		return toInterfaceResponse(nil), fmt.Errorf("unsupported HTTP method: %s", method)
-	}
-
-	ifaceResp := toInterfaceResponse(resp)
+	resp, execErr := req.Execute(method, path)
 
 	if execErr != nil {
 		t.logger.Error("Request failed",
@@ -221,15 +208,15 @@ func (t *Transport) executeRequest(req *resty.Request, method, path string) (*in
 			zap.String("path", path),
 			zap.Error(execErr),
 		)
-		return ifaceResp, fmt.Errorf("request failed: %w", execErr)
+		return resp, fmt.Errorf("request failed: %w", execErr)
 	}
 
 	if err := t.validateResponse(resp, method, path); err != nil {
-		return ifaceResp, err
+		return resp, err
 	}
 
 	if resp.IsError() {
-		return ifaceResp, ParseErrorResponse(
+		return resp, ParseErrorResponse(
 			[]byte(resp.String()),
 			resp.StatusCode(),
 			resp.Status(),
@@ -240,11 +227,25 @@ func (t *Transport) executeRequest(req *resty.Request, method, path string) (*in
 	}
 
 	duration := resp.Duration()
-	t.logger.Debug("Request completed",
+
+	var stickySessionCookie string
+	var allCookies []string
+	if resp.RawResponse != nil {
+		for _, cookie := range resp.Cookies() {
+			allCookies = append(allCookies, cookie.Name)
+			if cookie.Name == "jpro-ingress" || cookie.Name == "APBALANCEID" || cookie.Name == "JSESSIONID" {
+				stickySessionCookie = fmt.Sprintf("%s=%s", cookie.Name, cookie.Value)
+			}
+		}
+	}
+
+	t.logger.Info("Request completed",
 		zap.String("method", method),
 		zap.String("path", path),
 		zap.Int("status_code", resp.StatusCode()),
 		zap.Duration("duration", duration),
+		zap.String("sticky_session_cookie", stickySessionCookie),
+		zap.Strings("all_response_cookies", allCookies),
 	)
 
 	// Mandatory fixed delay (user-configured for bulk operations).
@@ -264,5 +265,5 @@ func (t *Transport) executeRequest(req *resty.Request, method, path string) (*in
 		time.Sleep(adaptive)
 	}
 
-	return ifaceResp, nil
+	return resp, nil
 }

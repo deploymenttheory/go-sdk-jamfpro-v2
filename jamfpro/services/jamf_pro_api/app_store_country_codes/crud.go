@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// ListV1 returns all App Store country codes (Get App Store Country Codes).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-store-country-codes
-		ListV1(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context) (*ListResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the App Store country codes-related methods of the Jamf Pro API.
@@ -35,7 +36,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV1 returns all App Store country codes.
 // URL: GET /api/v1/app-store-country-codes
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-store-country-codes
-func (s *Service) ListV1(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointAppStoreCountryCodesV1

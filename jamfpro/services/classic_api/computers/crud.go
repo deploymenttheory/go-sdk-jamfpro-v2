@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,44 +17,44 @@ type (
 		// List returns all computers.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputers
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified computer by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputersbyid
-		GetByID(ctx context.Context, id string) (*ResponseComputer, *interfaces.Response, error)
+		GetByID(ctx context.Context, id string) (*ResponseComputer, *resty.Response, error)
 
 		// GetByName returns the specified computer by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputersbyname
-		GetByName(ctx context.Context, name string) (*ResponseComputer, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResponseComputer, *resty.Response, error)
 
 		// Create creates a new computer.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputerbyid
-		Create(ctx context.Context, computer *ResponseComputer) (*ResponseComputer, *interfaces.Response, error)
+		Create(ctx context.Context, computer *ResponseComputer) (*ResponseComputer, *resty.Response, error)
 
 		// UpdateByID updates the specified computer by ID.
 		// If Site.ID == 0 && Site.Name == "", sets ID = -1 and Name = "none".
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatecomputerbyid
-		UpdateByID(ctx context.Context, id string, computer *ResponseComputer) (*ResponseComputer, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id string, computer *ResponseComputer) (*ResponseComputer, *resty.Response, error)
 
 		// UpdateByName updates the specified computer by name.
 		// If Site.ID == 0 && Site.Name == "", sets ID = -1 and Name = "none".
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatecomputerbyname
-		UpdateByName(ctx context.Context, name string, computer *ResponseComputer) (*ResponseComputer, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, computer *ResponseComputer) (*ResponseComputer, *resty.Response, error)
 
 		// DeleteByID removes the specified computer by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerbyid
-		DeleteByID(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteByName removes the specified computer by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the computers-related Classic API methods.
@@ -87,7 +88,7 @@ func applySiteDefault(computer *ResponseComputer) {
 // URL: GET /JSSResource/computers
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputers
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointComputers
 
 	var out ListResponse
@@ -108,7 +109,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/computers/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputersbyid
-func (s *Service) GetByID(ctx context.Context, id string) (*ResponseComputer, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id string) (*ResponseComputer, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("computer ID cannot be empty")
 	}
@@ -133,7 +134,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResponseComputer, *i
 // URL: GET /JSSResource/computers/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputersbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResponseComputer, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResponseComputer, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("computer name cannot be empty")
 	}
@@ -158,7 +159,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResponseComputer
 // URL: POST /JSSResource/computers
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputerbyid
-func (s *Service) Create(ctx context.Context, computer *ResponseComputer) (*ResponseComputer, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, computer *ResponseComputer) (*ResponseComputer, *resty.Response, error) {
 	if computer == nil {
 		return nil, nil, fmt.Errorf("computer is required")
 	}
@@ -186,7 +187,7 @@ func (s *Service) Create(ctx context.Context, computer *ResponseComputer) (*Resp
 // URL: PUT /JSSResource/computers/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatecomputerbyid
-func (s *Service) UpdateByID(ctx context.Context, id string, computer *ResponseComputer) (*ResponseComputer, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id string, computer *ResponseComputer) (*ResponseComputer, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("computer ID cannot be empty")
 	}
@@ -216,7 +217,7 @@ func (s *Service) UpdateByID(ctx context.Context, id string, computer *ResponseC
 // URL: PUT /JSSResource/computers/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatecomputerbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, computer *ResponseComputer) (*ResponseComputer, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, computer *ResponseComputer) (*ResponseComputer, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("computer name cannot be empty")
 	}
@@ -246,7 +247,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, computer *Respo
 // URL: DELETE /JSSResource/computers/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerbyid
-func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("computer ID cannot be empty")
 	}
@@ -269,7 +270,7 @@ func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Respon
 // URL: DELETE /JSSResource/computers/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("computer name cannot be empty")
 	}

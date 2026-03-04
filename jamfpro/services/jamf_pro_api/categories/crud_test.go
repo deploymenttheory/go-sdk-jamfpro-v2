@@ -29,7 +29,7 @@ func TestUnit_Categories_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -48,7 +48,7 @@ func TestUnit_Categories_List_WithrsqlQuery(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Categories_List_WithRSQLFilter(t *testing.T) {
@@ -61,7 +61,7 @@ func TestUnit_Categories_List_WithRSQLFilter(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount, "filtered result should contain exactly one category")
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "2", result.Results[0].ID)
@@ -91,7 +91,7 @@ func TestUnit_Categories_List_APIFailure(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 // =============================================================================
@@ -107,7 +107,7 @@ func TestUnit_Categories_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "No priority", result.Name)
 	assert.Equal(t, 9, result.Priority)
@@ -131,7 +131,7 @@ func TestUnit_Categories_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -148,7 +148,7 @@ func TestUnit_Categories_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Contains(t, result.Href, "/api/v1/categories/3")
 }
@@ -172,7 +172,7 @@ func TestUnit_Categories_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 // =============================================================================
@@ -189,7 +189,7 @@ func TestUnit_Categories_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Updated Category", result.Name)
 	assert.Equal(t, 5, result.Priority)
@@ -224,7 +224,7 @@ func TestUnit_Categories_UpdateByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -238,7 +238,7 @@ func TestUnit_Categories_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Categories_DeleteByID_EmptyID(t *testing.T) {
@@ -257,7 +257,7 @@ func TestUnit_Categories_DeleteByID_APIFailure(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 // =============================================================================
@@ -272,7 +272,7 @@ func TestUnit_Categories_DeleteMultipleByID_Success(t *testing.T) {
 	resp, err := svc.DeleteCategoriesByIDV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Categories_DeleteMultipleByID_NilRequest(t *testing.T) {
@@ -302,7 +302,7 @@ func TestUnit_Categories_DeleteMultipleByID_APIFailure(t *testing.T) {
 	resp, err := svc.DeleteCategoriesByIDV1(context.Background(), req)
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 // =============================================================================
@@ -318,7 +318,7 @@ func TestUnit_Categories_GetHistory_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "admin", result.Results[0].Username)
@@ -343,7 +343,7 @@ func TestUnit_Categories_GetHistory_APIFailure(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "failed to get category history")
 }
 
@@ -359,7 +359,7 @@ func TestUnit_Categories_AddHistoryNotes_Success(t *testing.T) {
 	resp, err := svc.AddCategoryHistoryNotesV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_Categories_AddHistoryNotes_EmptyID(t *testing.T) {
@@ -389,5 +389,5 @@ func TestUnit_Categories_AddHistoryNotes_APIFailure(t *testing.T) {
 	resp, err := svc.AddCategoryHistoryNotesV1(context.Background(), "1", req)
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }

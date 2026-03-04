@@ -21,7 +21,7 @@ func TestAcceptance_VolumePurchasingSubscriptions_list_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.GreaterOrEqual(t, list.TotalCount, 0)
 }
 
@@ -44,6 +44,6 @@ func TestAcceptance_VolumePurchasingSubscriptions_get_by_idv1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, got)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, list.Results[0].ID, got.ID)
 }

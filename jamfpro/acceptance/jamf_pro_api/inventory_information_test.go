@@ -51,7 +51,7 @@ func TestAcceptance_InventoryInformation_get_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	assert.GreaterOrEqual(t, result.ManagedComputers, 0)
 	assert.GreaterOrEqual(t, result.UnmanagedComputers, 0)

@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -21,37 +22,37 @@ type (
 		// Fields allowed in filter: name, serverName, principal, fileSharingConnectionType, httpsEnabled.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// CreateV1 creates a new distribution point.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points
-		CreateV1(ctx context.Context, request *RequestDistributionPoint) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestDistributionPoint) (*CreateResponse, *resty.Response, error)
 
 		// DeleteMultipleV1 deletes multiple distribution points at once.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points-delete-multiple
-		DeleteMultipleV1(ctx context.Context, ids []string) (*interfaces.Response, error)
+		DeleteMultipleV1(ctx context.Context, ids []string) (*resty.Response, error)
 
 		// GetByIDV1 retrieves a single distribution point by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceDistributionPoint, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceDistributionPoint, *resty.Response, error)
 
 		// UpdateByIDV1 updates the specified distribution point by ID (full update with PUT).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-distribution-points-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *resty.Response, error)
 
 		// DeleteByIDV1 removes the specified distribution point by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-distribution-points-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// PatchByIDV1 partially updates the specified distribution point by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-distribution-points-id
-		PatchByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *interfaces.Response, error)
+		PatchByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *resty.Response, error)
 
 		// GetHistoryByIDV1 retrieves the history for a distribution point with pagination.
 		//
@@ -59,12 +60,12 @@ type (
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points-id-history
-		GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryListResponse, *interfaces.Response, error)
+		GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error)
 
 		// CreateHistoryNoteV1 adds a history note to a distribution point.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points-id-history
-		CreateHistoryNoteV1(ctx context.Context, id string, note string) (*HistoryEntry, *interfaces.Response, error)
+		CreateHistoryNoteV1(ctx context.Context, id string, note string) (*HistoryEntry, *resty.Response, error)
 	}
 
 	// Service handles communication with the Distribution Point-related methods of the Jamf Pro API.
@@ -88,7 +89,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV1 retrieves all distribution points with pagination and RSQL filtering.
 // URL: GET /api/v1/distribution-points
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointV1
@@ -109,17 +110,17 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list distribution points: %w", err)
 	}
-	
+
 	// Set totalCount to the actual number of results retrieved
 	result.TotalCount = len(result.Results)
-	
+
 	return &result, resp, nil
 }
 
 // CreateV1 creates a new distribution point.
 // URL: POST /api/v1/distribution-points
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points
-func (s *Service) CreateV1(ctx context.Context, request *RequestDistributionPoint) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestDistributionPoint) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -144,7 +145,7 @@ func (s *Service) CreateV1(ctx context.Context, request *RequestDistributionPoin
 // DeleteMultipleV1 deletes multiple distribution points at once.
 // URL: POST /api/v1/distribution-points/delete-multiple
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points-delete-multiple
-func (s *Service) DeleteMultipleV1(ctx context.Context, ids []string) (*interfaces.Response, error) {
+func (s *Service) DeleteMultipleV1(ctx context.Context, ids []string) (*resty.Response, error) {
 	if len(ids) == 0 {
 		return nil, fmt.Errorf("at least one ID is required")
 	}
@@ -169,7 +170,7 @@ func (s *Service) DeleteMultipleV1(ctx context.Context, ids []string) (*interfac
 // GetByIDV1 retrieves a single distribution point by ID.
 // URL: GET /api/v1/distribution-points/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDistributionPoint, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDistributionPoint, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("distribution point ID is required")
 	}
@@ -193,7 +194,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDistributi
 // UpdateByIDV1 updates the specified distribution point by ID (full update with PUT).
 // URL: PUT /api/v1/distribution-points/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-distribution-points-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("distribution point ID is required")
 	}
@@ -222,7 +223,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestD
 // DeleteByIDV1 removes the specified distribution point by ID.
 // URL: DELETE /api/v1/distribution-points/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-distribution-points-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("distribution point ID is required")
 	}
@@ -244,7 +245,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 // PatchByIDV1 partially updates the specified distribution point by ID.
 // URL: PATCH /api/v1/distribution-points/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-distribution-points-id
-func (s *Service) PatchByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *interfaces.Response, error) {
+func (s *Service) PatchByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("distribution point ID is required")
 	}
@@ -273,7 +274,7 @@ func (s *Service) PatchByIDV1(ctx context.Context, id string, request *RequestDi
 // GetHistoryByIDV1 retrieves the history for a distribution point with pagination.
 // URL: GET /api/v1/distribution-points/{id}/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points-id-history
-func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryListResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("distribution point ID is required")
 	}
@@ -298,17 +299,17 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get distribution point history: %w", err)
 	}
-	
+
 	// Set totalCount to the actual number of results retrieved
 	result.TotalCount = len(result.Results)
-	
+
 	return &result, resp, nil
 }
 
 // CreateHistoryNoteV1 adds a history note to a distribution point.
 // URL: POST /api/v1/distribution-points/{id}/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points-id-history
-func (s *Service) CreateHistoryNoteV1(ctx context.Context, id string, note string) (*HistoryEntry, *interfaces.Response, error) {
+func (s *Service) CreateHistoryNoteV1(ctx context.Context, id string, note string) (*HistoryEntry, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("distribution point ID is required")
 	}

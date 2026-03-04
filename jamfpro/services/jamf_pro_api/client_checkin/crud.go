@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,24 +18,24 @@ type (
 		// GetV3 returns the current client check-in settings (Get Client Check-In settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in
-		GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *interfaces.Response, error)
+		GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *resty.Response, error)
 
 		// UpdateV3 updates the client check-in settings (Update Client Check-In object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-check-in
-		UpdateV3(ctx context.Context, request *ResourceClientCheckinSettings) (*ResourceClientCheckinSettings, *interfaces.Response, error)
+		UpdateV3(ctx context.Context, request *ResourceClientCheckinSettings) (*ResourceClientCheckinSettings, *resty.Response, error)
 
 		// GetHistoryV3 returns the client check-in history object (Get Client Check-In history object).
 		//
 		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in-history
-		GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*ResourceClientCheckinHistory, *interfaces.Response, error)
+		GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*ResourceClientCheckinHistory, *resty.Response, error)
 
 		// AddHistoryNoteV3 adds a note to the client check-in history (Add a Note to Client Check-In History).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-check-in-history
-		AddHistoryNoteV3(ctx context.Context, request *RequestClientCheckinHistoryNote) (*CreateHistoryResponse, *interfaces.Response, error)
+		AddHistoryNoteV3(ctx context.Context, request *RequestClientCheckinHistoryNote) (*CreateHistoryResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the client check-in-related methods of the Jamf Pro API.
@@ -58,7 +59,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV3 returns the current client check-in settings.
 // URL: GET /api/v3/check-in
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in
-func (s *Service) GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *interfaces.Response, error) {
+func (s *Service) GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *resty.Response, error) {
 	var result ResourceClientCheckinSettings
 
 	endpoint := EndpointClientCheckinV3
@@ -79,7 +80,7 @@ func (s *Service) GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *i
 // URL: GET /api/v3/check-in/history
 // Query params (optional): page, page-size, sort, filter (RSQL).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in-history
-func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*ResourceClientCheckinHistory, *interfaces.Response, error) {
+func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*ResourceClientCheckinHistory, *resty.Response, error) {
 	var result ResourceClientCheckinHistory
 
 	endpoint := EndpointClientCheckinHistoryV3
@@ -108,7 +109,7 @@ func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string)
 // AddHistoryNoteV3 adds a note to the client check-in history.
 // URL: POST /api/v3/check-in/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-check-in-history
-func (s *Service) AddHistoryNoteV3(ctx context.Context, request *RequestClientCheckinHistoryNote) (*CreateHistoryResponse, *interfaces.Response, error) {
+func (s *Service) AddHistoryNoteV3(ctx context.Context, request *RequestClientCheckinHistoryNote) (*CreateHistoryResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -127,7 +128,7 @@ func (s *Service) AddHistoryNoteV3(ctx context.Context, request *RequestClientCh
 // UpdateV3 updates the client check-in settings.
 // URL: PUT /api/v3/check-in
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-check-in
-func (s *Service) UpdateV3(ctx context.Context, request *ResourceClientCheckinSettings) (*ResourceClientCheckinSettings, *interfaces.Response, error) {
+func (s *Service) UpdateV3(ctx context.Context, request *ResourceClientCheckinSettings) (*ResourceClientCheckinSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

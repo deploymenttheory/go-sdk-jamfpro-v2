@@ -29,7 +29,7 @@ func TestUnit_Byoprofiles_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -51,7 +51,7 @@ func TestUnit_Byoprofiles_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Test BYO Profile 1", result.General.Name)
 	assert.Equal(t, "Test BYO profile description", result.General.Description)
@@ -86,7 +86,7 @@ func TestUnit_Byoprofiles_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -102,7 +102,7 @@ func TestUnit_Byoprofiles_GetByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Test BYO Profile 1", result.General.Name)
 }
@@ -136,7 +136,7 @@ func TestUnit_Byoprofiles_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 100, result.ID)
 }
 
@@ -163,7 +163,7 @@ func TestUnit_Byoprofiles_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 // =============================================================================
@@ -184,7 +184,7 @@ func TestUnit_Byoprofiles_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -231,7 +231,7 @@ func TestUnit_Byoprofiles_UpdateByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -271,7 +271,7 @@ func TestUnit_Byoprofiles_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Byoprofiles_DeleteByID_ZeroID(t *testing.T) {
@@ -303,7 +303,7 @@ func TestUnit_Byoprofiles_DeleteByName_Success(t *testing.T) {
 	resp, err := svc.DeleteByName(context.Background(), "Test BYO Profile 1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Byoprofiles_DeleteByName_EmptyName(t *testing.T) {

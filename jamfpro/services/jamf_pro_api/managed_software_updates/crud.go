@@ -8,6 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -18,92 +19,92 @@ type (
 		// GetAvailableUpdates retrieves a list of all available managed software updates.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-available-updates
-		GetAvailableUpdates(ctx context.Context) (*ResponseAvailableUpdates, *interfaces.Response, error)
+		GetAvailableUpdates(ctx context.Context) (*ResponseAvailableUpdates, *resty.Response, error)
 
 		// GetPlans retrieves a list of all managed software update plans.
 		//
 		// Query parameters can be used for filtering and pagination.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans
-		GetPlans(ctx context.Context, params url.Values) (*ResponsePlanList, *interfaces.Response, error)
+		GetPlans(ctx context.Context, params url.Values) (*ResponsePlanList, *resty.Response, error)
 
 		// GetPlanByUUID retrieves a managed software update plan by its UUID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-id
-		GetPlanByUUID(ctx context.Context, uuid string) (*ResourcePlan, *interfaces.Response, error)
+		GetPlanByUUID(ctx context.Context, uuid string) (*ResourcePlan, *resty.Response, error)
 
 		// GetDeclarationsByPlanUUID retrieves all declarations associated with a managed software update plan by its UUID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-id-declarations
-		GetDeclarationsByPlanUUID(ctx context.Context, uuid string) (*ResponseDeclarationsList, *interfaces.Response, error)
+		GetDeclarationsByPlanUUID(ctx context.Context, uuid string) (*ResponseDeclarationsList, *resty.Response, error)
 
 		// CreatePlanByDeviceID creates a managed software update plan by device ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-managed-software-updates-plans
-		CreatePlanByDeviceID(ctx context.Context, plan *RequestPlanCreate) (*ResponsePlanCreate, *interfaces.Response, error)
+		CreatePlanByDeviceID(ctx context.Context, plan *RequestPlanCreate) (*ResponsePlanCreate, *resty.Response, error)
 
 		// CreatePlanByGroupID creates a managed software update plan by group ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-managed-software-updates-plans-group
-		CreatePlanByGroupID(ctx context.Context, plan *RequestPlanCreate) (*ResponsePlanCreate, *interfaces.Response, error)
+		CreatePlanByGroupID(ctx context.Context, plan *RequestPlanCreate) (*ResponsePlanCreate, *resty.Response, error)
 
 		// GetPlansByGroupID retrieves managed software update plans for a specific group ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-group-id
-		GetPlansByGroupID(ctx context.Context, groupID string, groupType string) (*ResponsePlanList, *interfaces.Response, error)
+		GetPlansByGroupID(ctx context.Context, groupID string, groupType string) (*ResponsePlanList, *resty.Response, error)
 
 		// GetFeatureToggle retrieves the current managed software update feature toggle settings.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-feature-toggle
-		GetFeatureToggle(ctx context.Context) (*RequestFeatureToggle, *interfaces.Response, error)
+		GetFeatureToggle(ctx context.Context) (*RequestFeatureToggle, *resty.Response, error)
 
 		// UpdateFeatureToggle updates the feature toggle for managed software updates.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-managed-software-updates-plans-feature-toggle
-		UpdateFeatureToggle(ctx context.Context, toggle *RequestFeatureToggle) (*ResponseFeatureToggle, *interfaces.Response, error)
+		UpdateFeatureToggle(ctx context.Context, toggle *RequestFeatureToggle) (*ResponseFeatureToggle, *resty.Response, error)
 
 		// GetFeatureToggleStatus retrieves the background status of the feature toggle.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-feature-toggle-status
-		GetFeatureToggleStatus(ctx context.Context) (*ResponseFeatureToggleStatus, *interfaces.Response, error)
+		GetFeatureToggleStatus(ctx context.Context) (*ResponseFeatureToggleStatus, *resty.Response, error)
 
 		// ForceStopFeatureToggleProcess forcefully stops any ongoing or stalled feature-toggle processes.
 		// This "Break Glass" endpoint should not be used under nominal conditions.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-managed-software-updates-plans-feature-toggle-abandon
-		ForceStopFeatureToggleProcess(ctx context.Context) (*ResponseError, *interfaces.Response, error)
+		ForceStopFeatureToggleProcess(ctx context.Context) (*ResponseError, *resty.Response, error)
 
 		// GetPlanEventsByUUID retrieves the event store for a managed software update plan by its UUID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-id-events
-		GetPlanEventsByUUID(ctx context.Context, uuid string) (*ResponsePlanEvents, *interfaces.Response, error)
+		GetPlanEventsByUUID(ctx context.Context, uuid string) (*ResponsePlanEvents, *resty.Response, error)
 
 		// GetUpdateStatuses retrieves update statuses with RSQL filter and pagination support.
 		//
 		// Query parameters: filter (RSQL), page, page-size, sort.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses
-		GetUpdateStatuses(ctx context.Context, params url.Values) (*ResponseUpdateStatusList, *interfaces.Response, error)
+		GetUpdateStatuses(ctx context.Context, params url.Values) (*ResponseUpdateStatusList, *resty.Response, error)
 
 		// GetUpdateStatusesByComputerGroup retrieves update statuses for a computer group.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-computer-groups-id
-		GetUpdateStatusesByComputerGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error)
+		GetUpdateStatusesByComputerGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *resty.Response, error)
 
 		// GetUpdateStatusesByComputer retrieves update statuses for a computer.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-computers-id
-		GetUpdateStatusesByComputer(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error)
+		GetUpdateStatusesByComputer(ctx context.Context, id string) (*ResponseUpdateStatusList, *resty.Response, error)
 
 		// GetUpdateStatusesByMobileDeviceGroup retrieves update statuses for a mobile device group.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-mobile-device-groups-id
-		GetUpdateStatusesByMobileDeviceGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error)
+		GetUpdateStatusesByMobileDeviceGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *resty.Response, error)
 
 		// GetUpdateStatusesByMobileDevice retrieves update statuses for a mobile device.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-mobile-devices-id
-		GetUpdateStatusesByMobileDevice(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error)
+		GetUpdateStatusesByMobileDevice(ctx context.Context, id string) (*ResponseUpdateStatusList, *resty.Response, error)
 	}
 
 	// Service handles communication with the managed software updates-related methods of the Jamf Pro API.
@@ -128,7 +129,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetAvailableUpdates retrieves a list of all available managed software updates.
 // URL: GET /api/v1/managed-software-updates/available-updates
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-available-updates
-func (s *Service) GetAvailableUpdates(ctx context.Context) (*ResponseAvailableUpdates, *interfaces.Response, error) {
+func (s *Service) GetAvailableUpdates(ctx context.Context) (*ResponseAvailableUpdates, *resty.Response, error) {
 	endpoint := EndpointManagedSoftwareUpdates + "/available-updates"
 
 	var result ResponseAvailableUpdates
@@ -148,7 +149,7 @@ func (s *Service) GetAvailableUpdates(ctx context.Context) (*ResponseAvailableUp
 // GetPlans retrieves a list of all managed software update plans.
 // URL: GET /api/v1/managed-software-updates/plans
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans
-func (s *Service) GetPlans(ctx context.Context, params url.Values) (*ResponsePlanList, *interfaces.Response, error) {
+func (s *Service) GetPlans(ctx context.Context, params url.Values) (*ResponsePlanList, *resty.Response, error) {
 	endpoint := EndpointManagedSoftwareUpdates + "/plans"
 
 	headers := map[string]string{
@@ -185,7 +186,7 @@ func (s *Service) GetPlans(ctx context.Context, params url.Values) (*ResponsePla
 // GetPlanByUUID retrieves a managed software update plan by its UUID.
 // URL: GET /api/v1/managed-software-updates/plans/{uuid}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-id
-func (s *Service) GetPlanByUUID(ctx context.Context, uuid string) (*ResourcePlan, *interfaces.Response, error) {
+func (s *Service) GetPlanByUUID(ctx context.Context, uuid string) (*ResourcePlan, *resty.Response, error) {
 	if uuid == "" {
 		return nil, nil, fmt.Errorf("uuid is required")
 	}
@@ -209,7 +210,7 @@ func (s *Service) GetPlanByUUID(ctx context.Context, uuid string) (*ResourcePlan
 // GetDeclarationsByPlanUUID retrieves all declarations associated with a managed software update plan by its UUID.
 // URL: GET /api/v1/managed-software-updates/plans/{uuid}/declarations
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-id-declarations
-func (s *Service) GetDeclarationsByPlanUUID(ctx context.Context, uuid string) (*ResponseDeclarationsList, *interfaces.Response, error) {
+func (s *Service) GetDeclarationsByPlanUUID(ctx context.Context, uuid string) (*ResponseDeclarationsList, *resty.Response, error) {
 	if uuid == "" {
 		return nil, nil, fmt.Errorf("uuid is required")
 	}
@@ -233,7 +234,7 @@ func (s *Service) GetDeclarationsByPlanUUID(ctx context.Context, uuid string) (*
 // CreatePlanByDeviceID creates a managed software update plan by device ID.
 // URL: POST /api/v1/managed-software-updates/plans
 // https://developer.jamf.com/jamf-pro/reference/post_v1-managed-software-updates-plans
-func (s *Service) CreatePlanByDeviceID(ctx context.Context, plan *RequestPlanCreate) (*ResponsePlanCreate, *interfaces.Response, error) {
+func (s *Service) CreatePlanByDeviceID(ctx context.Context, plan *RequestPlanCreate) (*ResponsePlanCreate, *resty.Response, error) {
 	if plan == nil {
 		return nil, nil, fmt.Errorf("plan is required")
 	}
@@ -258,7 +259,7 @@ func (s *Service) CreatePlanByDeviceID(ctx context.Context, plan *RequestPlanCre
 // CreatePlanByGroupID creates a managed software update plan by group ID.
 // URL: POST /api/v1/managed-software-updates/plans/group
 // https://developer.jamf.com/jamf-pro/reference/post_v1-managed-software-updates-plans-group
-func (s *Service) CreatePlanByGroupID(ctx context.Context, plan *RequestPlanCreate) (*ResponsePlanCreate, *interfaces.Response, error) {
+func (s *Service) CreatePlanByGroupID(ctx context.Context, plan *RequestPlanCreate) (*ResponsePlanCreate, *resty.Response, error) {
 	if plan == nil {
 		return nil, nil, fmt.Errorf("plan is required")
 	}
@@ -283,7 +284,7 @@ func (s *Service) CreatePlanByGroupID(ctx context.Context, plan *RequestPlanCrea
 // GetPlansByGroupID retrieves managed software update plans for a specific group ID.
 // URL: GET /api/v1/managed-software-updates/plans/group/{groupId}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-group-id
-func (s *Service) GetPlansByGroupID(ctx context.Context, groupID string, groupType string) (*ResponsePlanList, *interfaces.Response, error) {
+func (s *Service) GetPlansByGroupID(ctx context.Context, groupID string, groupType string) (*ResponsePlanList, *resty.Response, error) {
 	if groupID == "" {
 		return nil, nil, fmt.Errorf("groupID is required")
 	}
@@ -310,7 +311,7 @@ func (s *Service) GetPlansByGroupID(ctx context.Context, groupID string, groupTy
 // GetFeatureToggle retrieves the current managed software update feature toggle settings.
 // URL: GET /api/v1/managed-software-updates/plans/feature-toggle
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-feature-toggle
-func (s *Service) GetFeatureToggle(ctx context.Context) (*RequestFeatureToggle, *interfaces.Response, error) {
+func (s *Service) GetFeatureToggle(ctx context.Context) (*RequestFeatureToggle, *resty.Response, error) {
 	endpoint := EndpointManagedSoftwareUpdates + "/plans/feature-toggle"
 
 	var result RequestFeatureToggle
@@ -330,7 +331,7 @@ func (s *Service) GetFeatureToggle(ctx context.Context) (*RequestFeatureToggle, 
 // UpdateFeatureToggle updates the feature toggle for managed software updates.
 // URL: PUT /api/v1/managed-software-updates/plans/feature-toggle
 // https://developer.jamf.com/jamf-pro/reference/put_v1-managed-software-updates-plans-feature-toggle
-func (s *Service) UpdateFeatureToggle(ctx context.Context, toggle *RequestFeatureToggle) (*ResponseFeatureToggle, *interfaces.Response, error) {
+func (s *Service) UpdateFeatureToggle(ctx context.Context, toggle *RequestFeatureToggle) (*ResponseFeatureToggle, *resty.Response, error) {
 	if toggle == nil {
 		return nil, nil, fmt.Errorf("toggle is required")
 	}
@@ -355,7 +356,7 @@ func (s *Service) UpdateFeatureToggle(ctx context.Context, toggle *RequestFeatur
 // GetFeatureToggleStatus retrieves the background status of the feature toggle.
 // URL: GET /api/v1/managed-software-updates/plans/feature-toggle/status
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-feature-toggle-status
-func (s *Service) GetFeatureToggleStatus(ctx context.Context) (*ResponseFeatureToggleStatus, *interfaces.Response, error) {
+func (s *Service) GetFeatureToggleStatus(ctx context.Context) (*ResponseFeatureToggleStatus, *resty.Response, error) {
 	endpoint := EndpointManagedSoftwareUpdates + "/plans/feature-toggle/status"
 
 	var result ResponseFeatureToggleStatus
@@ -376,7 +377,7 @@ func (s *Service) GetFeatureToggleStatus(ctx context.Context) (*ResponseFeatureT
 // This "Break Glass" endpoint should not be used under nominal conditions.
 // URL: POST /api/v1/managed-software-updates/plans/feature-toggle/abandon
 // https://developer.jamf.com/jamf-pro/reference/post_v1-managed-software-updates-plans-feature-toggle-abandon
-func (s *Service) ForceStopFeatureToggleProcess(ctx context.Context) (*ResponseError, *interfaces.Response, error) {
+func (s *Service) ForceStopFeatureToggleProcess(ctx context.Context) (*ResponseError, *resty.Response, error) {
 	endpoint := EndpointManagedSoftwareUpdates + "/plans/feature-toggle/abandon"
 
 	var result ResponseError
@@ -397,7 +398,7 @@ func (s *Service) ForceStopFeatureToggleProcess(ctx context.Context) (*ResponseE
 // GetPlanEventsByUUID retrieves the event store for a managed software update plan by its UUID.
 // URL: GET /api/v1/managed-software-updates/plans/{id}/events
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-id-events
-func (s *Service) GetPlanEventsByUUID(ctx context.Context, uuid string) (*ResponsePlanEvents, *interfaces.Response, error) {
+func (s *Service) GetPlanEventsByUUID(ctx context.Context, uuid string) (*ResponsePlanEvents, *resty.Response, error) {
 	if uuid == "" {
 		return nil, nil, fmt.Errorf("uuid is required")
 	}
@@ -421,7 +422,7 @@ func (s *Service) GetPlanEventsByUUID(ctx context.Context, uuid string) (*Respon
 // GetUpdateStatuses retrieves update statuses with RSQL filter and pagination support.
 // URL: GET /api/v1/managed-software-updates/update-statuses
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses
-func (s *Service) GetUpdateStatuses(ctx context.Context, params url.Values) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+func (s *Service) GetUpdateStatuses(ctx context.Context, params url.Values) (*ResponseUpdateStatusList, *resty.Response, error) {
 	endpoint := EndpointManagedSoftwareUpdates + "/update-statuses"
 
 	headers := map[string]string{
@@ -458,7 +459,7 @@ func (s *Service) GetUpdateStatuses(ctx context.Context, params url.Values) (*Re
 // GetUpdateStatusesByComputerGroup retrieves update statuses for a computer group.
 // URL: GET /api/v1/managed-software-updates/update-statuses/computer-groups/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-computer-groups-id
-func (s *Service) GetUpdateStatusesByComputerGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+func (s *Service) GetUpdateStatusesByComputerGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -482,7 +483,7 @@ func (s *Service) GetUpdateStatusesByComputerGroup(ctx context.Context, id strin
 // GetUpdateStatusesByComputer retrieves update statuses for a computer.
 // URL: GET /api/v1/managed-software-updates/update-statuses/computers/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-computers-id
-func (s *Service) GetUpdateStatusesByComputer(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+func (s *Service) GetUpdateStatusesByComputer(ctx context.Context, id string) (*ResponseUpdateStatusList, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -506,7 +507,7 @@ func (s *Service) GetUpdateStatusesByComputer(ctx context.Context, id string) (*
 // GetUpdateStatusesByMobileDeviceGroup retrieves update statuses for a mobile device group.
 // URL: GET /api/v1/managed-software-updates/update-statuses/mobile-device-groups/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-mobile-device-groups-id
-func (s *Service) GetUpdateStatusesByMobileDeviceGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+func (s *Service) GetUpdateStatusesByMobileDeviceGroup(ctx context.Context, id string) (*ResponseUpdateStatusList, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -530,7 +531,7 @@ func (s *Service) GetUpdateStatusesByMobileDeviceGroup(ctx context.Context, id s
 // GetUpdateStatusesByMobileDevice retrieves update statuses for a mobile device.
 // URL: GET /api/v1/managed-software-updates/update-statuses/mobile-devices/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses-mobile-devices-id
-func (s *Service) GetUpdateStatusesByMobileDevice(ctx context.Context, id string) (*ResponseUpdateStatusList, *interfaces.Response, error) {
+func (s *Service) GetUpdateStatusesByMobileDevice(ctx context.Context, id string) (*ResponseUpdateStatusList, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

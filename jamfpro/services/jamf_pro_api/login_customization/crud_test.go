@@ -23,7 +23,7 @@ func TestUnit_LoginCustomization_GetV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.IncludeCustomDisclaimer)
 	assert.Equal(t, "Accept", result.ActionText)
 }
@@ -34,7 +34,7 @@ func TestUnit_LoginCustomization_GetV1_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_LoginCustomization_UpdateV1_NilRequest(t *testing.T) {
@@ -61,6 +61,6 @@ func TestUnit_LoginCustomization_UpdateV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Updated Disclaimer Header", result.DisclaimerHeading)
 }

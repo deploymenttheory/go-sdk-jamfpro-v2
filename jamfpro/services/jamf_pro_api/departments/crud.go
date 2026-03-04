@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -20,44 +21,44 @@ type (
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the specified department by ID (Get specified Department object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceDepartment, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceDepartment, *resty.Response, error)
 
 		// CreateV1 creates a new department record (Create Department record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments
-		CreateV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV1 updates the specified department by ID (Update specified Department object).
 		//
 		// Returns the full updated department resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-departments-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *resty.Response, error)
 
 		// DeleteByIDV1 removes the specified department by ID (Remove specified Department record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-departments-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// GetDepartmentHistoryV1 returns the history object for the specified department.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id-history
-		GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddDepartmentHistoryNotesV1 adds notes to the specified department history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-id-history
-		AddDepartmentHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error)
+		AddDepartmentHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error)
 
 		// DeleteDepartmentsByIDV1 deletes multiple departments by their IDs.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-delete-multiple
-		DeleteDepartmentsByIDV1(ctx context.Context, req *DeleteDepartmentsByIDRequest) (*interfaces.Response, error)
+		DeleteDepartmentsByIDV1(ctx context.Context, req *DeleteDepartmentsByIDRequest) (*resty.Response, error)
 	}
 
 	// Service handles communication with the departments-related methods of the Jamf Pro API.
@@ -82,7 +83,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/departments
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-departments
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointDepartmentsV1
@@ -110,7 +111,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 returns the specified department by ID (Get specified Department object).
 // URL: GET /api/v1/departments/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDepartment, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDepartment, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("department ID is required")
 	}
@@ -135,7 +136,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDepartment
 // URL: POST /api/v1/departments
 // Body: JSON with name
 // https://developer.jamf.com/jamf-pro/reference/post_v1-departments
-func (s *Service) CreateV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -161,7 +162,7 @@ func (s *Service) CreateV1(ctx context.Context, request *RequestDepartment) (*Cr
 // URL: PUT /api/v1/departments/{id}
 // Body: JSON with name
 // https://developer.jamf.com/jamf-pro/reference/put_v1-departments-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -190,7 +191,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestD
 // DeleteByIDV1 removes the specified department by ID (Remove specified Department record).
 // URL: DELETE /api/v1/departments/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-departments-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("department ID is required")
 	}
@@ -213,7 +214,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 // URL: GET /api/v1/departments/{id}/history
 // Query Params: filter, sort, page, page-size (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id-history
-func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("department ID is required")
 	}
@@ -246,7 +247,7 @@ func (s *Service) GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQue
 // URL: POST /api/v1/departments/{id}/history
 // Body: JSON with note
 // https://developer.jamf.com/jamf-pro/reference/post_v1-departments-id-history
-func (s *Service) AddDepartmentHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error) {
+func (s *Service) AddDepartmentHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("department ID is required")
 	}
@@ -272,7 +273,7 @@ func (s *Service) AddDepartmentHistoryNotesV1(ctx context.Context, id string, re
 // DeleteDepartmentsByIDV1 deletes multiple departments by their IDs.
 // URL: POST /api/v1/departments/delete-multiple
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-delete-multiple
-func (s *Service) DeleteDepartmentsByIDV1(ctx context.Context, req *DeleteDepartmentsByIDRequest) (*interfaces.Response, error) {
+func (s *Service) DeleteDepartmentsByIDV1(ctx context.Context, req *DeleteDepartmentsByIDRequest) (*resty.Response, error) {
 	if req == nil || len(req.IDs) == 0 {
 		return nil, fmt.Errorf("department IDs are required")
 	}

@@ -60,7 +60,7 @@ func TestAcceptance_SelfServiceBrandingUpload_upload(t *testing.T) {
 
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.URL)
 	acc.LogTestSuccess(t, "Successfully uploaded branding image: %s", result.URL)
 }

@@ -6,10 +6,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -84,7 +84,7 @@ func TestAcceptance_MobileDevicePrestages_list_v3(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 	if result.TotalCount > 0 {
 		assert.NotNil(t, result.Results)
@@ -186,12 +186,12 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 			WarrantyDate:      "1970-01-01",
 			VersionLock:       1,
 		},
-		EnrollmentCustomizationID:       "0",
-		AutoAdvanceSetup:                boolPtr(false),
-		AllowPairing:                    boolPtr(true),
-		MultiUser:                       boolPtr(false),
-		Supervised:                      boolPtr(true),
-		MaximumSharedAccounts:           10,
+		EnrollmentCustomizationID:           "0",
+		AutoAdvanceSetup:                    boolPtr(false),
+		AllowPairing:                        boolPtr(true),
+		MultiUser:                           boolPtr(false),
+		Supervised:                          boolPtr(true),
+		MaximumSharedAccounts:               10,
 		ConfigureDeviceBeforeSetupAssistant: boolPtr(false),
 		Names: mobile_device_prestages.SubsetNames{
 			AssignNamesUsing:       "STATIC",
@@ -217,7 +217,7 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 		return
 	}
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode())
 	acc.LogTestSuccess(t, "Created mobile device prestage with ID: %s", created.ID)
 
 	id := created.ID
@@ -230,7 +230,7 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 	// Read by ID (with retry for eventual consistency)
 	acc.LogTestStage(t, "Read", "Getting mobile device prestage by ID")
 	var getByID *mobile_device_prestages.ResourceMobileDevicePrestage
-	var getResp *interfaces.Response
+	var getResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		getByID, getResp, getErr = svc.GetByIDV3(ctx, id)
@@ -238,7 +238,7 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, getByID)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	assert.Equal(t, name, getByID.DisplayName)
 	acc.LogTestSuccess(t, "Retrieved prestage by ID: %s", getByID.DisplayName)
 
@@ -256,7 +256,7 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 	scope, resp, err := svc.GetScopeByIDV2(ctx, id)
 	require.NoError(t, err)
 	require.NotNil(t, scope)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, id, scope.PrestageId)
 	acc.LogTestSuccess(t, "Retrieved scope - VersionLock: %d, Assignments: %d", scope.VersionLock, len(scope.Assignments))
 
@@ -270,7 +270,7 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	acc.LogTestSuccess(t, "Updated mobile device prestage")
 
 	// Verify Update
@@ -278,7 +278,7 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 	verifyUpdated, resp, err := svc.GetByIDV3(ctx, id)
 	require.NoError(t, err)
 	require.NotNil(t, verifyUpdated)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "999-888-7777", verifyUpdated.SupportPhoneNumber)
 	assert.Equal(t, "updated@company.com", verifyUpdated.SupportEmailAddress)
 	acc.LogTestSuccess(t, "Verified update - Phone: %s", verifyUpdated.SupportPhoneNumber)

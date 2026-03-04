@@ -20,7 +20,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.GreaterOrEqual(t, result.TotalCount, 0)
 		t.Logf("Found %d total accounts", result.TotalCount)
 	})
@@ -35,7 +35,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 
 		// Verify all returned accounts are enabled
 		for _, account := range result.Results {
@@ -53,7 +53,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 		result, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 
 		// Verify all returned accounts are administrators
 		for _, account := range result.Results {
@@ -72,7 +72,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 		result, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 
 		// Verify all returned accounts match the filter criteria
 		for _, account := range result.Results {
@@ -94,7 +94,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 		result, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		// Note: GetPaginated fetches all pages, so we should get all results
 		t.Logf("Retrieved %d accounts (pagination handled automatically)", len(result.Results))
 	})
@@ -108,7 +108,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 		result, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		t.Logf("Retrieved %d accounts sorted by realname descending", len(result.Results))
 	})
 }
@@ -136,7 +136,7 @@ func TestAcceptance_Accounts_crud(t *testing.T) {
 	created, resp, err := client.Accounts.CreateV1(context.Background(), createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 	t.Logf("Created account with ID: %s", created.ID)
 
@@ -152,7 +152,7 @@ func TestAcceptance_Accounts_crud(t *testing.T) {
 	retrieved, resp, err := client.Accounts.GetByIDV1(context.Background(), created.ID)
 	require.NoError(t, err)
 	require.NotNil(t, retrieved)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "testuser_acceptance", retrieved.Username)
 	t.Logf("Retrieved account: %s", retrieved.Username)
 
@@ -162,7 +162,7 @@ func TestAcceptance_Accounts_crud(t *testing.T) {
 	}
 	listResult, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, len(listResult.Results), 1, "Created account should appear in filtered list")
 	t.Logf("Found created account in list")
 }

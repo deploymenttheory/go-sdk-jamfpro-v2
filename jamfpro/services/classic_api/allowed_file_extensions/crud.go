@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,29 +17,29 @@ type (
 		// List returns all allowed file extensions.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextension
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified allowed file extension by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextensionbyid
-		GetByID(ctx context.Context, id int) (*ResourceAllowedFileExtension, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceAllowedFileExtension, *resty.Response, error)
 
 		// GetByExtension returns the allowed file extension matching the given extension string.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextensionbyname
-		GetByExtension(ctx context.Context, extension string) (*ResourceAllowedFileExtension, *interfaces.Response, error)
+		GetByExtension(ctx context.Context, extension string) (*ResourceAllowedFileExtension, *resty.Response, error)
 
 		// Create creates a new allowed file extension.
 		//
 		// Returns the created resource with its assigned ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createallowedfileextensionbyid
-		Create(ctx context.Context, req *RequestAllowedFileExtension) (*ResourceAllowedFileExtension, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestAllowedFileExtension) (*ResourceAllowedFileExtension, *resty.Response, error)
 
 		// DeleteByID removes the specified allowed file extension by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteallowedfileextensionbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 	}
 
 	// Service handles communication with the allowed file extension-related Classic API methods.
@@ -63,7 +64,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // List returns all allowed file extensions.
 // URL: GET /JSSResource/allowedfileextensions
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextension
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicAllowedFileExtensions
@@ -84,7 +85,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // GetByID returns the specified allowed file extension by ID.
 // URL: GET /JSSResource/allowedfileextensions/id/{id}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextensionbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAllowedFileExtension, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAllowedFileExtension, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("allowed file extension ID must be a positive integer")
 	}
@@ -109,7 +110,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAllowedFileExte
 // GetByExtension returns the allowed file extension matching the given extension string.
 // URL: GET /JSSResource/allowedfileextensions/extension/{extension}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextensionbyname
-func (s *Service) GetByExtension(ctx context.Context, extension string) (*ResourceAllowedFileExtension, *interfaces.Response, error) {
+func (s *Service) GetByExtension(ctx context.Context, extension string) (*ResourceAllowedFileExtension, *resty.Response, error) {
 	if extension == "" {
 		return nil, nil, fmt.Errorf("extension is required")
 	}
@@ -135,7 +136,7 @@ func (s *Service) GetByExtension(ctx context.Context, extension string) (*Resour
 // URL: POST /JSSResource/allowedfileextensions/id/0
 // Returns the created resource with its assigned ID.
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createallowedfileextensionbyid
-func (s *Service) Create(ctx context.Context, req *RequestAllowedFileExtension) (*ResourceAllowedFileExtension, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestAllowedFileExtension) (*ResourceAllowedFileExtension, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -160,7 +161,7 @@ func (s *Service) Create(ctx context.Context, req *RequestAllowedFileExtension) 
 // DeleteByID removes the specified allowed file extension by ID.
 // URL: DELETE /JSSResource/allowedfileextensions/id/{id}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteallowedfileextensionbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("allowed file extension ID must be a positive integer")
 	}

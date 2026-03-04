@@ -167,7 +167,7 @@ func TestAcceptance_AdvancedUserSearches_lifecycle(t *testing.T) {
 	require.NoError(t, err, "UpdateAdvancedUserSearchByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 6. UpdateByName (back to original name)
@@ -196,7 +196,7 @@ func TestAcceptance_AdvancedUserSearches_lifecycle(t *testing.T) {
 	require.NoError(t, err, "UpdateAdvancedUserSearchByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 7. GetByID — verify revert

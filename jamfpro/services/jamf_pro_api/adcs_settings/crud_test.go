@@ -27,7 +27,7 @@ func TestUnit_AdcsSettings_CreateV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, result.ID)
 	assert.Equal(t, "/api/v1/pki/adcs-settings/1", result.Href)
 }
@@ -56,7 +56,7 @@ func TestUnit_AdcsSettings_GetByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Test ADCS", result.DisplayName)
 	assert.Equal(t, "TestCA", result.CAName)
@@ -93,7 +93,7 @@ func TestUnit_AdcsSettings_UpdateByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_AdcsSettings_UpdateByIDV1_EmptyID(t *testing.T) {
@@ -135,7 +135,7 @@ func TestUnit_AdcsSettings_DeleteByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_AdcsSettings_DeleteByIDV1_EmptyID(t *testing.T) {
@@ -166,7 +166,7 @@ func TestUnit_AdcsSettings_ValidateServerCertificateV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_AdcsSettings_ValidateServerCertificateV1_NilRequest(t *testing.T) {
@@ -199,7 +199,7 @@ func TestUnit_AdcsSettings_ValidateClientCertificateV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_AdcsSettings_ValidateClientCertificateV1_NilRequest(t *testing.T) {
@@ -225,7 +225,7 @@ func TestUnit_AdcsSettings_GetDependenciesByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "Test Profile", result.Results[0].ConfigProfileName)
@@ -256,7 +256,7 @@ func TestUnit_AdcsSettings_GetHistoryByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "admin", result.Results[0].Username)
@@ -291,7 +291,7 @@ func TestUnit_AdcsSettings_AddHistoryNoteByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_AdcsSettings_AddHistoryNoteByIDV1_EmptyID(t *testing.T) {

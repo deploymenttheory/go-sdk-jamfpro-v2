@@ -30,7 +30,7 @@ func TestUnit_MobileDeviceEnrollmentProfile_GetDownloadProfileV1_Success(t *test
 	require.NotNil(t, data)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, data)
 	assert.Contains(t, string(data), "fake-profile-data-for-testing")
 }
@@ -53,7 +53,7 @@ func TestUnit_MobileDeviceEnrollmentProfile_GetDownloadProfileV1_NotFound(t *tes
 	assert.Error(t, err)
 	assert.Nil(t, data)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 	assert.Contains(t, err.Error(), "failed to download profile")
 }
 

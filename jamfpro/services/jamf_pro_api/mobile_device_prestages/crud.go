@@ -10,6 +10,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
+	"resty.dev/v3"
 )
 
 type (
@@ -23,79 +24,79 @@ type (
 		// This method automatically fetches all pages and returns the complete list.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-mobile-device-prestages
-		ListV3(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		ListV3(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV3 returns the mobile device prestage by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-mobile-device-prestages-id
-		GetByIDV3(ctx context.Context, id string) (*ResourceMobileDevicePrestage, *interfaces.Response, error)
+		GetByIDV3(ctx context.Context, id string) (*ResourceMobileDevicePrestage, *resty.Response, error)
 
 		// GetByNameV3 returns the mobile device prestage by display name.
 		//
 		// This is a convenience method that calls ListV3 and filters by DisplayName.
-		GetByNameV3(ctx context.Context, name string) (*ResourceMobileDevicePrestage, *interfaces.Response, error)
+		GetByNameV3(ctx context.Context, name string) (*ResourceMobileDevicePrestage, *resty.Response, error)
 
 		// CreateV3 creates a new mobile device prestage.
 		// Returns CreateResponse (id, href).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-mobile-device-prestages
-		CreateV3(ctx context.Context, prestage *ResourceMobileDevicePrestage) (*CreateResponse, *interfaces.Response, error)
+		CreateV3(ctx context.Context, prestage *ResourceMobileDevicePrestage) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV3 updates the mobile device prestage by ID.
 		// The current resource is fetched first so that all versionLock values
 		// are injected transparently. Callers do not need to supply versionLock.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-mobile-device-prestages-id
-		UpdateByIDV3(ctx context.Context, id string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *interfaces.Response, error)
+		UpdateByIDV3(ctx context.Context, id string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *resty.Response, error)
 
 		// UpdateByNameV3 updates the mobile device prestage by display name.
-		UpdateByNameV3(ctx context.Context, name string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *interfaces.Response, error)
+		UpdateByNameV3(ctx context.Context, name string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *resty.Response, error)
 
 		// DeleteByIDV3 deletes the mobile device prestage by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-mobile-device-prestages-id
-		DeleteByIDV3(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV3(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteByNameV3 deletes the mobile device prestage by display name.
-		DeleteByNameV3(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByNameV3(ctx context.Context, name string) (*resty.Response, error)
 
 		// GetScopeByIDV2 returns the device scope for the mobile device prestage by ID (v2 API).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-prestages-id-scope
-		GetScopeByIDV2(ctx context.Context, id string) (*ResourceDeviceScope, *interfaces.Response, error)
+		GetScopeByIDV2(ctx context.Context, id string) (*ResourceDeviceScope, *resty.Response, error)
 
 		// ReplaceScopeByIDV2 replaces the device scope for the mobile device prestage by ID (v2 API).
-		ReplaceScopeByIDV2(ctx context.Context, id string, request *RequestReplaceScope) (*ResourceDeviceScope, *interfaces.Response, error)
+		ReplaceScopeByIDV2(ctx context.Context, id string, request *RequestReplaceScope) (*ResourceDeviceScope, *resty.Response, error)
 
 		// AddScopeByIDV2 adds device scope (serial numbers) to the mobile device prestage by ID (v2 API).
-		AddScopeByIDV2(ctx context.Context, id string, request *RequestAddScope) (*ResourceDeviceScope, *interfaces.Response, error)
+		AddScopeByIDV2(ctx context.Context, id string, request *RequestAddScope) (*ResourceDeviceScope, *resty.Response, error)
 
 		// RemoveScopeByIDV2 removes device scope (serial numbers) from the mobile device prestage by ID (v2 API).
-		RemoveScopeByIDV2(ctx context.Context, id string, request *RequestRemoveScope) (*ResourceDeviceScope, *interfaces.Response, error)
+		RemoveScopeByIDV2(ctx context.Context, id string, request *RequestRemoveScope) (*ResourceDeviceScope, *resty.Response, error)
 
 		// GetAllSyncsV2 returns all prestage sync states for all mobile device prestages (v2 API).
-		GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *interfaces.Response, error)
+		GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *resty.Response, error)
 
 		// GetSyncsByIDV2 returns sync states for a specific mobile device prestage by ID (v2 API).
-		GetSyncsByIDV2(ctx context.Context, id string) ([]ResourcePrestageSync, *interfaces.Response, error)
+		GetSyncsByIDV2(ctx context.Context, id string) ([]ResourcePrestageSync, *resty.Response, error)
 
 		// GetLatestSyncByIDV2 returns the latest sync state for a mobile device prestage by ID (v2 API).
-		GetLatestSyncByIDV2(ctx context.Context, id string) (*ResourcePrestageSync, *interfaces.Response, error)
+		GetLatestSyncByIDV2(ctx context.Context, id string) (*ResourcePrestageSync, *resty.Response, error)
 
 		// GetAttachmentsByIDV3 returns attachments for a mobile device prestage by ID (v3 API).
-		GetAttachmentsByIDV3(ctx context.Context, id string) ([]ResourceAttachment, *interfaces.Response, error)
+		GetAttachmentsByIDV3(ctx context.Context, id string) ([]ResourceAttachment, *resty.Response, error)
 
 		// UploadAttachmentV3 uploads an attachment to a mobile device prestage by ID (v3 API).
-		UploadAttachmentV3(ctx context.Context, id string, fileReader io.Reader, fileSize int64, fileName string) (*ResourceAttachmentUpload, *interfaces.Response, error)
+		UploadAttachmentV3(ctx context.Context, id string, fileReader io.Reader, fileSize int64, fileName string) (*ResourceAttachmentUpload, *resty.Response, error)
 
 		// DeleteAttachmentsByIDV3 deletes attachments from a mobile device prestage by ID (v3 API).
-		DeleteAttachmentsByIDV3(ctx context.Context, id string, request *RequestDeleteAttachments) (*interfaces.Response, error)
+		DeleteAttachmentsByIDV3(ctx context.Context, id string, request *RequestDeleteAttachments) (*resty.Response, error)
 
 		// GetHistoryByIDV3 returns the history for a mobile device prestage by ID (v3 API).
-		GetHistoryByIDV3(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryByIDV3(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNoteByIDV3 adds a history note to a mobile device prestage by ID (v3 API).
-		AddHistoryNoteByIDV3(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *interfaces.Response, error)
+		AddHistoryNoteByIDV3(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *resty.Response, error)
 	}
 
 	// Service handles communication with the mobile device prestages-related methods of the Jamf Pro API.
@@ -116,7 +117,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v3/mobile-device-prestages
 // This method automatically fetches all pages and returns the complete list.
 // https://developer.jamf.com/jamf-pro/reference/get_v3-mobile-device-prestages
-func (s *Service) ListV3(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV3(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointMobileDevicePrestagesV3
@@ -146,7 +147,7 @@ func (s *Service) ListV3(ctx context.Context) (*ListResponse, *interfaces.Respon
 // GetByIDV3 returns the mobile device prestage by ID.
 // URL: GET /api/v3/mobile-device-prestages/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v3-mobile-device-prestages-id
-func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceMobileDevicePrestage, *interfaces.Response, error) {
+func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceMobileDevicePrestage, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -169,7 +170,7 @@ func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceMobileDevi
 
 // GetByNameV3 returns the mobile device prestage by display name.
 // This is a convenience method that calls ListV3 and filters by DisplayName.
-func (s *Service) GetByNameV3(ctx context.Context, name string) (*ResourceMobileDevicePrestage, *interfaces.Response, error) {
+func (s *Service) GetByNameV3(ctx context.Context, name string) (*ResourceMobileDevicePrestage, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -191,7 +192,7 @@ func (s *Service) GetByNameV3(ctx context.Context, name string) (*ResourceMobile
 // CreateV3 creates a new mobile device prestage.
 // URL: POST /api/v3/mobile-device-prestages
 // https://developer.jamf.com/jamf-pro/reference/post_v3-mobile-device-prestages
-func (s *Service) CreateV3(ctx context.Context, prestage *ResourceMobileDevicePrestage) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV3(ctx context.Context, prestage *ResourceMobileDevicePrestage) (*CreateResponse, *resty.Response, error) {
 	if prestage == nil {
 		return nil, nil, fmt.Errorf("prestage is required")
 	}
@@ -223,7 +224,7 @@ func (s *Service) CreateV3(ctx context.Context, prestage *ResourceMobileDevicePr
 // transparently. Callers do not need to supply versionLock.
 // URL: PUT /api/v3/mobile-device-prestages/{id}
 // https://developer.jamf.com/jamf-pro/reference/put_v3-mobile-device-prestages-id
-func (s *Service) UpdateByIDV3(ctx context.Context, id string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV3(ctx context.Context, id string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -265,7 +266,7 @@ func (s *Service) UpdateByIDV3(ctx context.Context, id string, prestage *Resourc
 // UpdateByNameV3 updates the mobile device prestage by display name.
 // The resource fetched during the name lookup is reused directly for version
 // lock injection, avoiding a second round-trip to the API.
-func (s *Service) UpdateByNameV3(ctx context.Context, name string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *interfaces.Response, error) {
+func (s *Service) UpdateByNameV3(ctx context.Context, name string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -307,7 +308,7 @@ func (s *Service) UpdateByNameV3(ctx context.Context, name string, prestage *Res
 // DeleteByIDV3 deletes the mobile device prestage by ID.
 // URL: DELETE /api/v3/mobile-device-prestages/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v3-mobile-device-prestages-id
-func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -327,7 +328,7 @@ func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*interfaces.Resp
 }
 
 // DeleteByNameV3 deletes the mobile device prestage by display name.
-func (s *Service) DeleteByNameV3(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByNameV3(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("name is required")
 	}
@@ -343,7 +344,7 @@ func (s *Service) DeleteByNameV3(ctx context.Context, name string) (*interfaces.
 // GetScopeByIDV2 returns the device scope for the mobile device prestage by ID.
 // URL: GET /api/v2/mobile-device-prestages/{id}/scope
 // https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-prestages-id-scope
-func (s *Service) GetScopeByIDV2(ctx context.Context, id string) (*ResourceDeviceScope, *interfaces.Response, error) {
+func (s *Service) GetScopeByIDV2(ctx context.Context, id string) (*ResourceDeviceScope, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -367,7 +368,7 @@ func (s *Service) GetScopeByIDV2(ctx context.Context, id string) (*ResourceDevic
 // ReplaceScopeByIDV2 replaces the device scope for the mobile device prestage by ID.
 // Fetches the current scope first to obtain versionLock and injects it transparently.
 // URL: PUT /api/v2/mobile-device-prestages/{id}/scope
-func (s *Service) ReplaceScopeByIDV2(ctx context.Context, id string, request *RequestReplaceScope) (*ResourceDeviceScope, *interfaces.Response, error) {
+func (s *Service) ReplaceScopeByIDV2(ctx context.Context, id string, request *RequestReplaceScope) (*ResourceDeviceScope, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -401,7 +402,7 @@ func (s *Service) ReplaceScopeByIDV2(ctx context.Context, id string, request *Re
 
 // AddScopeByIDV2 adds device scope (serial numbers) to the mobile device prestage by ID.
 // URL: POST /api/v2/mobile-device-prestages/{id}/scope
-func (s *Service) AddScopeByIDV2(ctx context.Context, id string, request *RequestAddScope) (*ResourceDeviceScope, *interfaces.Response, error) {
+func (s *Service) AddScopeByIDV2(ctx context.Context, id string, request *RequestAddScope) (*ResourceDeviceScope, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -435,7 +436,7 @@ func (s *Service) AddScopeByIDV2(ctx context.Context, id string, request *Reques
 
 // RemoveScopeByIDV2 removes device scope (serial numbers) from the mobile device prestage by ID.
 // URL: POST /api/v2/mobile-device-prestages/{id}/scope/delete-multiple
-func (s *Service) RemoveScopeByIDV2(ctx context.Context, id string, request *RequestRemoveScope) (*ResourceDeviceScope, *interfaces.Response, error) {
+func (s *Service) RemoveScopeByIDV2(ctx context.Context, id string, request *RequestRemoveScope) (*ResourceDeviceScope, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -469,7 +470,7 @@ func (s *Service) RemoveScopeByIDV2(ctx context.Context, id string, request *Req
 
 // GetAllSyncsV2 returns all prestage sync states for all mobile device prestages.
 // URL: GET /api/v2/mobile-device-prestages/syncs
-func (s *Service) GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *interfaces.Response, error) {
+func (s *Service) GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *resty.Response, error) {
 	endpoint := EndpointMobileDevicePrestagesV2 + "/syncs"
 
 	var result []ResourcePrestageSync
@@ -488,7 +489,7 @@ func (s *Service) GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *i
 
 // GetSyncsByIDV2 returns sync states for a specific mobile device prestage by ID.
 // URL: GET /api/v2/mobile-device-prestages/{id}/syncs
-func (s *Service) GetSyncsByIDV2(ctx context.Context, id string) ([]ResourcePrestageSync, *interfaces.Response, error) {
+func (s *Service) GetSyncsByIDV2(ctx context.Context, id string) ([]ResourcePrestageSync, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -511,7 +512,7 @@ func (s *Service) GetSyncsByIDV2(ctx context.Context, id string) ([]ResourcePres
 
 // GetLatestSyncByIDV2 returns the latest sync state for a mobile device prestage by ID.
 // URL: GET /api/v2/mobile-device-prestages/{id}/syncs/latest
-func (s *Service) GetLatestSyncByIDV2(ctx context.Context, id string) (*ResourcePrestageSync, *interfaces.Response, error) {
+func (s *Service) GetLatestSyncByIDV2(ctx context.Context, id string) (*ResourcePrestageSync, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -534,7 +535,7 @@ func (s *Service) GetLatestSyncByIDV2(ctx context.Context, id string) (*Resource
 
 // GetAttachmentsByIDV3 returns attachments for a mobile device prestage by ID.
 // URL: GET /api/v3/mobile-device-prestages/{id}/attachments
-func (s *Service) GetAttachmentsByIDV3(ctx context.Context, id string) ([]ResourceAttachment, *interfaces.Response, error) {
+func (s *Service) GetAttachmentsByIDV3(ctx context.Context, id string) ([]ResourceAttachment, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -557,7 +558,7 @@ func (s *Service) GetAttachmentsByIDV3(ctx context.Context, id string) ([]Resour
 
 // UploadAttachmentV3 uploads an attachment to a mobile device prestage by ID.
 // URL: POST /api/v3/mobile-device-prestages/{id}/attachments
-func (s *Service) UploadAttachmentV3(ctx context.Context, id string, fileReader io.Reader, fileSize int64, fileName string) (*ResourceAttachmentUpload, *interfaces.Response, error) {
+func (s *Service) UploadAttachmentV3(ctx context.Context, id string, fileReader io.Reader, fileSize int64, fileName string) (*ResourceAttachmentUpload, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -585,7 +586,7 @@ func (s *Service) UploadAttachmentV3(ctx context.Context, id string, fileReader 
 }
 
 // UploadAttachmentFromFileV3 opens the file at filePath and uploads it via UploadAttachmentV3.
-func (s *Service) UploadAttachmentFromFileV3(ctx context.Context, id string, filePath string) (*ResourceAttachmentUpload, *interfaces.Response, error) {
+func (s *Service) UploadAttachmentFromFileV3(ctx context.Context, id string, filePath string) (*ResourceAttachmentUpload, *resty.Response, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, nil, fmt.Errorf("open attachment file: %w", err)
@@ -607,7 +608,7 @@ func (s *Service) UploadAttachmentFromFileV3(ctx context.Context, id string, fil
 
 // DeleteAttachmentsByIDV3 deletes attachments from a mobile device prestage by ID.
 // URL: POST /api/v3/mobile-device-prestages/{id}/attachments/delete-multiple
-func (s *Service) DeleteAttachmentsByIDV3(ctx context.Context, id string, request *RequestDeleteAttachments) (*interfaces.Response, error) {
+func (s *Service) DeleteAttachmentsByIDV3(ctx context.Context, id string, request *RequestDeleteAttachments) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -633,7 +634,7 @@ func (s *Service) DeleteAttachmentsByIDV3(ctx context.Context, id string, reques
 // GetHistoryByIDV3 returns the history for a mobile device prestage by ID with pagination.
 // URL: GET /api/v3/mobile-device-prestages/{id}/history
 // Query params: page, page-size, sort, filter
-func (s *Service) GetHistoryByIDV3(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryByIDV3(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -665,7 +666,7 @@ func (s *Service) GetHistoryByIDV3(ctx context.Context, id string, query map[str
 
 // AddHistoryNoteByIDV3 adds a history note to a mobile device prestage by ID.
 // URL: POST /api/v3/mobile-device-prestages/{id}/history
-func (s *Service) AddHistoryNoteByIDV3(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *interfaces.Response, error) {
+func (s *Service) AddHistoryNoteByIDV3(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

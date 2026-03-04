@@ -26,7 +26,7 @@ func TestUnit_CloudLdapKeystore_ValidateV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "PKCS12", result.Type)
 	assert.Equal(t, "keystore.p12", result.FileName)
 	assert.NotEmpty(t, result.Subject)

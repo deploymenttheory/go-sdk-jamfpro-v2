@@ -8,6 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -22,42 +23,42 @@ type (
 		// Allowed sort/filter fields: id, displayName.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-integrations
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the API integration by ID (Get API Integration by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getoneapiintegration
-		GetByIDV1(ctx context.Context, id string) (*ResourceApiIntegration, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceApiIntegration, *resty.Response, error)
 
 		// GetByNameV1 returns the API integration by display name (searches first page of ListV1).
-		GetByNameV1(ctx context.Context, name string) (*ResourceApiIntegration, *interfaces.Response, error)
+		GetByNameV1(ctx context.Context, name string) (*ResourceApiIntegration, *resty.Response, error)
 
 		// CreateV1 creates a new API integration (Create API Integration).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateapiintegration
-		CreateV1(ctx context.Context, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestApiIntegration) (*ResourceApiIntegration, *resty.Response, error)
 
 		// UpdateByIDV1 updates the API integration by ID (Update API Integration by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/putupdateapiintegration
-		UpdateByIDV1(ctx context.Context, id string, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestApiIntegration) (*ResourceApiIntegration, *resty.Response, error)
 
 		// UpdateByNameV1 updates the API integration by display name.
-		UpdateByNameV1(ctx context.Context, name string, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error)
+		UpdateByNameV1(ctx context.Context, name string, request *RequestApiIntegration) (*ResourceApiIntegration, *resty.Response, error)
 
 		// DeleteByIDV1 deletes the API integration by ID (Delete API Integration by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/deleteapiintegration
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteByNameV1 deletes the API integration by display name.
-		DeleteByNameV1(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByNameV1(ctx context.Context, name string) (*resty.Response, error)
 
 		// RefreshClientCredentialsByIDV1 creates client credentials for the API integration by ID (Create client credentials).
 		// POST /api/v1/api-integrations/{id}/client-credentials
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateclientcredentials
-		RefreshClientCredentialsByIDV1(ctx context.Context, id string) (*ResourceClientCredentials, *interfaces.Response, error)
+		RefreshClientCredentialsByIDV1(ctx context.Context, id string) (*ResourceClientCredentials, *resty.Response, error)
 	}
 
 	// Service handles communication with the API integrations-related methods of the Jamf Pro API.
@@ -79,7 +80,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // Note: page and page-size are managed internally by GetPaginated.
 // https://developer.jamf.com/jamf-pro/reference/get_v1-api-integrations
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointApiIntegrationsV1
@@ -110,7 +111,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 returns the API integration by ID.
 // URL: GET /api/v1/api-integrations/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getoneapiintegration
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceApiIntegration, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceApiIntegration, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -131,7 +132,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceApiIntegra
 }
 
 // GetByNameV1 returns the API integration by display name (searches first page).
-func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceApiIntegration, *interfaces.Response, error) {
+func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceApiIntegration, *resty.Response, error) {
 	list, resp, err := s.ListV1(ctx, nil)
 	if err != nil {
 		return nil, resp, err
@@ -147,7 +148,7 @@ func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceApiInt
 // CreateV1 creates a new API integration.
 // URL: POST /api/v1/api-integrations
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateapiintegration
-func (s *Service) CreateV1(ctx context.Context, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestApiIntegration) (*ResourceApiIntegration, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -171,7 +172,7 @@ func (s *Service) CreateV1(ctx context.Context, request *RequestApiIntegration) 
 // UpdateByIDV1 updates the API integration by ID.
 // URL: PUT /api/v1/api-integrations/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/putupdateapiintegration
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestApiIntegration) (*ResourceApiIntegration, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -195,7 +196,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestA
 }
 
 // UpdateByNameV1 updates the API integration by display name.
-func (s *Service) UpdateByNameV1(ctx context.Context, name string, request *RequestApiIntegration) (*ResourceApiIntegration, *interfaces.Response, error) {
+func (s *Service) UpdateByNameV1(ctx context.Context, name string, request *RequestApiIntegration) (*ResourceApiIntegration, *resty.Response, error) {
 	existing, resp, err := s.GetByNameV1(ctx, name)
 	if err != nil {
 		return nil, resp, err
@@ -207,7 +208,7 @@ func (s *Service) UpdateByNameV1(ctx context.Context, name string, request *Requ
 // DeleteByIDV1 deletes the API integration by ID.
 // URL: DELETE /api/v1/api-integrations/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/deleteapiintegration
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -226,7 +227,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 }
 
 // DeleteByNameV1 deletes the API integration by display name.
-func (s *Service) DeleteByNameV1(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByNameV1(ctx context.Context, name string) (*resty.Response, error) {
 	existing, resp, err := s.GetByNameV1(ctx, name)
 	if err != nil {
 		return resp, err
@@ -238,7 +239,7 @@ func (s *Service) DeleteByNameV1(ctx context.Context, name string) (*interfaces.
 // RefreshClientCredentialsByIDV1 creates new client credentials for the API integration by ID.
 // URL: POST /api/v1/api-integrations/{id}/client-credentials
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateclientcredentials
-func (s *Service) RefreshClientCredentialsByIDV1(ctx context.Context, id string) (*ResourceClientCredentials, *interfaces.Response, error) {
+func (s *Service) RefreshClientCredentialsByIDV1(ctx context.Context, id string) (*ResourceClientCredentials, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

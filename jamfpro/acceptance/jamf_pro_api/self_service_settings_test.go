@@ -18,7 +18,7 @@ func TestAcceptance_SelfServiceSettings_get(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_SelfServiceSettings_update(t *testing.T) {
@@ -36,7 +36,7 @@ func TestAcceptance_SelfServiceSettings_update(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	request.ConfigurationSettings.NotificationsEnabled = current.ConfigurationSettings.NotificationsEnabled
 	_, _, _ = svc.Update(ctx, &request)

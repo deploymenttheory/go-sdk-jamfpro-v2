@@ -67,7 +67,7 @@ func TestAcceptance_GSXConnection_get_and_update(t *testing.T) {
 	original, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, original)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Skip test if GSX connection is not properly configured
 	if original.Username == "" || original.ServiceAccountNo == "" || original.GsxKeystore.Name == "" {
@@ -92,7 +92,7 @@ func TestAcceptance_GSXConnection_get_and_update(t *testing.T) {
 	updated, resp, err := svc.UpdateV1(ctx, &modified)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify update was applied
 	assert.Equal(t, modified.Enabled, updated.Enabled)
@@ -100,7 +100,7 @@ func TestAcceptance_GSXConnection_get_and_update(t *testing.T) {
 	// Get again to verify persistence
 	current, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, modified.Enabled, current.Enabled)
 }
 
@@ -119,7 +119,7 @@ func TestAcceptance_GSXConnection_history(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
-		assert.Equal(t, 201, resp.StatusCode)
+		assert.Equal(t, 201, resp.StatusCode())
 		assert.NotEmpty(t, result.ID)
 		t.Logf("Added history note with ID: %s", result.ID)
 	})
@@ -129,7 +129,7 @@ func TestAcceptance_GSXConnection_history(t *testing.T) {
 		history, resp, err := svc.GetHistoryV1(ctx, nil)
 		require.NoError(t, err)
 		require.NotNil(t, history)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 
 		if len(history.Results) > 0 {
@@ -145,7 +145,7 @@ func TestAcceptance_GSXConnection_history(t *testing.T) {
 		rsqlQuery := map[string]string{"sort": "date:desc"}
 		historyFiltered, resp, err := svc.GetHistoryV1(ctx, rsqlQuery)
 		require.NoError(t, err)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.NotNil(t, historyFiltered)
 		assert.GreaterOrEqual(t, historyFiltered.TotalCount, 1)
 	})

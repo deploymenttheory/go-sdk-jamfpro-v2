@@ -23,7 +23,7 @@ func TestUnit_ApiAuthorization_GetV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.Account.ID)
 	assert.Equal(t, "admin", result.Account.Username)
 	assert.Equal(t, "IT Bob", result.Account.RealName)

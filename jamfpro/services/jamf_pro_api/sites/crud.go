@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,14 +18,14 @@ type (
 		// ListV1 returns all sites.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites
-		ListV1(ctx context.Context) ([]ResourceSite, *interfaces.Response, error)
+		ListV1(ctx context.Context) ([]ResourceSite, *resty.Response, error)
 
 		// GetObjectsByIDV1 returns paginated objects for a site.
 		//
 		// Query params: page, page-size, sort, filter (RSQL)
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites-id-objects
-		GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ObjectsListResponse, *interfaces.Response, error)
+		GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ObjectsListResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the sites-related methods of the Jamf Pro API.
@@ -43,7 +44,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListV1 returns all sites.
 // URL: GET /api/v1/sites
-func (s *Service) ListV1(ctx context.Context) ([]ResourceSite, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context) ([]ResourceSite, *resty.Response, error) {
 	endpoint := EndpointSitesV1
 
 	headers := map[string]string{
@@ -61,7 +62,7 @@ func (s *Service) ListV1(ctx context.Context) ([]ResourceSite, *interfaces.Respo
 
 // GetObjectsByIDV1 returns paginated objects for a site.
 // URL: GET /api/v1/sites/{id}/objects
-func (s *Service) GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ObjectsListResponse, *interfaces.Response, error) {
+func (s *Service) GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ObjectsListResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

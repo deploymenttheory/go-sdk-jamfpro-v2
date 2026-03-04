@@ -65,7 +65,7 @@ func TestAcceptance_Bookmarks_list_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
@@ -86,7 +86,7 @@ func TestAcceptance_Bookmarks_list_with_rsql_filter(t *testing.T) {
 	}
 
 	created, createResp, err := svc.CreateV1(ctx, bm)
-	if err != nil && createResp != nil && createResp.StatusCode == 400 {
+	if err != nil && createResp != nil && createResp.StatusCode() == 400 {
 		t.Skip("Bookmarks create not available in this tenant; skipping RSQL filter test")
 	}
 	require.NoError(t, err)
@@ -185,7 +185,7 @@ func TestAcceptance_Bookmarks_lifecycle(t *testing.T) {
 		DisplayInBrowser: &displayInBrowser,
 	}
 	created, createResp, err := svc.CreateV1(ctx, bm)
-	if err != nil && createResp != nil && createResp.StatusCode == 400 {
+	if err != nil && createResp != nil && createResp.StatusCode() == 400 {
 		t.Skip("Bookmarks create not available in this tenant; skipping lifecycle")
 	}
 	require.NoError(t, err)

@@ -51,7 +51,7 @@ func TestAcceptance_ApiAuthorization_get_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	assert.NotEmpty(t, result.Account.Username, "account username should not be empty")
 	assert.NotEmpty(t, result.AuthenticationType, "authentication type should not be empty")

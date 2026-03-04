@@ -7,10 +7,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_request"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -86,7 +86,7 @@ func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "GetByID", "Getting form input field by ID=%d", fieldID)
 
 	var fetched *app_request.ResourceFormInputField
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetFormInputFieldByIDV1(ctx, fieldID)

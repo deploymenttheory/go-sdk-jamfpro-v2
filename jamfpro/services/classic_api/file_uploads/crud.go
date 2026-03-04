@@ -8,6 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 // fileUploadFormFieldName is the form field name expected by the Classic API file uploads endpoint.
@@ -31,7 +32,7 @@ type (
 		// Note: peripherals resource only supports ResourceIDTypeID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/fileuploads
-		CreateAttachment(ctx context.Context, resource string, idType ResourceIDType, identifier string, filePath string, forceIpaUpload bool) (*interfaces.Response, error)
+		CreateAttachment(ctx context.Context, resource string, idType ResourceIDType, identifier string, filePath string, forceIpaUpload bool) (*resty.Response, error)
 	}
 
 	// Service handles communication with the file-uploads-related Classic API methods.
@@ -53,7 +54,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: POST /JSSResource/fileuploads/{resource}/{idType}/{identifier}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/fileuploads
-func (s *Service) CreateAttachment(ctx context.Context, resource string, idType ResourceIDType, identifier string, filePath string, forceIpaUpload bool) (*interfaces.Response, error) {
+func (s *Service) CreateAttachment(ctx context.Context, resource string, idType ResourceIDType, identifier string, filePath string, forceIpaUpload bool) (*resty.Response, error) {
 	// Validate resource
 	validResource := false
 	for _, r := range ValidFileUploadResources {

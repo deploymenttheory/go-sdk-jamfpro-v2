@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,27 +17,27 @@ type (
 		// List returns all static mobile device groups (Get Static Mobile Device Group objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-static-groups
-		List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified static mobile device group by ID (Get specified Static Mobile Device Group object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-static-groups-id
-		GetByID(ctx context.Context, id string) (*ResourceStaticMobileDeviceGroup, *interfaces.Response, error)
+		GetByID(ctx context.Context, id string) (*ResourceStaticMobileDeviceGroup, *resty.Response, error)
 
 		// Create creates a new static mobile device group (Create Static Mobile Device Group record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mobile-device-groups-static-groups
-		Create(ctx context.Context, request *RequestStaticMobileDeviceGroup) (*CreateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, request *RequestStaticMobileDeviceGroup) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByID updates the specified static mobile device group by ID (Update specified Static Mobile Device Group object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-mobile-device-groups-static-groups-id
-		UpdateByID(ctx context.Context, id string, request *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id string, request *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *resty.Response, error)
 
 		// DeleteByID removes the specified static mobile device group by ID (Remove specified Static Mobile Device Group record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-mobile-device-groups-static-groups-id
-		DeleteByID(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the static mobile device groups-related methods of the Jamf Pro API.
@@ -55,7 +56,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns all static mobile device groups.
 // URL: GET /api/v2/mobile-device-groups/static-groups
-func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointStaticGroupsV2
@@ -74,7 +75,7 @@ func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListR
 
 // GetByID returns the specified static mobile device group by ID.
 // URL: GET /api/v2/mobile-device-groups/static-groups/{id}
-func (s *Service) GetByID(ctx context.Context, id string) (*ResourceStaticMobileDeviceGroup, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id string) (*ResourceStaticMobileDeviceGroup, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("static mobile device group ID is required")
 	}
@@ -97,7 +98,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResourceStaticMobile
 
 // Create creates a new static mobile device group.
 // URL: POST /api/v2/mobile-device-groups/static-groups
-func (s *Service) Create(ctx context.Context, request *RequestStaticMobileDeviceGroup) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, request *RequestStaticMobileDeviceGroup) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -125,7 +126,7 @@ func (s *Service) Create(ctx context.Context, request *RequestStaticMobileDevice
 
 // UpdateByID updates the specified static mobile device group by ID (PATCH).
 // URL: PATCH /api/v2/mobile-device-groups/static-groups/{id}
-func (s *Service) UpdateByID(ctx context.Context, id string, request *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id string, request *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -157,7 +158,7 @@ func (s *Service) UpdateByID(ctx context.Context, id string, request *RequestSta
 
 // DeleteByID removes the specified static mobile device group by ID.
 // URL: DELETE /api/v2/mobile-device-groups/static-groups/{id}
-func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("static mobile device group ID is required")
 	}

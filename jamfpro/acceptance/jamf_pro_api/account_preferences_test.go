@@ -18,7 +18,7 @@ func TestAcceptance_AccountPreferences_get_v3(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.Language)
 }
 
@@ -36,7 +36,7 @@ func TestAcceptance_AccountPreferences_update_v2(t *testing.T) {
 	updated, resp, err := svc.UpdateV3(ctx, &request)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.True(t, resp.StatusCode == 200 || resp.StatusCode == 204, "expected 200 or 204, got %d", resp.StatusCode)
+	assert.True(t, resp.StatusCode() == 200 || resp.StatusCode() == 204, "expected 200 or 204, got %d", resp.StatusCode())
 	_ = updated
 
 	// Restore original

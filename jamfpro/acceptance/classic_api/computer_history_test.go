@@ -43,7 +43,7 @@ func TestAcceptance_ComputerHistory_get_by_id(t *testing.T) {
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, history)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, history.General.Name, "computer name should be populated")
 	acc.LogTestSuccess(t, "Computer history retrieved: ID=%s name=%q", computerID, history.General.Name)
 }
@@ -80,7 +80,7 @@ func TestAcceptance_ComputerHistory_get_by_id_and_subset(t *testing.T) {
 	require.NoError(t, err, "GetByIDAndSubset should not return an error")
 	require.NotNil(t, history)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, history.General.Name)
 	acc.LogTestSuccess(t, "Computer history subset retrieved: ID=%s", computerID)
 }
@@ -114,7 +114,7 @@ func TestAcceptance_ComputerHistory_get_by_name(t *testing.T) {
 	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, history)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, computerName, history.General.Name)
 	acc.LogTestSuccess(t, "Computer history retrieved by name: %q", computerName)
 }

@@ -10,7 +10,10 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -140,68 +143,71 @@ func (m *MobileDeviceConfigurationProfilesMock) RegisterConflictErrorMock() {
 
 // ---- interfaces.HTTPClient implementation ----
 
-func (m *MobileDeviceConfigurationProfilesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *MobileDeviceConfigurationProfilesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
 	if mergePage != nil {
-		if err := mergePage(resp.Body); err != nil {
+		body := resp.Bytes()
+		if err := mergePage(body); err != nil {
 			return resp, err
 		}
 	}
 	return resp, nil
 }
 
-func (m *MobileDeviceConfigurationProfilesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
-func (m *MobileDeviceConfigurationProfilesMock) InvalidateToken() error                     { return nil }
-func (m *MobileDeviceConfigurationProfilesMock) KeepAliveToken() error                      { return nil }
-func (m *MobileDeviceConfigurationProfilesMock) GetLogger() *zap.Logger                     { return m.logger }
+func (m *MobileDeviceConfigurationProfilesMock) RSQLBuilder() interfaces.RSQLFilterBuilder {
+	return nil
+}
+func (m *MobileDeviceConfigurationProfilesMock) InvalidateToken() error { return nil }
+func (m *MobileDeviceConfigurationProfilesMock) KeepAliveToken() error  { return nil }
+func (m *MobileDeviceConfigurationProfilesMock) GetLogger() *zap.Logger { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -234,23 +240,15 @@ func (m *MobileDeviceConfigurationProfilesMock) registerError(method, path strin
 
 // dispatch looks up the registered response and either unmarshals the XML body
 // into result or returns an error depending on the registration type.
-func (m *MobileDeviceConfigurationProfilesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *MobileDeviceConfigurationProfilesMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/xml"}},
-			Body:       []byte(`<error>no mock registered</error>`),
-		}, fmt.Errorf("MobileDeviceConfigurationProfilesMock: no response registered for %s %s", method, path)
+		headers := http.Header{"Content-Type": {mime.ApplicationXML}}
+		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("MobileDeviceConfigurationProfilesMock: no response registered for %s %s", method, path)
 	}
 
-	resp := &interfaces.Response{
-		StatusCode: r.statusCode,
-		Status:     fmt.Sprintf("%d", r.statusCode),
-		Headers:    http.Header{"Content-Type": {"application/xml"}},
-		Body:       r.rawBody,
-	}
+	headers := http.Header{"Content-Type": {mime.ApplicationXML}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

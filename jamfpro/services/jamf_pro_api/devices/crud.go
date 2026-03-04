@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,7 +17,7 @@ type (
 		// GetGroupsV1 returns a list of groups that the specified device belongs to.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-devices-id-groups
-		GetGroupsV1(ctx context.Context, id string) ([]ResourceGroup, *interfaces.Response, error)
+		GetGroupsV1(ctx context.Context, id string) ([]ResourceGroup, *resty.Response, error)
 	}
 
 	// Service handles communication with the devices-related methods of the Jamf Pro API.
@@ -43,7 +44,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Response: array of objects with id and name.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-devices-id-groups
-func (s *Service) GetGroupsV1(ctx context.Context, id string) ([]ResourceGroup, *interfaces.Response, error) {
+func (s *Service) GetGroupsV1(ctx context.Context, id string) ([]ResourceGroup, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

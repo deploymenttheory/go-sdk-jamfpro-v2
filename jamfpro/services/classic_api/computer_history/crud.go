@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,52 +18,52 @@ type (
 		// GetByID retrieves computer history by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
-		GetByID(ctx context.Context, id string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetByID(ctx context.Context, id string) (*ResourceComputerHistory, *resty.Response, error)
 
 		// GetByIDAndSubset retrieves a subset of computer history by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
-		GetByIDAndSubset(ctx context.Context, id string, subset string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetByIDAndSubset(ctx context.Context, id string, subset string) (*ResourceComputerHistory, *resty.Response, error)
 
 		// GetByName retrieves computer history by computer name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
-		GetByName(ctx context.Context, name string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceComputerHistory, *resty.Response, error)
 
 		// GetByNameAndSubset retrieves a subset of computer history by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
-		GetByNameAndSubset(ctx context.Context, name string, subset string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetByNameAndSubset(ctx context.Context, name string, subset string) (*ResourceComputerHistory, *resty.Response, error)
 
 		// GetByUDID retrieves computer history by UDID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
-		GetByUDID(ctx context.Context, udid string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetByUDID(ctx context.Context, udid string) (*ResourceComputerHistory, *resty.Response, error)
 
 		// GetByUDIDAndSubset retrieves a subset of computer history by UDID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
-		GetByUDIDAndSubset(ctx context.Context, udid string, subset string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetByUDIDAndSubset(ctx context.Context, udid string, subset string) (*ResourceComputerHistory, *resty.Response, error)
 
 		// GetBySerialNumber retrieves computer history by serial number.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
-		GetBySerialNumber(ctx context.Context, serialNumber string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetBySerialNumber(ctx context.Context, serialNumber string) (*ResourceComputerHistory, *resty.Response, error)
 
 		// GetBySerialNumberAndSubset retrieves a subset of computer history by serial number.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
-		GetBySerialNumberAndSubset(ctx context.Context, serialNumber string, subset string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetBySerialNumberAndSubset(ctx context.Context, serialNumber string, subset string) (*ResourceComputerHistory, *resty.Response, error)
 
 		// GetByMACAddress retrieves computer history by MAC address.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
-		GetByMACAddress(ctx context.Context, macAddress string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetByMACAddress(ctx context.Context, macAddress string) (*ResourceComputerHistory, *resty.Response, error)
 
 		// GetByMACAddressAndSubset retrieves a subset of computer history by MAC address.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
-		GetByMACAddressAndSubset(ctx context.Context, macAddress string, subset string) (*ResourceComputerHistory, *interfaces.Response, error)
+		GetByMACAddressAndSubset(ctx context.Context, macAddress string, subset string) (*ResourceComputerHistory, *resty.Response, error)
 	}
 
 	// Service handles communication with the computer-history-related Classic API methods.
@@ -88,7 +89,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/computerhistory/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
-func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerHistory, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("computer history ID cannot be empty")
 	}
@@ -99,7 +100,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerHist
 // URL: GET /JSSResource/computerhistory/id/{id}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
-func (s *Service) GetByIDAndSubset(ctx context.Context, id string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetByIDAndSubset(ctx context.Context, id string, subset string) (*ResourceComputerHistory, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("computer history ID cannot be empty")
 	}
@@ -113,7 +114,7 @@ func (s *Service) GetByIDAndSubset(ctx context.Context, id string, subset string
 // URL: GET /JSSResource/computerhistory/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceComputerHistory, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("computer name cannot be empty")
 	}
@@ -124,7 +125,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceComputer
 // URL: GET /JSSResource/computerhistory/name/{name}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
-func (s *Service) GetByNameAndSubset(ctx context.Context, name string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetByNameAndSubset(ctx context.Context, name string, subset string) (*ResourceComputerHistory, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("computer name cannot be empty")
 	}
@@ -138,7 +139,7 @@ func (s *Service) GetByNameAndSubset(ctx context.Context, name string, subset st
 // URL: GET /JSSResource/computerhistory/udid/{udid}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
-func (s *Service) GetByUDID(ctx context.Context, udid string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetByUDID(ctx context.Context, udid string) (*ResourceComputerHistory, *resty.Response, error) {
 	if udid == "" {
 		return nil, nil, fmt.Errorf("UDID cannot be empty")
 	}
@@ -149,7 +150,7 @@ func (s *Service) GetByUDID(ctx context.Context, udid string) (*ResourceComputer
 // URL: GET /JSSResource/computerhistory/udid/{udid}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
-func (s *Service) GetByUDIDAndSubset(ctx context.Context, udid string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetByUDIDAndSubset(ctx context.Context, udid string, subset string) (*ResourceComputerHistory, *resty.Response, error) {
 	if udid == "" {
 		return nil, nil, fmt.Errorf("UDID cannot be empty")
 	}
@@ -163,7 +164,7 @@ func (s *Service) GetByUDIDAndSubset(ctx context.Context, udid string, subset st
 // URL: GET /JSSResource/computerhistory/serialnumber/{serialNumber}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
-func (s *Service) GetBySerialNumber(ctx context.Context, serialNumber string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetBySerialNumber(ctx context.Context, serialNumber string) (*ResourceComputerHistory, *resty.Response, error) {
 	if serialNumber == "" {
 		return nil, nil, fmt.Errorf("serial number cannot be empty")
 	}
@@ -174,7 +175,7 @@ func (s *Service) GetBySerialNumber(ctx context.Context, serialNumber string) (*
 // URL: GET /JSSResource/computerhistory/serialnumber/{serialNumber}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
-func (s *Service) GetBySerialNumberAndSubset(ctx context.Context, serialNumber string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetBySerialNumberAndSubset(ctx context.Context, serialNumber string, subset string) (*ResourceComputerHistory, *resty.Response, error) {
 	if serialNumber == "" {
 		return nil, nil, fmt.Errorf("serial number cannot be empty")
 	}
@@ -188,7 +189,7 @@ func (s *Service) GetBySerialNumberAndSubset(ctx context.Context, serialNumber s
 // URL: GET /JSSResource/computerhistory/macaddress/{macAddress}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
-func (s *Service) GetByMACAddress(ctx context.Context, macAddress string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetByMACAddress(ctx context.Context, macAddress string) (*ResourceComputerHistory, *resty.Response, error) {
 	if macAddress == "" {
 		return nil, nil, fmt.Errorf("MAC address cannot be empty")
 	}
@@ -199,7 +200,7 @@ func (s *Service) GetByMACAddress(ctx context.Context, macAddress string) (*Reso
 // URL: GET /JSSResource/computerhistory/macaddress/{macAddress}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
-func (s *Service) GetByMACAddressAndSubset(ctx context.Context, macAddress string, subset string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) GetByMACAddressAndSubset(ctx context.Context, macAddress string, subset string) (*ResourceComputerHistory, *resty.Response, error) {
 	if macAddress == "" {
 		return nil, nil, fmt.Errorf("MAC address cannot be empty")
 	}
@@ -210,7 +211,7 @@ func (s *Service) GetByMACAddressAndSubset(ctx context.Context, macAddress strin
 }
 
 // get performs the GET request and unmarshals the response.
-func (s *Service) get(ctx context.Context, endpoint string) (*ResourceComputerHistory, *interfaces.Response, error) {
+func (s *Service) get(ctx context.Context, endpoint string) (*ResourceComputerHistory, *resty.Response, error) {
 	var out ResourceComputerHistory
 	headers := map[string]string{
 		"Accept":       mime.ApplicationXML,

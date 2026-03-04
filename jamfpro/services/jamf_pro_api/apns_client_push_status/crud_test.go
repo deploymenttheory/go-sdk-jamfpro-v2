@@ -24,7 +24,7 @@ func TestUnit_APNSClientPushStatus_ListV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 3, result.TotalCount)
 	assert.Len(t, result.Results, 3)
 	assert.Equal(t, "MOBILE_DEVICE", result.Results[0].DeviceType)
@@ -47,7 +47,7 @@ func TestUnit_APNSClientPushStatus_ListV1_WithRSQLFilterDeviceType(t *testing.T)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify RSQL query was passed to the client
 	assert.NotNil(t, mock.LastRSQLQuery)
@@ -67,7 +67,7 @@ func TestUnit_APNSClientPushStatus_ListV1_WithRSQLFilterDate(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify RSQL query was passed
 	assert.Equal(t, `disabledAt>2024-01-01T00:00:00Z`, mock.LastRSQLQuery["filter"])
@@ -88,7 +88,7 @@ func TestUnit_APNSClientPushStatus_ListV1_WithPagination(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify pagination parameters were passed
 	assert.Equal(t, "0", mock.LastRSQLQuery["page"])
@@ -108,7 +108,7 @@ func TestUnit_APNSClientPushStatus_ListV1_WithComplexRSQLFilter(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify complex RSQL query was passed
 	assert.Equal(t, `deviceType=="COMPUTER";disabledAt>2024-01-01T00:00:00Z`, mock.LastRSQLQuery["filter"])
@@ -126,7 +126,7 @@ func TestUnit_APNSClientPushStatus_ListV1_WithSorting(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify sort parameter was passed
 	assert.Equal(t, "managementId:asc", mock.LastRSQLQuery["sort"])
@@ -140,7 +140,7 @@ func TestUnit_APNSClientPushStatus_EnableAllClientsV1_Success(t *testing.T) {
 	resp, err := svc.EnableAllClientsV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 202, resp.StatusCode)
+	assert.Equal(t, 202, resp.StatusCode())
 }
 
 // Test GetEnableAllClientsStatusV1 with success response
@@ -152,7 +152,7 @@ func TestUnit_APNSClientPushStatus_GetEnableAllClientsStatusV1_Success(t *testin
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "2024-11-06T14:30:00Z", result.RequestedTime)
 	assert.Equal(t, "QUEUED", result.Status)
 	require.NotNil(t, result.ProcessedTime)
@@ -171,7 +171,7 @@ func TestUnit_APNSClientPushStatus_EnableClientV1_Success(t *testing.T) {
 	resp, err := svc.EnableClientV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 // Test EnableClientV1 with nil request returns error

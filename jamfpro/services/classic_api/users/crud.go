@@ -8,6 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -18,58 +19,58 @@ type (
 		// List returns all users.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusers
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified user by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyid
-		GetByID(ctx context.Context, id int) (*ResourceUser, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceUser, *resty.Response, error)
 
 		// GetByName returns the specified user by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyname
-		GetByName(ctx context.Context, name string) (*ResourceUser, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceUser, *resty.Response, error)
 
 		// GetByEmail returns users matching the specified email.
 		// Note: Returns a list response even for a single match.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyemailaddress
-		GetByEmail(ctx context.Context, email string) (*ListResponse, *interfaces.Response, error)
+		GetByEmail(ctx context.Context, email string) (*ListResponse, *resty.Response, error)
 
 		// Create creates a new user.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createuserbyid
-		Create(ctx context.Context, req *RequestUser) (*ResourceUser, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestUser) (*ResourceUser, *resty.Response, error)
 
 		// UpdateByID updates the specified user by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyid
-		UpdateByID(ctx context.Context, id int, req *RequestUser) (*ResourceUser, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestUser) (*ResourceUser, *resty.Response, error)
 
 		// UpdateByName updates the specified user by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyname
-		UpdateByName(ctx context.Context, name string, req *RequestUser) (*ResourceUser, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestUser) (*ResourceUser, *resty.Response, error)
 
 		// UpdateByEmail updates the specified user by email.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyemail
-		UpdateByEmail(ctx context.Context, email string, req *RequestUser) (*ResourceUser, *interfaces.Response, error)
+		UpdateByEmail(ctx context.Context, email string, req *RequestUser) (*ResourceUser, *resty.Response, error)
 
 		// DeleteByID removes the specified user by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified user by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 
 		// DeleteByEmail removes the specified user by email.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyemail
-		DeleteByEmail(ctx context.Context, email string) (*interfaces.Response, error)
+		DeleteByEmail(ctx context.Context, email string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the users-related Classic API methods.
@@ -96,7 +97,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/users
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusers
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointUsers
 
 	var out ListResponse
@@ -118,7 +119,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/users/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUser, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUser, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("user ID must be a positive integer")
 	}
@@ -144,7 +145,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUser, *interfac
 // URL: GET /JSSResource/users/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUser, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUser, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("user name cannot be empty")
 	}
@@ -172,7 +173,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUser, *i
 // URL: GET /JSSResource/users/email/{email}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyemailaddress
-func (s *Service) GetByEmail(ctx context.Context, email string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) GetByEmail(ctx context.Context, email string) (*ListResponse, *resty.Response, error) {
 	if email == "" {
 		return nil, nil, fmt.Errorf("user email cannot be empty")
 	}
@@ -198,7 +199,7 @@ func (s *Service) GetByEmail(ctx context.Context, email string) (*ListResponse, 
 // URL: POST /JSSResource/users/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createuserbyid
-func (s *Service) Create(ctx context.Context, req *RequestUser) (*ResourceUser, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestUser) (*ResourceUser, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -234,7 +235,7 @@ func (s *Service) Create(ctx context.Context, req *RequestUser) (*ResourceUser, 
 // URL: PUT /JSSResource/users/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUser) (*ResourceUser, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUser) (*ResourceUser, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("user ID must be a positive integer")
 	}
@@ -273,7 +274,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUser) (*Re
 // URL: PUT /JSSResource/users/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUser) (*ResourceUser, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUser) (*ResourceUser, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("user name cannot be empty")
 	}
@@ -312,7 +313,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUse
 // URL: PUT /JSSResource/users/email/{email}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyemail
-func (s *Service) UpdateByEmail(ctx context.Context, email string, req *RequestUser) (*ResourceUser, *interfaces.Response, error) {
+func (s *Service) UpdateByEmail(ctx context.Context, email string, req *RequestUser) (*ResourceUser, *resty.Response, error) {
 	if email == "" {
 		return nil, nil, fmt.Errorf("user email cannot be empty")
 	}
@@ -351,7 +352,7 @@ func (s *Service) UpdateByEmail(ctx context.Context, email string, req *RequestU
 // URL: DELETE /JSSResource/users/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("user ID must be a positive integer")
 	}
@@ -375,7 +376,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // URL: DELETE /JSSResource/users/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("user name cannot be empty")
 	}
@@ -399,7 +400,7 @@ func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Re
 // URL: DELETE /JSSResource/users/email/{email}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyemail
-func (s *Service) DeleteByEmail(ctx context.Context, email string) (*interfaces.Response, error) {
+func (s *Service) DeleteByEmail(ctx context.Context, email string) (*resty.Response, error) {
 	if email == "" {
 		return nil, fmt.Errorf("user email cannot be empty")
 	}

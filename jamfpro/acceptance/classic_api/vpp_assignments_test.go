@@ -65,7 +65,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	defer cancel1()
 
 	created, createResp, err := svc.Create(ctx1, createReq)
-	if err != nil && createResp != nil && createResp.StatusCode == 409 {
+	if err != nil && createResp != nil && createResp.StatusCode() == 409 {
 		t.Skip("VPP assignment create may require additional setup in this environment; skipping lifecycle")
 	}
 	require.NoError(t, err, "Create should not return an error")
@@ -73,7 +73,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	require.NotNil(t, createResp)
 	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
 	// Create may return ID 0 if API does not return it; we use List to find the created assignment
-	acc.LogTestSuccess(t, "VPP assignment create response status=%d", createResp.StatusCode)
+	acc.LogTestSuccess(t, "VPP assignment create response status=%d", createResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 2. List — verify the new assignment appears
@@ -147,7 +147,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	_, updateResp, err := svc.UpdateByID(ctx4, assignmentID, updateReq)
 	require.NoError(t, err, "UpdateByID should not return an error")
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 5. GetByID — verify update

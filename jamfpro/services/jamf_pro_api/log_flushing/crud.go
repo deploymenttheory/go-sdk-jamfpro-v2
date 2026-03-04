@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 // ServiceInterface defines the interface for log flushing operations.
@@ -22,14 +23,14 @@ type ServiceInterface interface {
 	// hour of day when automatic log flushing occurs.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-log-flushing
-	GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSettings, *interfaces.Response, error)
+	GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSettings, *resty.Response, error)
 
 	// ListTasksV1 retrieves all log flushing tasks.
 	//
 	// Returns a list of queued, running, and completed log flushing tasks.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-log-flushing-task
-	ListTasksV1(ctx context.Context) ([]ResourceLogFlushingTask, *interfaces.Response, error)
+	ListTasksV1(ctx context.Context) ([]ResourceLogFlushingTask, *resty.Response, error)
 
 	// GetTaskByIDV1 retrieves a specific log flushing task by ID.
 	//
@@ -37,7 +38,7 @@ type ServiceInterface interface {
 	// its current state and configuration.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-log-flushing-task-id
-	GetTaskByIDV1(ctx context.Context, id string) (*ResourceLogFlushingTask, *interfaces.Response, error)
+	GetTaskByIDV1(ctx context.Context, id string) (*ResourceLogFlushingTask, *resty.Response, error)
 
 	// QueueTaskV1 creates a new log flushing task.
 	//
@@ -45,7 +46,7 @@ type ServiceInterface interface {
 	// period. The task will be processed according to Jamf Pro's task scheduling.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-log-flushing-task
-	QueueTaskV1(ctx context.Context, request *RequestLogFlushingTask) (*CreateResponse, *interfaces.Response, error)
+	QueueTaskV1(ctx context.Context, request *RequestLogFlushingTask) (*CreateResponse, *resty.Response, error)
 
 	// DeleteTaskByIDV1 deletes a specific log flushing task by ID.
 	//
@@ -53,7 +54,7 @@ type ServiceInterface interface {
 	// be deleted and will return an error.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-log-flushing-task-id
-	DeleteTaskByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+	DeleteTaskByIDV1(ctx context.Context, id string) (*resty.Response, error)
 }
 
 type (
@@ -75,7 +76,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetSettingsV1 retrieves the current log flushing settings.
 // URL: GET /api/v1/log-flushing
 // https://developer.jamf.com/jamf-pro/reference/get_v1-log-flushing
-func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSettings, *interfaces.Response, error) {
+func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSettings, *resty.Response, error) {
 	endpoint := EndpointLogFlushingV1
 
 	headers := map[string]string{
@@ -94,7 +95,7 @@ func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSettin
 // ListTasksV1 retrieves all log flushing tasks.
 // URL: GET /api/v1/log-flushing/task
 // https://developer.jamf.com/jamf-pro/reference/get_v1-log-flushing-task
-func (s *Service) ListTasksV1(ctx context.Context) ([]ResourceLogFlushingTask, *interfaces.Response, error) {
+func (s *Service) ListTasksV1(ctx context.Context) ([]ResourceLogFlushingTask, *resty.Response, error) {
 	endpoint := EndpointLogFlushingV1 + "/task"
 
 	headers := map[string]string{
@@ -113,7 +114,7 @@ func (s *Service) ListTasksV1(ctx context.Context) ([]ResourceLogFlushingTask, *
 // GetTaskByIDV1 retrieves a specific log flushing task by ID.
 // URL: GET /api/v1/log-flushing/task/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-log-flushing-task-id
-func (s *Service) GetTaskByIDV1(ctx context.Context, id string) (*ResourceLogFlushingTask, *interfaces.Response, error) {
+func (s *Service) GetTaskByIDV1(ctx context.Context, id string) (*ResourceLogFlushingTask, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("task ID is required")
 	}
@@ -136,7 +137,7 @@ func (s *Service) GetTaskByIDV1(ctx context.Context, id string) (*ResourceLogFlu
 // QueueTaskV1 creates a new log flushing task.
 // URL: POST /api/v1/log-flushing/task
 // https://developer.jamf.com/jamf-pro/reference/post_v1-log-flushing-task
-func (s *Service) QueueTaskV1(ctx context.Context, request *RequestLogFlushingTask) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) QueueTaskV1(ctx context.Context, request *RequestLogFlushingTask) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("log flushing task request cannot be nil")
 	}
@@ -160,7 +161,7 @@ func (s *Service) QueueTaskV1(ctx context.Context, request *RequestLogFlushingTa
 // DeleteTaskByIDV1 deletes a specific log flushing task by ID.
 // URL: DELETE /api/v1/log-flushing/task/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-log-flushing-task-id
-func (s *Service) DeleteTaskByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteTaskByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("task ID is required")
 	}

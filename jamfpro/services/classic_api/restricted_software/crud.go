@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,44 +17,44 @@ type (
 		// ListRestrictedSoftware returns all restricted software.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findrestrictedsoftware
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetRestrictedSoftwareByID returns the specified restricted software by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findrestrictedsoftwarebyid
-		GetByID(ctx context.Context, id int) (*ResourceRestrictedSoftware, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceRestrictedSoftware, *resty.Response, error)
 
 		// GetRestrictedSoftwareByName returns the specified restricted software by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findrestrictedsoftwarebyname
-		GetByName(ctx context.Context, name string) (*ResourceRestrictedSoftware, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceRestrictedSoftware, *resty.Response, error)
 
 		// CreateRestrictedSoftware creates new restricted software.
 		//
 		// Returns the created restricted software's assigned ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createrestrictedsoftwarebyid
-		Create(ctx context.Context, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateRestrictedSoftwareByID updates the specified restricted software by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updaterestrictedsoftwarebyid
-		UpdateByID(ctx context.Context, id int, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateRestrictedSoftwareByName updates the specified restricted software by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updaterestrictedsoftwarebyname
-		UpdateByName(ctx context.Context, name string, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *resty.Response, error)
 
 		// DeleteRestrictedSoftwareByID removes the specified restricted software by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleterestrictedsoftwarebyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteRestrictedSoftwareByName removes the specified restricted software by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleterestrictedsoftwarebyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the restricted software-related Classic API methods.
@@ -78,7 +79,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // List returns all restricted software.
 // URL: GET /JSSResource/restrictedsoftware
 // https://developer.jamf.com/jamf-pro/reference/findrestrictedsoftware
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicRestrictedSoftware
@@ -99,7 +100,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // GetByID returns the specified restricted software by ID.
 // URL: GET /JSSResource/restrictedsoftware/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findrestrictedsoftwarebyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceRestrictedSoftware, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceRestrictedSoftware, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("restricted software ID must be a positive integer")
 	}
@@ -124,7 +125,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceRestrictedSoftw
 // GetByName returns the specified restricted software by name.
 // URL: GET /JSSResource/restrictedsoftware/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findrestrictedsoftwarebyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceRestrictedSoftware, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceRestrictedSoftware, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("restricted software name is required")
 	}
@@ -150,7 +151,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceRestrict
 // URL: POST /JSSResource/restrictedsoftware/id/0
 // Returns the created restricted software's assigned ID.
 // https://developer.jamf.com/jamf-pro/reference/createrestrictedsoftwarebyid
-func (s *Service) Create(ctx context.Context, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -175,7 +176,7 @@ func (s *Service) Create(ctx context.Context, req *RequestRestrictedSoftware) (*
 // UpdateByID updates the specified restricted software by ID.
 // URL: PUT /JSSResource/restrictedsoftware/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updaterestrictedsoftwarebyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("restricted software ID must be a positive integer")
 	}
@@ -203,7 +204,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestRestricted
 // UpdateByName updates the specified restricted software by name.
 // URL: PUT /JSSResource/restrictedsoftware/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updaterestrictedsoftwarebyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("restricted software name is required")
 	}
@@ -231,7 +232,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 // DeleteByID removes the specified restricted software by ID.
 // URL: DELETE /JSSResource/restrictedsoftware/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleterestrictedsoftwarebyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("restricted software ID must be a positive integer")
 	}
@@ -254,7 +255,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // DeleteByName removes the specified restricted software by name.
 // URL: DELETE /JSSResource/restrictedsoftware/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deleterestrictedsoftwarebyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("restricted software name is required")
 	}

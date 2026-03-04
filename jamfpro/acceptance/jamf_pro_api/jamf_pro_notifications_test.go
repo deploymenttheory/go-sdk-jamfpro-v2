@@ -48,7 +48,7 @@ func TestAcceptance_JamfProNotifications_get_v1(t *testing.T) {
 	notifications, resp, err := svc.GetForUserAndSiteV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, len(notifications), 0)
 
 	acc.LogTestSuccess(t, "GetForUserAndSiteV1: %d notification(s) returned", len(notifications))

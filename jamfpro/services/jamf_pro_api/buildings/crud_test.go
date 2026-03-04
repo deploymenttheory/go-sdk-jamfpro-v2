@@ -25,7 +25,7 @@ func TestUnit_Buildings_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -42,7 +42,7 @@ func TestUnit_Buildings_List_WithrsqlQuery(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Buildings_List_WithRSQLFilter(t *testing.T) {
@@ -55,7 +55,7 @@ func TestUnit_Buildings_List_WithRSQLFilter(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "2", result.Results[0].ID)
@@ -72,7 +72,7 @@ func TestUnit_Buildings_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Main Office", result.Name)
 	assert.Equal(t, "123 Main St", result.StreetAddress1)
@@ -97,7 +97,7 @@ func TestUnit_Buildings_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_Buildings_Create_Success(t *testing.T) {
@@ -116,7 +116,7 @@ func TestUnit_Buildings_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Contains(t, result.Href, "/api/v1/buildings/3")
 }
@@ -140,7 +140,7 @@ func TestUnit_Buildings_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 func TestUnit_Buildings_UpdateByID_Success(t *testing.T) {
@@ -160,7 +160,7 @@ func TestUnit_Buildings_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Main Office Updated", result.Name)
 }
@@ -192,7 +192,7 @@ func TestUnit_Buildings_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Buildings_DeleteByID_EmptyID(t *testing.T) {
@@ -212,7 +212,7 @@ func TestUnit_Buildings_DeleteMultipleByID_Success(t *testing.T) {
 	resp, err := svc.DeleteBuildingsByIDV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Buildings_DeleteMultipleByID_EmptyIDs(t *testing.T) {
@@ -242,7 +242,7 @@ func TestUnit_Buildings_GetHistoryV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -261,7 +261,7 @@ func TestUnit_Buildings_GetHistoryV1_NullDetails(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Nil(t, result.Results[0].Details)
@@ -285,7 +285,7 @@ func TestUnit_Buildings_AddHistoryNotesV1_Success(t *testing.T) {
 	resp, err := svc.AddBuildingHistoryNotesV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_Buildings_AddHistoryNotesV1_EmptyID(t *testing.T) {
@@ -338,7 +338,7 @@ func TestUnit_Buildings_ExportV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, data)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Contains(t, string(data), "totalCount")
 }
 
@@ -351,7 +351,7 @@ func TestUnit_Buildings_ExportV1_EmptyAcceptType(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, data)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // TestUnit_Buildings_ExportV1_WithQueryAndBody tests export with query params and body.
@@ -365,7 +365,7 @@ func TestUnit_Buildings_ExportV1_WithQueryAndBody(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, data)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // TestUnit_Buildings_ExportV1_NoMockRegistered verifies error when no mock is registered.
@@ -388,7 +388,7 @@ func TestUnit_Buildings_ExportHistoryV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, data)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Contains(t, string(data), "totalCount")
 }
 
@@ -401,7 +401,7 @@ func TestUnit_Buildings_ExportHistoryV1_EmptyAcceptType(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, data)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // TestUnit_Buildings_ExportHistoryV1_EmptyID tests validation error for empty ID.

@@ -17,7 +17,7 @@ func TestAcceptance_SsoCertificate_get_v2(t *testing.T) {
 	result, resp, err := svc.GetV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	if result != nil {
 		_ = result.Keystore.Type
 	}
@@ -36,7 +36,7 @@ func TestAcceptance_SsoCertificate_lifecycle(t *testing.T) {
 	}
 	require.NotNil(t, created)
 	require.NotNil(t, resp)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode())
 	assert.NotEmpty(t, created.Keystore.Key)
 
 	// Cleanup: Delete the certificate at the end
@@ -48,14 +48,14 @@ func TestAcceptance_SsoCertificate_lifecycle(t *testing.T) {
 	fetched, resp, err := svc.GetV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, fetched.Keystore.Key)
 
 	// Download the certificate
 	downloaded, resp, err := svc.DownloadV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	if len(downloaded) == 0 {
 		t.Log("Warning: Downloaded certificate is empty")
 	}
@@ -64,7 +64,7 @@ func TestAcceptance_SsoCertificate_lifecycle(t *testing.T) {
 	resp, err = svc.DeleteV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestAcceptance_SsoCertificate_update_v2(t *testing.T) {
@@ -88,7 +88,7 @@ func TestAcceptance_SsoCertificate_update_v2(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_SsoCertificate_parse_v2(t *testing.T) {
@@ -110,5 +110,5 @@ func TestAcceptance_SsoCertificate_parse_v2(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }

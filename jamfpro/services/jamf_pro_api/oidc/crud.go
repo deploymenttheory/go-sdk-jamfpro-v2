@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 // ServiceInterface defines the interface for OIDC (OpenID Connect) operations.
@@ -22,7 +23,7 @@ type ServiceInterface interface {
 	// OpenID Connect identity provider.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-direct-idp-login-url
-	GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDirectIdPLoginURL, *interfaces.Response, error)
+	GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDirectIdPLoginURL, *resty.Response, error)
 
 	// GetPublicKeyV1 retrieves the public key used for signing OIDC messages.
 	//
@@ -30,14 +31,14 @@ type ServiceInterface interface {
 	// verify JWT tokens issued by Jamf Pro's OIDC implementation.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-public-key
-	GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *interfaces.Response, error)
+	GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *resty.Response, error)
 
 	// GetPublicFeaturesV1 retrieves the public OIDC configuration features.
 	//
 	// Returns whether Jamf ID authentication is enabled for the OIDC configuration.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-public-features
-	GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatures, *interfaces.Response, error)
+	GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatures, *resty.Response, error)
 
 	// GenerateCertificateV1 generates a new certificate for signing OIDC messages.
 	//
@@ -46,7 +47,7 @@ type ServiceInterface interface {
 	// carefully as it will require clients to refresh their cached public keys.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-oidc-generate-certificate
-	GenerateCertificateV1(ctx context.Context) (*interfaces.Response, error)
+	GenerateCertificateV1(ctx context.Context) (*resty.Response, error)
 
 	// GetRedirectURLV1 provides the redirect URL for OIDC authentication.
 	//
@@ -54,7 +55,7 @@ type ServiceInterface interface {
 	// redirect URL to initiate OIDC authentication flow. Uses the v2 dispatch endpoint.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-oidc-dispatch
-	GetRedirectURLV1(ctx context.Context, request *RequestOIDCRedirectURL) (*ResourceOIDCRedirectURL, *interfaces.Response, error)
+	GetRedirectURLV1(ctx context.Context, request *RequestOIDCRedirectURL) (*ResourceOIDCRedirectURL, *resty.Response, error)
 }
 
 type (
@@ -76,7 +77,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetDirectIdPLoginURLV1 retrieves the direct IdP login URL for OIDC.
 // URL: GET /api/v1/oidc/direct-idp-login-url
 // https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-direct-idp-login-url
-func (s *Service) GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDirectIdPLoginURL, *interfaces.Response, error) {
+func (s *Service) GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDirectIdPLoginURL, *resty.Response, error) {
 	endpoint := EndpointOIDCV1 + "/direct-idp-login-url"
 
 	headers := map[string]string{
@@ -95,7 +96,7 @@ func (s *Service) GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDire
 // GetPublicKeyV1 retrieves the public key used for signing OIDC messages.
 // URL: GET /api/v1/oidc/public-key
 // https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-public-key
-func (s *Service) GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *interfaces.Response, error) {
+func (s *Service) GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *resty.Response, error) {
 	endpoint := EndpointOIDCV1 + "/public-key"
 
 	headers := map[string]string{
@@ -114,7 +115,7 @@ func (s *Service) GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *
 // GetPublicFeaturesV1 retrieves the public OIDC configuration features.
 // URL: GET /api/v1/oidc/public-features
 // https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-public-features
-func (s *Service) GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatures, *interfaces.Response, error) {
+func (s *Service) GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatures, *resty.Response, error) {
 	endpoint := EndpointOIDCV1 + "/public-features"
 
 	headers := map[string]string{
@@ -133,7 +134,7 @@ func (s *Service) GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatu
 // GenerateCertificateV1 generates a new certificate for signing OIDC messages.
 // URL: POST /api/v1/oidc/generate-certificate
 // https://developer.jamf.com/jamf-pro/reference/post_v1-oidc-generate-certificate
-func (s *Service) GenerateCertificateV1(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) GenerateCertificateV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointOIDCV1 + "/generate-certificate"
 
 	headers := map[string]string{
@@ -152,7 +153,7 @@ func (s *Service) GenerateCertificateV1(ctx context.Context) (*interfaces.Respon
 // GetRedirectURLV1 provides the redirect URL for OIDC authentication.
 // URL: POST /api/v2/oidc/dispatch
 // https://developer.jamf.com/jamf-pro/reference/post_v2-oidc-dispatch
-func (s *Service) GetRedirectURLV1(ctx context.Context, request *RequestOIDCRedirectURL) (*ResourceOIDCRedirectURL, *interfaces.Response, error) {
+func (s *Service) GetRedirectURLV1(ctx context.Context, request *RequestOIDCRedirectURL) (*ResourceOIDCRedirectURL, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("OIDC redirect URL request cannot be nil")
 	}

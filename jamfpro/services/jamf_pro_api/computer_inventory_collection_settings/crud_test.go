@@ -49,7 +49,7 @@ func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_Success(t *testing.T)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_NilSettings(t *testing.T) {
@@ -144,7 +144,7 @@ func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_Success
 
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_EmptyID(t *testing.T) {

@@ -29,7 +29,7 @@ func TestUnit_ActivationCode_Get_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Example Organization", result.OrganizationName)
 	assert.Equal(t, "ABCD-1234-EFGH-5678", result.Code)
 }
@@ -50,7 +50,7 @@ func TestUnit_ActivationCode_Update_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ActivationCode_Update_NilRequest(t *testing.T) {

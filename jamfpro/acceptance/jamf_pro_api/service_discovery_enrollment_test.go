@@ -19,7 +19,7 @@ func TestAcceptance_ServiceDiscoveryEnrollment_get_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_ServiceDiscoveryEnrollment_update_v1(t *testing.T) {
@@ -43,7 +43,7 @@ func TestAcceptance_ServiceDiscoveryEnrollment_update_v1(t *testing.T) {
 		_, resp, err := svc.UpdateV1(ctx, &request)
 		require.NoError(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 204, resp.StatusCode)
+		assert.Equal(t, 204, resp.StatusCode())
 		// Restore
 		request.WellKnownSettings[0].EnrollmentType = origType
 		_, _, _ = svc.UpdateV1(ctx, &request)

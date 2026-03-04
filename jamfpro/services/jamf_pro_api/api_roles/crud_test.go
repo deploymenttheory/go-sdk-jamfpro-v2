@@ -20,7 +20,7 @@ func TestUnit_ApiRoles_ListV1_Success(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	require.Equal(t, "1", result.Results[0].ID)
@@ -32,7 +32,7 @@ func TestUnit_ApiRoles_GetByIDV1_Success(t *testing.T) {
 	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "1", result.ID)
 	require.Equal(t, "Administrator", result.DisplayName)
 }
@@ -51,7 +51,7 @@ func TestUnit_ApiRoles_CreateV1_Success(t *testing.T) {
 	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "3", result.ID)
 	require.Equal(t, "Custom Role", result.DisplayName)
 }
@@ -69,7 +69,7 @@ func TestUnit_ApiRoles_DeleteByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Equal(t, 204, resp.StatusCode)
+	require.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_APIRoles_UpdateByIDV1_Success(t *testing.T) {
@@ -78,7 +78,7 @@ func TestUnit_APIRoles_UpdateByIDV1_Success(t *testing.T) {
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "1", result.ID)
 	require.Equal(t, "Administrator", result.DisplayName)
 }

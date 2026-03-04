@@ -27,7 +27,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
-		assert.Equal(t, 201, resp.StatusCode)
+		assert.Equal(t, 201, resp.StatusCode())
 		assert.NotEmpty(t, result.ID)
 		t.Logf("Added history note with ID: %d", result.ID)
 	})
@@ -38,7 +38,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.GreaterOrEqual(t, result.TotalCount, 1, "Should have at least the note we just added")
 		t.Logf("Found %d total activation code history entries", result.TotalCount)
 	})
@@ -53,7 +53,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 
 		// Verify all returned entries match the filter
 		for _, entry := range result.Results {
@@ -71,7 +71,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 
 		// Verify all returned entries match the filter
 		for _, entry := range result.Results {
@@ -90,7 +90,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 
 		// Verify all returned entries match the filter criteria
 		for _, entry := range result.Results {
@@ -111,7 +111,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		// Note: GetPaginated fetches all pages, so we should get all results
 		t.Logf("Retrieved %d history entries (pagination handled automatically)", len(result.Results))
 	})
@@ -125,7 +125,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		t.Logf("Retrieved %d history entries sorted by date ascending", len(result.Results))
 	})
 
@@ -138,7 +138,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		t.Logf("Retrieved %d history entries with multiple sort fields", len(result.Results))
 	})
 }

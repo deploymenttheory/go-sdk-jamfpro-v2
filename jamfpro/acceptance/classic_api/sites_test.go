@@ -125,7 +125,7 @@ func TestAcceptance_Sites_lifecycle(t *testing.T) {
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
 	// Classic API PUT responses return only the resource ID, not the full resource.
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 6. UpdateByName (back to original name for next step)
@@ -141,7 +141,7 @@ func TestAcceptance_Sites_lifecycle(t *testing.T) {
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
 	// Classic API PUT responses return only the resource ID, not the full resource.
-	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 7. GetByID — verify revert

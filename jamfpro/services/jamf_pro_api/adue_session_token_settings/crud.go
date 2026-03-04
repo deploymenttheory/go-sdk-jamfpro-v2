@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,12 +17,12 @@ type (
 		// GetV1 retrieves ADUE session token settings (Get ADUE Session Token Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-adue-session-token-settings
-		GetV1(ctx context.Context) (*ResourceADUETokenSettings, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceADUETokenSettings, *resty.Response, error)
 
 		// UpdateV1 updates ADUE session token settings (Update ADUE Session Token Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-adue-session-token-settings
-		UpdateV1(ctx context.Context, request *ResourceADUETokenSettings) (*ResourceADUETokenSettings, *interfaces.Response, error)
+		UpdateV1(ctx context.Context, request *ResourceADUETokenSettings) (*ResourceADUETokenSettings, *resty.Response, error)
 	}
 
 	// Service handles communication with the ADUE session token settings-related methods of the Jamf Pro API.
@@ -45,7 +46,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 retrieves ADUE session token settings.
 // URL: GET /api/v1/adue-session-token-settings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-adue-session-token-settings
-func (s *Service) GetV1(ctx context.Context) (*ResourceADUETokenSettings, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceADUETokenSettings, *resty.Response, error) {
 	var result ResourceADUETokenSettings
 
 	endpoint := EndpointADUESessionTokenSettingsV1
@@ -65,7 +66,7 @@ func (s *Service) GetV1(ctx context.Context) (*ResourceADUETokenSettings, *inter
 // UpdateV1 updates ADUE session token settings.
 // URL: PUT /api/v1/adue-session-token-settings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-adue-session-token-settings
-func (s *Service) UpdateV1(ctx context.Context, request *ResourceADUETokenSettings) (*ResourceADUETokenSettings, *interfaces.Response, error) {
+func (s *Service) UpdateV1(ctx context.Context, request *ResourceADUETokenSettings) (*ResourceADUETokenSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

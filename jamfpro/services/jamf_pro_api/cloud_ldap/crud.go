@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -19,59 +20,59 @@ type (
 		// providerName should be "GOOGLE" or "AZURE".
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-defaults-provider-mappings
-		GetDefaultMappingsV2(ctx context.Context, providerName string) (*ResponseDefaultMappings, *interfaces.Response, error)
+		GetDefaultMappingsV2(ctx context.Context, providerName string) (*ResponseDefaultMappings, *resty.Response, error)
 
 		// GetDefaultServerConfigurationV2 returns the default server configuration for the specified provider (Get Default Server Configuration).
 		//
 		// providerName should be "GOOGLE" or "AZURE".
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-defaults-provider-server-configuration
-		GetDefaultServerConfigurationV2(ctx context.Context, providerName string) (*ResponseDefaultServerConfiguration, *interfaces.Response, error)
+		GetDefaultServerConfigurationV2(ctx context.Context, providerName string) (*ResponseDefaultServerConfiguration, *resty.Response, error)
 
 		// CreateV2 creates a new Cloud LDAP configuration (Create Cloud LDAP).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-cloud-ldaps
-		CreateV2(ctx context.Context, request *ResourceCloudLdap) (*ResponseCloudLdapCreated, *interfaces.Response, error)
+		CreateV2(ctx context.Context, request *ResourceCloudLdap) (*ResponseCloudLdapCreated, *resty.Response, error)
 
 		// GetByIDV2 returns the Cloud LDAP configuration by ID (Get Cloud LDAP by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id
-		GetByIDV2(ctx context.Context, id string) (*ResourceCloudLdap, *interfaces.Response, error)
+		GetByIDV2(ctx context.Context, id string) (*ResourceCloudLdap, *resty.Response, error)
 
 		// UpdateByIDV2 updates the Cloud LDAP configuration by ID (Update Cloud LDAP by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-cloud-ldaps-id
-		UpdateByIDV2(ctx context.Context, id string, request *ResourceCloudLdap) (*ResourceCloudLdap, *interfaces.Response, error)
+		UpdateByIDV2(ctx context.Context, id string, request *ResourceCloudLdap) (*ResourceCloudLdap, *resty.Response, error)
 
 		// DeleteByIDV2 deletes the Cloud LDAP configuration by ID (Delete Cloud LDAP by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-cloud-ldaps-id
-		DeleteByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
 
 		// GetBindConnectionPoolStatsByIDV2 returns bind connection pool statistics (Get Bind Connection Pool Statistics).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-bind
-		GetBindConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *interfaces.Response, error)
+		GetBindConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *resty.Response, error)
 
 		// GetSearchConnectionPoolStatsByIDV2 returns search connection pool statistics (Get Search Connection Pool Statistics).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-search
-		GetSearchConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *interfaces.Response, error)
+		GetSearchConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *resty.Response, error)
 
 		// TestConnectionByIDV2 tests the communication with the specified cloud connection (Test Connection).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-status
-		TestConnectionByIDV2(ctx context.Context, id string) (*ConnectionStatusResponse, *interfaces.Response, error)
+		TestConnectionByIDV2(ctx context.Context, id string) (*ConnectionStatusResponse, *resty.Response, error)
 
 		// GetMappingsByIDV2 returns the mappings configuration for the Cloud LDAP by ID (Get Mappings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-mappings
-		GetMappingsByIDV2(ctx context.Context, id string) (*CloudLdapMappings, *interfaces.Response, error)
+		GetMappingsByIDV2(ctx context.Context, id string) (*CloudLdapMappings, *resty.Response, error)
 
 		// UpdateMappingsByIDV2 updates the mappings configuration for the Cloud LDAP by ID (Update Mappings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-cloud-ldaps-id-mappings
-		UpdateMappingsByIDV2(ctx context.Context, id string, request *CloudLdapMappings) (*CloudLdapMappings, *interfaces.Response, error)
+		UpdateMappingsByIDV2(ctx context.Context, id string, request *CloudLdapMappings) (*CloudLdapMappings, *resty.Response, error)
 	}
 
 	// Service handles communication with the Cloud LDAP-related methods of the Jamf Pro API.
@@ -91,7 +92,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetDefaultMappingsV2 returns the default field mappings for the specified provider.
 // URL: GET /api/v2/cloud-ldaps/defaults/{providerName}/mappings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-defaults-provider-mappings
-func (s *Service) GetDefaultMappingsV2(ctx context.Context, providerName string) (*ResponseDefaultMappings, *interfaces.Response, error) {
+func (s *Service) GetDefaultMappingsV2(ctx context.Context, providerName string) (*ResponseDefaultMappings, *resty.Response, error) {
 	if providerName == "" {
 		return nil, nil, fmt.Errorf("providerName is required")
 	}
@@ -115,7 +116,7 @@ func (s *Service) GetDefaultMappingsV2(ctx context.Context, providerName string)
 // GetDefaultServerConfigurationV2 returns the default server configuration for the specified provider.
 // URL: GET /api/v2/cloud-ldaps/defaults/{providerName}/server-configuration
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-defaults-provider-server-configuration
-func (s *Service) GetDefaultServerConfigurationV2(ctx context.Context, providerName string) (*ResponseDefaultServerConfiguration, *interfaces.Response, error) {
+func (s *Service) GetDefaultServerConfigurationV2(ctx context.Context, providerName string) (*ResponseDefaultServerConfiguration, *resty.Response, error) {
 	if providerName == "" {
 		return nil, nil, fmt.Errorf("providerName is required")
 	}
@@ -139,7 +140,7 @@ func (s *Service) GetDefaultServerConfigurationV2(ctx context.Context, providerN
 // CreateV2 creates a new Cloud LDAP configuration.
 // URL: POST /api/v2/cloud-ldaps
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-cloud-ldaps
-func (s *Service) CreateV2(ctx context.Context, request *ResourceCloudLdap) (*ResponseCloudLdapCreated, *interfaces.Response, error) {
+func (s *Service) CreateV2(ctx context.Context, request *ResourceCloudLdap) (*ResponseCloudLdapCreated, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -164,7 +165,7 @@ func (s *Service) CreateV2(ctx context.Context, request *ResourceCloudLdap) (*Re
 // GetByIDV2 returns the Cloud LDAP configuration by ID.
 // URL: GET /api/v2/cloud-ldaps/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id
-func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceCloudLdap, *interfaces.Response, error) {
+func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceCloudLdap, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -188,7 +189,7 @@ func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceCloudLdap,
 // UpdateByIDV2 updates the Cloud LDAP configuration by ID.
 // URL: PUT /api/v2/cloud-ldaps/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-cloud-ldaps-id
-func (s *Service) UpdateByIDV2(ctx context.Context, id string, request *ResourceCloudLdap) (*ResourceCloudLdap, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV2(ctx context.Context, id string, request *ResourceCloudLdap) (*ResourceCloudLdap, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -216,7 +217,7 @@ func (s *Service) UpdateByIDV2(ctx context.Context, id string, request *Resource
 // DeleteByIDV2 deletes the Cloud LDAP configuration by ID.
 // URL: DELETE /api/v2/cloud-ldaps/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-cloud-ldaps-id
-func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -238,7 +239,7 @@ func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Resp
 // GetBindConnectionPoolStatsByIDV2 returns bind connection pool statistics.
 // URL: GET /api/v2/cloud-ldaps/{id}/connection/bind
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-bind
-func (s *Service) GetBindConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *interfaces.Response, error) {
+func (s *Service) GetBindConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -262,7 +263,7 @@ func (s *Service) GetBindConnectionPoolStatsByIDV2(ctx context.Context, id strin
 // GetSearchConnectionPoolStatsByIDV2 returns search connection pool statistics.
 // URL: GET /api/v2/cloud-ldaps/{id}/connection/search
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-search
-func (s *Service) GetSearchConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *interfaces.Response, error) {
+func (s *Service) GetSearchConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -286,7 +287,7 @@ func (s *Service) GetSearchConnectionPoolStatsByIDV2(ctx context.Context, id str
 // TestConnectionByIDV2 tests the communication with the specified cloud connection.
 // URL: GET /api/v2/cloud-ldaps/{id}/connection/status
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-status
-func (s *Service) TestConnectionByIDV2(ctx context.Context, id string) (*ConnectionStatusResponse, *interfaces.Response, error) {
+func (s *Service) TestConnectionByIDV2(ctx context.Context, id string) (*ConnectionStatusResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -310,7 +311,7 @@ func (s *Service) TestConnectionByIDV2(ctx context.Context, id string) (*Connect
 // GetMappingsByIDV2 returns the mappings configuration for the Cloud LDAP by ID.
 // URL: GET /api/v2/cloud-ldaps/{id}/mappings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-mappings
-func (s *Service) GetMappingsByIDV2(ctx context.Context, id string) (*CloudLdapMappings, *interfaces.Response, error) {
+func (s *Service) GetMappingsByIDV2(ctx context.Context, id string) (*CloudLdapMappings, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -334,7 +335,7 @@ func (s *Service) GetMappingsByIDV2(ctx context.Context, id string) (*CloudLdapM
 // UpdateMappingsByIDV2 updates the mappings configuration for the Cloud LDAP by ID.
 // URL: PUT /api/v2/cloud-ldaps/{id}/mappings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-cloud-ldaps-id-mappings
-func (s *Service) UpdateMappingsByIDV2(ctx context.Context, id string, request *CloudLdapMappings) (*CloudLdapMappings, *interfaces.Response, error) {
+func (s *Service) UpdateMappingsByIDV2(ctx context.Context, id string, request *CloudLdapMappings) (*CloudLdapMappings, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

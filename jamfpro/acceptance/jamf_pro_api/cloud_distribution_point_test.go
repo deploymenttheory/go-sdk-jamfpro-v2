@@ -17,12 +17,12 @@ func TestAcceptance_CloudDistributionPoint_get(t *testing.T) {
 
 	result, resp, err := svc.GetV1(ctx)
 	// 404 is acceptable when no CDP is configured
-	if err != nil && resp != nil && resp.StatusCode == 404 {
+	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Skip("No cloud distribution point configured")
 		return
 	}
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 }

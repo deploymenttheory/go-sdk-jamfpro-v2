@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 // ServiceInterface defines the interface for SLASA (Software License Agreement Service Acceptance) operations.
@@ -20,14 +21,14 @@ type ServiceInterface interface {
 	// Returns whether the Software License Agreement has been accepted or not.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-slasa
-	GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *interfaces.Response, error)
+	GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *resty.Response, error)
 
 	// AcceptV1 accepts the SLASA (Software License Agreement Service Acceptance).
 	//
 	// Must be called before managed software updates can be used.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-slasa
-	AcceptV1(ctx context.Context) (*interfaces.Response, error)
+	AcceptV1(ctx context.Context) (*resty.Response, error)
 }
 
 type (
@@ -49,7 +50,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetStatusV1 retrieves the current SLASA acceptance status.
 // URL: GET /api/v1/managed-software-updates/slasa
 // https://developer.jamf.com/jamf-pro/reference/get_v1-slasa
-func (s *Service) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *interfaces.Response, error) {
+func (s *Service) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *resty.Response, error) {
 	endpoint := EndpointSLASAV1
 
 	headers := map[string]string{
@@ -68,7 +69,7 @@ func (s *Service) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *inter
 // AcceptV1 accepts the SLASA (Software License Agreement Service Acceptance).
 // URL: POST /api/v1/managed-software-updates/slasa
 // https://developer.jamf.com/jamf-pro/reference/post_v1-slasa
-func (s *Service) AcceptV1(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) AcceptV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointSLASAV1
 
 	headers := map[string]string{

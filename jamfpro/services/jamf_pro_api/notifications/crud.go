@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// ListV1 returns all notifications for the current user and site (Get Notifications).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-		ListV1(ctx context.Context) ([]ResourceNotification, *interfaces.Response, error)
+		ListV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error)
 	}
 
 	// Service handles communication with the notifications methods of the Jamf Pro API.
@@ -35,7 +36,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV1 returns all notifications for the current user and site.
 // URL: GET /api/v1/notifications
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-func (s *Service) ListV1(ctx context.Context) ([]ResourceNotification, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error) {
 	var result []ResourceNotification
 
 	endpoint := EndpointNotificationsV1

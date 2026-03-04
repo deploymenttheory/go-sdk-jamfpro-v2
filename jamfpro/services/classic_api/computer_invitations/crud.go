@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,27 +17,27 @@ type (
 		// List returns all computer invitations.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified computer invitation by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyid
-		GetByID(ctx context.Context, id string) (*ResourceComputerInvitation, *interfaces.Response, error)
+		GetByID(ctx context.Context, id string) (*ResourceComputerInvitation, *resty.Response, error)
 
 		// GetByInvitationID returns the specified computer invitation by invitation ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyinvitation
-		GetByInvitationID(ctx context.Context, invitationID string) (*ResourceComputerInvitation, *interfaces.Response, error)
+		GetByInvitationID(ctx context.Context, invitationID string) (*ResourceComputerInvitation, *resty.Response, error)
 
 		// Create creates a new computer invitation.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputerinvitationbyid
-		Create(ctx context.Context, req *ResourceComputerInvitation) (*ResourceComputerInvitation, *interfaces.Response, error)
+		Create(ctx context.Context, req *ResourceComputerInvitation) (*ResourceComputerInvitation, *resty.Response, error)
 
 		// DeleteByID removes the specified computer invitation by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerinvitationbyid
-		DeleteByID(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the computer-invitations-related Classic API methods.
@@ -62,7 +63,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/computerinvitations
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointComputerInvitations
 
 	var out ListResponse
@@ -83,7 +84,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/computerinvitations/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyid
-func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerInvitation, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerInvitation, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("computer invitation ID cannot be empty")
 	}
@@ -108,7 +109,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResourceComputerInvi
 // URL: GET /JSSResource/computerinvitations/invitation/{invitationID}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyinvitation
-func (s *Service) GetByInvitationID(ctx context.Context, invitationID string) (*ResourceComputerInvitation, *interfaces.Response, error) {
+func (s *Service) GetByInvitationID(ctx context.Context, invitationID string) (*ResourceComputerInvitation, *resty.Response, error) {
 	if invitationID == "" {
 		return nil, nil, fmt.Errorf("computer invitation invitation ID cannot be empty")
 	}
@@ -133,7 +134,7 @@ func (s *Service) GetByInvitationID(ctx context.Context, invitationID string) (*
 // URL: POST /JSSResource/computerinvitations/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputerinvitationbyid
-func (s *Service) Create(ctx context.Context, req *ResourceComputerInvitation) (*ResourceComputerInvitation, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *ResourceComputerInvitation) (*ResourceComputerInvitation, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -158,7 +159,7 @@ func (s *Service) Create(ctx context.Context, req *ResourceComputerInvitation) (
 // URL: DELETE /JSSResource/computerinvitations/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerinvitationbyid
-func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("computer invitation ID cannot be empty")
 	}

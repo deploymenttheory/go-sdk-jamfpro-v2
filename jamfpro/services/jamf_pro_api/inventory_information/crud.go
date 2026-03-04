@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,7 +17,7 @@ type (
 		// GetV1 returns statistics about managed/unmanaged devices and computers in the inventory.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
-		GetV1(ctx context.Context) (*ResourceInventoryInformation, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceInventoryInformation, *resty.Response, error)
 	}
 
 	// Service handles communication with the inventory information-related methods of the Jamf Pro API.
@@ -43,7 +44,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Response: object with managedComputers, unmanagedComputers, managedDevices, unmanagedDevices.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
-func (s *Service) GetV1(ctx context.Context) (*ResourceInventoryInformation, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceInventoryInformation, *resty.Response, error) {
 	endpoint := EndpointInventoryInformationV1
 
 	var result ResourceInventoryInformation

@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,27 +18,27 @@ type (
 		// UpdateV1 updates the activation code in Jamf Pro.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-activation-code
-		UpdateV1(ctx context.Context, req *ActivationCodeRequest) (*interfaces.Response, error)
+		UpdateV1(ctx context.Context, req *ActivationCodeRequest) (*resty.Response, error)
 
 		// UpdateOrganizationNameV1 updates the organization name in Jamf Pro.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-activation-code-organization-name
-		UpdateOrganizationNameV1(ctx context.Context, req *OrganizationNameRequest) (*interfaces.Response, error)
+		UpdateOrganizationNameV1(ctx context.Context, req *OrganizationNameRequest) (*resty.Response, error)
 
 		// GetHistoryV1 retrieves activation code history with optional RSQL filtering.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-activation-code-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNoteV1 adds a note to activation code history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-activation-code-history
-		AddHistoryNoteV1(ctx context.Context, req *HistoryNoteRequest) (*HistoryEntry, *interfaces.Response, error)
+		AddHistoryNoteV1(ctx context.Context, req *HistoryNoteRequest) (*HistoryEntry, *resty.Response, error)
 
 		// ExportHistoryV1 exports activation code history in specified format (JSON or CSV).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-activation-code-history-export
-		ExportHistoryV1(ctx context.Context, queryParams map[string]string, req *HistoryExportRequest) (*HistoryExportResponse, *interfaces.Response, error)
+		ExportHistoryV1(ctx context.Context, queryParams map[string]string, req *HistoryExportRequest) (*HistoryExportResponse, *resty.Response, error)
 	}
 
 	// Service provides methods for interacting with activation code endpoints.
@@ -62,7 +63,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // UpdateV1 updates the activation code in Jamf Pro.
 // URL: PUT /api/v1/activation-code
 // https://developer.jamf.com/jamf-pro/reference/put_v1-activation-code
-func (s *Service) UpdateV1(ctx context.Context, req *ActivationCodeRequest) (*interfaces.Response, error) {
+func (s *Service) UpdateV1(ctx context.Context, req *ActivationCodeRequest) (*resty.Response, error) {
 	if req == nil {
 		return nil, fmt.Errorf("request is required")
 	}
@@ -84,7 +85,7 @@ func (s *Service) UpdateV1(ctx context.Context, req *ActivationCodeRequest) (*in
 // UpdateOrganizationNameV1 updates the organization name in Jamf Pro.
 // URL: PATCH /api/v1/activation-code/organization-name
 // https://developer.jamf.com/jamf-pro/reference/patch_v1-activation-code-organization-name
-func (s *Service) UpdateOrganizationNameV1(ctx context.Context, req *OrganizationNameRequest) (*interfaces.Response, error) {
+func (s *Service) UpdateOrganizationNameV1(ctx context.Context, req *OrganizationNameRequest) (*resty.Response, error) {
 	if req == nil {
 		return nil, fmt.Errorf("request is required")
 	}
@@ -108,7 +109,7 @@ func (s *Service) UpdateOrganizationNameV1(ctx context.Context, req *Organizatio
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // Note: page and page-size are managed internally by GetPaginated.
 // https://developer.jamf.com/jamf-pro/reference/get_v1-activation-code-history
-func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	endpoint := EndpointActivationCodeHistoryV1
 
 	var result HistoryResponse
@@ -140,7 +141,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 // AddHistoryNoteV1 adds a note to activation code history.
 // URL: POST /api/v1/activation-code/history
 // https://developer.jamf.com/jamf-pro/reference/post_v1-activation-code-history
-func (s *Service) AddHistoryNoteV1(ctx context.Context, req *HistoryNoteRequest) (*HistoryEntry, *interfaces.Response, error) {
+func (s *Service) AddHistoryNoteV1(ctx context.Context, req *HistoryNoteRequest) (*HistoryEntry, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -167,7 +168,7 @@ func (s *Service) AddHistoryNoteV1(ctx context.Context, req *HistoryNoteRequest)
 // acceptType should be "application/json" or "text/csv"
 // The request body is optional and can override query parameters if URI exceeds 2,000 characters.
 // https://developer.jamf.com/jamf-pro/reference/post_v1-activation-code-history-export
-func (s *Service) ExportHistoryV1(ctx context.Context, queryParams map[string]string, req *HistoryExportRequest) (*HistoryExportResponse, *interfaces.Response, error) {
+func (s *Service) ExportHistoryV1(ctx context.Context, queryParams map[string]string, req *HistoryExportRequest) (*HistoryExportResponse, *resty.Response, error) {
 	endpoint := EndpointActivationCodeHistoryExportV1
 
 	var result HistoryExportResponse

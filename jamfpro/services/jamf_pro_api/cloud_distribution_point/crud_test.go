@@ -20,7 +20,7 @@ func TestUnit_CloudDistributionPoint_GetV1_Success(t *testing.T) {
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.True(t, result.HasConnectionSucceeded)
 	require.Equal(t, "JCDS", result.CdnType)
 }
@@ -30,7 +30,7 @@ func TestUnit_CloudDistributionPoint_GetUploadCapabilityV1_Success(t *testing.T)
 	result, resp, err := svc.GetUploadCapabilityV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.True(t, result.DirectUploadCapable)
 }
 
@@ -39,7 +39,7 @@ func TestUnit_CloudDistributionPoint_GetTestConnectionV1_Success(t *testing.T) {
 	result, resp, err := svc.GetTestConnectionV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.True(t, result.HasConnectionSucceeded)
 }
 
@@ -48,7 +48,7 @@ func TestUnit_CloudDistributionPoint_DeleteV1_Success(t *testing.T) {
 	resp, err := svc.DeleteV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Equal(t, 204, resp.StatusCode)
+	require.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_CloudDistributionPoint_CreateV1_Success(t *testing.T) {
@@ -60,7 +60,7 @@ func TestUnit_CloudDistributionPoint_CreateV1_Success(t *testing.T) {
 	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 201, resp.StatusCode)
+	require.Equal(t, 201, resp.StatusCode())
 	require.True(t, result.HasConnectionSucceeded)
 	require.Equal(t, "JCDS", result.CdnType)
 }
@@ -74,7 +74,7 @@ func TestUnit_CloudDistributionPoint_UpdateV1_Success(t *testing.T) {
 	result, resp, err := svc.UpdateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.True(t, result.HasConnectionSucceeded)
 }
 
@@ -83,7 +83,7 @@ func TestUnit_CloudDistributionPoint_GetHistoryV1_Success(t *testing.T) {
 	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	require.Equal(t, 1, result.Results[0].ID)
@@ -96,7 +96,7 @@ func TestUnit_CloudDistributionPoint_GetFilesV1_Success(t *testing.T) {
 	result, resp, err := svc.GetFilesV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	require.Equal(t, "file-001", result.Results[0].ID)
@@ -192,7 +192,7 @@ func TestUnit_CloudDistributionPoint_AddHistoryNoteV1_Success(t *testing.T) {
 	result, resp, err := svc.AddHistoryNoteV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 201, resp.StatusCode)
+	require.Equal(t, 201, resp.StatusCode())
 	require.Equal(t, 2, result.ID)
 	require.Equal(t, "admin", result.Username)
 	require.Equal(t, "Added history note via API", result.Note)
@@ -220,7 +220,7 @@ func TestUnit_CloudDistributionPoint_FailUploadV1_Success(t *testing.T) {
 	resp, err := svc.FailUploadV1(context.Background(), "test-id", "package.pkg", "PACKAGE")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Equal(t, 204, resp.StatusCode)
+	require.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_CloudDistributionPoint_FailUploadV1_EmptyID(t *testing.T) {
@@ -259,7 +259,7 @@ func TestUnit_CloudDistributionPoint_RefreshInventoryV1_Success(t *testing.T) {
 	resp, err := svc.RefreshInventoryV1(context.Background(), "")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_CloudDistributionPoint_RefreshInventoryV1_WithFileName(t *testing.T) {
@@ -267,7 +267,7 @@ func TestUnit_CloudDistributionPoint_RefreshInventoryV1_WithFileName(t *testing.
 	resp, err := svc.RefreshInventoryV1(context.Background(), "package.pkg")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_CloudDistributionPoint_RefreshInventoryV1_Error(t *testing.T) {

@@ -154,7 +154,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 7. GetByID — verify update

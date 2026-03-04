@@ -21,7 +21,7 @@ func TestAcceptance_CacheSettings_get_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.CacheType)
 }
 
@@ -46,5 +46,5 @@ func TestAcceptance_CacheSettings_update_v1(t *testing.T) {
 	}
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }

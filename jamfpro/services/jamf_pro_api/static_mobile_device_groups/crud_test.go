@@ -23,7 +23,7 @@ func TestUnit_StaticMobileDeviceGroups_List_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "10", result.Results[0].ID)
@@ -38,7 +38,7 @@ func TestUnit_StaticMobileDeviceGroups_GetByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "10", result.ID)
 	assert.Equal(t, "Static Devices", result.Name)
 }
@@ -67,7 +67,7 @@ func TestUnit_StaticMobileDeviceGroups_Create_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "11", result.ID)
 	assert.NotEmpty(t, result.Href)
 }
@@ -96,7 +96,7 @@ func TestUnit_StaticMobileDeviceGroups_UpdateByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "10", result.ID)
 	assert.Equal(t, "Static Devices Updated", result.Name)
 }
@@ -129,7 +129,7 @@ func TestUnit_StaticMobileDeviceGroups_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByID(context.Background(), "10")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_StaticMobileDeviceGroups_DeleteByID_EmptyID(t *testing.T) {

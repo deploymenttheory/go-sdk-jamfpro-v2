@@ -20,7 +20,7 @@ func TestUnit_Csa_GetTokenExchangeDetailsV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.TenantID)
 	assert.NotEmpty(t, result.Subject)
 	assert.Greater(t, result.RefreshExpiration, 0)
@@ -38,7 +38,7 @@ func TestUnit_Csa_GetTenantIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.TenantID)
 }
 
@@ -53,7 +53,7 @@ func TestUnit_Csa_DeleteTokenExchangeV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Csa_GetTokenExchangeDetailsV1_Error(t *testing.T) {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -19,17 +20,17 @@ type (
 		// Initialize initializes a fresh Jamf Pro Server installation.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize
-		Initialize(ctx context.Context, request *ResourceSystemInitialize) (*interfaces.Response, error)
+		Initialize(ctx context.Context, request *ResourceSystemInitialize) (*resty.Response, error)
 
 		// InitializeDatabaseConnection sets up the database password during startup.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize-database-connection
-		InitializeDatabaseConnection(ctx context.Context, password string) (*interfaces.Response, error)
+		InitializeDatabaseConnection(ctx context.Context, password string) (*resty.Response, error)
 
 		// PlatformInitialize sets up Jamf Pro Server with OIDC SSO and a federated user (no password required).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-platform-initialize
-		PlatformInitialize(ctx context.Context, request *ResourcePlatformInitialize) (*interfaces.Response, error)
+		PlatformInitialize(ctx context.Context, request *ResourcePlatformInitialize) (*resty.Response, error)
 	}
 
 	// Service handles communication with the Jamf Pro system initialization API.
@@ -51,7 +52,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Initialize initializes a fresh Jamf Pro Server installation.
 // URL: POST /api/v1/system/initialize
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize
-func (s *Service) Initialize(ctx context.Context, request *ResourceSystemInitialize) (*interfaces.Response, error) {
+func (s *Service) Initialize(ctx context.Context, request *ResourceSystemInitialize) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request cannot be nil")
 	}
@@ -74,7 +75,7 @@ func (s *Service) Initialize(ctx context.Context, request *ResourceSystemInitial
 // InitializeDatabaseConnection sets up the database password during startup.
 // URL: POST /api/v1/system/initialize-database-connection
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize-database-connection
-func (s *Service) InitializeDatabaseConnection(ctx context.Context, password string) (*interfaces.Response, error) {
+func (s *Service) InitializeDatabaseConnection(ctx context.Context, password string) (*resty.Response, error) {
 	endpoint := EndpointInitializeDatabaseConnection
 
 	request := &ResourceDatabasePassword{
@@ -97,7 +98,7 @@ func (s *Service) InitializeDatabaseConnection(ctx context.Context, password str
 // PlatformInitialize sets up Jamf Pro Server with OIDC SSO and a federated user (no password required).
 // URL: POST /api/v1/system/platform-initialize
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-platform-initialize
-func (s *Service) PlatformInitialize(ctx context.Context, request *ResourcePlatformInitialize) (*interfaces.Response, error) {
+func (s *Service) PlatformInitialize(ctx context.Context, request *ResourcePlatformInitialize) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request cannot be nil")
 	}

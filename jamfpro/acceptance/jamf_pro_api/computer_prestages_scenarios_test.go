@@ -92,7 +92,7 @@ func TestAcceptance_ComputerPrestages_minimal_config(t *testing.T) {
 		return
 	}
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode())
 
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -184,7 +184,7 @@ func TestAcceptance_ComputerPrestages_recovery_lock_scenario(t *testing.T) {
 		return
 	}
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode())
 
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -281,7 +281,7 @@ func TestAcceptance_ComputerPrestages_account_settings_scenario(t *testing.T) {
 		return
 	}
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode())
 
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -408,7 +408,7 @@ func TestAcceptance_ComputerPrestages_maximal_config(t *testing.T) {
 		return
 	}
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode())
 
 	acc.Cleanup(t, func() {
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

@@ -79,7 +79,7 @@ func TestAcceptance_Engage_settings_lifecycle(t *testing.T) {
 		IsEnabled: !originalEnabled,
 	}
 	updatedSettings, updateResp, err := svc.UpdateV2(ctx, updateReq)
-	if err != nil && updateResp != nil && updateResp.StatusCode == 405 {
+	if err != nil && updateResp != nil && updateResp.StatusCode() == 405 {
 		t.Skip("Engage update endpoint not available (405 Method Not Allowed)")
 	}
 	require.NoError(t, err)

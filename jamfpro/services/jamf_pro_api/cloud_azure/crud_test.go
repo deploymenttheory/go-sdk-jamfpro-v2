@@ -20,7 +20,7 @@ func TestUnit_CloudAzure_GetDefaultServerConfigurationV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result)
 	assert.Equal(t, "objectGUID", result.Mappings.UserId)
 	assert.Equal(t, "userPrincipalName", result.Mappings.UserName)
@@ -37,7 +37,7 @@ func TestUnit_CloudAzure_GetByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.Server.ID)
 	assert.Equal(t, "Test Azure IDP", result.CloudIdPCommon.DisplayName)
 	assert.Equal(t, "AZURE", result.CloudIdPCommon.ProviderName)
@@ -108,7 +108,7 @@ func TestUnit_CloudAzure_CreateV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, result.ID)
 	assert.Equal(t, "/api/v1/cloud-azure/1", result.Href)
 }
@@ -144,7 +144,7 @@ func TestUnit_CloudAzure_UpdateByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result)
 }
 
@@ -225,7 +225,7 @@ func TestUnit_CloudAzure_DeleteByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_CloudAzure_DeleteByIDV1_EmptyID(t *testing.T) {
@@ -253,7 +253,7 @@ func TestUnit_CloudAzure_DeleteByNameV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_CloudAzure_DeleteByNameV1_EmptyName(t *testing.T) {
@@ -279,7 +279,7 @@ func TestUnit_CloudAzure_GetDefaultMappingsV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "objectGUID", result.UserId)
 	assert.Equal(t, "userPrincipalName", result.UserName)
 	assert.Equal(t, "displayName", result.RealName)

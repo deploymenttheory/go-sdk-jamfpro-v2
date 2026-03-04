@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,30 +18,30 @@ type (
 		// ListV2 returns all static computer groups.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups
-		ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV2 returns the specified static computer group by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups-id
-		GetByIDV2(ctx context.Context, id string) (*ResourceStaticGroup, *interfaces.Response, error)
+		GetByIDV2(ctx context.Context, id string) (*ResourceStaticGroup, *resty.Response, error)
 
 		// GetByNameV2 returns the specified static computer group by name.
-		GetByNameV2(ctx context.Context, name string) (*ResourceStaticGroup, *interfaces.Response, error)
+		GetByNameV2(ctx context.Context, name string) (*ResourceStaticGroup, *resty.Response, error)
 
 		// CreateV2 creates a new static computer group.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-static-groups
-		CreateV2(ctx context.Context, request *RequestStaticGroup) (*CreateResponse, *interfaces.Response, error)
+		CreateV2(ctx context.Context, request *RequestStaticGroup) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV2 updates the specified static computer group by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-static-groups-id
-		UpdateByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*RequestStaticGroup, *interfaces.Response, error)
+		UpdateByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*RequestStaticGroup, *resty.Response, error)
 
 		// DeleteByIDV2 removes the specified static computer group by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-groups-static-groups-id
-		DeleteByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the static computer groups-related methods of the Jamf Pro API.
@@ -59,10 +60,9 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ListV2 returns all static computer groups.
 // URL: GET /api/v2/computer-groups/static-groups
-func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 	result.Results = []ResourceStaticGroup{}
-
 
 	endpoint := EndpointStaticGroupsV2
 
@@ -85,11 +85,12 @@ func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	}
 
 	// Extract totalCount from response body if available
-	if resp != nil && len(resp.Body) > 0 {
+	bodyBytes := resp.Bytes()
+	if resp != nil && len(bodyBytes) > 0 {
 		var pageResp struct {
 			TotalCount int `json:"totalCount"`
 		}
-		if err := json.Unmarshal(resp.Body, &pageResp); err == nil {
+		if err := json.Unmarshal(bodyBytes, &pageResp); err == nil {
 			result.TotalCount = pageResp.TotalCount
 		}
 	}
@@ -104,7 +105,7 @@ func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*Lis
 
 // GetByIDV2 returns the specified static computer group by ID.
 // URL: GET /api/v2/computer-groups/static-groups/{id}
-func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceStaticGroup, *interfaces.Response, error) {
+func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceStaticGroup, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("static computer group ID is required")
 	}
@@ -126,7 +127,7 @@ func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceStaticGrou
 }
 
 // GetByNameV2 returns the specified static computer group by name.
-func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourceStaticGroup, *interfaces.Response, error) {
+func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourceStaticGroup, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("static computer group name is required")
 	}
@@ -149,7 +150,7 @@ func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourceStatic
 
 // CreateV2 creates a new static computer group.
 // URL: POST /api/v2/computer-groups/static-groups
-func (s *Service) CreateV2(ctx context.Context, request *RequestStaticGroup) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV2(ctx context.Context, request *RequestStaticGroup) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -177,7 +178,7 @@ func (s *Service) CreateV2(ctx context.Context, request *RequestStaticGroup) (*C
 
 // UpdateByIDV2 updates the specified static computer group by ID.
 // URL: PUT /api/v2/computer-groups/static-groups/{id}
-func (s *Service) UpdateByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*RequestStaticGroup, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*RequestStaticGroup, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -209,7 +210,7 @@ func (s *Service) UpdateByIDV2(ctx context.Context, id string, request *RequestS
 
 // DeleteByIDV2 removes the specified static computer group by ID.
 // URL: DELETE /api/v2/computer-groups/static-groups/{id}
-func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("static computer group ID is required")
 	}

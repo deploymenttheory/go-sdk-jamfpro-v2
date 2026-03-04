@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -20,40 +21,40 @@ type (
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 retrieves a group by its platform ID (groupPlatformId).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *resty.Response, error)
 
 		// GetComputerGroupByNameV1 retrieves a computer group by its name (groupName).
 		//
 		// This method filters by groupName and groupType=COMPUTER.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		GetComputerGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *interfaces.Response, error)
+		GetComputerGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *resty.Response, error)
 
 		// GetMobileGroupByNameV1 retrieves a mobile device group by its name (groupName).
 		//
 		// This method filters by groupName and groupType=MOBILE.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		GetMobileGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *interfaces.Response, error)
+		GetMobileGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *resty.Response, error)
 
 		// GetComputerGroupByIDV1 retrieves a computer group by its Jamf Pro ID (groupJamfProId).
 		//
 		// This method filters by groupJamfProId and groupType=COMPUTER.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		GetComputerGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *interfaces.Response, error)
+		GetComputerGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *resty.Response, error)
 
 		// GetMobileGroupByIDV1 retrieves a mobile device group by its Jamf Pro ID (groupJamfProId).
 		//
 		// This method filters by groupJamfProId and groupType=MOBILE.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		GetMobileGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *interfaces.Response, error)
+		GetMobileGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *resty.Response, error)
 
 		// UpdateByIDV1 updates a group by its platform ID.
 		//
@@ -62,14 +63,14 @@ type (
 		// For static groups, assignments can also be updated.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-groups-id
-		UpdateByIDV1(ctx context.Context, id string, req *RequestUpdateGroup) (*ResourceGroup, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, req *RequestUpdateGroup) (*ResourceGroup, *resty.Response, error)
 
 		// DeleteByIDV1 removes the specified group by its platform ID.
 		//
 		// Returns a 400 error if the group is being used as a dependency.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-groups-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the Groups-related methods of the Jamf Pro API.
@@ -90,7 +91,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/groups
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointGroupsV1
 
 	var result ListResponse
@@ -118,7 +119,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 retrieves a group by its platform ID (groupPlatformId).
 // URL: GET /api/v1/groups/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("group ID is required")
 	}
@@ -142,7 +143,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *in
 // GetComputerGroupByNameV1 retrieves a computer group by its name (groupName).
 // URL: GET /api/v1/groups?filter=groupName=="name"
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-func (s *Service) GetComputerGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *interfaces.Response, error) {
+func (s *Service) GetComputerGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("group name is required")
 	}
@@ -168,7 +169,7 @@ func (s *Service) GetComputerGroupByNameV1(ctx context.Context, name string) (*R
 // GetMobileGroupByNameV1 retrieves a mobile device group by its name (groupName).
 // URL: GET /api/v1/groups?filter=groupName=="name"
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-func (s *Service) GetMobileGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *interfaces.Response, error) {
+func (s *Service) GetMobileGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("group name is required")
 	}
@@ -194,7 +195,7 @@ func (s *Service) GetMobileGroupByNameV1(ctx context.Context, name string) (*Res
 // GetComputerGroupByIDV1 retrieves a computer group by its Jamf Pro ID (groupJamfProId).
 // URL: GET /api/v1/groups
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-func (s *Service) GetComputerGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *interfaces.Response, error) {
+func (s *Service) GetComputerGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *resty.Response, error) {
 	if jamfProID == "" {
 		return nil, nil, fmt.Errorf("group Jamf Pro ID is required")
 	}
@@ -216,7 +217,7 @@ func (s *Service) GetComputerGroupByIDV1(ctx context.Context, jamfProID string) 
 // GetMobileGroupByIDV1 retrieves a mobile device group by its Jamf Pro ID (groupJamfProId).
 // URL: GET /api/v1/groups
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-func (s *Service) GetMobileGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *interfaces.Response, error) {
+func (s *Service) GetMobileGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *resty.Response, error) {
 	if jamfProID == "" {
 		return nil, nil, fmt.Errorf("group Jamf Pro ID is required")
 	}
@@ -238,7 +239,7 @@ func (s *Service) GetMobileGroupByIDV1(ctx context.Context, jamfProID string) (*
 // UpdateByIDV1 updates a group by its platform ID.
 // URL: PATCH /api/v1/groups/{id}
 // https://developer.jamf.com/jamf-pro/reference/patch_v1-groups-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, req *RequestUpdateGroup) (*ResourceGroup, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, req *RequestUpdateGroup) (*ResourceGroup, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("group ID is required")
 	}
@@ -266,7 +267,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, req *RequestUpdat
 // DeleteByIDV1 removes the specified group by its platform ID.
 // URL: DELETE /api/v1/groups/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-groups-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("group ID is required")
 	}

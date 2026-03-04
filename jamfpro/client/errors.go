@@ -3,21 +3,9 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"go.uber.org/zap"
-)
-
-const (
-	StatusBadRequest          = 400
-	StatusUnauthorized        = 401
-	StatusForbidden           = 403
-	StatusNotFound            = 404
-	StatusConflict            = 409
-	StatusPreconditionFailed  = 412
-	StatusUnprocessableEntity = 422
-	StatusTooManyRequests     = 429
-	StatusInternalServerError = 500
-	StatusServiceUnavailable  = 503
 )
 
 // APIError represents an error response from the Jamf Pro API.
@@ -74,25 +62,25 @@ func ParseErrorResponse(body []byte, statusCode int, status, method, endpoint st
 
 func defaultMessageForStatus(statusCode int) string {
 	switch statusCode {
-	case 400:
+	case http.StatusBadRequest:
 		return "The request could not be understood by the server due to malformed syntax."
-	case 401:
+	case http.StatusUnauthorized:
 		return "The request has not been applied because it lacks valid authentication credentials for the target resource."
-	case 403:
+	case http.StatusForbidden:
 		return "Authentication required or token invalid. The server understood the request but refuses to authorize it."
-	case 404:
+	case http.StatusNotFound:
 		return "The server has not found anything matching the Request-URI."
-	case 409:
+	case http.StatusConflict:
 		return "The request could not be completed due to a conflict with the current state of the resource."
-	case 412:
+	case http.StatusPreconditionFailed:
 		return "One or more conditions given in the request header fields evaluated to false when tested on the server."
-	case 422:
+	case http.StatusUnprocessableEntity:
 		return "The request has correct syntax, but has a field with a bad value, such as an ID which does not exist, an illegal enum value, or a field is missing entirely."
-	case 429:
+	case http.StatusTooManyRequests:
 		return "The user has sent too many requests in a given amount of time (rate limiting)."
-	case 500:
+	case http.StatusInternalServerError:
 		return "The server encountered an unexpected condition which prevented it from fulfilling the request."
-	case 503:
+	case http.StatusServiceUnavailable:
 		return "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
 	default:
 		return "Unknown error"
@@ -102,7 +90,7 @@ func defaultMessageForStatus(statusCode int) string {
 // IsNotFound checks if the error is a not found error (404).
 func IsNotFound(err error) bool {
 	if apiErr, ok := err.(*APIError); ok {
-		return apiErr.StatusCode == StatusNotFound
+		return apiErr.StatusCode == http.StatusNotFound
 	}
 	return false
 }
@@ -110,7 +98,7 @@ func IsNotFound(err error) bool {
 // IsUnauthorized checks if the error is an authentication error (401).
 func IsUnauthorized(err error) bool {
 	if apiErr, ok := err.(*APIError); ok {
-		return apiErr.StatusCode == StatusUnauthorized
+		return apiErr.StatusCode == http.StatusUnauthorized
 	}
 	return false
 }
@@ -118,7 +106,7 @@ func IsUnauthorized(err error) bool {
 // IsBadRequest checks if the error is a bad request error (400).
 func IsBadRequest(err error) bool {
 	if apiErr, ok := err.(*APIError); ok {
-		return apiErr.StatusCode == StatusBadRequest
+		return apiErr.StatusCode == http.StatusBadRequest
 	}
 	return false
 }
@@ -126,7 +114,7 @@ func IsBadRequest(err error) bool {
 // IsServerError checks if the error is a server error (5xx).
 func IsServerError(err error) bool {
 	if apiErr, ok := err.(*APIError); ok {
-		return apiErr.StatusCode >= 500 && apiErr.StatusCode < 600
+		return apiErr.StatusCode >= http.StatusInternalServerError && apiErr.StatusCode < 600
 	}
 	return false
 }

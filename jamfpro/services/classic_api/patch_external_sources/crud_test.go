@@ -28,7 +28,7 @@ func TestUnit_PatchExternalSources_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -49,7 +49,7 @@ func TestUnit_PatchExternalSources_GetByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Primary Patch Source", result.Name)
 	assert.Equal(t, "patches.example.com", result.HostName)
@@ -92,7 +92,7 @@ func TestUnit_PatchExternalSources_GetByName_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Primary Patch Source", result.Name)
 }
@@ -122,7 +122,7 @@ func TestUnit_PatchExternalSources_Create_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Primary Patch Source", result.Name)
 }
@@ -157,7 +157,7 @@ func TestUnit_PatchExternalSources_UpdateByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Primary Patch Source Updated", result.Name)
 }
@@ -189,7 +189,7 @@ func TestUnit_PatchExternalSources_UpdateByName_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -217,7 +217,7 @@ func TestUnit_PatchExternalSources_DeleteByID_Success(t *testing.T) {
 
 	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_PatchExternalSources_DeleteByID_ZeroID(t *testing.T) {

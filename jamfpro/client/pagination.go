@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"resty.dev/v3"
 )
 
 // PaginationLinks contains pagination navigation links (for cursor-style APIs).
@@ -37,7 +37,7 @@ type jamfPaginatedPage struct {
 // Pagination is only available on endpoints that explicitly support it.
 // Example: GET /api/v3/computers-inventory
 // See: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory
-func (t *Transport) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
+func (t *Transport) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	currentParams := make(map[string]string)
 	maps.Copy(currentParams, rsqlQuery)
 	if currentParams["page"] == "" {
@@ -47,7 +47,7 @@ func (t *Transport) GetPaginated(ctx context.Context, path string, rsqlQuery map
 		currentParams["page-size"] = strconv.Itoa(DefaultPageSize)
 	}
 
-	var lastResp *interfaces.Response
+	var lastResp *resty.Response
 	for {
 		var pageResp jamfPaginatedPage
 		resp, err := t.Get(ctx, path, currentParams, headers, &pageResp)

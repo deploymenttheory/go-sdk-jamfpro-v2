@@ -23,7 +23,7 @@ func TestUnit_SelfServiceBrandingUpload_Upload_Success(t *testing.T) {
 	result, resp, err := svc.Upload(context.Background(), r, 14, "branding.png")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Contains(t, []int{200, 201}, resp.StatusCode)
+	require.Contains(t, []int{200, 201}, resp.StatusCode())
 	require.NotEmpty(t, result.URL)
 	require.Contains(t, result.URL, "uploaded-branding.png")
 }
@@ -34,7 +34,7 @@ func TestUnit_SelfServiceBrandingUpload_Upload_DefaultFileName(t *testing.T) {
 	result, resp, err := svc.Upload(context.Background(), r, 14, "")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.NotEmpty(t, result.URL)
 }
 
@@ -59,7 +59,7 @@ func TestUnit_SelfServiceBrandingUpload_UploadFromFile_Success(t *testing.T) {
 	result, resp, err := svc.UploadFromFile(context.Background(), f.Name())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Contains(t, []int{200, 201}, resp.StatusCode)
+	require.Contains(t, []int{200, 201}, resp.StatusCode())
 	require.NotEmpty(t, result.URL)
 }
 

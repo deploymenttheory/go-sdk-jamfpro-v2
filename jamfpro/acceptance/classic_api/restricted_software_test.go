@@ -160,7 +160,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	require.NotNil(t, updated, "UpdateByID: updated is nil")
 	require.Contains(t, []int{200, 201}, updateResp.StatusCode, "UpdateByID: expected status 200 or 201, got %d", updateResp.StatusCode)
 	// Classic API PUT responses return only the resource ID, not the full resource.
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 6. GetByID — verify the update

@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,39 +18,39 @@ type (
 		// ListV1 returns all advanced mobile device searches (Get Advanced Mobile Device Searches).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the specified advanced mobile device search by ID (Get Advanced Mobile Device Search by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedMobileDeviceSearch, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedMobileDeviceSearch, *resty.Response, error)
 
 		// CreateV1 creates a new advanced mobile device search (Create Advanced Mobile Device Search).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches
-		CreateV1(ctx context.Context, request *ResourceAdvancedMobileDeviceSearch) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *ResourceAdvancedMobileDeviceSearch) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV1 updates the specified advanced mobile device search by ID (Update Advanced Mobile Device Search by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-advanced-mobile-device-searches-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedMobileDeviceSearch) (*ResourceAdvancedMobileDeviceSearch, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedMobileDeviceSearch) (*ResourceAdvancedMobileDeviceSearch, *resty.Response, error)
 
 		// DeleteByIDV1 removes the specified advanced mobile device search by ID (Delete Advanced Mobile Device Search by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-advanced-mobile-device-searches-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteMultipleV1 deletes multiple advanced mobile device searches by their IDs (Delete multiple Advanced Mobile Device Searches by their IDs).
 		//
 		// Sends a POST to /api/v1/advanced-mobile-device-searches/delete-multiple with a body containing search IDs.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches-delete-multiple
-		DeleteMultipleV1(ctx context.Context, req *DeleteAdvancedMobileDeviceSearchesByIDRequest) (*interfaces.Response, error)
+		DeleteMultipleV1(ctx context.Context, req *DeleteAdvancedMobileDeviceSearchesByIDRequest) (*resty.Response, error)
 
 		// GetChoicesV1 returns criteria choices for advanced mobile device searches (Get Advanced Mobile Device Search Choices).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches-choices
-		GetChoicesV1(ctx context.Context, criteria, site, contains string) (*ChoicesResponse, *interfaces.Response, error)
+		GetChoicesV1(ctx context.Context, criteria, site, contains string) (*ChoicesResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the advanced mobile device searches-related methods of the Jamf Pro API.
@@ -69,7 +70,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV1 returns all advanced mobile device searches.
 // URL: GET /api/v1/advanced-mobile-device-searches
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointAdvancedMobileDeviceSearchesV1
@@ -88,7 +89,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 returns the specified advanced mobile device search by ID.
 // URL: GET /api/v1/advanced-mobile-device-searches/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedMobileDeviceSearch, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedMobileDeviceSearch, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -110,7 +111,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedMo
 // CreateV1 creates a new advanced mobile device search.
 // URL: POST /api/v1/advanced-mobile-device-searches
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches
-func (s *Service) CreateV1(ctx context.Context, request *ResourceAdvancedMobileDeviceSearch) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *ResourceAdvancedMobileDeviceSearch) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("search is required")
 	}
@@ -134,7 +135,7 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceAdvancedMobileD
 // UpdateByIDV1 updates the specified advanced mobile device search by ID.
 // URL: PUT /api/v1/advanced-mobile-device-searches/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-advanced-mobile-device-searches-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedMobileDeviceSearch) (*ResourceAdvancedMobileDeviceSearch, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedMobileDeviceSearch) (*ResourceAdvancedMobileDeviceSearch, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -163,7 +164,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *Resource
 // DeleteByIDV1 removes the specified advanced mobile device search by ID.
 // URL: DELETE /api/v1/advanced-mobile-device-searches/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-advanced-mobile-device-searches-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -185,7 +186,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 // URL: POST /api/v1/advanced-mobile-device-searches/delete-multiple
 // Body: JSON with ids (array of search IDs)
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches-delete-multiple
-func (s *Service) DeleteMultipleV1(ctx context.Context, req *DeleteAdvancedMobileDeviceSearchesByIDRequest) (*interfaces.Response, error) {
+func (s *Service) DeleteMultipleV1(ctx context.Context, req *DeleteAdvancedMobileDeviceSearchesByIDRequest) (*resty.Response, error) {
 	if req == nil || len(req.IDs) == 0 {
 		return nil, fmt.Errorf("ids are required")
 	}
@@ -208,7 +209,7 @@ func (s *Service) DeleteMultipleV1(ctx context.Context, req *DeleteAdvancedMobil
 // GetChoicesV1 returns criteria choices for advanced mobile device searches.
 // URL: GET /api/v1/advanced-mobile-device-searches/choices?criteria=...&site=...&contains=...
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches-choices
-func (s *Service) GetChoicesV1(ctx context.Context, criteria, site, contains string) (*ChoicesResponse, *interfaces.Response, error) {
+func (s *Service) GetChoicesV1(ctx context.Context, criteria, site, contains string) (*ChoicesResponse, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/choices?criteria=%s&site=%s&contains=%s",
 		EndpointAdvancedMobileDeviceSearchesV1,
 		url.QueryEscape(criteria),

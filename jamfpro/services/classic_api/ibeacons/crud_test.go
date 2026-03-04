@@ -29,7 +29,7 @@ func TestUnit_Ibeacons_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -51,7 +51,7 @@ func TestUnit_Ibeacons_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Lobby Beacon", result.Name)
 	assert.Equal(t, "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0", result.UUID)
@@ -87,7 +87,7 @@ func TestUnit_Ibeacons_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -103,7 +103,7 @@ func TestUnit_Ibeacons_GetByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Lobby Beacon", result.Name)
 }
@@ -137,7 +137,7 @@ func TestUnit_Ibeacons_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 3, result.ID)
 	assert.Equal(t, "New Beacon", result.Name)
 }
@@ -161,7 +161,7 @@ func TestUnit_Ibeacons_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 // =============================================================================
@@ -183,7 +183,7 @@ func TestUnit_Ibeacons_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Lobby Beacon Updated", result.Name)
 }
@@ -227,7 +227,7 @@ func TestUnit_Ibeacons_UpdateByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Lobby Beacon Updated", result.Name)
 }
@@ -263,7 +263,7 @@ func TestUnit_Ibeacons_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Ibeacons_DeleteByID_ZeroID(t *testing.T) {
@@ -286,7 +286,7 @@ func TestUnit_Ibeacons_DeleteByName_Success(t *testing.T) {
 	resp, err := svc.DeleteByName(context.Background(), "Lobby Beacon")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Ibeacons_DeleteByName_EmptyName(t *testing.T) {

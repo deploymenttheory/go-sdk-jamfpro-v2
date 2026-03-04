@@ -20,7 +20,7 @@ func TestAcceptance_SsoSettings_get_v3(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_SsoSettings_get_enrollment_customization_dependencies(t *testing.T) {
@@ -32,7 +32,7 @@ func TestAcceptance_SsoSettings_get_enrollment_customization_dependencies(t *tes
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_SsoSettings_update_v3(t *testing.T) {
@@ -50,7 +50,7 @@ func TestAcceptance_SsoSettings_update_v3(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Restore
 	request.SsoBypassAllowed = current.SsoBypassAllowed
@@ -69,14 +69,14 @@ func TestAcceptance_SsoSettings_get_history_v3(t *testing.T) {
 	addResult, addResp, err := svc.AddHistoryNoteV3(ctx, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, addResult)
-	assert.Equal(t, 201, addResp.StatusCode)
+	assert.Equal(t, 201, addResp.StatusCode())
 	t.Logf("Added history note with ID: %s", addResult.ID)
 
 	result, resp, err := svc.GetHistoryV3(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 1, "Should have at least the note we just added")
 }
 
@@ -93,6 +93,6 @@ func TestAcceptance_SsoSettings_add_history_note_v3(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	t.Logf("Added history note successfully")
 }

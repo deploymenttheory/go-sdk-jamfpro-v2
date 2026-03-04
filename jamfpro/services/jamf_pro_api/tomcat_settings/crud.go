@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// IssueTomcatSslCertificate generates an SSL certificate via Jamf CA.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_settings-issue-tomcat-ssl-certificate
-		IssueTomcatSslCertificate(ctx context.Context) (*interfaces.Response, error)
+		IssueTomcatSslCertificate(ctx context.Context) (*resty.Response, error)
 	}
 
 	// Service handles communication with the Tomcat settings methods of the Jamf Pro API.
@@ -34,7 +35,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // IssueTomcatSslCertificate generates an SSL certificate via Jamf CA.
 // URL: POST /api/settings/issueTomcatSslCertificate
-func (s *Service) IssueTomcatSslCertificate(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) IssueTomcatSslCertificate(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointIssueTomcatSslCertificate
 
 	headers := map[string]string{

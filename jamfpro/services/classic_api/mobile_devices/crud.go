@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,52 +17,52 @@ type (
 		// List returns all mobile devices.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevices
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified mobile device by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyid
-		GetByID(ctx context.Context, id string) (*ResponseMobileDevice, *interfaces.Response, error)
+		GetByID(ctx context.Context, id string) (*ResponseMobileDevice, *resty.Response, error)
 
 		// GetByName returns the specified mobile device by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyname
-		GetByName(ctx context.Context, name string) (*ResponseMobileDevice, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResponseMobileDevice, *resty.Response, error)
 
 		// GetByIDAndDataSubset returns a specific subset of data for the mobile device by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyid
-		GetByIDAndDataSubset(ctx context.Context, id, subset string) (*ResponseMobileDevice, *interfaces.Response, error)
+		GetByIDAndDataSubset(ctx context.Context, id, subset string) (*ResponseMobileDevice, *resty.Response, error)
 
 		// GetByNameAndDataSubset returns a specific subset of data for the mobile device by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyname
-		GetByNameAndDataSubset(ctx context.Context, name, subset string) (*ResponseMobileDevice, *interfaces.Response, error)
+		GetByNameAndDataSubset(ctx context.Context, name, subset string) (*ResponseMobileDevice, *resty.Response, error)
 
 		// Create creates a new mobile device.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledevicebyid
-		Create(ctx context.Context, device *ResponseMobileDevice) (*ResponseMobileDevice, *interfaces.Response, error)
+		Create(ctx context.Context, device *ResponseMobileDevice) (*ResponseMobileDevice, *resty.Response, error)
 
 		// UpdateByID updates the specified mobile device by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicebyid
-		UpdateByID(ctx context.Context, id string, device *ResponseMobileDevice) (*ResponseMobileDevice, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id string, device *ResponseMobileDevice) (*ResponseMobileDevice, *resty.Response, error)
 
 		// UpdateByName updates the specified mobile device by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicebyname
-		UpdateByName(ctx context.Context, name string, device *ResponseMobileDevice) (*ResponseMobileDevice, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, device *ResponseMobileDevice) (*ResponseMobileDevice, *resty.Response, error)
 
 		// DeleteByID removes the specified mobile device by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicebyid
-		DeleteByID(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteByName removes the specified mobile device by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicebyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the mobile-devices-related Classic API methods.
@@ -88,7 +89,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/mobiledevices
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevices
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointMobileDevices
 
 	var out ListResponse
@@ -110,7 +111,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/mobiledevices/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyid
-func (s *Service) GetByID(ctx context.Context, id string) (*ResponseMobileDevice, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id string) (*ResponseMobileDevice, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("mobile device ID cannot be empty")
 	}
@@ -134,7 +135,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResponseMobileDevice
 // GetByName returns the specified mobile device by name.
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResponseMobileDevice, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResponseMobileDevice, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("mobile device name cannot be empty")
 	}
@@ -158,7 +159,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResponseMobileDe
 // GetByIDAndDataSubset returns a specific subset of data for the mobile device by ID.
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyid
-func (s *Service) GetByIDAndDataSubset(ctx context.Context, id, subset string) (*ResponseMobileDevice, *interfaces.Response, error) {
+func (s *Service) GetByIDAndDataSubset(ctx context.Context, id, subset string) (*ResponseMobileDevice, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("mobile device ID cannot be empty")
 	}
@@ -185,7 +186,7 @@ func (s *Service) GetByIDAndDataSubset(ctx context.Context, id, subset string) (
 // GetByNameAndDataSubset returns a specific subset of data for the mobile device by name.
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyname
-func (s *Service) GetByNameAndDataSubset(ctx context.Context, name, subset string) (*ResponseMobileDevice, *interfaces.Response, error) {
+func (s *Service) GetByNameAndDataSubset(ctx context.Context, name, subset string) (*ResponseMobileDevice, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("mobile device name cannot be empty")
 	}
@@ -212,7 +213,7 @@ func (s *Service) GetByNameAndDataSubset(ctx context.Context, name, subset strin
 // Create creates a new mobile device.
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledevicebyid
-func (s *Service) Create(ctx context.Context, device *ResponseMobileDevice) (*ResponseMobileDevice, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, device *ResponseMobileDevice) (*ResponseMobileDevice, *resty.Response, error) {
 	if device == nil {
 		return nil, nil, fmt.Errorf("mobile device is required")
 	}
@@ -238,7 +239,7 @@ func (s *Service) Create(ctx context.Context, device *ResponseMobileDevice) (*Re
 // URL: PUT /JSSResource/mobiledevices/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicebyid
-func (s *Service) UpdateByID(ctx context.Context, id string, device *ResponseMobileDevice) (*ResponseMobileDevice, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id string, device *ResponseMobileDevice) (*ResponseMobileDevice, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("mobile device ID cannot be empty")
 	}
@@ -267,7 +268,7 @@ func (s *Service) UpdateByID(ctx context.Context, id string, device *ResponseMob
 // URL: PUT /JSSResource/mobiledevices/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicebyname
-func (s *Service) UpdateByName(ctx context.Context, name string, device *ResponseMobileDevice) (*ResponseMobileDevice, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, device *ResponseMobileDevice) (*ResponseMobileDevice, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("mobile device name cannot be empty")
 	}
@@ -296,7 +297,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, device *Respons
 // URL: DELETE /JSSResource/mobiledevices/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicebyid
-func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("mobile device ID cannot be empty")
 	}
@@ -320,7 +321,7 @@ func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Respon
 // URL: DELETE /JSSResource/mobiledevices/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicebyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("mobile device name cannot be empty")
 	}

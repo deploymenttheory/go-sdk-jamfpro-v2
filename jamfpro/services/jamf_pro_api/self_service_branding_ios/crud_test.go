@@ -24,7 +24,7 @@ func TestUnit_SelfServiceBrandingMobile_ListV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -41,7 +41,7 @@ func TestUnit_SelfServiceBrandingMobile_GetByIDV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Corporate Branding", result.BrandingName)
 	assert.Equal(t, "#FFFFFF", result.HeaderBackgroundColorCode)
@@ -67,7 +67,7 @@ func TestUnit_SelfServiceBrandingMobile_GetByIDV1_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_SelfServiceBrandingMobile_GetByNameV1_Success(t *testing.T) {
@@ -120,7 +120,7 @@ func TestUnit_SelfServiceBrandingMobile_CreateV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Contains(t, result.Href, "/api/v1/self-service/branding/ios/3")
 }
@@ -150,7 +150,7 @@ func TestUnit_SelfServiceBrandingMobile_CreateV1_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 func TestUnit_SelfServiceBrandingMobile_UpdateByIDV1_Success(t *testing.T) {
@@ -170,7 +170,7 @@ func TestUnit_SelfServiceBrandingMobile_UpdateByIDV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Corporate Branding Updated", result.BrandingName)
 }
@@ -209,7 +209,7 @@ func TestUnit_SelfServiceBrandingMobile_DeleteByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_SelfServiceBrandingMobile_DeleteByIDV1_EmptyID(t *testing.T) {
@@ -237,7 +237,7 @@ func TestUnit_SelfServiceBrandingMobile_UpdateByNameV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_SelfServiceBrandingMobile_DeleteByNameV1_Success(t *testing.T) {
@@ -248,7 +248,7 @@ func TestUnit_SelfServiceBrandingMobile_DeleteByNameV1_Success(t *testing.T) {
 	resp, err := svc.DeleteByNameV1(context.Background(), "Corporate Branding")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_SelfServiceBrandingMobile_UpdateByNameV1_NotFound(t *testing.T) {

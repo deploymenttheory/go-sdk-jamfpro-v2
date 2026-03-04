@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,7 +18,7 @@ type (
 		// (Apple Aspen config format).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-enrollment-profile-id-download-profile
-		GetDownloadProfileV1(ctx context.Context, id string) ([]byte, *interfaces.Response, error)
+		GetDownloadProfileV1(ctx context.Context, id string) ([]byte, *resty.Response, error)
 	}
 
 	// Service handles communication with the mobile device enrollment profile-related methods of the Jamf Pro API.
@@ -44,7 +45,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Response: 200 OK with binary body (application/x-apple-aspen-config).
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-enrollment-profile-id-download-profile
-func (s *Service) GetDownloadProfileV1(ctx context.Context, id string) ([]byte, *interfaces.Response, error) {
+func (s *Service) GetDownloadProfileV1(ctx context.Context, id string) ([]byte, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

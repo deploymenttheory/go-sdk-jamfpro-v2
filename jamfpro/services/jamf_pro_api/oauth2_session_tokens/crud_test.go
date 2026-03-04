@@ -20,7 +20,7 @@ func TestUnit_OAuth2SessionTokens_GetV1_Success(t *testing.T) {
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "token123", result.AccessToken)
 	require.Equal(t, "id-token-456", result.IDToken)
 }
@@ -32,5 +32,5 @@ func TestUnit_OAuth2SessionTokens_GetV1_Error(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 401, resp.StatusCode)
+	require.Equal(t, 401, resp.StatusCode())
 }

@@ -55,7 +55,7 @@ func TestAcceptance_DeviceCommunicationSettings_get_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_DeviceCommunicationSettings_update_v1(t *testing.T) {
@@ -72,5 +72,5 @@ func TestAcceptance_DeviceCommunicationSettings_update_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }

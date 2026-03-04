@@ -61,7 +61,7 @@ func TestAcceptance_Ldap_get_ldap_groups_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result.Results)
 }
 
@@ -74,7 +74,7 @@ func TestAcceptance_Ldap_get_ldap_servers_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_Ldap_get_ldap_groups_v1_with_rsql_filter(t *testing.T) {
@@ -86,7 +86,7 @@ func TestAcceptance_Ldap_get_ldap_groups_v1_with_rsql_filter(t *testing.T) {
 	allGroups, allResp, err := svc.GetLdapGroupsV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, allGroups)
-	assert.Equal(t, 200, allResp.StatusCode)
+	assert.Equal(t, 200, allResp.StatusCode())
 
 	if len(allGroups.Results) == 0 {
 		t.Skip("No LDAP groups available in this environment; skipping RSQL filter test")
@@ -104,7 +104,7 @@ func TestAcceptance_Ldap_get_ldap_groups_v1_with_rsql_filter(t *testing.T) {
 	filtered, filteredResp, err := svc.GetLdapGroupsV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, filtered)
-	assert.Equal(t, 200, filteredResp.StatusCode)
+	assert.Equal(t, 200, filteredResp.StatusCode())
 
 	// Verify the target group appears in filtered results
 	found := false

@@ -57,7 +57,7 @@ func TestAcceptance_User_get(t *testing.T) {
 	}
 	require.NotNil(t, u)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, u.Username, "username should not be empty")
 
 	acc.LogTestSuccess(t, "Get: username=%s accessLevel=%s privilegeSet=%s",

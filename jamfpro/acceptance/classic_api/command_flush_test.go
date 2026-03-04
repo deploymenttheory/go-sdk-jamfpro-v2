@@ -33,7 +33,7 @@ func TestAcceptance_CommandFlush_flush_by_id_and_status(t *testing.T) {
 	resp, err := svc.FlushByIDAndStatus(ctx1, "computers", "1", "Failed")
 	require.NoError(t, err, "FlushByIDAndStatus should not return an error")
 	require.NotNil(t, resp)
-	assert.Contains(t, []int{200, 201, 204}, resp.StatusCode, "expected 200, 201, or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp.StatusCode(), "expected 200, 201, or 204")
 
 	acc.LogTestSuccess(t, "Successfully flushed failed commands for computer 1")
 
@@ -48,7 +48,7 @@ func TestAcceptance_CommandFlush_flush_by_id_and_status(t *testing.T) {
 	resp2, err := svc.FlushByIDAndStatus(ctx2, "mobiledevices", "1", "Pending")
 	require.NoError(t, err, "FlushByIDAndStatus should not return an error")
 	require.NotNil(t, resp2)
-	assert.Contains(t, []int{200, 201, 204}, resp2.StatusCode, "expected 200, 201, or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp2.StatusCode(), "expected 200, 201, or 204")
 
 	acc.LogTestSuccess(t, "Successfully flushed pending commands for mobile device 1")
 
@@ -63,7 +63,7 @@ func TestAcceptance_CommandFlush_flush_by_id_and_status(t *testing.T) {
 	resp3, err := svc.FlushByIDAndStatus(ctx3, "computergroups", "1", "Pending+Failed")
 	require.NoError(t, err, "FlushByIDAndStatus should not return an error")
 	require.NotNil(t, resp3)
-	assert.Contains(t, []int{200, 201, 204}, resp3.StatusCode, "expected 200, 201, or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp3.StatusCode(), "expected 200, 201, or 204")
 
 	acc.LogTestSuccess(t, "Successfully flushed pending+failed commands for computer group 1")
 }
@@ -116,7 +116,7 @@ func TestAcceptance_CommandFlush_flush_with_xml(t *testing.T) {
 	resp, err := svc.FlushWithXML(ctx1, req)
 	require.NoError(t, err, "FlushWithXML should not return an error")
 	require.NotNil(t, resp)
-	assert.Contains(t, []int{200, 201, 204}, resp.StatusCode, "expected 200, 201, or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp.StatusCode(), "expected 200, 201, or 204")
 
 	acc.LogTestSuccess(t, "Successfully flushed pending commands for mobile device %d", deviceID)
 
@@ -158,7 +158,7 @@ func TestAcceptance_CommandFlush_flush_with_xml(t *testing.T) {
 	resp2, err := svc.FlushWithXML(ctx3, req2)
 	require.NoError(t, err, "FlushWithXML should not return an error")
 	require.NotNil(t, resp2)
-	assert.Contains(t, []int{200, 201, 204}, resp2.StatusCode, "expected 200, 201, or 204")
+	assert.Contains(t, []int{200, 201, 204}, resp2.StatusCode(), "expected 200, 201, or 204")
 
 	acc.LogTestSuccess(t, "Successfully flushed failed commands for computer %d", computerID)
 }

@@ -20,7 +20,7 @@ func TestUnit_Locales_ListV1_Success(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 2)
 	require.Equal(t, "en", result[0].Identifier)
 	require.Equal(t, "English", result[0].Description)
@@ -35,7 +35,7 @@ func TestUnit_Locales_ListV1_Error(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 500, resp.StatusCode)
+	require.Equal(t, 500, resp.StatusCode())
 	require.Contains(t, err.Error(), "mock client error")
 }
 
@@ -60,5 +60,5 @@ func TestUnit_Locales_ListV1_InvalidJSON(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 }

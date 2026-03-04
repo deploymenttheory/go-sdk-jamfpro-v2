@@ -7,10 +7,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_macos"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -57,7 +57,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 	created, createResp, err := svc.Create(ctx, createReq)
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	brandingID := created.ID
@@ -74,7 +74,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "GetByID", "Getting branding by ID=%s", brandingID)
 
 	var fetched *self_service_branding_macos.ResourceSelfServiceBrandingMacOS
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetByID(ctx, brandingID)
@@ -82,7 +82,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, brandingID, fetched.ID)
 	assert.Equal(t, createReq.BrandingName, fetched.BrandingName)
 	acc.LogTestSuccess(t, "GetByID: name=%q", fetched.BrandingName)
@@ -109,7 +109,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx, brandingID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Branding updated: ID=%s", brandingID)
 
 	// 5. Re-fetch to verify
@@ -125,7 +125,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx, brandingID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Branding ID=%s deleted", brandingID)
 }
 
@@ -169,7 +169,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_list_with_rsql_filter(t *testing.T)
 	list, listResp, err := svc.List(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, b := range list.Results {
@@ -192,7 +192,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_list(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 	if result.TotalCount > 0 {
 		assert.NotNil(t, result.Results)

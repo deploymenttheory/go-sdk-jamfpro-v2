@@ -21,7 +21,7 @@ func TestUnit_Onboarding_GetV1_Success(t *testing.T) {
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.Enabled)
 	require.Len(t, result.OnboardingItems, 1)
 	assert.Equal(t, "APP", result.OnboardingItems[0].SelfServiceEntityType)
@@ -51,7 +51,7 @@ func TestUnit_Onboarding_UpdateV1_Success(t *testing.T) {
 	result, resp, err := svc.UpdateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.Enabled)
 }
 
@@ -61,7 +61,7 @@ func TestUnit_Onboarding_GetEligibleAppsV1_Success(t *testing.T) {
 	result, resp, err := svc.GetEligibleAppsV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "101", result.Results[0].ID)
@@ -74,7 +74,7 @@ func TestUnit_Onboarding_GetEligibleConfigurationProfilesV1_Success(t *testing.T
 	result, resp, err := svc.GetEligibleConfigurationProfilesV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 }
 
@@ -84,7 +84,7 @@ func TestUnit_Onboarding_GetEligiblePoliciesV1_Success(t *testing.T) {
 	result, resp, err := svc.GetEligiblePoliciesV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 }
 
@@ -94,7 +94,7 @@ func TestUnit_Onboarding_GetHistoryV1_Success(t *testing.T) {
 	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -126,7 +126,7 @@ func TestUnit_Onboarding_AddHistoryNotesV1_Success(t *testing.T) {
 	result, resp, err := svc.AddHistoryNotesV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Equal(t, "/api/v1/onboarding/history/3", result.Href)
 }
@@ -137,7 +137,7 @@ func TestUnit_Onboarding_ExportHistoryV1_Success(t *testing.T) {
 	data, resp, err := svc.ExportHistoryV1(context.Background(), "text/csv", nil, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Contains(t, string(data), "id,username,date,note,details")
 }
 

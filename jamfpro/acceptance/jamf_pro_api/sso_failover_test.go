@@ -18,7 +18,7 @@ func TestAcceptance_SsoFailover_get_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.FailoverURL)
 }
 
@@ -37,7 +37,7 @@ func TestAcceptance_SsoFailover_regenerate_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.FailoverURL)
 	assert.NotEqual(t, before.FailoverURL, result.FailoverURL, "Failover URL should change after regeneration")
 

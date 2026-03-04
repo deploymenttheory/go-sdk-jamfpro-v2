@@ -8,6 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -21,36 +22,36 @@ type (
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations
-		ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV2 returns the specified enrollment customization by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-id
-		GetByIDV2(ctx context.Context, id string) (*ResourceEnrollmentCustomization, *interfaces.Response, error)
+		GetByIDV2(ctx context.Context, id string) (*ResourceEnrollmentCustomization, *resty.Response, error)
 
 		// GetByNameV2 returns the specified enrollment customization by display name.
 		//
 		// This is a convenience method that calls ListV2 and filters by name.
-		GetByNameV2(ctx context.Context, name string) (*ResourceEnrollmentCustomization, *interfaces.Response, error)
+		GetByNameV2(ctx context.Context, name string) (*ResourceEnrollmentCustomization, *resty.Response, error)
 
 		// CreateV2 creates a new enrollment customization record.
 		//
 		// Returns the created enrollment customization's ID and href.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-customizations
-		CreateV2(ctx context.Context, request *ResourceEnrollmentCustomization) (*CreateResponse, *interfaces.Response, error)
+		CreateV2(ctx context.Context, request *ResourceEnrollmentCustomization) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV2 replaces the specified enrollment customization by ID.
 		//
 		// Returns the full updated enrollment customization resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-enrollment-customizations-id
-		UpdateByIDV2(ctx context.Context, id string, request *ResourceEnrollmentCustomization) (*ResourceEnrollmentCustomization, *interfaces.Response, error)
+		UpdateByIDV2(ctx context.Context, id string, request *ResourceEnrollmentCustomization) (*ResourceEnrollmentCustomization, *resty.Response, error)
 
 		// DeleteByIDV2 removes the specified enrollment customization by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-enrollment-customizations-id
-		DeleteByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
 
 		// GetHistoryV2 returns the history object for the specified enrollment customization.
 		//
@@ -58,29 +59,29 @@ type (
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-id-history
-		GetHistoryV2(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV2(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNotesV2 adds notes to the specified enrollment customization's history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-customizations-id-history
-		AddHistoryNotesV2(ctx context.Context, id string, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error)
+		AddHistoryNotesV2(ctx context.Context, id string, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error)
 
 		// GetPrestagesV2 retrieves the list of prestages using this enrollment customization.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-id-prestages
-		GetPrestagesV2(ctx context.Context, id string) (*PrestagesResponse, *interfaces.Response, error)
+		GetPrestagesV2(ctx context.Context, id string) (*PrestagesResponse, *resty.Response, error)
 
 		// UploadImageV2 uploads an image for enrollment customizations.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-customizations-images
-		UploadImageV2(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ImageUploadResponse, *interfaces.Response, error)
+		UploadImageV2(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ImageUploadResponse, *resty.Response, error)
 
 		// GetImageByIdV2 retrieves an enrollment customization image by ID.
 		//
 		// Returns the image file data as bytes.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-images-id
-		GetImageByIdV2(ctx context.Context, id string) ([]byte, *interfaces.Response, error)
+		GetImageByIdV2(ctx context.Context, id string) ([]byte, *resty.Response, error)
 	}
 
 	// Service handles communication with the enrollment customizations-related methods of the Jamf Pro API.
@@ -106,7 +107,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v2/enrollment-customizations
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations
-func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointEnrollmentCustomizationsV2
@@ -135,7 +136,7 @@ func (s *Service) ListV2(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV2 returns the specified enrollment customization by ID.
 // URL: GET /api/v2/enrollment-customizations/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-id
-func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceEnrollmentCustomization, *interfaces.Response, error) {
+func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceEnrollmentCustomization, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -158,7 +159,7 @@ func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourceEnrollment
 
 // GetByNameV2 returns the specified enrollment customization by display name.
 // This is a convenience method that calls ListV2 and filters by name.
-func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourceEnrollmentCustomization, *interfaces.Response, error) {
+func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourceEnrollmentCustomization, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("enrollment customization name is required")
 	}
@@ -180,7 +181,7 @@ func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourceEnroll
 // CreateV2 creates a new enrollment customization record.
 // URL: POST /api/v2/enrollment-customizations
 // https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-customizations
-func (s *Service) CreateV2(ctx context.Context, request *ResourceEnrollmentCustomization) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV2(ctx context.Context, request *ResourceEnrollmentCustomization) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -209,7 +210,7 @@ func (s *Service) CreateV2(ctx context.Context, request *ResourceEnrollmentCusto
 // URL: PUT /api/v2/enrollment-customizations/{id}
 // Returns the full updated enrollment customization resource.
 // https://developer.jamf.com/jamf-pro/reference/put_v2-enrollment-customizations-id
-func (s *Service) UpdateByIDV2(ctx context.Context, id string, request *ResourceEnrollmentCustomization) (*ResourceEnrollmentCustomization, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV2(ctx context.Context, id string, request *ResourceEnrollmentCustomization) (*ResourceEnrollmentCustomization, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -242,7 +243,7 @@ func (s *Service) UpdateByIDV2(ctx context.Context, id string, request *Resource
 // DeleteByIDV2 removes the specified enrollment customization by ID.
 // URL: DELETE /api/v2/enrollment-customizations/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v2-enrollment-customizations-id
-func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -265,7 +266,7 @@ func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Resp
 // URL: GET /api/v2/enrollment-customizations/{id}/history
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-id-history
-func (s *Service) GetHistoryV2(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV2(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -298,7 +299,7 @@ func (s *Service) GetHistoryV2(ctx context.Context, id string, rsqlQuery map[str
 // AddHistoryNotesV2 adds notes to the specified enrollment customization's history.
 // URL: POST /api/v2/enrollment-customizations/{id}/history
 // https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-customizations-id-history
-func (s *Service) AddHistoryNotesV2(ctx context.Context, id string, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error) {
+func (s *Service) AddHistoryNotesV2(ctx context.Context, id string, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -329,7 +330,7 @@ func (s *Service) AddHistoryNotesV2(ctx context.Context, id string, req *Request
 // GetPrestagesV2 retrieves the list of prestages using this enrollment customization.
 // URL: GET /api/v2/enrollment-customizations/{id}/prestages
 // https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-id-prestages
-func (s *Service) GetPrestagesV2(ctx context.Context, id string) (*PrestagesResponse, *interfaces.Response, error) {
+func (s *Service) GetPrestagesV2(ctx context.Context, id string) (*PrestagesResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -353,7 +354,7 @@ func (s *Service) GetPrestagesV2(ctx context.Context, id string) (*PrestagesResp
 // UploadImageV2 uploads an image for enrollment customizations.
 // URL: POST /api/v2/enrollment-customizations/images
 // https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-customizations-images
-func (s *Service) UploadImageV2(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ImageUploadResponse, *interfaces.Response, error) {
+func (s *Service) UploadImageV2(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ImageUploadResponse, *resty.Response, error) {
 	if fileReader == nil {
 		return nil, nil, fmt.Errorf("file reader is required")
 	}
@@ -379,7 +380,7 @@ func (s *Service) UploadImageV2(ctx context.Context, fileReader io.Reader, fileS
 // URL: GET /api/v2/enrollment-customizations/images/{id}
 // Returns the image file data as bytes.
 // https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-images-id
-func (s *Service) GetImageByIdV2(ctx context.Context, id string) ([]byte, *interfaces.Response, error) {
+func (s *Service) GetImageByIdV2(ctx context.Context, id string) ([]byte, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("image ID is required")
 	}

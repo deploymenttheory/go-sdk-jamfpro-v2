@@ -9,6 +9,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"resty.dev/v3"
+
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 )
@@ -92,7 +95,7 @@ func loadMockResponse(filename string) ([]byte, error) {
 }
 
 // Get implements interfaces.HTTPClient.Get.
-func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	m.LastRSQLQuery = query
 	key := "GET:" + path
 	resp, ok := m.responses[key]
@@ -101,7 +104,7 @@ func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[str
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
+		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -110,11 +113,11 @@ func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[str
 		}
 	}
 
-	return &interfaces.Response{StatusCode: resp.statusCode}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // GetPaginated implements interfaces.HTTPClient.GetPaginated.
-func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, query map[string]string, headers map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, query map[string]string, headers map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	m.LastRSQLQuery = query
 	key := "GET:" + path
 	resp, ok := m.responses[key]
@@ -123,7 +126,7 @@ func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, quer
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
+		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if mergePage != nil && len(resp.rawBody) > 0 {
@@ -138,11 +141,11 @@ func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, quer
 		}
 	}
 
-	return &interfaces.Response{StatusCode: resp.statusCode}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Post implements interfaces.HTTPClient.Post.
-func (m *ActivationCodeMock) Post(ctx context.Context, path string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) Post(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	key := "POST:" + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -150,7 +153,7 @@ func (m *ActivationCodeMock) Post(ctx context.Context, path string, body any, he
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
+		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -159,16 +162,16 @@ func (m *ActivationCodeMock) Post(ctx context.Context, path string, body any, he
 		}
 	}
 
-	return &interfaces.Response{StatusCode: resp.statusCode}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Delete implements interfaces.HTTPClient.Delete.
-func (m *ActivationCodeMock) Delete(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) Delete(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("Delete not implemented in ActivationCodeMock")
 }
 
 // Put implements interfaces.HTTPClient.Put.
-func (m *ActivationCodeMock) Put(ctx context.Context, path string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) Put(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	key := "PUT:" + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -176,14 +179,14 @@ func (m *ActivationCodeMock) Put(ctx context.Context, path string, body any, hea
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
+		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
-	return &interfaces.Response{StatusCode: resp.statusCode}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Patch implements interfaces.HTTPClient.Patch.
-func (m *ActivationCodeMock) Patch(ctx context.Context, path string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) Patch(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	key := "PATCH:" + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -191,10 +194,10 @@ func (m *ActivationCodeMock) Patch(ctx context.Context, path string, body any, h
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode}, fmt.Errorf("%s", resp.errMsg)
+		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
-	return &interfaces.Response{StatusCode: resp.statusCode}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // DownloadFile implements interfaces.HTTPClient.DownloadFile.
@@ -213,12 +216,12 @@ func (m *ActivationCodeMock) GetLogger() *zap.Logger {
 }
 
 // DeleteWithBody implements interfaces.HTTPClient.DeleteWithBody.
-func (m *ActivationCodeMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("DeleteWithBody not implemented in ActivationCodeMock")
 }
 
 // PostWithQuery implements interfaces.HTTPClient.PostWithQuery.
-func (m *ActivationCodeMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, out any) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "POST:" + path
 	resp, ok := m.responses[key]
@@ -227,24 +230,24 @@ func (m *ActivationCodeMock) PostWithQuery(ctx context.Context, path string, rsq
 	}
 
 	if resp.errMsg != "" {
-		return &interfaces.Response{StatusCode: resp.statusCode, Body: []byte(resp.errMsg)}, fmt.Errorf("%s", resp.errMsg)
+		return shared.NewMockResponse(resp.statusCode, http.Header{}, []byte(resp.errMsg)), fmt.Errorf("%s", resp.errMsg)
 	}
 
-	return &interfaces.Response{StatusCode: resp.statusCode, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // PostForm implements interfaces.HTTPClient.PostForm.
-func (m *ActivationCodeMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, out any) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostForm not implemented in ActivationCodeMock")
 }
 
 // PostMultipart implements interfaces.HTTPClient.PostMultipart.
-func (m *ActivationCodeMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out any) (*interfaces.Response, error) {
+func (m *ActivationCodeMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostMultipart not implemented in ActivationCodeMock")
 }
 
 // GetBytes implements interfaces.HTTPClient.GetBytes.
-func (m *ActivationCodeMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
+func (m *ActivationCodeMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	return nil, nil, fmt.Errorf("GetBytes not implemented in ActivationCodeMock")
 }
 

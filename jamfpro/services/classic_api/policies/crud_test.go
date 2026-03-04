@@ -29,7 +29,7 @@ func TestUnit_Policies_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -51,7 +51,7 @@ func TestUnit_Policies_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.General.ID)
 	assert.Equal(t, "Test Policy", result.General.Name)
 	assert.True(t, result.General.Enabled)
@@ -87,7 +87,7 @@ func TestUnit_Policies_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -103,7 +103,7 @@ func TestUnit_Policies_GetByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.General.ID)
 	assert.Equal(t, "Test Policy", result.General.Name)
 	assert.True(t, result.General.Enabled)
@@ -143,7 +143,7 @@ func TestUnit_Policies_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 3, result.ID)
 }
 
@@ -176,7 +176,7 @@ func TestUnit_Policies_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 	assert.Contains(t, err.Error(), "409")
 }
 
@@ -204,7 +204,7 @@ func TestUnit_Policies_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -260,7 +260,7 @@ func TestUnit_Policies_UpdateByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -304,7 +304,7 @@ func TestUnit_Policies_DeleteByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Policies_DeleteByID_ZeroID(t *testing.T) {
@@ -337,7 +337,7 @@ func TestUnit_Policies_DeleteByName_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Policies_DeleteByName_EmptyName(t *testing.T) {
@@ -362,7 +362,7 @@ func TestUnit_Policies_GetByCreatedBy_Success_JSS(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 }
@@ -400,7 +400,7 @@ func TestUnit_Policies_GetByCategory_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 }
@@ -428,7 +428,7 @@ func TestUnit_Policies_GetByIDWithSubset_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.General.ID)
 	assert.Equal(t, "Test Policy", result.General.Name)
 }
@@ -463,7 +463,7 @@ func TestUnit_Policies_GetByIDWithSubset_MultipleSubsets(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.General.ID)
 }
 
@@ -480,7 +480,7 @@ func TestUnit_Policies_GetByNameWithSubset_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.General.ID)
 	assert.Equal(t, "Test Policy", result.General.Name)
 }
@@ -515,6 +515,6 @@ func TestUnit_Policies_GetByNameWithSubset_MultipleSubsets(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.General.ID)
 }

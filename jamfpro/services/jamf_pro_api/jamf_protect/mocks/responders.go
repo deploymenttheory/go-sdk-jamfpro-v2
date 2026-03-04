@@ -8,7 +8,9 @@ import (
 	"net/http"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -229,7 +231,7 @@ func (m *JamfProtectMock) RegisterListPlansBadResultsMock() {
 }
 
 // Get implements interfaces.HTTPClient.
-func (m *JamfProtectMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JamfProtectMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
 	resp, ok := m.responses[key]
@@ -244,15 +246,11 @@ func (m *JamfProtectMock) Get(ctx context.Context, path string, rsqlQuery map[st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Post implements interfaces.HTTPClient.
-func (m *JamfProtectMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JamfProtectMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "POST " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -266,30 +264,26 @@ func (m *JamfProtectMock) Post(ctx context.Context, path string, body any, heade
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // PostWithQuery implements interfaces.HTTPClient.
-func (m *JamfProtectMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JamfProtectMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, body, headers, result)
 }
 
 // PostForm implements interfaces.HTTPClient.
-func (m *JamfProtectMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JamfProtectMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, formData, headers, result)
 }
 
 // PostMultipart implements interfaces.HTTPClient.
-func (m *JamfProtectMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *JamfProtectMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
 // Put implements interfaces.HTTPClient.
-func (m *JamfProtectMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JamfProtectMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PUT " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -303,15 +297,11 @@ func (m *JamfProtectMock) Put(ctx context.Context, path string, body any, header
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Patch implements interfaces.HTTPClient.
-func (m *JamfProtectMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JamfProtectMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PATCH " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -325,15 +315,11 @@ func (m *JamfProtectMock) Patch(ctx context.Context, path string, body any, head
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Delete implements interfaces.HTTPClient.
-func (m *JamfProtectMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JamfProtectMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "DELETE " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -347,20 +333,16 @@ func (m *JamfProtectMock) Delete(ctx context.Context, path string, rsqlQuery map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // DeleteWithBody implements interfaces.HTTPClient.
-func (m *JamfProtectMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JamfProtectMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Delete(ctx, path, nil, headers, result)
 }
 
 // GetBytes implements interfaces.HTTPClient.
-func (m *JamfProtectMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
+func (m *JamfProtectMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
 	resp, ok := m.responses[key]
@@ -370,15 +352,11 @@ func (m *JamfProtectMock) GetBytes(ctx context.Context, path string, rsqlQuery m
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, resp.rawBody, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
 // GetPaginated implements interfaces.HTTPClient.
-func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
+func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	key := "GET " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -387,11 +365,7 @@ func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	if resp.errMsg != "" {
 		return nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	ifaceResp := &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}
+	ifaceResp := shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody)
 	if mergePage != nil && len(resp.rawBody) > 0 {
 		var page struct {
 			Results json.RawMessage `json:"results"`

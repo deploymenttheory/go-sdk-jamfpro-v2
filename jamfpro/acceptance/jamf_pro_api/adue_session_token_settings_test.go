@@ -18,7 +18,7 @@ func TestAcceptance_AdueSessionTokenSettings_get_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_AdueSessionTokenSettings_update_v1(t *testing.T) {
@@ -45,7 +45,7 @@ func TestAcceptance_AdueSessionTokenSettings_update_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	request.Enabled = current.Enabled
 	_, _, _ = svc.UpdateV1(ctx, &request)

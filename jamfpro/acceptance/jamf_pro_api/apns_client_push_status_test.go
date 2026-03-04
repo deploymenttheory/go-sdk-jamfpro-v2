@@ -21,7 +21,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.GreaterOrEqual(t, result.TotalCount, 0)
 		t.Logf("Found %d total clients with push notifications disabled", result.TotalCount)
 	})
@@ -36,7 +36,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 
 		// Verify all returned entries are mobile devices
 		for _, entry := range result.Results {
@@ -54,7 +54,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 
 		// Verify all returned entries are computers
 		for _, entry := range result.Results {
@@ -76,7 +76,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 			return
 		}
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		t.Logf("Found %d devices with push disabled after 2024-01-01", len(result.Results))
 	})
 
@@ -93,7 +93,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 			return
 		}
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 
 		// Verify all returned entries match the filter criteria
 		for _, entry := range result.Results {
@@ -113,7 +113,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		// Note: GetPaginated fetches all pages, so we should get all results
 		t.Logf("Retrieved %d entries (pagination handled automatically)", len(result.Results))
 	})
@@ -127,7 +127,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		t.Logf("Retrieved %d entries sorted by device type then push disabled time", len(result.Results))
 	})
 
@@ -140,7 +140,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		t.Logf("Retrieved %d entries sorted by management ID ascending", len(result.Results))
 	})
 }
@@ -154,8 +154,8 @@ func TestAcceptance_APNSClientPushStatus_enable_all_clients_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	// API may return 200 or 202 depending on implementation
-	assert.True(t, resp.StatusCode == 200 || resp.StatusCode == 202, "expected 200 or 202, got %d", resp.StatusCode)
-	t.Logf("EnableAllClientsV1 completed with status %d", resp.StatusCode)
+	assert.True(t, resp.StatusCode() == 200 || resp.StatusCode() == 202, "expected 200 or 202, got %d", resp.StatusCode())
+	t.Logf("EnableAllClientsV1 completed with status %d", resp.StatusCode())
 }
 
 // TestAcceptance_APNSClientPushStatus_get_enable_all_clients_status_v1 tests retrieving enable-all-clients status.
@@ -165,14 +165,14 @@ func TestAcceptance_APNSClientPushStatus_get_enable_all_clients_status_v1(t *tes
 
 	result, resp, err := client.APNSClientPushStatus.GetEnableAllClientsStatusV1(context.Background())
 	// 404 is valid if no recent enable-all-clients request exists
-	if err != nil && resp != nil && resp.StatusCode == 404 {
+	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Log("No recent enable-all-clients request (404) - skipping status check")
 		return
 	}
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Contains(t, []string{"QUEUED", "STARTED", "COMPLETED"}, result.Status)
 	t.Logf("Enable-all-clients status: %s (requested: %s)", result.Status, result.RequestedTime)
 }
@@ -200,6 +200,6 @@ func TestAcceptance_APNSClientPushStatus_enable_client_v1(t *testing.T) {
 	resp, err := client.APNSClientPushStatus.EnableClientV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 	t.Logf("Successfully enabled push for client %s", managementID)
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,27 +18,27 @@ type (
 		// ListV1 returns all advanced user content searches (Get Advanced User Content Searches).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-user-content-searches
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the specified advanced user content search by ID (Get Advanced User Content Search by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-user-content-searches-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedUserContentSearch, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedUserContentSearch, *resty.Response, error)
 
 		// CreateV1 creates a new advanced user content search (Create Advanced User Content Search).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-user-content-searches
-		CreateV1(ctx context.Context, request *ResourceAdvancedUserContentSearch) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *ResourceAdvancedUserContentSearch) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV1 updates the specified advanced user content search by ID (Update Advanced User Content Search by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-advanced-user-content-searches-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedUserContentSearch) (*ResourceAdvancedUserContentSearch, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedUserContentSearch) (*ResourceAdvancedUserContentSearch, *resty.Response, error)
 
 		// DeleteByIDV1 removes the specified advanced user content search by ID (Delete Advanced User Content Search by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-advanced-user-content-searches-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the advanced user content searches-related methods of the Jamf Pro API.
@@ -59,7 +60,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // Note: page and page-size are managed internally by GetPaginated.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-user-content-searches
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointAdvancedUserContentSearchesV1
@@ -89,7 +90,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 returns the specified advanced user content search by ID.
 // URL: GET /api/v1/advanced-user-content-searches/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-user-content-searches-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedUserContentSearch, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedUserContentSearch, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -111,7 +112,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedUs
 // CreateV1 creates a new advanced user content search.
 // URL: POST /api/v1/advanced-user-content-searches
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-user-content-searches
-func (s *Service) CreateV1(ctx context.Context, request *ResourceAdvancedUserContentSearch) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *ResourceAdvancedUserContentSearch) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("search is required")
 	}
@@ -135,7 +136,7 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceAdvancedUserCon
 // UpdateByIDV1 updates the specified advanced user content search by ID.
 // URL: PUT /api/v1/advanced-user-content-searches/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-advanced-user-content-searches-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedUserContentSearch) (*ResourceAdvancedUserContentSearch, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedUserContentSearch) (*ResourceAdvancedUserContentSearch, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -164,7 +165,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *Resource
 // DeleteByIDV1 removes the specified advanced user content search by ID.
 // URL: DELETE /api/v1/advanced-user-content-searches/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-advanced-user-content-searches-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}

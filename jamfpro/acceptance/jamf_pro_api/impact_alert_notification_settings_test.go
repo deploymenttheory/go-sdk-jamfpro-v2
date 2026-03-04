@@ -56,7 +56,7 @@ func TestAcceptance_ImpactAlertNotificationSettings_get_and_update(t *testing.T)
 	original, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, original)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Register cleanup to restore original settings
 	t.Cleanup(func() {
@@ -83,7 +83,7 @@ func TestAcceptance_ImpactAlertNotificationSettings_get_and_update(t *testing.T)
 	// Get again to verify persistence
 	current, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, modified.ScopeableObjectsAlertEnabled, current.ScopeableObjectsAlertEnabled)
 	assert.Equal(t, modified.ScopeableObjectsConfirmationCodeEnabled, current.ScopeableObjectsConfirmationCodeEnabled)
 	assert.Equal(t, modified.DeployableObjectsAlertEnabled, current.DeployableObjectsAlertEnabled)

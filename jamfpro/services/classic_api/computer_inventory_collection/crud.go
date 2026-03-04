@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,10 +16,10 @@ type (
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinventorycollection
 	ComputerInventoryCollectionServiceInterface interface {
 		// Get retrieves the computer inventory collection settings.
-		Get(ctx context.Context) (*ResourceComputerInventoryCollection, *interfaces.Response, error)
+		Get(ctx context.Context) (*ResourceComputerInventoryCollection, *resty.Response, error)
 
 		// Update updates the computer inventory collection settings.
-		Update(ctx context.Context, settings *ResourceComputerInventoryCollection) (*interfaces.Response, error)
+		Update(ctx context.Context, settings *ResourceComputerInventoryCollection) (*resty.Response, error)
 	}
 
 	// Service handles communication with the computer inventory collection-related Classic API methods.
@@ -43,7 +44,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Get retrieves the computer inventory collection settings.
 // URL: GET /JSSResource/computerinventorycollection
 // https://developer.jamf.com/jamf-pro/reference/computerinventorycollection
-func (s *Service) Get(ctx context.Context) (*ResourceComputerInventoryCollection, *interfaces.Response, error) {
+func (s *Service) Get(ctx context.Context) (*ResourceComputerInventoryCollection, *resty.Response, error) {
 	var result ResourceComputerInventoryCollection
 
 	endpoint := EndpointClassicComputerInventoryCollection
@@ -64,7 +65,7 @@ func (s *Service) Get(ctx context.Context) (*ResourceComputerInventoryCollection
 // Update updates the computer inventory collection settings.
 // URL: PUT /JSSResource/computerinventorycollection
 // https://developer.jamf.com/jamf-pro/reference/computerinventorycollection
-func (s *Service) Update(ctx context.Context, settings *ResourceComputerInventoryCollection) (*interfaces.Response, error) {
+func (s *Service) Update(ctx context.Context, settings *ResourceComputerInventoryCollection) (*resty.Response, error) {
 	if settings == nil {
 		return nil, fmt.Errorf("settings is required")
 	}

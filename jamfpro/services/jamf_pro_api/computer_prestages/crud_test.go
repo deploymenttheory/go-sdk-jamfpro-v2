@@ -22,7 +22,7 @@ func TestUnit_ComputerPrestages_ListV3_Success(t *testing.T) {
 	result, resp, err := svc.ListV3(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "Test Prestage", result.Results[0].DisplayName)
@@ -36,7 +36,7 @@ func TestUnit_ComputerPrestages_GetByIDV3_Success(t *testing.T) {
 	result, resp, err := svc.GetByIDV3(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Test Prestage", result.DisplayName)
 }
@@ -57,7 +57,7 @@ func TestUnit_ComputerPrestages_GetByNameV3_Success(t *testing.T) {
 	result, resp, err := svc.GetByNameV3(context.Background(), "Test Prestage")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Test Prestage", result.DisplayName)
 }
 
@@ -78,7 +78,7 @@ func TestUnit_ComputerPrestages_CreateV3_Success(t *testing.T) {
 	result, resp, err := svc.CreateV3(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "/api/v3/computer-prestages/1", result.Href)
 }
@@ -101,7 +101,7 @@ func TestUnit_ComputerPrestages_UpdateByIDV3_Success(t *testing.T) {
 	result, resp, err := svc.UpdateByIDV3(context.Background(), "1", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerPrestages_DeleteByIDV3_EmptyID(t *testing.T) {
@@ -119,7 +119,7 @@ func TestUnit_ComputerPrestages_DeleteByIDV3_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV3(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerPrestages_UpdateByNameV3_Success(t *testing.T) {
@@ -131,7 +131,7 @@ func TestUnit_ComputerPrestages_UpdateByNameV3_Success(t *testing.T) {
 	result, resp, err := svc.UpdateByNameV3(context.Background(), "Test Prestage", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerPrestages_UpdateByNameV3_NilRequest(t *testing.T) {
@@ -152,7 +152,7 @@ func TestUnit_ComputerPrestages_DeleteByNameV3_Success(t *testing.T) {
 	resp, err := svc.DeleteByNameV3(context.Background(), "Test Prestage")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerPrestages_DeleteByNameV3_NotFound(t *testing.T) {
@@ -181,7 +181,7 @@ func TestUnit_ComputerPrestages_GetDeviceScopeByIDV2_Success(t *testing.T) {
 	result, resp, err := svc.GetDeviceScopeByIDV2(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.PrestageId)
 	assert.Equal(t, 1, result.VersionLock)
 	require.Len(t, result.Assignments, 1)
@@ -216,7 +216,7 @@ func TestUnit_ComputerPrestages_ReplaceDeviceScopeByIDV2_Success(t *testing.T) {
 	result, resp, err := svc.ReplaceDeviceScopeByIDV2(context.Background(), "1", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.PrestageId)
 	assert.Equal(t, 1, result.VersionLock)
 	require.Len(t, result.Assignments, 1)
@@ -440,7 +440,7 @@ func TestUnit_ComputerPrestages_GetAllDeviceScopeV2_Success(t *testing.T) {
 	result, resp, err := svc.GetAllDeviceScopeV2(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.Prestages, 1)
 	assert.Equal(t, "1", result.Prestages[0].PrestageId)
 	assert.Equal(t, 1, result.Prestages[0].VersionLock)
@@ -478,7 +478,7 @@ func TestUnit_ComputerPrestages_AddDeviceScopeByIDV2_Success(t *testing.T) {
 	result, resp, err := svc.AddDeviceScopeByIDV2(context.Background(), "1", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.PrestageId)
 	assert.Equal(t, 1, result.VersionLock)
 	require.Len(t, result.Assignments, 1)
@@ -537,7 +537,7 @@ func TestUnit_ComputerPrestages_RemoveDeviceScopeByIDV2_Success(t *testing.T) {
 	result, resp, err := svc.RemoveDeviceScopeByIDV2(context.Background(), "1", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.PrestageId)
 	assert.Equal(t, 1, result.VersionLock)
 }
@@ -573,7 +573,7 @@ func TestUnit_ComputerPrestages_ListV3_WithQuery(t *testing.T) {
 	result, resp, err := svc.ListV3(context.Background(), query)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 }
 
@@ -594,7 +594,7 @@ func TestUnit_ComputerPrestages_CreateV3_ValidEnums(t *testing.T) {
 	result, resp, err := svc.CreateV3(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerPrestages_CreateV3_ValidEnumsCUSTOM(t *testing.T) {
@@ -610,7 +610,7 @@ func TestUnit_ComputerPrestages_CreateV3_ValidEnumsCUSTOM(t *testing.T) {
 	result, resp, err := svc.CreateV3(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerPrestages_CreateV3_ValidRecoveryLockRANDOM(t *testing.T) {
@@ -624,7 +624,7 @@ func TestUnit_ComputerPrestages_CreateV3_ValidRecoveryLockRANDOM(t *testing.T) {
 	result, resp, err := svc.CreateV3(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerPrestages_CreateV3_ValidPrestageMinimumOsTypes(t *testing.T) {
@@ -639,7 +639,7 @@ func TestUnit_ComputerPrestages_CreateV3_ValidPrestageMinimumOsTypes(t *testing.
 		result, resp, err := svc.CreateV3(context.Background(), request)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 	}
 }
 
@@ -657,6 +657,6 @@ func TestUnit_ComputerPrestages_CreateV3_ValidUserAccountTypes(t *testing.T) {
 		result, resp, err := svc.CreateV3(context.Background(), request)
 		require.NoError(t, err)
 		require.NotNil(t, result)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 	}
 }

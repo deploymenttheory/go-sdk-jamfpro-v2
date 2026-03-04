@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,39 +17,39 @@ type (
 		// List returns all patch external sources.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified patch external source by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		GetByID(ctx context.Context, id int) (*ResourcePatchExternalSource, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourcePatchExternalSource, *resty.Response, error)
 
 		// GetByName returns the specified patch external source by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		GetByName(ctx context.Context, name string) (*ResourcePatchExternalSource, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourcePatchExternalSource, *resty.Response, error)
 
 		// Create creates a new patch external source.
 		//
 		// Returns the created patch external source with its assigned ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		Create(ctx context.Context, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *resty.Response, error)
 
 		// UpdateByID updates the specified patch external source by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		UpdateByID(ctx context.Context, id int, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *resty.Response, error)
 
 		// UpdateByName updates the specified patch external source by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		UpdateByName(ctx context.Context, name string, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *resty.Response, error)
 
 		// DeleteByID removes the specified patch external source by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 	}
 
 	// Service handles communication with the patch external source-related Classic API methods.
@@ -73,7 +74,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // List returns all patch external sources.
 // URL: GET /JSSResource/patchexternalsources
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicPatchExternalSources
@@ -94,7 +95,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // GetByID returns the specified patch external source by ID.
 // URL: GET /JSSResource/patchexternalsources/id/{id}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourcePatchExternalSource, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourcePatchExternalSource, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("patch external source ID must be a positive integer")
 	}
@@ -119,7 +120,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourcePatchExternalSo
 // GetByName returns the specified patch external source by name.
 // URL: GET /JSSResource/patchexternalsources/name/{name}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourcePatchExternalSource, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourcePatchExternalSource, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("patch external source name is required")
 	}
@@ -145,7 +146,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourcePatchExt
 // URL: POST /JSSResource/patchexternalsources/id/0
 // Returns the created patch external source with its assigned ID.
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-func (s *Service) Create(ctx context.Context, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -170,7 +171,7 @@ func (s *Service) Create(ctx context.Context, req *RequestPatchExternalSource) (
 // UpdateByID updates the specified patch external source by ID.
 // URL: PUT /JSSResource/patchexternalsources/id/{id}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("patch external source ID must be a positive integer")
 	}
@@ -198,7 +199,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestPatchExter
 // UpdateByName updates the specified patch external source by name.
 // URL: PUT /JSSResource/patchexternalsources/name/{name}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("patch external source name is required")
 	}
@@ -226,7 +227,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestPat
 // DeleteByID removes the specified patch external source by ID.
 // URL: DELETE /JSSResource/patchexternalsources/id/{id}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("patch external source ID must be a positive integer")
 	}

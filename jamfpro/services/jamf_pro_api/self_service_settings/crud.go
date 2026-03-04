@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,24 +18,24 @@ type (
 		// Get retrieves self-service settings (Get Self Service Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings
-		Get(ctx context.Context) (*ResourceSelfServiceSettings, *interfaces.Response, error)
+		Get(ctx context.Context) (*ResourceSelfServiceSettings, *resty.Response, error)
 
 		// Update updates self-service settings (Update Self Service Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-self-service-settings
-		Update(ctx context.Context, request *ResourceSelfServiceSettings) (*ResourceSelfServiceSettings, *interfaces.Response, error)
+		Update(ctx context.Context, request *ResourceSelfServiceSettings) (*ResourceSelfServiceSettings, *resty.Response, error)
 
 		// GetHistoryV1 returns the paginated history for Self Service settings.
 		//
 		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNotesV1 adds a note to the Self Service settings history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-self-service-settings-history
-		AddHistoryNotesV1(ctx context.Context, req *AddHistoryNotesRequest) (*AddHistoryNotesResponse, *interfaces.Response, error)
+		AddHistoryNotesV1(ctx context.Context, req *AddHistoryNotesRequest) (*AddHistoryNotesResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the self-service settings methods of the Jamf Pro API.
@@ -57,7 +58,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // Get retrieves self-service settings.
 // URL: GET /api/v1/self-service/settings
-func (s *Service) Get(ctx context.Context) (*ResourceSelfServiceSettings, *interfaces.Response, error) {
+func (s *Service) Get(ctx context.Context) (*ResourceSelfServiceSettings, *resty.Response, error) {
 	var result ResourceSelfServiceSettings
 
 	endpoint := EndpointSelfServiceSettingsV1
@@ -75,7 +76,7 @@ func (s *Service) Get(ctx context.Context) (*ResourceSelfServiceSettings, *inter
 
 // Update updates self-service settings.
 // URL: PUT /api/v1/self-service/settings
-func (s *Service) Update(ctx context.Context, request *ResourceSelfServiceSettings) (*ResourceSelfServiceSettings, *interfaces.Response, error) {
+func (s *Service) Update(ctx context.Context, request *ResourceSelfServiceSettings) (*ResourceSelfServiceSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -100,7 +101,7 @@ func (s *Service) Update(ctx context.Context, request *ResourceSelfServiceSettin
 // URL: GET /api/v1/self-service/settings/history
 // Query params (optional): page, page-size, sort, filter (RSQL).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings-history
-func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
@@ -127,7 +128,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 // AddHistoryNotesV1 adds a note to the Self Service settings history.
 // URL: POST /api/v1/self-service/settings/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-self-service-settings-history
-func (s *Service) AddHistoryNotesV1(ctx context.Context, req *AddHistoryNotesRequest) (*AddHistoryNotesResponse, *interfaces.Response, error) {
+func (s *Service) AddHistoryNotesV1(ctx context.Context, req *AddHistoryNotesRequest) (*AddHistoryNotesResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

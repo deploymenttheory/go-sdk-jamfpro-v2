@@ -28,7 +28,7 @@ func TestUnit_Packages_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -45,7 +45,7 @@ func TestUnit_Packages_List_WithrsqlQuery(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Packages_List_WithRSQLFilter(t *testing.T) {
@@ -58,7 +58,7 @@ func TestUnit_Packages_List_WithRSQLFilter(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "2", result.Results[0].ID)
@@ -75,7 +75,7 @@ func TestUnit_Packages_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Firefox", result.PackageName)
 	assert.Equal(t, "Firefox.pkg", result.FileName)
@@ -100,7 +100,7 @@ func TestUnit_Packages_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_Packages_Create_Success(t *testing.T) {
@@ -128,7 +128,7 @@ func TestUnit_Packages_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Contains(t, result.Href, "/api/v1/packages/3")
 }
@@ -155,7 +155,7 @@ func TestUnit_Packages_UploadV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 }
 
@@ -191,7 +191,7 @@ func TestUnit_Packages_AssignManifestToPackageV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_Packages_DeletePackageManifestV1_Success(t *testing.T) {
@@ -201,7 +201,7 @@ func TestUnit_Packages_DeletePackageManifestV1_Success(t *testing.T) {
 	resp, err := svc.DeletePackageManifestV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Packages_Create_Conflict(t *testing.T) {
@@ -225,7 +225,7 @@ func TestUnit_Packages_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 func TestUnit_Packages_UpdateByID_Success(t *testing.T) {
@@ -247,7 +247,7 @@ func TestUnit_Packages_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Firefox Updated", result.PackageName)
 }
@@ -277,7 +277,7 @@ func TestUnit_Packages_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Packages_DeleteByID_EmptyID(t *testing.T) {
@@ -297,7 +297,7 @@ func TestUnit_Packages_DeleteMultipleByID_Success(t *testing.T) {
 	resp, err := svc.DeletePackagesByIDV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Packages_DeleteMultipleByID_EmptyIDs(t *testing.T) {
@@ -327,7 +327,7 @@ func TestUnit_Packages_GetHistoryV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", string(result.Results[0].ID))
@@ -353,7 +353,7 @@ func TestUnit_Packages_AddHistoryNotesV1_Success(t *testing.T) {
 	resp, err := svc.AddHistoryNotesV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_Packages_AddHistoryNotesV1_EmptyID(t *testing.T) {
@@ -386,7 +386,7 @@ func TestUnit_Packages_ExportV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Contains(t, string(body), "Firefox")
 }
 
@@ -401,7 +401,7 @@ func TestUnit_Packages_ExportV1_WithQueryAndBody(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Packages_ExportV1_CSV(t *testing.T) {
@@ -412,7 +412,7 @@ func TestUnit_Packages_ExportV1_CSV(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Packages_ExportV1_EmptyAcceptDefaultsToJSON(t *testing.T) {
@@ -423,7 +423,7 @@ func TestUnit_Packages_ExportV1_EmptyAcceptDefaultsToJSON(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Packages_ExportV1_Error(t *testing.T) {
@@ -447,7 +447,7 @@ func TestUnit_Packages_ExportHistoryV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Contains(t, string(body), "admin")
 }
 
@@ -462,7 +462,7 @@ func TestUnit_Packages_ExportHistoryV1_WithQueryAndBody(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Packages_ExportHistoryV1_EmptyID(t *testing.T) {

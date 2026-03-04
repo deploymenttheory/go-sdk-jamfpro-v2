@@ -17,7 +17,7 @@ func TestUnit_Slasa_GetStatusV1_Accepted(t *testing.T) {
 	result, resp, err := service.GetStatusV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "ACCEPTED", result.SLASAAcceptanceStatus)
 }
 
@@ -29,7 +29,7 @@ func TestUnit_Slasa_GetStatusV1_NotAccepted(t *testing.T) {
 	result, resp, err := service.GetStatusV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "NOT_ACCEPTED", result.SLASAAcceptanceStatus)
 }
 
@@ -63,7 +63,7 @@ func TestUnit_Slasa_AcceptV1_Success(t *testing.T) {
 
 	resp, err := service.AcceptV1(context.Background())
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Slasa_AcceptV1_NoMockRegistered(t *testing.T) {

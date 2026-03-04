@@ -30,7 +30,7 @@ func TestUnit_ComputerInventoryCollection_Get_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.LocalUserAccounts)
 	assert.True(t, result.HiddenAccounts)
 	assert.True(t, result.Printers)
@@ -68,7 +68,7 @@ func TestUnit_ComputerInventoryCollection_Update_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ComputerInventoryCollection_Update_NilSettings(t *testing.T) {

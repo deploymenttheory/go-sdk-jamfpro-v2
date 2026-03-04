@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,22 +18,22 @@ type (
 		// GetSettingsV1 returns the user preferences for the authenticated user and key (username, key, values).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-settings-keyid
-		GetSettingsV1(ctx context.Context, keyID string) (*ResourceUserPreferencesSettings, *interfaces.Response, error)
+		GetSettingsV1(ctx context.Context, keyID string) (*ResourceUserPreferencesSettings, *resty.Response, error)
 
 		// GetV1 returns the user setting value for the authenticated user and key (string value).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-keyid
-		GetV1(ctx context.Context, keyID string) (string, *interfaces.Response, error)
+		GetV1(ctx context.Context, keyID string) (string, *resty.Response, error)
 
 		// PutV1 persists the user setting for the authenticated user and key.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-user-preferences-keyid
-		PutV1(ctx context.Context, keyID string, values RequestUserPreferences) (*interfaces.Response, error)
+		PutV1(ctx context.Context, keyID string, values RequestUserPreferences) (*resty.Response, error)
 
 		// DeleteV1 removes the specified setting for the authenticated user.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-user-preferences-keyid
-		DeleteV1(ctx context.Context, keyID string) (*interfaces.Response, error)
+		DeleteV1(ctx context.Context, keyID string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the Jamf Pro user account settings methods of the Jamf Pro API.
@@ -57,7 +58,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/user/preferences/settings/{keyId}
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-settings-keyid
-func (s *Service) GetSettingsV1(ctx context.Context, keyID string) (*ResourceUserPreferencesSettings, *interfaces.Response, error) {
+func (s *Service) GetSettingsV1(ctx context.Context, keyID string) (*ResourceUserPreferencesSettings, *resty.Response, error) {
 	if keyID == "" {
 		return nil, nil, fmt.Errorf("keyId is required")
 	}
@@ -83,7 +84,7 @@ func (s *Service) GetSettingsV1(ctx context.Context, keyID string) (*ResourceUse
 // Returns the raw string value (API may return JSON string or plain string).
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-keyid
-func (s *Service) GetV1(ctx context.Context, keyID string) (string, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context, keyID string) (string, *resty.Response, error) {
 	if keyID == "" {
 		return "", nil, fmt.Errorf("keyId is required")
 	}
@@ -113,7 +114,7 @@ func (s *Service) GetV1(ctx context.Context, keyID string) (string, *interfaces.
 // Body: map of key-value pairs to persist.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-user-preferences-keyid
-func (s *Service) PutV1(ctx context.Context, keyID string, values RequestUserPreferences) (*interfaces.Response, error) {
+func (s *Service) PutV1(ctx context.Context, keyID string, values RequestUserPreferences) (*resty.Response, error) {
 	if keyID == "" {
 		return nil, fmt.Errorf("keyId is required")
 	}
@@ -140,7 +141,7 @@ func (s *Service) PutV1(ctx context.Context, keyID string, values RequestUserPre
 // URL: DELETE /api/v1/user/preferences/{keyId}
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-user-preferences-keyid
-func (s *Service) DeleteV1(ctx context.Context, keyID string) (*interfaces.Response, error) {
+func (s *Service) DeleteV1(ctx context.Context, keyID string) (*resty.Response, error) {
 	if keyID == "" {
 		return nil, fmt.Errorf("keyId is required")
 	}

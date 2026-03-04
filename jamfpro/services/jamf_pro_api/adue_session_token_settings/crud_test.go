@@ -23,7 +23,7 @@ func TestUnit_AdueSessionTokenSettings_GetV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.Enabled)
 	assert.Equal(t, 30, result.ExpirationIntervalDays)
 }
@@ -40,7 +40,7 @@ func TestUnit_AdueSessionTokenSettings_UpdateV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_AdueSessionTokenSettings_UpdateV1_NilRequest(t *testing.T) {

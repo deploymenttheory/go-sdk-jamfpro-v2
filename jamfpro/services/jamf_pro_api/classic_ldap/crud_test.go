@@ -23,7 +23,7 @@ func TestUnit_ClassicLdap_GetMappingsByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "mail", result.UserObjectMapIdTo)
 	assert.Equal(t, "uid", result.UserObjectMapUsernameTo)
 	assert.Equal(t, "displayName", result.UserObjectMapRealNameTo)

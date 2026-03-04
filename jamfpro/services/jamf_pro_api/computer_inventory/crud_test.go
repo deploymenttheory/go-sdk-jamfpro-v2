@@ -20,7 +20,7 @@ func TestUnit_ComputerInventory_ListV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	assert.Len(t, result.Results, 2)
 	assert.Equal(t, "Test-Mac-001", result.Results[0].General.Name)
@@ -38,7 +38,7 @@ func TestUnit_ComputerInventory_GetByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Test-Mac-001", result.General.Name)
 	assert.Equal(t, "C02ABC123DEF", result.Hardware.SerialNumber)
@@ -77,7 +77,7 @@ func TestUnit_ComputerInventory_UpdateByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result)
 }
 
@@ -120,7 +120,7 @@ func TestUnit_ComputerInventory_DeleteByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ComputerInventory_DeleteByIDV3_EmptyID(t *testing.T) {
@@ -146,7 +146,7 @@ func TestUnit_ComputerInventory_ListFileVaultV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ComputerId)
@@ -164,7 +164,7 @@ func TestUnit_ComputerInventory_GetFileVaultByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ComputerId)
 	assert.Equal(t, "Test-Mac-001", result.Name)
 	assert.NotEmpty(t, result.PersonalRecoveryKey)
@@ -195,7 +195,7 @@ func TestUnit_ComputerInventory_GetRecoveryLockPasswordByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.RecoveryLockPassword)
 }
 
@@ -223,7 +223,7 @@ func TestUnit_ComputerInventory_DeleteAttachmentByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ComputerInventory_DeleteAttachmentByIDV3_EmptyComputerID(t *testing.T) {
@@ -261,7 +261,7 @@ func TestUnit_ComputerInventory_RemoveMDMProfileByIDV1(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.DeviceID)
 	assert.NotEmpty(t, result.CommandUUID)
 }
@@ -295,7 +295,7 @@ func TestUnit_ComputerInventory_EraseByIDV1(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ComputerInventory_EraseByIDV1_EmptyID(t *testing.T) {
@@ -344,7 +344,7 @@ func TestUnit_ComputerInventory_CreateV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "/api/v3/computers-inventory/1", result.HREF)
 }
@@ -373,7 +373,7 @@ func TestUnit_ComputerInventory_GetDetailByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Test-Mac-001", result.General.Name)
 }
@@ -404,7 +404,7 @@ func TestUnit_ComputerInventory_UploadAttachmentByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_ComputerInventory_UploadAttachmentByIDV3_EmptyComputerID(t *testing.T) {
@@ -444,7 +444,7 @@ func TestUnit_ComputerInventory_GetAttachmentByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result)
 }
 
@@ -485,7 +485,7 @@ func TestUnit_ComputerInventory_GetDeviceLockPinByIDV3(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.Pin)
 	assert.Equal(t, "123456", result.Pin)
 }

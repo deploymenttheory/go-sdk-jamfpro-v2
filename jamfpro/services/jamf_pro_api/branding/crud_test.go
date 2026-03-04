@@ -19,7 +19,7 @@ func TestUnit_Branding_DownloadBrandingImageV1_Success(t *testing.T) {
 	svc, _ := setupMockService(t)
 	body, resp, err := svc.DownloadBrandingImageV1(context.Background(), "test-id")
 	require.NoError(t, err)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.NotNil(t, body)
 	require.Greater(t, len(body), 0)
 }

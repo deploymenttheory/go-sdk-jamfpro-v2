@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,12 +18,12 @@ type (
 		// ListV1 returns all API role privileges (Get API Role Privileges).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges
-		ListV1(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// SearchPrivilegesByNameV1 returns privileges matching the given name (Get API Role Privileges by name).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges-search
-		SearchPrivilegesByNameV1(ctx context.Context, name string, limit int) (*ListResponse, *interfaces.Response, error)
+		SearchPrivilegesByNameV1(ctx context.Context, name string, limit int) (*ListResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the API role privileges-related methods of the Jamf Pro API.
@@ -42,7 +43,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV1 returns all API role privileges.
 // URL: GET /api/v1/api-role-privileges
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges
-func (s *Service) ListV1(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointAPIRolePrivilegesV1
@@ -62,7 +63,7 @@ func (s *Service) ListV1(ctx context.Context) (*ListResponse, *interfaces.Respon
 // SearchPrivilegesByNameV1 returns privileges matching the given name.
 // URL: GET /api/v1/api-role-privileges/search?name=...&limit=...
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges-search
-func (s *Service) SearchPrivilegesByNameV1(ctx context.Context, name string, limit int) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) SearchPrivilegesByNameV1(ctx context.Context, name string, limit int) (*ListResponse, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name parameter is required")
 	}

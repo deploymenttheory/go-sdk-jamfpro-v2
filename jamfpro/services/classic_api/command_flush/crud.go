@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -21,12 +22,12 @@ type (
 		// Valid status values: Pending, Failed, or Pending+Failed
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
-		FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*interfaces.Response, error)
+		FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*resty.Response, error)
 
 		// FlushWithXML clears MDM commands using an XML request body for batch operations.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
-		FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*interfaces.Response, error)
+		FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*resty.Response, error)
 	}
 
 	// Service handles communication with the command-flush-related Classic API methods.
@@ -56,7 +57,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: DELETE /JSSResource/commandflush/{idType}/id/{id}/status/{status}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
-func (s *Service) FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*interfaces.Response, error) {
+func (s *Service) FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*resty.Response, error) {
 	if err := validateIDType(idType); err != nil {
 		return nil, err
 	}
@@ -87,7 +88,7 @@ func (s *Service) FlushByIDAndStatus(ctx context.Context, idType string, id stri
 // URL: DELETE /JSSResource/commandflush
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
-func (s *Service) FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*interfaces.Response, error) {
+func (s *Service) FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*resty.Response, error) {
 	if err := validateCommandFlushRequest(req); err != nil {
 		return nil, err
 	}

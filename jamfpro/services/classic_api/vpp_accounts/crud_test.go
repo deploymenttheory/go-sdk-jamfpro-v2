@@ -28,7 +28,7 @@ func TestUnit_VppAccounts_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -49,7 +49,7 @@ func TestUnit_VppAccounts_GetByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Production VPP", result.Name)
 	assert.Equal(t, "admin@example.com", result.Contact)
@@ -97,7 +97,7 @@ func TestUnit_VppAccounts_Create_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Production VPP", result.Name)
 }
@@ -132,7 +132,7 @@ func TestUnit_VppAccounts_UpdateByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Production VPP Updated", result.Name)
 }
@@ -161,7 +161,7 @@ func TestUnit_VppAccounts_DeleteByID_Success(t *testing.T) {
 
 	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_VppAccounts_DeleteByID_ZeroID(t *testing.T) {

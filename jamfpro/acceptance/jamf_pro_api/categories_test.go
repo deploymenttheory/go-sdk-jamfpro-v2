@@ -7,10 +7,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -145,7 +145,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	defer cancel3()
 
 	var fetched *categories.ResourceCategory
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetByIDV1(ctx3, categoryID)
@@ -346,7 +346,7 @@ func TestAcceptance_Categories_bulk_delete(t *testing.T) {
 		cancel1()
 		require.NoError(t, err, "CreateCategoryV1 %d should succeed", i)
 		require.NotNil(t, created)
-		assert.Equal(t, 201, resp.StatusCode)
+		assert.Equal(t, 201, resp.StatusCode())
 		ids = append(ids, created.ID)
 		acc.LogTestSuccess(t, "Bulk test: created category ID=%s", created.ID)
 	}

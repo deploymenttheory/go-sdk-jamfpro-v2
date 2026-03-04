@@ -20,7 +20,7 @@ func TestUnit_SsoFailover_GetV1_Success(t *testing.T) {
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "https://sso.example.com/failover?key=abc123", result.FailoverURL)
 }
 
@@ -29,7 +29,7 @@ func TestUnit_SsoFailover_RegenerateV1_Success(t *testing.T) {
 	result, resp, err := svc.RegenerateV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.NotEmpty(t, result.FailoverURL)
 }
 
@@ -40,5 +40,5 @@ func TestUnit_SSOFailover_GetV1_Error(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 500, resp.StatusCode)
+	require.Equal(t, 500, resp.StatusCode())
 }

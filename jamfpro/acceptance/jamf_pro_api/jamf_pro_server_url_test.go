@@ -55,7 +55,7 @@ func TestAcceptance_JamfProServerURL_get_and_update(t *testing.T) {
 	original, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, original)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Register cleanup to restore original settings
 	t.Cleanup(func() {
@@ -74,12 +74,12 @@ func TestAcceptance_JamfProServerURL_get_and_update(t *testing.T) {
 	modified.UnsecuredEnrollmentUrl = "http://jamf-test.example.com:8080"
 
 	updated, resp, err := svc.UpdateV1(ctx, &modified)
-	if err != nil && resp != nil && resp.StatusCode == 403 {
+	if err != nil && resp != nil && resp.StatusCode() == 403 {
 		t.Skip("Server URL update not allowed in hosted environment (403 HOSTED_ENVIRONMENT)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify update was applied
 	assert.Equal(t, modified.URL, updated.URL)
@@ -88,7 +88,7 @@ func TestAcceptance_JamfProServerURL_get_and_update(t *testing.T) {
 	// Get again to verify persistence
 	current, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, modified.URL, current.URL)
 	assert.Equal(t, modified.UnsecuredEnrollmentUrl, current.UnsecuredEnrollmentUrl)
 }

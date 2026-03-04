@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,47 +18,47 @@ type (
 		// ListV1 returns all mobile device extension attribute objects (Get Mobile Device Extension Attribute objects).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the specified mobile device extension attribute by ID (Get specified Mobile Device Extension Attribute object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceMobileDeviceExtensionAttribute, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceMobileDeviceExtensionAttribute, *resty.Response, error)
 
 		// CreateV1 creates a new mobile device extension attribute (Create Mobile Device Extension Attribute record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes
-		CreateV1(ctx context.Context, request *RequestMobileDeviceExtensionAttribute) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestMobileDeviceExtensionAttribute) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV1 updates the specified mobile device extension attribute by ID (Update specified Mobile Device Extension Attribute object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-mobile-device-extension-attributes-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestMobileDeviceExtensionAttribute) (*ResourceMobileDeviceExtensionAttribute, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestMobileDeviceExtensionAttribute) (*ResourceMobileDeviceExtensionAttribute, *resty.Response, error)
 
 		// DeleteByIDV1 removes the specified mobile device extension attribute by ID (Remove specified Mobile Device Extension Attribute record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mobile-device-extension-attributes-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteMobileDeviceExtensionAttributesByIDV1 deletes multiple mobile device extension attributes by their IDs (Delete multiple Mobile Device Extension Attributes by their IDs).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes-delete-multiple
-		DeleteMobileDeviceExtensionAttributesByIDV1(ctx context.Context, req *DeleteMobileDeviceExtensionAttributesByIDRequest) (*interfaces.Response, error)
+		DeleteMobileDeviceExtensionAttributesByIDV1(ctx context.Context, req *DeleteMobileDeviceExtensionAttributesByIDRequest) (*resty.Response, error)
 
 		// GetHistoryByIDV1 returns the history for the specified mobile device extension attribute by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id-history
-		GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNoteByIDV1 adds a history note to the specified mobile device extension attribute.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes-id-history
-		AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddHistoryNoteRequest) (*interfaces.Response, error)
+		AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddHistoryNoteRequest) (*resty.Response, error)
 
 		// GetDataDependencyByIDV1 returns smart group dependent objects for the specified mobile device extension attribute.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id-data-dependency
-		GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *interfaces.Response, error)
+		GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the mobile device extension attributes-related methods of the Jamf Pro API.
@@ -81,7 +82,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV1 returns all mobile device extension attribute objects.
 // URL: GET /api/v1/mobile-device-extension-attributes
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointMobileDeviceExtensionAttributesV1
@@ -110,7 +111,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 returns the specified mobile device extension attribute by ID.
 // URL: GET /api/v1/mobile-device-extension-attributes/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceMobileDeviceExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceMobileDeviceExtensionAttribute, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("mobile device extension attribute ID is required")
 	}
@@ -134,7 +135,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceMobileDevi
 // CreateV1 creates a new mobile device extension attribute.
 // URL: POST /api/v1/mobile-device-extension-attributes
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes
-func (s *Service) CreateV1(ctx context.Context, request *RequestMobileDeviceExtensionAttribute) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestMobileDeviceExtensionAttribute) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -159,7 +160,7 @@ func (s *Service) CreateV1(ctx context.Context, request *RequestMobileDeviceExte
 // UpdateByIDV1 updates the specified mobile device extension attribute by ID.
 // URL: PUT /api/v1/mobile-device-extension-attributes/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-mobile-device-extension-attributes-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestMobileDeviceExtensionAttribute) (*ResourceMobileDeviceExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestMobileDeviceExtensionAttribute) (*ResourceMobileDeviceExtensionAttribute, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -188,7 +189,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestM
 // DeleteByIDV1 removes the specified mobile device extension attribute by ID.
 // URL: DELETE /api/v1/mobile-device-extension-attributes/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mobile-device-extension-attributes-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("mobile device extension attribute ID is required")
 	}
@@ -210,7 +211,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 // DeleteMobileDeviceExtensionAttributesByIDV1 deletes multiple mobile device extension attributes by their IDs.
 // URL: POST /api/v1/mobile-device-extension-attributes/delete-multiple
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes-delete-multiple
-func (s *Service) DeleteMobileDeviceExtensionAttributesByIDV1(ctx context.Context, req *DeleteMobileDeviceExtensionAttributesByIDRequest) (*interfaces.Response, error) {
+func (s *Service) DeleteMobileDeviceExtensionAttributesByIDV1(ctx context.Context, req *DeleteMobileDeviceExtensionAttributesByIDRequest) (*resty.Response, error) {
 	if req == nil || len(req.IDs) == 0 {
 		return nil, fmt.Errorf("ids are required")
 	}
@@ -234,7 +235,7 @@ func (s *Service) DeleteMobileDeviceExtensionAttributesByIDV1(ctx context.Contex
 // URL: GET /api/v1/mobile-device-extension-attributes/{id}/history
 // Query params (optional): filter (RSQL), sort, page, page-size.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id-history
-func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("mobile device extension attribute ID is required")
 	}
@@ -266,7 +267,7 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map
 // AddHistoryNoteByIDV1 adds a history note to the specified mobile device extension attribute.
 // URL: POST /api/v1/mobile-device-extension-attributes/{id}/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes-id-history
-func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddHistoryNoteRequest) (*interfaces.Response, error) {
+func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddHistoryNoteRequest) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("mobile device extension attribute ID is required")
 	}
@@ -292,7 +293,7 @@ func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddH
 // GetDataDependencyByIDV1 returns smart group dependent objects for the specified mobile device extension attribute.
 // URL: GET /api/v1/mobile-device-extension-attributes/{id}/data-dependency
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id-data-dependency
-func (s *Service) GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *interfaces.Response, error) {
+func (s *Service) GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("mobile device extension attribute ID is required")
 	}

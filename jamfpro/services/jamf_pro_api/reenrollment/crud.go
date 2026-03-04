@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,23 +17,23 @@ type (
 	ReenrollmentServiceInterface interface {
 		// Get retrieves re-enrollment settings.
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-reenrollment
-		Get(ctx context.Context) (*ResourceReenrollmentSettings, *interfaces.Response, error)
+		Get(ctx context.Context) (*ResourceReenrollmentSettings, *resty.Response, error)
 
 		// Update updates re-enrollment settings.
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-reenrollment
-		Update(ctx context.Context, request *ResourceReenrollmentSettings) (*ResourceReenrollmentSettings, *interfaces.Response, error)
+		Update(ctx context.Context, request *ResourceReenrollmentSettings) (*ResourceReenrollmentSettings, *resty.Response, error)
 
 		// GetHistory returns paginated re-enrollment history (page, page-size, sort).
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-reenrollment-history
-		GetHistory(ctx context.Context, query map[string]string) (*ReenrollmentHistoryResponse, *interfaces.Response, error)
+		GetHistory(ctx context.Context, query map[string]string) (*ReenrollmentHistoryResponse, *resty.Response, error)
 
 		// AddHistoryNotes adds a note to re-enrollment history.
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-reenrollment-history
-		AddHistoryNotes(ctx context.Context, request *AddReenrollmentHistoryNotesRequest) (*ReenrollmentHistoryObject, *interfaces.Response, error)
+		AddHistoryNotes(ctx context.Context, request *AddReenrollmentHistoryNotesRequest) (*ReenrollmentHistoryObject, *resty.Response, error)
 
 		// ExportHistory exports re-enrollment history. query may include page, page-size, sort, filter, export-fields, export-labels. body may override when URI exceeds ~2k chars. Uses Accept: text/csv,application/json.
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-reenrollment-history-export
-		ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*interfaces.Response, []byte, error)
+		ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*resty.Response, []byte, error)
 	}
 
 	// Service handles communication with the re-enrollment settings methods of the Jamf Pro API.
@@ -55,7 +56,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // Get retrieves re-enrollment settings.
 // URL: GET /api/v1/reenrollment
-func (s *Service) Get(ctx context.Context) (*ResourceReenrollmentSettings, *interfaces.Response, error) {
+func (s *Service) Get(ctx context.Context) (*ResourceReenrollmentSettings, *resty.Response, error) {
 	var result ResourceReenrollmentSettings
 
 	endpoint := EndpointReenrollmentV1
@@ -73,7 +74,7 @@ func (s *Service) Get(ctx context.Context) (*ResourceReenrollmentSettings, *inte
 
 // Update updates re-enrollment settings.
 // URL: PUT /api/v1/reenrollment
-func (s *Service) Update(ctx context.Context, request *ResourceReenrollmentSettings) (*ResourceReenrollmentSettings, *interfaces.Response, error) {
+func (s *Service) Update(ctx context.Context, request *ResourceReenrollmentSettings) (*ResourceReenrollmentSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -96,7 +97,7 @@ func (s *Service) Update(ctx context.Context, request *ResourceReenrollmentSetti
 
 // GetHistory returns paginated re-enrollment history.
 // URL: GET /api/v1/reenrollment/history
-func (s *Service) GetHistory(ctx context.Context, query map[string]string) (*ReenrollmentHistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistory(ctx context.Context, query map[string]string) (*ReenrollmentHistoryResponse, *resty.Response, error) {
 	var result ReenrollmentHistoryResponse
 
 	mergePage := func(pageData []byte) error {
@@ -124,7 +125,7 @@ func (s *Service) GetHistory(ctx context.Context, query map[string]string) (*Ree
 
 // AddHistoryNotes adds a note to re-enrollment history.
 // URL: POST /api/v1/reenrollment/history
-func (s *Service) AddHistoryNotes(ctx context.Context, request *AddReenrollmentHistoryNotesRequest) (*ReenrollmentHistoryObject, *interfaces.Response, error) {
+func (s *Service) AddHistoryNotes(ctx context.Context, request *AddReenrollmentHistoryNotesRequest) (*ReenrollmentHistoryObject, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -144,7 +145,7 @@ func (s *Service) AddHistoryNotes(ctx context.Context, request *AddReenrollmentH
 
 // ExportHistory exports re-enrollment history. query: page, page-size, sort, filter, export-fields, export-labels. body optional (overrides query when URI would exceed ~2k chars; use page, pageSize, sort, filter, fields). Uses Accept: text/csv,application/json and Content-Type: application/json when body is sent.
 // URL: POST /api/v1/reenrollment/history/export
-func (s *Service) ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*interfaces.Response, []byte, error) {
+func (s *Service) ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*resty.Response, []byte, error) {
 	endpoint := EndpointReenrollmentHistoryExport
 	headers := map[string]string{"Accept": "text/csv,application/json"}
 	var sendBody any
@@ -156,5 +157,5 @@ func (s *Service) ExportHistory(ctx context.Context, query map[string]string, bo
 	if err != nil {
 		return nil, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }

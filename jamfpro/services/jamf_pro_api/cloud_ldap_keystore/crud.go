@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,7 +18,7 @@ type (
 		// ValidateV1 validates a Cloud LDAP keystore (Validate LDAP Keystore).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-ldap-keystore-verify
-		ValidateV1(ctx context.Context, request *ValidateKeystoreRequest) (*ResponseValidateKeystore, *interfaces.Response, error)
+		ValidateV1(ctx context.Context, request *ValidateKeystoreRequest) (*ResponseValidateKeystore, *resty.Response, error)
 	}
 
 	// Service handles communication with the Cloud LDAP Keystore-related methods of the Jamf Pro API.
@@ -37,7 +38,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ValidateV1 validates a Cloud LDAP keystore.
 // URL: POST /api/v1/ldap-keystore/verify
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-ldap-keystore-verify
-func (s *Service) ValidateV1(ctx context.Context, request *ValidateKeystoreRequest) (*ResponseValidateKeystore, *interfaces.Response, error) {
+func (s *Service) ValidateV1(ctx context.Context, request *ValidateKeystoreRequest) (*ResponseValidateKeystore, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

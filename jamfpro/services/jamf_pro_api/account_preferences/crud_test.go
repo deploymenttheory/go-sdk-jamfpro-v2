@@ -23,7 +23,7 @@ func TestUnit_AccountPreferences_GetV3_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "en", result.Language)
 	assert.Equal(t, "DARK", result.UserInterfaceDisplayTheme)
 }
@@ -43,7 +43,7 @@ func TestUnit_AccountPreferences_UpdateV3_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "en", result.Language)
 }
 

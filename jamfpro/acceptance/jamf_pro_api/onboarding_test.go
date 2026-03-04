@@ -61,7 +61,7 @@ func TestAcceptance_Onboarding_get_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_Onboarding_update_v1(t *testing.T) {
@@ -81,7 +81,7 @@ func TestAcceptance_Onboarding_update_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	restoreReq := &onboarding.ResourceUpdateOnboardingSettings{
 		Enabled:         current.Enabled,
@@ -112,7 +112,7 @@ func TestAcceptance_Onboarding_get_eligible_apps_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
@@ -125,7 +125,7 @@ func TestAcceptance_Onboarding_get_eligible_configuration_profiles_v1(t *testing
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
@@ -138,7 +138,7 @@ func TestAcceptance_Onboarding_get_eligible_policies_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
@@ -154,14 +154,14 @@ func TestAcceptance_Onboarding_get_history_v1(t *testing.T) {
 	addResult, addResp, err := svc.AddHistoryNotesV1(ctx, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, addResult)
-	assert.Equal(t, 201, addResp.StatusCode)
+	assert.Equal(t, 201, addResp.StatusCode())
 	t.Logf("Added history note with ID: %s", addResult.ID)
 
 	result, resp, err := svc.GetHistoryV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 1, "Should have at least the note we just added")
 }
 
@@ -178,6 +178,6 @@ func TestAcceptance_Onboarding_add_history_notes_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, result.ID)
 }

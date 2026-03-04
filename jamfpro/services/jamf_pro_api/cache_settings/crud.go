@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,12 +17,12 @@ type (
 		// GetV1 retrieves the current cache settings (Get Cache Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cache-settings
-		GetV1(ctx context.Context) (*ResourceCacheSettings, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceCacheSettings, *resty.Response, error)
 
 		// UpdateV1 updates the cache settings (Update Cache Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-cache-settings
-		UpdateV1(ctx context.Context, request *ResourceCacheSettings) (*ResourceCacheSettings, *interfaces.Response, error)
+		UpdateV1(ctx context.Context, request *ResourceCacheSettings) (*ResourceCacheSettings, *resty.Response, error)
 	}
 
 	// Service handles communication with the cache settings-related methods of the Jamf Pro API.
@@ -41,7 +42,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 retrieves the current cache settings.
 // URL: GET /api/v1/cache-settings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cache-settings
-func (s *Service) GetV1(ctx context.Context) (*ResourceCacheSettings, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceCacheSettings, *resty.Response, error) {
 	var result ResourceCacheSettings
 	endpoint := EndpointCacheSettingsV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON}
@@ -55,7 +56,7 @@ func (s *Service) GetV1(ctx context.Context) (*ResourceCacheSettings, *interface
 // UpdateV1 updates the cache settings.
 // URL: PUT /api/v1/cache-settings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-cache-settings
-func (s *Service) UpdateV1(ctx context.Context, request *ResourceCacheSettings) (*ResourceCacheSettings, *interfaces.Response, error) {
+func (s *Service) UpdateV1(ctx context.Context, request *ResourceCacheSettings) (*ResourceCacheSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

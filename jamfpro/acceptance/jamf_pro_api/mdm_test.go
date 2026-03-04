@@ -87,5 +87,5 @@ func TestAcceptance_MDM_validation_errors(t *testing.T) {
 // 	result, resp, err := svc.BlankPush(context.Background(), []string{deviceID})
 // 	require.NoError(t, err)
 // 	require.NotNil(t, result)
-// 	assert.Equal(t, 200, resp.StatusCode)
+// 	assert.Equal(t, 200, resp.StatusCode())
 // }

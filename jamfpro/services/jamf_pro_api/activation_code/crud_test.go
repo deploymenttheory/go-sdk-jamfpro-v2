@@ -24,7 +24,7 @@ func TestUnit_ActivationCode_GetHistoryV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 3, result.TotalCount)
 	assert.Len(t, result.Results, 3)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -49,7 +49,7 @@ func TestUnit_ActivationCode_GetHistoryV1_WithRSQLFilter(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify RSQL query was passed to the client
 	assert.NotNil(t, mock.LastRSQLQuery)
@@ -72,7 +72,7 @@ func TestUnit_ActivationCode_GetHistoryV1_WithPagination(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify pagination parameters were passed
 	assert.Equal(t, "0", mock.LastRSQLQuery["page"])
@@ -92,7 +92,7 @@ func TestUnit_ActivationCode_GetHistoryV1_WithComplexRSQLFilter(t *testing.T) {
 	result, resp, err := svc.GetHistoryV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify complex RSQL query was passed
 	assert.Equal(t, `username!=admin and details==enabled and date>2024-01-01`, mock.LastRSQLQuery["filter"])
@@ -110,7 +110,7 @@ func TestUnit_ActivationCode_GetHistoryV1_WithSorting(t *testing.T) {
 	result, resp, err := svc.GetHistoryV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify sort parameter was passed
 	assert.Equal(t, "username:asc,date:desc", mock.LastRSQLQuery["sort"])
@@ -128,7 +128,7 @@ func TestUnit_ActivationCode_UpdateV1_Success(t *testing.T) {
 	resp, err := svc.UpdateV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 202, resp.StatusCode)
+	assert.Equal(t, 202, resp.StatusCode())
 }
 
 // Test UpdateV1 with nil request
@@ -153,7 +153,7 @@ func TestUnit_ActivationCode_UpdateOrganizationNameV1_Success(t *testing.T) {
 	resp, err := svc.UpdateOrganizationNameV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 202, resp.StatusCode)
+	assert.Equal(t, 202, resp.StatusCode())
 }
 
 // Test UpdateOrganizationNameV1 with nil request
@@ -179,7 +179,7 @@ func TestUnit_ActivationCode_AddHistoryNoteV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "Test history note", result.Note)
 }
 
@@ -213,7 +213,7 @@ func TestUnit_ActivationCode_ExportHistoryV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func stringPtr(s string) *string {

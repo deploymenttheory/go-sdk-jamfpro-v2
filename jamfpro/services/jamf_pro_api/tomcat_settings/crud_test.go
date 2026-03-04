@@ -28,7 +28,7 @@ func TestUnit_TomcatSettings_IssueTomcatSslCertificate_Success(t *testing.T) {
 	resp, err := svc.IssueTomcatSslCertificate(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_TomcatSettings_IssueTomcatSslCertificate_Error(t *testing.T) {
@@ -38,7 +38,7 @@ func TestUnit_TomcatSettings_IssueTomcatSslCertificate_Error(t *testing.T) {
 	resp, err := svc.IssueTomcatSslCertificate(context.Background())
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
 	assert.Contains(t, err.Error(), "CERTIFICATE_ISSUE_FAILED")
 }

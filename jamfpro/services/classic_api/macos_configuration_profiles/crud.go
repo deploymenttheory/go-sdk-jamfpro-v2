@@ -7,6 +7,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared/plist"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,48 +18,48 @@ type (
 		// List returns all macOS configuration profiles.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofiles
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified macOS configuration profile by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyid
-		GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
 
 		// GetByName returns the specified macOS configuration profile by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyname
-		GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
 
 		// Create creates a new macOS configuration profile.
 		//
 		// Returns the created profile ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createosxconfigurationprofilebyid
-		Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByID updates the specified macOS configuration profile by ID.
 		//
 		// Returns the updated profile ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyid
-		UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByName updates the specified macOS configuration profile by name.
 		//
 		// Returns the updated profile ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyname
-		UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
 
 		// DeleteByID removes the specified macOS configuration profile by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified macOS configuration profile by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the macOS configuration profiles Classic API methods.
@@ -85,7 +86,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/osxconfigurationprofiles
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofiles
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointMacOSConfigurationProfiles
 
 	var out ListResponse
@@ -107,7 +108,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/osxconfigurationprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("macOS configuration profile ID must be a positive integer")
 	}
@@ -133,7 +134,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 // URL: GET /JSSResource/osxconfigurationprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("macOS configuration profile name cannot be empty")
 	}
@@ -159,7 +160,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *inter
 // URL: POST /JSSResource/osxconfigurationprofiles/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createosxconfigurationprofilebyid
-func (s *Service) Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -198,7 +199,7 @@ func (s *Service) Create(ctx context.Context, req *RequestResource) (*CreateUpda
 // URL: PUT /JSSResource/osxconfigurationprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("macOS configuration profile ID must be a positive integer")
 	}
@@ -255,7 +256,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestResource) 
 // URL: PUT /JSSResource/osxconfigurationprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("macOS configuration profile name cannot be empty")
 	}
@@ -302,7 +303,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestRes
 // URL: DELETE /JSSResource/osxconfigurationprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("macOS configuration profile ID must be a positive integer")
 	}
@@ -326,7 +327,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // URL: DELETE /JSSResource/osxconfigurationprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("macOS configuration profile name cannot be empty")
 	}

@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -21,7 +22,7 @@ type (
 		// require the Classic API (XML).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
-		ListV2(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		ListV2(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// ListSummaryV2 returns a list of patch policy summaries.
 		//
@@ -30,7 +31,7 @@ type (
 		// from GET /api/v2/patch-policies. Lighter-weight than ListV2 which uses /policy-details.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
-		ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *interfaces.Response, error)
+		ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *resty.Response, error)
 
 		// GetByIDV2 returns the patch policy by ID.
 		//
@@ -38,7 +39,7 @@ type (
 		// The v2 API does not provide a direct endpoint for fetching by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
-		GetByIDV2(ctx context.Context, id string) (*ResourcePatchPolicy, *interfaces.Response, error)
+		GetByIDV2(ctx context.Context, id string) (*ResourcePatchPolicy, *resty.Response, error)
 
 		// GetByNameV2 returns the patch policy by name.
 		//
@@ -46,22 +47,22 @@ type (
 		// The v2 API does not provide a direct endpoint for fetching by name.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
-		GetByNameV2(ctx context.Context, name string) (*ResourcePatchPolicy, *interfaces.Response, error)
+		GetByNameV2(ctx context.Context, name string) (*ResourcePatchPolicy, *resty.Response, error)
 
 		// GetDashboardStatusV2 checks if a patch policy is on the dashboard.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-id-dashboard
-		GetDashboardStatusV2(ctx context.Context, id string) (*DashboardStatusResponse, *interfaces.Response, error)
+		GetDashboardStatusV2(ctx context.Context, id string) (*DashboardStatusResponse, *resty.Response, error)
 
 		// AddToDashboardV2 adds a patch policy to the dashboard.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-policies-id-dashboard
-		AddToDashboardV2(ctx context.Context, id string) (*interfaces.Response, error)
+		AddToDashboardV2(ctx context.Context, id string) (*resty.Response, error)
 
 		// RemoveFromDashboardV2 removes a patch policy from the dashboard.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-policies-id-dashboard
-		RemoveFromDashboardV2(ctx context.Context, id string) (*interfaces.Response, error)
+		RemoveFromDashboardV2(ctx context.Context, id string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the patch policies-related methods of the Jamf Pro API.
@@ -86,7 +87,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV2 returns a list of all patch policies with full details.
 // URL: GET /api/v2/patch-policies/policy-details
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
-func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV2(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointPatchPoliciesPolicyDetails
@@ -116,7 +117,7 @@ func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Respon
 // ListSummaryV2 returns a list of patch policy summaries.
 // URL: GET /api/v2/patch-policies
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
-func (s *Service) ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *interfaces.Response, error) {
+func (s *Service) ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *resty.Response, error) {
 	endpoint := EndpointPatchPoliciesV2
 
 	headers := map[string]string{
@@ -135,7 +136,7 @@ func (s *Service) ListSummaryV2(ctx context.Context, rsqlQuery map[string]string
 // GetByIDV2 returns the patch policy by ID.
 // URL: GET /api/v2/patch-policies/policy-details (filtered by ID)
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
-func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourcePatchPolicy, *interfaces.Response, error) {
+func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourcePatchPolicy, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -157,7 +158,7 @@ func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourcePatchPolic
 // GetByNameV2 returns the patch policy by name.
 // URL: GET /api/v2/patch-policies/policy-details (filtered by name)
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
-func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourcePatchPolicy, *interfaces.Response, error) {
+func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourcePatchPolicy, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -179,7 +180,7 @@ func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourcePatchP
 // GetDashboardStatusV2 checks if a patch policy is on the dashboard.
 // URL: GET /api/v2/patch-policies/{id}/dashboard
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-id-dashboard
-func (s *Service) GetDashboardStatusV2(ctx context.Context, id string) (*DashboardStatusResponse, *interfaces.Response, error) {
+func (s *Service) GetDashboardStatusV2(ctx context.Context, id string) (*DashboardStatusResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -203,7 +204,7 @@ func (s *Service) GetDashboardStatusV2(ctx context.Context, id string) (*Dashboa
 // AddToDashboardV2 adds a patch policy to the dashboard.
 // URL: POST /api/v2/patch-policies/{id}/dashboard
 // https://developer.jamf.com/jamf-pro/reference/post_v2-patch-policies-id-dashboard
-func (s *Service) AddToDashboardV2(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) AddToDashboardV2(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -226,7 +227,7 @@ func (s *Service) AddToDashboardV2(ctx context.Context, id string) (*interfaces.
 // RemoveFromDashboardV2 removes a patch policy from the dashboard.
 // URL: DELETE /api/v2/patch-policies/{id}/dashboard
 // https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-policies-id-dashboard
-func (s *Service) RemoveFromDashboardV2(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) RemoveFromDashboardV2(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}

@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -20,21 +21,21 @@ type (
 		// pagination and sorting (page, page-size, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the specified ebook by ID (Get specified Ebook object).
 		//
 		// Returns a single ebook object for the given ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *resty.Response, error)
 
 		// GetScopeByIDV1 returns the scope for the specified ebook by ID (Get specified scope of Ebook object).
 		//
 		// Returns scope with assignments, limitations, and exclusions.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks-id-scope
-		GetScopeByIDV1(ctx context.Context, id string) (*ResourceScope, *interfaces.Response, error)
+		GetScopeByIDV1(ctx context.Context, id string) (*ResourceScope, *resty.Response, error)
 	}
 
 	// Service handles communication with the ebooks-related methods of the Jamf Pro API.
@@ -59,7 +60,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/ebooks
 
 // https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointEbooksV1
@@ -87,7 +88,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 returns the specified ebook by ID (Get specified Ebook object).
 // URL: GET /api/v1/ebooks/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("ebook ID is required")
 	}
@@ -111,7 +112,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *in
 // GetScopeByIDV1 returns the scope for the specified ebook by ID (Get specified scope of Ebook object).
 // URL: GET /api/v1/ebooks/{id}/scope
 // https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks-id-scope
-func (s *Service) GetScopeByIDV1(ctx context.Context, id string) (*ResourceScope, *interfaces.Response, error) {
+func (s *Service) GetScopeByIDV1(ctx context.Context, id string) (*ResourceScope, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("ebook ID is required")
 	}

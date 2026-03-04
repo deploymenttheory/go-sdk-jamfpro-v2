@@ -1,6 +1,7 @@
 package client
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -52,16 +53,16 @@ func TestParseErrorResponse(t *testing.T) {
 func TestIsNotFound(t *testing.T) {
 	assert.False(t, IsNotFound(nil))
 	assert.False(t, IsNotFound(&APIError{StatusCode: 500}))
-	assert.True(t, IsNotFound(&APIError{StatusCode: StatusNotFound}))
+	assert.True(t, IsNotFound(&APIError{StatusCode: http.StatusNotFound}))
 }
 
 func TestIsUnauthorized(t *testing.T) {
-	assert.True(t, IsUnauthorized(&APIError{StatusCode: StatusUnauthorized}))
+	assert.True(t, IsUnauthorized(&APIError{StatusCode: http.StatusUnauthorized}))
 	assert.False(t, IsUnauthorized(&APIError{StatusCode: 200}))
 }
 
 func TestIsBadRequest(t *testing.T) {
-	assert.True(t, IsBadRequest(&APIError{StatusCode: StatusBadRequest}))
+	assert.True(t, IsBadRequest(&APIError{StatusCode: http.StatusBadRequest}))
 }
 
 func TestIsServerError(t *testing.T) {
@@ -89,8 +90,8 @@ func TestIsServerError_NonAPIError(t *testing.T) {
 func TestParseErrorResponse_DefaultMessageForStatus(t *testing.T) {
 	logger := zap.NewNop()
 	for code, want := range map[int]string{
-		StatusForbidden: "Authentication required or token invalid. The server understood the request but refuses to authorize it.",
-		StatusConflict:  "The request could not be completed due to a conflict with the current state of the resource.",
+		http.StatusForbidden: "Authentication required or token invalid. The server understood the request but refuses to authorize it.",
+		http.StatusConflict:  "The request could not be completed due to a conflict with the current state of the resource.",
 	} {
 		err := ParseErrorResponse(nil, code, "", "GET", "/", logger)
 		require.Error(t, err)

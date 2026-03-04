@@ -28,7 +28,7 @@ func TestUnit_DiskEncryptionConfigurations_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -47,7 +47,7 @@ func TestUnit_DiskEncryptionConfigurations_GetByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "FileVault Config", result.Name)
 	assert.Equal(t, "Individual", result.KeyType)
@@ -89,7 +89,7 @@ func TestUnit_DiskEncryptionConfigurations_GetByName_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "FileVault Config", result.Name)
 }
@@ -118,7 +118,7 @@ func TestUnit_DiskEncryptionConfigurations_Create_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -152,7 +152,7 @@ func TestUnit_DiskEncryptionConfigurations_UpdateByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -183,7 +183,7 @@ func TestUnit_DiskEncryptionConfigurations_UpdateByName_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -211,7 +211,7 @@ func TestUnit_DiskEncryptionConfigurations_DeleteByID_Success(t *testing.T) {
 
 	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_DiskEncryptionConfigurations_DeleteByID_ZeroID(t *testing.T) {
@@ -231,7 +231,7 @@ func TestUnit_DiskEncryptionConfigurations_DeleteByName_Success(t *testing.T) {
 
 	resp, err := svc.DeleteByName(context.Background(), "FileVault Config")
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_DiskEncryptionConfigurations_DeleteByName_EmptyName(t *testing.T) {

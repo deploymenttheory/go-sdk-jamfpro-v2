@@ -37,7 +37,7 @@ func TestUnit_ComputerGroups_ListSmartGroups_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -56,7 +56,7 @@ func TestUnit_ComputerGroups_GetSmartGroupByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "MacBooks", result.Name)
 	assert.True(t, result.IsSmart)
@@ -83,7 +83,7 @@ func TestUnit_ComputerGroups_GetSmartGroupByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_UpdateSmartGroup_NotFound(t *testing.T) {
@@ -94,7 +94,7 @@ func TestUnit_ComputerGroups_UpdateSmartGroup_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_DeleteSmartGroup_NotFound(t *testing.T) {
@@ -104,7 +104,7 @@ func TestUnit_ComputerGroups_DeleteSmartGroup_NotFound(t *testing.T) {
 	resp, err := svc.DeleteSmartV2(context.Background(), "999")
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_CreateSmartGroup_Success(t *testing.T) {
@@ -122,7 +122,7 @@ func TestUnit_ComputerGroups_CreateSmartGroup_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Contains(t, result.Href, "/api/v2/computer-groups/smart-groups/3")
 }
@@ -146,7 +146,7 @@ func TestUnit_ComputerGroups_CreateSmartGroup_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_UpdateSmartGroup_Success(t *testing.T) {
@@ -164,7 +164,7 @@ func TestUnit_ComputerGroups_UpdateSmartGroup_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "MacBooks Updated", result.Name)
 }
@@ -196,7 +196,7 @@ func TestUnit_ComputerGroups_DeleteSmartGroup_Success(t *testing.T) {
 	resp, err := svc.DeleteSmartV2(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_DeleteSmartGroup_EmptyID(t *testing.T) {
@@ -229,7 +229,7 @@ func TestUnit_ComputerGroups_ListStaticGroups_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "10", result.Results[0].ID)
@@ -247,7 +247,7 @@ func TestUnit_ComputerGroups_GetStaticGroupByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "10", result.ID)
 	assert.Equal(t, "Test Machines", result.Name)
 	assert.False(t, result.IsSmart)
@@ -262,7 +262,7 @@ func TestUnit_ComputerGroups_GetStaticGroupByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_GetStaticGroupByID_EmptyID(t *testing.T) {
@@ -288,7 +288,7 @@ func TestUnit_ComputerGroups_CreateStaticGroup_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "12", result.ID)
 	assert.Contains(t, result.Href, "/api/v2/computer-groups/static-groups/12")
 }
@@ -302,7 +302,7 @@ func TestUnit_ComputerGroups_CreateStaticGroup_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_CreateStaticGroup_NilRequest(t *testing.T) {
@@ -328,7 +328,7 @@ func TestUnit_ComputerGroups_UpdateStaticGroup_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "10", result.ID)
 	assert.Equal(t, []string{"101", "102", "103"}, result.ComputerIds)
 }
@@ -352,7 +352,7 @@ func TestUnit_ComputerGroups_UpdateStaticGroup_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_UpdateStaticGroup_NilRequest(t *testing.T) {
@@ -372,7 +372,7 @@ func TestUnit_ComputerGroups_DeleteStaticGroup_Success(t *testing.T) {
 	resp, err := svc.DeleteStaticByIDV2(context.Background(), "10")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_DeleteStaticGroup_NotFound(t *testing.T) {
@@ -382,7 +382,7 @@ func TestUnit_ComputerGroups_DeleteStaticGroup_NotFound(t *testing.T) {
 	resp, err := svc.DeleteStaticByIDV2(context.Background(), "999")
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_ComputerGroups_DeleteStaticGroup_EmptyID(t *testing.T) {
@@ -405,7 +405,7 @@ func TestUnit_ComputerGroups_ListAllV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 2)
 	assert.Equal(t, "1", result[0].ID)
 	assert.Equal(t, "MacBooks", result[0].Name)
@@ -436,7 +436,7 @@ func TestUnit_ComputerGroups_GetSmartGroupMembershipByIDV2_Success(t *testing.T)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.Members, 3)
 	assert.Equal(t, []int{101, 102, 103}, result.Members)
 }

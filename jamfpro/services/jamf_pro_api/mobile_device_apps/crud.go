@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -18,7 +19,7 @@ type (
 		// This endpoint does not require authorization, only the re-install code.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-apps-reinstall-app-config
-		ReinstallAppConfigV1(ctx context.Context, request *RequestReinstallAppConfig) (*interfaces.Response, error)
+		ReinstallAppConfigV1(ctx context.Context, request *RequestReinstallAppConfig) (*resty.Response, error)
 	}
 
 	// Service handles communication with the mobile device apps-related methods of the Jamf Pro API.
@@ -45,7 +46,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Response: 204 No Content on success.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-apps-reinstall-app-config
-func (s *Service) ReinstallAppConfigV1(ctx context.Context, request *RequestReinstallAppConfig) (*interfaces.Response, error) {
+func (s *Service) ReinstallAppConfigV1(ctx context.Context, request *RequestReinstallAppConfig) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request is required")
 	}

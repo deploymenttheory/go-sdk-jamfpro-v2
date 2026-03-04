@@ -34,7 +34,7 @@ func TestUnit_Sites_ListV1_NoMockRegistered(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 404, resp.StatusCode)
+	require.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_Sites_GetObjectsByIDV1_Success(t *testing.T) {
@@ -82,5 +82,5 @@ func TestUnit_Sites_GetObjectsByIDV1_NoMockRegistered(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 404, resp.StatusCode)
+	require.Equal(t, 404, resp.StatusCode())
 }

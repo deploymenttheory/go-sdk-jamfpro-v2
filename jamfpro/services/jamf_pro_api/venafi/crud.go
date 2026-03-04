@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,67 +18,67 @@ type (
 		// Create creates a new Venafi PKI configuration.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi
-		Create(ctx context.Context, request *ResourceVenafi) (*ResponseVenafiCreated, *interfaces.Response, error)
+		Create(ctx context.Context, request *ResourceVenafi) (*ResponseVenafiCreated, *resty.Response, error)
 
 		// GetByID returns the Venafi PKI configuration by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id
-		GetByID(ctx context.Context, id string) (*ResponseVenafi, *interfaces.Response, error)
+		GetByID(ctx context.Context, id string) (*ResponseVenafi, *resty.Response, error)
 
 		// UpdateByID updates the Venafi PKI configuration by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-pki-venafi-id
-		UpdateByID(ctx context.Context, id string, request *ResourceVenafi) (*ResponseVenafi, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id string, request *ResourceVenafi) (*ResponseVenafi, *resty.Response, error)
 
 		// DeleteByID deletes the Venafi PKI configuration by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-venafi-id
-		DeleteByID(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
 
 		// GetConnectionStatus tests communication between Jamf Pro and the PKI Proxy Server.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-connection-status
-		GetConnectionStatus(ctx context.Context, id string) (*ResponseConnectionStatus, *interfaces.Response, error)
+		GetConnectionStatus(ctx context.Context, id string) (*ResponseConnectionStatus, *resty.Response, error)
 
 		// GetDependentProfiles returns configuration profiles using the Venafi CA.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-dependent-profiles
-		GetDependentProfiles(ctx context.Context, id string) (*ResponseDependentProfiles, *interfaces.Response, error)
+		GetDependentProfiles(ctx context.Context, id string) (*ResponseDependentProfiles, *resty.Response, error)
 
 		// GetHistory returns the history for a Venafi configuration.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-history
-		GetHistory(ctx context.Context, id string, query map[string]string) (*ResponseHistory, *interfaces.Response, error)
+		GetHistory(ctx context.Context, id string, query map[string]string) (*ResponseHistory, *resty.Response, error)
 
 		// AddHistoryNote adds a note to the history for a Venafi configuration.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi-id-history
-		AddHistoryNote(ctx context.Context, id string, request *HistoryNoteRequest) (*ResponseVenafiCreated, *interfaces.Response, error)
+		AddHistoryNote(ctx context.Context, id string, request *HistoryNoteRequest) (*ResponseVenafiCreated, *resty.Response, error)
 
 		// GetJamfPublicKey downloads the certificate for securing Jamf Pro to PKI Proxy communication.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-jamf-public-key
-		GetJamfPublicKey(ctx context.Context, id string) (*interfaces.Response, []byte, error)
+		GetJamfPublicKey(ctx context.Context, id string) (*resty.Response, []byte, error)
 
 		// GetProxyTrustStore downloads the PKI Proxy Server public key.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-proxy-trust-store
-		GetProxyTrustStore(ctx context.Context, id string) (*interfaces.Response, []byte, error)
+		GetProxyTrustStore(ctx context.Context, id string) (*resty.Response, []byte, error)
 
 		// RegenerateJamfPublicKeyByIDV1 regenerates the Jamf public key for Venafi configuration.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi-id-jamf-public-key-regenerate
-		RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// UploadProxyTrustStoreByIDV1 uploads the PKI Proxy Server public key (PEM certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi-id-proxy-trust-store
-		UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pemCertificate []byte) (*interfaces.Response, error)
+		UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pemCertificate []byte) (*resty.Response, error)
 
 		// DeleteProxyTrustStoreByIDV1 removes the PKI Proxy Server public key.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-venafi-id-proxy-trust-store
-		DeleteProxyTrustStoreByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteProxyTrustStoreByIDV1(ctx context.Context, id string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the Venafi PKI-related methods of the Jamf Pro API.
@@ -96,7 +97,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // Create creates a new Venafi PKI configuration.
 // URL: POST /api/v1/pki/venafi
-func (s *Service) Create(ctx context.Context, request *ResourceVenafi) (*ResponseVenafiCreated, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, request *ResourceVenafi) (*ResponseVenafiCreated, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -120,7 +121,7 @@ func (s *Service) Create(ctx context.Context, request *ResourceVenafi) (*Respons
 
 // GetByID returns the Venafi PKI configuration by ID.
 // URL: GET /api/v1/pki/venafi/{id}
-func (s *Service) GetByID(ctx context.Context, id string) (*ResponseVenafi, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id string) (*ResponseVenafi, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -143,7 +144,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResponseVenafi, *int
 
 // UpdateByID updates the Venafi PKI configuration by ID.
 // URL: PATCH /api/v1/pki/venafi/{id}
-func (s *Service) UpdateByID(ctx context.Context, id string, request *ResourceVenafi) (*ResponseVenafi, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id string, request *ResourceVenafi) (*ResponseVenafi, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -170,7 +171,7 @@ func (s *Service) UpdateByID(ctx context.Context, id string, request *ResourceVe
 
 // DeleteByID deletes the Venafi PKI configuration by ID.
 // URL: DELETE /api/v1/pki/venafi/{id}
-func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -191,7 +192,7 @@ func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Respon
 
 // GetConnectionStatus tests communication between Jamf Pro and the PKI Proxy Server.
 // URL: GET /api/v1/pki/venafi/{id}/connection-status
-func (s *Service) GetConnectionStatus(ctx context.Context, id string) (*ResponseConnectionStatus, *interfaces.Response, error) {
+func (s *Service) GetConnectionStatus(ctx context.Context, id string) (*ResponseConnectionStatus, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -214,7 +215,7 @@ func (s *Service) GetConnectionStatus(ctx context.Context, id string) (*Response
 
 // GetDependentProfiles returns configuration profiles using the Venafi CA.
 // URL: GET /api/v1/pki/venafi/{id}/dependent-profiles
-func (s *Service) GetDependentProfiles(ctx context.Context, id string) (*ResponseDependentProfiles, *interfaces.Response, error) {
+func (s *Service) GetDependentProfiles(ctx context.Context, id string) (*ResponseDependentProfiles, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -237,7 +238,7 @@ func (s *Service) GetDependentProfiles(ctx context.Context, id string) (*Respons
 
 // GetHistory returns the history for a Venafi configuration.
 // URL: GET /api/v1/pki/venafi/{id}/history
-func (s *Service) GetHistory(ctx context.Context, id string, query map[string]string) (*ResponseHistory, *interfaces.Response, error) {
+func (s *Service) GetHistory(ctx context.Context, id string, query map[string]string) (*ResponseHistory, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -270,7 +271,7 @@ func (s *Service) GetHistory(ctx context.Context, id string, query map[string]st
 
 // AddHistoryNote adds a note to the history for a Venafi configuration.
 // URL: POST /api/v1/pki/venafi/{id}/history
-func (s *Service) AddHistoryNote(ctx context.Context, id string, request *HistoryNoteRequest) (*ResponseVenafiCreated, *interfaces.Response, error) {
+func (s *Service) AddHistoryNote(ctx context.Context, id string, request *HistoryNoteRequest) (*ResponseVenafiCreated, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -297,7 +298,7 @@ func (s *Service) AddHistoryNote(ctx context.Context, id string, request *Histor
 
 // GetJamfPublicKey downloads the certificate for securing Jamf Pro to PKI Proxy communication.
 // URL: GET /api/v1/pki/venafi/{id}/jamf-public-key
-func (s *Service) GetJamfPublicKey(ctx context.Context, id string) (*interfaces.Response, []byte, error) {
+func (s *Service) GetJamfPublicKey(ctx context.Context, id string) (*resty.Response, []byte, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -318,7 +319,7 @@ func (s *Service) GetJamfPublicKey(ctx context.Context, id string) (*interfaces.
 
 // GetProxyTrustStore downloads the PKI Proxy Server public key.
 // URL: GET /api/v1/pki/venafi/{id}/proxy-trust-store
-func (s *Service) GetProxyTrustStore(ctx context.Context, id string) (*interfaces.Response, []byte, error) {
+func (s *Service) GetProxyTrustStore(ctx context.Context, id string) (*resty.Response, []byte, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -339,7 +340,7 @@ func (s *Service) GetProxyTrustStore(ctx context.Context, id string) (*interface
 
 // RegenerateJamfPublicKeyByIDV1 regenerates the Jamf public key for Venafi configuration.
 // URL: POST /api/v1/pki/venafi/{id}/jamf-public-key/regenerate
-func (s *Service) RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -360,7 +361,7 @@ func (s *Service) RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) 
 
 // UploadProxyTrustStoreByIDV1 uploads the PKI Proxy Server public key (PEM certificate).
 // URL: POST /api/v1/pki/venafi/{id}/proxy-trust-store
-func (s *Service) UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pemCertificate []byte) (*interfaces.Response, error) {
+func (s *Service) UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pemCertificate []byte) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -385,7 +386,7 @@ func (s *Service) UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pe
 
 // DeleteProxyTrustStoreByIDV1 removes the PKI Proxy Server public key.
 // URL: DELETE /api/v1/pki/venafi/{id}/proxy-trust-store
-func (s *Service) DeleteProxyTrustStoreByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteProxyTrustStoreByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}

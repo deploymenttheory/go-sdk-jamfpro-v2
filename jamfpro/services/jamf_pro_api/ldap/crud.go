@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,17 +18,17 @@ type (
 		// Optional rsqlQuery keys: "filter" (RSQL), "sort", "page", "page-size". Omit or nil for no filter.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ldap-groups
-		GetLdapGroupsV1(ctx context.Context, rsqlQuery map[string]string) (*ListGroupsResponseV1, *interfaces.Response, error)
+		GetLdapGroupsV1(ctx context.Context, rsqlQuery map[string]string) (*ListGroupsResponseV1, *resty.Response, error)
 
 		// GetLdapServersV1 retrieves every active LDAP or cloud identity provider server definition (Get LDAP servers).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ldap-servers
-		GetLdapServersV1(ctx context.Context) ([]ResourceLdapServerV1, *interfaces.Response, error)
+		GetLdapServersV1(ctx context.Context) ([]ResourceLdapServerV1, *resty.Response, error)
 
 		// GetLdapServersOnlyV1 retrieves LDAP servers only (not migrated to cloud).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ldap-ldap-servers
-		GetLdapServersOnlyV1(ctx context.Context) ([]ResourceLdapServerV1, *interfaces.Response, error)
+		GetLdapServersOnlyV1(ctx context.Context) ([]ResourceLdapServerV1, *resty.Response, error)
 	}
 
 	// Service handles communication with the LDAP-related methods of the Jamf Pro API.
@@ -51,7 +52,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetLdapGroupsV1 retrieves LDAP groups. Optional rsqlQuery: filter (RSQL), sort, page, page-size.
 // URL: GET /api/v1/ldap/groups
 // https://developer.jamf.com/jamf-pro/reference/get_v1-ldap-groups
-func (s *Service) GetLdapGroupsV1(ctx context.Context, rsqlQuery map[string]string) (*ListGroupsResponseV1, *interfaces.Response, error) {
+func (s *Service) GetLdapGroupsV1(ctx context.Context, rsqlQuery map[string]string) (*ListGroupsResponseV1, *resty.Response, error) {
 
 	var result ListGroupsResponseV1
 
@@ -72,7 +73,7 @@ func (s *Service) GetLdapGroupsV1(ctx context.Context, rsqlQuery map[string]stri
 // GetLdapServersV1 retrieves every active LDAP or cloud identity provider server definition.
 // URL: GET /api/v1/ldap/servers
 // https://developer.jamf.com/jamf-pro/reference/get_v1-ldap-servers
-func (s *Service) GetLdapServersV1(ctx context.Context) ([]ResourceLdapServerV1, *interfaces.Response, error) {
+func (s *Service) GetLdapServersV1(ctx context.Context) ([]ResourceLdapServerV1, *resty.Response, error) {
 	var result []ResourceLdapServerV1
 
 	endpoint := EndpointLdapServersV1
@@ -92,7 +93,7 @@ func (s *Service) GetLdapServersV1(ctx context.Context) ([]ResourceLdapServerV1,
 // GetLdapServersOnlyV1 retrieves LDAP servers only (not migrated to cloud).
 // URL: GET /api/v1/ldap/ldap-servers
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ldap-ldap-servers
-func (s *Service) GetLdapServersOnlyV1(ctx context.Context) ([]ResourceLdapServerV1, *interfaces.Response, error) {
+func (s *Service) GetLdapServersOnlyV1(ctx context.Context) ([]ResourceLdapServerV1, *resty.Response, error) {
 	var result []ResourceLdapServerV1
 
 	endpoint := EndpointLdapServersOnlyV1

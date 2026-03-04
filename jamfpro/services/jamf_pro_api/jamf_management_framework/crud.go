@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -21,7 +22,7 @@ type (
 		// Returns 201 Created with deviceId and commandUuid when the command is successfully queued.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-management-framework-redeploy-id
-		RedeployV1(ctx context.Context, computerID string) (*RedeployResponse, *interfaces.Response, error)
+		RedeployV1(ctx context.Context, computerID string) (*RedeployResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the Jamf Management Framework-related methods of the Jamf Pro API.
@@ -46,7 +47,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: POST /api/v1/jamf-management-framework/redeploy/{id}
 // Path param: id (computer ID)
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-management-framework-redeploy-id
-func (s *Service) RedeployV1(ctx context.Context, computerID string) (*RedeployResponse, *interfaces.Response, error) {
+func (s *Service) RedeployV1(ctx context.Context, computerID string) (*RedeployResponse, *resty.Response, error) {
 	id := strings.TrimSpace(computerID)
 	if id == "" {
 		return nil, nil, fmt.Errorf("computer ID is required")

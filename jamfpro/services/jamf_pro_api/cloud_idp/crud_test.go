@@ -21,7 +21,7 @@ func TestUnit_CloudIdp_ListV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	assert.Len(t, result.Results, 2)
 	assert.Equal(t, "Test Azure IDP", result.Results[0].DisplayName)
@@ -40,7 +40,7 @@ func TestUnit_CloudIdp_GetByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Test Azure IDP", result.DisplayName)
 	assert.Equal(t, "AZURE", result.ProviderName)
@@ -121,7 +121,7 @@ func TestUnit_CloudIdp_ExportV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, data)
 }
 
@@ -140,7 +140,7 @@ func TestUnit_CloudIdp_ExportV1_QueryOnly(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, data)
 }
 
@@ -162,7 +162,7 @@ func TestUnit_CloudIdp_ExportV1_CSV(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, data)
 }
 
@@ -177,7 +177,7 @@ func TestUnit_CloudIdp_GetHistoryByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "admin", result.Results[0].Username)
@@ -212,7 +212,7 @@ func TestUnit_CloudIdp_AddHistoryNoteByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_CloudIdp_AddHistoryNoteByIDV1_EmptyID(t *testing.T) {
@@ -258,7 +258,7 @@ func TestUnit_CloudIdp_TestGroupSearchByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "TestGroup", result.Results[0].Name)
@@ -309,7 +309,7 @@ func TestUnit_CloudIdp_TestUserSearchByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "testuser", result.Results[0].Name)
@@ -363,7 +363,7 @@ func TestUnit_CloudIdp_TestUserMembershipByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "testuser", result.Username)
 	assert.True(t, result.IsMember)
 }

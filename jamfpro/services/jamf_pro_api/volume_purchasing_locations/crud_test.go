@@ -24,7 +24,7 @@ func TestUnit_VolumePurchasingLocations_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -40,7 +40,7 @@ func TestUnit_VolumePurchasingLocations_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "VPL One", result.Name)
 	assert.True(t, result.AutomaticallyPopulatePurchasedContent)
@@ -69,7 +69,7 @@ func TestUnit_VolumePurchasingLocations_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "2", result.ID)
 	assert.NotEmpty(t, result.Href)
 }
@@ -89,7 +89,7 @@ func TestUnit_VolumePurchasingLocations_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "VPL One Updated", result.Name)
 }
@@ -101,7 +101,7 @@ func TestUnit_VolumePurchasingLocations_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_VolumePurchasingLocations_ReclaimByID_Success(t *testing.T) {
@@ -111,7 +111,7 @@ func TestUnit_VolumePurchasingLocations_ReclaimByID_Success(t *testing.T) {
 	resp, err := svc.ReclaimVolumePurchasingLocationByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 202, resp.StatusCode)
+	assert.Equal(t, 202, resp.StatusCode())
 }
 
 func TestUnit_VolumePurchasingLocations_GetContentV1_Success(t *testing.T) {
@@ -123,7 +123,7 @@ func TestUnit_VolumePurchasingLocations_GetContentV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 0, result.TotalCount)
 	assert.NotNil(t, result.Results)
 }
@@ -137,7 +137,7 @@ func TestUnit_VolumePurchasingLocations_GetHistoryV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -152,7 +152,7 @@ func TestUnit_VolumePurchasingLocations_AddHistoryNotesV1_Success(t *testing.T) 
 	resp, err := svc.AddHistoryNotesV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_VolumePurchasingLocations_AddHistoryNotesV1_EmptyID(t *testing.T) {
@@ -179,7 +179,7 @@ func TestUnit_VolumePurchasingLocations_RevokeVolumePurchasingLocationLicensesBy
 	resp, err := svc.RevokeVolumePurchasingLocationLicensesByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_VolumePurchasingLocations_CreateV1_NilRequest(t *testing.T) {
@@ -301,7 +301,7 @@ func TestUnit_VolumePurchasingLocations_GetByIDV1_NotFound(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_VolumePurchasingLocations_GetByIDV1_Error(t *testing.T) {

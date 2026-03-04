@@ -24,7 +24,7 @@ func TestUnit_VolumePurchasingSubscriptions_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -40,7 +40,7 @@ func TestUnit_VolumePurchasingSubscriptions_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "VPS One", result.Name)
 	assert.True(t, result.Enabled)
@@ -63,7 +63,7 @@ func TestUnit_VolumePurchasingSubscriptions_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_VolumePurchasingSubscriptions_Create_Success(t *testing.T) {
@@ -79,7 +79,7 @@ func TestUnit_VolumePurchasingSubscriptions_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "2", result.ID)
 	assert.NotEmpty(t, result.Href)
 }
@@ -106,7 +106,7 @@ func TestUnit_VolumePurchasingSubscriptions_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "VPS One Updated", result.Name)
 }
@@ -139,7 +139,7 @@ func TestUnit_VolumePurchasingSubscriptions_UpdateByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_VolumePurchasingSubscriptions_DeleteByID_Success(t *testing.T) {
@@ -149,7 +149,7 @@ func TestUnit_VolumePurchasingSubscriptions_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_VolumePurchasingSubscriptions_DeleteByID_EmptyID(t *testing.T) {
@@ -167,7 +167,7 @@ func TestUnit_VolumePurchasingSubscriptions_DeleteByID_NotFound(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "999")
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_VolumePurchasingSubscriptions_List_Error(t *testing.T) {
@@ -178,5 +178,5 @@ func TestUnit_VolumePurchasingSubscriptions_List_Error(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }

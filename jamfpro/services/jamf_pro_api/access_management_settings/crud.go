@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,12 +17,12 @@ type (
 		// GetV4 retrieves the current access management settings (Get Access Management Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment-access-management
-		GetV4(ctx context.Context) (*ResourceAccessManagementSettings, *interfaces.Response, error)
+		GetV4(ctx context.Context) (*ResourceAccessManagementSettings, *resty.Response, error)
 
 		// CreateV4 configures the access management settings (Create/Update Access Management Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v4-enrollment-access-management
-		CreateV4(ctx context.Context, request *ResourceAccessManagementSettings) (*ResourceAccessManagementSettings, *interfaces.Response, error)
+		CreateV4(ctx context.Context, request *ResourceAccessManagementSettings) (*ResourceAccessManagementSettings, *resty.Response, error)
 	}
 
 	// Service handles communication with the access management settings-related methods of the Jamf Pro API.
@@ -41,7 +42,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV4 retrieves the current access management settings.
 // URL: GET /api/v4/enrollment/access-management
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment-access-management
-func (s *Service) GetV4(ctx context.Context) (*ResourceAccessManagementSettings, *interfaces.Response, error) {
+func (s *Service) GetV4(ctx context.Context) (*ResourceAccessManagementSettings, *resty.Response, error) {
 	var result ResourceAccessManagementSettings
 	endpoint := EndpointAccessManagementSettingsV4
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
@@ -55,7 +56,7 @@ func (s *Service) GetV4(ctx context.Context) (*ResourceAccessManagementSettings,
 // CreateV4 configures the access management settings.
 // URL: POST /api/v4/enrollment/access-management
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v4-enrollment-access-management
-func (s *Service) CreateV4(ctx context.Context, request *ResourceAccessManagementSettings) (*ResourceAccessManagementSettings, *interfaces.Response, error) {
+func (s *Service) CreateV4(ctx context.Context, request *ResourceAccessManagementSettings) (*ResourceAccessManagementSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

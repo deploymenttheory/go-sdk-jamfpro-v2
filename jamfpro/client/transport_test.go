@@ -108,30 +108,30 @@ func TestTransport_Get_Post_Put_Delete(t *testing.T) {
 	resp, err := tr.Get(ctx, "/api/test", nil, nil, &getResult)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", getResult["id"])
 
 	var postResult map[string]string
 	resp, err = tr.Post(ctx, "/api/test", map[string]string{"k": "v"}, nil, &postResult)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	resp, err = tr.Put(ctx, "/api/test", map[string]string{"k": "v"}, nil, &postResult)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	resp, err = tr.Delete(ctx, "/api/test", nil, nil, nil)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	var patchResult map[string]string
 	resp, err = tr.Patch(ctx, "/api/test", map[string]string{"k": "v"}, nil, &patchResult)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	resp, err = tr.DeleteWithBody(ctx, "/api/test", map[string]string{"id": "1"}, nil, nil)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestTransport_PostWithQuery_PostForm_GetBytes(t *testing.T) {
@@ -145,16 +145,16 @@ func TestTransport_PostWithQuery_PostForm_GetBytes(t *testing.T) {
 	var result map[string]string
 	resp, err := tr.PostWithQuery(ctx, "/api/test", map[string]string{"q": "v"}, nil, nil, &result)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	resp, err = tr.PostForm(ctx, "/api/test", map[string]string{"form": "data"}, nil, &result)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	resp, body, err := tr.GetBytes(ctx, "/api/test", nil, nil)
 	require.NoError(t, err)
 	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestTransport_PostMultipart(t *testing.T) {
@@ -168,7 +168,7 @@ func TestTransport_PostMultipart(t *testing.T) {
 	var result map[string]string
 	resp, err := tr.PostMultipart(ctx, "/api/upload", "file", "test.txt", bytes.NewReader([]byte("content")), 7, map[string]string{"key": "val"}, nil, nil, &result)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	called := false
 	resp, err = tr.PostMultipart(ctx, "/api/upload", "file", "a.txt", bytes.NewReader([]byte("x")), 1, nil, nil, func(_, _ string, written, total int64) { called = true }, &result)
@@ -202,7 +202,7 @@ func TestTransport_GetBytes_ErrorResponse(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, body)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestTransport_ExecuteRequest_ConcurrencyLimit(t *testing.T) {
@@ -266,7 +266,7 @@ func TestTransport_ValidateResponse_EmptyBody(t *testing.T) {
 	var result map[string]any
 	resp, err := tr.Get(ctx, "/api/empty", nil, nil, &result)
 	require.NoError(t, err)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestTransport_ValidateResponse_NonJSONWarn(t *testing.T) {
@@ -294,7 +294,7 @@ func TestTransport_ValidateResponse_NonJSONWarn(t *testing.T) {
 	var result []byte
 	resp, err := tr.Get(ctx, "/api/plain", nil, nil, &result)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestTransport_WithTotalRetryDuration_Request(t *testing.T) {
@@ -307,7 +307,7 @@ func TestTransport_WithTotalRetryDuration_Request(t *testing.T) {
 	var result map[string]string
 	resp, err := tr.Get(ctx, "/api/test", nil, nil, &result)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestTransport_RequestWithMandatoryDelay(t *testing.T) {
@@ -320,7 +320,7 @@ func TestTransport_RequestWithMandatoryDelay(t *testing.T) {
 	var result map[string]string
 	resp, err := tr.Get(ctx, "/api/test", nil, nil, &result)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestTransport_ExecuteRequest_ContextCanceled(t *testing.T) {
@@ -391,7 +391,7 @@ func TestTransport_ExecuteRequest_ServerError(t *testing.T) {
 	var result map[string]string
 	resp, err := tr.Get(ctx, "/api/err", nil, nil, &result)
 	require.Error(t, err)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestTransport_DeprecationHeader(t *testing.T) {
@@ -417,7 +417,7 @@ func TestTransport_DeprecationHeader(t *testing.T) {
 	var result map[string]any
 	resp, err := tr.Get(ctx, "/api/deprecated", nil, nil, &result)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestTransport_InvalidateToken(t *testing.T) {
@@ -451,5 +451,5 @@ func TestTransport_ApplyHeaders(t *testing.T) {
 	var result map[string]string
 	resp, err := tr.Get(ctx, "/api/test", nil, map[string]string{"X-Request": "request-val"}, &result)
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }

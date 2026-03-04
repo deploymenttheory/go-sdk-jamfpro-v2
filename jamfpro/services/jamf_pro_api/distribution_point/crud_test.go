@@ -35,7 +35,7 @@ func TestUnit_DistributionPoint_ListV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -65,7 +65,7 @@ func TestUnit_DistributionPoint_CreateV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 }
 
@@ -83,7 +83,7 @@ func TestUnit_DistributionPoint_DeleteMultipleV1_Success(t *testing.T) {
 	resp, err := svc.DeleteMultipleV1(context.Background(), []string{"1", "2"})
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_DistributionPoint_DeleteMultipleV1_EmptyIDs(t *testing.T) {
@@ -100,7 +100,7 @@ func TestUnit_DistributionPoint_GetByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Test DP", result.Name)
 }
@@ -121,7 +121,7 @@ func TestUnit_DistributionPoint_GetByIDV1_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_DistributionPoint_UpdateByIDV1_Success(t *testing.T) {
@@ -137,7 +137,7 @@ func TestUnit_DistributionPoint_UpdateByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 }
 
@@ -165,7 +165,7 @@ func TestUnit_DistributionPoint_DeleteByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_DistributionPoint_DeleteByIDV1_EmptyID(t *testing.T) {
@@ -189,7 +189,7 @@ func TestUnit_DistributionPoint_PatchByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 }
 
@@ -218,7 +218,7 @@ func TestUnit_DistributionPoint_GetHistoryByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -250,7 +250,7 @@ func TestUnit_DistributionPoint_CreateHistoryNoteV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Test note", result.Note)
 }

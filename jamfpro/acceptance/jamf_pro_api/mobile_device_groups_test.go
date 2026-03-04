@@ -19,7 +19,7 @@ func TestAcceptance_MobileDeviceGroups_smart_list(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.GreaterOrEqual(t, list.TotalCount, 0)
 }
 
@@ -42,7 +42,7 @@ func TestAcceptance_MobileDeviceGroups_smart_get_by_id(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, got)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, list.Results[0].ID, got.ID)
 }
 
@@ -57,7 +57,7 @@ func TestAcceptance_MobileDeviceGroups_static_list(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.GreaterOrEqual(t, list.TotalCount, 0)
 }
 
@@ -80,6 +80,6 @@ func TestAcceptance_MobileDeviceGroups_static_get_by_id(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, got)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, list.Results[0].ID, got.ID)
 }

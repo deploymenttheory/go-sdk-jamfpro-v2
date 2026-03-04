@@ -32,7 +32,7 @@ func TestUnit_MDMRenewal_UpdateDeviceCommonDetailsV1_Success(t *testing.T) {
 	resp, err := svc.UpdateDeviceCommonDetailsV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_MDMRenewal_UpdateDeviceCommonDetailsV1_WithOptionalFields(t *testing.T) {
@@ -56,7 +56,7 @@ func TestUnit_MDMRenewal_UpdateDeviceCommonDetailsV1_WithOptionalFields(t *testi
 	resp, err := svc.UpdateDeviceCommonDetailsV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_MDMRenewal_UpdateDeviceCommonDetailsV1_NilRequest(t *testing.T) {
@@ -102,7 +102,7 @@ func TestUnit_MDMRenewal_GetDeviceCommonDetailsV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "abc-123-client-mgmt-id", result.ClientManagementID)
 	assert.NotNil(t, result.RenewMdmProfileStartDate)
@@ -133,7 +133,7 @@ func TestUnit_MDMRenewal_GetDeviceCommonDetailsV1_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_MDMRenewal_GetDeviceCommonDetailsV1_NoMockRegistered(t *testing.T) {
@@ -154,7 +154,7 @@ func TestUnit_MDMRenewal_GetRenewalStrategiesV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 1)
 	assert.Equal(t, "err-1", result[0].Error.MdmRenewalErrorId)
 	assert.Equal(t, "abc-123-client-mgmt-id", result[0].Error.ClientManagementId)
@@ -184,7 +184,7 @@ func TestUnit_MDMRenewal_GetRenewalStrategiesV1_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_MDMRenewal_GetRenewalStrategiesV1_NoMockRegistered(t *testing.T) {
@@ -203,7 +203,7 @@ func TestUnit_MDMRenewal_DeleteRenewalStrategiesV1_Success(t *testing.T) {
 	resp, err := svc.DeleteRenewalStrategiesV1(context.Background(), "abc-123-client-mgmt-id")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_MDMRenewal_DeleteRenewalStrategiesV1_EmptyClientManagementID(t *testing.T) {
@@ -222,7 +222,7 @@ func TestUnit_MDMRenewal_DeleteRenewalStrategiesV1_NotFound(t *testing.T) {
 	resp, err := svc.DeleteRenewalStrategiesV1(context.Background(), "999")
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_MDMRenewal_DeleteRenewalStrategiesV1_NoMockRegistered(t *testing.T) {

@@ -24,7 +24,7 @@ func TestUnit_MobileDeviceExtensionAttributes_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -40,7 +40,7 @@ func TestUnit_MobileDeviceExtensionAttributes_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "MDEA One", result.Name)
 	assert.Equal(t, "String", result.DataType)
@@ -63,7 +63,7 @@ func TestUnit_MobileDeviceExtensionAttributes_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceExtensionAttributes_Create_Success(t *testing.T) {
@@ -81,7 +81,7 @@ func TestUnit_MobileDeviceExtensionAttributes_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.NotEmpty(t, result.Href)
 }
@@ -111,7 +111,7 @@ func TestUnit_MobileDeviceExtensionAttributes_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "MDEA One Updated", result.Name)
 }
@@ -123,7 +123,7 @@ func TestUnit_MobileDeviceExtensionAttributes_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceExtensionAttributes_DeleteMultipleByID_Success(t *testing.T) {
@@ -134,7 +134,7 @@ func TestUnit_MobileDeviceExtensionAttributes_DeleteMultipleByID_Success(t *test
 	resp, err := svc.DeleteMobileDeviceExtensionAttributesByIDV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceExtensionAttributes_DeleteMultipleByID_NilRequest(t *testing.T) {
@@ -154,7 +154,7 @@ func TestUnit_MobileDeviceExtensionAttributes_GetHistoryByIDV1_Success(t *testin
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -178,7 +178,7 @@ func TestUnit_MobileDeviceExtensionAttributes_AddHistoryNoteByIDV1_Success(t *te
 	resp, err := svc.AddHistoryNoteByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceExtensionAttributes_AddHistoryNoteByIDV1_EmptyID(t *testing.T) {

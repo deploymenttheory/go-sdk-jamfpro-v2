@@ -12,7 +12,9 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -24,7 +26,7 @@ type registeredResponse struct {
 
 // NotificationsMock is a test double implementing interfaces.HTTPClient.
 type NotificationsMock struct {
-	responses     map[string]registeredResponse
+	responses       map[string]registeredResponse
 	prefixResponses []struct {
 		method string
 		prefix string
@@ -37,9 +39,9 @@ type NotificationsMock struct {
 // NewNotificationsMock returns an empty mock ready for response registration.
 func NewNotificationsMock() *NotificationsMock {
 	return &NotificationsMock{
-		responses:     make(map[string]registeredResponse),
+		responses:       make(map[string]registeredResponse),
 		prefixResponses: nil,
-		logger:        zap.NewNop(),
+		logger:          zap.NewNop(),
 	}
 }
 
@@ -92,7 +94,7 @@ func (m *NotificationsMock) registerPrefix(method, pathPrefix string, statusCode
 	})
 }
 
-func (m *NotificationsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	key := method + ":" + path
 	if r, ok := m.responses[key]; ok {
 		return m.buildResponse(r, result)
@@ -105,12 +107,9 @@ func (m *NotificationsMock) dispatch(method, path string, result any) (*interfac
 	return nil, fmt.Errorf("NotificationsMock: no response registered for %s %s", method, path)
 }
 
-func (m *NotificationsMock) buildResponse(r registeredResponse, result any) (*interfaces.Response, error) {
-	resp := &interfaces.Response{
-		StatusCode: r.statusCode,
-		Headers:    http.Header{"Content-Type": {"application/json"}},
-		Body:       r.rawBody,
-	}
+func (m *NotificationsMock) buildResponse(r registeredResponse, result any) (*resty.Response, error) {
+	headers := http.Header{"Content-Type": {"application/json"}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
@@ -158,63 +157,63 @@ func (m *NotificationsMock) RegisterDeleteNotificationMock() {
 }
 
 // Get implements interfaces.HTTPClient.
-func (m *NotificationsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)
 }
 
 // Post implements interfaces.HTTPClient.
-func (m *NotificationsMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
 // PostWithQuery implements interfaces.HTTPClient.
-func (m *NotificationsMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
 // PostForm implements interfaces.HTTPClient.
-func (m *NotificationsMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
 // PostMultipart implements interfaces.HTTPClient.
-func (m *NotificationsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
 // Put implements interfaces.HTTPClient.
-func (m *NotificationsMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
 // Patch implements interfaces.HTTPClient.
-func (m *NotificationsMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
 // Delete implements interfaces.HTTPClient.
-func (m *NotificationsMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
 // DeleteWithBody implements interfaces.HTTPClient.
-func (m *NotificationsMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *NotificationsMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
 // GetBytes implements interfaces.HTTPClient.
-func (m *NotificationsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
+func (m *NotificationsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
 // GetPaginated implements interfaces.HTTPClient.
-func (m *NotificationsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
+func (m *NotificationsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in NotificationsMock")
 }
 

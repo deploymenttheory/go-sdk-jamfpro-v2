@@ -7,10 +7,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_mobile_device_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -37,12 +37,12 @@ func TestAcceptance_SmartMobileDeviceGroups_lifecycle(t *testing.T) {
 	}
 
 	created, createResp, err := svc.Create(ctx, createReq)
-	if err != nil && createResp != nil && (createResp.StatusCode == 500 || createResp.StatusCode == 404) {
+	if err != nil && createResp != nil && (createResp.StatusCode() == 500 || createResp.StatusCode() == 404) {
 		t.Skip("Smart mobile device group endpoint not available (404/500)")
 	}
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	groupID := created.ID
@@ -59,7 +59,7 @@ func TestAcceptance_SmartMobileDeviceGroups_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "GetByID", "Getting smart mobile device group by ID=%s", groupID)
 
 	var fetched *smart_mobile_device_groups.ResourceSmartMobileDeviceGroup
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetByID(ctx, groupID)
@@ -67,7 +67,7 @@ func TestAcceptance_SmartMobileDeviceGroups_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, groupID, fetched.GroupID)
 	assert.Equal(t, groupName, fetched.GroupName)
 	acc.LogTestSuccess(t, "GetByID: GroupID=%s GroupName=%q", fetched.GroupID, fetched.GroupName)
@@ -86,7 +86,7 @@ func TestAcceptance_SmartMobileDeviceGroups_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx, groupID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Smart mobile device group updated: ID=%s", groupID)
 
 	// 4. Re-fetch to verify
@@ -102,7 +102,7 @@ func TestAcceptance_SmartMobileDeviceGroups_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx, groupID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Smart mobile device group ID=%s deleted", groupID)
 }
 
@@ -126,7 +126,7 @@ func TestAcceptance_SmartMobileDeviceGroups_list_with_rsql_filter(t *testing.T) 
 	}
 
 	created, createResp, err := svc.Create(ctx, createReq)
-	if err != nil && createResp != nil && (createResp.StatusCode == 500 || createResp.StatusCode == 404) {
+	if err != nil && createResp != nil && (createResp.StatusCode() == 500 || createResp.StatusCode() == 404) {
 		t.Skip("Smart mobile device group endpoint not available (404/500)")
 	}
 	require.NoError(t, err)
@@ -225,13 +225,13 @@ func TestAcceptance_SmartMobileDeviceGroups_list(t *testing.T) {
 	ctx := context.Background()
 
 	list, resp, err := svc.List(ctx, map[string]string{"page": "0", "page-size": "100"})
-	if err != nil && resp != nil && resp.StatusCode == 404 {
+	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Skip("Smart mobile device group endpoint not available (404)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.GreaterOrEqual(t, list.TotalCount, 0)
 }
 
@@ -243,7 +243,7 @@ func TestAcceptance_SmartMobileDeviceGroups_get_by_id(t *testing.T) {
 	ctx := context.Background()
 
 	list, resp, err := svc.List(ctx, map[string]string{"page": "0", "page-size": "1"})
-	if err != nil && resp != nil && resp.StatusCode == 404 {
+	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Skip("Smart mobile device group endpoint not available (404)")
 	}
 	require.NoError(t, err)
@@ -257,7 +257,7 @@ func TestAcceptance_SmartMobileDeviceGroups_get_by_id(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, got)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, list.Results[0].GroupID, got.GroupID)
 }
 
@@ -269,7 +269,7 @@ func TestAcceptance_SmartMobileDeviceGroups_get_membership(t *testing.T) {
 	ctx := context.Background()
 
 	list, resp, err := svc.List(ctx, map[string]string{"page": "0", "page-size": "1"})
-	if err != nil && resp != nil && resp.StatusCode == 404 {
+	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Skip("Smart mobile device group endpoint not available (404)")
 	}
 	require.NoError(t, err)
@@ -283,6 +283,6 @@ func TestAcceptance_SmartMobileDeviceGroups_get_membership(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, membership)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.GreaterOrEqual(t, membership.TotalCount, 0)
 }

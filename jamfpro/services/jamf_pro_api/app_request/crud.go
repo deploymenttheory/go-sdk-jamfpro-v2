@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,42 +18,42 @@ type (
 		// ListFormInputFieldsV1 returns all form input field objects (Search for Form Input Fields).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-request-form-input-fields
-		ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[string]string) (*FormInputFieldListResponse, *interfaces.Response, error)
+		ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[string]string) (*FormInputFieldListResponse, *resty.Response, error)
 
 		// ReplaceFormInputFieldsV1 replaces all form input fields (Replace all Form Input Fields).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-app-request-form-input-fields
-		ReplaceFormInputFieldsV1(ctx context.Context, request []RequestFormInputField) ([]ResourceFormInputField, *interfaces.Response, error)
+		ReplaceFormInputFieldsV1(ctx context.Context, request []RequestFormInputField) ([]ResourceFormInputField, *resty.Response, error)
 
 		// CreateFormInputFieldV1 creates a new form input field record (Create Form Input Field record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-app-request-form-input-fields
-		CreateFormInputFieldV1(ctx context.Context, request *RequestFormInputField) (*ResourceFormInputField, *interfaces.Response, error)
+		CreateFormInputFieldV1(ctx context.Context, request *RequestFormInputField) (*ResourceFormInputField, *resty.Response, error)
 
 		// GetFormInputFieldByIDV1 returns the specified form input field by ID (Get specified Form Input Field object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-request-form-input-fields-id
-		GetFormInputFieldByIDV1(ctx context.Context, id int) (*ResourceFormInputField, *interfaces.Response, error)
+		GetFormInputFieldByIDV1(ctx context.Context, id int) (*ResourceFormInputField, *resty.Response, error)
 
 		// UpdateFormInputFieldByIDV1 updates the specified form input field by ID (Update specified Form Input Field object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-app-request-form-input-fields-id
-		UpdateFormInputFieldByIDV1(ctx context.Context, id int, request *RequestFormInputField) (*ResourceFormInputField, *interfaces.Response, error)
+		UpdateFormInputFieldByIDV1(ctx context.Context, id int, request *RequestFormInputField) (*ResourceFormInputField, *resty.Response, error)
 
 		// DeleteFormInputFieldByIDV1 removes the specified form input field by ID (Remove specified Form Input Field record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-app-request-form-input-fields-id
-		DeleteFormInputFieldByIDV1(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteFormInputFieldByIDV1(ctx context.Context, id int) (*resty.Response, error)
 
 		// GetSettingsV1 retrieves the app request settings (Get Application Request Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-app-request-settings
-		GetSettingsV1(ctx context.Context) (*ResourceAppRequestSettings, *interfaces.Response, error)
+		GetSettingsV1(ctx context.Context) (*ResourceAppRequestSettings, *resty.Response, error)
 
 		// UpdateSettingsV1 updates the app request settings (Update Application Request Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-app-request-settings
-		UpdateSettingsV1(ctx context.Context, request *ResourceAppRequestSettings) (*ResourceAppRequestSettings, *interfaces.Response, error)
+		UpdateSettingsV1(ctx context.Context, request *ResourceAppRequestSettings) (*ResourceAppRequestSettings, *resty.Response, error)
 	}
 
 	// Service handles communication with the app request-related methods of the Jamf Pro API.
@@ -76,7 +77,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListFormInputFieldsV1 returns all form input field objects (Search for Form Input Fields).
 // URL: GET /api/v1/app-request/form-input-fields
 // https://developer.jamf.com/jamf-pro/reference/get_v1-app-request-form-input-fields
-func (s *Service) ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[string]string) (*FormInputFieldListResponse, *interfaces.Response, error) {
+func (s *Service) ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[string]string) (*FormInputFieldListResponse, *resty.Response, error) {
 	var result FormInputFieldListResponse
 
 	endpoint := EndpointFormInputFieldsV1
@@ -104,7 +105,7 @@ func (s *Service) ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[strin
 // ReplaceFormInputFieldsV1 replaces all form input fields (Replace all Form Input Fields).
 // URL: PUT /api/v1/app-request/form-input-fields
 // https://developer.jamf.com/jamf-pro/reference/put_v1-app-request-form-input-fields
-func (s *Service) ReplaceFormInputFieldsV1(ctx context.Context, request []RequestFormInputField) ([]ResourceFormInputField, *interfaces.Response, error) {
+func (s *Service) ReplaceFormInputFieldsV1(ctx context.Context, request []RequestFormInputField) ([]ResourceFormInputField, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -129,7 +130,7 @@ func (s *Service) ReplaceFormInputFieldsV1(ctx context.Context, request []Reques
 // CreateFormInputFieldV1 creates a new form input field record (Create Form Input Field record).
 // URL: POST /api/v1/app-request/form-input-fields
 // https://developer.jamf.com/jamf-pro/reference/post_v1-app-request-form-input-fields
-func (s *Service) CreateFormInputFieldV1(ctx context.Context, request *RequestFormInputField) (*ResourceFormInputField, *interfaces.Response, error) {
+func (s *Service) CreateFormInputFieldV1(ctx context.Context, request *RequestFormInputField) (*ResourceFormInputField, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -154,7 +155,7 @@ func (s *Service) CreateFormInputFieldV1(ctx context.Context, request *RequestFo
 // GetFormInputFieldByIDV1 returns the specified form input field by ID (Get specified Form Input Field object).
 // URL: GET /api/v1/app-request/form-input-fields/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-app-request-form-input-fields-id
-func (s *Service) GetFormInputFieldByIDV1(ctx context.Context, id int) (*ResourceFormInputField, *interfaces.Response, error) {
+func (s *Service) GetFormInputFieldByIDV1(ctx context.Context, id int) (*ResourceFormInputField, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%d", EndpointFormInputFieldsV1, id)
 
 	var result ResourceFormInputField
@@ -174,7 +175,7 @@ func (s *Service) GetFormInputFieldByIDV1(ctx context.Context, id int) (*Resourc
 // UpdateFormInputFieldByIDV1 updates the specified form input field by ID (Update specified Form Input Field object).
 // URL: PUT /api/v1/app-request/form-input-fields/{id}
 // https://developer.jamf.com/jamf-pro/reference/put_v1-app-request-form-input-fields-id
-func (s *Service) UpdateFormInputFieldByIDV1(ctx context.Context, id int, request *RequestFormInputField) (*ResourceFormInputField, *interfaces.Response, error) {
+func (s *Service) UpdateFormInputFieldByIDV1(ctx context.Context, id int, request *RequestFormInputField) (*ResourceFormInputField, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -199,7 +200,7 @@ func (s *Service) UpdateFormInputFieldByIDV1(ctx context.Context, id int, reques
 // DeleteFormInputFieldByIDV1 removes the specified form input field by ID (Remove specified Form Input Field record).
 // URL: DELETE /api/v1/app-request/form-input-fields/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-app-request-form-input-fields-id
-func (s *Service) DeleteFormInputFieldByIDV1(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteFormInputFieldByIDV1(ctx context.Context, id int) (*resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%d", EndpointFormInputFieldsV1, id)
 
 	headers := map[string]string{
@@ -221,7 +222,7 @@ func (s *Service) DeleteFormInputFieldByIDV1(ctx context.Context, id int) (*inte
 // GetSettingsV1 retrieves the app request settings (Get Application Request Settings).
 // URL: GET /api/v1/app-request/settings
 // https://developer.jamf.com/jamf-pro/reference/get_v1-app-request-settings
-func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceAppRequestSettings, *interfaces.Response, error) {
+func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceAppRequestSettings, *resty.Response, error) {
 	var result ResourceAppRequestSettings
 
 	endpoint := EndpointSettingsV1
@@ -241,7 +242,7 @@ func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceAppRequestSetting
 // UpdateSettingsV1 updates the app request settings (Update Application Request Settings).
 // URL: PUT /api/v1/app-request/settings
 // https://developer.jamf.com/jamf-pro/reference/put_v1-app-request-settings
-func (s *Service) UpdateSettingsV1(ctx context.Context, request *ResourceAppRequestSettings) (*ResourceAppRequestSettings, *interfaces.Response, error) {
+func (s *Service) UpdateSettingsV1(ctx context.Context, request *ResourceAppRequestSettings) (*ResourceAppRequestSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

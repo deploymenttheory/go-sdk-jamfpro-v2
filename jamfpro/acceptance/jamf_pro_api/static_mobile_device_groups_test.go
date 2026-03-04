@@ -7,10 +7,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_mobile_device_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -51,12 +51,12 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 		Assignments: []static_mobile_device_groups.StaticMobileDeviceGroupAssignment{},
 	}
 	created, createResp, err := svc.Create(ctx, createReq)
-	if err != nil && createResp != nil && (createResp.StatusCode == 500 || createResp.StatusCode == 404) {
+	if err != nil && createResp != nil && (createResp.StatusCode() == 500 || createResp.StatusCode() == 404) {
 		t.Skip("Static mobile device group endpoint not available (404/500)")
 	}
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	groupID := created.ID
@@ -95,7 +95,7 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "GetByID", "Getting static mobile device group by ID=%s", groupID)
 
 	var fetched *static_mobile_device_groups.ResourceStaticMobileDeviceGroup
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetByID(ctx, groupID)
@@ -159,7 +159,7 @@ func TestAcceptance_StaticMobileDeviceGroups_list_with_rsql_filter(t *testing.T)
 	}
 
 	created, createResp, err := svc.Create(ctx, createReq)
-	if err != nil && createResp != nil && (createResp.StatusCode == 500 || createResp.StatusCode == 404) {
+	if err != nil && createResp != nil && (createResp.StatusCode() == 500 || createResp.StatusCode() == 404) {
 		t.Skip("Static mobile device group endpoint not available (404/500)")
 	}
 	require.NoError(t, err)

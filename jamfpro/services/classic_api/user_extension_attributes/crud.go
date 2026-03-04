@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,48 +17,48 @@ type (
 		// List returns all user extension attributes.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributes
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified user extension attribute by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyid
-		GetByID(ctx context.Context, id int) (*ResourceUserExtensionAttribute, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceUserExtensionAttribute, *resty.Response, error)
 
 		// GetByName returns the specified user extension attribute by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyname
-		GetByName(ctx context.Context, name string) (*ResourceUserExtensionAttribute, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceUserExtensionAttribute, *resty.Response, error)
 
 		// Create creates a new user extension attribute.
 		//
 		// Returns the created user extension attribute (full resource).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createuserextensionattributebyid
-		Create(ctx context.Context, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error)
 
 		// UpdateByID updates the specified user extension attribute by ID.
 		//
 		// Returns the updated user extension attribute (full resource).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyid
-		UpdateByID(ctx context.Context, id int, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error)
 
 		// UpdateByName updates the specified user extension attribute by name.
 		//
 		// Returns the updated user extension attribute (full resource).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyname
-		UpdateByName(ctx context.Context, name string, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error)
 
 		// DeleteByID removes the specified user extension attribute by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified user extension attribute by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the user-extension-attributes-related Classic API methods.
@@ -84,7 +85,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/userextensionattributes
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributes
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointUserExtensionAttributes
 
 	var out ListResponse
@@ -106,7 +107,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/userextensionattributes/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUserExtensionAttribute, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("user extension attribute ID must be a positive integer")
 	}
@@ -132,7 +133,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceUserExtensionAt
 // URL: GET /JSSResource/userextensionattributes/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUserExtensionAttribute, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("user extension attribute name cannot be empty")
 	}
@@ -160,7 +161,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceUserExte
 // URL: POST /JSSResource/userextensionattributes/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createuserextensionattributebyid
-func (s *Service) Create(ctx context.Context, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -191,7 +192,7 @@ func (s *Service) Create(ctx context.Context, req *RequestUserExtensionAttribute
 // URL: PUT /JSSResource/userextensionattributes/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("user extension attribute ID must be a positive integer")
 	}
@@ -225,7 +226,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestUserExtens
 // URL: PUT /JSSResource/userextensionattributes/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("user extension attribute name cannot be empty")
 	}
@@ -257,7 +258,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestUse
 // URL: DELETE /JSSResource/userextensionattributes/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("user extension attribute ID must be a positive integer")
 	}
@@ -281,7 +282,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // URL: DELETE /JSSResource/userextensionattributes/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("user extension attribute name cannot be empty")
 	}

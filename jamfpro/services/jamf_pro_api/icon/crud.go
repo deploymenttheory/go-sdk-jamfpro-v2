@@ -8,6 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -18,18 +19,18 @@ type (
 		// GetByIDV1 returns icon metadata by ID (Get Icon).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-id
-		GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *resty.Response, error)
 
 		// UploadV1 uploads an icon image (Create Icon).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
-		UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceIcon, *interfaces.Response, error)
+		UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceIcon, *resty.Response, error)
 
 		// DownloadV1 downloads the icon image bytes (Download a self service icon).
 		// res: original, 300, or 512 (default original). scale: 0 = original, non-0 = scaled to 300.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-download-id
-		DownloadV1(ctx context.Context, id int, res, scale string) ([]byte, *interfaces.Response, error)
+		DownloadV1(ctx context.Context, id int, res, scale string) ([]byte, *resty.Response, error)
 	}
 
 	// Service handles communication with the icons-related methods of the Jamf Pro API.
@@ -49,7 +50,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetByIDV1 returns icon metadata by ID.
 // URL: GET /api/v1/icon/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-id
-func (s *Service) GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%d", EndpointIconV1, id)
 	var result ResourceIcon
 
@@ -68,7 +69,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *interf
 // UploadV1 uploads an icon image (multipart/form-data, field "file").
 // URL: POST /api/v1/icon
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
-func (s *Service) UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceIcon, *interfaces.Response, error) {
+func (s *Service) UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceIcon, *resty.Response, error) {
 	if fileName == "" {
 		fileName = "icon.png"
 	}
@@ -88,7 +89,7 @@ func (s *Service) UploadV1(ctx context.Context, fileReader io.Reader, fileSize i
 }
 
 // UploadV1FromFile opens the file at filePath and uploads it via UploadV1.
-func (s *Service) UploadV1FromFile(ctx context.Context, filePath string) (*ResourceIcon, *interfaces.Response, error) {
+func (s *Service) UploadV1FromFile(ctx context.Context, filePath string) (*ResourceIcon, *resty.Response, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, nil, fmt.Errorf("open icon file: %w", err)
@@ -109,7 +110,7 @@ func (s *Service) UploadV1FromFile(ctx context.Context, filePath string) (*Resou
 // scale: 0 = original image, non-0 = scaled to 300. Use Accept: image/*.
 // URL: GET /api/v1/icon/download/{id}?res=...&scale=...
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-download-id
-func (s *Service) DownloadV1(ctx context.Context, id int, res, scale string) ([]byte, *interfaces.Response, error) {
+func (s *Service) DownloadV1(ctx context.Context, id int, res, scale string) ([]byte, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%d", EndpointIconsDownloadV1, id)
 	if res == "" {
 		res = "original"

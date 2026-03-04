@@ -27,7 +27,7 @@ func TestUnit_AppStoreCountryCodes_ListV1_Success(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.CountryCodes, 3)
 	require.Equal(t, "US", result.CountryCodes[0].Code)
 	require.Equal(t, "United States", result.CountryCodes[0].Name)
@@ -53,7 +53,7 @@ func TestUnit_AppStoreCountryCodes_ListV1_EmptyList(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.NotNil(t, result.CountryCodes)
 	require.Len(t, result.CountryCodes, 0)
 }

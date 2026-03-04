@@ -18,7 +18,7 @@ func TestAcceptance_LoginCustomization_get_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_LoginCustomization_update_v1(t *testing.T) {
@@ -42,7 +42,7 @@ func TestAcceptance_LoginCustomization_update_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Restore original
 	request.DisclaimerHeading = current.DisclaimerHeading
