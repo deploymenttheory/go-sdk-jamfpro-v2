@@ -8,6 +8,9 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"resty.dev/v3"
+
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 )
@@ -100,7 +103,7 @@ func (m *LogFlushingMock) RegisterDeleteTaskErrorMock(id string) {
 	m.registerError("DELETE", "/api/v1/log-flushing/task/"+id, "api error")
 }
 
-func (m *LogFlushingMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *LogFlushingMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
 	r, ok := m.responses[key]
@@ -115,10 +118,10 @@ func (m *LogFlushingMock) Get(ctx context.Context, path string, rsqlQuery map[st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
+	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
-func (m *LogFlushingMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *LogFlushingMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "POST " + path
 	r, ok := m.responses[key]
 	if !ok {
@@ -132,22 +135,22 @@ func (m *LogFlushingMock) Post(ctx context.Context, path string, body any, heade
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
+	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
-func (m *LogFlushingMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *LogFlushingMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, body, headers, result)
 }
 
-func (m *LogFlushingMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *LogFlushingMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-func (m *LogFlushingMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *LogFlushingMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
-func (m *LogFlushingMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *LogFlushingMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PUT " + path
 	r, ok := m.responses[key]
 	if !ok {
@@ -161,10 +164,10 @@ func (m *LogFlushingMock) Put(ctx context.Context, path string, body any, header
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
+	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
-func (m *LogFlushingMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *LogFlushingMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PATCH " + path
 	r, ok := m.responses[key]
 	if !ok {
@@ -178,10 +181,10 @@ func (m *LogFlushingMock) Patch(ctx context.Context, path string, body any, head
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
+	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
-func (m *LogFlushingMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *LogFlushingMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "DELETE " + path
 	r, ok := m.responses[key]
 	if !ok {
@@ -195,14 +198,14 @@ func (m *LogFlushingMock) Delete(ctx context.Context, path string, rsqlQuery map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, nil
+	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
-func (m *LogFlushingMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *LogFlushingMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Delete(ctx, path, nil, headers, result)
 }
 
-func (m *LogFlushingMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
+func (m *LogFlushingMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
 	r, ok := m.responses[key]
@@ -212,10 +215,10 @@ func (m *LogFlushingMock) GetBytes(ctx context.Context, path string, rsqlQuery m
 	if r.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", r.errMsg)
 	}
-	return &interfaces.Response{StatusCode: r.statusCode, Headers: http.Header{}, Body: r.rawBody}, r.rawBody, nil
+	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), r.rawBody, nil
 }
 
-func (m *LogFlushingMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
+func (m *LogFlushingMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in LogFlushingMock")
 }
 

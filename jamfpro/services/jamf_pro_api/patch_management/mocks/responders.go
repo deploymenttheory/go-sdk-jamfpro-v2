@@ -8,6 +8,9 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"resty.dev/v3"
+
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 )
@@ -66,7 +69,7 @@ func (m *PatchManagementMock) RegisterAcceptDisclaimerErrorMock() {
 	}
 }
 
-func (m *PatchManagementMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *PatchManagementMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "GET " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -80,10 +83,10 @@ func (m *PatchManagementMock) Get(ctx context.Context, path string, rsqlQuery ma
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *PatchManagementMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *PatchManagementMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "POST " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -97,22 +100,22 @@ func (m *PatchManagementMock) Post(ctx context.Context, path string, body any, h
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *PatchManagementMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *PatchManagementMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, body, headers, result)
 }
 
-func (m *PatchManagementMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *PatchManagementMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-func (m *PatchManagementMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *PatchManagementMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
-func (m *PatchManagementMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *PatchManagementMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PUT " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -126,10 +129,10 @@ func (m *PatchManagementMock) Put(ctx context.Context, path string, body any, he
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *PatchManagementMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *PatchManagementMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PATCH " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -143,10 +146,10 @@ func (m *PatchManagementMock) Patch(ctx context.Context, path string, body any, 
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *PatchManagementMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *PatchManagementMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "DELETE " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -160,14 +163,14 @@ func (m *PatchManagementMock) Delete(ctx context.Context, path string, rsqlQuery
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *PatchManagementMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *PatchManagementMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Delete(ctx, path, nil, headers, result)
 }
 
-func (m *PatchManagementMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
+func (m *PatchManagementMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	key := "GET " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -176,10 +179,10 @@ func (m *PatchManagementMock) GetBytes(ctx context.Context, path string, rsqlQue
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, resp.rawBody, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
-func (m *PatchManagementMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
+func (m *PatchManagementMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in PatchManagementMock")
 }
 

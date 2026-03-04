@@ -74,7 +74,7 @@ func TestAcceptance_Branding_download_image_v1(t *testing.T) {
 	data, resp, err := svc.DownloadBrandingImageV1(ctx, imageID)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, data, "downloaded image should not be empty")
 
 	acc.LogTestSuccess(t, "DownloadBrandingImageV1: ID=%s bytes=%d", imageID, len(data))

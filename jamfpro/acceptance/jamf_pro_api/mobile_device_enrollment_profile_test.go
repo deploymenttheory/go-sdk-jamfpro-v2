@@ -57,7 +57,7 @@ func TestAcceptance_MobileDeviceEnrollmentProfile_download_v1(t *testing.T) {
 	data, resp, err := svc.GetDownloadProfileV1(ctx, profileID)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, data, "profile download should return non-empty data")
 
 	acc.LogTestSuccess(t, "GetDownloadProfileV1: ID=%s size=%d bytes", profileID, len(data))

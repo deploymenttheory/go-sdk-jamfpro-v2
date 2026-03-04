@@ -182,7 +182,7 @@ fmt.Println(result.DisplayName)
 
 ## Response Metadata
 
-Service methods return `(result, resp, err)`. The `resp` value (e.g. `*interfaces.Response`) carries HTTP metadata:
+Service methods return `(result, resp, err)`. The `resp` value (e.g. `*resty.Response`) carries HTTP metadata:
 
 ```go
 result, resp, err := jamfClient.Categories.ListV1(ctx, nil)

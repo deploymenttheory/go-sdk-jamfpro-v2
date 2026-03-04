@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -20,27 +21,27 @@ type (
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mdm-commands
-		ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (*ListCommandsResponse, *interfaces.Response, error)
+		ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (*ListCommandsResponse, *resty.Response, error)
 
 		// BlankPush sends an MDM blank push command to the specified devices.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-blank-push
-		BlankPush(ctx context.Context, clientManagementIDs []string) (*BlankPushResponse, *interfaces.Response, error)
+		BlankPush(ctx context.Context, clientManagementIDs []string) (*BlankPushResponse, *resty.Response, error)
 
 		// SendCommand sends an MDM command for creation and queuing.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
-		SendCommand(ctx context.Context, req *CommandRequest) (*CommandResponse, *interfaces.Response, error)
+		SendCommand(ctx context.Context, req *CommandRequest) (*CommandResponse, *resty.Response, error)
 
 		// DeployPackage deploys a package using an MDM command.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-deploy-package
-		DeployPackage(ctx context.Context, req *DeployPackageRequest) (*DeployPackageResponse, *interfaces.Response, error)
+		DeployPackage(ctx context.Context, req *DeployPackageRequest) (*DeployPackageResponse, *resty.Response, error)
 
 		// RenewProfile renews MDM profiles for the specified device UDIDs.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mdm-renew-profile
-		RenewProfile(ctx context.Context, req *RenewProfileRequest) (*RenewProfileResponse, *interfaces.Response, error)
+		RenewProfile(ctx context.Context, req *RenewProfileRequest) (*RenewProfileResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the MDM command methods of the Jamf Pro API.
@@ -66,7 +67,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v2/mdm/commands
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v2-mdm-commands
-func (s *Service) ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (*ListCommandsResponse, *interfaces.Response, error) {
+func (s *Service) ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (*ListCommandsResponse, *resty.Response, error) {
 	endpoint := EndpointCommands
 
 	var result ListCommandsResponse
@@ -94,7 +95,7 @@ func (s *Service) ListCommandsV2(ctx context.Context, rsqlQuery map[string]strin
 // BlankPush sends an MDM blank push command to the specified devices.
 // URL: POST /api/v2/mdm/blank-push
 // https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-blank-push
-func (s *Service) BlankPush(ctx context.Context, clientManagementIDs []string) (*BlankPushResponse, *interfaces.Response, error) {
+func (s *Service) BlankPush(ctx context.Context, clientManagementIDs []string) (*BlankPushResponse, *resty.Response, error) {
 	if len(clientManagementIDs) == 0 {
 		return nil, nil, fmt.Errorf("clientManagementIDs is required and must not be empty")
 	}
@@ -119,7 +120,7 @@ func (s *Service) BlankPush(ctx context.Context, clientManagementIDs []string) (
 // SendCommand sends an MDM command for creation and queuing.
 // URL: POST /api/v2/mdm/commands
 // https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
-func (s *Service) SendCommand(ctx context.Context, req *CommandRequest) (*CommandResponse, *interfaces.Response, error) {
+func (s *Service) SendCommand(ctx context.Context, req *CommandRequest) (*CommandResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -143,7 +144,7 @@ func (s *Service) SendCommand(ctx context.Context, req *CommandRequest) (*Comman
 // DeployPackage deploys a package using an MDM command.
 // URL: POST /api/v1/deploy-package?verbose=true
 // https://developer.jamf.com/jamf-pro/reference/post_v1-deploy-package
-func (s *Service) DeployPackage(ctx context.Context, req *DeployPackageRequest) (*DeployPackageResponse, *interfaces.Response, error) {
+func (s *Service) DeployPackage(ctx context.Context, req *DeployPackageRequest) (*DeployPackageResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -167,7 +168,7 @@ func (s *Service) DeployPackage(ctx context.Context, req *DeployPackageRequest) 
 // RenewProfile renews MDM profiles for the specified device UDIDs.
 // URL: POST /api/v1/mdm/renew-profile
 // https://developer.jamf.com/jamf-pro/reference/post_v1-mdm-renew-profile
-func (s *Service) RenewProfile(ctx context.Context, req *RenewProfileRequest) (*RenewProfileResponse, *interfaces.Response, error) {
+func (s *Service) RenewProfile(ctx context.Context, req *RenewProfileRequest) (*RenewProfileResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

@@ -49,7 +49,7 @@ func TestAcceptance_MacOSConfigProfileCustomSettings_get_schema_list(t *testing.
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	// Schema list can be empty or contain buckets
 	assert.NotNil(t, result)
 }

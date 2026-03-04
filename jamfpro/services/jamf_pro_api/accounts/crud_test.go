@@ -24,7 +24,7 @@ func TestUnit_Accounts_ListV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	assert.Len(t, result.Results, 2)
 	assert.Equal(t, "testuser1", result.Results[0].Username)
@@ -45,7 +45,7 @@ func TestUnit_Accounts_ListV1_WithRSQLFilter(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify RSQL query was passed to the client
 	assert.NotNil(t, mock.LastRSQLQuery)
@@ -68,7 +68,7 @@ func TestUnit_Accounts_ListV1_WithPagination(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify pagination parameters were passed
 	assert.Equal(t, "0", mock.LastRSQLQuery["page"])
@@ -88,7 +88,7 @@ func TestUnit_Accounts_ListV1_WithComplexRSQLFilter(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify complex RSQL query was passed
 	assert.Equal(t, `accountStatus==Enabled and privilegeLevel==ADMINISTRATOR and failedLoginAttempts==0`, mock.LastRSQLQuery["filter"])
@@ -103,7 +103,7 @@ func TestUnit_Accounts_GetByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "testuser1", result.Username)
 	assert.Equal(t, "Test User One", result.Realname)
@@ -145,7 +145,7 @@ func TestUnit_Accounts_CreateV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Equal(t, "newuser", result.Username)
 }
@@ -169,7 +169,7 @@ func TestUnit_Accounts_DeleteByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 // Test DeleteByIDV1 with empty ID

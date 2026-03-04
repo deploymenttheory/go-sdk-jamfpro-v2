@@ -212,7 +212,7 @@ func TestUnit_MobileDevicePrestages_DeleteByIDV3_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // TestDeleteByNameV3 tests deleting a mobile device prestage by display name.
@@ -226,7 +226,7 @@ func TestUnit_MobileDevicePrestages_DeleteByNameV3_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // TestGetScopeByIDV2 tests retrieving device scope for a mobile device prestage.

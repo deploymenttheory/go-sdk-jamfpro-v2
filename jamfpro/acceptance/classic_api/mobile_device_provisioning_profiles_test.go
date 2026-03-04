@@ -158,11 +158,11 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 		// The Jamf Classic API PUT for provisioning profiles may require a binary
 		// .mobileprovision file upload on some tenants; XML-only updates return 500.
 		acc.LogTestWarning(t, "UpdateByID returned error (may not be supported via XML-only on this tenant): %v", err)
-		t.Skipf("Skipping update assertions: Classic API does not support XML-only provisioning profile updates on this tenant (status=%d)", updateResp.StatusCode)
+		t.Skipf("Skipping update assertions: Classic API does not support XML-only provisioning profile updates on this tenant (status=%d)", updateResp.StatusCode())
 	}
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 7. UpdateByName (back to original name)
@@ -182,11 +182,11 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	if err != nil {
 		acc.LogTestWarning(t, "UpdateByName returned error (may not be supported via XML-only on this tenant): %v", err)
-		t.Skipf("Skipping revert assertions: Classic API does not support XML-only provisioning profile updates on this tenant (status=%d)", revertResp.StatusCode)
+		t.Skipf("Skipping revert assertions: Classic API does not support XML-only provisioning profile updates on this tenant (status=%d)", revertResp.StatusCode())
 	}
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 8. GetByID — verify revert

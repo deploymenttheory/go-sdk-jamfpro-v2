@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,12 +16,12 @@ type (
 		// GetV1 retrieves the current SSO failover settings (Get SSO Failover Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sso-failover
-		GetV1(ctx context.Context) (*FailoverSettings, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*FailoverSettings, *resty.Response, error)
 
 		// RegenerateV1 generates a new SSO failover URL (Regenerate SSO Failover URL).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-sso-failover-generate
-		RegenerateV1(ctx context.Context) (*FailoverSettings, *interfaces.Response, error)
+		RegenerateV1(ctx context.Context) (*FailoverSettings, *resty.Response, error)
 	}
 
 	// Service handles communication with the SSO failover-related methods of the Jamf Pro API.
@@ -44,7 +45,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 retrieves the current SSO failover settings.
 // URL: GET /api/v1/sso/failover
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sso-failover
-func (s *Service) GetV1(ctx context.Context) (*FailoverSettings, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*FailoverSettings, *resty.Response, error) {
 	var result FailoverSettings
 
 	endpoint := EndpointSSOFailoverV1
@@ -63,7 +64,7 @@ func (s *Service) GetV1(ctx context.Context) (*FailoverSettings, *interfaces.Res
 // RegenerateV1 generates a new SSO failover URL.
 // URL: POST /api/v1/sso/failover/generate
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-sso-failover-generate
-func (s *Service) RegenerateV1(ctx context.Context) (*FailoverSettings, *interfaces.Response, error) {
+func (s *Service) RegenerateV1(ctx context.Context) (*FailoverSettings, *resty.Response, error) {
 	var result FailoverSettings
 
 	endpoint := EndpointSSOFailoverGenerateV1

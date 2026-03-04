@@ -72,7 +72,7 @@ func findValidIconID(t *testing.T) (int, *icons.ResourceIcon, bool) {
 		if err != nil {
 			continue
 		}
-		if resp != nil && resp.StatusCode == 200 && result != nil {
+		if resp != nil && resp.StatusCode() == 200 && result != nil {
 			acc.LogTestSuccess(t, "GetByID succeeded for icon ID=%d", id)
 			return id, result, true
 		}
@@ -105,7 +105,7 @@ func TestAcceptance_Icons_get_by_id(t *testing.T) {
 // 		id := perm[i] + 1
 // 		// First check if icon exists
 // 		_, resp, err := svc.GetByIDV1(ctx, id)
-// 		if err != nil || resp == nil || resp.StatusCode != 200 {
+// 		if err != nil || resp == nil || resp.StatusCode() != 200 {
 // 			continue
 // 		}
 
@@ -120,7 +120,7 @@ func TestAcceptance_Icons_get_by_id(t *testing.T) {
 
 // 		// Success!
 // 		require.NotNil(t, resp)
-// 		assert.Equal(t, 200, resp.StatusCode)
+// 		assert.Equal(t, 200, resp.StatusCode())
 // 		assert.NotEmpty(t, body)
 // 		acc.LogTestSuccess(t, "Successfully downloaded icon ID=%d (%d bytes)", id, len(body))
 // 		return

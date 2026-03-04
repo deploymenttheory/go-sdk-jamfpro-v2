@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,68 +17,68 @@ type (
 		// List returns all mobile device enrollment profiles.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofiles
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified mobile device enrollment profile by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyid
-		GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
 
 		// GetByName returns the specified mobile device enrollment profile by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyname
-		GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
 
 		// GetByInvitation returns the specified mobile device enrollment profile by invitation.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyinvitation
-		GetByInvitation(ctx context.Context, invitation string) (*Resource, *interfaces.Response, error)
+		GetByInvitation(ctx context.Context, invitation string) (*Resource, *resty.Response, error)
 
 		// GetByIDWithSubset returns a specific subset of a mobile device enrollment profile by ID.
 		// Subset values: General, Location, Purchasing, Attachments.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyiddatasubset
-		GetByIDWithSubset(ctx context.Context, id int, subset string) (*Resource, *interfaces.Response, error)
+		GetByIDWithSubset(ctx context.Context, id int, subset string) (*Resource, *resty.Response, error)
 
 		// GetByNameWithSubset returns a specific subset of a mobile device enrollment profile by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbynamedatasubset
-		GetByNameWithSubset(ctx context.Context, name, subset string) (*Resource, *interfaces.Response, error)
+		GetByNameWithSubset(ctx context.Context, name, subset string) (*Resource, *resty.Response, error)
 
 		// Create creates a new mobile device enrollment profile.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceenrollmentprofilebyid
-		Create(ctx context.Context, req *Resource) (*Resource, *interfaces.Response, error)
+		Create(ctx context.Context, req *Resource) (*Resource, *resty.Response, error)
 
 		// UpdateByID updates the specified mobile device enrollment profile by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceenrollmentprofilebyid
-		UpdateByID(ctx context.Context, id int, req *Resource) (*Resource, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *Resource) (*Resource, *resty.Response, error)
 
 		// UpdateByName updates the specified mobile device enrollment profile by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceenrollmentprofilebyname
-		UpdateByName(ctx context.Context, name string, req *Resource) (*Resource, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *Resource) (*Resource, *resty.Response, error)
 
 		// UpdateByInvitation updates the specified mobile device enrollment profile by invitation.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceenrollmentprofilebyinvitation
-		UpdateByInvitation(ctx context.Context, invitation string, req *Resource) (*Resource, *interfaces.Response, error)
+		UpdateByInvitation(ctx context.Context, invitation string, req *Resource) (*Resource, *resty.Response, error)
 
 		// DeleteByID removes the specified mobile device enrollment profile by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceenrollmentprofilebyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified mobile device enrollment profile by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceenrollmentprofilebyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 
 		// DeleteByInvitation removes the specified mobile device enrollment profile by invitation.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceenrollmentprofilebyinvitation
-		DeleteByInvitation(ctx context.Context, invitation string) (*interfaces.Response, error)
+		DeleteByInvitation(ctx context.Context, invitation string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the mobile device enrollment profiles-related Classic API methods.
@@ -104,7 +105,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/mobiledeviceenrollmentprofiles
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofiles
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointMobileDeviceEnrollmentProfiles
 
 	var out ListResponse
@@ -126,7 +127,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/mobiledeviceenrollmentprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("mobile device enrollment profile ID must be a positive integer")
 	}
@@ -152,7 +153,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 // URL: GET /JSSResource/mobiledeviceenrollmentprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("mobile device enrollment profile name cannot be empty")
 	}
@@ -178,7 +179,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*Resource, *inter
 // URL: GET /JSSResource/mobiledeviceenrollmentprofiles/invitation/{invitation}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyinvitation
-func (s *Service) GetByInvitation(ctx context.Context, invitation string) (*Resource, *interfaces.Response, error) {
+func (s *Service) GetByInvitation(ctx context.Context, invitation string) (*Resource, *resty.Response, error) {
 	if invitation == "" {
 		return nil, nil, fmt.Errorf("mobile device enrollment profile invitation cannot be empty")
 	}
@@ -204,7 +205,7 @@ func (s *Service) GetByInvitation(ctx context.Context, invitation string) (*Reso
 // URL: GET /JSSResource/mobiledeviceenrollmentprofiles/id/{id}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbyiddatasubset
-func (s *Service) GetByIDWithSubset(ctx context.Context, id int, subset string) (*Resource, *interfaces.Response, error) {
+func (s *Service) GetByIDWithSubset(ctx context.Context, id int, subset string) (*Resource, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("mobile device enrollment profile ID must be a positive integer")
 	}
@@ -233,7 +234,7 @@ func (s *Service) GetByIDWithSubset(ctx context.Context, id int, subset string) 
 // URL: GET /JSSResource/mobiledeviceenrollmentprofiles/name/{name}/subset/{subset}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceenrollmentprofilesbynamedatasubset
-func (s *Service) GetByNameWithSubset(ctx context.Context, name, subset string) (*Resource, *interfaces.Response, error) {
+func (s *Service) GetByNameWithSubset(ctx context.Context, name, subset string) (*Resource, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("mobile device enrollment profile name cannot be empty")
 	}
@@ -262,7 +263,7 @@ func (s *Service) GetByNameWithSubset(ctx context.Context, name, subset string) 
 // URL: POST /JSSResource/mobiledeviceenrollmentprofiles/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceenrollmentprofilebyid
-func (s *Service) Create(ctx context.Context, req *Resource) (*Resource, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *Resource) (*Resource, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -291,7 +292,7 @@ func (s *Service) Create(ctx context.Context, req *Resource) (*Resource, *interf
 // URL: PUT /JSSResource/mobiledeviceenrollmentprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceenrollmentprofilebyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Resource, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Resource, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("mobile device enrollment profile ID must be a positive integer")
 	}
@@ -323,7 +324,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Resou
 // URL: PUT /JSSResource/mobiledeviceenrollmentprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceenrollmentprofilebyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) (*Resource, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) (*Resource, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("mobile device enrollment profile name cannot be empty")
 	}
@@ -355,7 +356,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *Resource) 
 // URL: PUT /JSSResource/mobiledeviceenrollmentprofiles/invitation/{invitation}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceenrollmentprofilebyinvitation
-func (s *Service) UpdateByInvitation(ctx context.Context, invitation string, req *Resource) (*Resource, *interfaces.Response, error) {
+func (s *Service) UpdateByInvitation(ctx context.Context, invitation string, req *Resource) (*Resource, *resty.Response, error) {
 	if invitation == "" {
 		return nil, nil, fmt.Errorf("mobile device enrollment profile invitation cannot be empty")
 	}
@@ -387,7 +388,7 @@ func (s *Service) UpdateByInvitation(ctx context.Context, invitation string, req
 // URL: DELETE /JSSResource/mobiledeviceenrollmentprofiles/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceenrollmentprofilebyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("mobile device enrollment profile ID must be a positive integer")
 	}
@@ -411,7 +412,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // URL: DELETE /JSSResource/mobiledeviceenrollmentprofiles/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceenrollmentprofilebyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("mobile device enrollment profile name cannot be empty")
 	}
@@ -435,7 +436,7 @@ func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Re
 // URL: DELETE /JSSResource/mobiledeviceenrollmentprofiles/invitation/{invitation}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceenrollmentprofilebyinvitation
-func (s *Service) DeleteByInvitation(ctx context.Context, invitation string) (*interfaces.Response, error) {
+func (s *Service) DeleteByInvitation(ctx context.Context, invitation string) (*resty.Response, error) {
 	if invitation == "" {
 		return nil, fmt.Errorf("mobile device enrollment profile invitation cannot be empty")
 	}

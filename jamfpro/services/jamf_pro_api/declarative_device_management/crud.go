@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,17 +18,17 @@ type (
 		// ForceSyncV1 initiates a DDM synchronization for a specific client management ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-ddm-clientmanagementid-sync
-		ForceSyncV1(ctx context.Context, clientManagementID string) (*interfaces.Response, error)
+		ForceSyncV1(ctx context.Context, clientManagementID string) (*resty.Response, error)
 
 		// GetStatusItemsV1 retrieves the latest status report items for a specific device by its client management ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ddm-clientmanagementid-status-items
-		GetStatusItemsV1(ctx context.Context, clientManagementID string) (*ResourceStatusItems, *interfaces.Response, error)
+		GetStatusItemsV1(ctx context.Context, clientManagementID string) (*ResourceStatusItems, *resty.Response, error)
 
 		// GetStatusItemByKeyV1 retrieves a specific status report item by its client management ID and status item key.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ddm-clientmanagementid-status-items-key
-		GetStatusItemByKeyV1(ctx context.Context, clientManagementID string, key string) (*StatusItem, *interfaces.Response, error)
+		GetStatusItemByKeyV1(ctx context.Context, clientManagementID string, key string) (*StatusItem, *resty.Response, error)
 	}
 
 	// Service handles communication with the Declarative Device Management-related methods of the Jamf Pro API.
@@ -47,7 +48,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ForceSyncV1 initiates a DDM synchronization for a specific client management ID.
 // URL: POST /api/v1/ddm/{clientManagementId}/sync
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-ddm-clientmanagementid-sync
-func (s *Service) ForceSyncV1(ctx context.Context, clientManagementID string) (*interfaces.Response, error) {
+func (s *Service) ForceSyncV1(ctx context.Context, clientManagementID string) (*resty.Response, error) {
 	if clientManagementID == "" {
 		return nil, fmt.Errorf("clientManagementID is required")
 	}
@@ -70,7 +71,7 @@ func (s *Service) ForceSyncV1(ctx context.Context, clientManagementID string) (*
 // GetStatusItemsV1 retrieves the latest status report items for a specific device by its client management ID.
 // URL: GET /api/v1/ddm/{clientManagementId}/status-items
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ddm-clientmanagementid-status-items
-func (s *Service) GetStatusItemsV1(ctx context.Context, clientManagementID string) (*ResourceStatusItems, *interfaces.Response, error) {
+func (s *Service) GetStatusItemsV1(ctx context.Context, clientManagementID string) (*ResourceStatusItems, *resty.Response, error) {
 	if clientManagementID == "" {
 		return nil, nil, fmt.Errorf("clientManagementID is required")
 	}
@@ -94,7 +95,7 @@ func (s *Service) GetStatusItemsV1(ctx context.Context, clientManagementID strin
 // GetStatusItemByKeyV1 retrieves a specific status report item by its client management ID and status item key.
 // URL: GET /api/v1/ddm/{clientManagementId}/status-items/{key}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ddm-clientmanagementid-status-items-key
-func (s *Service) GetStatusItemByKeyV1(ctx context.Context, clientManagementID string, key string) (*StatusItem, *interfaces.Response, error) {
+func (s *Service) GetStatusItemByKeyV1(ctx context.Context, clientManagementID string, key string) (*StatusItem, *resty.Response, error) {
 	if clientManagementID == "" {
 		return nil, nil, fmt.Errorf("clientManagementID is required")
 	}

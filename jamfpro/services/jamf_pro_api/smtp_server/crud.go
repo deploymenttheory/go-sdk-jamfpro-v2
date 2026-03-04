@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,29 +18,29 @@ type (
 		// GetV2 returns the current SMTP server configuration (Get SMTP server).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
-		GetV2(ctx context.Context) (*ResourceSMTPServer, *interfaces.Response, error)
+		GetV2(ctx context.Context) (*ResourceSMTPServer, *resty.Response, error)
 
 		// UpdateV2 updates the SMTP server configuration (Update SMTP server).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
-		UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error)
+		UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *resty.Response, error)
 
 		// GetHistoryV1 returns the paginated SMTP server history.
 		//
 		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNoteV1 adds a note to the SMTP server history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-history
-		AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *interfaces.Response, error)
+		AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *resty.Response, error)
 
 		// TestV1 tests the SMTP server configuration by sending a test email.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-test
-		TestV1(ctx context.Context, req *TestRequest) (*interfaces.Response, error)
+		TestV1(ctx context.Context, req *TestRequest) (*resty.Response, error)
 	}
 
 	// Service handles communication with the SMTP server-related methods of the Jamf Pro API.
@@ -59,7 +60,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV2 returns the current SMTP server configuration.
 // URL: GET /api/v2/smtp-server
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
-func (s *Service) GetV2(ctx context.Context) (*ResourceSMTPServer, *interfaces.Response, error) {
+func (s *Service) GetV2(ctx context.Context) (*ResourceSMTPServer, *resty.Response, error) {
 	var result ResourceSMTPServer
 
 	endpoint := EndpointSMTPServerV2
@@ -79,7 +80,7 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceSMTPServer, *interfaces.R
 // UpdateV2 updates the SMTP server configuration.
 // URL: PUT /api/v2/smtp-server
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
-func (s *Service) UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *interfaces.Response, error) {
+func (s *Service) UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -105,7 +106,7 @@ func (s *Service) UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*R
 // URL: GET /api/v1/smtp-server/history
 // Query params (optional): page, page-size, sort, filter (RSQL).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
-func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
@@ -132,7 +133,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 // AddHistoryNoteV1 adds a note to the SMTP server history.
 // URL: POST /api/v1/smtp-server/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-history
-func (s *Service) AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *interfaces.Response, error) {
+func (s *Service) AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -158,7 +159,7 @@ func (s *Service) AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteReque
 // TestV1 tests the SMTP server configuration by sending a test email.
 // URL: POST /api/v1/smtp-server/test
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-test
-func (s *Service) TestV1(ctx context.Context, req *TestRequest) (*interfaces.Response, error) {
+func (s *Service) TestV1(ctx context.Context, req *TestRequest) (*resty.Response, error) {
 	if req == nil {
 		return nil, fmt.Errorf("request is required")
 	}

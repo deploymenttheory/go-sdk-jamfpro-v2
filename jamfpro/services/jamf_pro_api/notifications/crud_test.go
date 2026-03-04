@@ -20,7 +20,7 @@ func TestUnit_Notifications_ListV1_Success(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 1)
 	require.Equal(t, "EXAMPLE", result[0].Type)
 	require.Equal(t, "1", result[0].ID)
@@ -33,5 +33,5 @@ func TestUnit_Notifications_ListV1_Error(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 500, resp.StatusCode)
+	require.Equal(t, 500, resp.StatusCode())
 }

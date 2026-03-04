@@ -44,7 +44,7 @@ func TestAcceptance_Devices_get_groups_v1(t *testing.T) {
 
 	// Get a mobile device ID from smart mobile device groups membership
 	groupList, resp, err := acc.Client.SmartMobileDeviceGroups.List(ctx, map[string]string{"page": "0", "page-size": "1"})
-	if err != nil && resp != nil && resp.StatusCode == 404 {
+	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Skip("Smart mobile device groups endpoint not available (404)")
 	}
 	require.NoError(t, err)
@@ -69,7 +69,7 @@ func TestAcceptance_Devices_get_groups_v1(t *testing.T) {
 	groups, resp, err := svc.GetGroupsV1(ctx, deviceID)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, len(groups), 0)
 
 	acc.LogTestSuccess(t, "GetGroupsV1: deviceID=%s groupCount=%d", deviceID, len(groups))

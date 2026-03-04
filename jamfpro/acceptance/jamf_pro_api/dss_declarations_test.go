@@ -56,7 +56,7 @@ func TestAcceptance_DSSDeclarations_get_by_uuid(t *testing.T) {
 	}
 
 	require.NotNil(t, declaration)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, declaration.Declarations)
 	assert.GreaterOrEqual(t, len(declaration.Declarations), 0)
 

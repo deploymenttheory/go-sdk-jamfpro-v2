@@ -45,7 +45,7 @@ func TestAcceptance_JamfAccountPreferences_get_v3(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.Language, "language preference should not be empty")
 
 	acc.LogTestSuccess(t, "JamfAccountPreferences: language=%s timezone=%s theme=%s",
@@ -76,8 +76,8 @@ func TestAcceptance_JamfAccountPreferences_get_and_update_v3(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, updateResp)
 	// PATCH returns 204 No Content; some tenants may return 200
-	assert.True(t, updateResp.StatusCode == 200 || updateResp.StatusCode == 204,
-		"expected 200 or 204, got %d", updateResp.StatusCode)
+	assert.True(t, updateResp.StatusCode() == 200 || updateResp.StatusCode() == 204,
+		"expected 200 or 204, got %d", updateResp.StatusCode())
 	_ = updated
 
 	acc.LogTestSuccess(t, "UpdateV3: disablePageLeaveCheck toggled to %v", request.DisablePageLeaveCheck)

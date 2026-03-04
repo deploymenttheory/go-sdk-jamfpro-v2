@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// GetV1 returns information related to cloud setup (Get Cloud Information).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-information
-		GetV1(ctx context.Context) (*ResourceCloudInformation, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceCloudInformation, *resty.Response, error)
 	}
 
 	// Service handles communication with the cloud information-related methods of the Jamf Pro API.
@@ -39,7 +40,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 returns information related to cloud setup.
 // URL: GET /api/v1/cloud-information
 // https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-information
-func (s *Service) GetV1(ctx context.Context) (*ResourceCloudInformation, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceCloudInformation, *resty.Response, error) {
 	var result ResourceCloudInformation
 
 	endpoint := EndpointCloudInformationV1

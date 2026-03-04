@@ -7,10 +7,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/inventory_preload"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -84,7 +84,7 @@ func TestAcceptance_InventoryPreload_record_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "GetRecordByID", "Getting record ID=%s", recordID)
 
 	var fetched *inventory_preload.InventoryPreloadRecord
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetRecordByID(ctx, recordID)
@@ -157,7 +157,7 @@ func TestAcceptance_InventoryPreload_csv_template(t *testing.T) {
 	template, resp, err := svc.GetCSVTemplate(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, template, "CSV template should not be empty")
 
 	acc.LogTestSuccess(t, "GetCSVTemplate: %d bytes downloaded", len(template))

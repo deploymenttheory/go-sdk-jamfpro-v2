@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// GetV4 retrieves the current enrollment settings (Get Enrollment Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
-		GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *interfaces.Response, error)
+		GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *resty.Response, error)
 	}
 
 	// Service handles communication with the enrollment settings-related methods of the Jamf Pro API.
@@ -35,7 +36,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV4 retrieves the current enrollment settings.
 // URL: GET /api/v4/enrollment
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
-func (s *Service) GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *interfaces.Response, error) {
+func (s *Service) GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *resty.Response, error) {
 	var result ResourceEnrollmentSettingsV4
 	endpoint := EndpointEnrollmentSettingsV4
 	headers := map[string]string{

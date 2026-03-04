@@ -10,7 +10,9 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -72,23 +74,16 @@ func loadMockResponse(filename string) ([]byte, error) {
 	return data, nil
 }
 
-func (m *DevicesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		return nil, fmt.Errorf("DevicesMock: no response registered for %s %s", method, path)
 	}
-
-	resp := &interfaces.Response{
-		StatusCode: r.statusCode,
-		Status:     fmt.Sprintf("%d", r.statusCode),
-		Headers:    http.Header{"Content-Type": {"application/json"}},
-		Body:       r.rawBody,
-	}
-
+	headers := http.Header{"Content-Type": {"application/json"}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
-
 	if result != nil && len(r.rawBody) > 0 {
 		if err := json.Unmarshal(r.rawBody, result); err != nil {
 			return resp, fmt.Errorf("DevicesMock: unmarshal into result: %w", err)
@@ -112,55 +107,55 @@ func (m *DevicesMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v1/devices/999/groups", 404, "error_not_found.json")
 }
 
-func (m *DevicesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
 }
 
-func (m *DevicesMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *DevicesMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *DevicesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *DevicesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *DevicesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
-func (m *DevicesMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
-func (m *DevicesMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *DevicesMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DevicesMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *DevicesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *DevicesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
-func (m *DevicesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *DevicesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	return m.dispatch("GET", path, nil)
 }
 
 func (m *DevicesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
 func (m *DevicesMock) InvalidateToken() error                    { return nil }
-func (m *DevicesMock) KeepAliveToken() error                      { return nil }
-func (m *DevicesMock) GetLogger() *zap.Logger                     { return m.logger }
+func (m *DevicesMock) KeepAliveToken() error                     { return nil }
+func (m *DevicesMock) GetLogger() *zap.Logger                    { return m.logger }

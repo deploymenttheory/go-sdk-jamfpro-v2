@@ -39,7 +39,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	defer cancel1()
 
 	created, createResp, err := svc.Create(ctx1, createReq)
-	if err != nil && createResp != nil && createResp.StatusCode == 409 {
+	if err != nil && createResp != nil && createResp.StatusCode() == 409 {
 		t.Skip("VPP create requires service token in this environment; skipping lifecycle")
 	}
 	require.NoError(t, err, "CreateVPPAccount should not return an error")
@@ -116,7 +116,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	require.NoError(t, err, "UpdateVPPAccountByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 5. DeleteByID

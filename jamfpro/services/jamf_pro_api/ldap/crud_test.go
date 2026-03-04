@@ -23,7 +23,7 @@ func TestUnit_Ldap_GetLdapGroupsV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "Engineering", result.Results[0].Name)
@@ -38,7 +38,7 @@ func TestUnit_Ldap_GetLdapGroupsV1_WithQuery(t *testing.T) {
 	result, resp, err := svc.GetLdapGroupsV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Ldap_GetLdapGroupsV1_Error(t *testing.T) {
@@ -49,7 +49,7 @@ func TestUnit_Ldap_GetLdapGroupsV1_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_Ldap_GetLdapGroupsV1_NoMock(t *testing.T) {
@@ -70,7 +70,7 @@ func TestUnit_Ldap_GetLdapServersV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 2)
 	assert.Equal(t, 1, result[0].ID)
 	assert.Equal(t, "Corporate LDAP", result[0].Name)
@@ -86,7 +86,7 @@ func TestUnit_Ldap_GetLdapServersV1_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_Ldap_GetLdapServersV1_NoMock(t *testing.T) {
@@ -107,7 +107,7 @@ func TestUnit_Ldap_GetLdapServersOnlyV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 2)
 	assert.Equal(t, 1, result[0].ID)
 	assert.Equal(t, "Corporate LDAP", result[0].Name)
@@ -123,7 +123,7 @@ func TestUnit_Ldap_GetLdapServersOnlyV1_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_Ldap_GetLdapServersOnlyV1_NoMock(t *testing.T) {

@@ -6,10 +6,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_computer_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -50,12 +50,12 @@ func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 		Assignments: []string{},
 	}
 	created, createResp, err := svc.CreateV2(ctx, createReq)
-	if err != nil && createResp != nil && createResp.StatusCode == 500 {
+	if err != nil && createResp != nil && createResp.StatusCode() == 500 {
 		t.Skip("Static computer group create returned 500 in this environment; skipping lifecycle")
 	}
 	require.NoError(t, err, "CreateV2 should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	groupID := created.ID
@@ -72,7 +72,7 @@ func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "GetByID", "Getting static computer group by ID=%s", groupID)
 
 	var fetched *static_computer_groups.ResourceStaticGroup
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetByIDV2(ctx, groupID)
@@ -134,7 +134,7 @@ func TestAcceptance_StaticComputerGroups_list(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 	assert.NotNil(t, result.Results)
 }

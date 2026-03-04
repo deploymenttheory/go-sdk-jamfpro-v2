@@ -66,10 +66,10 @@ func TestAcceptance_JamfConnect_get_settings(t *testing.T) {
 	result, resp, err := svc.GetSettingsV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Contains(t, []int{200, 204}, resp.StatusCode)
+	assert.Contains(t, []int{200, 204}, resp.StatusCode())
 
 	// Verify structure
-	if resp.StatusCode == 200 {
+	if resp.StatusCode() == 200 {
 		assert.NotEmpty(t, result.ID)
 	}
 }
@@ -84,7 +84,7 @@ func TestAcceptance_JamfConnect_list_and_get_profiles(t *testing.T) {
 	listResult, resp, err := svc.ListConfigProfilesV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, listResult)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// If there are profiles, test get-by helpers
 	if listResult.TotalCount > 0 && len(listResult.Results) > 0 {
@@ -93,19 +93,19 @@ func TestAcceptance_JamfConnect_list_and_get_profiles(t *testing.T) {
 		// Test GetByUUID
 		profileByUUID, resp, err := svc.GetConfigProfileByUUIDV1(ctx, firstProfile.UUID)
 		require.NoError(t, err)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.Equal(t, firstProfile.UUID, profileByUUID.UUID)
 
 		// Test GetByID
 		profileByID, resp, err := svc.GetConfigProfileByIDV1(ctx, firstProfile.ProfileID)
 		require.NoError(t, err)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.Equal(t, firstProfile.ProfileID, profileByID.ProfileID)
 
 		// Test GetByName
 		profileByName, resp, err := svc.GetConfigProfileByNameV1(ctx, firstProfile.ProfileName)
 		require.NoError(t, err)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.Equal(t, firstProfile.ProfileName, profileByName.ProfileName)
 	}
 }

@@ -24,7 +24,7 @@ func TestUnit_StaticComputerGroups_ListV2_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -53,7 +53,7 @@ func TestUnit_StaticComputerGroups_GetByIDV2_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Engineering Workstations", result.Name)
 	assert.Equal(t, "Computers used by engineering team", result.Description)
@@ -78,7 +78,7 @@ func TestUnit_StaticComputerGroups_GetByIDV2_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_StaticComputerGroups_GetByNameV2_Success(t *testing.T) {
@@ -140,7 +140,7 @@ func TestUnit_StaticComputerGroups_CreateV2_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Contains(t, result.Href, "/api/v2/computer-groups/static-groups/3")
 }
@@ -167,7 +167,7 @@ func TestUnit_StaticComputerGroups_CreateV2_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 func TestUnit_StaticComputerGroups_UpdateByIDV2_Success(t *testing.T) {
@@ -187,7 +187,7 @@ func TestUnit_StaticComputerGroups_UpdateByIDV2_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Engineering Workstations Updated", result.Name)
 	assert.Equal(t, "Updated description", result.Description)
 	require.Len(t, result.Assignments, 3)
@@ -223,7 +223,7 @@ func TestUnit_StaticComputerGroups_UpdateByIDV2_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_StaticComputerGroups_UpdateByIDV2_NilAssignments(t *testing.T) {
@@ -235,7 +235,7 @@ func TestUnit_StaticComputerGroups_UpdateByIDV2_NilAssignments(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_StaticComputerGroups_DeleteByIDV2_Success(t *testing.T) {
@@ -245,7 +245,7 @@ func TestUnit_StaticComputerGroups_DeleteByIDV2_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV2(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_StaticComputerGroups_DeleteByIDV2_EmptyID(t *testing.T) {
@@ -264,7 +264,7 @@ func TestUnit_StaticComputerGroups_DeleteByIDV2_NotFound(t *testing.T) {
 	resp, err := svc.DeleteByIDV2(context.Background(), "999")
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_StaticComputerGroups_CreateV2_NilAssignments(t *testing.T) {
@@ -276,6 +276,6 @@ func TestUnit_StaticComputerGroups_CreateV2_NilAssignments(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 }

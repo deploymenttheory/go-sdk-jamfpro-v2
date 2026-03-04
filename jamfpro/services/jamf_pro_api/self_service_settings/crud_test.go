@@ -23,7 +23,7 @@ func TestUnit_SelfServiceSettings_Get_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "USER", result.LoginSettings.UserLoginLevel)
 	assert.True(t, result.ConfigurationSettings.NotificationsEnabled)
 }
@@ -44,7 +44,7 @@ func TestUnit_SelfServiceSettings_Update_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_SelfServiceSettings_Update_NilRequest(t *testing.T) {
@@ -65,7 +65,7 @@ func TestUnit_SelfServiceSettings_GetHistoryV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -82,7 +82,7 @@ func TestUnit_SelfServiceSettings_AddHistoryNotesV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 42, result.ID)
 	assert.Equal(t, "/api/v1/self-service/settings/history/42", result.Href)
 }

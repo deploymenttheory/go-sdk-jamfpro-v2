@@ -22,7 +22,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_Computers_Pending(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 func TestUnit_CommandFlush_FlushByIDAndStatus_Computers_Failed(t *testing.T) {
@@ -34,7 +34,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_Computers_Failed(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 func TestUnit_CommandFlush_FlushByIDAndStatus_Computers_PendingAndFailed(t *testing.T) {
@@ -46,7 +46,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_Computers_PendingAndFailed(t *test
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 // ---- Computer Groups - all status combinations ----
@@ -60,7 +60,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_ComputerGroups_Pending(t *testing.
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 func TestUnit_CommandFlush_FlushByIDAndStatus_ComputerGroups_Failed(t *testing.T) {
@@ -72,7 +72,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_ComputerGroups_Failed(t *testing.T
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 func TestUnit_CommandFlush_FlushByIDAndStatus_ComputerGroups_PendingAndFailed(t *testing.T) {
@@ -84,7 +84,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_ComputerGroups_PendingAndFailed(t 
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 // ---- Mobile Devices - all status combinations ----
@@ -98,7 +98,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDevices_Pending(t *testing.T
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDevices_Failed(t *testing.T) {
@@ -110,7 +110,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDevices_Failed(t *testing.T)
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDevices_PendingAndFailed(t *testing.T) {
@@ -122,7 +122,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDevices_PendingAndFailed(t *
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 // ---- Mobile Device Groups - all status combinations ----
@@ -136,7 +136,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDeviceGroups_Pending(t *test
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDeviceGroups_Failed(t *testing.T) {
@@ -148,7 +148,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDeviceGroups_Failed(t *testi
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDeviceGroups_PendingAndFailed(t *testing.T) {
@@ -160,7 +160,7 @@ func TestUnit_CommandFlush_FlushByIDAndStatus_MobileDeviceGroups_PendingAndFaile
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 // ---- FlushWithXML ----
@@ -184,7 +184,7 @@ func TestUnit_CommandFlush_FlushWithXML(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode())
 }
 
 // ---- Validation errors ----

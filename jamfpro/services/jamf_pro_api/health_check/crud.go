@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,13 +16,13 @@ type (
 		// GetV1 returns whether the Jamf Pro API is healthy (Get Health Check).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
-		GetV1(ctx context.Context) (healthy bool, resp *interfaces.Response, err error)
+		GetV1(ctx context.Context) (healthy bool, resp *resty.Response, err error)
 
 		// GetHealthStatusV1 returns request acceptance ratios for each concurrency group and time window.
 		// Only available in Jamf Cloud; returns 404 on non-cloud nodes.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-status
-		GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus, *interfaces.Response, error)
+		GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus, *resty.Response, error)
 	}
 
 	// Service handles communication with the health check-related methods of the Jamf Pro API.
@@ -45,7 +46,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 returns whether the Jamf Pro API is healthy.
 // URL: GET /api/v1/health-check
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
-func (s *Service) GetV1(ctx context.Context) (bool, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (bool, *resty.Response, error) {
 	endpoint := EndpointHealthCheckV1
 
 	headers := map[string]string{
@@ -57,13 +58,13 @@ func (s *Service) GetV1(ctx context.Context) (bool, *interfaces.Response, error)
 		return false, resp, err
 	}
 
-	return resp != nil && resp.StatusCode == 200, resp, nil
+	return resp != nil && resp.StatusCode() == 200, resp, nil
 }
 
 // GetHealthStatusV1 returns request acceptance ratios for each concurrency group and time window.
 // URL: GET /api/v1/health-status
 // Only available in Jamf Cloud; returns 404 on non-cloud nodes.
-func (s *Service) GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus, *interfaces.Response, error) {
+func (s *Service) GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus, *resty.Response, error) {
 	endpoint := EndpointHealthStatusV1
 
 	var result ResourceHealthStatus

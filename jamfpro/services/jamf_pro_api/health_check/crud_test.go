@@ -21,7 +21,7 @@ func TestUnit_HealthCheck_GetV1_Success(t *testing.T) {
 	healthy, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.True(t, healthy)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_HealthCheck_GetV1_Error(t *testing.T) {
@@ -38,7 +38,7 @@ func TestUnit_HealthCheck_GetHealthStatusV1_Success(t *testing.T) {
 	result, resp, err := svc.GetHealthStatusV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.NotNil(t, result)
 	assert.Equal(t, 0.75, result.API.ThirtySeconds)
 	assert.Equal(t, 0.75, result.UI.OneMinute)

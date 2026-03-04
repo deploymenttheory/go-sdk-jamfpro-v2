@@ -22,7 +22,7 @@ func TestUnit_ApiIntegrations_ListV1_Success(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "Test Integration", result.Results[0].DisplayName)
@@ -36,7 +36,7 @@ func TestUnit_ApiIntegrations_GetByIDV1_Success(t *testing.T) {
 	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Test Integration", result.DisplayName)
 }
@@ -57,7 +57,7 @@ func TestUnit_ApiIntegrations_GetByNameV1_Success(t *testing.T) {
 	result, resp, err := svc.GetByNameV1(context.Background(), "Test Integration")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Test Integration", result.DisplayName)
 }
 
@@ -78,7 +78,7 @@ func TestUnit_ApiIntegrations_CreateV1_Success(t *testing.T) {
 	result, resp, err := svc.CreateV1(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Test Integration", result.DisplayName)
 }
 
@@ -99,7 +99,7 @@ func TestUnit_ApiIntegrations_UpdateByIDV1_Success(t *testing.T) {
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ApiIntegrations_DeleteByIDV1_EmptyID(t *testing.T) {
@@ -117,7 +117,7 @@ func TestUnit_ApiIntegrations_DeleteByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ApiIntegrations_UpdateByNameV1_Success(t *testing.T) {
@@ -129,7 +129,7 @@ func TestUnit_ApiIntegrations_UpdateByNameV1_Success(t *testing.T) {
 	result, resp, err := svc.UpdateByNameV1(context.Background(), "Test Integration", request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ApiIntegrations_UpdateByNameV1_NilRequest(t *testing.T) {
@@ -150,7 +150,7 @@ func TestUnit_ApiIntegrations_DeleteByNameV1_Success(t *testing.T) {
 	resp, err := svc.DeleteByNameV1(context.Background(), "Test Integration")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ApiIntegrations_DeleteByNameV1_NotFound(t *testing.T) {
@@ -180,7 +180,7 @@ func TestUnit_ApiIntegrations_RefreshClientCredentialsByIDV1_Success(t *testing.
 	result, resp, err := svc.RefreshClientCredentialsByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "new-client-id", result.ClientID)
 	assert.Equal(t, "new-client-secret", result.ClientSecret)
 }

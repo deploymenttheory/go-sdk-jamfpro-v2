@@ -8,10 +8,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customizations"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -116,7 +116,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	// Read by ID (with retry for eventual consistency)
 	acc.LogTestStage(t, "Read", "Getting enrollment customization by ID")
 	var retrieved *enrollment_customizations.ResourceEnrollmentCustomization
-	var getResp *interfaces.Response
+	var getResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		retrieved, getResp, getErr = svc.GetByIDV2(ctx, customizationID)
@@ -466,7 +466,7 @@ func TestAcceptance_EnrollmentCustomizations_image_upload_download(t *testing.T)
 
 	uploaded, uploadResp, err := svc.UploadImageV2(ctx, fileReader, fileInfo.Size(), "test-icon.png")
 	if err != nil {
-		if uploadResp != nil && (uploadResp.StatusCode == 404 || uploadResp.StatusCode == 400) {
+		if uploadResp != nil && (uploadResp.StatusCode() == 404 || uploadResp.StatusCode() == 400) {
 			t.Skip("Image upload endpoint not available or requires specific configuration (400/404)")
 		}
 		require.NoError(t, err)

@@ -268,8 +268,8 @@ func TestAcceptance_MobileDevices_update_by_id(t *testing.T) {
 		return
 	}
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
+	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// Revert the device name
 	revertReq := &mobile_devices.ResponseMobileDevice{

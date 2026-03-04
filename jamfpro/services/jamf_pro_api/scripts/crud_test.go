@@ -29,7 +29,7 @@ func TestUnit_Scripts_ListV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -48,7 +48,7 @@ func TestUnit_Scripts_ListV1_WithrsqlQuery(t *testing.T) {
 	result, resp, err := svc.ListScriptsV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Scripts_ListV1_WithRSQLFilter(t *testing.T) {
@@ -61,7 +61,7 @@ func TestUnit_Scripts_ListV1_WithRSQLFilter(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount, "filtered result should contain exactly one script")
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -84,7 +84,7 @@ func TestUnit_Scripts_GetByIDV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Install Homebrew", result.Name)
 	assert.Equal(t, "AFTER", result.Priority)
@@ -111,7 +111,7 @@ func TestUnit_Scripts_GetByIDV1_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -132,7 +132,7 @@ func TestUnit_Scripts_CreateV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Contains(t, result.Href, "/api/v1/scripts/3")
 }
@@ -156,7 +156,7 @@ func TestUnit_Scripts_CreateV1_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 // =============================================================================
@@ -176,7 +176,7 @@ func TestUnit_Scripts_UpdateByIDV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Install Homebrew Updated", result.Name)
 	assert.Equal(t, "BEFORE", result.Priority)
@@ -213,7 +213,7 @@ func TestUnit_Scripts_DeleteByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteScriptByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Scripts_DeleteByIDV1_EmptyID(t *testing.T) {
@@ -238,7 +238,7 @@ func TestUnit_Scripts_GetHistoryV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "admin", result.Results[0].Username)
@@ -255,7 +255,7 @@ func TestUnit_Scripts_GetHistoryV1_WithRSQLFilter(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	// Verify the rsqlQuery was forwarded to the HTTP client.
 	assert.Equal(t, rsqlQuery, mock.LastRSQLQuery, "rsqlQuery should be passed through to the HTTP client")
 }
@@ -282,7 +282,7 @@ func TestUnit_Scripts_AddHistoryNotesV1_Success(t *testing.T) {
 	resp, err := svc.AddScriptHistoryNotesV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_Scripts_AddHistoryNotesV1_EmptyID(t *testing.T) {
@@ -317,7 +317,7 @@ func TestUnit_Scripts_DownloadByIDV1_Success(t *testing.T) {
 	require.NotNil(t, data)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, data, "downloaded script contents should not be empty")
 	assert.Contains(t, string(data), "#!/bin/bash")
 }

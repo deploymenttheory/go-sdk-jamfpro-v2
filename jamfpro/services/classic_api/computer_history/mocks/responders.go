@@ -12,7 +12,10 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 //go:embed validate_get_computer_history.xml
@@ -118,57 +121,58 @@ func (m *ComputerHistoryMock) RegisterNotFoundErrorMock() {
 
 // ---- interfaces.HTTPClient implementation ----
 
-func (m *ComputerHistoryMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
 }
 
-func (m *ComputerHistoryMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerHistoryMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerHistoryMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerHistoryMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerHistoryMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
-func (m *ComputerHistoryMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
-func (m *ComputerHistoryMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *ComputerHistoryMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *ComputerHistoryMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *ComputerHistoryMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
-func (m *ComputerHistoryMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
 	if mergePage != nil {
-		if err := mergePage(resp.Body); err != nil {
+		body := resp.Bytes()
+		if err := mergePage(body); err != nil {
 			return resp, err
 		}
 	}
@@ -176,9 +180,9 @@ func (m *ComputerHistoryMock) GetPaginated(ctx context.Context, path string, rsq
 }
 
 func (m *ComputerHistoryMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
-func (m *ComputerHistoryMock) InvalidateToken() error                     { return nil }
-func (m *ComputerHistoryMock) KeepAliveToken() error                      { return nil }
-func (m *ComputerHistoryMock) GetLogger() *zap.Logger                     { return m.logger }
+func (m *ComputerHistoryMock) InvalidateToken() error                    { return nil }
+func (m *ComputerHistoryMock) KeepAliveToken() error                     { return nil }
+func (m *ComputerHistoryMock) GetLogger() *zap.Logger                    { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -203,23 +207,15 @@ func (m *ComputerHistoryMock) register(method, path string, statusCode int, fixt
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
-func (m *ComputerHistoryMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *ComputerHistoryMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/xml"}},
-			Body:       []byte(`<error>no mock registered</error>`),
-		}, fmt.Errorf("ComputerHistoryMock: no response registered for %s %s", method, path)
+		headers := http.Header{"Content-Type": {mime.ApplicationXML}}
+		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("ComputerHistoryMock: no response registered for %s %s", method, path)
 	}
 
-	resp := &interfaces.Response{
-		StatusCode: r.statusCode,
-		Status:     fmt.Sprintf("%d", r.statusCode),
-		Headers:    http.Header{"Content-Type": {"application/xml"}},
-		Body:       r.rawBody,
-	}
+	headers := http.Header{"Content-Type": {mime.ApplicationXML}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

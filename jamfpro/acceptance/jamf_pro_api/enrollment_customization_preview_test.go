@@ -7,11 +7,11 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customization_preview"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customizations"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -60,7 +60,7 @@ func TestAcceptance_EnrollmentCustomizationPreview_parse_markdown(t *testing.T) 
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.Markdown, "parsed HTML should not be empty")
 
 	acc.LogTestSuccess(t, "ParseMarkdown: output length=%d", len(result.Markdown))
@@ -149,7 +149,7 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 	acc.LogTestStage(t, "GetTextPanel", "Getting text panel ID=%s", panelID)
 
 	var fetchedPanel *enrollment_customization_preview.ResourceTextPanel
-	var fetchPanelResp *interfaces.Response
+	var fetchPanelResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetchedPanel, fetchPanelResp, getErr = previewSvc.GetTextPanel(ctx, ecID, panelID)

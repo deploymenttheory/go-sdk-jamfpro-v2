@@ -3,22 +3,10 @@ package interfaces
 import (
 	"context"
 	"io"
-	"net/http"
-	"time"
 
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
-
-// Response represents HTTP response metadata returned alongside data or errors.
-type Response struct {
-	StatusCode int
-	Status     string
-	Headers    http.Header
-	Body       []byte
-	Duration   time.Duration
-	ReceivedAt time.Time
-	Size       int64
-}
 
 // MultipartProgressCallback is called during multipart uploads to report progress.
 type MultipartProgressCallback func(fieldName string, fileName string, bytesWritten int64, totalBytes int64)
@@ -35,7 +23,7 @@ type MultipartProgressCallback func(fieldName string, fileName string, bytesWrit
 //	    And().
 //	    GreaterThan("hardware.totalRamMegabytes", "8192").
 //	    Build()
-//	// → general.name=="MacBook Pro";hardware.totalRamMegabytes>"8192"
+//	    → general.name=="MacBook Pro";hardware.totalRamMegabytes>"8192"
 type RSQLFilterBuilder interface {
 	// EqualTo produces: field=="value". Wildcards (*) in value are preserved.
 	EqualTo(field, value string) RSQLFilterBuilder
@@ -91,7 +79,7 @@ type HTTPClient interface {
 		rsqlQuery map[string]string, // optional: RSQL filter, sort, page, page-size
 		headers map[string]string, // HTTP headers
 		result any, // pointer to unmarshal response into
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// Post executes a POST request with a JSON body.
 	// The body is marshaled to JSON and the response is unmarshaled into the result parameter.
@@ -102,7 +90,7 @@ type HTTPClient interface {
 		body any, // request body to marshal as JSON
 		headers map[string]string, // HTTP headers
 		result any, // pointer to unmarshal response into
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// PostWithQuery executes a POST request with both query parameters and a JSON body.
 	// The body is marshaled to JSON and the response is unmarshaled into the result parameter.
@@ -114,7 +102,7 @@ type HTTPClient interface {
 		body any, // request body to marshal as JSON
 		headers map[string]string, // HTTP headers
 		result any, // pointer to unmarshal response into
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// PostForm executes a POST request with form-urlencoded data.
 	// The Content-Type header is automatically set to application/x-www-form-urlencoded.
@@ -125,7 +113,7 @@ type HTTPClient interface {
 		formData map[string]string, // form fields as key-value pairs
 		headers map[string]string, // HTTP headers
 		result any, // pointer to unmarshal response into
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// PostMultipart executes a POST request with multipart/form-data encoding, typically for file uploads.
 	// The Content-Type header is automatically set to multipart/form-data with a boundary.
@@ -142,7 +130,7 @@ type HTTPClient interface {
 		headers map[string]string, // HTTP headers
 		progressCallback MultipartProgressCallback, // optional progress callback
 		result any, // pointer to unmarshal response into
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// Put executes a PUT request with a JSON body.
 	// The body is marshaled to JSON and the response is unmarshaled into the result parameter.
@@ -153,7 +141,7 @@ type HTTPClient interface {
 		body any, // request body to marshal as JSON
 		headers map[string]string, // HTTP headers
 		result any, // pointer to unmarshal response into
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// Patch executes a PATCH request with a JSON body.
 	// The body is marshaled to JSON and the response is unmarshaled into the result parameter.
@@ -164,7 +152,7 @@ type HTTPClient interface {
 		body any, // request body to marshal as JSON
 		headers map[string]string, // HTTP headers
 		result any, // pointer to unmarshal response into
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// Delete executes a DELETE request.
 	// Query parameters and headers are applied if provided.
@@ -175,7 +163,7 @@ type HTTPClient interface {
 		rsqlQuery map[string]string, // URL query parameters
 		headers map[string]string, // HTTP headers
 		result any, // pointer to unmarshal response into
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// DeleteWithBody executes a DELETE request with a JSON body (for bulk operations).
 	// The body is marshaled to JSON and the response is unmarshaled into the result parameter.
@@ -186,7 +174,7 @@ type HTTPClient interface {
 		body any, // request body to marshal as JSON
 		headers map[string]string, // HTTP headers
 		result any, // pointer to unmarshal response into
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// GetBytes performs a GET request and returns raw bytes without unmarshaling.
 	// Use this for non-JSON responses such as binary files, CSV exports, or raw XML.
@@ -196,7 +184,7 @@ type HTTPClient interface {
 		path string, // API endpoint path
 		rsqlQuery map[string]string, // optional: RSQL filter, sort, page, page-size
 		headers map[string]string, // HTTP headers
-	) (*Response, []byte, error)
+	) (*resty.Response, []byte, error)
 
 	// GetPaginated transparently fetches all pages of a paginated Jamf Pro API endpoint,
 	// calling mergePage with each page's results array. The caller supplies optional
@@ -210,7 +198,7 @@ type HTTPClient interface {
 		rsqlQuery map[string]string, // optional: filter (RSQL), sort, page, page-size
 		headers map[string]string, // HTTP headers
 		mergePage func(pageData []byte) error, // callback to merge each page's results
-	) (*Response, error)
+	) (*resty.Response, error)
 
 	// RSQLBuilder returns a new RSQL filter expression builder.
 	// Pass the Build() result as rsqlQuery["filter"] to filter paginated results.

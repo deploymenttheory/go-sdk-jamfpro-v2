@@ -6,10 +6,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/patch_software_title_configurations"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -77,7 +77,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_list_v2(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, len(*result), 0)
 }
 
@@ -118,7 +118,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	require.NotNil(t, created)
 	require.NotEmpty(t, created.ID)
 	assert.Contains(t, created.Href, created.ID)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	acc.Cleanup(t, func() {
 		acc.LogTestStage(t, "Cleanup", "Deleting patch software title configuration ID: %s", created.ID)
 		_, _ = svc.DeleteByIDV2(ctx, created.ID)
@@ -127,7 +127,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	// GetByID (with retry for eventual consistency)
 	acc.LogTestStage(t, "Read", "Getting patch software title configuration by ID: %s", created.ID)
 	var retrieved *patch_software_title_configurations.ResourcePatchSoftwareTitleConfiguration
-	var getResp *interfaces.Response
+	var getResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		retrieved, getResp, getErr = svc.GetByIDV2(ctx, created.ID)
@@ -141,7 +141,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	assert.True(t, retrieved.UINotifications)
 	assert.False(t, retrieved.EmailNotifications)
 	assert.Len(t, retrieved.ExtensionAttributes, 1)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 
 	// GetByName
 	acc.LogTestStage(t, "Read", "Getting patch software title configuration by name: %s", name)
@@ -150,7 +150,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	require.NotNil(t, retrievedByName)
 	assert.Equal(t, created.ID, retrievedByName.ID)
 	assert.Equal(t, name, retrievedByName.DisplayName)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Update
 	acc.LogTestStage(t, "Update", "Updating patch software title configuration ID: %s", created.ID)
@@ -169,7 +169,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Failed to update patch software title configuration")
 	require.NotNil(t, updated)
 	assert.Equal(t, created.ID, updated.ID)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify update
 	acc.LogTestStage(t, "Verify", "Verifying patch software title configuration update")
@@ -177,19 +177,19 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Failed to get updated patch software title configuration")
 	require.NotNil(t, updatedRetrieved)
 	assert.Equal(t, created.ID, updatedRetrieved.ID)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Delete
 	acc.LogTestStage(t, "Delete", "Deleting patch software title configuration ID: %s", created.ID)
 	resp, err = svc.DeleteByIDV2(ctx, created.ID)
 	require.NoError(t, err, "Failed to delete patch software title configuration")
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify deletion
 	acc.LogTestStage(t, "Verify", "Verifying patch software title configuration deletion")
 	_, resp, err = svc.GetByIDV2(ctx, created.ID)
 	assert.Error(t, err, "Expected error when getting deleted patch software title configuration")
 	if resp != nil {
-		assert.Equal(t, 404, resp.StatusCode)
+		assert.Equal(t, 404, resp.StatusCode())
 	}
 }

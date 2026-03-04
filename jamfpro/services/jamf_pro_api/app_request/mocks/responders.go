@@ -10,7 +10,9 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -106,65 +108,65 @@ func (m *AppRequestMock) RegisterNotFoundErrorMock() {
 
 // ---- interfaces.HTTPClient implementation ----
 
-func (m *AppRequestMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)
 }
 
-func (m *AppRequestMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *AppRequestMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *AppRequestMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *AppRequestMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *AppRequestMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
-func (m *AppRequestMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
-func (m *AppRequestMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *AppRequestMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *AppRequestMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *AppRequestMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
-func (m *AppRequestMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *AppRequestMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
-	
-	// Extract "results" field from response body before passing to mergePage
+
+	bodyBytes := resp.Bytes()
 	var wrapper struct {
 		Results json.RawMessage `json:"results"`
 	}
-	if err := json.Unmarshal(resp.Body, &wrapper); err != nil {
+	if err := json.Unmarshal(bodyBytes, &wrapper); err != nil {
 		return resp, fmt.Errorf("failed to extract results: %w", err)
 	}
-	
+
 	if mergePage != nil {
 		if err := mergePage(wrapper.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
@@ -175,8 +177,8 @@ func (m *AppRequestMock) GetPaginated(ctx context.Context, path string, rsqlQuer
 
 func (m *AppRequestMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
 func (m *AppRequestMock) InvalidateToken() error                    { return nil }
-func (m *AppRequestMock) KeepAliveToken() error                      { return nil }
-func (m *AppRequestMock) GetLogger() *zap.Logger                     { return m.logger }
+func (m *AppRequestMock) KeepAliveToken() error                     { return nil }
+func (m *AppRequestMock) GetLogger() *zap.Logger                    { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -211,23 +213,15 @@ func (m *AppRequestMock) registerError(method, path string, statusCode int, fixt
 
 // dispatch looks up the registered response and either unmarshals the body
 // into result or returns an error depending on the registration type.
-func (m *AppRequestMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *AppRequestMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return &interfaces.Response{
-			StatusCode: http.StatusNotFound,
-			Status:     "404 Not Found",
-			Headers:    http.Header{"Content-Type": {"application/json"}},
-			Body:       []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`),
-		}, fmt.Errorf("AppRequestMock: no response registered for %s %s", method, path)
+		headers := http.Header{"Content-Type": {"application/json"}}
+		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`)), fmt.Errorf("AppRequestMock: no response registered for %s %s", method, path)
 	}
 
-	resp := &interfaces.Response{
-		StatusCode: r.statusCode,
-		Status:     fmt.Sprintf("%d", r.statusCode),
-		Headers:    http.Header{"Content-Type": {"application/json"}},
-		Body:       r.rawBody,
-	}
+	headers := http.Header{"Content-Type": {"application/json"}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

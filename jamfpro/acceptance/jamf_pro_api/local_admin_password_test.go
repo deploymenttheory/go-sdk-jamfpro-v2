@@ -74,7 +74,7 @@ func TestAcceptance_LocalAdminPassword_settings_get_and_update(t *testing.T) {
 	originalSettings, getResp, err := svc.GetSettingsV2(ctx)
 	require.NoError(t, err, "GetSettingsV2 should not return an error")
 	require.NotNil(t, originalSettings)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	acc.LogTestSuccess(t, "Current settings: AutoDeploy=%v, RotationTime=%d days",
 		originalSettings.AutoDeployEnabled, originalSettings.PasswordRotationTime)
 
@@ -90,7 +90,7 @@ func TestAcceptance_LocalAdminPassword_settings_get_and_update(t *testing.T) {
 	updateResp, err := svc.UpdateSettingsV2(ctx, updatedSettings)
 	require.NoError(t, err)
 	require.NotNil(t, updateResp)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Settings updated successfully")
 
 	// 3. Verify settings were updated
@@ -99,7 +99,7 @@ func TestAcceptance_LocalAdminPassword_settings_get_and_update(t *testing.T) {
 	fetchedSettings, fetchResp, err := svc.GetSettingsV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, fetchedSettings)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, updatedSettings.AutoDeployEnabled, fetchedSettings.AutoDeployEnabled)
 	assert.Equal(t, updatedSettings.PasswordRotationTime, fetchedSettings.PasswordRotationTime)
 	acc.LogTestSuccess(t, "Settings verified: RotationTime=%d days", fetchedSettings.PasswordRotationTime)
@@ -110,7 +110,7 @@ func TestAcceptance_LocalAdminPassword_settings_get_and_update(t *testing.T) {
 	restoreResp, err := svc.UpdateSettingsV2(ctx, originalSettings)
 	require.NoError(t, err)
 	require.NotNil(t, restoreResp)
-	assert.Equal(t, 200, restoreResp.StatusCode)
+	assert.Equal(t, 200, restoreResp.StatusCode())
 	acc.LogTestSuccess(t, "Original settings restored")
 }
 
@@ -129,7 +129,7 @@ func TestAcceptance_LocalAdminPassword_pending_rotations(t *testing.T) {
 	result, resp, err := svc.GetPendingRotationsV2(ctx)
 	require.NoError(t, err, "GetPendingRotationsV2 should not return an error")
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	acc.LogTestSuccess(t, "Pending rotations: %d total", result.TotalCount)
 

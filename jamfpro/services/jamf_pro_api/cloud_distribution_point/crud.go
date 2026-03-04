@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,63 +18,63 @@ type (
 		// GetV1 returns the current cloud distribution point configuration (Get Cloud Distribution Point).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point
-		GetV1(ctx context.Context) (*ResourceCloudDistributionPointV1, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceCloudDistributionPointV1, *resty.Response, error)
 
 		// CreateV1 provisions a cloud distribution point (Create Cloud Distribution Point).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point
-		CreateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *resty.Response, error)
 
 		// UpdateV1 updates the cloud distribution point configuration (Update Cloud Distribution Point).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-cloud-distribution-point
-		UpdateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error)
+		UpdateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *resty.Response, error)
 
 		// DeleteV1 removes the cloud distribution point configuration (Remove Cloud Distribution Point).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-cloud-distribution-point
-		DeleteV1(ctx context.Context) (*interfaces.Response, error)
+		DeleteV1(ctx context.Context) (*resty.Response, error)
 
 		// GetUploadCapabilityV1 returns the upload capability for the cloud distribution point.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-upload-capability
-		GetUploadCapabilityV1(ctx context.Context) (*UploadCapabilityV1, *interfaces.Response, error)
+		GetUploadCapabilityV1(ctx context.Context) (*UploadCapabilityV1, *resty.Response, error)
 
 		// GetTestConnectionV1 returns the test connection status for the cloud distribution point.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-test-connection
-		GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *interfaces.Response, error)
+		GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *resty.Response, error)
 
 		// GetHistoryV1 returns the history for the cloud distribution point.
 		//
 		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// GetFilesV1 returns the inventory files for the cloud distribution point.
 		//
 		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-files
-		GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (*FilesResponse, *interfaces.Response, error)
+		GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (*FilesResponse, *resty.Response, error)
 
 		// AddHistoryNoteV1 adds a history note for the cloud distribution point (Add Cloud Distribution Point History Note).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-history
-		AddHistoryNoteV1(ctx context.Context, request *RequestHistoryNoteV1) (*HistoryItem, *interfaces.Response, error)
+		AddHistoryNoteV1(ctx context.Context, request *RequestHistoryNoteV1) (*HistoryItem, *resty.Response, error)
 
 		// FailUploadV1 marks a specific file upload as failed for the cloud distribution point.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-fail-upload-id
-		FailUploadV1(ctx context.Context, id string, fileName string, fileType string) (*interfaces.Response, error)
+		FailUploadV1(ctx context.Context, id string, fileName string, fileType string) (*resty.Response, error)
 
 		// RefreshInventoryV1 updates inventory data for the cloud distribution point.
 		//
 		// Optional file-name query param: if provided, checks availability of that file; otherwise forces an immediate inventory refresh.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-refresh-inventory
-		RefreshInventoryV1(ctx context.Context, fileName string) (*interfaces.Response, error)
+		RefreshInventoryV1(ctx context.Context, fileName string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the cloud distribution point methods of the Jamf Pro API.
@@ -93,7 +94,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 returns the current cloud distribution point configuration.
 // URL: GET /api/v1/cloud-distribution-point
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point
-func (s *Service) GetV1(ctx context.Context) (*ResourceCloudDistributionPointV1, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceCloudDistributionPointV1, *resty.Response, error) {
 	var result ResourceCloudDistributionPointV1
 
 	endpoint := EndpointCloudDistributionPointV1
@@ -113,7 +114,7 @@ func (s *Service) GetV1(ctx context.Context) (*ResourceCloudDistributionPointV1,
 // CreateV1 provisions a cloud distribution point.
 // URL: POST /api/v1/cloud-distribution-point
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point
-func (s *Service) CreateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -138,7 +139,7 @@ func (s *Service) CreateV1(ctx context.Context, request *RequestCloudDistributio
 // UpdateV1 updates the cloud distribution point (PATCH).
 // URL: PATCH /api/v1/cloud-distribution-point
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-cloud-distribution-point
-func (s *Service) UpdateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *interfaces.Response, error) {
+func (s *Service) UpdateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -163,7 +164,7 @@ func (s *Service) UpdateV1(ctx context.Context, request *RequestCloudDistributio
 // DeleteV1 removes the cloud distribution point configuration.
 // URL: DELETE /api/v1/cloud-distribution-point
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-cloud-distribution-point
-func (s *Service) DeleteV1(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) DeleteV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointCloudDistributionPointV1
 
 	headers := map[string]string{
@@ -181,7 +182,7 @@ func (s *Service) DeleteV1(ctx context.Context) (*interfaces.Response, error) {
 // GetUploadCapabilityV1 returns upload capability for the cloud distribution point.
 // URL: GET /api/v1/cloud-distribution-point/upload-capability
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-upload-capability
-func (s *Service) GetUploadCapabilityV1(ctx context.Context) (*UploadCapabilityV1, *interfaces.Response, error) {
+func (s *Service) GetUploadCapabilityV1(ctx context.Context) (*UploadCapabilityV1, *resty.Response, error) {
 	endpoint := EndpointCloudDistributionPointV1 + "/upload-capability"
 	var result UploadCapabilityV1
 
@@ -200,7 +201,7 @@ func (s *Service) GetUploadCapabilityV1(ctx context.Context) (*UploadCapabilityV
 // GetTestConnectionV1 returns the test connection status.
 // URL: GET /api/v1/cloud-distribution-point/test-connection
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-test-connection
-func (s *Service) GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *interfaces.Response, error) {
+func (s *Service) GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *resty.Response, error) {
 	endpoint := EndpointCloudDistributionPointV1 + "/test-connection"
 	var result TestConnectionV1
 
@@ -220,7 +221,7 @@ func (s *Service) GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *
 // URL: GET /api/v1/cloud-distribution-point/history
 // Query params (optional): page, page-size, sort, filter (RSQL).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-history
-func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
@@ -247,7 +248,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 // URL: GET /api/v1/cloud-distribution-point/files
 // Query params (optional): page, page-size, sort, filter (RSQL).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-files
-func (s *Service) GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (*FilesResponse, *interfaces.Response, error) {
+func (s *Service) GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (*FilesResponse, *resty.Response, error) {
 	var result FilesResponse
 
 	mergePage := func(pageData []byte) error {
@@ -273,7 +274,7 @@ func (s *Service) GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (
 // AddHistoryNoteV1 adds a history note for the cloud distribution point.
 // URL: POST /api/v1/cloud-distribution-point/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-history
-func (s *Service) AddHistoryNoteV1(ctx context.Context, request *RequestHistoryNoteV1) (*HistoryItem, *interfaces.Response, error) {
+func (s *Service) AddHistoryNoteV1(ctx context.Context, request *RequestHistoryNoteV1) (*HistoryItem, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -299,7 +300,7 @@ func (s *Service) AddHistoryNoteV1(ctx context.Context, request *RequestHistoryN
 // URL: POST /api/v1/cloud-distribution-point/fail-upload/{id}
 // Query params: file-name, type (PACKAGE, EBOOK, MOBILE_DEVICE_APP).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-fail-upload-id
-func (s *Service) FailUploadV1(ctx context.Context, id string, fileName string, fileType string) (*interfaces.Response, error) {
+func (s *Service) FailUploadV1(ctx context.Context, id string, fileName string, fileType string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -334,7 +335,7 @@ func (s *Service) FailUploadV1(ctx context.Context, id string, fileName string, 
 // URL: POST /api/v1/cloud-distribution-point/refresh-inventory
 // Optional query param: file-name (if provided, checks availability of that file; otherwise forces immediate inventory refresh).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-refresh-inventory
-func (s *Service) RefreshInventoryV1(ctx context.Context, fileName string) (*interfaces.Response, error) {
+func (s *Service) RefreshInventoryV1(ctx context.Context, fileName string) (*resty.Response, error) {
 	endpoint := EndpointCloudDistributionPointRefreshV1
 
 	var queryParams map[string]string

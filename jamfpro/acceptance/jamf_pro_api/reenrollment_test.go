@@ -22,7 +22,7 @@ func TestAcceptance_Reenrollment_get(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_Reenrollment_update(t *testing.T) {
@@ -40,7 +40,7 @@ func TestAcceptance_Reenrollment_update(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, updated)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	request.FlushPolicyHistory = current.FlushPolicyHistory
 	_, _, _ = svc.Update(ctx, &request)
@@ -58,14 +58,14 @@ func TestAcceptance_Reenrollment_get_history(t *testing.T) {
 	addResult, addResp, err := svc.AddHistoryNotes(ctx, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, addResult)
-	assert.Contains(t, []int{200, 201}, addResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, addResp.StatusCode())
 	t.Logf("Added history note: %s", addResult.Note)
 
 	result, resp, err := svc.GetHistory(ctx, map[string]string{"page": "0", "page-size": "100", "sort": "date:desc"})
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 1, "Should have at least the note we just added")
 	assert.NotNil(t, result.Results)
 }
@@ -80,7 +80,7 @@ func TestAcceptance_Reenrollment_add_history_notes(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode, "API may return 200 or 201")
+	assert.Contains(t, []int{200, 201}, resp.StatusCode(), "API may return 200 or 201")
 	assert.Equal(t, request.Note, result.Note)
 }
 
@@ -93,6 +93,6 @@ func TestAcceptance_Reenrollment_export_history(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Greater(t, len(body), 0)
 }

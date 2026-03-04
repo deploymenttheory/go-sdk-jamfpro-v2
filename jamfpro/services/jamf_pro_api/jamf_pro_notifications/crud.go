@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 // ServiceInterface defines the interface for Jamf Pro notifications operations.
@@ -22,12 +23,12 @@ type ServiceInterface interface {
 	// relevant to the user's role.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-	GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotification, *interfaces.Response, error)
+	GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error)
 
 	// DeleteByTypeAndIDV1 deletes a notification by type and ID.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-notifications-type-id
-	DeleteByTypeAndIDV1(ctx context.Context, notificationType, id string) (*interfaces.Response, error)
+	DeleteByTypeAndIDV1(ctx context.Context, notificationType, id string) (*resty.Response, error)
 }
 
 type (
@@ -49,7 +50,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetForUserAndSiteV1 retrieves all notifications for the current user and site.
 // URL: GET /api/v1/notifications
 // https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-func (s *Service) GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotification, *interfaces.Response, error) {
+func (s *Service) GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error) {
 	endpoint := EndpointNotificationsV1
 
 	headers := map[string]string{
@@ -68,7 +69,7 @@ func (s *Service) GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotificati
 // DeleteByTypeAndIDV1 deletes a notification by type and ID.
 // URL: DELETE /api/v1/notifications/{type}/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-notifications-type-id
-func (s *Service) DeleteByTypeAndIDV1(ctx context.Context, notificationType, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByTypeAndIDV1(ctx context.Context, notificationType, id string) (*resty.Response, error) {
 	if notificationType == "" {
 		return nil, fmt.Errorf("notification type is required")
 	}

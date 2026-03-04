@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,7 +17,7 @@ type (
 		// GetMappingsByIDV1 returns the LDAP attribute mappings for an OnPrem LDAP configuration by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-classic-ldap-id
-		GetMappingsByIDV1(ctx context.Context, id string) (*ResourceOnPremLdapMappingsV1, *interfaces.Response, error)
+		GetMappingsByIDV1(ctx context.Context, id string) (*ResourceOnPremLdapMappingsV1, *resty.Response, error)
 	}
 
 	// Service handles communication with the classic LDAP-related methods of the Jamf Pro API.
@@ -36,7 +37,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetMappingsByIDV1 returns the LDAP attribute mappings for an OnPrem LDAP configuration by ID.
 // URL: GET /api/v1/classic-ldap/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-classic-ldap-id
-func (s *Service) GetMappingsByIDV1(ctx context.Context, id string) (*ResourceOnPremLdapMappingsV1, *interfaces.Response, error) {
+func (s *Service) GetMappingsByIDV1(ctx context.Context, id string) (*ResourceOnPremLdapMappingsV1, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s", EndpointClassicLdapV1, id)
 	var result ResourceOnPremLdapMappingsV1
 

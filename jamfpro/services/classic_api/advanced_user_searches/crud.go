@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,48 +17,48 @@ type (
 		// List returns all advanced user searches.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedusersearches
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified advanced user search by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedusersearchesbyid
-		GetByID(ctx context.Context, id int) (*ResourceAdvancedUserSearch, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceAdvancedUserSearch, *resty.Response, error)
 
 		// GetByName returns the specified advanced user search by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersearchesbyname
-		GetByName(ctx context.Context, name string) (*ResourceAdvancedUserSearch, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceAdvancedUserSearch, *resty.Response, error)
 
 		// Create creates a new advanced user search.
 		//
 		// Returns the created advanced user search ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createadvancedusersearchgbyid
-		Create(ctx context.Context, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByID updates the specified advanced user search by ID.
 		//
 		// Returns the updated advanced user search ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateadvancedusersearchbyid
-		UpdateByID(ctx context.Context, id int, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByName updates the specified advanced user search by name.
 		//
 		// Returns the updated advanced user search ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateadvancedusersearchbyname
-		UpdateByName(ctx context.Context, name string, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *resty.Response, error)
 
 		// DeleteByID removes the specified advanced user search by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteadvancedusersearchbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified advanced user search by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteadvancedusersearchbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the advanced user searches-related Classic API methods.
@@ -82,7 +83,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // List returns all advanced user searches.
 // URL: GET /JSSResource/advancedusersearches
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedusersearches
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicAdvancedUserSearches
@@ -103,7 +104,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // GetByID returns the specified advanced user search by ID.
 // URL: GET /JSSResource/advancedusersearches/id/{id}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedusersearchesbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAdvancedUserSearch, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAdvancedUserSearch, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("advanced user search ID must be a positive integer")
 	}
@@ -128,7 +129,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAdvancedUserSea
 // GetByName returns the specified advanced user search by name.
 // URL: GET /JSSResource/advancedusersearches/name/{name}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersearchesbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceAdvancedUserSearch, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceAdvancedUserSearch, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("advanced user search name is required")
 	}
@@ -154,7 +155,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceAdvanced
 // URL: POST /JSSResource/advancedusersearches/id/0
 // Returns the created advanced user search ID only.
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createadvancedusersearchgbyid
-func (s *Service) Create(ctx context.Context, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -180,7 +181,7 @@ func (s *Service) Create(ctx context.Context, req *RequestAdvancedUserSearch) (*
 // URL: PUT /JSSResource/advancedusersearches/id/{id}
 // Returns the updated advanced user search ID only.
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateadvancedusersearchbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("advanced user search ID must be a positive integer")
 	}
@@ -209,7 +210,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAdvancedUs
 // URL: PUT /JSSResource/advancedusersearches/name/{name}
 // Returns the updated advanced user search ID only.
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateadvancedusersearchbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAdvancedUserSearch) (*CreateUpdateResponse, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("advanced user search name is required")
 	}
@@ -237,7 +238,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAdv
 // DeleteByID removes the specified advanced user search by ID.
 // URL: DELETE /JSSResource/advancedusersearches/id/{id}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteadvancedusersearchbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("advanced user search ID must be a positive integer")
 	}
@@ -260,7 +261,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // DeleteByName removes the specified advanced user search by name.
 // URL: DELETE /JSSResource/advancedusersearches/name/{name}
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteadvancedusersearchbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("advanced user search name is required")
 	}

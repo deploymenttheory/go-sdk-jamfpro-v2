@@ -31,7 +31,7 @@ func TestUnit_ReturnToService_ListV1_Success(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -69,7 +69,7 @@ func TestUnit_ReturnToService_GetByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Default", result.DisplayName)
 }
 
@@ -85,7 +85,7 @@ func TestUnit_ReturnToService_CreateV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "2", result.ID)
 	assert.NotEmpty(t, result.Href)
 }
@@ -102,7 +102,7 @@ func TestUnit_ReturnToService_UpdateByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Updated Config", result.DisplayName)
 }
 
@@ -132,7 +132,7 @@ func TestUnit_ReturnToService_DeleteByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_ReturnToService_ListV1_APIError(t *testing.T) {
@@ -143,7 +143,7 @@ func TestUnit_ReturnToService_ListV1_APIError(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_ReturnToService_GetByIDV1_APIError(t *testing.T) {
@@ -154,7 +154,7 @@ func TestUnit_ReturnToService_GetByIDV1_APIError(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_ReturnToService_CreateV1_APIError(t *testing.T) {
@@ -166,7 +166,7 @@ func TestUnit_ReturnToService_CreateV1_APIError(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_ReturnToService_UpdateByIDV1_APIError(t *testing.T) {
@@ -178,7 +178,7 @@ func TestUnit_ReturnToService_UpdateByIDV1_APIError(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_ReturnToService_DeleteByIDV1_APIError(t *testing.T) {

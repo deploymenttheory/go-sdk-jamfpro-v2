@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -19,32 +20,32 @@ type (
 		// GetSettingsV1 retrieves the Jamf Connect settings.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect
-		GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *interfaces.Response, error)
+		GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *resty.Response, error)
 
 		// ListConfigProfilesV1 lists all Jamf Connect config profiles with pagination support.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-config-profiles
-		ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetConfigProfileByUUIDV1 retrieves a specific Jamf Connect config profile by UUID.
 		//
 		// Helper method that searches through the list of profiles.
-		GetConfigProfileByUUIDV1(ctx context.Context, uuid string) (*ResourceJamfConnectConfigProfile, *interfaces.Response, error)
+		GetConfigProfileByUUIDV1(ctx context.Context, uuid string) (*ResourceJamfConnectConfigProfile, *resty.Response, error)
 
 		// GetConfigProfileByIDV1 retrieves a specific Jamf Connect config profile by profile ID.
 		//
 		// Helper method that searches through the list of profiles.
-		GetConfigProfileByIDV1(ctx context.Context, profileID int) (*ResourceJamfConnectConfigProfile, *interfaces.Response, error)
+		GetConfigProfileByIDV1(ctx context.Context, profileID int) (*ResourceJamfConnectConfigProfile, *resty.Response, error)
 
 		// GetConfigProfileByNameV1 retrieves a specific Jamf Connect config profile by name.
 		//
 		// Helper method that searches through the list of profiles.
-		GetConfigProfileByNameV1(ctx context.Context, name string) (*ResourceJamfConnectConfigProfile, *interfaces.Response, error)
+		GetConfigProfileByNameV1(ctx context.Context, name string) (*ResourceJamfConnectConfigProfile, *resty.Response, error)
 
 		// UpdateConfigProfileByUUIDV1 updates a Jamf Connect config profile by UUID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-jamf-connect-config-profiles-uuid
-		UpdateConfigProfileByUUIDV1(ctx context.Context, uuid string, request *ResourceJamfConnectConfigProfileUpdate) (*ResourceJamfConnectConfigProfile, *interfaces.Response, error)
+		UpdateConfigProfileByUUIDV1(ctx context.Context, uuid string, request *ResourceJamfConnectConfigProfileUpdate) (*ResourceJamfConnectConfigProfile, *resty.Response, error)
 
 		// GetDeploymentTasksByIDV1 retrieves deployment tasks for a specific Jamf Connect deployment.
 		//
@@ -52,24 +53,24 @@ type (
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-deployments-id-tasks
-		GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*DeploymentTasksResponse, *interfaces.Response, error)
+		GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*DeploymentTasksResponse, *resty.Response, error)
 
 		// GetHistoryV1 retrieves the history for Jamf Connect.
 		//
 		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNoteV1 adds a note to the Jamf Connect history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-history
-		AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNote) (*interfaces.Response, error)
+		AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNote) (*resty.Response, error)
 
 		// RetryDeploymentTasksByUUIDV1 retries Connect install tasks for specified computers.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-deployments-configprofileuuid-tasks-retry
-		RetryDeploymentTasksByUUIDV1(ctx context.Context, uuid string, computerIDs []string) (*interfaces.Response, error)
+		RetryDeploymentTasksByUUIDV1(ctx context.Context, uuid string, computerIDs []string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the Jamf Connect-related methods of the Jamf Pro API.
@@ -89,7 +90,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetSettingsV1 retrieves the Jamf Connect settings.
 // URL: GET /api/v1/jamf-connect
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect
-func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *interfaces.Response, error) {
+func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *resty.Response, error) {
 	var result ResourceJamfConnect
 
 	endpoint := EndpointJamfConnectV1
@@ -109,7 +110,7 @@ func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *int
 // ListConfigProfilesV1 lists all Jamf Connect config profiles with pagination support.
 // URL: GET /api/v1/jamf-connect/config-profiles
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-config-profiles
-func (s *Service) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/config-profiles", EndpointJamfConnectV1)
 
 	var result ListResponse
@@ -137,7 +138,7 @@ func (s *Service) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string
 // GetConfigProfileByUUIDV1 retrieves a specific Jamf Connect config profile by UUID.
 // URL: GET /api/v1/jamf-connect/config-profiles (searches through list)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-config-profiles
-func (s *Service) GetConfigProfileByUUIDV1(ctx context.Context, uuid string) (*ResourceJamfConnectConfigProfile, *interfaces.Response, error) {
+func (s *Service) GetConfigProfileByUUIDV1(ctx context.Context, uuid string) (*ResourceJamfConnectConfigProfile, *resty.Response, error) {
 	if uuid == "" {
 		return nil, nil, fmt.Errorf("uuid is required")
 	}
@@ -159,7 +160,7 @@ func (s *Service) GetConfigProfileByUUIDV1(ctx context.Context, uuid string) (*R
 // GetConfigProfileByIDV1 retrieves a specific Jamf Connect config profile by profile ID.
 // URL: GET /api/v1/jamf-connect/config-profiles (searches through list)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-config-profiles
-func (s *Service) GetConfigProfileByIDV1(ctx context.Context, profileID int) (*ResourceJamfConnectConfigProfile, *interfaces.Response, error) {
+func (s *Service) GetConfigProfileByIDV1(ctx context.Context, profileID int) (*ResourceJamfConnectConfigProfile, *resty.Response, error) {
 	if profileID <= 0 {
 		return nil, nil, fmt.Errorf("profile ID must be greater than 0")
 	}
@@ -181,7 +182,7 @@ func (s *Service) GetConfigProfileByIDV1(ctx context.Context, profileID int) (*R
 // GetConfigProfileByNameV1 retrieves a specific Jamf Connect config profile by name.
 // URL: GET /api/v1/jamf-connect/config-profiles (searches through list)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-config-profiles
-func (s *Service) GetConfigProfileByNameV1(ctx context.Context, name string) (*ResourceJamfConnectConfigProfile, *interfaces.Response, error) {
+func (s *Service) GetConfigProfileByNameV1(ctx context.Context, name string) (*ResourceJamfConnectConfigProfile, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -203,7 +204,7 @@ func (s *Service) GetConfigProfileByNameV1(ctx context.Context, name string) (*R
 // UpdateConfigProfileByUUIDV1 updates a Jamf Connect config profile by UUID.
 // URL: PUT /api/v1/jamf-connect/config-profiles/{uuid}
 // https://developer.jamf.com/jamf-pro/reference/put_v1-jamf-connect-config-profiles-uuid
-func (s *Service) UpdateConfigProfileByUUIDV1(ctx context.Context, uuid string, request *ResourceJamfConnectConfigProfileUpdate) (*ResourceJamfConnectConfigProfile, *interfaces.Response, error) {
+func (s *Service) UpdateConfigProfileByUUIDV1(ctx context.Context, uuid string, request *ResourceJamfConnectConfigProfileUpdate) (*ResourceJamfConnectConfigProfile, *resty.Response, error) {
 	if uuid == "" {
 		return nil, nil, fmt.Errorf("uuid is required")
 	}
@@ -233,7 +234,7 @@ func (s *Service) UpdateConfigProfileByUUIDV1(ctx context.Context, uuid string, 
 // URL: GET /api/v1/jamf-connect/deployments/{id}/tasks
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-deployments-id-tasks
-func (s *Service) GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*DeploymentTasksResponse, *interfaces.Response, error) {
+func (s *Service) GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*DeploymentTasksResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("deployment ID is required")
 	}
@@ -266,7 +267,7 @@ func (s *Service) GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQ
 // URL: GET /api/v1/jamf-connect/history
 // Query params (optional): page, page-size, sort, filter (RSQL).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-history
-func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/history", EndpointJamfConnectV1)
 
 	var result HistoryResponse
@@ -294,7 +295,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 // AddHistoryNoteV1 adds a note to the Jamf Connect history.
 // URL: POST /api/v1/jamf-connect/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-history
-func (s *Service) AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNote) (*interfaces.Response, error) {
+func (s *Service) AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNote) (*resty.Response, error) {
 	if req == nil {
 		return nil, fmt.Errorf("request is required")
 	}
@@ -319,7 +320,7 @@ func (s *Service) AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNo
 // RetryDeploymentTasksByUUIDV1 retries Connect install tasks for specified computers.
 // URL: POST /api/v1/jamf-connect/deployments/{uuid}/tasks/retry
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-deployments-configprofileuuid-tasks-retry
-func (s *Service) RetryDeploymentTasksByUUIDV1(ctx context.Context, uuid string, computerIDs []string) (*interfaces.Response, error) {
+func (s *Service) RetryDeploymentTasksByUUIDV1(ctx context.Context, uuid string, computerIDs []string) (*resty.Response, error) {
 	if uuid == "" {
 		return nil, fmt.Errorf("uuid is required")
 	}

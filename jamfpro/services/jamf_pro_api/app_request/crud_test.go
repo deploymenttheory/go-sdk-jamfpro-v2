@@ -29,7 +29,7 @@ func TestUnit_AppRequest_ListFormInputFields_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -50,7 +50,7 @@ func TestUnit_AppRequest_ListFormInputFields_WithQueryParams(t *testing.T) {
 	result, resp, err := svc.ListFormInputFieldsV1(context.Background(), params)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // =============================================================================
@@ -72,7 +72,7 @@ func TestUnit_AppRequest_ReplaceFormInputFields_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 2)
 	assert.Equal(t, 1, result[0].ID)
 	assert.Equal(t, "Quantity", result[0].Title)
@@ -105,7 +105,7 @@ func TestUnit_AppRequest_CreateFormInputField_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 3, result.ID)
 	assert.Equal(t, "Department", result.Title)
 	assert.Equal(t, "Which department?", *result.Description)
@@ -135,7 +135,7 @@ func TestUnit_AppRequest_GetFormInputFieldByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Quantity", result.Title)
 	assert.Equal(t, "How many of these would you like?", *result.Description)
@@ -150,7 +150,7 @@ func TestUnit_AppRequest_GetFormInputFieldByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -168,7 +168,7 @@ func TestUnit_AppRequest_UpdateFormInputFieldByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Quantity", result.Title)
 }
@@ -194,7 +194,7 @@ func TestUnit_AppRequest_DeleteFormInputFieldByID_Success(t *testing.T) {
 	resp, err := svc.DeleteFormInputFieldByIDV1(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 // =============================================================================
@@ -210,7 +210,7 @@ func TestUnit_AppRequest_GetSettings_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.IsEnabled)
 	assert.Equal(t, "deviceLocale", result.AppStoreLocale)
 	assert.Equal(t, 1, result.RequesterUserGroupID)
@@ -238,7 +238,7 @@ func TestUnit_AppRequest_UpdateSettings_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.IsEnabled)
 	assert.Equal(t, "deviceLocale", result.AppStoreLocale)
 	assert.Equal(t, 1, result.RequesterUserGroupID)

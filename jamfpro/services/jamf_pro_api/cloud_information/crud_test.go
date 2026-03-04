@@ -23,7 +23,7 @@ func TestUnit_CloudInformation_GetV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.CloudInstance)
 	assert.False(t, result.RampInstance)
 	assert.False(t, result.GovCloudInstance)
@@ -39,7 +39,7 @@ func TestUnit_CloudInformation_GetV1_ClientError(t *testing.T) {
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "mock client error")
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Nil(t, result)
 }
 

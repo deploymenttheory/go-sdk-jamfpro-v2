@@ -22,7 +22,7 @@ func TestUnit_AccessManagementSettings_GetV4_Success(t *testing.T) {
 	result, resp, err := svc.GetV4(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_AccessManagementSettings_CreateV4_NilRequest(t *testing.T) {
@@ -42,7 +42,7 @@ func TestUnit_AccessManagementSettings_CreateV4_Success(t *testing.T) {
 	result, resp, err := svc.CreateV4(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_AccessManagementSettings_GetV4_Error(t *testing.T) {

@@ -23,7 +23,7 @@ func TestUnit_SmartMobileDeviceGroups_List_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].GroupID)
@@ -38,7 +38,7 @@ func TestUnit_SmartMobileDeviceGroups_GetByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.GroupID)
 	assert.Equal(t, "iPhones", result.GroupName)
 	require.Len(t, result.Criteria, 1)
@@ -53,7 +53,7 @@ func TestUnit_SmartMobileDeviceGroups_GetByName_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.GroupID)
 	assert.Equal(t, "iPhones", result.GroupName)
 }
@@ -75,7 +75,7 @@ func TestUnit_SmartMobileDeviceGroups_GetMembership_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].MobileDeviceId)
@@ -97,7 +97,7 @@ func TestUnit_SmartMobileDeviceGroups_Create_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "2", result.ID)
 	assert.NotEmpty(t, result.Href)
 }
@@ -117,7 +117,7 @@ func TestUnit_SmartMobileDeviceGroups_UpdateByID_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.GroupID)
 	assert.Equal(t, "iPhones Updated", result.GroupName)
 }
@@ -129,7 +129,7 @@ func TestUnit_SmartMobileDeviceGroups_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByID(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_SmartMobileDeviceGroups_GetByID_EmptyID(t *testing.T) {
@@ -207,7 +207,7 @@ func TestUnit_SmartMobileDeviceGroups_GetByID_NotFound(t *testing.T) {
 	_, resp, err := svc.GetByID(context.Background(), "999")
 	assert.Error(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
 }
 

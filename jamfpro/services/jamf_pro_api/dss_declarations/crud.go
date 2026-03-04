@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,7 +17,7 @@ type (
 		// GetByUUIDV1 returns the specified DSS declaration by UUID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
-		GetByUUIDV1(ctx context.Context, uuid string) (*ResponseDSSDeclaration, *interfaces.Response, error)
+		GetByUUIDV1(ctx context.Context, uuid string) (*ResponseDSSDeclaration, *resty.Response, error)
 	}
 
 	// Service handles communication with the DSS declarations-related methods of the Jamf Pro API.
@@ -41,7 +42,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetByUUIDV1 returns the specified DSS declaration by UUID.
 // URL: GET /api/v1/dss-declarations/{uuid}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
-func (s *Service) GetByUUIDV1(ctx context.Context, uuid string) (*ResponseDSSDeclaration, *interfaces.Response, error) {
+func (s *Service) GetByUUIDV1(ctx context.Context, uuid string) (*ResponseDSSDeclaration, *resty.Response, error) {
 	if uuid == "" {
 		return nil, nil, fmt.Errorf("uuid is required")
 	}

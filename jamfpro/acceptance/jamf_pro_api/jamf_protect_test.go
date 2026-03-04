@@ -64,15 +64,15 @@ func TestAcceptance_JamfProtect_get_settings_v1(t *testing.T) {
 
 	result, resp, err := svc.GetSettingsV1(ctx)
 	if err != nil {
-		if resp != nil && (resp.StatusCode == 404 || resp.StatusCode == 400) {
-			t.Logf("GetSettingsV1 returned %d - Jamf Protect integration not configured, skipping", resp.StatusCode)
+		if resp != nil && (resp.StatusCode() == 404 || resp.StatusCode() == 400) {
+			t.Logf("GetSettingsV1 returned %d - Jamf Protect integration not configured, skipping", resp.StatusCode())
 			return
 		}
 		require.NoError(t, err)
 	}
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	acc.LogTestSuccess(t, "JamfProtect settings: protectURL=%s autoInstall=%v",
 		result.ProtectURL, result.AutoInstall)
@@ -92,8 +92,8 @@ func TestAcceptance_JamfProtect_list_history_v1(t *testing.T) {
 	}
 	addResult, addResp, err := svc.CreateHistoryNoteV1(ctx, noteReq)
 	if err != nil {
-		if addResp != nil && (addResp.StatusCode == 404 || addResp.StatusCode == 400) {
-			t.Skipf("CreateHistoryNoteV1 returned %d - Jamf Protect not configured, skipping", addResp.StatusCode)
+		if addResp != nil && (addResp.StatusCode() == 404 || addResp.StatusCode() == 400) {
+			t.Skipf("CreateHistoryNoteV1 returned %d - Jamf Protect not configured, skipping", addResp.StatusCode())
 			return
 		}
 		require.NoError(t, err)
@@ -108,7 +108,7 @@ func TestAcceptance_JamfProtect_list_history_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 1, "Should have at least the note we just added")
 
 	acc.LogTestSuccess(t, "ListHistoryV1: found %d history entries", result.TotalCount)
@@ -125,15 +125,15 @@ func TestAcceptance_JamfProtect_list_plans_v1(t *testing.T) {
 
 	result, resp, err := svc.ListPlansV1(ctx, nil)
 	if err != nil {
-		if resp != nil && (resp.StatusCode == 404 || resp.StatusCode == 400) {
-			t.Logf("ListPlansV1 returned %d - Jamf Protect not configured, skipping", resp.StatusCode)
+		if resp != nil && (resp.StatusCode() == 404 || resp.StatusCode() == 400) {
+			t.Logf("ListPlansV1 returned %d - Jamf Protect not configured, skipping", resp.StatusCode())
 			return
 		}
 		require.NoError(t, err)
 	}
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 
 	acc.LogTestSuccess(t, "ListPlansV1: found %d plans", result.TotalCount)

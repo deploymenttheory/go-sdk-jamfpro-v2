@@ -10,7 +10,9 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -23,7 +25,7 @@ type registeredResponse struct {
 // ComputerGroupsMock is a test double implementing interfaces.HTTPClient.
 type ComputerGroupsMock struct {
 	responses     map[string]registeredResponse
-	logger         *zap.Logger
+	logger        *zap.Logger
 	LastRSQLQuery map[string]string
 }
 
@@ -81,18 +83,13 @@ func (m *ComputerGroupsMock) registerError(method, path string, statusCode int, 
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body, errMsg: errMsg}
 }
 
-func (m *ComputerGroupsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		return nil, fmt.Errorf("ComputerGroupsMock: no response registered for %s %s", method, path)
 	}
 
-	resp := &interfaces.Response{
-		StatusCode: r.statusCode,
-		Status:     fmt.Sprintf("%d", r.statusCode),
-		Headers:    http.Header{"Content-Type": {"application/json"}},
-		Body:       r.rawBody,
-	}
+	resp := shared.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
@@ -202,61 +199,62 @@ func (m *ComputerGroupsMock) RegisterStaticDeleteNotFoundErrorMock() {
 	m.registerError("DELETE", "/api/v2/computer-groups/static-groups/999", 404, "error_not_found.json")
 }
 
-func (m *ComputerGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)
 }
 
-func (m *ComputerGroupsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerGroupsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerGroupsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerGroupsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
-func (m *ComputerGroupsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
-func (m *ComputerGroupsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *ComputerGroupsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *ComputerGroupsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *ComputerGroupsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
-func (m *ComputerGroupsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *ComputerGroupsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
 	if mergePage != nil {
+		bodyBytes := resp.Bytes()
 		var pageResp struct {
 			Results json.RawMessage `json:"results"`
 		}
-		if err := json.Unmarshal(resp.Body, &pageResp); err != nil {
+		if err := json.Unmarshal(bodyBytes, &pageResp); err != nil {
 			return resp, fmt.Errorf("failed to extract results field: %w", err)
 		}
 		if err := mergePage(pageResp.Results); err != nil {
@@ -265,7 +263,6 @@ func (m *ComputerGroupsMock) GetPaginated(ctx context.Context, path string, rsql
 	}
 	return resp, nil
 }
-
 
 func (m *ComputerGroupsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
 func (m *ComputerGroupsMock) InvalidateToken() error                    { return nil }

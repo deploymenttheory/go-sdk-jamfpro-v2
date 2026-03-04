@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,48 +17,48 @@ type (
 		// List returns all file share distribution points.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified file share distribution point by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyid
-		GetByID(ctx context.Context, id int) (*ResourceFileShareDistributionPoint, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceFileShareDistributionPoint, *resty.Response, error)
 
 		// GetByName returns the specified file share distribution point by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyname
-		GetByName(ctx context.Context, name string) (*ResourceFileShareDistributionPoint, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceFileShareDistributionPoint, *resty.Response, error)
 
 		// Create creates a new file share distribution point.
 		//
 		// Returns the created distribution point ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdistributionpointbyid
-		Create(ctx context.Context, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByID updates the specified file share distribution point by ID.
 		//
 		// Returns the updated distribution point ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyid
-		UpdateByID(ctx context.Context, id int, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByName updates the specified file share distribution point by name.
 		//
 		// Returns the updated distribution point ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyname
-		UpdateByName(ctx context.Context, name string, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error)
 
 		// DeleteByID removes the specified file share distribution point by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedistributionpointbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified file share distribution point by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedistributionpointbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the file-share-distribution-points-related Classic API methods.
@@ -83,7 +84,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/distributionpoints
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointFileShareDistributionPoints
 
 	var out ListResponse
@@ -104,7 +105,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/distributionpoints/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceFileShareDistributionPoint, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceFileShareDistributionPoint, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("distribution point ID must be a positive integer")
 	}
@@ -129,7 +130,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceFileShareDistri
 // URL: GET /JSSResource/distributionpoints/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceFileShareDistributionPoint, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceFileShareDistributionPoint, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("distribution point name cannot be empty")
 	}
@@ -156,7 +157,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceFileShar
 // URL: POST /JSSResource/distributionpoints/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdistributionpointbyid
-func (s *Service) Create(ctx context.Context, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -186,7 +187,7 @@ func (s *Service) Create(ctx context.Context, req *RequestFileShareDistributionP
 // URL: PUT /JSSResource/distributionpoints/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("distribution point ID must be a positive integer")
 	}
@@ -219,7 +220,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestFileShareD
 // URL: PUT /JSSResource/distributionpoints/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("distribution point name cannot be empty")
 	}
@@ -250,7 +251,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestFil
 // URL: DELETE /JSSResource/distributionpoints/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedistributionpointbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("distribution point ID must be a positive integer")
 	}
@@ -272,7 +273,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // DeleteByName removes the specified file share distribution point by name.
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedistributionpointbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("distribution point name cannot be empty")
 	}

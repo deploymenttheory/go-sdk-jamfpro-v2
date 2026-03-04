@@ -23,7 +23,7 @@ func TestUnit_Reenrollment_Get_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "DELETE_EVERYTHING", result.FlushMdmQueue)
 	assert.False(t, result.FlushPolicyHistory)
 }
@@ -41,7 +41,7 @@ func TestUnit_Reenrollment_Update_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Reenrollment_Update_NilRequest(t *testing.T) {
@@ -62,7 +62,7 @@ func TestUnit_Reenrollment_GetHistory_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "Test note", result.Results[0].Note)
@@ -77,7 +77,7 @@ func TestUnit_Reenrollment_AddHistoryNotes_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "Acceptance test note", result.Note)
 }
 
@@ -118,7 +118,7 @@ func TestUnit_Reenrollment_ExportHistory_WithBody(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, data)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Reenrollment_ExportHistory_Success(t *testing.T) {
@@ -129,6 +129,6 @@ func TestUnit_Reenrollment_ExportHistory_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Greater(t, len(body), 0)
 }

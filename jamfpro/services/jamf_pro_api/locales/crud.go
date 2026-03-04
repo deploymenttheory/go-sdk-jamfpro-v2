@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// ListV1 returns all available locales (Get Locales).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
-		ListV1(ctx context.Context) ([]ResourceLocale, *interfaces.Response, error)
+		ListV1(ctx context.Context) ([]ResourceLocale, *resty.Response, error)
 	}
 
 	// Service handles communication with the locales-related methods of the Jamf Pro API.
@@ -39,7 +40,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV1 returns all available locales.
 // URL: GET /api/v1/locales
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
-func (s *Service) ListV1(ctx context.Context) ([]ResourceLocale, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context) ([]ResourceLocale, *resty.Response, error) {
 	var result []ResourceLocale
 
 	endpoint := EndpointLocalesV1

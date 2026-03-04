@@ -1,6 +1,10 @@
 package client
 
-import "resty.dev/v3"
+import (
+	"net/http"
+	
+	"resty.dev/v3"
+)
 
 // retryCondition is the resty AddRetryConditions callback.
 // It returns true when the request should be retried.
@@ -43,7 +47,7 @@ func retryCondition(resp *resty.Response, err error) bool {
 		return false
 	}
 
-	return isTransientStatusCode(code) || code == StatusTooManyRequests
+	return isTransientStatusCode(code) || code == http.StatusTooManyRequests
 }
 
 // isIdempotentMethod returns true for HTTP methods that are safe to retry:

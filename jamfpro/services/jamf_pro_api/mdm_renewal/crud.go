@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -18,23 +19,23 @@ type (
 		// Returns 204 No Content on success.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-mdm-renewal-device-common-details
-		UpdateDeviceCommonDetailsV1(ctx context.Context, request *RequestDeviceCommonDetailsUpdate) (*interfaces.Response, error)
+		UpdateDeviceCommonDetailsV1(ctx context.Context, request *RequestDeviceCommonDetailsUpdate) (*resty.Response, error)
 
 		// GetDeviceCommonDetailsV1 returns device common details for the given client management ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-device-common-details-clientmanagementid
-		GetDeviceCommonDetailsV1(ctx context.Context, clientManagementID string) (*DeviceCommonDetails, *interfaces.Response, error)
+		GetDeviceCommonDetailsV1(ctx context.Context, clientManagementID string) (*DeviceCommonDetails, *resty.Response, error)
 
 		// GetRenewalStrategiesV1 returns MDM renewal errors and strategies for the given client management ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-renewal-strategies-clientmanagementid
-		GetRenewalStrategiesV1(ctx context.Context, clientManagementID string) ([]RenewalErrorWithStrategies, *interfaces.Response, error)
+		GetRenewalStrategiesV1(ctx context.Context, clientManagementID string) ([]RenewalErrorWithStrategies, *resty.Response, error)
 
 		// DeleteRenewalStrategiesV1 deletes all renewal strategies and errors for the given client management ID.
 		// Returns 204 No Content on success.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mdm-renewal-renewal-strategies-clientmanagementid
-		DeleteRenewalStrategiesV1(ctx context.Context, clientManagementID string) (*interfaces.Response, error)
+		DeleteRenewalStrategiesV1(ctx context.Context, clientManagementID string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the MDM renewal-related methods of the Jamf Pro API.
@@ -59,7 +60,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: PATCH /api/v1/mdm-renewal/device-common-details
 // Body: RequestDeviceCommonDetailsUpdate (clientManagementId required in body)
 // Response: 204 No Content
-func (s *Service) UpdateDeviceCommonDetailsV1(ctx context.Context, request *RequestDeviceCommonDetailsUpdate) (*interfaces.Response, error) {
+func (s *Service) UpdateDeviceCommonDetailsV1(ctx context.Context, request *RequestDeviceCommonDetailsUpdate) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request is required")
 	}
@@ -84,7 +85,7 @@ func (s *Service) UpdateDeviceCommonDetailsV1(ctx context.Context, request *Requ
 
 // GetDeviceCommonDetailsV1 returns device common details for the given client management ID.
 // URL: GET /api/v1/mdm-renewal/device-common-details/{clientManagementId}
-func (s *Service) GetDeviceCommonDetailsV1(ctx context.Context, clientManagementID string) (*DeviceCommonDetails, *interfaces.Response, error) {
+func (s *Service) GetDeviceCommonDetailsV1(ctx context.Context, clientManagementID string) (*DeviceCommonDetails, *resty.Response, error) {
 	if clientManagementID == "" {
 		return nil, nil, fmt.Errorf("clientManagementId is required")
 	}
@@ -107,7 +108,7 @@ func (s *Service) GetDeviceCommonDetailsV1(ctx context.Context, clientManagement
 
 // GetRenewalStrategiesV1 returns MDM renewal errors and strategies for the given client management ID.
 // URL: GET /api/v1/mdm-renewal/renewal-strategies/{clientManagementId}
-func (s *Service) GetRenewalStrategiesV1(ctx context.Context, clientManagementID string) ([]RenewalErrorWithStrategies, *interfaces.Response, error) {
+func (s *Service) GetRenewalStrategiesV1(ctx context.Context, clientManagementID string) ([]RenewalErrorWithStrategies, *resty.Response, error) {
 	if clientManagementID == "" {
 		return nil, nil, fmt.Errorf("clientManagementId is required")
 	}
@@ -131,7 +132,7 @@ func (s *Service) GetRenewalStrategiesV1(ctx context.Context, clientManagementID
 // DeleteRenewalStrategiesV1 deletes all renewal strategies and errors for the given client management ID.
 // URL: DELETE /api/v1/mdm-renewal/renewal-strategies/{clientManagementId}
 // Response: 204 No Content
-func (s *Service) DeleteRenewalStrategiesV1(ctx context.Context, clientManagementID string) (*interfaces.Response, error) {
+func (s *Service) DeleteRenewalStrategiesV1(ctx context.Context, clientManagementID string) (*resty.Response, error) {
 	if clientManagementID == "" {
 		return nil, fmt.Errorf("clientManagementId is required")
 	}

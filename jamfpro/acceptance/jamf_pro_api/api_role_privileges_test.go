@@ -18,7 +18,7 @@ func TestAcceptance_APIRolePrivileges_list_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.Privileges)
 }
 
@@ -31,5 +31,5 @@ func TestAcceptance_APIRolePrivileges_search_by_name_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }

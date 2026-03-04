@@ -16,7 +16,7 @@ func TestUnit_PatchManagement_AcceptDisclaimerV2_Success(t *testing.T) {
 
 	resp, err := service.AcceptDisclaimerV2(context.Background())
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_PatchManagement_AcceptDisclaimerV2_Error(t *testing.T) {

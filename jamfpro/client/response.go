@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -36,33 +35,35 @@ func (t *Transport) validateResponse(resp *resty.Response, method, path string) 
 }
 
 // IsResponseSuccess returns true if the response status code is 2xx.
-func IsResponseSuccess(resp *interfaces.Response) bool {
+// Delegates to resty's native IsSuccess() method.
+func IsResponseSuccess(resp *resty.Response) bool {
 	if resp == nil {
 		return false
 	}
-	return resp.StatusCode >= 200 && resp.StatusCode < 300
+	return resp.IsSuccess()
 }
 
 // IsResponseError returns true if the response status code is 4xx or 5xx.
-func IsResponseError(resp *interfaces.Response) bool {
+// Delegates to resty's native IsError() method.
+func IsResponseError(resp *resty.Response) bool {
 	if resp == nil {
 		return false
 	}
-	return resp.StatusCode >= 400
+	return resp.IsError()
 }
 
 // GetResponseHeader returns a header value from the response by key.
-func GetResponseHeader(resp *interfaces.Response, key string) string {
-	if resp == nil || resp.Headers == nil {
+func GetResponseHeader(resp *resty.Response, key string) string {
+	if resp == nil {
 		return ""
 	}
-	return resp.Headers.Get(key)
+	return resp.Header().Get(key)
 }
 
 // GetResponseHeaders returns all headers from the response.
-func GetResponseHeaders(resp *interfaces.Response) http.Header {
+func GetResponseHeaders(resp *resty.Response) http.Header {
 	if resp == nil {
 		return make(http.Header)
 	}
-	return resp.Headers
+	return resp.Header()
 }

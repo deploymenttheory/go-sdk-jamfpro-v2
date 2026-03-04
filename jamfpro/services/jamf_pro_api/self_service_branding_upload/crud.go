@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,10 +18,10 @@ type (
 		// Upload uploads a branding image file (multipart/form-data, field "file").
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_self-service-branding-images
-		Upload(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceBrandingImage, *interfaces.Response, error)
+		Upload(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceBrandingImage, *resty.Response, error)
 
 		// UploadFromFile opens the file at filePath and uploads it via Upload.
-		UploadFromFile(ctx context.Context, filePath string) (*ResourceBrandingImage, *interfaces.Response, error)
+		UploadFromFile(ctx context.Context, filePath string) (*ResourceBrandingImage, *resty.Response, error)
 	}
 
 	// Service handles communication with the self-service branding images methods of the Jamf Pro API.
@@ -40,7 +41,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Upload uploads a branding image file (multipart/form-data, field "file").
 // URL: POST /api/self-service/branding/images
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_self-service-branding-images
-func (s *Service) Upload(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceBrandingImage, *interfaces.Response, error) {
+func (s *Service) Upload(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceBrandingImage, *resty.Response, error) {
 	if fileName == "" {
 		fileName = "branding.png"
 	}
@@ -54,7 +55,7 @@ func (s *Service) Upload(ctx context.Context, fileReader io.Reader, fileSize int
 }
 
 // UploadFromFile opens the file at filePath and uploads it via Upload.
-func (s *Service) UploadFromFile(ctx context.Context, filePath string) (*ResourceBrandingImage, *interfaces.Response, error) {
+func (s *Service) UploadFromFile(ctx context.Context, filePath string) (*ResourceBrandingImage, *resty.Response, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, nil, fmt.Errorf("open branding image file: %w", err)

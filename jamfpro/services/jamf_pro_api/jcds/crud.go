@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 // ServiceInterface defines the interface for Jamf Cloud Distribution Service (JCDS) operations.
@@ -29,14 +30,14 @@ type ServiceInterface interface {
 	// Returns metadata for all packages including filename, size, MD5, SHA3, and region.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files
-	GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *interfaces.Response, error)
+	GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *resty.Response, error)
 
 	// GetPackageURIByNameV1 retrieves the S3 URI for a specific package by name.
 	//
 	// Returns the S3 URI that can be used to access the package directly.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files-filename
-	GetPackageURIByNameV1(ctx context.Context, packageName string) (*ResponseJCDSFile, *interfaces.Response, error)
+	GetPackageURIByNameV1(ctx context.Context, packageName string) (*ResponseJCDSFile, *resty.Response, error)
 
 	// RenewCredentialsV1 obtains fresh AWS credentials for JCDS operations.
 	//
@@ -44,7 +45,7 @@ type ServiceInterface interface {
 	// that can be used to perform S3 operations on the JCDS bucket.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-renew-credentials
-	RenewCredentialsV1(ctx context.Context) (*ResourceJCDSUploadCredentials, *interfaces.Response, error)
+	RenewCredentialsV1(ctx context.Context) (*ResourceJCDSUploadCredentials, *resty.Response, error)
 
 	// CreatePackageV1 uploads a package file to JCDS using AWS S3.
 	//
@@ -61,7 +62,7 @@ type ServiceInterface interface {
 	// in Jamf Pro. Use the Packages service to register the package after upload.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-files
-	CreatePackageV1(ctx context.Context, filePath string) (*ResponseJCDSFile, *interfaces.Response, error)
+	CreatePackageV1(ctx context.Context, filePath string) (*ResponseJCDSFile, *resty.Response, error)
 
 	// DeletePackageV1 deletes a package file from JCDS using AWS S3.
 	//
@@ -77,7 +78,7 @@ type ServiceInterface interface {
 	// metadata from Jamf Pro. Use the Packages service to manage package records.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-files (for credentials)
-	DeletePackageV1(ctx context.Context, filePath string) (*interfaces.Response, error)
+	DeletePackageV1(ctx context.Context, filePath string) (*resty.Response, error)
 
 	// RefreshInventoryV1 triggers Jamf Pro to refresh its inventory of JCDS packages.
 	//
@@ -85,7 +86,7 @@ type ServiceInterface interface {
 	// to ensure Jamf Pro's package inventory is synchronized with S3.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-refresh-inventory
-	RefreshInventoryV1(ctx context.Context) (*interfaces.Response, error)
+	RefreshInventoryV1(ctx context.Context) (*resty.Response, error)
 }
 
 type (
@@ -107,7 +108,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetPackagesV1 retrieves a list of all files stored in JCDS.
 // URL: GET /api/v1/jcds/files
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files
-func (s *Service) GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *interfaces.Response, error) {
+func (s *Service) GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *resty.Response, error) {
 	endpoint := EndpointJCDSV1 + "/files"
 
 	headers := map[string]string{
@@ -126,7 +127,7 @@ func (s *Service) GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *inter
 // GetPackageURIByNameV1 retrieves the S3 URI for a specific package by name.
 // URL: GET /api/v1/jcds/files/{filename}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files-filename
-func (s *Service) GetPackageURIByNameV1(ctx context.Context, packageName string) (*ResponseJCDSFile, *interfaces.Response, error) {
+func (s *Service) GetPackageURIByNameV1(ctx context.Context, packageName string) (*ResponseJCDSFile, *resty.Response, error) {
 	if packageName == "" {
 		return nil, nil, fmt.Errorf("package name is required")
 	}
@@ -149,7 +150,7 @@ func (s *Service) GetPackageURIByNameV1(ctx context.Context, packageName string)
 // RenewCredentialsV1 obtains fresh AWS credentials for JCDS operations.
 // URL: POST /api/v1/jcds/renew-credentials
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-renew-credentials
-func (s *Service) RenewCredentialsV1(ctx context.Context) (*ResourceJCDSUploadCredentials, *interfaces.Response, error) {
+func (s *Service) RenewCredentialsV1(ctx context.Context) (*ResourceJCDSUploadCredentials, *resty.Response, error) {
 	endpoint := EndpointJCDSV1 + "/renew-credentials"
 
 	headers := map[string]string{
@@ -169,7 +170,7 @@ func (s *Service) RenewCredentialsV1(ctx context.Context) (*ResourceJCDSUploadCr
 // CreatePackageV1 uploads a package file to JCDS using AWS S3.
 // URL: POST /api/v1/jcds/files (for credentials) + AWS S3 upload
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-files
-func (s *Service) CreatePackageV1(ctx context.Context, filePath string) (*ResponseJCDSFile, *interfaces.Response, error) {
+func (s *Service) CreatePackageV1(ctx context.Context, filePath string) (*ResponseJCDSFile, *resty.Response, error) {
 	if filePath == "" {
 		return nil, nil, fmt.Errorf("file path is required")
 	}
@@ -253,7 +254,7 @@ func (s *Service) CreatePackageV1(ctx context.Context, filePath string) (*Respon
 // DeletePackageV1 deletes a package file from JCDS using AWS S3.
 // URL: POST /api/v1/jcds/files (for credentials) + AWS S3 delete
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-files
-func (s *Service) DeletePackageV1(ctx context.Context, filePath string) (*interfaces.Response, error) {
+func (s *Service) DeletePackageV1(ctx context.Context, filePath string) (*resty.Response, error) {
 	if filePath == "" {
 		return nil, fmt.Errorf("file path is required")
 	}
@@ -312,7 +313,7 @@ func (s *Service) DeletePackageV1(ctx context.Context, filePath string) (*interf
 // RefreshInventoryV1 triggers Jamf Pro to refresh its inventory of JCDS packages.
 // URL: POST /api/v1/jcds/refresh-inventory
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-refresh-inventory
-func (s *Service) RefreshInventoryV1(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) RefreshInventoryV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointJCDSV1 + "/refresh-inventory"
 
 	headers := map[string]string{

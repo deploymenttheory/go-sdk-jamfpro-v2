@@ -405,7 +405,7 @@ func TestUnit_PatchSoftwareTitleConfigurations_DeleteByIDV2_Success(t *testing.T
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // TestDeleteByIDV2_EmptyID tests deleting a patch software title configuration with empty ID.
@@ -444,7 +444,7 @@ func TestUnit_PatchSoftwareTitleConfigurations_DeleteByNameV2_Success(t *testing
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // TestDeleteByNameV2_EmptyName tests deleting a patch software title configuration with empty name.
@@ -533,7 +533,7 @@ func TestUnit_PatchSoftwareTitleConfigurations_AddToDashboardByIDV2_Success(t *t
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 // TestRemoveFromDashboardByIDV2_EmptyID tests removing from dashboard with empty ID.
@@ -570,7 +570,7 @@ func TestUnit_PatchSoftwareTitleConfigurations_RemoveFromDashboardByIDV2_Success
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 // TestGetDefinitionsByIDV2_EmptyID tests getting definitions with empty ID.

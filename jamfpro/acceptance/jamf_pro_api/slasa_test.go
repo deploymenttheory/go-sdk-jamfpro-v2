@@ -48,7 +48,7 @@ func TestAcceptance_SLASA_get_status_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, result.SLASAAcceptanceStatus)
 	assert.Contains(t, []string{"ACCEPTED", "NOT_ACCEPTED"}, result.SLASAAcceptanceStatus)
 }

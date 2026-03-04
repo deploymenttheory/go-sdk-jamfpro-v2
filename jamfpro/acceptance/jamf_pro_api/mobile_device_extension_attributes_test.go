@@ -7,10 +7,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 func uniqueNameMDEA(base string) string {
@@ -56,7 +56,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_list_with_rsql_filter(t *tes
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, ea := range list.Results {
@@ -110,13 +110,13 @@ func TestAcceptance_MobileDeviceExtensionAttributes_delete_multiple(t *testing.T
 	resp, err := svc.DeleteMobileDeviceExtensionAttributesByIDV1(ctx, &mobile_device_extension_attributes.DeleteMobileDeviceExtensionAttributesByIDRequest{
 		IDs: []string{c1.ID, c2.ID},
 	})
-	if err != nil && resp != nil && resp.StatusCode == 405 {
+	if err != nil && resp != nil && resp.StatusCode() == 405 {
 		t.Skip("Bulk delete endpoint not available (405 Method Not Allowed)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
-	acc.LogTestSuccess(t, "Bulk delete completed, status=%d", resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
+	acc.LogTestSuccess(t, "Bulk delete completed, status=%d", resp.StatusCode())
 }
 
 // =============================================================================
@@ -197,7 +197,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_lifecycle(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	eaID := created.ID
@@ -212,7 +212,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_lifecycle(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, r := range list.Results {
@@ -226,7 +226,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_lifecycle(t *testing.T) {
 
 	acc.LogTestStage(t, "GetByID", "Getting mobile device extension attribute by ID=%s", eaID)
 	var fetched *mobile_device_extension_attributes.ResourceMobileDeviceExtensionAttribute
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, eaID)
@@ -234,7 +234,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, eaID, fetched.ID)
 	assert.Equal(t, createReq.Name, fetched.Name)
 
@@ -250,7 +250,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, eaID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 202}, updateResp.StatusCode)
+	assert.Contains(t, []int{200, 202}, updateResp.StatusCode())
 	assert.Equal(t, eaID, updated.ID)
 
 	verified, _, err := svc.GetByIDV1(ctx, eaID)
@@ -262,5 +262,5 @@ func TestAcceptance_MobileDeviceExtensionAttributes_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx, eaID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 }

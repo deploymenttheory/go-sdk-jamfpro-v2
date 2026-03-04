@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -21,32 +22,32 @@ type (
 		// Returns current configuration including keystore details and service account info.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection
-		GetV1(ctx context.Context) (*ResourceGSXConnection, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceGSXConnection, *resty.Response, error)
 
 		// ReplaceV1 replaces the GSX connection settings via PUT.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-gsx-connection
-		ReplaceV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *interfaces.Response, error)
+		ReplaceV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *resty.Response, error)
 
 		// UpdateV1 updates the GSX connection settings via PATCH.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-gsx-connection
-		UpdateV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *interfaces.Response, error)
+		UpdateV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *resty.Response, error)
 
 		// GetHistoryV1 retrieves GSX connection history with optional sorting.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNoteV1 adds a history note to the GSX connection.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-gsx-connection-history
-		AddHistoryNoteV1(ctx context.Context, request *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *interfaces.Response, error)
+		AddHistoryNoteV1(ctx context.Context, request *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *resty.Response, error)
 
 		// TestV1 tests the functionality of the GSX connection.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-gsx-connection-test
-		TestV1(ctx context.Context) (*interfaces.Response, error)
+		TestV1(ctx context.Context) (*resty.Response, error)
 	}
 
 	// Service handles communication with the GSX connection-related methods of the Jamf Pro API.
@@ -66,7 +67,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 retrieves the GSX connection settings.
 // URL: GET /api/v1/gsx-connection
 // https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection
-func (s *Service) GetV1(ctx context.Context) (*ResourceGSXConnection, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceGSXConnection, *resty.Response, error) {
 	var result ResourceGSXConnection
 
 	endpoint := EndpointGSXConnectionV1
@@ -85,7 +86,7 @@ func (s *Service) GetV1(ctx context.Context) (*ResourceGSXConnection, *interface
 // ReplaceV1 replaces the GSX connection settings via PUT.
 // URL: PUT /api/v1/gsx-connection
 // https://developer.jamf.com/jamf-pro/reference/put_v1-gsx-connection
-func (s *Service) ReplaceV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *interfaces.Response, error) {
+func (s *Service) ReplaceV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -109,7 +110,7 @@ func (s *Service) ReplaceV1(ctx context.Context, request *ResourceGSXConnection)
 // UpdateV1 updates the GSX connection settings via PATCH.
 // URL: PATCH /api/v1/gsx-connection
 // https://developer.jamf.com/jamf-pro/reference/patch_v1-gsx-connection
-func (s *Service) UpdateV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *interfaces.Response, error) {
+func (s *Service) UpdateV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -133,7 +134,7 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceGSXConnection) 
 // GetHistoryV1 retrieves GSX connection history with optional sorting.
 // URL: GET /api/v1/gsx-connection/history
 // https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection-history
-func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/history", EndpointGSXConnectionV1)
 
 	var result HistoryResponse
@@ -161,7 +162,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 // AddHistoryNoteV1 adds a history note to the GSX connection.
 // URL: POST /api/v1/gsx-connection/history
 // https://developer.jamf.com/jamf-pro/reference/post_v1-gsx-connection-history
-func (s *Service) AddHistoryNoteV1(ctx context.Context, request *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *interfaces.Response, error) {
+func (s *Service) AddHistoryNoteV1(ctx context.Context, request *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -186,7 +187,7 @@ func (s *Service) AddHistoryNoteV1(ctx context.Context, request *AddHistoryNoteR
 // TestV1 tests the functionality of the GSX connection.
 // URL: POST /api/v1/gsx-connection/test
 // https://developer.jamf.com/jamf-pro/reference/post_v1-gsx-connection-test
-func (s *Service) TestV1(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) TestV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/test", EndpointGSXConnectionV1)
 
 	headers := map[string]string{

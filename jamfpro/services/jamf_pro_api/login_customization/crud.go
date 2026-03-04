@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,12 +17,12 @@ type (
 		// GetV1 returns the current login customization settings (Get Login Customization).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
-		GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *resty.Response, error)
 
 		// UpdateV1 updates login customization settings (Update Login Customization / PUT).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-login-customization
-		UpdateV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *interfaces.Response, error)
+		UpdateV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *resty.Response, error)
 	}
 
 	// Service handles communication with the login customization-related methods of the Jamf Pro API.
@@ -45,7 +46,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 returns the current login customization settings.
 // URL: GET /api/v1/login-customization
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
-func (s *Service) GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *resty.Response, error) {
 	var result ResourceLoginCustomizationV1
 
 	endpoint := EndpointLoginCustomizationV1
@@ -65,7 +66,7 @@ func (s *Service) GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *in
 // UpdateV1 updates login customization settings.
 // URL: PUT /api/v1/login-customization
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-login-customization
-func (s *Service) UpdateV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *interfaces.Response, error) {
+func (s *Service) UpdateV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

@@ -183,7 +183,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
 	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 7. UpdateByName (back to original name)
@@ -218,7 +218,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
 	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
-	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode)
+	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
 	// 8. GetByID — verify revert
@@ -245,7 +245,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 
 	deleteResp, err := svc.DeleteByID(ctx8, appID)
 	if err != nil {
-		if deleteResp != nil && deleteResp.StatusCode == 400 {
+		if deleteResp != nil && deleteResp.StatusCode() == 400 {
 			acc.LogTestSuccess(t, "Mobile device application ID=%d deleted (API returned 400)", appID)
 		} else {
 			require.NoError(t, err, "DeleteByID should not return an error")
@@ -311,7 +311,7 @@ func TestAcceptance_MobileDeviceApplications_delete_by_name(t *testing.T) {
 
 	deleteResp, err := svc.DeleteByName(ctx2, appName)
 	if err != nil {
-		if deleteResp != nil && deleteResp.StatusCode == 400 {
+		if deleteResp != nil && deleteResp.StatusCode() == 400 {
 			acc.LogTestSuccess(t, "Mobile device application %q deleted by name (API returned 400)", appName)
 		} else {
 			require.NoError(t, err, "DeleteByName should not return an error")

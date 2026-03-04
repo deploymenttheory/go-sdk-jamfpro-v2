@@ -56,7 +56,7 @@ func TestAcceptance_ClassicLdap_get_mappings_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	acc.LogTestSuccess(t, "GetMappingsByIDV1: ldapServerID=%s userObjectMapUsernameTo=%q",
 		ldapID, result.UserObjectMapUsernameTo)

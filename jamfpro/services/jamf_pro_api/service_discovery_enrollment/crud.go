@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,13 +18,13 @@ type (
 		// GetV1 returns all well-known service discovery settings (Get Service Discovery Enrollment Well-Known Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
-		GetV1(ctx context.Context) (*WellKnownSettingsResponseV1, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*WellKnownSettingsResponseV1, *resty.Response, error)
 
 		// UpdateV1 updates the enrollment types for all organizations (Update Service Discovery Enrollment Well-Known Settings).
 		// Returns nil for the result when the API responds with 204 No Content.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-service-discovery-enrollment-well-known-settings
-		UpdateV1(ctx context.Context, request *WellKnownSettingsResponseV1) (*WellKnownSettingsResponseV1, *interfaces.Response, error)
+		UpdateV1(ctx context.Context, request *WellKnownSettingsResponseV1) (*WellKnownSettingsResponseV1, *resty.Response, error)
 	}
 
 	// Service handles communication with the service discovery enrollment-related methods of the Jamf Pro API.
@@ -47,7 +48,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 returns all well-known service discovery settings.
 // URL: GET /api/v1/service-discovery-enrollment/well-known-settings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
-func (s *Service) GetV1(ctx context.Context) (*WellKnownSettingsResponseV1, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*WellKnownSettingsResponseV1, *resty.Response, error) {
 	var result WellKnownSettingsResponseV1
 
 	endpoint := EndpointWellKnownSettingsV1
@@ -67,7 +68,7 @@ func (s *Service) GetV1(ctx context.Context) (*WellKnownSettingsResponseV1, *int
 // UpdateV1 updates the enrollment types for all organizations.
 // URL: PUT /api/v1/service-discovery-enrollment/well-known-settings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-service-discovery-enrollment-well-known-settings
-func (s *Service) UpdateV1(ctx context.Context, request *WellKnownSettingsResponseV1) (*WellKnownSettingsResponseV1, *interfaces.Response, error) {
+func (s *Service) UpdateV1(ctx context.Context, request *WellKnownSettingsResponseV1) (*WellKnownSettingsResponseV1, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -84,7 +85,7 @@ func (s *Service) UpdateV1(ctx context.Context, request *WellKnownSettingsRespon
 		return nil, resp, err
 	}
 
-	if resp != nil && resp.StatusCode == http.StatusNoContent {
+	if resp != nil && resp.StatusCode() == http.StatusNoContent {
 		return nil, resp, nil
 	}
 

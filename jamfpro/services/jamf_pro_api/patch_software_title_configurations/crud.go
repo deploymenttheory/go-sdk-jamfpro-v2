@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -19,103 +20,103 @@ type (
 		// This endpoint retrieves all patch software title configurations with their details.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations
-		ListV2(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		ListV2(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV2 returns the patch software title configuration by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id
-		GetByIDV2(ctx context.Context, id string) (*ResourcePatchSoftwareTitleConfiguration, *interfaces.Response, error)
+		GetByIDV2(ctx context.Context, id string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
 
 		// GetByNameV2 returns the patch software title configuration by display name.
 		//
 		// This is a convenience method that calls ListV2 and filters by DisplayName.
-		GetByNameV2(ctx context.Context, name string) (*ResourcePatchSoftwareTitleConfiguration, *interfaces.Response, error)
+		GetByNameV2(ctx context.Context, name string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
 
 		// CreateV2 creates a new patch software title configuration.
 		// Returns CreateResponse (id, href).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations
-		CreateV2(ctx context.Context, config *ResourcePatchSoftwareTitleConfiguration) (*CreateResponse, *interfaces.Response, error)
+		CreateV2(ctx context.Context, config *ResourcePatchSoftwareTitleConfiguration) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV2 updates the patch software title configuration by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-patch-software-title-configurations-id
-		UpdateByIDV2(ctx context.Context, id string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *interfaces.Response, error)
+		UpdateByIDV2(ctx context.Context, id string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
 
 		// UpdateByNameV2 updates the patch software title configuration by display name.
-		UpdateByNameV2(ctx context.Context, name string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *interfaces.Response, error)
+		UpdateByNameV2(ctx context.Context, name string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
 
 		// DeleteByIDV2 deletes the patch software title configuration by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-software-title-configurations-id
-		DeleteByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteByNameV2 deletes the patch software title configuration by display name.
-		DeleteByNameV2(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByNameV2(ctx context.Context, name string) (*resty.Response, error)
 
 		// GetDashboardStatusByIDV2 returns whether the software title configuration is on the dashboard.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-dashboard
-		GetDashboardStatusByIDV2(ctx context.Context, id string) (*ResourceDashboardStatus, *interfaces.Response, error)
+		GetDashboardStatusByIDV2(ctx context.Context, id string) (*ResourceDashboardStatus, *resty.Response, error)
 
 		// AddToDashboardByIDV2 adds the software title configuration to the dashboard.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations-id-dashboard
-		AddToDashboardByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
+		AddToDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error)
 
 		// RemoveFromDashboardByIDV2 removes the software title configuration from the dashboard.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-software-title-configurations-id-dashboard
-		RemoveFromDashboardByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
+		RemoveFromDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error)
 
 		// GetDefinitionsByIDV2 returns paginated patch software title definitions.
 		//
 		// Query params: page, page-size, sort, filter (RSQL).
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-definitions
-		GetDefinitionsByIDV2(ctx context.Context, id string, query map[string]string) (*DefinitionsResponse, *interfaces.Response, error)
+		GetDefinitionsByIDV2(ctx context.Context, id string, query map[string]string) (*DefinitionsResponse, *resty.Response, error)
 
 		// GetDependenciesByIDV2 returns paginated dependencies (smart groups) for the configuration.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-dependencies
-		GetDependenciesByIDV2(ctx context.Context, id string, query map[string]string) (*DependenciesResponse, *interfaces.Response, error)
+		GetDependenciesByIDV2(ctx context.Context, id string, query map[string]string) (*DependenciesResponse, *resty.Response, error)
 
 		// ExportReportByIDV2 exports patch reporting data as CSV bytes.
 		//
 		// Query params: filter (RSQL), columns-to-export (comma-separated column names).
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-export-report
-		ExportReportByIDV2(ctx context.Context, id string, query map[string]string) ([]byte, *interfaces.Response, error)
+		ExportReportByIDV2(ctx context.Context, id string, query map[string]string) ([]byte, *resty.Response, error)
 
 		// GetExtensionAttributesByIDV2 returns extension attributes for the software title.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-extension-attributes
-		GetExtensionAttributesByIDV2(ctx context.Context, id string) ([]ResourceExtensionAttribute, *interfaces.Response, error)
+		GetExtensionAttributesByIDV2(ctx context.Context, id string) ([]ResourceExtensionAttribute, *resty.Response, error)
 
 		// GetPatchReportByIDV2 returns paginated patch report for the configuration.
 		//
 		// Query params: page, page-size, sort, filter (RSQL).
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-patch-report
-		GetPatchReportByIDV2(ctx context.Context, id string, query map[string]string) (*PatchReportResponse, *interfaces.Response, error)
+		GetPatchReportByIDV2(ctx context.Context, id string, query map[string]string) (*PatchReportResponse, *resty.Response, error)
 
 		// GetPatchSummaryByIDV2 returns the patch summary for the configuration.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-patch-summary
-		GetPatchSummaryByIDV2(ctx context.Context, id string) (*ResourcePatchSummary, *interfaces.Response, error)
+		GetPatchSummaryByIDV2(ctx context.Context, id string) (*ResourcePatchSummary, *resty.Response, error)
 
 		// GetHistoryByIDV2 returns paginated history for the configuration.
 		//
 		// Query params: page, page-size, sort, filter (RSQL).
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-history
-		GetHistoryByIDV2(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryByIDV2(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNoteByIDV2 adds a history note to the configuration.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations-id-history
-		AddHistoryNoteByIDV2(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *interfaces.Response, error)
+		AddHistoryNoteByIDV2(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *resty.Response, error)
 
 		// GetPatchVersionsByIDV2 returns patch versions for the configuration.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-patch-summary-versions
-		GetPatchVersionsByIDV2(ctx context.Context, id string) ([]ResourcePatchVersion, *interfaces.Response, error)
+		GetPatchVersionsByIDV2(ctx context.Context, id string) ([]ResourcePatchVersion, *resty.Response, error)
 	}
 
 	// Service handles communication with the patch software title configurations-related methods of the Jamf Pro API.
@@ -140,7 +141,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // ListV2 returns all patch software title configurations.
 // URL: GET /api/v2/patch-software-title-configurations
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations
-func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV2(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointPatchSoftwareTitleConfigurationsV2
@@ -161,7 +162,7 @@ func (s *Service) ListV2(ctx context.Context) (*ListResponse, *interfaces.Respon
 // GetByIDV2 returns the patch software title configuration by ID.
 // URL: GET /api/v2/patch-software-title-configurations/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id
-func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourcePatchSoftwareTitleConfiguration, *interfaces.Response, error) {
+func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -184,7 +185,7 @@ func (s *Service) GetByIDV2(ctx context.Context, id string) (*ResourcePatchSoftw
 
 // GetByNameV2 returns the patch software title configuration by display name.
 // This is a convenience method that calls ListV2 and filters by DisplayName.
-func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourcePatchSoftwareTitleConfiguration, *interfaces.Response, error) {
+func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -206,7 +207,7 @@ func (s *Service) GetByNameV2(ctx context.Context, name string) (*ResourcePatchS
 // CreateV2 creates a new patch software title configuration.
 // URL: POST /api/v2/patch-software-title-configurations
 // https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations
-func (s *Service) CreateV2(ctx context.Context, config *ResourcePatchSoftwareTitleConfiguration) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV2(ctx context.Context, config *ResourcePatchSoftwareTitleConfiguration) (*CreateResponse, *resty.Response, error) {
 	if config == nil {
 		return nil, nil, fmt.Errorf("config is required")
 	}
@@ -239,7 +240,7 @@ func (s *Service) CreateV2(ctx context.Context, config *ResourcePatchSoftwareTit
 // UpdateByIDV2 updates the patch software title configuration by ID.
 // URL: PATCH /api/v2/patch-software-title-configurations/{id}
 // https://developer.jamf.com/jamf-pro/reference/patch_v2-patch-software-title-configurations-id
-func (s *Service) UpdateByIDV2(ctx context.Context, id string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV2(ctx context.Context, id string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -266,7 +267,7 @@ func (s *Service) UpdateByIDV2(ctx context.Context, id string, config *ResourceP
 }
 
 // UpdateByNameV2 updates the patch software title configuration by display name.
-func (s *Service) UpdateByNameV2(ctx context.Context, name string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *interfaces.Response, error) {
+func (s *Service) UpdateByNameV2(ctx context.Context, name string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -282,7 +283,7 @@ func (s *Service) UpdateByNameV2(ctx context.Context, name string, config *Resou
 // DeleteByIDV2 deletes the patch software title configuration by ID.
 // URL: DELETE /api/v2/patch-software-title-configurations/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-software-title-configurations-id
-func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -302,7 +303,7 @@ func (s *Service) DeleteByIDV2(ctx context.Context, id string) (*interfaces.Resp
 }
 
 // DeleteByNameV2 deletes the patch software title configuration by display name.
-func (s *Service) DeleteByNameV2(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByNameV2(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("name is required")
 	}
@@ -321,7 +322,7 @@ func (s *Service) DeleteByNameV2(ctx context.Context, name string) (*interfaces.
 
 // GetDashboardStatusByIDV2 returns whether the software title configuration is on the dashboard.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/dashboard
-func (s *Service) GetDashboardStatusByIDV2(ctx context.Context, id string) (*ResourceDashboardStatus, *interfaces.Response, error) {
+func (s *Service) GetDashboardStatusByIDV2(ctx context.Context, id string) (*ResourceDashboardStatus, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -344,7 +345,7 @@ func (s *Service) GetDashboardStatusByIDV2(ctx context.Context, id string) (*Res
 
 // AddToDashboardByIDV2 adds the software title configuration to the dashboard.
 // URL: POST /api/v2/patch-software-title-configurations/{id}/dashboard
-func (s *Service) AddToDashboardByIDV2(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) AddToDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -366,7 +367,7 @@ func (s *Service) AddToDashboardByIDV2(ctx context.Context, id string) (*interfa
 
 // RemoveFromDashboardByIDV2 removes the software title configuration from the dashboard.
 // URL: DELETE /api/v2/patch-software-title-configurations/{id}/dashboard
-func (s *Service) RemoveFromDashboardByIDV2(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) RemoveFromDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -391,7 +392,7 @@ func (s *Service) RemoveFromDashboardByIDV2(ctx context.Context, id string) (*in
 
 // GetDefinitionsByIDV2 returns paginated patch software title definitions.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/definitions
-func (s *Service) GetDefinitionsByIDV2(ctx context.Context, id string, query map[string]string) (*DefinitionsResponse, *interfaces.Response, error) {
+func (s *Service) GetDefinitionsByIDV2(ctx context.Context, id string, query map[string]string) (*DefinitionsResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -423,8 +424,9 @@ func (s *Service) GetDefinitionsByIDV2(ctx context.Context, id string, query map
 	var rawResp struct {
 		TotalCount int `json:"totalCount"`
 	}
-	if resp != nil && resp.Body != nil {
-		_ = json.Unmarshal(resp.Body, &rawResp)
+	bodyBytes := resp.Bytes()
+	if resp != nil && len(bodyBytes) > 0 {
+		_ = json.Unmarshal(bodyBytes, &rawResp)
 		result.TotalCount = rawResp.TotalCount
 	}
 	if result.TotalCount == 0 && len(result.Results) > 0 {
@@ -435,7 +437,7 @@ func (s *Service) GetDefinitionsByIDV2(ctx context.Context, id string, query map
 
 // GetDependenciesByIDV2 returns paginated dependencies (smart groups) for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/dependencies
-func (s *Service) GetDependenciesByIDV2(ctx context.Context, id string, query map[string]string) (*DependenciesResponse, *interfaces.Response, error) {
+func (s *Service) GetDependenciesByIDV2(ctx context.Context, id string, query map[string]string) (*DependenciesResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -466,8 +468,9 @@ func (s *Service) GetDependenciesByIDV2(ctx context.Context, id string, query ma
 	var rawResp struct {
 		TotalCount int `json:"totalCount"`
 	}
-	if resp != nil && resp.Body != nil {
-		_ = json.Unmarshal(resp.Body, &rawResp)
+	bodyBytes := resp.Bytes()
+	if resp != nil && len(bodyBytes) > 0 {
+		_ = json.Unmarshal(bodyBytes, &rawResp)
 		result.TotalCount = rawResp.TotalCount
 	}
 	if result.TotalCount == 0 && len(result.Results) > 0 {
@@ -478,7 +481,7 @@ func (s *Service) GetDependenciesByIDV2(ctx context.Context, id string, query ma
 
 // ExportReportByIDV2 exports patch reporting data as CSV bytes.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/export-report
-func (s *Service) ExportReportByIDV2(ctx context.Context, id string, query map[string]string) ([]byte, *interfaces.Response, error) {
+func (s *Service) ExportReportByIDV2(ctx context.Context, id string, query map[string]string) ([]byte, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -499,7 +502,7 @@ func (s *Service) ExportReportByIDV2(ctx context.Context, id string, query map[s
 
 // GetExtensionAttributesByIDV2 returns extension attributes for the software title.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/extension-attributes
-func (s *Service) GetExtensionAttributesByIDV2(ctx context.Context, id string) ([]ResourceExtensionAttribute, *interfaces.Response, error) {
+func (s *Service) GetExtensionAttributesByIDV2(ctx context.Context, id string) ([]ResourceExtensionAttribute, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -522,7 +525,7 @@ func (s *Service) GetExtensionAttributesByIDV2(ctx context.Context, id string) (
 
 // GetPatchReportByIDV2 returns paginated patch report for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/patch-report
-func (s *Service) GetPatchReportByIDV2(ctx context.Context, id string, query map[string]string) (*PatchReportResponse, *interfaces.Response, error) {
+func (s *Service) GetPatchReportByIDV2(ctx context.Context, id string, query map[string]string) (*PatchReportResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -553,8 +556,9 @@ func (s *Service) GetPatchReportByIDV2(ctx context.Context, id string, query map
 	var rawResp struct {
 		TotalCount int `json:"totalCount"`
 	}
-	if resp != nil && resp.Body != nil {
-		_ = json.Unmarshal(resp.Body, &rawResp)
+	bodyBytes := resp.Bytes()
+	if resp != nil && len(bodyBytes) > 0 {
+		_ = json.Unmarshal(bodyBytes, &rawResp)
 		result.TotalCount = rawResp.TotalCount
 	}
 	if result.TotalCount == 0 && len(result.Results) > 0 {
@@ -565,7 +569,7 @@ func (s *Service) GetPatchReportByIDV2(ctx context.Context, id string, query map
 
 // GetPatchSummaryByIDV2 returns the patch summary for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/patch-summary
-func (s *Service) GetPatchSummaryByIDV2(ctx context.Context, id string) (*ResourcePatchSummary, *interfaces.Response, error) {
+func (s *Service) GetPatchSummaryByIDV2(ctx context.Context, id string) (*ResourcePatchSummary, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -592,7 +596,7 @@ func (s *Service) GetPatchSummaryByIDV2(ctx context.Context, id string) (*Resour
 
 // GetHistoryByIDV2 returns paginated history for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/history
-func (s *Service) GetHistoryByIDV2(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryByIDV2(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -623,8 +627,9 @@ func (s *Service) GetHistoryByIDV2(ctx context.Context, id string, query map[str
 	var rawResp struct {
 		TotalCount int `json:"totalCount"`
 	}
-	if resp != nil && resp.Body != nil {
-		_ = json.Unmarshal(resp.Body, &rawResp)
+	bodyBytes := resp.Bytes()
+	if resp != nil && len(bodyBytes) > 0 {
+		_ = json.Unmarshal(bodyBytes, &rawResp)
 		result.TotalCount = rawResp.TotalCount
 	}
 	if result.TotalCount == 0 && len(result.Results) > 0 {
@@ -635,7 +640,7 @@ func (s *Service) GetHistoryByIDV2(ctx context.Context, id string, query map[str
 
 // AddHistoryNoteByIDV2 adds a history note to the configuration.
 // URL: POST /api/v2/patch-software-title-configurations/{id}/history
-func (s *Service) AddHistoryNoteByIDV2(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *interfaces.Response, error) {
+func (s *Service) AddHistoryNoteByIDV2(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -669,7 +674,7 @@ func (s *Service) AddHistoryNoteByIDV2(ctx context.Context, id string, request *
 
 // GetPatchVersionsByIDV2 returns patch versions for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/patch-summary/versions
-func (s *Service) GetPatchVersionsByIDV2(ctx context.Context, id string) ([]ResourcePatchVersion, *interfaces.Response, error) {
+func (s *Service) GetPatchVersionsByIDV2(ctx context.Context, id string) ([]ResourcePatchVersion, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

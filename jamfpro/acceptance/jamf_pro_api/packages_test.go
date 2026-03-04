@@ -11,10 +11,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -169,7 +169,7 @@ func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	created, createResp, err := svc.CreateAndUpload(ctx, pkgPath, createReq)
 	require.NoError(t, err, "CreateAndUpload should not return an error")
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "create may return 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "create may return 200 or 201")
 	assert.NotEmpty(t, created.ID)
 
 	packageID := created.ID
@@ -191,7 +191,7 @@ func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, p := range list.Results {
@@ -208,7 +208,7 @@ func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "GetByID", "Getting package by ID=%s", packageID)
 
 	var fetched *packages.ResourcePackage
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, packageID)
@@ -216,7 +216,7 @@ func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, packageID, fetched.ID)
 	assert.Equal(t, createReq.PackageName, fetched.PackageName)
 	acc.LogTestSuccess(t, "GetByID: packageName=%q", fetched.PackageName)
@@ -244,7 +244,7 @@ func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, packageID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	assert.Equal(t, updateReq.PackageName, updated.PackageName)
 	acc.LogTestSuccess(t, "Package updated: ID=%s", packageID)
 
@@ -263,13 +263,13 @@ func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	noteResp, err := svc.AddHistoryNotesV1(ctx, packageID, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, noteResp)
-	assert.Equal(t, 201, noteResp.StatusCode)
+	assert.Equal(t, 201, noteResp.StatusCode())
 	acc.LogTestSuccess(t, "History note added")
 
 	history, histResp, err := svc.GetHistoryV1(ctx, packageID, nil)
 	require.NoError(t, err)
 	require.NotNil(t, history)
-	assert.Equal(t, 200, histResp.StatusCode)
+	assert.Equal(t, 200, histResp.StatusCode())
 	assert.GreaterOrEqual(t, history.TotalCount, 1)
 	acc.LogTestSuccess(t, "History entries: %d", history.TotalCount)
 
@@ -279,7 +279,7 @@ func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx, packageID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Package ID=%s deleted", packageID)
 }
 
@@ -330,7 +330,7 @@ func TestAcceptance_Packages_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, p := range list.Results {
@@ -389,12 +389,12 @@ func TestAcceptance_Packages_delete_multiple(t *testing.T) {
 
 	bulkReq := &packages.DeletePackagesByIDRequest{IDs: ids}
 	bulkResp, err := svc.DeletePackagesByIDV1(ctx, bulkReq)
-	if err != nil && bulkResp != nil && bulkResp.StatusCode == 500 {
+	if err != nil && bulkResp != nil && bulkResp.StatusCode() == 500 {
 		t.Skip("Bulk delete endpoint returned 500 (API issue)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, bulkResp)
-	assert.Equal(t, 204, bulkResp.StatusCode)
+	assert.Equal(t, 204, bulkResp.StatusCode())
 	acc.LogTestSuccess(t, "Bulk delete of %d packages succeeded", len(ids))
 
 	for _, id := range ids {
@@ -544,7 +544,7 @@ func TestAcceptance_Packages_update_and_upload(t *testing.T) {
 	created, createResp, err := svc.CreateAndUpload(ctx, initialPkgPath, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	packageID := created.ID
@@ -596,7 +596,7 @@ func TestAcceptance_Packages_update_and_upload(t *testing.T) {
 	updated, updateResp, err := svc.UpdateAndUpload(ctx, packageID, updatedPkgPath, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	assert.Equal(t, updateReq.PackageName, updated.PackageName)
 	assert.Equal(t, 20, updated.Priority)
 	acc.LogTestSuccess(t, "Package updated and new file uploaded with ID=%s", packageID)

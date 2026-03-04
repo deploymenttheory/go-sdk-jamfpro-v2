@@ -10,7 +10,9 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 type registeredResponse struct {
@@ -107,58 +109,59 @@ func (m *SmartMobileDeviceGroupsMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v2/mobile-device-groups/smart-groups/999", 404, "error_not_found.json")
 }
 
-func (m *SmartMobileDeviceGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)
 }
 
-func (m *SmartMobileDeviceGroupsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *SmartMobileDeviceGroupsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *SmartMobileDeviceGroupsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *SmartMobileDeviceGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *SmartMobileDeviceGroupsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
-func (m *SmartMobileDeviceGroupsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
-func (m *SmartMobileDeviceGroupsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *SmartMobileDeviceGroupsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *SmartMobileDeviceGroupsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *SmartMobileDeviceGroupsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
-func (m *SmartMobileDeviceGroupsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
-	if mergePage != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
+	bodyBytes := resp.Bytes()
+	if mergePage != nil && len(bodyBytes) > 0 {
+		if err := mergePage(bodyBytes); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
@@ -166,22 +169,18 @@ func (m *SmartMobileDeviceGroupsMock) GetPaginated(ctx context.Context, path str
 }
 
 func (m *SmartMobileDeviceGroupsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
-func (m *SmartMobileDeviceGroupsMock) InvalidateToken() error                      { return nil }
-func (m *SmartMobileDeviceGroupsMock) KeepAliveToken() error                        { return nil }
-func (m *SmartMobileDeviceGroupsMock) GetLogger() *zap.Logger                       { return m.logger }
+func (m *SmartMobileDeviceGroupsMock) InvalidateToken() error                    { return nil }
+func (m *SmartMobileDeviceGroupsMock) KeepAliveToken() error                     { return nil }
+func (m *SmartMobileDeviceGroupsMock) GetLogger() *zap.Logger                    { return m.logger }
 
-func (m *SmartMobileDeviceGroupsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *SmartMobileDeviceGroupsMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		return nil, fmt.Errorf("SmartMobileDeviceGroupsMock: no response registered for %s %s", method, path)
 	}
 
-	resp := &interfaces.Response{
-		StatusCode: r.statusCode,
-		Status:     fmt.Sprintf("%d", r.statusCode),
-		Headers:    http.Header{"Content-Type": {"application/json"}},
-		Body:       r.rawBody,
-	}
+	headers := http.Header{"Content-Type": {"application/json"}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

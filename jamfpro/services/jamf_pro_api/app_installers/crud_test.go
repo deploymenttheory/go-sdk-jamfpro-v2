@@ -20,7 +20,7 @@ func TestUnit_AppInstallers_ListTitlesV1_Success(t *testing.T) {
 	result, resp, err := svc.ListTitlesV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	require.Equal(t, "1", result.Results[0].ID)
@@ -31,7 +31,7 @@ func TestUnit_AppInstallers_GetTitleByIDV1_Success(t *testing.T) {
 	result, resp, err := svc.GetTitleByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "1", result.ID)
 	require.Equal(t, "Example App", result.TitleName)
 }
@@ -41,7 +41,7 @@ func TestUnit_AppInstallers_ListDeploymentsV1_Success(t *testing.T) {
 	result, resp, err := svc.ListDeploymentsV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, 1, result.TotalCount)
 }
 
@@ -50,7 +50,7 @@ func TestUnit_AppInstallers_GetDeploymentByIDV1_Success(t *testing.T) {
 	result, resp, err := svc.GetDeploymentByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "1", result.ID)
 }
 
@@ -60,7 +60,7 @@ func TestUnit_AppInstallers_CreateDeploymentV1_Success(t *testing.T) {
 	result, resp, err := svc.CreateDeploymentV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 201, resp.StatusCode)
+	require.Equal(t, 201, resp.StatusCode())
 	require.Equal(t, "2", result.ID)
 }
 
@@ -69,7 +69,7 @@ func TestUnit_AppInstallers_DeleteDeploymentByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteDeploymentByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Equal(t, 204, resp.StatusCode)
+	require.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_AppInstallers_UpdateDeploymentByIDV1_Success(t *testing.T) {
@@ -79,7 +79,7 @@ func TestUnit_AppInstallers_UpdateDeploymentByIDV1_Success(t *testing.T) {
 	result, resp, err := svc.UpdateDeploymentByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "1", result.ID)
 	require.Equal(t, "Example Deployment", result.Name)
 }

@@ -8,6 +8,9 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"resty.dev/v3"
+
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 )
@@ -100,7 +103,7 @@ func (m *MacOSConfigProfileCustomSettingsMock) RegisterCreateErrorMock() {
 	}
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "GET " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -114,10 +117,10 @@ func (m *MacOSConfigProfileCustomSettingsMock) Get(ctx context.Context, path str
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "POST " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -131,22 +134,22 @@ func (m *MacOSConfigProfileCustomSettingsMock) Post(ctx context.Context, path st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, body, headers, result)
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PUT " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -160,10 +163,10 @@ func (m *MacOSConfigProfileCustomSettingsMock) Put(ctx context.Context, path str
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PATCH " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -177,10 +180,10 @@ func (m *MacOSConfigProfileCustomSettingsMock) Patch(ctx context.Context, path s
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "DELETE " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -194,14 +197,14 @@ func (m *MacOSConfigProfileCustomSettingsMock) Delete(ctx context.Context, path 
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Delete(ctx, path, nil, headers, result)
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	key := "GET " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -210,10 +213,10 @@ func (m *MacOSConfigProfileCustomSettingsMock) GetBytes(ctx context.Context, pat
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return &interfaces.Response{StatusCode: resp.statusCode, Headers: http.Header{}, Body: resp.rawBody}, resp.rawBody, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in MacOSConfigProfileCustomSettingsMock")
 }
 

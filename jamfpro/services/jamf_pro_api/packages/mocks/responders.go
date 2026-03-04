@@ -11,7 +11,9 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -80,18 +82,14 @@ func (m *PackagesMock) registerError(method, path string, statusCode int, fixtur
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body, errMsg: errMsg}
 }
 
-func (m *PackagesMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		return nil, fmt.Errorf("PackagesMock: no response registered for %s %s", method, path)
 	}
 
-	resp := &interfaces.Response{
-		StatusCode: r.statusCode,
-		Status:     fmt.Sprintf("%d", r.statusCode),
-		Headers:    http.Header{"Content-Type": {"application/json"}},
-		Body:       r.rawBody,
-	}
+	headers := http.Header{"Content-Type": {"application/json"}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
@@ -211,62 +209,63 @@ func (m *PackagesMock) RegisterAPIError(method, path string, statusCode int, err
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: []byte(`{}`), errMsg: errMsg}
 }
 
-func (m *PackagesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)
 }
 
-func (m *PackagesMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *PackagesMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *PackagesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *PackagesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *PackagesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
-func (m *PackagesMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
-func (m *PackagesMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *PackagesMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *PackagesMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *PackagesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *PackagesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
-func (m *PackagesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *PackagesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
-	if mergePage != nil && len(resp.Body) > 0 {
+	bodyBytes := resp.Bytes()
+	if mergePage != nil && len(bodyBytes) > 0 {
 		var page struct {
 			Results json.RawMessage `json:"results"`
 		}
-		if err := json.Unmarshal(resp.Body, &page); err != nil {
+		if err := json.Unmarshal(bodyBytes, &page); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 		if err := mergePage(page.Results); err != nil {
@@ -278,5 +277,5 @@ func (m *PackagesMock) GetPaginated(ctx context.Context, path string, rsqlQuery 
 
 func (m *PackagesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
 func (m *PackagesMock) InvalidateToken() error                    { return nil }
-func (m *PackagesMock) KeepAliveToken() error                      { return nil }
-func (m *PackagesMock) GetLogger() *zap.Logger                     { return m.logger }
+func (m *PackagesMock) KeepAliveToken() error                     { return nil }
+func (m *PackagesMock) GetLogger() *zap.Logger                    { return m.logger }

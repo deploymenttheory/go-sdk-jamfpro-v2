@@ -10,7 +10,9 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 type registeredResponse struct {
@@ -83,12 +85,13 @@ func (m *DistributionPointMock) RegisterHistoryInvalidMock() {
 	m.register("GET", "/api/v1/distribution-points/1/history", 200, "validate_history_invalid.json")
 }
 
-func (m *DistributionPointMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		return nil, fmt.Errorf("DistributionPointMock: no response for %s %s", method, path)
 	}
-	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	headers := http.Header{"Content-Type": {"application/json"}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
@@ -108,57 +111,54 @@ func loadMockResponse(filename string) ([]byte, error) {
 	return os.ReadFile(filepath.Join(dir, "mocks", filename))
 }
 
-func (m *DistributionPointMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
 }
-func (m *DistributionPointMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *DistributionPointMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *DistributionPointMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *DistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *DistributionPointMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
-func (m *DistributionPointMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
-func (m *DistributionPointMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
-func (m *DistributionPointMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *DistributionPointMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
-func (m *DistributionPointMock) GetBytes(ctx context.Context, path string, q map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *DistributionPointMock) GetBytes(ctx context.Context, path string, q map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
-func (m *DistributionPointMock) GetPaginated(ctx context.Context, path string, q map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *DistributionPointMock) GetPaginated(ctx context.Context, path string, q map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
-	if mergePage != nil && len(resp.Body) > 0 {
-		// Extract "results" field from the response body before calling mergePage
-		// to match the behavior of the real GetPaginated implementation
+	bodyBytes := resp.Bytes()
+	if mergePage != nil && len(bodyBytes) > 0 {
 		var pageResp struct {
 			TotalCount int             `json:"totalCount"`
 			Results    json.RawMessage `json:"results"`
 		}
-		if err := json.Unmarshal(resp.Body, &pageResp); err != nil {
+		if err := json.Unmarshal(bodyBytes, &pageResp); err != nil {
 			return resp, fmt.Errorf("unmarshal page response: %w", err)
 		}
-		
-		// Pass only the "results" array to mergePage, matching real API behavior
 		if err := mergePage(pageResp.Results); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}

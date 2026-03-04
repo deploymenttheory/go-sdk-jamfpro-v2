@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 // ServiceInterface defines the interface for Jamf Protect operations.
@@ -22,14 +23,14 @@ type ServiceInterface interface {
 	// and auto-install settings.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect
-	GetSettingsV1(ctx context.Context) (*ResourceJamfProtectSettings, *interfaces.Response, error)
+	GetSettingsV1(ctx context.Context) (*ResourceJamfProtectSettings, *resty.Response, error)
 
 	// UpdateSettingsV1 updates Jamf Protect integration settings.
 	//
 	// Allows modification of settings such as auto-install configuration.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-jamf-protect
-	UpdateSettingsV1(ctx context.Context, request *RequestJamfProtectSettings) (*ResourceJamfProtectSettings, *interfaces.Response, error)
+	UpdateSettingsV1(ctx context.Context, request *RequestJamfProtectSettings) (*ResourceJamfProtectSettings, *resty.Response, error)
 
 	// RegisterV1 registers a new Jamf Protect integration.
 	//
@@ -37,7 +38,7 @@ type ServiceInterface interface {
 	// client ID, and password credentials.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-register
-	RegisterV1(ctx context.Context, request *RequestJamfProtectRegistration) (*ResourceJamfProtectSettings, *interfaces.Response, error)
+	RegisterV1(ctx context.Context, request *RequestJamfProtectRegistration) (*ResourceJamfProtectSettings, *resty.Response, error)
 
 	// SyncPlansV1 synchronizes Jamf Protect plans from the Protect server.
 	//
@@ -45,7 +46,7 @@ type ServiceInterface interface {
 	// Returns 204 No Content on success.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-plans-sync
-	SyncPlansV1(ctx context.Context) (*interfaces.Response, error)
+	SyncPlansV1(ctx context.Context) (*resty.Response, error)
 
 	// CreateIntegrationV1 creates a complete Jamf Protect integration.
 	//
@@ -54,7 +55,7 @@ type ServiceInterface interface {
 	//
 	// This is a convenience method that combines RegisterV1, UpdateSettingsV1,
 	// and SyncPlansV1 operations.
-	CreateIntegrationV1(ctx context.Context, registration *RequestJamfProtectRegistration, autoInstall bool) (*ResourceJamfProtectSettings, *interfaces.Response, error)
+	CreateIntegrationV1(ctx context.Context, registration *RequestJamfProtectRegistration, autoInstall bool) (*ResourceJamfProtectSettings, *resty.Response, error)
 
 	// ListDeploymentTasksV1 retrieves deployment tasks for a specific deployment.
 	//
@@ -62,7 +63,7 @@ type ServiceInterface interface {
 	// and associated computer information. Supports filtering via rsqlQuery.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect-deployments-id-tasks
-	ListDeploymentTasksV1(ctx context.Context, deploymentID string, rsqlQuery map[string]string) (*ListResponseJamfProtectDeploymentTasks, *interfaces.Response, error)
+	ListDeploymentTasksV1(ctx context.Context, deploymentID string, rsqlQuery map[string]string) (*ListResponseJamfProtectDeploymentTasks, *resty.Response, error)
 
 	// RetryDeploymentTasksV1 retries failed deployment tasks for a deployment.
 	//
@@ -70,7 +71,7 @@ type ServiceInterface interface {
 	// Returns 204 No Content on success.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-deployments-id-tasks-retry
-	RetryDeploymentTasksV1(ctx context.Context, deploymentID string) (*interfaces.Response, error)
+	RetryDeploymentTasksV1(ctx context.Context, deploymentID string) (*resty.Response, error)
 
 	// ListHistoryV1 retrieves paginated Jamf Protect history entries.
 	//
@@ -78,14 +79,14 @@ type ServiceInterface interface {
 	// user, date, notes, and details. Supports filtering via rsqlQuery.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect-history
-	ListHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectHistory, *interfaces.Response, error)
+	ListHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectHistory, *resty.Response, error)
 
 	// CreateHistoryNoteV1 creates a new history note for Jamf Protect.
 	//
 	// Adds a new audit log entry with note and details to the Jamf Protect history.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-history
-	CreateHistoryNoteV1(ctx context.Context, request *RequestJamfProtectHistoryNote) (*ResourceJamfProtectHistoryCreate, *interfaces.Response, error)
+	CreateHistoryNoteV1(ctx context.Context, request *RequestJamfProtectHistoryNote) (*ResourceJamfProtectHistoryCreate, *resty.Response, error)
 
 	// ListPlansV1 retrieves paginated list of Jamf Protect plans.
 	//
@@ -93,14 +94,14 @@ type ServiceInterface interface {
 	// Supports filtering via rsqlQuery.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect-plans
-	ListPlansV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectPlans, *interfaces.Response, error)
+	ListPlansV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectPlans, *resty.Response, error)
 
 	// DeleteIntegrationV1 removes the Jamf Protect integration.
 	//
 	// Deletes the configured Jamf Protect integration and all associated settings.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-jamf-protect
-	DeleteIntegrationV1(ctx context.Context) (*interfaces.Response, error)
+	DeleteIntegrationV1(ctx context.Context) (*resty.Response, error)
 }
 
 type (
@@ -122,7 +123,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetSettingsV1 retrieves the current Jamf Protect integration settings.
 // URL: GET /api/v1/jamf-protect
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect
-func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfProtectSettings, *interfaces.Response, error) {
+func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfProtectSettings, *resty.Response, error) {
 	endpoint := EndpointJamfProtectV1
 
 	headers := map[string]string{
@@ -141,7 +142,7 @@ func (s *Service) GetSettingsV1(ctx context.Context) (*ResourceJamfProtectSettin
 // UpdateSettingsV1 updates Jamf Protect integration settings.
 // URL: PUT /api/v1/jamf-protect
 // https://developer.jamf.com/jamf-pro/reference/put_v1-jamf-protect
-func (s *Service) UpdateSettingsV1(ctx context.Context, request *RequestJamfProtectSettings) (*ResourceJamfProtectSettings, *interfaces.Response, error) {
+func (s *Service) UpdateSettingsV1(ctx context.Context, request *RequestJamfProtectSettings) (*ResourceJamfProtectSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("Jamf Protect settings request cannot be nil")
 	}
@@ -165,7 +166,7 @@ func (s *Service) UpdateSettingsV1(ctx context.Context, request *RequestJamfProt
 // RegisterV1 registers a new Jamf Protect integration.
 // URL: POST /api/v1/jamf-protect/register
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-register
-func (s *Service) RegisterV1(ctx context.Context, request *RequestJamfProtectRegistration) (*ResourceJamfProtectSettings, *interfaces.Response, error) {
+func (s *Service) RegisterV1(ctx context.Context, request *RequestJamfProtectRegistration) (*ResourceJamfProtectSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("Jamf Protect registration request cannot be nil")
 	}
@@ -189,7 +190,7 @@ func (s *Service) RegisterV1(ctx context.Context, request *RequestJamfProtectReg
 // SyncPlansV1 synchronizes Jamf Protect plans from the Protect server.
 // URL: POST /api/v1/jamf-protect/plans/sync
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-plans-sync
-func (s *Service) SyncPlansV1(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) SyncPlansV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointJamfProtectPlansV1 + "/sync"
 
 	headers := map[string]string{
@@ -208,7 +209,7 @@ func (s *Service) SyncPlansV1(ctx context.Context) (*interfaces.Response, error)
 // CreateIntegrationV1 creates a complete Jamf Protect integration.
 // This is a composite operation that performs registration, updates settings,
 // and syncs plans in a single call.
-func (s *Service) CreateIntegrationV1(ctx context.Context, registration *RequestJamfProtectRegistration, autoInstall bool) (*ResourceJamfProtectSettings, *interfaces.Response, error) {
+func (s *Service) CreateIntegrationV1(ctx context.Context, registration *RequestJamfProtectRegistration, autoInstall bool) (*ResourceJamfProtectSettings, *resty.Response, error) {
 	if registration == nil {
 		return nil, nil, fmt.Errorf("Jamf Protect registration request cannot be nil")
 	}
@@ -240,7 +241,7 @@ func (s *Service) CreateIntegrationV1(ctx context.Context, registration *Request
 // ListDeploymentTasksV1 retrieves deployment tasks for a specific deployment.
 // URL: GET /api/v1/jamf-protect/deployments/{id}/tasks
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect-deployments-id-tasks
-func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string, rsqlQuery map[string]string) (*ListResponseJamfProtectDeploymentTasks, *interfaces.Response, error) {
+func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string, rsqlQuery map[string]string) (*ListResponseJamfProtectDeploymentTasks, *resty.Response, error) {
 	if deploymentID == "" {
 		return nil, nil, fmt.Errorf("deployment ID is required")
 	}
@@ -272,7 +273,7 @@ func (s *Service) ListDeploymentTasksV1(ctx context.Context, deploymentID string
 // RetryDeploymentTasksV1 retries failed deployment tasks for a deployment.
 // URL: POST /api/v1/jamf-protect/deployments/{id}/tasks/retry
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-deployments-id-tasks-retry
-func (s *Service) RetryDeploymentTasksV1(ctx context.Context, deploymentID string) (*interfaces.Response, error) {
+func (s *Service) RetryDeploymentTasksV1(ctx context.Context, deploymentID string) (*resty.Response, error) {
 	if deploymentID == "" {
 		return nil, fmt.Errorf("deployment ID is required")
 	}
@@ -295,7 +296,7 @@ func (s *Service) RetryDeploymentTasksV1(ctx context.Context, deploymentID strin
 // ListHistoryV1 retrieves paginated Jamf Protect history entries.
 // URL: GET /api/v1/jamf-protect/history
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect-history
-func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectHistory, *interfaces.Response, error) {
+func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectHistory, *resty.Response, error) {
 	endpoint := EndpointJamfProtectHistoryV1
 
 	var result ListResponseJamfProtectHistory
@@ -324,7 +325,7 @@ func (s *Service) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string
 // CreateHistoryNoteV1 creates a new history note for Jamf Protect.
 // URL: POST /api/v1/jamf-protect/history
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-history
-func (s *Service) CreateHistoryNoteV1(ctx context.Context, request *RequestJamfProtectHistoryNote) (*ResourceJamfProtectHistoryCreate, *interfaces.Response, error) {
+func (s *Service) CreateHistoryNoteV1(ctx context.Context, request *RequestJamfProtectHistoryNote) (*ResourceJamfProtectHistoryCreate, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("Jamf Protect history note request cannot be nil")
 	}
@@ -348,7 +349,7 @@ func (s *Service) CreateHistoryNoteV1(ctx context.Context, request *RequestJamfP
 // ListPlansV1 retrieves paginated list of Jamf Protect plans.
 // URL: GET /api/v1/jamf-protect/plans
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect-plans
-func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectPlans, *interfaces.Response, error) {
+func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectPlans, *resty.Response, error) {
 	endpoint := EndpointJamfProtectPlansV1
 
 	var result ListResponseJamfProtectPlans
@@ -376,7 +377,7 @@ func (s *Service) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) 
 // DeleteIntegrationV1 removes the Jamf Protect integration.
 // URL: DELETE /api/v1/jamf-protect
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-jamf-protect
-func (s *Service) DeleteIntegrationV1(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) DeleteIntegrationV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointJamfProtectV1
 
 	headers := map[string]string{

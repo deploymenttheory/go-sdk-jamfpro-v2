@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -19,14 +20,14 @@ type (
 		// GET /api/v1/jamf-package?application={protect|connect}
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-package
-		ListV1(ctx context.Context, application string) (ListV1Response, *interfaces.Response, error)
+		ListV1(ctx context.Context, application string) (ListV1Response, *resty.Response, error)
 
 		// GetV2 returns the package object for the given application (protect or connect).
 		//
 		// GET /api/v2/jamf-package?application={protect|connect}
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-package
-		GetV2(ctx context.Context, application string) (*ResourceJamfPackageV2, *interfaces.Response, error)
+		GetV2(ctx context.Context, application string) (*ResourceJamfPackageV2, *resty.Response, error)
 	}
 
 	// Service handles communication with the Jamf package-related methods of the Jamf Pro API.
@@ -59,7 +60,7 @@ func validateApplication(application string) error {
 // ListV1 returns an array of packages for the given application (protect or connect).
 // URL: GET /api/v1/jamf-package?application={protect|connect}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-package
-func (s *Service) ListV1(ctx context.Context, application string) (ListV1Response, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, application string) (ListV1Response, *resty.Response, error) {
 	if err := validateApplication(application); err != nil {
 		return nil, nil, fmt.Errorf("list jamf packages: %w", err)
 	}
@@ -85,7 +86,7 @@ func (s *Service) ListV1(ctx context.Context, application string) (ListV1Respons
 // GetV2 returns the package object for the given application (protect or connect).
 // URL: GET /api/v2/jamf-package?application={protect|connect}
 // https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-package
-func (s *Service) GetV2(ctx context.Context, application string) (*ResourceJamfPackageV2, *interfaces.Response, error) {
+func (s *Service) GetV2(ctx context.Context, application string) (*ResourceJamfPackageV2, *resty.Response, error) {
 	if err := validateApplication(application); err != nil {
 		return nil, nil, fmt.Errorf("get jamf package: %w", err)
 	}

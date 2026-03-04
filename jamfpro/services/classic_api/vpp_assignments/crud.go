@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,27 +17,27 @@ type (
 		// List returns all VPP assignments.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignments
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified VPP assignment by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignmentbyid
-		GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
 
 		// Create creates a new VPP assignment.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createvppassignmentbyid
-		Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByID updates the specified VPP assignment by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatevppassignmentbyid
-		UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
 
 		// DeleteByID removes the specified VPP assignment by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletevppassignmentbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 	}
 
 	// Service handles communication with the VPP assignments-related Classic API methods.
@@ -63,7 +64,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/vppassignments
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignments
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointVPPAssignments
 
 	var out ListResponse
@@ -85,7 +86,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/vppassignments/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignmentbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("VPP assignment ID must be a positive integer")
 	}
@@ -111,7 +112,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*Resource, *interfaces.R
 // URL: POST /JSSResource/vppassignments/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createvppassignmentbyid
-func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -142,7 +143,7 @@ func (s *Service) Create(ctx context.Context, req *Resource) (*CreateUpdateRespo
 // URL: PUT /JSSResource/vppassignments/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatevppassignmentbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("VPP assignment ID must be a positive integer")
 	}
@@ -176,7 +177,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *Resource) (*Creat
 // URL: DELETE /JSSResource/vppassignments/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletevppassignmentbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("VPP assignment ID must be a positive integer")
 	}

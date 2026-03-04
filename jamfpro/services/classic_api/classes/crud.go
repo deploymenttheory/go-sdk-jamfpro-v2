@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,48 +17,48 @@ type (
 		// List returns all classes.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findclasses
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified class by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findclassesbyid
-		GetByID(ctx context.Context, id int) (*ResourceClass, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceClass, *resty.Response, error)
 
 		// GetByName returns the specified class by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findclassesbyname
-		GetByName(ctx context.Context, name string) (*ResourceClass, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceClass, *resty.Response, error)
 
 		// Create creates a new class.
 		//
 		// Returns the created class ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createclassbyid
-		Create(ctx context.Context, req *RequestClass) (*CreateUpdateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestClass) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByID updates the specified class by ID.
 		//
 		// Returns the updated class ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateclassbyid
-		UpdateByID(ctx context.Context, id int, req *RequestClass) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestClass) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByName updates the specified class by name.
 		//
 		// Returns the updated class ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateclassbyname
-		UpdateByName(ctx context.Context, name string, req *RequestClass) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestClass) (*CreateUpdateResponse, *resty.Response, error)
 
 		// DeleteByID removes the specified class by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteclassbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified class by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteclassbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the classes-related Classic API methods.
@@ -82,7 +83,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // List returns all classes.
 // URL: GET /JSSResource/classes
 // https://developer.jamf.com/jamf-pro/reference/findclasses
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicClasses
@@ -103,7 +104,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // GetByID returns the specified class by ID.
 // URL: GET /JSSResource/classes/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findclassesbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceClass, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceClass, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("class ID must be a positive integer")
 	}
@@ -128,7 +129,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceClass, *interfa
 // GetByName returns the specified class by name.
 // URL: GET /JSSResource/classes/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findclassesbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceClass, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceClass, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("class name is required")
 	}
@@ -154,7 +155,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceClass, *
 // URL: POST /JSSResource/classes/id/0
 // Returns the created class ID only.
 // https://developer.jamf.com/jamf-pro/reference/createclassbyid
-func (s *Service) Create(ctx context.Context, req *RequestClass) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestClass) (*CreateUpdateResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -180,7 +181,7 @@ func (s *Service) Create(ctx context.Context, req *RequestClass) (*CreateUpdateR
 // URL: PUT /JSSResource/classes/id/{id}
 // Returns the updated class ID only.
 // https://developer.jamf.com/jamf-pro/reference/updateclassbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestClass) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestClass) (*CreateUpdateResponse, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("class ID must be a positive integer")
 	}
@@ -209,7 +210,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestClass) (*C
 // URL: PUT /JSSResource/classes/name/{name}
 // Returns the updated class ID only.
 // https://developer.jamf.com/jamf-pro/reference/updateclassbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestClass) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestClass) (*CreateUpdateResponse, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("class name is required")
 	}
@@ -237,7 +238,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestCla
 // DeleteByID removes the specified class by ID.
 // URL: DELETE /JSSResource/classes/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleteclassbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("class ID must be a positive integer")
 	}
@@ -260,7 +261,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // DeleteByName removes the specified class by name.
 // URL: DELETE /JSSResource/classes/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deleteclassbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("class name is required")
 	}

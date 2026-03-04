@@ -27,7 +27,7 @@ func TestUnit_Venafi_Create_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, result.ID)
 	assert.Equal(t, "/api/v1/pki/venafi/1", result.Href)
 }
@@ -56,7 +56,7 @@ func TestUnit_Venafi_GetByID_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Venafi Certificate Authority", result.Name)
 	assert.Equal(t, "localhost:9443", result.ProxyAddress)
@@ -92,7 +92,7 @@ func TestUnit_Venafi_UpdateByID_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Venafi Certificate Authority", result.Name)
 }
 
@@ -135,7 +135,7 @@ func TestUnit_Venafi_DeleteByID_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Venafi_DeleteByID_EmptyID(t *testing.T) {
@@ -161,7 +161,7 @@ func TestUnit_Venafi_GetConnectionStatus_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Successfully connected", result.Status)
 }
 
@@ -189,7 +189,7 @@ func TestUnit_Venafi_GetDependentProfiles_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "Test Configuration Profile", result.Results[0].Name)
@@ -220,7 +220,7 @@ func TestUnit_Venafi_GetHistory_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	assert.Len(t, result.Results, 1)
 	assert.Equal(t, "admin", result.Results[0].Username)
@@ -255,7 +255,7 @@ func TestUnit_Venafi_AddHistoryNote_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, result.ID)
 	assert.Equal(t, "/api/v1/pki/venafi/1/history/2", result.Href)
 }
@@ -299,7 +299,7 @@ func TestUnit_Venafi_GetJamfPublicKey_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, data)
 }
 
@@ -327,7 +327,7 @@ func TestUnit_Venafi_GetProxyTrustStore_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, data)
 }
 
@@ -355,7 +355,7 @@ func TestUnit_Venafi_RegenerateJamfPublicKeyByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Venafi_RegenerateJamfPublicKeyByIDV1_EmptyID(t *testing.T) {
@@ -382,7 +382,7 @@ func TestUnit_Venafi_UploadProxyTrustStoreByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_Venafi_UploadProxyTrustStoreByIDV1_EmptyID(t *testing.T) {
@@ -433,7 +433,7 @@ func TestUnit_Venafi_DeleteProxyTrustStoreByIDV1_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Venafi_DeleteProxyTrustStoreByIDV1_EmptyID(t *testing.T) {
@@ -460,7 +460,7 @@ func TestUnit_Venafi_GetHistory_WithQuery(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	assert.Len(t, result.Results, 1)
 }

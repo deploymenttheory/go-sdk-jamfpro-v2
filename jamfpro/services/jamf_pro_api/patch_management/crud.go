@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 // ServiceInterface defines the interface for Patch Management operations.
@@ -22,7 +23,7 @@ type ServiceInterface interface {
 	// Performs a POST with no request body and returns no response data.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-management-accept-disclaimer
-	AcceptDisclaimerV2(ctx context.Context) (*interfaces.Response, error)
+	AcceptDisclaimerV2(ctx context.Context) (*resty.Response, error)
 }
 
 type (
@@ -44,7 +45,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // AcceptDisclaimerV2 accepts the Patch Management disclaimer.
 // URL: POST /api/v2/patch-management-accept-disclaimer
 // https://developer.jamf.com/jamf-pro/reference/post_v2-patch-management-accept-disclaimer
-func (s *Service) AcceptDisclaimerV2(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) AcceptDisclaimerV2(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointPatchManagementAcceptDisclaimerV2
 
 	headers := map[string]string{

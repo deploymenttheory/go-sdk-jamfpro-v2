@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,39 +18,39 @@ type (
 		// GetV3 retrieves current Jamf SSO settings (Get SSO Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso
-		GetV3(ctx context.Context) (*ResourceSsoSettings, *interfaces.Response, error)
+		GetV3(ctx context.Context) (*ResourceSsoSettings, *resty.Response, error)
 
 		// UpdateV3 updates SSO settings (Update SSO Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-sso
-		UpdateV3(ctx context.Context, request *ResourceSsoSettings) (*ResourceSsoSettings, *interfaces.Response, error)
+		UpdateV3(ctx context.Context, request *ResourceSsoSettings) (*ResourceSsoSettings, *resty.Response, error)
 
 		// GetEnrollmentCustomizationDependenciesV3 retrieves SSO enrollment customization dependencies (Get SSO Enrollment Customization Dependencies).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-dependencies
-		GetEnrollmentCustomizationDependenciesV3(ctx context.Context) (*ResponseSsoEnrollmentCustomizationDependencies, *interfaces.Response, error)
+		GetEnrollmentCustomizationDependenciesV3(ctx context.Context) (*ResponseSsoEnrollmentCustomizationDependencies, *resty.Response, error)
 
 		// DisableV3 disables SSO (Disable SSO).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-disable
-		DisableV3(ctx context.Context) (*interfaces.Response, error)
+		DisableV3(ctx context.Context) (*resty.Response, error)
 
 		// GetHistoryV3 returns the history for SSO settings (Get SSO History).
 		//
 		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-history
-		GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*HistoryListResponse, *interfaces.Response, error)
+		GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error)
 
 		// AddHistoryNoteV3 adds a note to the history for SSO settings (Add SSO History Note).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-history
-		AddHistoryNoteV3(ctx context.Context, request *AddHistoryNoteRequest) (*CreateResponse, *interfaces.Response, error)
+		AddHistoryNoteV3(ctx context.Context, request *AddHistoryNoteRequest) (*CreateResponse, *resty.Response, error)
 
 		// DownloadMetadataV3 downloads the SAML metadata file (Download SAML Metadata).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-metadata-download
-		DownloadMetadataV3(ctx context.Context) ([]byte, *interfaces.Response, error)
+		DownloadMetadataV3(ctx context.Context) ([]byte, *resty.Response, error)
 	}
 
 	// Service handles communication with the SSO settings-related methods of the Jamf Pro API.
@@ -73,7 +74,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV3 retrieves current Jamf SSO settings.
 // URL: GET /api/v3/sso
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso
-func (s *Service) GetV3(ctx context.Context) (*ResourceSsoSettings, *interfaces.Response, error) {
+func (s *Service) GetV3(ctx context.Context) (*ResourceSsoSettings, *resty.Response, error) {
 	var result ResourceSsoSettings
 
 	endpoint := EndpointSsoV3
@@ -92,7 +93,7 @@ func (s *Service) GetV3(ctx context.Context) (*ResourceSsoSettings, *interfaces.
 // UpdateV3 updates SSO settings.
 // URL: PUT /api/v3/sso
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-sso
-func (s *Service) UpdateV3(ctx context.Context, request *ResourceSsoSettings) (*ResourceSsoSettings, *interfaces.Response, error) {
+func (s *Service) UpdateV3(ctx context.Context, request *ResourceSsoSettings) (*ResourceSsoSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -116,7 +117,7 @@ func (s *Service) UpdateV3(ctx context.Context, request *ResourceSsoSettings) (*
 // GetEnrollmentCustomizationDependenciesV3 retrieves SSO enrollment customization dependencies.
 // URL: GET /api/v3/sso/dependencies
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-dependencies
-func (s *Service) GetEnrollmentCustomizationDependenciesV3(ctx context.Context) (*ResponseSsoEnrollmentCustomizationDependencies, *interfaces.Response, error) {
+func (s *Service) GetEnrollmentCustomizationDependenciesV3(ctx context.Context) (*ResponseSsoEnrollmentCustomizationDependencies, *resty.Response, error) {
 	var result ResponseSsoEnrollmentCustomizationDependencies
 
 	endpoint := EndpointDependenciesV3
@@ -135,7 +136,7 @@ func (s *Service) GetEnrollmentCustomizationDependenciesV3(ctx context.Context) 
 // DisableV3 disables SSO.
 // URL: POST /api/v3/sso/disable
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-disable
-func (s *Service) DisableV3(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) DisableV3(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointDisableV3
 	headers := map[string]string{
 		"Accept":       mime.ApplicationJSON,
@@ -153,7 +154,7 @@ func (s *Service) DisableV3(ctx context.Context) (*interfaces.Response, error) {
 // GetHistoryV3 returns the history for SSO settings.
 // URL: GET /api/v3/sso/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-history
-func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*HistoryListResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error) {
 	var result HistoryListResponse
 
 	endpoint := EndpointHistoryV3
@@ -183,7 +184,7 @@ func (s *Service) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string)
 // AddHistoryNoteV3 adds a note to the history for SSO settings.
 // URL: POST /api/v3/sso/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-history
-func (s *Service) AddHistoryNoteV3(ctx context.Context, request *AddHistoryNoteRequest) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) AddHistoryNoteV3(ctx context.Context, request *AddHistoryNoteRequest) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -207,7 +208,7 @@ func (s *Service) AddHistoryNoteV3(ctx context.Context, request *AddHistoryNoteR
 // DownloadMetadataV3 downloads the SAML metadata file.
 // URL: GET /api/v3/sso/metadata/download
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-metadata-download
-func (s *Service) DownloadMetadataV3(ctx context.Context) ([]byte, *interfaces.Response, error) {
+func (s *Service) DownloadMetadataV3(ctx context.Context) ([]byte, *resty.Response, error) {
 	var result []byte
 
 	endpoint := EndpointMetadataDownloadV3

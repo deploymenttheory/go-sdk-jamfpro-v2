@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,24 +18,24 @@ type (
 		// GetV1 retrieves the current device communication settings (Get Device Communication Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings
-		GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *resty.Response, error)
 
 		// UpdateV1 updates the device communication settings (Update Device Communication Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-device-communication-settings
-		UpdateV1(ctx context.Context, request *ResourceDeviceCommunicationSettings) (*ResourceDeviceCommunicationSettings, *interfaces.Response, error)
+		UpdateV1(ctx context.Context, request *ResourceDeviceCommunicationSettings) (*ResourceDeviceCommunicationSettings, *resty.Response, error)
 
 		// GetHistoryV1 returns the history for the device communication settings.
 		//
 		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNotesV1 adds a note to the device communication settings history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-communication-settings-history
-		AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error)
+		AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error)
 	}
 
 	// Service handles communication with the device communication settings-related methods of the Jamf Pro API.
@@ -54,7 +55,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 retrieves the current device communication settings.
 // URL: GET /api/v1/device-communication-settings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings
-func (s *Service) GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *resty.Response, error) {
 	var result ResourceDeviceCommunicationSettings
 	endpoint := EndpointDeviceCommunicationSettingsV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON}
@@ -68,7 +69,7 @@ func (s *Service) GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettin
 // UpdateV1 updates the device communication settings.
 // URL: PUT /api/v1/device-communication-settings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-device-communication-settings
-func (s *Service) UpdateV1(ctx context.Context, request *ResourceDeviceCommunicationSettings) (*ResourceDeviceCommunicationSettings, *interfaces.Response, error) {
+func (s *Service) UpdateV1(ctx context.Context, request *ResourceDeviceCommunicationSettings) (*ResourceDeviceCommunicationSettings, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -86,7 +87,7 @@ func (s *Service) UpdateV1(ctx context.Context, request *ResourceDeviceCommunica
 // URL: GET /api/v1/device-communication-settings/history
 // Query params (optional): page, page-size, sort, filter (RSQL).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings-history
-func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	var result HistoryResponse
 
 	mergePage := func(pageData []byte) error {
@@ -113,7 +114,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string)
 // AddHistoryNotesV1 adds a note to the device communication settings history.
 // URL: POST /api/v1/device-communication-settings/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-communication-settings-history
-func (s *Service) AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error) {
+func (s *Service) AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

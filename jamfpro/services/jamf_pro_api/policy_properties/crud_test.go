@@ -21,7 +21,7 @@ func TestUnit_PolicyProperties_Get_Success(t *testing.T) {
 	result, resp, err := svc.Get(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.AllowNetworkStateChangeTriggers)
 }
 
@@ -34,7 +34,7 @@ func TestUnit_PolicyProperties_Update_Success(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_PolicyProperties_Update_NilRequest(t *testing.T) {

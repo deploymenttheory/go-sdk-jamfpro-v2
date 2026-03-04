@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,44 +18,44 @@ type (
 		// List returns all directory bindings.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddirectorybindings
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified directory binding by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddirectorybindingsbyid
-		GetByID(ctx context.Context, id int) (*ResourceDirectoryBinding, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceDirectoryBinding, *resty.Response, error)
 
 		// GetByName returns the specified directory binding by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddirectorybindingsbyname
-		GetByName(ctx context.Context, name string) (*ResourceDirectoryBinding, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceDirectoryBinding, *resty.Response, error)
 
 		// Create creates a new directory binding.
 		//
 		// Returns the created directory binding with its assigned ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdirectorybindingbyid
-		Create(ctx context.Context, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error)
 
 		// UpdateByID updates the specified directory binding by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedirectorybindingbyid
-		UpdateByID(ctx context.Context, id int, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error)
 
 		// UpdateByName updates the specified directory binding by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedirectorybindingbyname
-		UpdateByName(ctx context.Context, name string, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error)
 
 		// DeleteDirectoryBindingByID removes the specified directory binding by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedirectorybindingbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteDirectoryBindingByName removes the specified directory binding by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedirectorybindingbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the directory binding-related Classic API methods.
@@ -79,7 +80,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // List returns all directory bindings.
 // URL: GET /JSSResource/directorybindings
 // https://developer.jamf.com/jamf-pro/reference/findalldirectorybindings
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicDirectoryBindings
@@ -100,7 +101,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // GetByID returns the specified directory binding by ID.
 // URL: GET /JSSResource/directorybindings/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/finddirectorybindingsbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceDirectoryBinding, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceDirectoryBinding, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("directory binding ID must be a positive integer")
 	}
@@ -125,7 +126,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceDirectoryBindin
 // GetByName returns the specified directory binding by name.
 // URL: GET /JSSResource/directorybindings/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/finddirectorybindingsbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceDirectoryBinding, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceDirectoryBinding, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("directory binding name is required")
 	}
@@ -151,7 +152,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceDirector
 // URL: POST /JSSResource/directorybindings/id/0
 // Returns the created directory binding with its assigned ID.
 // https://developer.jamf.com/jamf-pro/reference/createdirectorybindingbyid
-func (s *Service) Create(ctx context.Context, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -176,7 +177,7 @@ func (s *Service) Create(ctx context.Context, req *RequestDirectoryBinding) (*Re
 // UpdateByID updates the specified directory binding by ID.
 // URL: PUT /JSSResource/directorybindings/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updatedirectorybindingbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("directory binding ID must be a positive integer")
 	}
@@ -204,7 +205,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestDirectoryB
 // UpdateByName updates the specified directory binding by name.
 // URL: PUT /JSSResource/directorybindings/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updatedirectorybindingbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("directory binding name is required")
 	}
@@ -232,7 +233,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestDir
 // DeleteByID removes the specified directory binding by ID.
 // URL: DELETE /JSSResource/directorybindings/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deletedirectorybindingbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("directory binding ID must be a positive integer")
 	}
@@ -255,7 +256,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // DeleteByName removes the specified directory binding by name.
 // URL: DELETE /JSSResource/directorybindings/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deletedirectorybindingbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("directory binding name is required")
 	}

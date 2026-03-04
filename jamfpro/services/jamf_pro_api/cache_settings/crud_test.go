@@ -28,7 +28,7 @@ func TestUnit_CacheSettings_GetV1_Success(t *testing.T) {
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "ehcache", result.CacheType)
 	assert.Equal(t, 3600, result.TimeToLiveSeconds)
 }
@@ -65,7 +65,7 @@ func TestUnit_CacheSettings_UpdateV1_Success(t *testing.T) {
 	result, resp, err := svc.UpdateV1(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_CacheSettings_UpdateV1_NoMock(t *testing.T) {

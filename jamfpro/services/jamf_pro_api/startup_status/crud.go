@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// GetV1 returns the Jamf Pro server startup status.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_startup-status
-		GetV1(ctx context.Context) (*ResourceStartupStatusV1, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*ResourceStartupStatusV1, *resty.Response, error)
 	}
 
 	// Service handles communication with the startup status-related methods of the Jamf Pro API.
@@ -39,7 +40,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 returns the Jamf Pro server startup status.
 // URL: GET /api/startup-status
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_startup-status
-func (s *Service) GetV1(ctx context.Context) (*ResourceStartupStatusV1, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*ResourceStartupStatusV1, *resty.Response, error) {
 	var result ResourceStartupStatusV1
 
 	endpoint := EndpointStartupStatus

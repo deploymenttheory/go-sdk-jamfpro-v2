@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,15 +18,15 @@ type (
 		// GetDeviceComplianceFeatureToggleV1 returns the enablement state of the device compliance feature for Conditional Access.
 		//
 		// Note: This endpoint is undocumented.
-		GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*ResourceDeviceComplianceStatus, *interfaces.Response, error)
+		GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*ResourceDeviceComplianceStatus, *resty.Response, error)
 
 		// GetDeviceComplianceInformationComputerV1 returns compliance information for a computer device.
 		// URL: GET /api/v1/conditional-access/device-compliance-information/computer/{deviceId}
-		GetDeviceComplianceInformationComputerV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *interfaces.Response, error)
+		GetDeviceComplianceInformationComputerV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *resty.Response, error)
 
 		// GetDeviceComplianceInformationMobileV1 returns compliance information for a mobile device.
 		// URL: GET /api/v1/conditional-access/device-compliance-information/mobile/{deviceId}
-		GetDeviceComplianceInformationMobileV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *interfaces.Response, error)
+		GetDeviceComplianceInformationMobileV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *resty.Response, error)
 	}
 
 	// Service handles communication with the Conditional Access-related methods of the Jamf Pro API.
@@ -43,7 +44,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetDeviceComplianceFeatureToggleV1 returns the enablement state of the device compliance feature for Conditional Access.
 // URL: GET /api/v1/conditional-access/device-compliance/feature-toggle
 // Note: This endpoint is undocumented.
-func (s *Service) GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*ResourceDeviceComplianceStatus, *interfaces.Response, error) {
+func (s *Service) GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*ResourceDeviceComplianceStatus, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/device-compliance/feature-toggle", EndpointConditionalAccessV1)
 
 	var result ResourceDeviceComplianceStatus
@@ -62,7 +63,7 @@ func (s *Service) GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*Reso
 
 // GetDeviceComplianceInformationComputerV1 returns compliance information for a computer device.
 // URL: GET /api/v1/conditional-access/device-compliance-information/computer/{deviceId}
-func (s *Service) GetDeviceComplianceInformationComputerV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *interfaces.Response, error) {
+func (s *Service) GetDeviceComplianceInformationComputerV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/device-compliance-information/computer/%s", EndpointConditionalAccessV1, deviceId)
 
 	var result []ResourceDeviceComplianceInfo
@@ -81,7 +82,7 @@ func (s *Service) GetDeviceComplianceInformationComputerV1(ctx context.Context, 
 
 // GetDeviceComplianceInformationMobileV1 returns compliance information for a mobile device.
 // URL: GET /api/v1/conditional-access/device-compliance-information/mobile/{deviceId}
-func (s *Service) GetDeviceComplianceInformationMobileV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *interfaces.Response, error) {
+func (s *Service) GetDeviceComplianceInformationMobileV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/device-compliance-information/mobile/%s", EndpointConditionalAccessV1, deviceId)
 
 	var result []ResourceDeviceComplianceInfo

@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -22,32 +23,32 @@ type (
 		// Note: page and page-size are managed internally; all pages are fetched automatically.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory
-		ListV3(ctx context.Context, rsqlQuery map[string]string) (*ResponseComputerInventoryList, *interfaces.Response, error)
+		ListV3(ctx context.Context, rsqlQuery map[string]string) (*ResponseComputerInventoryList, *resty.Response, error)
 
 		// CreateV3 creates a new computer inventory record (Create Computer Inventory record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-computers-inventory
-		CreateV3(ctx context.Context, request *ResourceComputerInventory) (*CreateComputerResponse, *interfaces.Response, error)
+		CreateV3(ctx context.Context, request *ResourceComputerInventory) (*CreateComputerResponse, *resty.Response, error)
 
 		// GetByIDV3 returns the specified computer inventory by ID (Get Computer Inventory by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id
-		GetByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *interfaces.Response, error)
+		GetByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *resty.Response, error)
 
 		// GetDetailByIDV3 returns all sections of a computer (Get all sections of a computer).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-detail-id
-		GetDetailByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *interfaces.Response, error)
+		GetDetailByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *resty.Response, error)
 
 		// UpdateByIDV3 updates the specified computer inventory by ID using merge-patch semantics (Update Computer Inventory).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v3-computers-inventory-detail-id
-		UpdateByIDV3(ctx context.Context, id string, request *ResourceComputerInventory) (*ResourceComputerInventory, *interfaces.Response, error)
+		UpdateByIDV3(ctx context.Context, id string, request *ResourceComputerInventory) (*ResourceComputerInventory, *resty.Response, error)
 
 		// DeleteByIDV3 removes the specified computer inventory by ID (Delete Computer Inventory).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-computers-inventory-id
-		DeleteByIDV3(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV3(ctx context.Context, id string) (*resty.Response, error)
 
 		// ListFileVaultV3 returns all FileVault inventory records using automatic pagination (Get FileVault Inventory).
 		//
@@ -55,47 +56,47 @@ type (
 		// No RSQL filtering or sorting is available for this endpoint.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-filevault
-		ListFileVaultV3(ctx context.Context) (*FileVaultInventoryList, *interfaces.Response, error)
+		ListFileVaultV3(ctx context.Context) (*FileVaultInventoryList, *resty.Response, error)
 
 		// GetFileVaultByIDV3 returns FileVault details for the specified computer by ID (Get FileVault Inventory by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-filevault
-		GetFileVaultByIDV3(ctx context.Context, id string) (*FileVaultInventory, *interfaces.Response, error)
+		GetFileVaultByIDV3(ctx context.Context, id string) (*FileVaultInventory, *resty.Response, error)
 
 		// GetRecoveryLockPasswordByIDV3 returns the recovery lock password for the specified computer by ID (Get Recovery Lock Password).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-view-recovery-lock-password
-		GetRecoveryLockPasswordByIDV3(ctx context.Context, id string) (*ResponseRecoveryLockPassword, *interfaces.Response, error)
+		GetRecoveryLockPasswordByIDV3(ctx context.Context, id string) (*ResponseRecoveryLockPassword, *resty.Response, error)
 
 		// UploadAttachmentByIDV3 uploads an attachment and assigns it to a computer (Upload attachment).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-computers-inventory-id-attachments
-		UploadAttachmentByIDV3(ctx context.Context, computerID string, attachment []byte) (*interfaces.Response, error)
+		UploadAttachmentByIDV3(ctx context.Context, computerID string, attachment []byte) (*resty.Response, error)
 
 		// GetAttachmentByIDV3 downloads a computer attachment by computer ID and attachment ID (Download attachment file).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-attachments-attachmentid
-		GetAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) ([]byte, *interfaces.Response, error)
+		GetAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) ([]byte, *resty.Response, error)
 
 		// DeleteAttachmentByIDV3 deletes a computer attachment by computer ID and attachment ID (Delete Computer Attachment).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-computers-inventory-id-attachments-attachmentid
-		DeleteAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) (*interfaces.Response, error)
+		DeleteAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) (*resty.Response, error)
 
 		// GetDeviceLockPinByIDV3 returns the device lock PIN for the specified computer by ID (Get Device Lock PIN).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-view-device-lock-pin
-		GetDeviceLockPinByIDV3(ctx context.Context, id string) (*ResponseDeviceLockPin, *interfaces.Response, error)
+		GetDeviceLockPinByIDV3(ctx context.Context, id string) (*ResponseDeviceLockPin, *resty.Response, error)
 
 		// RemoveMDMProfileByIDV1 removes the MDM profile from a computer by its ID (Remove MDM Profile).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-inventory-id-remove-mdm-profile
-		RemoveMDMProfileByIDV1(ctx context.Context, id string) (*ResponseRemoveMDMProfile, *interfaces.Response, error)
+		RemoveMDMProfileByIDV1(ctx context.Context, id string) (*ResponseRemoveMDMProfile, *resty.Response, error)
 
 		// EraseByIDV1 erases a computer by its ID (Erase Computer).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-inventory-id-erase
-		EraseByIDV1(ctx context.Context, id string, request *RequestEraseDeviceComputer) (*interfaces.Response, error)
+		EraseByIDV1(ctx context.Context, id string, request *RequestEraseDeviceComputer) (*resty.Response, error)
 	}
 
 	// Service handles communication with the Computer Inventory-related methods of the Jamf Pro API.
@@ -115,7 +116,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // CreateV3 creates a new computer inventory record.
 // URL: POST /api/v3/computers-inventory
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-computers-inventory
-func (s *Service) CreateV3(ctx context.Context, request *ResourceComputerInventory) (*CreateComputerResponse, *interfaces.Response, error) {
+func (s *Service) CreateV3(ctx context.Context, request *ResourceComputerInventory) (*CreateComputerResponse, *resty.Response, error) {
 	endpoint := EndpointComputerInventoryV3
 
 	if request == nil {
@@ -142,7 +143,7 @@ func (s *Service) CreateV3(ctx context.Context, request *ResourceComputerInvento
 // rsqlQuery supports: filter (RSQL), sort, section (all optional).
 // Note: page and page-size are managed internally by GetPaginated.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory
-func (s *Service) ListV3(ctx context.Context, rsqlQuery map[string]string) (*ResponseComputerInventoryList, *interfaces.Response, error) {
+func (s *Service) ListV3(ctx context.Context, rsqlQuery map[string]string) (*ResponseComputerInventoryList, *resty.Response, error) {
 	endpoint := EndpointComputerInventoryV3
 
 	var result ResponseComputerInventoryList
@@ -172,7 +173,7 @@ func (s *Service) ListV3(ctx context.Context, rsqlQuery map[string]string) (*Res
 // GetByIDV3 returns the specified computer inventory by ID.
 // URL: GET /api/v3/computers-inventory/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id
-func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *interfaces.Response, error) {
+func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s", EndpointComputerInventoryV3, id)
 
 	if id == "" {
@@ -196,7 +197,7 @@ func (s *Service) GetByIDV3(ctx context.Context, id string) (*ResourceComputerIn
 // GetDetailByIDV3 returns all sections of a computer.
 // URL: GET /api/v3/computers-inventory-detail/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-detail-id
-func (s *Service) GetDetailByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *interfaces.Response, error) {
+func (s *Service) GetDetailByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s-detail/%s", EndpointComputerInventoryV3, id)
 
 	if id == "" {
@@ -220,7 +221,7 @@ func (s *Service) GetDetailByIDV3(ctx context.Context, id string) (*ResourceComp
 // UpdateByIDV3 updates the specified computer inventory by ID using merge-patch semantics.
 // URL: PATCH /api/v3/computers-inventory-detail/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v3-computers-inventory-detail-id
-func (s *Service) UpdateByIDV3(ctx context.Context, id string, request *ResourceComputerInventory) (*ResourceComputerInventory, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV3(ctx context.Context, id string, request *ResourceComputerInventory) (*ResourceComputerInventory, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s-detail/%s", EndpointComputerInventoryV3, id)
 
 	if id == "" {
@@ -248,7 +249,7 @@ func (s *Service) UpdateByIDV3(ctx context.Context, id string, request *Resource
 // DeleteByIDV3 removes the specified computer inventory by ID.
 // URL: DELETE /api/v3/computers-inventory/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-computers-inventory-id
-func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s", EndpointComputerInventoryV3, id)
 
 	if id == "" {
@@ -272,7 +273,7 @@ func (s *Service) DeleteByIDV3(ctx context.Context, id string) (*interfaces.Resp
 // Note: This endpoint only supports pagination (page, page-size), which is managed internally.
 // No RSQL filtering or sorting is available for this endpoint.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-filevault
-func (s *Service) ListFileVaultV3(ctx context.Context) (*FileVaultInventoryList, *interfaces.Response, error) {
+func (s *Service) ListFileVaultV3(ctx context.Context) (*FileVaultInventoryList, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/filevault", EndpointComputerInventoryV3)
 
 	var result FileVaultInventoryList
@@ -302,7 +303,7 @@ func (s *Service) ListFileVaultV3(ctx context.Context) (*FileVaultInventoryList,
 // GetFileVaultByIDV3 returns FileVault details for the specified computer by ID.
 // URL: GET /api/v3/computers-inventory/{id}/filevault
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-filevault
-func (s *Service) GetFileVaultByIDV3(ctx context.Context, id string) (*FileVaultInventory, *interfaces.Response, error) {
+func (s *Service) GetFileVaultByIDV3(ctx context.Context, id string) (*FileVaultInventory, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s/filevault", EndpointComputerInventoryV3, id)
 
 	if id == "" {
@@ -326,7 +327,7 @@ func (s *Service) GetFileVaultByIDV3(ctx context.Context, id string) (*FileVault
 // GetDeviceLockPinByIDV3 returns the device lock PIN for the specified computer by ID.
 // URL: GET /api/v3/computers-inventory/{id}/view-device-lock-pin
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-view-device-lock-pin
-func (s *Service) GetDeviceLockPinByIDV3(ctx context.Context, id string) (*ResponseDeviceLockPin, *interfaces.Response, error) {
+func (s *Service) GetDeviceLockPinByIDV3(ctx context.Context, id string) (*ResponseDeviceLockPin, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s/view-device-lock-pin", EndpointComputerInventoryV3, id)
 
 	if id == "" {
@@ -350,7 +351,7 @@ func (s *Service) GetDeviceLockPinByIDV3(ctx context.Context, id string) (*Respo
 // GetRecoveryLockPasswordByIDV3 returns the recovery lock password for the specified computer by ID.
 // URL: GET /api/v3/computers-inventory/{id}/view-recovery-lock-password
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-view-recovery-lock-password
-func (s *Service) GetRecoveryLockPasswordByIDV3(ctx context.Context, id string) (*ResponseRecoveryLockPassword, *interfaces.Response, error) {
+func (s *Service) GetRecoveryLockPasswordByIDV3(ctx context.Context, id string) (*ResponseRecoveryLockPassword, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s/view-recovery-lock-password", EndpointComputerInventoryV3, id)
 
 	if id == "" {
@@ -374,7 +375,7 @@ func (s *Service) GetRecoveryLockPasswordByIDV3(ctx context.Context, id string) 
 // UploadAttachmentByIDV3 uploads an attachment and assigns it to a computer.
 // URL: POST /api/v3/computers-inventory/{id}/attachments
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-computers-inventory-id-attachments
-func (s *Service) UploadAttachmentByIDV3(ctx context.Context, computerID string, attachment []byte) (*interfaces.Response, error) {
+func (s *Service) UploadAttachmentByIDV3(ctx context.Context, computerID string, attachment []byte) (*resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s/attachments", EndpointComputerInventoryV3, computerID)
 
 	if computerID == "" {
@@ -400,7 +401,7 @@ func (s *Service) UploadAttachmentByIDV3(ctx context.Context, computerID string,
 // GetAttachmentByIDV3 downloads a computer attachment by computer ID and attachment ID.
 // URL: GET /api/v3/computers-inventory/{id}/attachments/{attachmentId}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-attachments-attachmentid
-func (s *Service) GetAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) ([]byte, *interfaces.Response, error) {
+func (s *Service) GetAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) ([]byte, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s/attachments/%s", EndpointComputerInventoryV3, computerID, attachmentID)
 
 	if computerID == "" {
@@ -427,7 +428,7 @@ func (s *Service) GetAttachmentByIDV3(ctx context.Context, computerID, attachmen
 // DeleteAttachmentByIDV3 deletes a computer attachment by computer ID and attachment ID.
 // URL: DELETE /api/v3/computers-inventory/{id}/attachments/{attachmentId}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-computers-inventory-id-attachments-attachmentid
-func (s *Service) DeleteAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) (*interfaces.Response, error) {
+func (s *Service) DeleteAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) (*resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s/attachments/%s", EndpointComputerInventoryV3, computerID, attachmentID)
 
 	if computerID == "" {
@@ -452,7 +453,7 @@ func (s *Service) DeleteAttachmentByIDV3(ctx context.Context, computerID, attach
 // RemoveMDMProfileByIDV1 removes the MDM profile from a computer by its ID.
 // URL: POST /api/v1/computer-inventory/{id}/remove-mdm-profile
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-inventory-id-remove-mdm-profile
-func (s *Service) RemoveMDMProfileByIDV1(ctx context.Context, id string) (*ResponseRemoveMDMProfile, *interfaces.Response, error) {
+func (s *Service) RemoveMDMProfileByIDV1(ctx context.Context, id string) (*ResponseRemoveMDMProfile, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s/remove-mdm-profile", EndpointComputerInventoryV1, id)
 
 	if id == "" {
@@ -477,7 +478,7 @@ func (s *Service) RemoveMDMProfileByIDV1(ctx context.Context, id string) (*Respo
 // EraseByIDV1 erases a computer by its ID.
 // URL: POST /api/v1/computer-inventory/{id}/erase
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-inventory-id-erase
-func (s *Service) EraseByIDV1(ctx context.Context, id string, request *RequestEraseDeviceComputer) (*interfaces.Response, error) {
+func (s *Service) EraseByIDV1(ctx context.Context, id string, request *RequestEraseDeviceComputer) (*resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s/erase", EndpointComputerInventoryV1, id)
 
 	if id == "" {

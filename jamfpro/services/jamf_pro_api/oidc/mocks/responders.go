@@ -9,7 +9,9 @@ import (
 	"net/http"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 // errNoMockRegistered is returned when no mock is registered for the request.
@@ -106,7 +108,7 @@ func (m *OIDCMock) RegisterGetRedirectURLMock() {
 }
 
 // Get implements interfaces.HTTPClient.
-func (m *OIDCMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *OIDCMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
 	resp, ok := m.responses[key]
@@ -121,15 +123,11 @@ func (m *OIDCMock) Get(ctx context.Context, path string, rsqlQuery map[string]st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Post implements interfaces.HTTPClient.
-func (m *OIDCMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *OIDCMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "POST " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -143,30 +141,26 @@ func (m *OIDCMock) Post(ctx context.Context, path string, body any, headers map[
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // PostWithQuery implements interfaces.HTTPClient.
-func (m *OIDCMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *OIDCMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, body, headers, result)
 }
 
 // PostForm implements interfaces.HTTPClient.
-func (m *OIDCMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *OIDCMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, formData, headers, result)
 }
 
 // PostMultipart implements interfaces.HTTPClient.
-func (m *OIDCMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *OIDCMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
 // Put implements interfaces.HTTPClient.
-func (m *OIDCMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *OIDCMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	rawBody, statusCode, found := m.dispatch("PUT", path)
 	if !found {
 		return nil, errNoMockRegistered
@@ -176,15 +170,11 @@ func (m *OIDCMock) Put(ctx context.Context, path string, body any, headers map[s
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: statusCode,
-		Headers:    http.Header{},
-		Body:       rawBody,
-	}, nil
+	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), nil
 }
 
 // Patch implements interfaces.HTTPClient.
-func (m *OIDCMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *OIDCMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	rawBody, statusCode, found := m.dispatch("PATCH", path)
 	if !found {
 		return nil, errNoMockRegistered
@@ -194,15 +184,11 @@ func (m *OIDCMock) Patch(ctx context.Context, path string, body any, headers map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: statusCode,
-		Headers:    http.Header{},
-		Body:       rawBody,
-	}, nil
+	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), nil
 }
 
 // Delete implements interfaces.HTTPClient.
-func (m *OIDCMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *OIDCMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	rawBody, statusCode, found := m.dispatch("DELETE", path)
 	if !found {
 		return nil, errNoMockRegistered
@@ -212,34 +198,26 @@ func (m *OIDCMock) Delete(ctx context.Context, path string, rsqlQuery map[string
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: statusCode,
-		Headers:    http.Header{},
-		Body:       rawBody,
-	}, nil
+	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), nil
 }
 
 // DeleteWithBody implements interfaces.HTTPClient.
-func (m *OIDCMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *OIDCMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Delete(ctx, path, nil, headers, result)
 }
 
 // GetBytes implements interfaces.HTTPClient.
-func (m *OIDCMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
+func (m *OIDCMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	rawBody, statusCode, found := m.dispatch("GET", path)
 	if !found {
 		return nil, nil, errNoMockRegistered
 	}
-	return &interfaces.Response{
-		StatusCode: statusCode,
-		Headers:    http.Header{},
-		Body:       rawBody,
-	}, rawBody, nil
+	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), rawBody, nil
 }
 
 // GetPaginated implements interfaces.HTTPClient.
-func (m *OIDCMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
+func (m *OIDCMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in OIDCMock")
 }
 

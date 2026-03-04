@@ -23,7 +23,7 @@ func TestUnit_SsoSettings_Get_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.False(t, result.SsoEnabled)
 	assert.Equal(t, "OIDC", result.ConfigurationType)
 	require.NotNil(t, result.OidcSettings)
@@ -43,7 +43,7 @@ func TestUnit_SsoSettings_Update_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_SsoSettings_Update_NilRequest(t *testing.T) {
@@ -64,7 +64,7 @@ func TestUnit_SsoSettings_GetEnrollmentCustomizationDependencies_Success(t *test
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.Dependencies, 1)
 	assert.Equal(t, "Enrollment Customization A", result.Dependencies[0].Name)
 	assert.Equal(t, "Enrollment Customization A", result.Dependencies[0].HumanReadableName)
@@ -77,7 +77,7 @@ func TestUnit_SsoSettings_DisableV3_Success(t *testing.T) {
 	resp, err := svc.DisableV3(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_SsoSettings_GetHistoryV3_Success(t *testing.T) {
@@ -88,7 +88,7 @@ func TestUnit_SsoSettings_GetHistoryV3_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -104,7 +104,7 @@ func TestUnit_SsoSettings_AddHistoryNoteV3_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "2", result.ID)
 }
 
@@ -125,7 +125,7 @@ func TestUnit_SsoSettings_DownloadMetadataV3_Success(t *testing.T) {
 	data, resp, err := svc.DownloadMetadataV3(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	_ = data
 }
 
@@ -137,7 +137,7 @@ func TestUnit_SsoSettings_GetV3_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
 }
 
@@ -150,7 +150,7 @@ func TestUnit_SsoSettings_UpdateV3_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
 }
 
@@ -162,7 +162,7 @@ func TestUnit_SsoSettings_GetEnrollmentCustomizationDependenciesV3_Error(t *test
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
 }
 
@@ -173,7 +173,7 @@ func TestUnit_SsoSettings_DisableV3_Error(t *testing.T) {
 	resp, err := svc.DisableV3(context.Background())
 	require.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
 }
 
@@ -185,7 +185,7 @@ func TestUnit_SsoSettings_GetHistoryV3_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
 }
 
@@ -198,7 +198,7 @@ func TestUnit_SsoSettings_AddHistoryNoteV3_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
 }
 
@@ -210,6 +210,6 @@ func TestUnit_SsoSettings_DownloadMetadataV3_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, data)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
 }

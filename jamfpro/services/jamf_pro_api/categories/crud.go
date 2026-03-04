@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -20,14 +21,14 @@ type (
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-categories
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the specified category by ID (Get specified Category object).
 		//
 		// Returns a single category object for the given ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-categories-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceCategory, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceCategory, *resty.Response, error)
 
 		// CreateV1 creates a new category record (Create Category record).
 		//
@@ -35,28 +36,28 @@ type (
 		// Returns the created category ID and href.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-categories
-		CreateV1(ctx context.Context, request *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestCategory) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByIDV1 updates the specified category by ID (Update specified Category object).
 		//
 		// Updates an existing category. All updatable fields (name, priority) may be sent.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-categories-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestCategory) (*CreateUpdateResponse, *resty.Response, error)
 
 		// DeleteByIDV1 removes the specified category by ID (Remove specified Category record).
 		//
 		// Permanently deletes the category. This operation cannot be undone.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-categories-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteCategoriesByIDV1 deletes multiple categories by their IDs (Delete multiple Categories by their IDs).
 		//
 		// Sends a POST to /api/v1/categories/delete-multiple with a body containing category IDs.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-categories-delete-multiple
-		DeleteCategoriesByIDV1(ctx context.Context, req *DeleteCategoriesByIDRequest) (*interfaces.Response, error)
+		DeleteCategoriesByIDV1(ctx context.Context, req *DeleteCategoriesByIDRequest) (*resty.Response, error)
 
 		// GetCategoryHistoryV1 returns the history object for the specified category (Get specified Category history object).
 		//
@@ -64,12 +65,12 @@ type (
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-categories-id-history
-		GetCategoryHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*CategoryHistoryResponse, *interfaces.Response, error)
+		GetCategoryHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*CategoryHistoryResponse, *resty.Response, error)
 
 		// AddCategoryHistoryNotesV1 adds notes to the specified category history (Add specified Category history object notes).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-categories-id-history
-		AddCategoryHistoryNotesV1(ctx context.Context, id string, req *AddCategoryHistoryNotesRequest) (*interfaces.Response, error)
+		AddCategoryHistoryNotesV1(ctx context.Context, id string, req *AddCategoryHistoryNotesRequest) (*resty.Response, error)
 	}
 
 	// Service handles communication with the categories
@@ -95,7 +96,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/categories
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-categories
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointCategoriesV1
@@ -123,7 +124,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 returns the specified category by ID (Get specified Category object).
 // URL: GET /api/v1/categories/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-categories-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCategory, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCategory, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("category ID is required")
 	}
@@ -148,7 +149,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCategory, 
 // URL: POST /api/v1/categories
 // Body: JSON with name, priority (optional)
 // https://developer.jamf.com/jamf-pro/reference/post_v1-categories
-func (s *Service) CreateV1(ctx context.Context, request *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestCategory) (*CreateUpdateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -174,7 +175,7 @@ func (s *Service) CreateV1(ctx context.Context, request *RequestCategory) (*Crea
 // URL: PUT /api/v1/categories/{id}
 // Body: JSON with name, priority (optional)
 // https://developer.jamf.com/jamf-pro/reference/put_v1-categories-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestCategory) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestCategory) (*CreateUpdateResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -203,7 +204,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestC
 // DeleteByIDV1 removes the specified category by ID (Remove specified Category record).
 // URL: DELETE /api/v1/categories/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-categories-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("category ID is required")
 	}
@@ -226,7 +227,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 // URL: POST /api/v1/categories/delete-multiple
 // Body: JSON with ids (array of category IDs)
 // https://developer.jamf.com/jamf-pro/reference/post_v1-categories-delete-multiple
-func (s *Service) DeleteCategoriesByIDV1(ctx context.Context, req *DeleteCategoriesByIDRequest) (*interfaces.Response, error) {
+func (s *Service) DeleteCategoriesByIDV1(ctx context.Context, req *DeleteCategoriesByIDRequest) (*resty.Response, error) {
 	if req == nil || len(req.IDs) == 0 {
 		return nil, fmt.Errorf("ids are required")
 	}
@@ -250,7 +251,7 @@ func (s *Service) DeleteCategoriesByIDV1(ctx context.Context, req *DeleteCategor
 // URL: GET /api/v1/categories/{id}/history
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-categories-id-history
-func (s *Service) GetCategoryHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*CategoryHistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetCategoryHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*CategoryHistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("category ID is required")
 	}
@@ -283,7 +284,7 @@ func (s *Service) GetCategoryHistoryV1(ctx context.Context, id string, rsqlQuery
 // URL: POST /api/v1/categories/{id}/history
 // Body: JSON with note
 // https://developer.jamf.com/jamf-pro/reference/post_v1-categories-id-history
-func (s *Service) AddCategoryHistoryNotesV1(ctx context.Context, id string, req *AddCategoryHistoryNotesRequest) (*interfaces.Response, error) {
+func (s *Service) AddCategoryHistoryNotesV1(ctx context.Context, id string, req *AddCategoryHistoryNotesRequest) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("category ID is required")
 	}

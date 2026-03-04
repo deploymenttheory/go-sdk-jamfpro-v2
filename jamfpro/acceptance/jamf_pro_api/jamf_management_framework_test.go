@@ -63,7 +63,7 @@ func TestAcceptance_JamfManagementFramework_redeploy_v1(t *testing.T) {
 	}
 
 	require.NotNil(t, result)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, result.CommandUUID, "commandUUID should not be empty")
 	acc.LogTestSuccess(t, "RedeployV1: computerID=%s commandUUID=%s", computerID, result.CommandUUID)
 }

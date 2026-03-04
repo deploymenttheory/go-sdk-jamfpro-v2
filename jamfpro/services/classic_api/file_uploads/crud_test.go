@@ -26,7 +26,7 @@ func TestUnit_FileUploads_CreateAttachment(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_FileUploads_CreateAttachment_WithForceIpaUpload(t *testing.T) {
@@ -43,7 +43,7 @@ func TestUnit_FileUploads_CreateAttachment_WithForceIpaUpload(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_FileUploads_CreateAttachment_ByName(t *testing.T) {

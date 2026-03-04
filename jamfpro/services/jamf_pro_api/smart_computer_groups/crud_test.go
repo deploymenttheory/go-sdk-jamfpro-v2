@@ -24,7 +24,7 @@ func TestUnit_SmartComputerGroups_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	assert.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -43,7 +43,7 @@ func TestUnit_SmartComputerGroups_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "All Macs", result.Name)
 	assert.Equal(t, "All managed Mac computers", result.Description)
@@ -71,7 +71,7 @@ func TestUnit_SmartComputerGroups_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_SmartComputerGroups_GetByName_Success(t *testing.T) {
@@ -118,7 +118,7 @@ func TestUnit_SmartComputerGroups_GetMembership_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Len(t, result.Members, 5)
 	assert.Equal(t, []int{101, 102, 103, 104, 105}, result.Members)
 }
@@ -149,7 +149,7 @@ func TestUnit_SmartComputerGroups_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Equal(t, "/api/v2/computer-groups/smart-groups/3", result.Href)
 }
@@ -173,7 +173,7 @@ func TestUnit_SmartComputerGroups_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 func TestUnit_SmartComputerGroups_UpdateByID_Success(t *testing.T) {
@@ -192,7 +192,7 @@ func TestUnit_SmartComputerGroups_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "All Macs Updated", result.Name)
 	assert.Equal(t, "Updated description", result.Description)
@@ -225,7 +225,7 @@ func TestUnit_SmartComputerGroups_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByID(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_SmartComputerGroups_DeleteByID_EmptyID(t *testing.T) {

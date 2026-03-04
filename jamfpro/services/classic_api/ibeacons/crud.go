@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,44 +17,44 @@ type (
 		// List returns all iBeacons.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findibeacons
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified iBeacon by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findibeaconsbyid
-		GetByID(ctx context.Context, id int) (*ResourceIBeacon, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceIBeacon, *resty.Response, error)
 
 		// GetByName returns the specified iBeacon by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findibeaconsbyname
-		GetByName(ctx context.Context, name string) (*ResourceIBeacon, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceIBeacon, *resty.Response, error)
 
 		// Create creates a new iBeacon.
 		//
 		// Returns the created iBeacon with its assigned ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createibeaconbyid
-		Create(ctx context.Context, req *RequestIBeacon) (*ResourceIBeacon, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestIBeacon) (*ResourceIBeacon, *resty.Response, error)
 
 		// UpdateByID updates the specified iBeacon by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateibeaconbyid
-		UpdateByID(ctx context.Context, id int, req *RequestIBeacon) (*ResourceIBeacon, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestIBeacon) (*ResourceIBeacon, *resty.Response, error)
 
 		// UpdateByName updates the specified iBeacon by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateibeaconbyname
-		UpdateByName(ctx context.Context, name string, req *RequestIBeacon) (*ResourceIBeacon, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestIBeacon) (*ResourceIBeacon, *resty.Response, error)
 
 		// DeleteByID removes the specified iBeacon by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteibeaconbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified iBeacon by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteibeaconbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the iBeacon-related Classic API methods.
@@ -78,7 +79,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // List returns all iBeacons.
 // URL: GET /JSSResource/ibeacons
 // https://developer.jamf.com/jamf-pro/reference/findibeacons
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointClassicIBeacons
@@ -99,7 +100,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // GetByID returns the specified iBeacon by ID.
 // URL: GET /JSSResource/ibeacons/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/findibeaconsbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceIBeacon, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceIBeacon, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("iBeacon ID must be a positive integer")
 	}
@@ -124,7 +125,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceIBeacon, *inter
 // GetByName returns the specified iBeacon by name.
 // URL: GET /JSSResource/ibeacons/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/findibeaconsbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceIBeacon, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceIBeacon, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("iBeacon name is required")
 	}
@@ -150,7 +151,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceIBeacon,
 // URL: POST /JSSResource/ibeacons/id/0
 // Returns the created iBeacon with its assigned ID.
 // https://developer.jamf.com/jamf-pro/reference/createibeaconbyid
-func (s *Service) Create(ctx context.Context, req *RequestIBeacon) (*ResourceIBeacon, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestIBeacon) (*ResourceIBeacon, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -175,7 +176,7 @@ func (s *Service) Create(ctx context.Context, req *RequestIBeacon) (*ResourceIBe
 // UpdateByID updates the specified iBeacon by ID.
 // URL: PUT /JSSResource/ibeacons/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/updateibeaconbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestIBeacon) (*ResourceIBeacon, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestIBeacon) (*ResourceIBeacon, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("iBeacon ID must be a positive integer")
 	}
@@ -203,7 +204,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestIBeacon) (
 // UpdateByName updates the specified iBeacon by name.
 // URL: PUT /JSSResource/ibeacons/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/updateibeaconbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestIBeacon) (*ResourceIBeacon, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestIBeacon) (*ResourceIBeacon, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("iBeacon name is required")
 	}
@@ -231,7 +232,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestIBe
 // DeleteByID removes the specified iBeacon by ID.
 // URL: DELETE /JSSResource/ibeacons/id/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleteibeaconbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("iBeacon ID must be a positive integer")
 	}
@@ -254,7 +255,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // DeleteByName removes the specified iBeacon by name.
 // URL: DELETE /JSSResource/ibeacons/name/{name}
 // https://developer.jamf.com/jamf-pro/reference/deleteibeaconbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("iBeacon name is required")
 	}

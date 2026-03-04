@@ -194,7 +194,7 @@ func TestUnit_PatchPolicies_AddToDashboardV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // TestAddToDashboardV2_EmptyID tests adding to dashboard with an empty ID.
@@ -219,7 +219,7 @@ func TestUnit_PatchPolicies_RemoveFromDashboardV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 // TestRemoveFromDashboardV2_EmptyID tests removing from dashboard with an empty ID.

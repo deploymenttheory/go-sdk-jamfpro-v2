@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,7 +16,7 @@ type (
 		// GetV1 retrieves OAuth2 session tokens (Get OAuth2 Session Tokens).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oauth2-session-tokens
-		GetV1(ctx context.Context) (*SessionTokenResponse, *interfaces.Response, error)
+		GetV1(ctx context.Context) (*SessionTokenResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the OAuth2 session token-related methods of the Jamf Pro API.
@@ -39,7 +40,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV1 retrieves OAuth2 session tokens.
 // URL: GET /api/v1/oauth2/session-tokens
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oauth2-session-tokens
-func (s *Service) GetV1(ctx context.Context) (*SessionTokenResponse, *interfaces.Response, error) {
+func (s *Service) GetV1(ctx context.Context) (*SessionTokenResponse, *resty.Response, error) {
 	var result SessionTokenResponse
 
 	endpoint := EndpointOAuth2SessionTokensV1

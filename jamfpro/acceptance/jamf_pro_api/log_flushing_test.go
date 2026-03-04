@@ -6,10 +6,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/log_flushing"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -58,7 +58,7 @@ func TestAcceptance_LogFlushing_settings_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, settings)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, settings.HourOfDay, 0)
 	assert.LessOrEqual(t, settings.HourOfDay, 23)
 
@@ -115,7 +115,7 @@ func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "GetTaskByIDV1", "Getting log flushing task ID=%s", taskID)
 
 	var task *log_flushing.ResourceLogFlushingTask
-	var getResp *interfaces.Response
+	var getResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		task, getResp, getErr = svc.GetTaskByIDV1(ctx, taskID)

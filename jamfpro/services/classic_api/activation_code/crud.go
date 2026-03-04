@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,12 +17,12 @@ type (
 		// GetActivationCode retrieves the activation code information.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findactivationcode
-		GetActivationCode(ctx context.Context) (*ResourceActivationCode, *interfaces.Response, error)
+		GetActivationCode(ctx context.Context) (*ResourceActivationCode, *resty.Response, error)
 
 		// UpdateActivationCode updates the activation code information.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateactivationcode
-		UpdateActivationCode(ctx context.Context, request *RequestActivationCode) (*interfaces.Response, error)
+		UpdateActivationCode(ctx context.Context, request *RequestActivationCode) (*resty.Response, error)
 	}
 
 	// Service handles communication with the activation code-related Classic API methods.
@@ -46,7 +47,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetActivationCode retrieves the activation code information.
 // URL: GET /JSSResource/activationcode
 // https://developer.jamf.com/jamf-pro/reference/findactivationcode
-func (s *Service) GetActivationCode(ctx context.Context) (*ResourceActivationCode, *interfaces.Response, error) {
+func (s *Service) GetActivationCode(ctx context.Context) (*ResourceActivationCode, *resty.Response, error) {
 	var result ResourceActivationCode
 
 	endpoint := EndpointClassicActivationCode
@@ -67,7 +68,7 @@ func (s *Service) GetActivationCode(ctx context.Context) (*ResourceActivationCod
 // UpdateActivationCode updates the activation code information.
 // URL: PUT /JSSResource/activationcode
 // https://developer.jamf.com/jamf-pro/reference/updateactivationcode
-func (s *Service) UpdateActivationCode(ctx context.Context, request *RequestActivationCode) (*interfaces.Response, error) {
+func (s *Service) UpdateActivationCode(ctx context.Context, request *RequestActivationCode) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request is required")
 	}

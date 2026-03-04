@@ -5,6 +5,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -15,32 +16,32 @@ type (
 		// GetV2 returns the certificate currently configured for SSO (Get SSO Certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert
-		GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *interfaces.Response, error)
+		GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error)
 
 		// CreateV2 generates a new certificate for signing SSO requests (Create SSO Certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert
-		CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *interfaces.Response, error)
+		CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error)
 
 		// UpdateV2 updates the certificate used for signing SSO requests (Update SSO Certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-sso-cert
-		UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *interfaces.Response, error)
+		UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *resty.Response, error)
 
 		// DownloadV2 downloads the certificate used for signing SSO requests (Download SSO Certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert-download
-		DownloadV2(ctx context.Context) ([]byte, *interfaces.Response, error)
+		DownloadV2(ctx context.Context) ([]byte, *resty.Response, error)
 
 		// ParseV2 parses the provided keystore file and returns keystore information (Parse SSO Certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert-parse
-		ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *interfaces.Response, error)
+		ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *resty.Response, error)
 
 		// DeleteV2 removes the currently configured SSO certificate (Delete SSO Certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-sso-cert
-		DeleteV2(ctx context.Context) (*interfaces.Response, error)
+		DeleteV2(ctx context.Context) (*resty.Response, error)
 	}
 
 	// Service handles communication with the SSO certificate-related methods of the Jamf Pro API.
@@ -64,7 +65,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV2 returns the certificate currently configured for SSO.
 // URL: GET /api/v2/sso/cert
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert
-func (s *Service) GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *interfaces.Response, error) {
+func (s *Service) GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error) {
 	var result ResourceSSOKeystoreResponse
 	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
@@ -80,7 +81,7 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *int
 // CreateV2 generates a new certificate for signing SSO requests.
 // URL: POST /api/v2/sso/cert
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert
-func (s *Service) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *interfaces.Response, error) {
+func (s *Service) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error) {
 	var result ResourceSSOKeystoreResponse
 	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
@@ -97,7 +98,7 @@ func (s *Service) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *
 // UpdateV2 updates the certificate used for signing SSO requests.
 // URL: PUT /api/v2/sso/cert
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-sso-cert
-func (s *Service) UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *interfaces.Response, error) {
+func (s *Service) UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *resty.Response, error) {
 	var result ResourceSSOKeystoreResponse
 	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
@@ -114,7 +115,7 @@ func (s *Service) UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) 
 // DownloadV2 downloads the certificate used for signing SSO requests.
 // URL: GET /api/v2/sso/cert/download
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert-download
-func (s *Service) DownloadV2(ctx context.Context) ([]byte, *interfaces.Response, error) {
+func (s *Service) DownloadV2(ctx context.Context) ([]byte, *resty.Response, error) {
 	var result []byte
 	endpoint := EndpointSSOCertDownloadV2
 	headers := map[string]string{
@@ -130,7 +131,7 @@ func (s *Service) DownloadV2(ctx context.Context) ([]byte, *interfaces.Response,
 // ParseV2 parses the provided keystore file and returns keystore information.
 // URL: POST /api/v2/sso/cert/parse
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert-parse
-func (s *Service) ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *interfaces.Response, error) {
+func (s *Service) ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *resty.Response, error) {
 	var result ParseKeystoreResponse
 	endpoint := EndpointSSOCertParseV2
 	headers := map[string]string{
@@ -147,7 +148,7 @@ func (s *Service) ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*
 // DeleteV2 removes the currently configured SSO certificate.
 // URL: DELETE /api/v2/sso/cert
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-sso-cert
-func (s *Service) DeleteV2(ctx context.Context) (*interfaces.Response, error) {
+func (s *Service) DeleteV2(ctx context.Context) (*resty.Response, error) {
 	endpoint := EndpointSSOCertV2
 	headers := map[string]string{
 		"Accept": mime.ApplicationJSON,

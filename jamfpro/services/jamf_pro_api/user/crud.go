@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,17 +18,17 @@ type (
 		// Get returns the current authenticated user information.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_api-user
-		Get(ctx context.Context) (*ResourceUser, *interfaces.Response, error)
+		Get(ctx context.Context) (*ResourceUser, *resty.Response, error)
 
 		// ChangePassword changes the current user's password.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-user-change-password
-		ChangePassword(ctx context.Context, request *RequestChangePassword) (*interfaces.Response, error)
+		ChangePassword(ctx context.Context, request *RequestChangePassword) (*resty.Response, error)
 
 		// UpdateSession updates the current user's session (change site).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_api-user-updateSession
-		UpdateSession(ctx context.Context, request *RequestUpdateSession) (*interfaces.Response, error)
+		UpdateSession(ctx context.Context, request *RequestUpdateSession) (*resty.Response, error)
 	}
 
 	// Service handles communication with the user-related methods of the Jamf Pro API.
@@ -46,7 +47,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // Get returns the current authenticated user information.
 // URL: GET /api/user
-func (s *Service) Get(ctx context.Context) (*ResourceUser, *interfaces.Response, error) {
+func (s *Service) Get(ctx context.Context) (*ResourceUser, *resty.Response, error) {
 	endpoint := EndpointUser
 
 	headers := map[string]string{
@@ -65,7 +66,7 @@ func (s *Service) Get(ctx context.Context) (*ResourceUser, *interfaces.Response,
 // ChangePassword changes the current user's password.
 // URL: POST /api/v1/user/change-password
 // Response: 204 No Content
-func (s *Service) ChangePassword(ctx context.Context, request *RequestChangePassword) (*interfaces.Response, error) {
+func (s *Service) ChangePassword(ctx context.Context, request *RequestChangePassword) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request is required")
 	}
@@ -94,7 +95,7 @@ func (s *Service) ChangePassword(ctx context.Context, request *RequestChangePass
 // UpdateSession updates the current user's session (change site).
 // URL: POST /api/user/updateSession
 // Response: 204 No Content
-func (s *Service) UpdateSession(ctx context.Context, request *RequestUpdateSession) (*interfaces.Response, error) {
+func (s *Service) UpdateSession(ctx context.Context, request *RequestUpdateSession) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request is required")
 	}

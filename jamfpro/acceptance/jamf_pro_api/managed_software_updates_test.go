@@ -67,13 +67,13 @@ func TestAcceptance_ManagedSoftwareUpdates_get_available_updates(t *testing.T) {
 	ctx := context.Background()
 
 	result, resp, err := svc.GetAvailableUpdates(ctx)
-	if err != nil && resp != nil && resp.StatusCode == 503 {
+	if err != nil && resp != nil && resp.StatusCode() == 503 {
 		t.Skip("Managed Software Update Plans toggle is off (503)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result.AvailableUpdates)
 
 	if len(result.AvailableUpdates.MacOS) > 0 {
@@ -98,13 +98,13 @@ func TestAcceptance_ManagedSoftwareUpdates_get_plans(t *testing.T) {
 
 	params := url.Values{}
 	result, resp, err := svc.GetPlans(ctx, params)
-	if err != nil && resp != nil && resp.StatusCode == 503 {
+	if err != nil && resp != nil && resp.StatusCode() == 503 {
 		t.Skip("Managed Software Update Plans toggle is off (503)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 	assert.NotNil(t, result.Results)
 
@@ -126,7 +126,7 @@ func TestAcceptance_ManagedSoftwareUpdates_get_plans(t *testing.T) {
 		planDetail, resp, err := svc.GetPlanByUUID(ctx, plan.PlanUuid)
 		require.NoError(t, err)
 		require.NotNil(t, planDetail)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.Equal(t, plan.PlanUuid, planDetail.PlanUuid)
 		acc.LogTestSuccess(t, "Retrieved plan by UUID: %s", planDetail.PlanUuid)
 
@@ -135,7 +135,7 @@ func TestAcceptance_ManagedSoftwareUpdates_get_plans(t *testing.T) {
 		declarations, resp, err := svc.GetDeclarationsByPlanUUID(ctx, plan.PlanUuid)
 		require.NoError(t, err)
 		require.NotNil(t, declarations)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		acc.LogTestSuccess(t, "Retrieved %d declarations for plan", len(declarations.Declarations))
 
 		if len(declarations.Declarations) > 0 {
@@ -159,7 +159,7 @@ func TestAcceptance_ManagedSoftwareUpdates_feature_toggle(t *testing.T) {
 	toggle, resp, err := svc.GetFeatureToggle(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, toggle)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	acc.LogTestSuccess(t, "Current feature toggle state: %v", toggle.Toggle)
 
 	// Get feature toggle status
@@ -167,7 +167,7 @@ func TestAcceptance_ManagedSoftwareUpdates_feature_toggle(t *testing.T) {
 	status, resp, err := svc.GetFeatureToggleStatus(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, status)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	if status.ToggleOn != nil {
 		acc.LogTestSuccess(t, "Toggle ON status: State=%s, Progress=%s",
@@ -212,7 +212,7 @@ func TestAcceptance_ManagedSoftwareUpdates_create_plan_by_device_id(t *testing.T
 	result, resp, err := svc.CreatePlanByDeviceID(ctx, plan)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Len(t, result.Plans, 1)
 	acc.LogTestSuccess(t, "Created plan with UUID: %s", result.Plans[0].PlanID)
 }
@@ -231,6 +231,6 @@ func TestAcceptance_ManagedSoftwareUpdates_get_plans_by_group_id(t *testing.T) {
 	result, resp, err := svc.GetPlansByGroupID(ctx, groupID, groupType)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	acc.LogTestSuccess(t, "Found %d plans for group %s", result.TotalCount, groupID)
 }

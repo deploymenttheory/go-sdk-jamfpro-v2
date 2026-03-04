@@ -4,33 +4,14 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"net/http"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
 
-// toInterfaceResponse converts a resty.Response to interfaces.Response.
-func toInterfaceResponse(resp *resty.Response) *interfaces.Response {
-	if resp == nil {
-		return &interfaces.Response{
-			Headers: make(http.Header),
-		}
-	}
-	return &interfaces.Response{
-		StatusCode: resp.StatusCode(),
-		Status:     resp.Status(),
-		Headers:    resp.Header(),
-		Body:       []byte(resp.String()),
-		Duration:   resp.Duration(),
-		ReceivedAt: resp.ReceivedAt(),
-		Size:       resp.Size(),
-	}
-}
-
 // Get executes a GET request.
-func (t *Transport) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result).SetResponseBodyUnlimitedReads(true)
 	for k, v := range rsqlQuery {
 		if v != "" {
@@ -42,7 +23,7 @@ func (t *Transport) Get(ctx context.Context, path string, rsqlQuery map[string]s
 }
 
 // Post executes a POST request with JSON body.
-func (t *Transport) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result).SetResponseBodyUnlimitedReads(true)
 	if body != nil {
 		req.SetBody(body)
@@ -52,7 +33,7 @@ func (t *Transport) Post(ctx context.Context, path string, body any, headers map
 }
 
 // PostWithQuery executes a POST request with both body and query parameters.
-func (t *Transport) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result)
 	for k, v := range rsqlQuery {
 		if v != "" {
@@ -67,15 +48,10 @@ func (t *Transport) PostWithQuery(ctx context.Context, path string, rsqlQuery ma
 }
 
 // PostForm executes a POST request with form-urlencoded data.
-func (t *Transport) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result)
 	if formData != nil {
 		req.SetFormData(formData)
-	}
-	for k, v := range t.globalHeaders {
-		if v != "" && k != "Content-Type" {
-			req.SetHeader(k, v)
-		}
 	}
 	for k, v := range headers {
 		if v != "" && k != "Content-Type" {
@@ -86,7 +62,7 @@ func (t *Transport) PostForm(ctx context.Context, path string, formData map[stri
 }
 
 // PostMultipart executes a POST request with multipart/form-data.
-func (t *Transport) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (t *Transport) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result)
 	if fileReader != nil && fileName != "" && fileField != "" {
 		field := &resty.MultipartField{
@@ -106,11 +82,6 @@ func (t *Transport) PostMultipart(ctx context.Context, path string, fileField st
 	if len(formFields) > 0 {
 		req.SetMultipartFormData(formFields)
 	}
-	for k, v := range t.globalHeaders {
-		if v != "" && k != "Content-Type" {
-			req.SetHeader(k, v)
-		}
-	}
 	for k, v := range headers {
 		if v != "" && k != "Content-Type" {
 			req.SetHeader(k, v)
@@ -120,7 +91,7 @@ func (t *Transport) PostMultipart(ctx context.Context, path string, fileField st
 }
 
 // Put executes a PUT request.
-func (t *Transport) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result).SetResponseBodyUnlimitedReads(true)
 	if body != nil {
 		req.SetBody(body)
@@ -130,7 +101,7 @@ func (t *Transport) Put(ctx context.Context, path string, body any, headers map[
 }
 
 // Patch executes a PATCH request.
-func (t *Transport) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result)
 	if body != nil {
 		req.SetBody(body)
@@ -140,7 +111,7 @@ func (t *Transport) Patch(ctx context.Context, path string, body any, headers ma
 }
 
 // Delete executes a DELETE request.
-func (t *Transport) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result)
 	for k, v := range rsqlQuery {
 		if v != "" {
@@ -152,7 +123,7 @@ func (t *Transport) Delete(ctx context.Context, path string, rsqlQuery map[strin
 }
 
 // DeleteWithBody executes a DELETE request with a JSON body.
-func (t *Transport) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (t *Transport) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result)
 	if body != nil {
 		req.SetBody(body)
@@ -162,7 +133,7 @@ func (t *Transport) DeleteWithBody(ctx context.Context, path string, body any, h
 }
 
 // GetBytes performs a GET request and returns raw bytes without unmarshaling.
-func (t *Transport) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
+func (t *Transport) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	req := t.client.R().SetContext(ctx)
 	for k, v := range rsqlQuery {
 		if v != "" {
@@ -172,13 +143,12 @@ func (t *Transport) GetBytes(ctx context.Context, path string, rsqlQuery map[str
 	t.applyHeaders(req, headers)
 	t.logger.Debug("Executing bytes request", zap.String("method", "GET"), zap.String("path", path))
 	resp, err := req.Get(path)
-	ifaceResp := toInterfaceResponse(resp)
 	if err != nil {
 		t.logger.Error("Bytes request failed", zap.String("path", path), zap.Error(err))
-		return ifaceResp, nil, fmt.Errorf("bytes request failed: %w", err)
+		return resp, nil, fmt.Errorf("bytes request failed: %w", err)
 	}
 	if resp.IsError() {
-		return ifaceResp, nil, ParseErrorResponse(
+		return resp, nil, ParseErrorResponse(
 			[]byte(resp.String()),
 			resp.StatusCode(),
 			resp.Status(),
@@ -187,5 +157,5 @@ func (t *Transport) GetBytes(ctx context.Context, path string, rsqlQuery map[str
 			t.logger,
 		)
 	}
-	return ifaceResp, []byte(resp.String()), nil
+	return resp, resp.Bytes(), nil
 }

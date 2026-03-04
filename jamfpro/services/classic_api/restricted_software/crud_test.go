@@ -30,7 +30,7 @@ func TestUnit_RestrictedSoftware_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -50,7 +50,7 @@ func TestUnit_RestrictedSoftware_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.General.ID)
 	assert.Equal(t, "Calculator", result.General.Name)
 	assert.Equal(t, "Calculator.app", result.General.ProcessName)
@@ -75,7 +75,7 @@ func TestUnit_RestrictedSoftware_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -91,7 +91,7 @@ func TestUnit_RestrictedSoftware_GetByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Calculator", result.General.Name)
 }
 
@@ -133,7 +133,7 @@ func TestUnit_RestrictedSoftware_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 100, result.ID)
 }
 
@@ -167,7 +167,7 @@ func TestUnit_RestrictedSoftware_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 }
 
@@ -198,7 +198,7 @@ func TestUnit_RestrictedSoftware_UpdateByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_RestrictedSoftware_UpdateByName_EmptyName(t *testing.T) {
@@ -223,7 +223,7 @@ func TestUnit_RestrictedSoftware_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_RestrictedSoftware_DeleteByID_ZeroID(t *testing.T) {
@@ -246,7 +246,7 @@ func TestUnit_RestrictedSoftware_DeleteByName_Success(t *testing.T) {
 	resp, err := svc.DeleteByName(context.Background(), "Calculator")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_RestrictedSoftware_DeleteByName_EmptyName(t *testing.T) {

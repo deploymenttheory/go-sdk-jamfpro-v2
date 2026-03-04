@@ -20,7 +20,7 @@ func TestUnit_MacosConfigurationProfileCustomSettings_GetSchemaList_Success(t *t
 	result, resp, err := service.GetSchemaList(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Len(t, *result, 1)
 	assert.Equal(t, "com.example.app", (*result)[0].BucketName)
 	assert.Equal(t, "Example App Settings", (*result)[0].DisplayName)
@@ -60,7 +60,7 @@ func TestUnit_MacosConfigurationProfileCustomSettings_GetByPayloadUUID_Success(t
 	result, resp, err := service.GetByPayloadUUID(ctx, testPayloadUUID)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, testPayloadUUID, result.PayloadUUID)
 	assert.Len(t, result.PayloadContent, 1)
 	assert.Equal(t, "com.apple.ManagedClient.preferences", result.PayloadContent[0].PayloadType)
@@ -124,7 +124,7 @@ func TestUnit_MacosConfigurationProfileCustomSettings_Create_Success(t *testing.
 	result, resp, err := service.Create(ctx, profile)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "newly-created-uuid-67890", result.UUID)
 }
 

@@ -24,7 +24,7 @@ func TestUnit_LocalAdminPassword_GetPendingRotationsV2_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "device-001", result.Results[0].LapsUser.ClientManagementID)
@@ -40,7 +40,7 @@ func TestUnit_LocalAdminPassword_GetSettingsV2_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.AutoDeployEnabled)
 	assert.Equal(t, 90, result.PasswordRotationTime)
 	assert.True(t, result.AutoRotateEnabled)
@@ -60,7 +60,7 @@ func TestUnit_LocalAdminPassword_UpdateSettingsV2_Success(t *testing.T) {
 	resp, err := svc.UpdateSettingsV2(context.Background(), settings)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_LocalAdminPassword_UpdateSettingsV2_NilRequest(t *testing.T) {
@@ -81,7 +81,7 @@ func TestUnit_LocalAdminPassword_GetPasswordHistoryByClientManagementIDV2_Succes
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "encrypted-password-1", result.Results[0].Password)
@@ -118,7 +118,7 @@ func TestUnit_LocalAdminPassword_GetCurrentPasswordByClientManagementIDV2_Succes
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "SecureP@ssw0rd123!", result.Password)
 }
 
@@ -151,7 +151,7 @@ func TestUnit_LocalAdminPassword_GetFullHistoryByClientManagementIDV2_Success(t 
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 4, result.TotalCount)
 	require.Len(t, result.Results, 4)
 	assert.Equal(t, "admin", result.Results[0].Username)
@@ -178,7 +178,7 @@ func TestUnit_LocalAdminPassword_GetCapableAccountsByClientManagementIDV2_Succes
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "device-001", result.Results[0].ClientManagementID)
@@ -204,7 +204,7 @@ func TestUnit_LocalAdminPassword_GetCapableAccountsByClientManagementIDV2_NotFou
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_LocalAdminPassword_SetPasswordByClientManagementIDV2_Success(t *testing.T) {
@@ -222,7 +222,7 @@ func TestUnit_LocalAdminPassword_SetPasswordByClientManagementIDV2_Success(t *te
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.LapsUserPasswordList, 2)
 	assert.Equal(t, "admin", result.LapsUserPasswordList[0].Username)
 	assert.Equal(t, "localadmin", result.LapsUserPasswordList[1].Username)
@@ -260,7 +260,7 @@ func TestUnit_LocalAdminPassword_GetHistoryByUsernameV2_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "2024-01-10T12:00:00Z", result.Results[0].CreatedDate)
@@ -296,7 +296,7 @@ func TestUnit_LocalAdminPassword_GetAuditByUsernameAndGUIDV2_Success(t *testing.
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "encrypted-password-1", result.Results[0].Password)
@@ -342,7 +342,7 @@ func TestUnit_LocalAdminPassword_GetHistoryByUsernameAndGUIDV2_Success(t *testin
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "COMPLETED", result.Results[0].RotationStatus)
@@ -387,7 +387,7 @@ func TestUnit_LocalAdminPassword_GetPasswordByUsernameAndGUIDV2_Success(t *testi
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "SecureP@ssw0rd123!", result.Password)
 }
 

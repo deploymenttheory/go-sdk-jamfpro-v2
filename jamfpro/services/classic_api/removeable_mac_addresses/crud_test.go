@@ -29,7 +29,7 @@ func TestUnit_RemoveableMacAddresses_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.Size)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, 1, result.Results[0].ID)
@@ -51,7 +51,7 @@ func TestUnit_RemoveableMacAddresses_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "AA:BB:CC:DD:EE:FF", result.Name)
 }
@@ -84,7 +84,7 @@ func TestUnit_RemoveableMacAddresses_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 // =============================================================================
@@ -100,7 +100,7 @@ func TestUnit_RemoveableMacAddresses_GetByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "AA:BB:CC:DD:EE:FF", result.Name)
 }
@@ -129,7 +129,7 @@ func TestUnit_RemoveableMacAddresses_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, 100, result.ID)
 	assert.Equal(t, "AA:BB:CC:DD:EE:FF", result.Name)
 }
@@ -153,7 +153,7 @@ func TestUnit_RemoveableMacAddresses_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 // =============================================================================
@@ -170,7 +170,7 @@ func TestUnit_RemoveableMacAddresses_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Updated MAC Address", result.Name)
 }
@@ -210,7 +210,7 @@ func TestUnit_RemoveableMacAddresses_UpdateByName_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "Updated MAC Address", result.Name)
 }
@@ -247,7 +247,7 @@ func TestUnit_RemoveableMacAddresses_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByID(context.Background(), 1)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_RemoveableMacAddresses_DeleteByID_ZeroID(t *testing.T) {
@@ -279,7 +279,7 @@ func TestUnit_RemoveableMacAddresses_DeleteByName_Success(t *testing.T) {
 	resp, err := svc.DeleteByName(context.Background(), "AA:BB:CC:DD:EE:FF")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_RemoveableMacAddresses_DeleteByName_EmptyName(t *testing.T) {

@@ -11,7 +11,9 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 type registeredResponse struct {
@@ -63,23 +65,16 @@ func (m *EnrollmentCustomizationPreviewMock) registerError(method, path string, 
 	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body, errMsg: errMsg}
 }
 
-func (m *EnrollmentCustomizationPreviewMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		return nil, fmt.Errorf("EnrollmentCustomizationPreviewMock: no response registered for %s %s", method, path)
 	}
-
-	resp := &interfaces.Response{
-		StatusCode: r.statusCode,
-		Status:     fmt.Sprintf("%d", r.statusCode),
-		Headers:    http.Header{"Content-Type": {"application/json"}},
-		Body:       r.rawBody,
-	}
-
+	headers := http.Header{"Content-Type": {"application/json"}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
-
 	if result != nil && len(r.rawBody) > 0 {
 		if err := json.Unmarshal(r.rawBody, result); err != nil {
 			return resp, fmt.Errorf("EnrollmentCustomizationPreviewMock: unmarshal into result: %w", err)
@@ -160,64 +155,67 @@ func (m *EnrollmentCustomizationPreviewMock) RegisterNotFoundErrorMock(id, panel
 	m.registerError("GET", "/api/v1/enrollment-customization/"+id+"/all/"+panelID, 404, "error_not_found.json")
 }
 
-func (m *EnrollmentCustomizationPreviewMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
-	if mergePage != nil && resp != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
-			return resp, fmt.Errorf("mergePage failed: %w", err)
+	if resp != nil {
+		bodyBytes := resp.Bytes()
+		if mergePage != nil && len(bodyBytes) > 0 {
+			if err := mergePage(bodyBytes); err != nil {
+				return resp, fmt.Errorf("mergePage failed: %w", err)
+			}
 		}
 	}
 	return resp, nil
 }
 
-func (m *EnrollmentCustomizationPreviewMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) GetBytes(ctx context.Context, path string, _ map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *EnrollmentCustomizationPreviewMock) GetBytes(ctx context.Context, path string, _ map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
 func (m *EnrollmentCustomizationPreviewMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
 func (m *EnrollmentCustomizationPreviewMock) InvalidateToken() error                    { return nil }
 func (m *EnrollmentCustomizationPreviewMock) KeepAliveToken() error                     { return nil }
-func (m *EnrollmentCustomizationPreviewMock) GetLogger() *zap.Logger                  { return m.logger }
+func (m *EnrollmentCustomizationPreviewMock) GetLogger() *zap.Logger                    { return m.logger }

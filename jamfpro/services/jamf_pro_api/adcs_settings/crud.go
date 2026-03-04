@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -18,49 +19,49 @@ type (
 		// CreateV1 creates a new AD CS configuration (Create AD CS Settings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings
-		CreateV1(ctx context.Context, request *ResourceAdcsSettings) (*ResponseAdcsSettingsCreated, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *ResourceAdcsSettings) (*ResponseAdcsSettingsCreated, *resty.Response, error)
 
 		// GetByIDV1 returns the AD CS configuration by ID (Get AD CS Settings by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id
-		GetByIDV1(ctx context.Context, id string) (*ResponseAdcsSettings, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResponseAdcsSettings, *resty.Response, error)
 
 		// UpdateByIDV1 updates the AD CS configuration by ID using merge-patch semantics (Update AD CS Settings by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-pki-adcs-settings-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdcsSettings) (*interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdcsSettings) (*resty.Response, error)
 
 		// DeleteByIDV1 deletes the AD CS configuration by ID (Delete AD CS Settings by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-adcs-settings-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// ValidateServerCertificateV1 validates the AD CS Settings server certificate (Validate Server Certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings-validate-certificate
-		ValidateServerCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*interfaces.Response, error)
+		ValidateServerCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*resty.Response, error)
 
 		// ValidateClientCertificateV1 validates the AD CS Settings client certificate (Validate Client Certificate).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings-validate-client-certificate
-		ValidateClientCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*interfaces.Response, error)
+		ValidateClientCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*resty.Response, error)
 
 		// GetDependenciesByIDV1 returns the list of dependencies for an AD CS Settings configuration (Get Dependencies).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id-dependencies
-		GetDependenciesByIDV1(ctx context.Context, id string) (*DependenciesResponse, *interfaces.Response, error)
+		GetDependenciesByIDV1(ctx context.Context, id string) (*DependenciesResponse, *resty.Response, error)
 
 		// GetHistoryByIDV1 returns the history for an AD CS Settings configuration (Get History).
 		//
 		// Query params (optional, pass via query): page, page-size, sort, filter.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id-history
-		GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNoteByIDV1 adds a note to the history for an AD CS Settings configuration (Add History Note).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings-id-history
-		AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*interfaces.Response, error)
+		AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*resty.Response, error)
 	}
 
 	// Service handles communication with the AD CS Settings-related methods of the Jamf Pro API.
@@ -80,7 +81,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // CreateV1 creates a new AD CS configuration.
 // URL: POST /api/v1/pki/adcs-settings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings
-func (s *Service) CreateV1(ctx context.Context, request *ResourceAdcsSettings) (*ResponseAdcsSettingsCreated, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *ResourceAdcsSettings) (*ResponseAdcsSettingsCreated, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -105,7 +106,7 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceAdcsSettings) (
 // GetByIDV1 returns the AD CS configuration by ID.
 // URL: GET /api/v1/pki/adcs-settings/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResponseAdcsSettings, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResponseAdcsSettings, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -129,7 +130,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResponseAdcsSettin
 // UpdateByIDV1 updates the AD CS configuration by ID using merge-patch semantics.
 // URL: PATCH /api/v1/pki/adcs-settings/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-pki-adcs-settings-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceAdcsSettings) (*interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceAdcsSettings) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -155,7 +156,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *Resource
 // DeleteByIDV1 deletes the AD CS configuration by ID.
 // URL: DELETE /api/v1/pki/adcs-settings/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-adcs-settings-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -177,7 +178,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 // ValidateServerCertificateV1 validates the AD CS Settings server certificate.
 // URL: POST /api/v1/pki/adcs-settings/validate-certificate
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings-validate-certificate
-func (s *Service) ValidateServerCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*interfaces.Response, error) {
+func (s *Service) ValidateServerCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request is required")
 	}
@@ -199,7 +200,7 @@ func (s *Service) ValidateServerCertificateV1(ctx context.Context, request *Vali
 // ValidateClientCertificateV1 validates the AD CS Settings client certificate.
 // URL: POST /api/v1/pki/adcs-settings/validate-client-certificate
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings-validate-client-certificate
-func (s *Service) ValidateClientCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*interfaces.Response, error) {
+func (s *Service) ValidateClientCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request is required")
 	}
@@ -221,7 +222,7 @@ func (s *Service) ValidateClientCertificateV1(ctx context.Context, request *Vali
 // GetDependenciesByIDV1 returns the list of dependencies for an AD CS Settings configuration.
 // URL: GET /api/v1/pki/adcs-settings/{id}/dependencies
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id-dependencies
-func (s *Service) GetDependenciesByIDV1(ctx context.Context, id string) (*DependenciesResponse, *interfaces.Response, error) {
+func (s *Service) GetDependenciesByIDV1(ctx context.Context, id string) (*DependenciesResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -247,7 +248,7 @@ func (s *Service) GetDependenciesByIDV1(ctx context.Context, id string) (*Depend
 // query supports: filter (RSQL), sort, page, page-size (all optional).
 // Note: page and page-size are managed internally by GetPaginated.
 // https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id-history
-func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -280,7 +281,7 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 // AddHistoryNoteByIDV1 adds a note to the history for an AD CS Settings configuration.
 // URL: POST /api/v1/pki/adcs-settings/{id}/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings-id-history
-func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*interfaces.Response, error) {
+func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}

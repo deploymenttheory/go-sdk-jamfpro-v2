@@ -20,7 +20,7 @@ func TestUnit_AdvancedUserContentSearches_ListV1_Success(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	require.Equal(t, "1", result.Results[0].ID)
@@ -32,7 +32,7 @@ func TestUnit_AdvancedUserContentSearches_GetByIDV1_Success(t *testing.T) {
 	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "1", result.ID)
 	require.Equal(t, "Andy's Search", result.Name)
 }
@@ -55,7 +55,7 @@ func TestUnit_AdvancedUserContentSearches_CreateV1_Success(t *testing.T) {
 	result, resp, err := svc.CreateV1(context.Background(), search)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Contains(t, []int{200, 201}, resp.StatusCode)
+	require.Contains(t, []int{200, 201}, resp.StatusCode())
 	require.Equal(t, "2", result.ID)
 }
 
@@ -77,7 +77,7 @@ func TestUnit_AdvancedUserContentSearches_UpdateByIDV1_Success(t *testing.T) {
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", search)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, "1", result.ID)
 }
 
@@ -88,7 +88,7 @@ func TestUnit_AdvancedUserContentSearches_GetByIDV1_NotFound(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 404, resp.StatusCode)
+	require.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_AdvancedUserContentSearches_UpdateByIDV1_EmptyID(t *testing.T) {
@@ -123,7 +123,7 @@ func TestUnit_AdvancedUserContentSearches_DeleteByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Equal(t, 204, resp.StatusCode)
+	require.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_AdvancedUserContentSearches_DeleteByIDV1_Error(t *testing.T) {

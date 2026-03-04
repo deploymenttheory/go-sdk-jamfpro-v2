@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,7 +17,7 @@ type (
 		// Uses Accept: image/* header. Returns raw bytes (not JSON).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-branding-images-download-id
-		DownloadBrandingImageV1(ctx context.Context, id string) ([]byte, *interfaces.Response, error)
+		DownloadBrandingImageV1(ctx context.Context, id string) ([]byte, *resty.Response, error)
 	}
 
 	// Service handles communication with the branding image download methods of the Jamf Pro API.
@@ -38,7 +39,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Uses Accept: image/* to request image response. Returns raw binary (not JSON).
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-branding-images-download-id
-func (s *Service) DownloadBrandingImageV1(ctx context.Context, id string) ([]byte, *interfaces.Response, error) {
+func (s *Service) DownloadBrandingImageV1(ctx context.Context, id string) ([]byte, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%s", EndpointBrandingImagesDownloadV1, id)
 	headers := map[string]string{"Accept": "image/*"}
 

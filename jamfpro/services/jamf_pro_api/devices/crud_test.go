@@ -31,7 +31,7 @@ func TestUnit_Devices_GetGroupsV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 2)
 	assert.Equal(t, "1", result[0].ID)
 	assert.Equal(t, "All Devices", result[0].Name)
@@ -48,7 +48,7 @@ func TestUnit_Devices_GetGroupsV1_EmptyArray(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Empty(t, result)
 }
 
@@ -70,7 +70,7 @@ func TestUnit_Devices_GetGroupsV1_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 	assert.Contains(t, err.Error(), "NOT-FOUND")
 }
 

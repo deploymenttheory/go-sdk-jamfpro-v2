@@ -20,7 +20,7 @@ func TestUnit_ApiRolePrivileges_ListV1_Success(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.Privileges, 3)
 }
 
@@ -29,7 +29,7 @@ func TestUnit_ApiRolePrivileges_SearchPrivilegesByNameV1_Success(t *testing.T) {
 	result, resp, err := svc.SearchPrivilegesByNameV1(context.Background(), "Read", 10)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.Privileges, 3)
 }
 
@@ -57,5 +57,5 @@ func TestUnit_APIRolePrivileges_SearchPrivilegesByNameV1_DefaultLimit(t *testing
 	result, resp, err := svc.SearchPrivilegesByNameV1(context.Background(), "Read", 0)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 }

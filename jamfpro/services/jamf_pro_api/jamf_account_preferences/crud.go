@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,12 +17,12 @@ type (
 		// GetV3 returns the current Jamf Pro account preferences.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
-		GetV3(ctx context.Context) (*ResourceAccountPreferences, *interfaces.Response, error)
+		GetV3(ctx context.Context) (*ResourceAccountPreferences, *resty.Response, error)
 
 		// UpdateV3 updates Jamf Pro account preferences (PATCH).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v3-account-preferences
-		UpdateV3(ctx context.Context, request *ResourceAccountPreferences) (*ResourceAccountPreferences, *interfaces.Response, error)
+		UpdateV3(ctx context.Context, request *ResourceAccountPreferences) (*ResourceAccountPreferences, *resty.Response, error)
 	}
 
 	// Service handles communication with the Jamf Pro account preferences methods of the Jamf Pro API.
@@ -46,7 +47,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v3/account-preferences
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
-func (s *Service) GetV3(ctx context.Context) (*ResourceAccountPreferences, *interfaces.Response, error) {
+func (s *Service) GetV3(ctx context.Context) (*ResourceAccountPreferences, *resty.Response, error) {
 	var result ResourceAccountPreferences
 
 	endpoint := EndpointAccountPreferencesV3
@@ -68,7 +69,7 @@ func (s *Service) GetV3(ctx context.Context) (*ResourceAccountPreferences, *inte
 // Returns 204 No Content on success; the API may not return the updated resource.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v3-account-preferences
-func (s *Service) UpdateV3(ctx context.Context, request *ResourceAccountPreferences) (*ResourceAccountPreferences, *interfaces.Response, error) {
+func (s *Service) UpdateV3(ctx context.Context, request *ResourceAccountPreferences) (*ResourceAccountPreferences, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -88,7 +89,8 @@ func (s *Service) UpdateV3(ctx context.Context, request *ResourceAccountPreferen
 	}
 
 	// PATCH returns 204 No Content; if no body, return the request as the "updated" value
-	if resp != nil && resp.StatusCode == 204 && len(resp.Body) == 0 {
+	bodyBytes := resp.Bytes()
+	if resp != nil && resp.StatusCode() == 204 && len(bodyBytes) == 0 {
 		return request, resp, nil
 	}
 

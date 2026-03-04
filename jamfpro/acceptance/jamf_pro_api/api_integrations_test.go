@@ -8,11 +8,11 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_integrations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -123,7 +123,7 @@ func TestAcceptance_ApiIntegrations_list_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 }
 
@@ -230,7 +230,7 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	idStr := strconv.Itoa(created.ID)
 	acc.Cleanup(t, func() {
@@ -238,7 +238,7 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	})
 
 	var getByID *api_integrations.ResourceApiIntegration
-	var getResp *interfaces.Response
+	var getResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		getByID, getResp, getErr = svc.GetByIDV1(ctx, idStr)
@@ -257,7 +257,7 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	creds, resp, err := svc.RefreshClientCredentialsByIDV1(ctx, idStr)
 	require.NoError(t, err)
 	require.NotNil(t, creds)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, creds.ClientID)
 	assert.NotEmpty(t, creds.ClientSecret)
 
@@ -269,7 +269,7 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	delResp, err := svc.DeleteByIDV1(ctx, idStr)
 	require.NoError(t, err)

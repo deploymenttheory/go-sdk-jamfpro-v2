@@ -17,7 +17,7 @@ func TestAcceptance_SelfServicePlusSettings_get(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestAcceptance_SelfServicePlusSettings_update(t *testing.T) {

@@ -6,11 +6,11 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -96,7 +96,7 @@ func TestAcceptance_Enrollment_get_and_update_v4(t *testing.T) {
 	result, resp, err := svc.GetV4(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify structure
 	assert.NotNil(t, result.InstallSingleProfile)
@@ -135,7 +135,7 @@ func TestAcceptance_Enrollment_get_and_update_v4(t *testing.T) {
 	updated, resp, err := svc.UpdateV4(ctx, updateRequest)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, !originalRestrictReenrollment, updated.RestrictReenrollment)
 
 	// Restore original setting
@@ -169,7 +169,7 @@ func TestAcceptance_Enrollment_get_and_update_v4(t *testing.T) {
 	restored, resp, err := svc.UpdateV4(ctx, restoreRequest)
 	require.NoError(t, err)
 	require.NotNil(t, restored)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, originalRestrictReenrollment, restored.RestrictReenrollment)
 }
 
@@ -192,12 +192,12 @@ func TestAcceptance_Enrollment_access_group_lifecycle_v3(t *testing.T) {
 	}
 
 	created, resp, err := svc.CreateAccessGroupV3(ctx, createRequest)
-	if err != nil && resp != nil && resp.StatusCode == 400 {
+	if err != nil && resp != nil && resp.StatusCode() == 400 {
 		t.Skip("Directory Service not configured (requires LDAP/AD setup)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 	createdID := created.ID
 
@@ -208,7 +208,7 @@ func TestAcceptance_Enrollment_access_group_lifecycle_v3(t *testing.T) {
 
 	// Get by ID (with retry for eventual consistency)
 	var fetched *enrollment.ResourceAccountDrivenUserEnrollmentAccessGroup
-	var getResp *interfaces.Response
+	var getResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, getResp, getErr = svc.GetAccessGroupByIDV3(ctx, createdID)
@@ -235,7 +235,7 @@ func TestAcceptance_Enrollment_access_group_lifecycle_v3(t *testing.T) {
 	updated, resp, err := svc.UpdateAccessGroupByIDV3(ctx, createdID, updateRequest)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Test ADUE Access Group Updated", updated.Name)
 	assert.Equal(t, false, updated.EnterpriseEnrollmentEnabled)
 	assert.Equal(t, true, updated.RequireEula)
@@ -243,12 +243,12 @@ func TestAcceptance_Enrollment_access_group_lifecycle_v3(t *testing.T) {
 	// Delete
 	resp, err = svc.DeleteAccessGroupByIDV3(ctx, createdID)
 	require.NoError(t, err)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 
 	// Verify deletion
 	_, resp, err = svc.GetAccessGroupByIDV3(ctx, createdID)
 	assert.Error(t, err)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestAcceptance_Enrollment_list_access_groups_v3(t *testing.T) {
@@ -261,7 +261,7 @@ func TestAcceptance_Enrollment_list_access_groups_v3(t *testing.T) {
 	listResult, resp, err := svc.ListAccessGroupsV3(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, listResult)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, listResult.TotalCount, 0)
 }
 
@@ -275,14 +275,14 @@ func TestAcceptance_Enrollment_language_messages_v3(t *testing.T) {
 	codes, resp, err := svc.ListLanguageCodesV3(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, codes)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, codes)
 
 	// List all language messages
 	messages, resp, err := svc.ListLanguageMessagesV3(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, messages)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// If English exists, test get by code
 	if len(messages.Results) > 0 {
@@ -291,7 +291,7 @@ func TestAcceptance_Enrollment_language_messages_v3(t *testing.T) {
 		message, resp, err := svc.GetLanguageMessageV3(ctx, firstMessage.LanguageCode)
 		require.NoError(t, err)
 		require.NotNil(t, message)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.Equal(t, firstMessage.LanguageCode, message.LanguageCode)
 	}
 }
@@ -316,7 +316,7 @@ func TestAcceptance_Enrollment_history_v2(t *testing.T) {
 	history, resp, err := svc.GetHistoryV2(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, history)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 }
 

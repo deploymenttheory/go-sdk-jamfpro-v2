@@ -23,7 +23,7 @@ func TestUnit_SsoCertificate_Get_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "SELF_SERVICE", result.Keystore.Type)
 }
 
@@ -35,7 +35,7 @@ func TestUnit_SsoCertificate_Create_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_SsoCertificate_Delete_Success(t *testing.T) {
@@ -45,7 +45,7 @@ func TestUnit_SsoCertificate_Delete_Success(t *testing.T) {
 	resp, err := svc.DeleteV2(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_SsoCertificate_UpdateV2_Success(t *testing.T) {
@@ -61,7 +61,7 @@ func TestUnit_SsoCertificate_UpdateV2_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "SELF_SERVICE", result.Keystore.Type)
 }
 
@@ -72,7 +72,7 @@ func TestUnit_SsoCertificate_DownloadV2_Success(t *testing.T) {
 	data, resp, err := svc.DownloadV2(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	_ = data
 }
 
@@ -89,7 +89,7 @@ func TestUnit_SsoCertificate_ParseV2_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "PKCS12", result.Type)
 	assert.Equal(t, "UPLOADED", result.KeystoreSetupType)
 	require.Len(t, result.Keys, 1)

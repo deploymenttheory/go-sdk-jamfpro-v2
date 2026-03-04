@@ -22,7 +22,7 @@ func TestAcceptance_VolumePurchasingLocations_list_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.GreaterOrEqual(t, list.TotalCount, 0)
 }
 
@@ -45,7 +45,7 @@ func TestAcceptance_VolumePurchasingLocations_get_by_idv1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, got)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, list.Results[0].ID, got.ID)
 }
 
@@ -80,7 +80,7 @@ func TestAcceptance_VolumePurchasingLocations_get_history_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, history)
 	require.NotNil(t, resp)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 }
 
@@ -106,7 +106,7 @@ func TestAcceptance_VolumePurchasingLocations_add_history_notes_v1(t *testing.T)
 	resp, err := svc.AddHistoryNotesV1(ctx, list.Results[0].ID, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Equal(t, 201, resp.StatusCode)
+	require.Equal(t, 201, resp.StatusCode())
 }
 
 // TestAcceptance_VolumePurchasingLocations_revoke_volume_purchasing_location_licenses_by_idv1 tests revoking licenses.
@@ -131,5 +131,5 @@ func TestAcceptance_VolumePurchasingLocations_revoke_volume_purchasing_location_
 		return
 	}
 	require.NotNil(t, resp)
-	require.Equal(t, 204, resp.StatusCode)
+	require.Equal(t, 204, resp.StatusCode())
 }

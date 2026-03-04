@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,55 +17,55 @@ type (
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/enrollment-customization-preview
 	EnrollmentCustomizationPreviewServiceInterface interface {
 		// ParseMarkdown parses markdown to HTML.
-		ParseMarkdown(ctx context.Context, request *RequestParseMarkdown) (*ResponseParseMarkdown, *interfaces.Response, error)
+		ParseMarkdown(ctx context.Context, request *RequestParseMarkdown) (*ResponseParseMarkdown, *resty.Response, error)
 
 		// GetAllPanels returns all panels for an enrollment customization.
-		GetAllPanels(ctx context.Context, id string) (*PanelListResponse, *interfaces.Response, error)
+		GetAllPanels(ctx context.Context, id string) (*PanelListResponse, *resty.Response, error)
 
 		// GetPanelByID returns a single panel by ID.
-		GetPanelByID(ctx context.Context, id, panelID string) (*ResourcePanel, *interfaces.Response, error)
+		GetPanelByID(ctx context.Context, id, panelID string) (*ResourcePanel, *resty.Response, error)
 
 		// DeletePanel deletes a panel from an enrollment customization.
-		DeletePanel(ctx context.Context, id, panelID string) (*interfaces.Response, error)
+		DeletePanel(ctx context.Context, id, panelID string) (*resty.Response, error)
 
 		// CreateLdapPanel creates an LDAP panel.
-		CreateLdapPanel(ctx context.Context, id string, request *ResourceLdapPanel) (*ResourceLdapPanel, *interfaces.Response, error)
+		CreateLdapPanel(ctx context.Context, id string, request *ResourceLdapPanel) (*ResourceLdapPanel, *resty.Response, error)
 
 		// GetLdapPanel returns an LDAP panel by ID.
-		GetLdapPanel(ctx context.Context, id, panelID string) (*ResourceLdapPanel, *interfaces.Response, error)
+		GetLdapPanel(ctx context.Context, id, panelID string) (*ResourceLdapPanel, *resty.Response, error)
 
 		// UpdateLdapPanel updates an LDAP panel.
-		UpdateLdapPanel(ctx context.Context, id, panelID string, request *ResourceLdapPanel) (*ResourceLdapPanel, *interfaces.Response, error)
+		UpdateLdapPanel(ctx context.Context, id, panelID string, request *ResourceLdapPanel) (*ResourceLdapPanel, *resty.Response, error)
 
 		// DeleteLdapPanel deletes an LDAP panel.
-		DeleteLdapPanel(ctx context.Context, id, panelID string) (*interfaces.Response, error)
+		DeleteLdapPanel(ctx context.Context, id, panelID string) (*resty.Response, error)
 
 		// CreateSsoPanel creates an SSO panel.
-		CreateSsoPanel(ctx context.Context, id string, request *ResourceSsoPanel) (*ResourceSsoPanel, *interfaces.Response, error)
+		CreateSsoPanel(ctx context.Context, id string, request *ResourceSsoPanel) (*ResourceSsoPanel, *resty.Response, error)
 
 		// GetSsoPanel returns an SSO panel by ID.
-		GetSsoPanel(ctx context.Context, id, panelID string) (*ResourceSsoPanel, *interfaces.Response, error)
+		GetSsoPanel(ctx context.Context, id, panelID string) (*ResourceSsoPanel, *resty.Response, error)
 
 		// UpdateSsoPanel updates an SSO panel.
-		UpdateSsoPanel(ctx context.Context, id, panelID string, request *ResourceSsoPanel) (*ResourceSsoPanel, *interfaces.Response, error)
+		UpdateSsoPanel(ctx context.Context, id, panelID string, request *ResourceSsoPanel) (*ResourceSsoPanel, *resty.Response, error)
 
 		// DeleteSsoPanel deletes an SSO panel.
-		DeleteSsoPanel(ctx context.Context, id, panelID string) (*interfaces.Response, error)
+		DeleteSsoPanel(ctx context.Context, id, panelID string) (*resty.Response, error)
 
 		// CreateTextPanel creates a text panel.
-		CreateTextPanel(ctx context.Context, id string, request *ResourceTextPanel) (*ResourceTextPanel, *interfaces.Response, error)
+		CreateTextPanel(ctx context.Context, id string, request *ResourceTextPanel) (*ResourceTextPanel, *resty.Response, error)
 
 		// GetTextPanel returns a text panel by ID.
-		GetTextPanel(ctx context.Context, id, panelID string) (*ResourceTextPanel, *interfaces.Response, error)
+		GetTextPanel(ctx context.Context, id, panelID string) (*ResourceTextPanel, *resty.Response, error)
 
 		// UpdateTextPanel updates a text panel.
-		UpdateTextPanel(ctx context.Context, id, panelID string, request *ResourceTextPanel) (*ResourceTextPanel, *interfaces.Response, error)
+		UpdateTextPanel(ctx context.Context, id, panelID string, request *ResourceTextPanel) (*ResourceTextPanel, *resty.Response, error)
 
 		// DeleteTextPanel deletes a text panel.
-		DeleteTextPanel(ctx context.Context, id, panelID string) (*interfaces.Response, error)
+		DeleteTextPanel(ctx context.Context, id, panelID string) (*resty.Response, error)
 
 		// GetTextPanelMarkdown returns the markdown for a text panel.
-		GetTextPanelMarkdown(ctx context.Context, id, panelID string) (*ResponseTextPanelMarkdown, *interfaces.Response, error)
+		GetTextPanelMarkdown(ctx context.Context, id, panelID string) (*ResponseTextPanelMarkdown, *resty.Response, error)
 	}
 
 	// Service handles communication with the enrollment customization preview methods of the Jamf Pro API.
@@ -81,7 +82,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // ParseMarkdown parses markdown to HTML.
 // URL: POST /api/v1/enrollment-customization/parse-markdown
-func (s *Service) ParseMarkdown(ctx context.Context, request *RequestParseMarkdown) (*ResponseParseMarkdown, *interfaces.Response, error) {
+func (s *Service) ParseMarkdown(ctx context.Context, request *RequestParseMarkdown) (*ResponseParseMarkdown, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -105,7 +106,7 @@ func (s *Service) ParseMarkdown(ctx context.Context, request *RequestParseMarkdo
 
 // GetAllPanels returns all panels for an enrollment customization.
 // URL: GET /api/v1/enrollment-customization/{id}/all
-func (s *Service) GetAllPanels(ctx context.Context, id string) (*PanelListResponse, *interfaces.Response, error) {
+func (s *Service) GetAllPanels(ctx context.Context, id string) (*PanelListResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -128,7 +129,7 @@ func (s *Service) GetAllPanels(ctx context.Context, id string) (*PanelListRespon
 
 // GetPanelByID returns a single panel by ID.
 // URL: GET /api/v1/enrollment-customization/{id}/all/{panel-id}
-func (s *Service) GetPanelByID(ctx context.Context, id, panelID string) (*ResourcePanel, *interfaces.Response, error) {
+func (s *Service) GetPanelByID(ctx context.Context, id, panelID string) (*ResourcePanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -154,7 +155,7 @@ func (s *Service) GetPanelByID(ctx context.Context, id, panelID string) (*Resour
 
 // DeletePanel deletes a panel from an enrollment customization.
 // URL: DELETE /api/v1/enrollment-customization/{id}/all/{panel-id}
-func (s *Service) DeletePanel(ctx context.Context, id, panelID string) (*interfaces.Response, error) {
+func (s *Service) DeletePanel(ctx context.Context, id, panelID string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -178,7 +179,7 @@ func (s *Service) DeletePanel(ctx context.Context, id, panelID string) (*interfa
 
 // CreateLdapPanel creates an LDAP panel.
 // URL: POST /api/v1/enrollment-customization/{id}/ldap
-func (s *Service) CreateLdapPanel(ctx context.Context, id string, request *ResourceLdapPanel) (*ResourceLdapPanel, *interfaces.Response, error) {
+func (s *Service) CreateLdapPanel(ctx context.Context, id string, request *ResourceLdapPanel) (*ResourceLdapPanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -211,7 +212,7 @@ func (s *Service) CreateLdapPanel(ctx context.Context, id string, request *Resou
 
 // GetLdapPanel returns an LDAP panel by ID.
 // URL: GET /api/v1/enrollment-customization/{id}/ldap/{panel-id}
-func (s *Service) GetLdapPanel(ctx context.Context, id, panelID string) (*ResourceLdapPanel, *interfaces.Response, error) {
+func (s *Service) GetLdapPanel(ctx context.Context, id, panelID string) (*ResourceLdapPanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -237,7 +238,7 @@ func (s *Service) GetLdapPanel(ctx context.Context, id, panelID string) (*Resour
 
 // UpdateLdapPanel updates an LDAP panel.
 // URL: PUT /api/v1/enrollment-customization/{id}/ldap/{panel-id}
-func (s *Service) UpdateLdapPanel(ctx context.Context, id, panelID string, request *ResourceLdapPanel) (*ResourceLdapPanel, *interfaces.Response, error) {
+func (s *Service) UpdateLdapPanel(ctx context.Context, id, panelID string, request *ResourceLdapPanel) (*ResourceLdapPanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -273,7 +274,7 @@ func (s *Service) UpdateLdapPanel(ctx context.Context, id, panelID string, reque
 
 // DeleteLdapPanel deletes an LDAP panel.
 // URL: DELETE /api/v1/enrollment-customization/{id}/ldap/{panel-id}
-func (s *Service) DeleteLdapPanel(ctx context.Context, id, panelID string) (*interfaces.Response, error) {
+func (s *Service) DeleteLdapPanel(ctx context.Context, id, panelID string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -297,7 +298,7 @@ func (s *Service) DeleteLdapPanel(ctx context.Context, id, panelID string) (*int
 
 // CreateSsoPanel creates an SSO panel.
 // URL: POST /api/v1/enrollment-customization/{id}/sso
-func (s *Service) CreateSsoPanel(ctx context.Context, id string, request *ResourceSsoPanel) (*ResourceSsoPanel, *interfaces.Response, error) {
+func (s *Service) CreateSsoPanel(ctx context.Context, id string, request *ResourceSsoPanel) (*ResourceSsoPanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -327,7 +328,7 @@ func (s *Service) CreateSsoPanel(ctx context.Context, id string, request *Resour
 
 // GetSsoPanel returns an SSO panel by ID.
 // URL: GET /api/v1/enrollment-customization/{id}/sso/{panel-id}
-func (s *Service) GetSsoPanel(ctx context.Context, id, panelID string) (*ResourceSsoPanel, *interfaces.Response, error) {
+func (s *Service) GetSsoPanel(ctx context.Context, id, panelID string) (*ResourceSsoPanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -353,7 +354,7 @@ func (s *Service) GetSsoPanel(ctx context.Context, id, panelID string) (*Resourc
 
 // UpdateSsoPanel updates an SSO panel.
 // URL: PUT /api/v1/enrollment-customization/{id}/sso/{panel-id}
-func (s *Service) UpdateSsoPanel(ctx context.Context, id, panelID string, request *ResourceSsoPanel) (*ResourceSsoPanel, *interfaces.Response, error) {
+func (s *Service) UpdateSsoPanel(ctx context.Context, id, panelID string, request *ResourceSsoPanel) (*ResourceSsoPanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -386,7 +387,7 @@ func (s *Service) UpdateSsoPanel(ctx context.Context, id, panelID string, reques
 
 // DeleteSsoPanel deletes an SSO panel.
 // URL: DELETE /api/v1/enrollment-customization/{id}/sso/{panel-id}
-func (s *Service) DeleteSsoPanel(ctx context.Context, id, panelID string) (*interfaces.Response, error) {
+func (s *Service) DeleteSsoPanel(ctx context.Context, id, panelID string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -410,7 +411,7 @@ func (s *Service) DeleteSsoPanel(ctx context.Context, id, panelID string) (*inte
 
 // CreateTextPanel creates a text panel.
 // URL: POST /api/v1/enrollment-customization/{id}/text
-func (s *Service) CreateTextPanel(ctx context.Context, id string, request *ResourceTextPanel) (*ResourceTextPanel, *interfaces.Response, error) {
+func (s *Service) CreateTextPanel(ctx context.Context, id string, request *ResourceTextPanel) (*ResourceTextPanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -446,7 +447,7 @@ func (s *Service) CreateTextPanel(ctx context.Context, id string, request *Resou
 
 // GetTextPanel returns a text panel by ID.
 // URL: GET /api/v1/enrollment-customization/{id}/text/{panel-id}
-func (s *Service) GetTextPanel(ctx context.Context, id, panelID string) (*ResourceTextPanel, *interfaces.Response, error) {
+func (s *Service) GetTextPanel(ctx context.Context, id, panelID string) (*ResourceTextPanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -472,7 +473,7 @@ func (s *Service) GetTextPanel(ctx context.Context, id, panelID string) (*Resour
 
 // UpdateTextPanel updates a text panel.
 // URL: PUT /api/v1/enrollment-customization/{id}/text/{panel-id}
-func (s *Service) UpdateTextPanel(ctx context.Context, id, panelID string, request *ResourceTextPanel) (*ResourceTextPanel, *interfaces.Response, error) {
+func (s *Service) UpdateTextPanel(ctx context.Context, id, panelID string, request *ResourceTextPanel) (*ResourceTextPanel, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -511,7 +512,7 @@ func (s *Service) UpdateTextPanel(ctx context.Context, id, panelID string, reque
 
 // DeleteTextPanel deletes a text panel.
 // URL: DELETE /api/v1/enrollment-customization/{id}/text/{panel-id}
-func (s *Service) DeleteTextPanel(ctx context.Context, id, panelID string) (*interfaces.Response, error) {
+func (s *Service) DeleteTextPanel(ctx context.Context, id, panelID string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("enrollment customization ID is required")
 	}
@@ -535,7 +536,7 @@ func (s *Service) DeleteTextPanel(ctx context.Context, id, panelID string) (*int
 
 // GetTextPanelMarkdown returns the markdown for a text panel.
 // URL: GET /api/v1/enrollment-customization/{id}/text/{panel-id}/markdown
-func (s *Service) GetTextPanelMarkdown(ctx context.Context, id, panelID string) (*ResponseTextPanelMarkdown, *interfaces.Response, error) {
+func (s *Service) GetTextPanelMarkdown(ctx context.Context, id, panelID string) (*ResponseTextPanelMarkdown, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}

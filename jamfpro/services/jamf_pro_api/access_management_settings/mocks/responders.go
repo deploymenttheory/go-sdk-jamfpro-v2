@@ -11,7 +11,9 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 type registeredResponse struct {
@@ -44,12 +46,13 @@ func (m *AccessManagementSettingsMock) RegisterPostMock() {
 	m.register("POST", "/api/v4/enrollment/access-management", 200, "validate_get.json")
 }
 
-func (m *AccessManagementSettingsMock) dispatch(method, path string, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return nil, fmt.Errorf("AccessManagementSettingsMock: no response for %s %s", method, path)
+		return shared.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("AccessManagementSettingsMock: no response for %s %s", method, path)
 	}
-	resp := &interfaces.Response{StatusCode: r.statusCode, Status: fmt.Sprintf("%d", r.statusCode), Headers: http.Header{"Content-Type": {"application/json"}}, Body: r.rawBody}
+	headers := http.Header{"Content-Type": {"application/json"}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -61,53 +64,54 @@ func mustMocksDir() string {
 	return filepath.Dir(filename)
 }
 
-func (m *AccessManagementSettingsMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
 }
-func (m *AccessManagementSettingsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AccessManagementSettingsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AccessManagementSettingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AccessManagementSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AccessManagementSettingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
-func (m *AccessManagementSettingsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
-func (m *AccessManagementSettingsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
-func (m *AccessManagementSettingsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
-func (m *AccessManagementSettingsMock) GetBytes(ctx context.Context, path string, _ map[string]string, _ map[string]string) (*interfaces.Response, []byte, error) {
+func (m *AccessManagementSettingsMock) GetBytes(ctx context.Context, path string, _ map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, nil, err
 	}
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
-func (m *AccessManagementSettingsMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*interfaces.Response, error) {
+func (m *AccessManagementSettingsMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
 		return resp, err
 	}
-	if mergePage != nil && len(resp.Body) > 0 {
-		if err := mergePage(resp.Body); err != nil {
+	bodyBytes := resp.Bytes()
+	if mergePage != nil && len(bodyBytes) > 0 {
+		if err := mergePage(bodyBytes); err != nil {
 			return resp, fmt.Errorf("mergePage failed: %w", err)
 		}
 	}
 	return resp, nil
 }
 func (m *AccessManagementSettingsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
-func (m *AccessManagementSettingsMock) InvalidateToken() error                     { return nil }
-func (m *AccessManagementSettingsMock) KeepAliveToken() error                      { return nil }
-func (m *AccessManagementSettingsMock) GetLogger() *zap.Logger                     { return m.logger }
+func (m *AccessManagementSettingsMock) InvalidateToken() error                    { return nil }
+func (m *AccessManagementSettingsMock) KeepAliveToken() error                     { return nil }
+func (m *AccessManagementSettingsMock) GetLogger() *zap.Logger                    { return m.logger }

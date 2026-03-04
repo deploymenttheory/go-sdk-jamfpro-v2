@@ -7,10 +7,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/distribution_point"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -56,7 +56,7 @@ func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "GetByID", "Getting distribution point by ID=%s", dpID)
 
 	var fetched *distribution_point.ResourceDistributionPoint
-	var fetchResp *interfaces.Response
+	var fetchResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		fetched, fetchResp, getErr = svc.GetByIDV1(ctx, dpID)
@@ -202,8 +202,8 @@ func TestAcceptance_DistributionPoint_bulk_delete(t *testing.T) {
 	deleteResp, err := svc.DeleteMultipleV1(ctx, []string{dp1.ID, dp2.ID})
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
-	acc.LogTestSuccess(t, "Bulk delete completed, status=%d", deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
+	acc.LogTestSuccess(t, "Bulk delete completed, status=%d", deleteResp.StatusCode())
 }
 
 // =============================================================================

@@ -21,7 +21,7 @@ func TestUnit_SelfServicePlusSettings_Get_Success(t *testing.T) {
 	result, resp, err := svc.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.False(t, result.Enabled)
 }
 
@@ -31,7 +31,7 @@ func TestUnit_SelfServicePlusSettings_Update_Success(t *testing.T) {
 	result, resp, err := svc.UpdateV1(context.Background(), &ResourceSelfServicePlusSettings{Enabled: true})
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 	assert.Nil(t, result)
 }
 
@@ -49,7 +49,7 @@ func TestUnit_SelfServicePlusSettings_GetFeatureToggleEnabledV1_Success(t *testi
 	enabled, resp, err := svc.GetFeatureToggleEnabledV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, enabled)
 }
 
@@ -88,5 +88,5 @@ func TestUnit_SelfServicePlusSettings_UpdateV1_Non204Response(t *testing.T) {
 	require.NoError(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }

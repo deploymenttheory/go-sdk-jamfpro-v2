@@ -20,7 +20,7 @@ func TestUnit_ClientCheckin_GetV3_Success(t *testing.T) {
 	result, resp, err := svc.GetV3(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, 15, result.CheckInFrequency)
 	require.True(t, result.CreateHooks)
 }
@@ -31,7 +31,7 @@ func TestUnit_ClientCheckin_UpdateV3_Success(t *testing.T) {
 	result, resp, err := svc.UpdateV3(context.Background(), settings)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_ClientCheckin_UpdateV3_NilSettings(t *testing.T) {
@@ -47,7 +47,7 @@ func TestUnit_ClientCheckin_GetHistoryV3_Success(t *testing.T) {
 	result, resp, err := svc.GetHistoryV3(context.Background(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.Equal(t, 200, resp.StatusCode)
+	require.Equal(t, 200, resp.StatusCode())
 	require.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	require.Equal(t, "1", result.Results[0].ID)
@@ -62,7 +62,7 @@ func TestUnit_ClientCheckin_AddHistoryNoteV3_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	require.Equal(t, 201, resp.StatusCode)
+	require.Equal(t, 201, resp.StatusCode())
 	require.Equal(t, "1", result.ID)
 	require.NotEmpty(t, result.HREF)
 }

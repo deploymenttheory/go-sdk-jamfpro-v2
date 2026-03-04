@@ -43,12 +43,12 @@ func TestAcceptance_HealthCheck_get_v1(t *testing.T) {
 	healthy, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Contains(t, []int{200, 204}, resp.StatusCode)
-	if resp.StatusCode == 200 {
+	assert.Contains(t, []int{200, 204}, resp.StatusCode())
+	if resp.StatusCode() == 200 {
 		assert.True(t, healthy, "Jamf Pro API should report as healthy")
 	}
 
-	acc.LogTestSuccess(t, "HealthCheck: healthy=%v status=%d", healthy, resp.StatusCode)
+	acc.LogTestSuccess(t, "HealthCheck: healthy=%v status=%d", healthy, resp.StatusCode())
 }
 
 // TestAcceptance_HealthCheck_get_health_status_v1 verifies the health status endpoint.
@@ -62,14 +62,14 @@ func TestAcceptance_HealthCheck_get_health_status_v1(t *testing.T) {
 	acc.LogTestStage(t, "GetHealthStatus", "Getting Jamf Pro API health status metrics")
 
 	result, resp, err := svc.GetHealthStatusV1(ctx)
-	if err != nil && resp != nil && resp.StatusCode == 404 {
+	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Log("GetHealthStatusV1 returned 404 - not available on non-cloud nodes, skipping")
 		return
 	}
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	// Metric values are acceptance ratios between 0 and 1
 	assert.GreaterOrEqual(t, result.API.OneMinute, 0.0)

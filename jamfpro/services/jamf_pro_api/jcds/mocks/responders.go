@@ -11,7 +11,9 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
 	"go.uber.org/zap"
+	"resty.dev/v3"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -103,7 +105,7 @@ func loadMockResponse(filename string) ([]byte, error) {
 }
 
 // Get implements interfaces.HTTPClient.
-func (m *JCDSMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JCDSMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
 	resp, ok := m.responses[key]
@@ -118,15 +120,11 @@ func (m *JCDSMock) Get(ctx context.Context, path string, rsqlQuery map[string]st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Post implements interfaces.HTTPClient.
-func (m *JCDSMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JCDSMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "POST " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -140,30 +138,26 @@ func (m *JCDSMock) Post(ctx context.Context, path string, body any, headers map[
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // PostWithQuery implements interfaces.HTTPClient.
-func (m *JCDSMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JCDSMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, body, headers, result)
 }
 
 // PostForm implements interfaces.HTTPClient.
-func (m *JCDSMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JCDSMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, formData, headers, result)
 }
 
 // PostMultipart implements interfaces.HTTPClient.
-func (m *JCDSMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*interfaces.Response, error) {
+func (m *JCDSMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
 // Put implements interfaces.HTTPClient.
-func (m *JCDSMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JCDSMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PUT " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -177,15 +171,11 @@ func (m *JCDSMock) Put(ctx context.Context, path string, body any, headers map[s
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Patch implements interfaces.HTTPClient.
-func (m *JCDSMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JCDSMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PATCH " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -199,15 +189,11 @@ func (m *JCDSMock) Patch(ctx context.Context, path string, body any, headers map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Delete implements interfaces.HTTPClient.
-func (m *JCDSMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JCDSMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "DELETE " + path
 	resp, ok := m.responses[key]
 	if !ok {
@@ -221,20 +207,16 @@ func (m *JCDSMock) Delete(ctx context.Context, path string, rsqlQuery map[string
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // DeleteWithBody implements interfaces.HTTPClient.
-func (m *JCDSMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*interfaces.Response, error) {
+func (m *JCDSMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Delete(ctx, path, nil, headers, result)
 }
 
 // GetBytes implements interfaces.HTTPClient.
-func (m *JCDSMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*interfaces.Response, []byte, error) {
+func (m *JCDSMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
 	resp, ok := m.responses[key]
@@ -244,15 +226,11 @@ func (m *JCDSMock) GetBytes(ctx context.Context, path string, rsqlQuery map[stri
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return &interfaces.Response{
-		StatusCode: resp.statusCode,
-		Headers:    http.Header{},
-		Body:       resp.rawBody,
-	}, resp.rawBody, nil
+	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
 // GetPaginated implements interfaces.HTTPClient.
-func (m *JCDSMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*interfaces.Response, error) {
+func (m *JCDSMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in JCDSMock")
 }
 

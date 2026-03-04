@@ -52,12 +52,12 @@ func TestAcceptance_JCDS_get_packages_v1(t *testing.T) {
 	acc.LogTestStage(t, "GetPackagesV1", "Listing JCDS packages")
 
 	packages, resp, err := svc.GetPackagesV1(ctx)
-	if err != nil && resp != nil && resp.StatusCode == 404 {
+	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Skip("JCDS not configured on this tenant (404 NOT_FOUND)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, len(packages), 0)
 	acc.LogTestSuccess(t, "GetPackagesV1: %d package(s) found", len(packages))
 
@@ -88,13 +88,13 @@ func TestAcceptance_JCDS_renew_credentials_v1(t *testing.T) {
 	acc.LogTestStage(t, "RenewCredentialsV1", "Renewing JCDS AWS credentials")
 
 	creds, resp, err := svc.RenewCredentialsV1(ctx)
-	if err != nil && resp != nil && resp.StatusCode == 404 {
+	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Skip("JCDS not configured on this tenant (404 NOT_FOUND)")
 	}
 	require.NoError(t, err)
 	require.NotNil(t, creds)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotEmpty(t, creds.AccessKeyID, "accessKeyId should not be empty")
 	assert.NotEmpty(t, creds.SecretAccessKey, "secretAccessKey should not be empty")
 	assert.NotEmpty(t, creds.Region, "region should not be empty")

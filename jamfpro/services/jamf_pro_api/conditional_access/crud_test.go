@@ -20,7 +20,7 @@ func TestUnit_ConditionalAccess_GetDeviceComplianceFeatureToggleV1_Success(t *te
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.SharedDeviceFeatureEnabled)
 }
 
@@ -49,7 +49,7 @@ func TestUnit_ConditionalAccess_GetDeviceComplianceInformationComputerV1_Success
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 1)
 	assert.Equal(t, "1", result[0].DeviceId)
 	assert.True(t, result[0].Applicable)
@@ -68,7 +68,7 @@ func TestUnit_ConditionalAccess_GetDeviceComplianceInformationMobileV1_Success(t
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 1)
 	assert.Equal(t, "1", result[0].DeviceId)
 	assert.True(t, result[0].Applicable)

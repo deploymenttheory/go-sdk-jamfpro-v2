@@ -29,7 +29,7 @@ func TestUnit_MobileDeviceGroups_ListSmartV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -44,7 +44,7 @@ func TestUnit_MobileDeviceGroups_GetSmartByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "iPhones", result.Name)
 	require.Len(t, result.Criteria, 1)
@@ -64,7 +64,7 @@ func TestUnit_MobileDeviceGroups_CreateSmartV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "2", result.ID)
 	assert.NotEmpty(t, result.Href)
 }
@@ -82,7 +82,7 @@ func TestUnit_MobileDeviceGroups_UpdateSmartByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "iPhones Updated", result.Name)
 }
@@ -94,7 +94,7 @@ func TestUnit_MobileDeviceGroups_DeleteSmartByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteSmartByIDV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_ListStaticV1_Success(t *testing.T) {
@@ -105,7 +105,7 @@ func TestUnit_MobileDeviceGroups_ListStaticV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "10", result.Results[0].ID)
@@ -120,7 +120,7 @@ func TestUnit_MobileDeviceGroups_ListStaticV1_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_GetStaticByIDV1_Success(t *testing.T) {
@@ -131,7 +131,7 @@ func TestUnit_MobileDeviceGroups_GetStaticByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "10", result.ID)
 	assert.Equal(t, "Static Devices", result.Name)
 }
@@ -150,7 +150,7 @@ func TestUnit_MobileDeviceGroups_CreateStaticV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "11", result.ID)
 	assert.NotEmpty(t, result.Href)
 }
@@ -169,7 +169,7 @@ func TestUnit_MobileDeviceGroups_UpdateStaticByIDV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "10", result.ID)
 	assert.Equal(t, "Static Devices Updated", result.Name)
 }
@@ -181,7 +181,7 @@ func TestUnit_MobileDeviceGroups_DeleteStaticByIDV1_Success(t *testing.T) {
 	resp, err := svc.DeleteStaticByIDV1(context.Background(), "10")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_ListSmartV1_Error(t *testing.T) {
@@ -191,7 +191,7 @@ func TestUnit_MobileDeviceGroups_ListSmartV1_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_ListSmartV1_NoMock(t *testing.T) {
@@ -219,7 +219,7 @@ func TestUnit_MobileDeviceGroups_GetSmartByIDV1_NotFound(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_CreateStaticV1_NilAssignments(t *testing.T) {
@@ -232,7 +232,7 @@ func TestUnit_MobileDeviceGroups_CreateStaticV1_NilAssignments(t *testing.T) {
 	result, resp, err := svc.CreateStaticV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_UpdateStaticByIDV1_NilAssignments(t *testing.T) {
@@ -245,7 +245,7 @@ func TestUnit_MobileDeviceGroups_UpdateStaticByIDV1_NilAssignments(t *testing.T)
 	result, resp, err := svc.UpdateStaticByIDV1(context.Background(), "10", req)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_GetSmartByIDV1_EmptyID(t *testing.T) {
@@ -291,7 +291,7 @@ func TestUnit_MobileDeviceGroups_GetStaticByIDV1_NotFound(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_GetStaticByIDV1_EmptyID(t *testing.T) {
@@ -351,7 +351,7 @@ func TestUnit_MobileDeviceGroups_ListAllV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result, 2)
 	assert.Equal(t, 1, result[0].ID)
 	assert.Equal(t, "iPhones", result[0].Name)
@@ -369,7 +369,7 @@ func TestUnit_MobileDeviceGroups_ListAllV1_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_GetStaticGroupMembershipV1_Success(t *testing.T) {
@@ -380,7 +380,7 @@ func TestUnit_MobileDeviceGroups_GetStaticGroupMembershipV1_Success(t *testing.T
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "101", result.Results[0].MobileDeviceID)
@@ -405,7 +405,7 @@ func TestUnit_MobileDeviceGroups_GetStaticGroupMembershipV1_Error(t *testing.T) 
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_GetSmartGroupMembershipV1_Success(t *testing.T) {
@@ -416,7 +416,7 @@ func TestUnit_MobileDeviceGroups_GetSmartGroupMembershipV1_Success(t *testing.T)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.TotalCount)
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "201", result.Results[0].MobileDeviceID)
@@ -440,7 +440,7 @@ func TestUnit_MobileDeviceGroups_GetSmartGroupMembershipV1_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Nil(t, result)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_Success(t *testing.T) {
@@ -454,7 +454,7 @@ func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_Success(t *testing.T) {
 	resp, err := svc.EraseDevicesByGroupIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_NilRequest(t *testing.T) {
@@ -464,7 +464,7 @@ func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_NilRequest(t *testing.T
 	resp, err := svc.EraseDevicesByGroupIDV1(context.Background(), "1", nil)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_EmptyID(t *testing.T) {
@@ -482,7 +482,7 @@ func TestUnit_MobileDeviceGroups_EraseDevicesByGroupIDV1_Error(t *testing.T) {
 	resp, err := svc.EraseDevicesByGroupIDV1(context.Background(), "1", nil)
 	require.Error(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }
 
 func boolPtr(b bool) *bool { return &b }

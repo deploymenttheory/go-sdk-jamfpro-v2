@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,24 +17,24 @@ type (
 		// GetV2 retrieves the computer inventory collection settings.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
-		GetV2(ctx context.Context) (*ResourceComputerInventoryCollectionSettings, *interfaces.Response, error)
+		GetV2(ctx context.Context) (*ResourceComputerInventoryCollectionSettings, *resty.Response, error)
 
 		// UpdateV2 updates the computer inventory collection settings.
 		//
 		// Returns 204 No Content on success with no response body.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-computer-inventory-collection-settings
-		UpdateV2(ctx context.Context, settings *ResourceComputerInventoryCollectionSettings) (*interfaces.Response, error)
+		UpdateV2(ctx context.Context, settings *ResourceComputerInventoryCollectionSettings) (*resty.Response, error)
 
 		// CreateCustomPathV2 creates a custom path for computer inventory collection settings.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-inventory-collection-settings-custom-path
-		CreateCustomPathV2(ctx context.Context, req *RequestCustomPath) (*SubsetPathItem, *interfaces.Response, error)
+		CreateCustomPathV2(ctx context.Context, req *RequestCustomPath) (*SubsetPathItem, *resty.Response, error)
 
 		// DeleteCustomPathByIDV2 deletes a custom path by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-inventory-collection-settings-custom-path-id
-		DeleteCustomPathByIDV2(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteCustomPathByIDV2(ctx context.Context, id string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the Computer Inventory Collection Settings-related methods of the Jamf Pro API.
@@ -53,7 +54,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetV2 retrieves the computer inventory collection settings.
 // URL: GET /api/v2/computer-inventory-collection-settings
 // https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
-func (s *Service) GetV2(ctx context.Context) (*ResourceComputerInventoryCollectionSettings, *interfaces.Response, error) {
+func (s *Service) GetV2(ctx context.Context) (*ResourceComputerInventoryCollectionSettings, *resty.Response, error) {
 	endpoint := EndpointComputerInventoryCollectionSettingsV2
 
 	var result ResourceComputerInventoryCollectionSettings
@@ -74,7 +75,7 @@ func (s *Service) GetV2(ctx context.Context) (*ResourceComputerInventoryCollecti
 // URL: PATCH /api/v2/computer-inventory-collection-settings
 // Returns 204 No Content on success with no response body.
 // https://developer.jamf.com/jamf-pro/reference/patch_v2-computer-inventory-collection-settings
-func (s *Service) UpdateV2(ctx context.Context, settings *ResourceComputerInventoryCollectionSettings) (*interfaces.Response, error) {
+func (s *Service) UpdateV2(ctx context.Context, settings *ResourceComputerInventoryCollectionSettings) (*resty.Response, error) {
 	if settings == nil {
 		return nil, fmt.Errorf("settings is required")
 	}
@@ -97,7 +98,7 @@ func (s *Service) UpdateV2(ctx context.Context, settings *ResourceComputerInvent
 // CreateCustomPathV2 creates a custom path for computer inventory collection settings.
 // URL: POST /api/v2/computer-inventory-collection-settings/custom-path
 // https://developer.jamf.com/jamf-pro/reference/post_v2-computer-inventory-collection-settings-custom-path
-func (s *Service) CreateCustomPathV2(ctx context.Context, req *RequestCustomPath) (*SubsetPathItem, *interfaces.Response, error) {
+func (s *Service) CreateCustomPathV2(ctx context.Context, req *RequestCustomPath) (*SubsetPathItem, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request body is required")
 	}
@@ -125,7 +126,7 @@ func (s *Service) CreateCustomPathV2(ctx context.Context, req *RequestCustomPath
 // DeleteCustomPathByIDV2 deletes a custom path by ID.
 // URL: DELETE /api/v2/computer-inventory-collection-settings/custom-path/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-inventory-collection-settings-custom-path-id
-func (s *Service) DeleteCustomPathByIDV2(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteCustomPathByIDV2(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("custom path ID is required")
 	}

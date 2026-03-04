@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,41 +18,41 @@ type (
 		// GetDefaultServerConfigurationV1 returns the default server configuration for Azure Cloud IDP (Get Default Server Configuration).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-defaults-server-configuration
-		GetDefaultServerConfigurationV1(ctx context.Context) (*CloudAzureServer, *interfaces.Response, error)
+		GetDefaultServerConfigurationV1(ctx context.Context) (*CloudAzureServer, *resty.Response, error)
 
 		// GetByIDV1 returns the Azure Cloud IDP configuration by ID (Get Cloud Identity Provider by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceCloudAzure, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceCloudAzure, *resty.Response, error)
 
 		// GetByNameV1 returns the Azure Cloud IDP configuration by display name (searches all providers).
-		GetByNameV1(ctx context.Context, name string) (*ResourceCloudAzure, *interfaces.Response, error)
+		GetByNameV1(ctx context.Context, name string) (*ResourceCloudAzure, *resty.Response, error)
 
 		// CreateV1 creates a new Azure Cloud IDP configuration (Create Cloud Identity Provider).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-azure
-		CreateV1(ctx context.Context, request *ResourceCloudAzure) (*ResponseCloudAzureCreated, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *ResourceCloudAzure) (*ResponseCloudAzureCreated, *resty.Response, error)
 
 		// UpdateByIDV1 updates the Azure Cloud IDP configuration by ID (Update Cloud Identity Provider by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-cloud-azure-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceCloudAzure) (*ResourceCloudAzure, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *ResourceCloudAzure) (*ResourceCloudAzure, *resty.Response, error)
 
 		// UpdateByNameV1 updates the Azure Cloud IDP configuration by display name.
-		UpdateByNameV1(ctx context.Context, name string, request *ResourceCloudAzure) (*ResourceCloudAzure, *interfaces.Response, error)
+		UpdateByNameV1(ctx context.Context, name string, request *ResourceCloudAzure) (*ResourceCloudAzure, *resty.Response, error)
 
 		// DeleteByIDV1 deletes the Azure Cloud IDP configuration by ID (Delete Cloud Identity Provider by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-cloud-azure-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteByNameV1 deletes the Azure Cloud IDP configuration by display name.
-		DeleteByNameV1(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByNameV1(ctx context.Context, name string) (*resty.Response, error)
 
 		// GetDefaultMappingsV1 returns the default field mappings for Azure Cloud IDP (Get Default Mappings).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-defaults-mappings
-		GetDefaultMappingsV1(ctx context.Context) (*CloudAzureServerMappings, *interfaces.Response, error)
+		GetDefaultMappingsV1(ctx context.Context) (*CloudAzureServerMappings, *resty.Response, error)
 	}
 
 	// Service handles communication with the Cloud Azure-related methods of the Jamf Pro API.
@@ -71,7 +72,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetDefaultServerConfigurationV1 returns the default server configuration for Azure Cloud IDP.
 // URL: GET /api/v1/cloud-azure/defaults/server-configuration
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-defaults-server-configuration
-func (s *Service) GetDefaultServerConfigurationV1(ctx context.Context) (*CloudAzureServer, *interfaces.Response, error) {
+func (s *Service) GetDefaultServerConfigurationV1(ctx context.Context) (*CloudAzureServer, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/defaults/server-configuration", EndpointCloudAzureV1)
 
 	var result CloudAzureServer
@@ -91,7 +92,7 @@ func (s *Service) GetDefaultServerConfigurationV1(ctx context.Context) (*CloudAz
 // GetByIDV1 returns the Azure Cloud IDP configuration by ID.
 // URL: GET /api/v1/cloud-azure/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCloudAzure, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCloudAzure, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -114,7 +115,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCloudAzure
 
 // GetByNameV1 returns the Azure Cloud IDP configuration by display name.
 // URL: GET /api/v1/cloud-azure (searches all providers)
-func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudAzure, *interfaces.Response, error) {
+func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudAzure, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -144,7 +145,7 @@ func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudA
 // CreateV1 creates a new Azure Cloud IDP configuration.
 // URL: POST /api/v1/cloud-azure
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-azure
-func (s *Service) CreateV1(ctx context.Context, request *ResourceCloudAzure) (*ResponseCloudAzureCreated, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *ResourceCloudAzure) (*ResponseCloudAzureCreated, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -169,7 +170,7 @@ func (s *Service) CreateV1(ctx context.Context, request *ResourceCloudAzure) (*R
 // UpdateByIDV1 updates the Azure Cloud IDP configuration by ID.
 // URL: PUT /api/v1/cloud-azure/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-cloud-azure-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceCloudAzure) (*ResourceCloudAzure, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *ResourceCloudAzure) (*ResourceCloudAzure, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -195,7 +196,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *Resource
 }
 
 // UpdateByNameV1 updates the Azure Cloud IDP configuration by display name.
-func (s *Service) UpdateByNameV1(ctx context.Context, name string, request *ResourceCloudAzure) (*ResourceCloudAzure, *interfaces.Response, error) {
+func (s *Service) UpdateByNameV1(ctx context.Context, name string, request *ResourceCloudAzure) (*ResourceCloudAzure, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -211,7 +212,7 @@ func (s *Service) UpdateByNameV1(ctx context.Context, name string, request *Reso
 // DeleteByIDV1 deletes the Azure Cloud IDP configuration by ID.
 // URL: DELETE /api/v1/cloud-azure/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-cloud-azure-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -231,7 +232,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 }
 
 // DeleteByNameV1 deletes the Azure Cloud IDP configuration by display name.
-func (s *Service) DeleteByNameV1(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByNameV1(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("name is required")
 	}
@@ -247,7 +248,7 @@ func (s *Service) DeleteByNameV1(ctx context.Context, name string) (*interfaces.
 // GetDefaultMappingsV1 returns the default field mappings for Azure Cloud IDP.
 // URL: GET /api/v1/cloud-azure/defaults/mappings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-defaults-mappings
-func (s *Service) GetDefaultMappingsV1(ctx context.Context) (*CloudAzureServerMappings, *interfaces.Response, error) {
+func (s *Service) GetDefaultMappingsV1(ctx context.Context) (*CloudAzureServerMappings, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/defaults/mappings", EndpointCloudAzureV1)
 
 	var result CloudAzureServerMappings

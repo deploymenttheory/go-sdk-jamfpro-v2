@@ -17,7 +17,7 @@ func TestUnit_Oidc_GetDirectIdPLoginURLV1_Success(t *testing.T) {
 	result, resp, err := service.GetDirectIdPLoginURLV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "https://idp.example.com/authorize?client_id=jamfpro", result.URL)
 }
 
@@ -29,7 +29,7 @@ func TestUnit_Oidc_GetPublicKeyV1_Success(t *testing.T) {
 	result, resp, err := service.GetPublicKeyV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Len(t, result.Keys, 1)
 	assert.Equal(t, "RSA", result.Keys[0].Kty)
 	assert.Equal(t, "AQAB", result.Keys[0].E)
@@ -47,7 +47,7 @@ func TestUnit_Oidc_GenerateCertificateV1_Success(t *testing.T) {
 
 	resp, err := service.GenerateCertificateV1(context.Background())
 	require.NoError(t, err)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_Oidc_GetRedirectURLV1_Success(t *testing.T) {
@@ -63,7 +63,7 @@ func TestUnit_Oidc_GetRedirectURLV1_Success(t *testing.T) {
 	result, resp, err := service.GetRedirectURLV1(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "https://idp.example.com/login?redirect=https://jamf.example.com", result.RedirectURL)
 }
 
@@ -86,7 +86,7 @@ func TestUnit_Oidc_GetPublicFeaturesV1_Success(t *testing.T) {
 	result, resp, err := service.GetPublicFeaturesV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, result.JamfIdAuthenticationEnabled)
 }
 

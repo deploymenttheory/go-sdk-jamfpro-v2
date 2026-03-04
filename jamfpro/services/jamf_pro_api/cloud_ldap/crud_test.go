@@ -20,7 +20,7 @@ func TestUnit_CloudLdap_GetDefaultMappingsV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "uid", result.UserMappings.UserID)
 	assert.Equal(t, "cn", result.GroupMappings.GroupName)
 	assert.Equal(t, "member", result.MembershipMappings.GroupMembershipMapping)
@@ -37,7 +37,7 @@ func TestUnit_CloudLdap_GetDefaultServerConfigurationV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 636, result.Port)
 	assert.Equal(t, "LDAPS", result.ConnectionType)
 	assert.Equal(t, 15, result.ConnectionTimeout)
@@ -94,7 +94,7 @@ func TestUnit_CloudLdap_CreateV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, result.ID)
 	assert.Equal(t, "/api/v2/cloud-ldaps/1", result.Href)
 }
@@ -130,7 +130,7 @@ func TestUnit_CloudLdap_CreateV2_APICallFails(t *testing.T) {
 
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "server error")
 }
@@ -146,7 +146,7 @@ func TestUnit_CloudLdap_GetByIDV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.CloudIdPCommon.ID)
 	assert.Equal(t, "Test Google LDAP", result.CloudIdPCommon.DisplayName)
 	assert.Equal(t, "GOOGLE", result.CloudIdPCommon.ProviderName)
@@ -178,7 +178,7 @@ func TestUnit_CloudLdap_GetByIDV2_APICallFails(t *testing.T) {
 
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "not found")
 }
@@ -201,7 +201,7 @@ func TestUnit_CloudLdap_UpdateByIDV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result)
 }
 
@@ -244,7 +244,7 @@ func TestUnit_CloudLdap_DeleteByIDV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_CloudLdap_DeleteByIDV2_EmptyID(t *testing.T) {
@@ -270,7 +270,7 @@ func TestUnit_CloudLdap_GetBindConnectionPoolStatsByIDV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, int64(95), result.NumSuccessfulCheckouts)
 	assert.Equal(t, int64(20), result.MaximumAvailableConnections)
 	assert.Equal(t, int64(15), result.NumAvailableConnections)
@@ -300,7 +300,7 @@ func TestUnit_CloudLdap_GetSearchConnectionPoolStatsByIDV2_Success(t *testing.T)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, int64(95), result.NumSuccessfulCheckouts)
 }
 
@@ -328,7 +328,7 @@ func TestUnit_CloudLdap_TestConnectionByIDV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Successfully connected", result.Status)
 }
 
@@ -356,7 +356,7 @@ func TestUnit_CloudLdap_GetMappingsByIDV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "uid", result.UserMappings.UserID)
 	assert.Equal(t, "cn", result.GroupMappings.GroupName)
 }
@@ -400,7 +400,7 @@ func TestUnit_CloudLdap_UpdateMappingsByIDV2_Success(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, result)
 }
 

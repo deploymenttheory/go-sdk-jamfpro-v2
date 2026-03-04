@@ -6,10 +6,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_prestages"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"resty.dev/v3"
 )
 
 // =============================================================================
@@ -89,7 +89,7 @@ func TestAcceptance_ComputerPrestages_list_v3(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 	assert.NotNil(t, result.Results)
 }
@@ -206,7 +206,7 @@ func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 		return
 	}
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, resp.StatusCode())
 
 	id := created.ID
 	acc.Cleanup(t, func() {
@@ -216,7 +216,7 @@ func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 	})
 
 	var getByID *computer_prestages.ResourceComputerPrestage
-	var getResp *interfaces.Response
+	var getResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
 		getByID, getResp, getErr = svc.GetByIDV3(ctx, id)
@@ -235,7 +235,7 @@ func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 	scope, resp, err := svc.GetDeviceScopeByIDV2(ctx, id)
 	require.NoError(t, err)
 	require.NotNil(t, scope)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, id, scope.PrestageId)
 
 	replaceReq := &computer_prestages.ReplaceDeviceScopeRequest{
@@ -245,14 +245,14 @@ func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 	replaced, resp, err := svc.ReplaceDeviceScopeByIDV2(ctx, id, replaceReq)
 	require.NoError(t, err)
 	require.NotNil(t, replaced)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, id, replaced.PrestageId)
 	assert.GreaterOrEqual(t, replaced.VersionLock, scope.VersionLock)
 
 	scope2, resp, err := svc.GetDeviceScopeByIDV2(ctx, id)
 	require.NoError(t, err)
 	require.NotNil(t, scope2)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	updated, resp, err := svc.UpdateByIDV3(ctx, id, &computer_prestages.ResourceComputerPrestage{
 		DisplayName: name,
@@ -260,7 +260,7 @@ func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	delResp, err := svc.DeleteByIDV3(ctx, id)
 	require.NoError(t, err)

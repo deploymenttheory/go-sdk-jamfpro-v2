@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,12 +17,12 @@ type (
 		// Get returns the current policy properties (Get Policy Properties).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
-		Get(ctx context.Context) (*ResourcePolicyProperties, *interfaces.Response, error)
+		Get(ctx context.Context) (*ResourcePolicyProperties, *resty.Response, error)
 
 		// Update updates policy properties (Update Policy Properties).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-policy-properties
-		Update(ctx context.Context, request *ResourcePolicyProperties) (*ResourcePolicyProperties, *interfaces.Response, error)
+		Update(ctx context.Context, request *ResourcePolicyProperties) (*ResourcePolicyProperties, *resty.Response, error)
 	}
 
 	// Service handles communication with the policy properties-related methods of the Jamf Pro API.
@@ -45,7 +46,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // Get returns the current policy properties.
 // URL: GET /api/v1/policy-properties
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
-func (s *Service) Get(ctx context.Context) (*ResourcePolicyProperties, *interfaces.Response, error) {
+func (s *Service) Get(ctx context.Context) (*ResourcePolicyProperties, *resty.Response, error) {
 	var result ResourcePolicyProperties
 	endpoint := EndpointPolicyPropertiesV1
 	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
@@ -59,7 +60,7 @@ func (s *Service) Get(ctx context.Context) (*ResourcePolicyProperties, *interfac
 // Update updates policy properties.
 // URL: PUT /api/v1/policy-properties
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-policy-properties
-func (s *Service) Update(ctx context.Context, request *ResourcePolicyProperties) (*ResourcePolicyProperties, *interfaces.Response, error) {
+func (s *Service) Update(ctx context.Context, request *ResourcePolicyProperties) (*ResourcePolicyProperties, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}

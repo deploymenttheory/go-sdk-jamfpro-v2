@@ -43,5 +43,5 @@ func TestAcceptance_PatchManagement_accept_disclaimer_v2(t *testing.T) {
 	resp, err := svc.AcceptDisclaimerV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	require.Contains(t, []int{200, 202}, resp.StatusCode)
+	require.Contains(t, []int{200, 202}, resp.StatusCode())
 }

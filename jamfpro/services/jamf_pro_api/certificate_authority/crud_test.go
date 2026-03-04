@@ -23,7 +23,7 @@ func TestUnit_CertificateAuthority_GetV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "CN=Jamf Pro CA", result.SubjectX500Principal)
 	assert.Equal(t, "12345", result.SerialNumber)
 	assert.Len(t, result.KeyUsage, 2)
@@ -36,7 +36,7 @@ func TestUnit_CertificateAuthority_GetActiveCertificateAuthorityDERV1_Success(t 
 	resp, data, err := svc.GetActiveCertificateAuthorityDERV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, data)
 	assert.Greater(t, len(data), 0)
 }
@@ -48,7 +48,7 @@ func TestUnit_CertificateAuthority_GetActiveCertificateAuthorityPEMV1_Success(t 
 	resp, data, err := svc.GetActiveCertificateAuthorityPEMV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, data)
 	assert.Contains(t, string(data), "BEGIN CERTIFICATE")
 }
@@ -61,7 +61,7 @@ func TestUnit_CertificateAuthority_GetCertificateAuthorityByIDV1_Success(t *test
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "CN=Jamf Pro CA", result.SubjectX500Principal)
 }
 
@@ -72,7 +72,7 @@ func TestUnit_CertificateAuthority_GetCertificateAuthorityByIDDERV1_Success(t *t
 	resp, data, err := svc.GetCertificateAuthorityByIDDERV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, data)
 	assert.Greater(t, len(data), 0)
 }
@@ -84,7 +84,7 @@ func TestUnit_CertificateAuthority_GetCertificateAuthorityByIDPEMV1_Success(t *t
 	resp, data, err := svc.GetCertificateAuthorityByIDPEMV1(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.NotNil(t, data)
 	assert.Contains(t, string(data), "BEGIN CERTIFICATE")
 }

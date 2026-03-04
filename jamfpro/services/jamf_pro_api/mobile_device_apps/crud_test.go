@@ -29,7 +29,7 @@ func TestUnit_MobileDeviceApps_ReinstallAppConfigV1_Success(t *testing.T) {
 	resp, err := svc.ReinstallAppConfigV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_MobileDeviceApps_ReinstallAppConfigV1_NilRequest(t *testing.T) {
@@ -59,7 +59,7 @@ func TestUnit_MobileDeviceApps_ReinstallAppConfigV1_NotFound(t *testing.T) {
 	resp, err := svc.ReinstallAppConfigV1(context.Background(), req)
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 	assert.Contains(t, err.Error(), "failed to reinstall app config")
 }
 

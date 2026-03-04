@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -20,17 +21,17 @@ type (
 		// (keys: sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the specified device enrollment by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceDeviceEnrollment, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceDeviceEnrollment, *resty.Response, error)
 
 		// GetByNameV1 returns the specified device enrollment by name.
 		//
 		// Note: This performs a client-side search through all device enrollments.
-		GetByNameV1(ctx context.Context, name string) (*ResourceDeviceEnrollment, *interfaces.Response, error)
+		GetByNameV1(ctx context.Context, name string) (*ResourceDeviceEnrollment, *resty.Response, error)
 
 		// GetHistoryV1 returns the history for the specified device enrollment.
 		//
@@ -38,70 +39,70 @@ type (
 		// (keys: filter, sort, page, page-size).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-history
-		GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// GetSyncStatesV1 retrieves all sync states for the specified device enrollment instance.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-syncs
-		GetSyncStatesV1(ctx context.Context, id string) ([]ResourceSyncState, *interfaces.Response, error)
+		GetSyncStatesV1(ctx context.Context, id string) ([]ResourceSyncState, *resty.Response, error)
 
 		// GetLatestSyncStateV1 retrieves the latest sync state for the specified device enrollment instance.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-syncs-latest
-		GetLatestSyncStateV1(ctx context.Context, id string) (*ResourceLatestSyncState, *interfaces.Response, error)
+		GetLatestSyncStateV1(ctx context.Context, id string) (*ResourceLatestSyncState, *resty.Response, error)
 
 		// GetAllSyncStatesV1 retrieves all sync states for all device enrollment instances.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-syncs
-		GetAllSyncStatesV1(ctx context.Context) ([]ResourceSyncState, *interfaces.Response, error)
+		GetAllSyncStatesV1(ctx context.Context) ([]ResourceSyncState, *resty.Response, error)
 
 		// GetPublicKeyV1 retrieves the public key for device enrollments as a PEM file.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-public-key
-		GetPublicKeyV1(ctx context.Context) ([]byte, *interfaces.Response, error)
+		GetPublicKeyV1(ctx context.Context) ([]byte, *resty.Response, error)
 
 		// CreateWithTokenV1 creates a new device enrollment instance using an MDM server token.
 		//
 		// Returns the created device enrollment's ID and href.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-upload-token
-		CreateWithTokenV1(ctx context.Context, request *RequestTokenUpload) (*CreateResponse, *interfaces.Response, error)
+		CreateWithTokenV1(ctx context.Context, request *RequestTokenUpload) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV1 updates the metadata for the specified device enrollment by ID.
 		//
 		// Returns the full updated device enrollment resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-device-enrollments-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestUpdate) (*ResourceDeviceEnrollment, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestUpdate) (*ResourceDeviceEnrollment, *resty.Response, error)
 
 		// UpdateTokenByIDV1 updates the token for the specified device enrollment by ID.
 		//
 		// Returns the full updated device enrollment resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-device-enrollments-id-upload-token
-		UpdateTokenByIDV1(ctx context.Context, id string, request *RequestTokenUpload) (*ResourceDeviceEnrollment, *interfaces.Response, error)
+		UpdateTokenByIDV1(ctx context.Context, id string, request *RequestTokenUpload) (*ResourceDeviceEnrollment, *resty.Response, error)
 
 		// DeleteByIDV1 removes the specified device enrollment by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-device-enrollments-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// DisownDevicesByIDV1 disowns devices from the specified device enrollment instance.
 		//
 		// Returns a map of device serial numbers to operation status (SUCCESS/FAILED).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-id-disown
-		DisownDevicesByIDV1(ctx context.Context, id string, request *RequestDisown) (*ResponseDisown, *interfaces.Response, error)
+		DisownDevicesByIDV1(ctx context.Context, id string, request *RequestDisown) (*ResponseDisown, *resty.Response, error)
 
 		// AddHistoryNotesV1 adds notes to the specified device enrollment's history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-id-history
-		AddHistoryNotesV1(ctx context.Context, id string, request *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error)
+		AddHistoryNotesV1(ctx context.Context, id string, request *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error)
 
 		// GetDevicesByIDV1 retrieves a list of devices assigned to the specified device enrollment instance.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-devices
-		GetDevicesByIDV1(ctx context.Context, id string) (*DevicesResponse, *interfaces.Response, error)
+		GetDevicesByIDV1(ctx context.Context, id string) (*DevicesResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the device enrollments-related methods of the Jamf Pro API.
@@ -127,7 +128,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/device-enrollments
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointDeviceEnrollmentsV1
@@ -155,7 +156,7 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 // GetByIDV1 returns the specified device enrollment by ID.
 // URL: GET /api/v1/device-enrollments/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDeviceEnrollment, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDeviceEnrollment, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -178,7 +179,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceDeviceEnro
 
 // GetByNameV1 returns the specified device enrollment by name.
 // Note: This performs a client-side search through all device enrollments.
-func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceDeviceEnrollment, *interfaces.Response, error) {
+func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceDeviceEnrollment, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -201,7 +202,7 @@ func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceDevice
 // URL: GET /api/v1/device-enrollments/{id}/history
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-history
-func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -233,7 +234,7 @@ func (s *Service) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[str
 // GetSyncStatesV1 retrieves all sync states for the specified device enrollment instance.
 // URL: GET /api/v1/device-enrollments/{id}/syncs
 // https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-syncs
-func (s *Service) GetSyncStatesV1(ctx context.Context, id string) ([]ResourceSyncState, *interfaces.Response, error) {
+func (s *Service) GetSyncStatesV1(ctx context.Context, id string) ([]ResourceSyncState, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -257,7 +258,7 @@ func (s *Service) GetSyncStatesV1(ctx context.Context, id string) ([]ResourceSyn
 // GetLatestSyncStateV1 retrieves the latest sync state for the specified device enrollment instance.
 // URL: GET /api/v1/device-enrollments/{id}/syncs/latest
 // https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-syncs-latest
-func (s *Service) GetLatestSyncStateV1(ctx context.Context, id string) (*ResourceLatestSyncState, *interfaces.Response, error) {
+func (s *Service) GetLatestSyncStateV1(ctx context.Context, id string) (*ResourceLatestSyncState, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -281,7 +282,7 @@ func (s *Service) GetLatestSyncStateV1(ctx context.Context, id string) (*Resourc
 // GetAllSyncStatesV1 retrieves all sync states for all device enrollment instances.
 // URL: GET /api/v1/device-enrollments/syncs
 // https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-syncs
-func (s *Service) GetAllSyncStatesV1(ctx context.Context) ([]ResourceSyncState, *interfaces.Response, error) {
+func (s *Service) GetAllSyncStatesV1(ctx context.Context) ([]ResourceSyncState, *resty.Response, error) {
 	var result []ResourceSyncState
 
 	endpoint := fmt.Sprintf("%s/syncs", EndpointDeviceEnrollmentsV1)
@@ -301,7 +302,7 @@ func (s *Service) GetAllSyncStatesV1(ctx context.Context) ([]ResourceSyncState, 
 // GetPublicKeyV1 retrieves the public key for device enrollments as a PEM file.
 // URL: GET /api/v1/device-enrollments/public-key
 // https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-public-key
-func (s *Service) GetPublicKeyV1(ctx context.Context) ([]byte, *interfaces.Response, error) {
+func (s *Service) GetPublicKeyV1(ctx context.Context) ([]byte, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/public-key", EndpointDeviceEnrollmentsV1)
 
 	headers := map[string]string{
@@ -319,7 +320,7 @@ func (s *Service) GetPublicKeyV1(ctx context.Context) ([]byte, *interfaces.Respo
 // CreateWithTokenV1 creates a new device enrollment instance using an MDM server token.
 // URL: POST /api/v1/device-enrollments/upload-token
 // https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-upload-token
-func (s *Service) CreateWithTokenV1(ctx context.Context, request *RequestTokenUpload) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateWithTokenV1(ctx context.Context, request *RequestTokenUpload) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -347,7 +348,7 @@ func (s *Service) CreateWithTokenV1(ctx context.Context, request *RequestTokenUp
 // UpdateByIDV1 updates the metadata for the specified device enrollment by ID.
 // URL: PUT /api/v1/device-enrollments/{id}
 // https://developer.jamf.com/jamf-pro/reference/put_v1-device-enrollments-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestUpdate) (*ResourceDeviceEnrollment, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestUpdate) (*ResourceDeviceEnrollment, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -378,7 +379,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestU
 // UpdateTokenByIDV1 updates the token for the specified device enrollment by ID.
 // URL: PUT /api/v1/device-enrollments/{id}/upload-token
 // https://developer.jamf.com/jamf-pro/reference/put_v1-device-enrollments-id-upload-token
-func (s *Service) UpdateTokenByIDV1(ctx context.Context, id string, request *RequestTokenUpload) (*ResourceDeviceEnrollment, *interfaces.Response, error) {
+func (s *Service) UpdateTokenByIDV1(ctx context.Context, id string, request *RequestTokenUpload) (*ResourceDeviceEnrollment, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -409,7 +410,7 @@ func (s *Service) UpdateTokenByIDV1(ctx context.Context, id string, request *Req
 // DeleteByIDV1 removes the specified device enrollment by ID.
 // URL: DELETE /api/v1/device-enrollments/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-device-enrollments-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -431,7 +432,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 // DisownDevicesByIDV1 disowns devices from the specified device enrollment instance.
 // URL: POST /api/v1/device-enrollments/{id}/disown
 // https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-id-disown
-func (s *Service) DisownDevicesByIDV1(ctx context.Context, id string, request *RequestDisown) (*ResponseDisown, *interfaces.Response, error) {
+func (s *Service) DisownDevicesByIDV1(ctx context.Context, id string, request *RequestDisown) (*ResponseDisown, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -462,7 +463,7 @@ func (s *Service) DisownDevicesByIDV1(ctx context.Context, id string, request *R
 // AddHistoryNotesV1 adds notes to the specified device enrollment's history.
 // URL: POST /api/v1/device-enrollments/{id}/history
 // https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-id-history
-func (s *Service) AddHistoryNotesV1(ctx context.Context, id string, request *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *interfaces.Response, error) {
+func (s *Service) AddHistoryNotesV1(ctx context.Context, id string, request *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -493,7 +494,7 @@ func (s *Service) AddHistoryNotesV1(ctx context.Context, id string, request *Req
 // GetDevicesByIDV1 retrieves a list of devices assigned to the specified device enrollment instance.
 // URL: GET /api/v1/device-enrollments/{id}/devices
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-devices
-func (s *Service) GetDevicesByIDV1(ctx context.Context, id string) (*DevicesResponse, *interfaces.Response, error) {
+func (s *Service) GetDevicesByIDV1(ctx context.Context, id string) (*DevicesResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("device enrollment ID is required")
 	}

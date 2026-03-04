@@ -62,15 +62,15 @@ func TestAcceptance_JamfProUserAccountSettings_lifecycle(t *testing.T) {
 		t.Skip("PUT /api/v1/user/preferences is not supported for this authentication method")
 	}
 	require.NotNil(t, putResp)
-	assert.True(t, putResp.StatusCode == 200 || putResp.StatusCode == 204,
-		"expected 200 or 204, got %d", putResp.StatusCode)
+	assert.True(t, putResp.StatusCode() == 200 || putResp.StatusCode() == 204,
+		"expected 200 or 204, got %d", putResp.StatusCode())
 
 	acc.Cleanup(t, func() {
 		cleanupCtx := context.Background()
 		_, _ = svc.DeleteV1(cleanupCtx, testUserPrefKey)
 	})
 
-	acc.LogTestSuccess(t, "PutV1: key=%s status=%d", testUserPrefKey, putResp.StatusCode)
+	acc.LogTestSuccess(t, "PutV1: key=%s status=%d", testUserPrefKey, putResp.StatusCode())
 
 	// 2. GetSettings
 	acc.LogTestStage(t, "GetSettings", "Getting settings for key=%s", testUserPrefKey)
@@ -104,8 +104,8 @@ func TestAcceptance_JamfProUserAccountSettings_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteV1(ctx, testUserPrefKey)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.True(t, deleteResp.StatusCode == 200 || deleteResp.StatusCode == 204,
-		"expected 200 or 204, got %d", deleteResp.StatusCode)
+	assert.True(t, deleteResp.StatusCode() == 200 || deleteResp.StatusCode() == 204,
+		"expected 200 or 204, got %d", deleteResp.StatusCode())
 
 	acc.LogTestSuccess(t, "DeleteV1: key=%s deleted", testUserPrefKey)
 }

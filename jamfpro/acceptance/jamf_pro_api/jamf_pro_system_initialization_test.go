@@ -65,7 +65,7 @@ func TestAcceptance_JamfProSystemInitialization_initialize(t *testing.T) {
 	resp, err := svc.Initialize(ctx, request)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.True(t, resp.StatusCode >= 200 && resp.StatusCode < 300, "expected success status")
+	assert.True(t, resp.StatusCode() >= 200 && resp.StatusCode() < 300, "expected success status")
 }
 
 func TestAcceptance_JamfProSystemInitialization_initialize_database_connection(t *testing.T) {
@@ -84,5 +84,5 @@ func TestAcceptance_JamfProSystemInitialization_initialize_database_connection(t
 	resp, err := svc.InitializeDatabaseConnection(ctx, password)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.True(t, resp.StatusCode >= 200 && resp.StatusCode < 300, "expected success status")
+	assert.True(t, resp.StatusCode() >= 200 && resp.StatusCode() < 300, "expected success status")
 }

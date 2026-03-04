@@ -23,7 +23,7 @@ func TestUnit_ServiceDiscoveryEnrollment_GetV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.WellKnownSettings, 1)
 	assert.Equal(t, "Example Org", result.WellKnownSettings[0].OrgName)
 	assert.Equal(t, "A1B2C3D4-E5F6-7890-ABCD-EF1234567890", result.WellKnownSettings[0].ServerUUID)
@@ -42,7 +42,7 @@ func TestUnit_ServiceDiscoveryEnrollment_UpdateV1_Success(t *testing.T) {
 	result, resp, err := svc.UpdateV1(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 	assert.Nil(t, result)
 }
 
@@ -92,5 +92,5 @@ func TestUnit_ServiceDiscoveryEnrollment_UpdateV1_Non204Response(t *testing.T) {
 	require.NoError(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 }

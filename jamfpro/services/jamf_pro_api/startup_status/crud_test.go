@@ -23,7 +23,7 @@ func TestUnit_StartupStatus_GetV1_Success(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "Database", result.Step)
 	assert.Equal(t, "DB_READY", result.StepCode)
 	assert.Equal(t, 100, result.Percentage)

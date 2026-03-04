@@ -24,7 +24,7 @@ func TestUnit_SelfServiceBrandingMacos_List_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 2, result.TotalCount)
 	assert.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].ID)
@@ -42,7 +42,7 @@ func TestUnit_SelfServiceBrandingMacos_GetByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Corporate Branding", result.BrandingName)
 	assert.Equal(t, "Self Service", result.ApplicationName)
@@ -69,7 +69,7 @@ func TestUnit_SelfServiceBrandingMacos_GetByID_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 }
 
 func TestUnit_SelfServiceBrandingMacos_GetByName_Success(t *testing.T) {
@@ -122,7 +122,7 @@ func TestUnit_SelfServiceBrandingMacos_Create_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 201, resp.StatusCode)
+	assert.Equal(t, 201, resp.StatusCode())
 	assert.Equal(t, "3", result.ID)
 	assert.Equal(t, "New Branding", result.BrandingName)
 }
@@ -148,7 +148,7 @@ func TestUnit_SelfServiceBrandingMacos_Create_Conflict(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 409, resp.StatusCode)
+	assert.Equal(t, 409, resp.StatusCode())
 }
 
 func TestUnit_SelfServiceBrandingMacos_UpdateByID_Success(t *testing.T) {
@@ -169,7 +169,7 @@ func TestUnit_SelfServiceBrandingMacos_UpdateByID_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "Corporate Branding Updated", result.BrandingName)
 	assert.Equal(t, "Welcome Back", result.HomeHeading)
@@ -204,7 +204,7 @@ func TestUnit_SelfServiceBrandingMacos_DeleteByID_Success(t *testing.T) {
 	resp, err := svc.DeleteByID(context.Background(), "1")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_SelfServiceBrandingMacos_DeleteByID_EmptyID(t *testing.T) {

@@ -64,7 +64,7 @@ func TestAcceptance_PatchPolicies_list_v2(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, result.TotalCount, 0)
 	if result.TotalCount > 0 {
 		assert.NotNil(t, result.Results)
@@ -86,7 +86,7 @@ func TestAcceptance_PatchPolicies_list_v2(t *testing.T) {
 		byID, resp, err := svc.GetByIDV2(ctx, policy.ID)
 		require.NoError(t, err)
 		require.NotNil(t, byID)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.Equal(t, policy.ID, byID.ID)
 		assert.Equal(t, policy.Name, byID.Name)
 		acc.LogTestSuccess(t, "Retrieved patch policy by ID: %s", byID.Name)
@@ -96,7 +96,7 @@ func TestAcceptance_PatchPolicies_list_v2(t *testing.T) {
 		byName, resp, err := svc.GetByNameV2(ctx, policy.Name)
 		require.NoError(t, err)
 		require.NotNil(t, byName)
-		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, 200, resp.StatusCode())
 		assert.Equal(t, policy.ID, byName.ID)
 		assert.Equal(t, policy.Name, byName.Name)
 		acc.LogTestSuccess(t, "Retrieved patch policy by name: %s", byName.Name)
@@ -115,7 +115,7 @@ func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 	list, resp, err := svc.ListV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	if list.TotalCount == 0 {
 		t.Skip("No patch policies available - skipping dashboard operations test")
@@ -132,7 +132,7 @@ func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 	initialStatus, resp, err := svc.GetDashboardStatusV2(ctx, policyID)
 	require.NoError(t, err)
 	require.NotNil(t, initialStatus)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	acc.LogTestSuccess(t, "Initial dashboard status - OnDashboard: %v", initialStatus.OnDashboard)
 
 	// If already on dashboard, remove it first for clean test
@@ -140,7 +140,7 @@ func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 		acc.LogTestStage(t, "Setup", "Removing policy from dashboard for clean test")
 		resp, err := svc.RemoveFromDashboardV2(ctx, policyID)
 		require.NoError(t, err)
-		assert.Contains(t, []int{200, 204}, resp.StatusCode)
+		assert.Contains(t, []int{200, 204}, resp.StatusCode())
 		acc.LogTestSuccess(t, "Removed policy from dashboard")
 	}
 
@@ -148,7 +148,7 @@ func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 	acc.LogTestStage(t, "Add", "Adding patch policy to dashboard")
 	addResp, err := svc.AddToDashboardV2(ctx, policyID)
 	require.NoError(t, err)
-	assert.Contains(t, []int{200, 201, 204}, addResp.StatusCode)
+	assert.Contains(t, []int{200, 201, 204}, addResp.StatusCode())
 	acc.LogTestSuccess(t, "Added patch policy to dashboard")
 
 	// Verify it's on the dashboard
@@ -156,7 +156,7 @@ func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 	statusAfterAdd, resp, err := svc.GetDashboardStatusV2(ctx, policyID)
 	require.NoError(t, err)
 	require.NotNil(t, statusAfterAdd)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.True(t, statusAfterAdd.OnDashboard, "Policy should be on dashboard after adding")
 	acc.LogTestSuccess(t, "Verified policy is on dashboard")
 
@@ -164,7 +164,7 @@ func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 	acc.LogTestStage(t, "Remove", "Removing patch policy from dashboard")
 	removeResp, err := svc.RemoveFromDashboardV2(ctx, policyID)
 	require.NoError(t, err)
-	assert.Contains(t, []int{200, 204}, removeResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, removeResp.StatusCode())
 	acc.LogTestSuccess(t, "Removed patch policy from dashboard")
 
 	// Verify it's removed from the dashboard
@@ -172,7 +172,7 @@ func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 	statusAfterRemove, resp, err := svc.GetDashboardStatusV2(ctx, policyID)
 	require.NoError(t, err)
 	require.NotNil(t, statusAfterRemove)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.False(t, statusAfterRemove.OnDashboard, "Policy should not be on dashboard after removal")
 	acc.LogTestSuccess(t, "Verified policy is removed from dashboard")
 

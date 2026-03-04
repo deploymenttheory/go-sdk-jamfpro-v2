@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,48 +17,48 @@ type (
 		// List returns all user groups (both smart and static).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroups
-		List(ctx context.Context) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified smart user group by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyid
-		GetByID(ctx context.Context, id int) (*ResourceSmartUserGroup, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceSmartUserGroup, *resty.Response, error)
 
 		// GetByName returns the specified smart user group by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyname
-		GetByName(ctx context.Context, name string) (*ResourceSmartUserGroup, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceSmartUserGroup, *resty.Response, error)
 
 		// Create creates a new smart user group.
 		//
 		// Returns the created user group ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createusergroupbyid
-		Create(ctx context.Context, req *RequestSmartUserGroup) (*CreateUpdateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestSmartUserGroup) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByID updates the specified smart user group by ID.
 		//
 		// Returns the updated user group ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyid
-		UpdateByID(ctx context.Context, id int, req *RequestSmartUserGroup) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestSmartUserGroup) (*CreateUpdateResponse, *resty.Response, error)
 
 		// UpdateByName updates the specified smart user group by name.
 		//
 		// Returns the updated user group ID only (Classic API behavior).
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyname
-		UpdateByName(ctx context.Context, name string, req *RequestSmartUserGroup) (*CreateUpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestSmartUserGroup) (*CreateUpdateResponse, *resty.Response, error)
 
 		// DeleteByID removes the specified smart user group by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified smart user group by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the smart-user-groups-related Classic API methods.
@@ -84,7 +85,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /JSSResource/usergroups
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroups
-func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	endpoint := EndpointSmartUserGroups
 
 	var out ListResponse
@@ -106,7 +107,7 @@ func (s *Service) List(ctx context.Context) (*ListResponse, *interfaces.Response
 // URL: GET /JSSResource/usergroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceSmartUserGroup, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceSmartUserGroup, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("user group ID must be a positive integer")
 	}
@@ -132,7 +133,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceSmartUserGroup,
 // URL: GET /JSSResource/usergroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceSmartUserGroup, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceSmartUserGroup, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("user group name is required")
 	}
@@ -160,7 +161,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceSmartUse
 // URL: POST /JSSResource/usergroups/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createusergroupbyid
-func (s *Service) Create(ctx context.Context, req *RequestSmartUserGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestSmartUserGroup) (*CreateUpdateResponse, *resty.Response, error) {
 	if err := ValidateRequest(req); err != nil {
 		return nil, nil, err
 	}
@@ -188,7 +189,7 @@ func (s *Service) Create(ctx context.Context, req *RequestSmartUserGroup) (*Crea
 // URL: PUT /JSSResource/usergroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestSmartUserGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestSmartUserGroup) (*CreateUpdateResponse, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("user group ID must be a positive integer")
 	}
@@ -219,7 +220,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestSmartUserG
 // URL: PUT /JSSResource/usergroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestSmartUserGroup) (*CreateUpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestSmartUserGroup) (*CreateUpdateResponse, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("user group name is required")
 	}
@@ -248,7 +249,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestSma
 // URL: DELETE /JSSResource/usergroups/id/{id}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("user group ID must be a positive integer")
 	}
@@ -272,7 +273,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // URL: DELETE /JSSResource/usergroups/name/{name}
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("user group name is required")
 	}

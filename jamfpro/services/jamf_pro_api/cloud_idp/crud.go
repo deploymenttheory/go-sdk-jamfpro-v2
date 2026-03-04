@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -20,15 +21,15 @@ type (
 		// Query params (optional, pass via query): page, page-size, sort, filter.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp
-		ListV1(ctx context.Context, query map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, query map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the Cloud Identity Provider configuration by ID (Get Cloud Identity Provider Configuration by ID).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceCloudIdProviderDetails, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceCloudIdProviderDetails, *resty.Response, error)
 
 		// GetByNameV1 returns the Cloud Identity Provider configuration by display name (searches first page of ListV1).
-		GetByNameV1(ctx context.Context, name string) (*ResourceCloudIdProviderDetails, *interfaces.Response, error)
+		GetByNameV1(ctx context.Context, name string) (*ResourceCloudIdProviderDetails, *resty.Response, error)
 
 		// ExportV1 exports Cloud Identity Providers collection (Export Cloud Identity Providers).
 		//
@@ -37,34 +38,34 @@ type (
 		// Accept (optional): pass mime.TextCSV for CSV export, mime.ApplicationJSON or empty for JSON (default).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-export
-		ExportV1(ctx context.Context, query map[string]string, request *ExportRequest, accept ...string) (*interfaces.Response, []byte, error)
+		ExportV1(ctx context.Context, query map[string]string, request *ExportRequest, accept ...string) (*resty.Response, []byte, error)
 
 		// GetHistoryByIDV1 returns the history for a Cloud Identity Provider configuration (Get History).
 		//
 		// Query params (optional, pass via query): page, page-size, sort, filter.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp-id-history
-		GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddHistoryNoteByIDV1 adds a note to the history for a Cloud Identity Provider configuration (Add History Note).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-history
-		AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*interfaces.Response, error)
+		AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*resty.Response, error)
 
 		// TestGroupSearchByIDV1 performs a test group search to verify configuration and mappings (Test Group Search).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-test-group
-		TestGroupSearchByIDV1(ctx context.Context, id string, request *TestGroupSearchRequest) (*TestGroupSearchResponse, *interfaces.Response, error)
+		TestGroupSearchByIDV1(ctx context.Context, id string, request *TestGroupSearchRequest) (*TestGroupSearchResponse, *resty.Response, error)
 
 		// TestUserSearchByIDV1 performs a test user search to verify configuration and mappings (Test User Search).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-test-user
-		TestUserSearchByIDV1(ctx context.Context, id string, request *TestUserSearchRequest) (*TestUserSearchResponse, *interfaces.Response, error)
+		TestUserSearchByIDV1(ctx context.Context, id string, request *TestUserSearchRequest) (*TestUserSearchResponse, *resty.Response, error)
 
 		// TestUserMembershipByIDV1 performs a test user membership search to verify configuration and mappings (Test User Membership).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-test-user-membership
-		TestUserMembershipByIDV1(ctx context.Context, id string, request *TestUserMembershipRequest) (*TestUserMembershipResponse, *interfaces.Response, error)
+		TestUserMembershipByIDV1(ctx context.Context, id string, request *TestUserMembershipRequest) (*TestUserMembershipResponse, *resty.Response, error)
 	}
 
 	// Service handles communication with the Cloud Identity Provider-related methods of the Jamf Pro API.
@@ -86,7 +87,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // query supports: filter (RSQL), sort, page, page-size (all optional).
 // Note: page and page-size are managed internally by GetPaginated.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp
-func (s *Service) ListV1(ctx context.Context, query map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, query map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	headers := map[string]string{
@@ -114,7 +115,7 @@ func (s *Service) ListV1(ctx context.Context, query map[string]string) (*ListRes
 // GetByIDV1 returns the Cloud Identity Provider configuration by ID.
 // URL: GET /api/v1/cloud-idp/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCloudIdProviderDetails, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCloudIdProviderDetails, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -138,7 +139,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceCloudIdPro
 // GetByNameV1 returns the Cloud Identity Provider configuration by display name.
 // URL: GET /api/v1/cloud-idp (searches first page)
 // Undocumented
-func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudIdProviderDetails, *interfaces.Response, error) {
+func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudIdProviderDetails, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -161,7 +162,7 @@ func (s *Service) GetByNameV1(ctx context.Context, name string) (*ResourceCloudI
 // URL: POST /api/v1/cloud-idp/export
 // Accept header: pass mime.TextCSV for CSV export, mime.ApplicationJSON or omit for JSON (default).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-export
-func (s *Service) ExportV1(ctx context.Context, query map[string]string, request *ExportRequest, accept ...string) (*interfaces.Response, []byte, error) {
+func (s *Service) ExportV1(ctx context.Context, query map[string]string, request *ExportRequest, accept ...string) (*resty.Response, []byte, error) {
 	endpoint := fmt.Sprintf("%s/export", EndpointCloudIdpV1)
 
 	acceptHeader := mime.ApplicationJSON
@@ -174,7 +175,7 @@ func (s *Service) ExportV1(ctx context.Context, query map[string]string, request
 		"Content-Type": mime.ApplicationJSON,
 	}
 
-	var resp *interfaces.Response
+	var resp *resty.Response
 	var err error
 
 	if request != nil {
@@ -187,13 +188,13 @@ func (s *Service) ExportV1(ctx context.Context, query map[string]string, request
 		return resp, nil, err
 	}
 
-	return resp, resp.Body, nil
+	return resp, resp.Bytes(), nil
 }
 
 // GetHistoryByIDV1 returns the history for a Cloud Identity Provider configuration.
 // URL: GET /api/v1/cloud-idp/{id}/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp-id-history
-func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -225,7 +226,7 @@ func (s *Service) GetHistoryByIDV1(ctx context.Context, id string, query map[str
 // AddHistoryNoteByIDV1 adds a note to the history for a Cloud Identity Provider configuration.
 // URL: POST /api/v1/cloud-idp/{id}/history
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-history
-func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*interfaces.Response, error) {
+func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -251,7 +252,7 @@ func (s *Service) AddHistoryNoteByIDV1(ctx context.Context, id string, request *
 // TestGroupSearchByIDV1 performs a test group search to verify configuration and mappings.
 // URL: POST /api/v1/cloud-idp/{id}/test-group
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-test-group
-func (s *Service) TestGroupSearchByIDV1(ctx context.Context, id string, request *TestGroupSearchRequest) (*TestGroupSearchResponse, *interfaces.Response, error) {
+func (s *Service) TestGroupSearchByIDV1(ctx context.Context, id string, request *TestGroupSearchRequest) (*TestGroupSearchResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -279,7 +280,7 @@ func (s *Service) TestGroupSearchByIDV1(ctx context.Context, id string, request 
 // TestUserSearchByIDV1 performs a test user search to verify configuration and mappings.
 // URL: POST /api/v1/cloud-idp/{id}/test-user
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-test-user
-func (s *Service) TestUserSearchByIDV1(ctx context.Context, id string, request *TestUserSearchRequest) (*TestUserSearchResponse, *interfaces.Response, error) {
+func (s *Service) TestUserSearchByIDV1(ctx context.Context, id string, request *TestUserSearchRequest) (*TestUserSearchResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -307,7 +308,7 @@ func (s *Service) TestUserSearchByIDV1(ctx context.Context, id string, request *
 // TestUserMembershipByIDV1 performs a test user membership search to verify configuration and mappings.
 // URL: POST /api/v1/cloud-idp/{id}/test-user-membership
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-test-user-membership
-func (s *Service) TestUserMembershipByIDV1(ctx context.Context, id string, request *TestUserMembershipRequest) (*TestUserMembershipResponse, *interfaces.Response, error) {
+func (s *Service) TestUserMembershipByIDV1(ctx context.Context, id string, request *TestUserMembershipRequest) (*TestUserMembershipResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

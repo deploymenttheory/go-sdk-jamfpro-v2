@@ -62,7 +62,7 @@ func TestAcceptance_Ebooks_list_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, list)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, list.TotalCount, 0)
 
 	acc.LogTestSuccess(t, "ListV1: totalCount=%d", list.TotalCount)
@@ -92,7 +92,7 @@ func TestAcceptance_Ebooks_get_by_id_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, got)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, firstID, got.ID)
 	assert.NotEmpty(t, got.Name)
 
@@ -123,7 +123,7 @@ func TestAcceptance_Ebooks_get_scope_by_id_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, scope)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 
 	acc.LogTestSuccess(t, "GetScopeByIDV1: ID=%s allComputers=%v allMobileDevices=%v", firstID, scope.AllComputers, scope.AllMobileDevices)
 }

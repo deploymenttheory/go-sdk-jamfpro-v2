@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -20,46 +21,46 @@ type (
 		// filtering and pagination (page, pageSize, sort).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByIDV1 returns the specified building by ID (Get specified Building object).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceBuilding, *interfaces.Response, error)
+		GetByIDV1(ctx context.Context, id string) (*ResourceBuilding, *resty.Response, error)
 
 		// CreateV1 creates a new building record (Create Building record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings
-		CreateV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *interfaces.Response, error)
+		CreateV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByIDV1 updates the specified building by ID (Update specified Building object).
 		//
 		// Returns the full updated building resource.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-buildings-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error)
+		UpdateByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *resty.Response, error)
 
 		// DeleteByIDV1 removes the specified building by ID (Remove specified Building record).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-buildings-id
-		DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
 
 		// DeleteBuildingsByIDV1 deletes multiple buildings by their IDs (Delete multiple Buildings by their IDs).
 		//
 		// Sends a POST to /api/v1/buildings/delete-multiple with a body containing building IDs.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-delete-multiple
-		DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuildingsByIDRequest) (*interfaces.Response, error)
+		DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuildingsByIDRequest) (*resty.Response, error)
 
 		// GetBuildingHistoryV1 returns the history object for the specified building.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id-history
-		GetBuildingHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error)
+		GetBuildingHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
 
 		// AddBuildingHistoryNotesV1 adds notes to the specified building history.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history
-		AddBuildingHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error)
+		AddBuildingHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error)
 
 		// ExportV1 exports the buildings collection in the specified format (JSON or CSV).
 		//
@@ -68,7 +69,7 @@ type (
 		// acceptType should be mime.TextCSV or mime.ApplicationJSON.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-export
-		ExportV1(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error)
+		ExportV1(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
 
 		// ExportHistoryV1 exports the history for the specified building in the specified format (JSON or CSV).
 		//
@@ -77,7 +78,7 @@ type (
 		// acceptType should be mime.TextCSV or mime.ApplicationJSON.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history-export
-		ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error)
+		ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
 	}
 
 	// Service handles communication with the buildings-related methods of the Jamf Pro API.
@@ -102,7 +103,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET /api/v1/buildings
 // Query Params: page, pageSize, sort (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
-func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	endpoint := EndpointBuildingsV1
@@ -123,17 +124,17 @@ func (s *Service) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Lis
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list buildings: %w", err)
 	}
-	
+
 	// Set totalCount to the actual number of results retrieved
 	result.TotalCount = len(result.Results)
-	
+
 	return &result, resp, nil
 }
 
 // GetByIDV1 returns the specified building by ID (Get specified Building object).
 // URL: GET /api/v1/buildings/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id
-func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceBuilding, *interfaces.Response, error) {
+func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceBuilding, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("building ID is required")
 	}
@@ -158,7 +159,7 @@ func (s *Service) GetByIDV1(ctx context.Context, id string) (*ResourceBuilding, 
 // URL: POST /api/v1/buildings
 // Body: JSON with name, streetAddress1, streetAddress2, city, stateProvince, zipPostalCode, country
 // https://developer.jamf.com/jamf-pro/reference/post_v1-buildings
-func (s *Service) CreateV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) CreateV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -184,7 +185,7 @@ func (s *Service) CreateV1(ctx context.Context, request *RequestBuilding) (*Crea
 // URL: PUT /api/v1/buildings/{id}
 // Body: JSON with name, streetAddress1, streetAddress2, city, stateProvince, zipPostalCode, country
 // https://developer.jamf.com/jamf-pro/reference/put_v1-buildings-id
-func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *interfaces.Response, error) {
+func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -213,7 +214,7 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, request *RequestB
 // DeleteByIDV1 removes the specified building by ID (Remove specified Building record).
 // URL: DELETE /api/v1/buildings/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-buildings-id
-func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("building ID is required")
 	}
@@ -236,7 +237,7 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
 // URL: POST /api/v1/buildings/delete-multiple
 // Body: JSON with ids (array of building IDs)
 // https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-delete-multiple
-func (s *Service) DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuildingsByIDRequest) (*interfaces.Response, error) {
+func (s *Service) DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuildingsByIDRequest) (*resty.Response, error) {
 	if req == nil || len(req.IDs) == 0 {
 		return nil, fmt.Errorf("ids are required")
 	}
@@ -260,7 +261,7 @@ func (s *Service) DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuilding
 // URL: GET /api/v1/buildings/{id}/history
 // Query Params: filter, sort, page, page-size (optional)
 // https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id-history
-func (s *Service) GetBuildingHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *interfaces.Response, error) {
+func (s *Service) GetBuildingHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("building ID is required")
 	}
@@ -285,10 +286,10 @@ func (s *Service) GetBuildingHistoryV1(ctx context.Context, id string, rsqlQuery
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get building history: %w", err)
 	}
-	
+
 	// Set totalCount to the actual number of results retrieved
 	result.TotalCount = len(result.Results)
-	
+
 	return &result, resp, nil
 }
 
@@ -296,7 +297,7 @@ func (s *Service) GetBuildingHistoryV1(ctx context.Context, id string, rsqlQuery
 // URL: POST /api/v1/buildings/{id}/history
 // Body: JSON with note
 // https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history
-func (s *Service) AddBuildingHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*interfaces.Response, error) {
+func (s *Service) AddBuildingHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("building ID is required")
 	}
@@ -325,7 +326,7 @@ func (s *Service) AddBuildingHistoryNotesV1(ctx context.Context, id string, req 
 // Body: optional ExportRequest to override query params when URI exceeds ~2k chars
 // Accept: text/csv or application/json
 // https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-export
-func (s *Service) ExportV1(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error) {
+func (s *Service) ExportV1(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error) {
 	endpoint := EndpointBuildingsV1 + "/export"
 
 	if acceptType == "" {
@@ -347,7 +348,7 @@ func (s *Service) ExportV1(ctx context.Context, rsqlQuery map[string]string, req
 		return nil, resp, fmt.Errorf("failed to export buildings: %w", err)
 	}
 
-	return resp.Body, resp, nil
+	return resp.Bytes(), resp, nil
 }
 
 // ExportHistoryV1 exports the history for the specified building in the specified format (JSON or CSV).
@@ -357,7 +358,7 @@ func (s *Service) ExportV1(ctx context.Context, rsqlQuery map[string]string, req
 // Body: optional ExportRequest to override query params when URI exceeds ~2k chars
 // Accept: text/csv or application/json
 // https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history-export
-func (s *Service) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *interfaces.Response, error) {
+func (s *Service) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("building ID is required")
 	}
@@ -383,5 +384,5 @@ func (s *Service) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[
 		return nil, resp, fmt.Errorf("failed to export building history: %w", err)
 	}
 
-	return resp.Body, resp, nil
+	return resp.Bytes(), resp, nil
 }

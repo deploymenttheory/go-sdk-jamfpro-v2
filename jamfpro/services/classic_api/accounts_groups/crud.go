@@ -6,6 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -16,41 +17,41 @@ type (
 		// GetByID returns the specified account group by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findaccountsbyid
-		GetByID(ctx context.Context, id int) (*ResourceAccountGroup, *interfaces.Response, error)
+		GetByID(ctx context.Context, id int) (*ResourceAccountGroup, *resty.Response, error)
 
 		// GetByName returns the specified account group by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findaccountsbyname
-		GetByName(ctx context.Context, name string) (*ResourceAccountGroup, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ResourceAccountGroup, *resty.Response, error)
 
 		// Create creates a new account group.
 		//
 		// Returns only the created account group's ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createaccountbyid
-		Create(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByID updates the specified account group by ID.
 		// Returns only the updated account group's ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyid
-		UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*UpdateResponse, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*UpdateResponse, *resty.Response, error)
 
 		// UpdateByName updates the specified account group by name.
 		// Returns only the updated account group's ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyname
-		UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*UpdateResponse, *interfaces.Response, error)
+		UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*UpdateResponse, *resty.Response, error)
 
 		// DeleteByID removes the specified account group by ID.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteaccountbyid
-		DeleteByID(ctx context.Context, id int) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 		// DeleteByName removes the specified account group by name.
 		//
 		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteaccountbyname
-		DeleteByName(ctx context.Context, name string) (*interfaces.Response, error)
+		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the account groups-related Classic API methods.
@@ -75,7 +76,7 @@ func NewService(client interfaces.HTTPClient) *Service {
 // GetByID returns the specified account group by ID.
 // URL: GET /JSSResource/accounts/groupid/{id}
 // https://developer.jamf.com/jamf-pro/reference/findaccountsbyid
-func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAccountGroup, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAccountGroup, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("account group ID must be a positive integer")
 	}
@@ -100,7 +101,7 @@ func (s *Service) GetByID(ctx context.Context, id int) (*ResourceAccountGroup, *
 // GetByName returns the specified account group by name.
 // URL: GET /JSSResource/accounts/groupname/{name}
 // https://developer.jamf.com/jamf-pro/reference/findaccountsbyname
-func (s *Service) GetByName(ctx context.Context, name string) (*ResourceAccountGroup, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ResourceAccountGroup, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("account group name is required")
 	}
@@ -126,7 +127,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ResourceAccountG
 // URL: POST /JSSResource/accounts/groupid/0
 // Returns only the created account group's ID.
 // https://developer.jamf.com/jamf-pro/reference/createaccountbyid
-func (s *Service) Create(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *resty.Response, error) {
 	if req == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -151,7 +152,7 @@ func (s *Service) Create(ctx context.Context, req *RequestAccountGroup) (*Create
 // UpdateByID updates the specified account group by ID.
 // URL: PUT /JSSResource/accounts/groupid/{id}
 // https://developer.jamf.com/jamf-pro/reference/updateaccountbyid
-func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*UpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*UpdateResponse, *resty.Response, error) {
 	if id <= 0 {
 		return nil, nil, fmt.Errorf("account group ID must be a positive integer")
 	}
@@ -179,7 +180,7 @@ func (s *Service) UpdateByID(ctx context.Context, id int, req *RequestAccountGro
 // UpdateByName updates the specified account group by name.
 // URL: PUT /JSSResource/accounts/groupname/{name}
 // https://developer.jamf.com/jamf-pro/reference/updateaccountbyname
-func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*UpdateResponse, *interfaces.Response, error) {
+func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*UpdateResponse, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("account group name is required")
 	}
@@ -207,7 +208,7 @@ func (s *Service) UpdateByName(ctx context.Context, name string, req *RequestAcc
 // DeleteByID removes the specified account group by ID.
 // URL: DELETE /JSSResource/accounts/groupid/{id}
 // https://developer.jamf.com/jamf-pro/reference/deleteaccountbyid
-func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id int) (*resty.Response, error) {
 	if id <= 0 {
 		return nil, fmt.Errorf("account group ID must be a positive integer")
 	}
@@ -230,7 +231,7 @@ func (s *Service) DeleteByID(ctx context.Context, id int) (*interfaces.Response,
 // DeleteByName removes the specified account group by name.
 // URL: DELETE /JSSResource/accounts/groupname/{name}
 // https://developer.jamf.com/jamf-pro/reference/deleteaccountbyname
-func (s *Service) DeleteByName(ctx context.Context, name string) (*interfaces.Response, error) {
+func (s *Service) DeleteByName(ctx context.Context, name string) (*resty.Response, error) {
 	if name == "" {
 		return nil, fmt.Errorf("account group name is required")
 	}

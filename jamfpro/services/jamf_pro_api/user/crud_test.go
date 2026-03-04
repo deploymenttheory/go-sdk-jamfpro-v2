@@ -30,7 +30,7 @@ func TestUnit_User_Get_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, "admin", result.Username)
 	assert.Equal(t, "Administrator", result.RealName)
@@ -61,7 +61,7 @@ func TestUnit_User_Get_NotFound(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode)
+	assert.Equal(t, 404, resp.StatusCode())
 	assert.Contains(t, err.Error(), "NOT-FOUND")
 }
 
@@ -73,7 +73,7 @@ func TestUnit_User_Get_InvalidJSON(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+	assert.Equal(t, 200, resp.StatusCode())
 	assert.Contains(t, err.Error(), "unmarshal")
 }
 
@@ -88,7 +88,7 @@ func TestUnit_User_ChangePassword_Success(t *testing.T) {
 	resp, err := svc.ChangePassword(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_User_ChangePassword_NilRequest(t *testing.T) {
@@ -163,7 +163,7 @@ func TestUnit_User_ChangePassword_Error(t *testing.T) {
 	resp, err := svc.ChangePassword(context.Background(), req)
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 400, resp.StatusCode)
+	assert.Equal(t, 400, resp.StatusCode())
 }
 
 func TestUnit_User_UpdateSession_Success(t *testing.T) {
@@ -176,7 +176,7 @@ func TestUnit_User_UpdateSession_Success(t *testing.T) {
 	resp, err := svc.UpdateSession(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 204, resp.StatusCode)
+	assert.Equal(t, 204, resp.StatusCode())
 }
 
 func TestUnit_User_UpdateSession_NilRequest(t *testing.T) {
@@ -198,5 +198,5 @@ func TestUnit_User_UpdateSession_Error(t *testing.T) {
 	resp, err := svc.UpdateSession(context.Background(), req)
 	assert.Error(t, err)
 	require.NotNil(t, resp)
-	assert.Equal(t, 500, resp.StatusCode)
+	assert.Equal(t, 500, resp.StatusCode())
 }

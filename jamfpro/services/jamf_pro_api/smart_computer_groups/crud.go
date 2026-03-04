@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
 )
 
 type (
@@ -17,35 +18,35 @@ type (
 		// List returns a paginated list of all smart computer groups.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
-		List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error)
+		List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
 
 		// GetByID returns the specified smart computer group by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups-id
-		GetByID(ctx context.Context, id string) (*ResourceSmartGroup, *interfaces.Response, error)
+		GetByID(ctx context.Context, id string) (*ResourceSmartGroup, *resty.Response, error)
 
 		// GetByName returns a smart computer group by name (client-side filter over list).
-		GetByName(ctx context.Context, name string) (*ListItem, *interfaces.Response, error)
+		GetByName(ctx context.Context, name string) (*ListItem, *resty.Response, error)
 
 		// GetMembership returns the computer IDs that are members of the specified smart group.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-group-membership-id
-		GetMembership(ctx context.Context, id string) (*MembershipResponse, *interfaces.Response, error)
+		GetMembership(ctx context.Context, id string) (*MembershipResponse, *resty.Response, error)
 
 		// Create creates a new smart computer group.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-smart-groups
-		Create(ctx context.Context, request *RequestSmartGroup) (*CreateResponse, *interfaces.Response, error)
+		Create(ctx context.Context, request *RequestSmartGroup) (*CreateResponse, *resty.Response, error)
 
 		// UpdateByID updates the specified smart computer group by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-smart-groups-id
-		UpdateByID(ctx context.Context, id string, request *RequestSmartGroup) (*ResourceSmartGroup, *interfaces.Response, error)
+		UpdateByID(ctx context.Context, id string, request *RequestSmartGroup) (*ResourceSmartGroup, *resty.Response, error)
 
 		// DeleteByID removes the specified smart computer group by ID.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-groups-smart-groups-id
-		DeleteByID(ctx context.Context, id string) (*interfaces.Response, error)
+		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
 	}
 
 	// Service handles communication with the smart computer groups methods of the Jamf Pro API.
@@ -68,11 +69,11 @@ func NewService(client interfaces.HTTPClient) *Service {
 
 // List returns a paginated list of all smart computer groups.
 // URL: GET /api/v2/computer-groups/smart-groups
-func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *interfaces.Response, error) {
+func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
 	mergePage := func(pageData []byte) error {
-	result.Results = []ListItem{}
+		result.Results = []ListItem{}
 
 		var pageResults []ListItem
 		if err := json.Unmarshal(pageData, &pageResults); err != nil {
@@ -93,11 +94,12 @@ func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListR
 	}
 
 	// Extract totalCount from response body if available
-	if resp != nil && len(resp.Body) > 0 {
+	bodyBytes := resp.Bytes()
+	if resp != nil && len(bodyBytes) > 0 {
 		var pageResp struct {
 			TotalCount int `json:"totalCount"`
 		}
-		if err := json.Unmarshal(resp.Body, &pageResp); err == nil {
+		if err := json.Unmarshal(bodyBytes, &pageResp); err == nil {
 			result.TotalCount = pageResp.TotalCount
 		}
 	}
@@ -112,7 +114,7 @@ func (s *Service) List(ctx context.Context, rsqlQuery map[string]string) (*ListR
 
 // GetByID returns the specified smart computer group by ID.
 // URL: GET /api/v2/computer-groups/smart-groups/{id}
-func (s *Service) GetByID(ctx context.Context, id string) (*ResourceSmartGroup, *interfaces.Response, error) {
+func (s *Service) GetByID(ctx context.Context, id string) (*ResourceSmartGroup, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("smart computer group ID is required")
 	}
@@ -134,7 +136,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*ResourceSmartGroup, 
 }
 
 // GetByName returns a smart computer group by name.
-func (s *Service) GetByName(ctx context.Context, name string) (*ListItem, *interfaces.Response, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*ListItem, *resty.Response, error) {
 	if name == "" {
 		return nil, nil, fmt.Errorf("smart computer group name is required")
 	}
@@ -157,7 +159,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*ListItem, *inter
 
 // GetMembership returns the computer IDs that are members of the specified smart group.
 // URL: GET /api/v2/computer-groups/smart-group-membership/{id}
-func (s *Service) GetMembership(ctx context.Context, id string) (*MembershipResponse, *interfaces.Response, error) {
+func (s *Service) GetMembership(ctx context.Context, id string) (*MembershipResponse, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("smart computer group ID is required")
 	}
@@ -180,7 +182,7 @@ func (s *Service) GetMembership(ctx context.Context, id string) (*MembershipResp
 
 // Create creates a new smart computer group.
 // URL: POST /api/v2/computer-groups/smart-groups
-func (s *Service) Create(ctx context.Context, request *RequestSmartGroup) (*CreateResponse, *interfaces.Response, error) {
+func (s *Service) Create(ctx context.Context, request *RequestSmartGroup) (*CreateResponse, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -203,7 +205,7 @@ func (s *Service) Create(ctx context.Context, request *RequestSmartGroup) (*Crea
 
 // UpdateByID updates the specified smart computer group by ID.
 // URL: PUT /api/v2/computer-groups/smart-groups/{id}
-func (s *Service) UpdateByID(ctx context.Context, id string, request *RequestSmartGroup) (*ResourceSmartGroup, *interfaces.Response, error) {
+func (s *Service) UpdateByID(ctx context.Context, id string, request *RequestSmartGroup) (*ResourceSmartGroup, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -231,7 +233,7 @@ func (s *Service) UpdateByID(ctx context.Context, id string, request *RequestSma
 
 // DeleteByID removes the specified smart computer group by ID.
 // URL: DELETE /api/v2/computer-groups/smart-groups/{id}
-func (s *Service) DeleteByID(ctx context.Context, id string) (*interfaces.Response, error) {
+func (s *Service) DeleteByID(ctx context.Context, id string) (*resty.Response, error) {
 	if id == "" {
 		return nil, fmt.Errorf("smart computer group ID is required")
 	}
