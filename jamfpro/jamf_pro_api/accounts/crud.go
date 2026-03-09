@@ -11,31 +11,6 @@ import (
 )
 
 type (
-	// AccountsServiceInterface defines the interface for user account operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-accounts
-	AccountsServiceInterface interface {
-		// ListV1 returns all user accounts with pagination, sorting, and filtering support.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-accounts
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the user account for the given id.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-accounts-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceAccount, *resty.Response, error)
-
-		// CreateV1 adds a new user account.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-accounts
-		CreateV1(ctx context.Context, req *RequestAccount) (*CreateResponse, *resty.Response, error)
-
-		// DeleteByIDV1 deletes the user account for the given id.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-accounts-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the accounts-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-accounts
@@ -43,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AccountsServiceInterface = (*Accounts)(nil)
 
 // NewService returns a new accounts Service backed by the provided HTTP client.
 func NewAccounts(client transport.HTTPClient) *Accounts {

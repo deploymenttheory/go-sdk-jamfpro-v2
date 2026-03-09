@@ -10,50 +10,6 @@ import (
 )
 
 type (
-	// AccountGroupsServiceInterface defines the interface for Classic API account group operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/accounts
-	AccountGroupsServiceInterface interface {
-		// GetByID returns the specified account group by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findaccountsbyid
-		GetByID(ctx context.Context, id int) (*ResourceAccountGroup, *resty.Response, error)
-
-		// GetByName returns the specified account group by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findaccountsbyname
-		GetByName(ctx context.Context, name string) (*ResourceAccountGroup, *resty.Response, error)
-
-		// Create creates a new account group.
-		//
-		// Returns only the created account group's ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createaccountbyid
-		Create(ctx context.Context, req *RequestAccountGroup) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified account group by ID.
-		// Returns only the updated account group's ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyid
-		UpdateByID(ctx context.Context, id int, req *RequestAccountGroup) (*UpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified account group by name.
-		// Returns only the updated account group's ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateaccountbyname
-		UpdateByName(ctx context.Context, name string, req *RequestAccountGroup) (*UpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified account group by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteaccountbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified account group by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteaccountbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the account groups-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/accounts
@@ -61,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AccountGroupsServiceInterface = (*AccountsGroups)(nil)
 
 // NewService returns a new account groups Service backed by the provided HTTP client.
 func NewAccountsGroups(client transport.HTTPClient) *AccountsGroups {

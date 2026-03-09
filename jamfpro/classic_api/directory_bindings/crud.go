@@ -11,53 +11,6 @@ import (
 )
 
 type (
-	// DirectoryBindingsServiceInterface defines the interface for Classic API directory binding operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/directorybindings
-	DirectoryBindingsServiceInterface interface {
-		// List returns all directory bindings.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddirectorybindings
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified directory binding by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddirectorybindingsbyid
-		GetByID(ctx context.Context, id int) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// GetByName returns the specified directory binding by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddirectorybindingsbyname
-		GetByName(ctx context.Context, name string) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// Create creates a new directory binding.
-		//
-		// Returns the created directory binding with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdirectorybindingbyid
-		Create(ctx context.Context, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// UpdateByID updates the specified directory binding by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedirectorybindingbyid
-		UpdateByID(ctx context.Context, id int, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// UpdateByName updates the specified directory binding by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedirectorybindingbyname
-		UpdateByName(ctx context.Context, name string, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// DeleteDirectoryBindingByID removes the specified directory binding by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedirectorybindingbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteDirectoryBindingByName removes the specified directory binding by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedirectorybindingbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the directory binding-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/directorybindings
@@ -65,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DirectoryBindingsServiceInterface = (*DirectoryBindings)(nil)
 
 // NewService returns a new directory bindings Service backed by the provided HTTP client.
 func NewDirectoryBindings(client transport.HTTPClient) *DirectoryBindings {

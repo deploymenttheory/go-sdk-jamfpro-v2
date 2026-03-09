@@ -11,57 +11,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API macOS configuration profile operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/osxconfigurationprofiles
-	ServiceInterface interface {
-		// List returns all macOS configuration profiles.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofiles
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified macOS configuration profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified macOS configuration profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// Create creates a new macOS configuration profile.
-		//
-		// Returns the created profile ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createosxconfigurationprofilebyid
-		Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified macOS configuration profile by ID.
-		//
-		// Returns the updated profile ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyid
-		UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified macOS configuration profile by name.
-		//
-		// Returns the updated profile ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyname
-		UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified macOS configuration profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified macOS configuration profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the macOS configuration profiles Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/osxconfigurationprofiles
@@ -69,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*MacosConfigurationProfiles)(nil)
 
 // NewService returns a new macOS configuration profiles Service backed by the provided HTTP client.
 func NewMacosConfigurationProfiles(client transport.HTTPClient) *MacosConfigurationProfiles {

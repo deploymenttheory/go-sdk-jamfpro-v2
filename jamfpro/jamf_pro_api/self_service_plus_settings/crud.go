@@ -11,26 +11,6 @@ import (
 )
 
 type (
-	// SelfServicePlusSettingsServiceInterface defines the interface for self-service plus settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getselfserviceplussettings
-	SelfServicePlusSettingsServiceInterface interface {
-		// GetFeatureToggleEnabledV1 returns whether the Self Service Plus feature toggle is enabled (Determines if Self Service Plus feature toggle is enabled).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getselfserviceplusfeaturetoggleenabled
-		GetFeatureToggleEnabledV1(ctx context.Context) (bool, *resty.Response, error)
-
-		// GetV1 retrieves the current Self Service Plus settings (Get Self Service Plus settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getselfserviceplussettings
-		GetV1(ctx context.Context) (*ResourceSelfServicePlusSettings, *resty.Response, error)
-
-		// UpdateV1 updates the Self Service Plus settings (Save Self Service Plus settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/putselfserviceplussettings
-		UpdateV1(ctx context.Context, request *ResourceSelfServicePlusSettings) (*ResourceSelfServicePlusSettings, *resty.Response, error)
-	}
-
 	// Service handles communication with the self-service plus settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getselfserviceplussettings
@@ -38,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SelfServicePlusSettingsServiceInterface = (*SelfServicePlusSettings)(nil)
 
 func NewSelfServicePlusSettings(client transport.HTTPClient) *SelfServicePlusSettings {
 	return &SelfServicePlusSettings{client: client}

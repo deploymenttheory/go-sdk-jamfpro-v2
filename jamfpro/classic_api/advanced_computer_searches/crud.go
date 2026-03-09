@@ -10,57 +10,6 @@ import (
 )
 
 type (
-	// AdvancedComputerSearchesServiceInterface defines the interface for Classic API advanced computer search operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearches
-	AdvancedComputerSearchesServiceInterface interface {
-		// List returns all advanced computer searches.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearches
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified advanced computer search by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearchesbyid
-		GetByID(ctx context.Context, id int) (*ResourceAdvancedComputerSearch, *resty.Response, error)
-
-		// GetByName returns the specified advanced computer search by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearchesbyname
-		GetByName(ctx context.Context, name string) (*ResourceAdvancedComputerSearch, *resty.Response, error)
-
-		// Create creates a new advanced computer search.
-		//
-		// Returns the created advanced computer search ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createadvancedcomputersearchgbyid
-		Create(ctx context.Context, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified advanced computer search by ID.
-		//
-		// Returns the updated advanced computer search ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateadvancedcomputersearchbyid
-		UpdateByID(ctx context.Context, id int, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified advanced computer search by name.
-		//
-		// Returns the updated advanced computer search ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateadvancedcomputersearchbyname
-		UpdateByName(ctx context.Context, name string, req *RequestAdvancedComputerSearch) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified advanced computer search by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteadvancedcomputersearchbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified advanced computer search by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteadvancedcomputersearchbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the advanced computer searches-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearches
@@ -68,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AdvancedComputerSearchesServiceInterface = (*AdvancedComputerSearches)(nil)
 
 // NewService returns a new advanced computer searches Service backed by the provided HTTP client.
 func NewAdvancedComputerSearches(client transport.HTTPClient) *AdvancedComputerSearches {

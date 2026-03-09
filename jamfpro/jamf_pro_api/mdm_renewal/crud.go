@@ -10,34 +10,6 @@ import (
 )
 
 type (
-	// MDMRenewalServiceInterface defines the interface for MDM renewal operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-device-common-details-clientmanagementid
-	MDMRenewalServiceInterface interface {
-		// UpdateDeviceCommonDetailsV1 partially updates device common details (PATCH).
-		// The clientManagementId must be provided in the request body.
-		// Returns 204 No Content on success.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-mdm-renewal-device-common-details
-		UpdateDeviceCommonDetailsV1(ctx context.Context, request *RequestDeviceCommonDetailsUpdate) (*resty.Response, error)
-
-		// GetDeviceCommonDetailsV1 returns device common details for the given client management ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-device-common-details-clientmanagementid
-		GetDeviceCommonDetailsV1(ctx context.Context, clientManagementID string) (*DeviceCommonDetails, *resty.Response, error)
-
-		// GetRenewalStrategiesV1 returns MDM renewal errors and strategies for the given client management ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-renewal-strategies-clientmanagementid
-		GetRenewalStrategiesV1(ctx context.Context, clientManagementID string) ([]RenewalErrorWithStrategies, *resty.Response, error)
-
-		// DeleteRenewalStrategiesV1 deletes all renewal strategies and errors for the given client management ID.
-		// Returns 204 No Content on success.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mdm-renewal-renewal-strategies-clientmanagementid
-		DeleteRenewalStrategiesV1(ctx context.Context, clientManagementID string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the MDM renewal-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-device-common-details-clientmanagementid
@@ -45,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ MDMRenewalServiceInterface = (*MdmRenewal)(nil)
 
 func NewMdmRenewal(client transport.HTTPClient) *MdmRenewal {
 	return &MdmRenewal{client: client}

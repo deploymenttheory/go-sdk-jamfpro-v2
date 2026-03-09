@@ -10,53 +10,6 @@ import (
 )
 
 type (
-	// NetworkSegmentsServiceInterface defines the interface for Classic API network segment operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/networksegments
-	NetworkSegmentsServiceInterface interface {
-		// List returns all network segments.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findnetworksegments
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified network segment by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findnetworksegmentsbyid
-		GetByID(ctx context.Context, id int) (*ResourceNetworkSegment, *resty.Response, error)
-
-		// GetByName returns the specified network segment by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findnetworksegmentsbyname
-		GetByName(ctx context.Context, name string) (*ResourceNetworkSegment, *resty.Response, error)
-
-		// Create creates a new network segment.
-		//
-		// Returns the created resource ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createnetworksegmentbyid
-		Create(ctx context.Context, req *RequestNetworkSegment) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified network segment by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatenetworksegmentbyid
-		UpdateByID(ctx context.Context, id int, req *RequestNetworkSegment) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified network segment by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatenetworksegmentbyname
-		UpdateByName(ctx context.Context, name string, req *RequestNetworkSegment) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified network segment by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletenetworksegmentbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified network segment by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletenetworksegmentbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the network segment-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/networksegments
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ NetworkSegmentsServiceInterface = (*NetworkSegments)(nil)
 
 // NewService returns a new network segments Service backed by the provided HTTP client.
 func NewNetworkSegments(client transport.HTTPClient) *NetworkSegments {

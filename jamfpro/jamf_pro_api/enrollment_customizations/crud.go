@@ -12,78 +12,6 @@ import (
 )
 
 type (
-	// EnrollmentCustomizationsServiceInterface defines the interface for enrollment customization operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations
-	EnrollmentCustomizationsServiceInterface interface {
-		// ListV2 returns a paged list of enrollment customization objects.
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations
-		ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV2 returns the specified enrollment customization by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-id
-		GetByIDV2(ctx context.Context, id string) (*ResourceEnrollmentCustomization, *resty.Response, error)
-
-		// GetByNameV2 returns the specified enrollment customization by display name.
-		//
-		// This is a convenience method that calls ListV2 and filters by name.
-		GetByNameV2(ctx context.Context, name string) (*ResourceEnrollmentCustomization, *resty.Response, error)
-
-		// CreateV2 creates a new enrollment customization record.
-		//
-		// Returns the created enrollment customization's ID and href.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-customizations
-		CreateV2(ctx context.Context, request *ResourceEnrollmentCustomization) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV2 replaces the specified enrollment customization by ID.
-		//
-		// Returns the full updated enrollment customization resource.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-enrollment-customizations-id
-		UpdateByIDV2(ctx context.Context, id string, request *ResourceEnrollmentCustomization) (*ResourceEnrollmentCustomization, *resty.Response, error)
-
-		// DeleteByIDV2 removes the specified enrollment customization by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-enrollment-customizations-id
-		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// GetHistoryV2 returns the history object for the specified enrollment customization.
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-id-history
-		GetHistoryV2(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNotesV2 adds notes to the specified enrollment customization's history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-customizations-id-history
-		AddHistoryNotesV2(ctx context.Context, id string, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error)
-
-		// GetPrestagesV2 retrieves the list of prestages using this enrollment customization.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-id-prestages
-		GetPrestagesV2(ctx context.Context, id string) (*PrestagesResponse, *resty.Response, error)
-
-		// UploadImageV2 uploads an image for enrollment customizations.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-customizations-images
-		UploadImageV2(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ImageUploadResponse, *resty.Response, error)
-
-		// GetImageByIdV2 retrieves an enrollment customization image by ID.
-		//
-		// Returns the image file data as bytes.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations-images-id
-		GetImageByIdV2(ctx context.Context, id string) ([]byte, *resty.Response, error)
-	}
-
 	// Service handles communication with the enrollment customizations-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations
@@ -91,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ EnrollmentCustomizationsServiceInterface = (*EnrollmentCustomizations)(nil)
 
 // NewService returns a new enrollment customizations Service backed by the provided HTTP client.
 func NewEnrollmentCustomizations(client transport.HTTPClient) *EnrollmentCustomizations {

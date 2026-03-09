@@ -11,33 +11,6 @@ import (
 )
 
 type (
-	// ClientCheckinServiceInterface defines the interface for client check-in settings (singleton).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in
-	ClientCheckinServiceInterface interface {
-		// GetV3 returns the current client check-in settings (Get Client Check-In settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in
-		GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *resty.Response, error)
-
-		// UpdateV3 updates the client check-in settings (Update Client Check-In object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-check-in
-		UpdateV3(ctx context.Context, request *ResourceClientCheckinSettings) (*ResourceClientCheckinSettings, *resty.Response, error)
-
-		// GetHistoryV3 returns the client check-in history object (Get Client Check-In history object).
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in-history
-		GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*ResourceClientCheckinHistory, *resty.Response, error)
-
-		// AddHistoryNoteV3 adds a note to the client check-in history (Add a Note to Client Check-In History).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-check-in-history
-		AddHistoryNoteV3(ctx context.Context, request *RequestClientCheckinHistoryNote) (*CreateHistoryResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the client check-in-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-check-in
@@ -45,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ClientCheckinServiceInterface = (*ClientCheckin)(nil)
 
 func NewClientCheckin(client transport.HTTPClient) *ClientCheckin {
 	return &ClientCheckin{client: client}

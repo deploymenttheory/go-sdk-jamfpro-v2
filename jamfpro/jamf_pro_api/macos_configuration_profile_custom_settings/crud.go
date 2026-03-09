@@ -9,27 +9,6 @@ import (
 	"resty.dev/v3"
 )
 
-// ServiceInterface defines the interface for macOS configuration profile custom settings operations.
-//
-// This service provides access to custom settings schemas and configuration profiles
-// for macOS devices. API reference: Undocumented.
-type ServiceInterface interface {
-	// GetSchemaList retrieves the list of custom settings schemas.
-	//
-	// Returns the schema list organized by buckets and domains.
-	GetSchemaList(ctx context.Context) (*ResponseCustomSettingsSchemaList, *resty.Response, error)
-
-	// GetByPayloadUUID retrieves a macOS configuration profile by payload UUID.
-	//
-	// id is the payload UUID of the configuration profile.
-	GetByPayloadUUID(ctx context.Context, id string) (*ResourceConfigProfile, *resty.Response, error)
-
-	// Create creates a new macOS configuration profile with custom settings schema.
-	//
-	// profile is the configuration profile to create.
-	Create(ctx context.Context, profile *ResourceConfigProfile) (*ResponseConfigProfileCreate, *resty.Response, error)
-}
-
 type (
 	// Service handles communication with the macOS configuration profile custom settings
 	// methods of the Jamf Pro API.
@@ -39,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*MacosConfigurationProfileCustomSettings)(nil)
 
 // NewService creates a new macOS configuration profile custom settings service.
 func NewMacosConfigurationProfileCustomSettings(client transport.HTTPClient) *MacosConfigurationProfileCustomSettings {

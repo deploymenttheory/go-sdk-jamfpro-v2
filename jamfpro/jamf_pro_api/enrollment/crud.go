@@ -11,122 +11,6 @@ import (
 )
 
 type (
-	// EnrollmentServiceInterface defines the interface for enrollment operations.
-	//
-	// Manages enrollment settings, ADUE access groups, and language messaging.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v4-enrollment
-	EnrollmentServiceInterface interface {
-		// GetADUESessionTokenSettingsV1 retrieves ADUE (Account Driven User Enrollment) session token settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-adue-session-token-settings
-		GetADUESessionTokenSettingsV1(ctx context.Context) (*ResourceADUESessionTokenSettings, *resty.Response, error)
-
-		// UpdateADUESessionTokenSettingsV1 updates ADUE session token settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-adue-session-token-settings
-		UpdateADUESessionTokenSettingsV1(ctx context.Context, request *ResourceADUESessionTokenSettings) (*ResourceADUESessionTokenSettings, *resty.Response, error)
-
-		// GetHistoryV2 retrieves enrollment history with optional sorting.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-history
-		GetHistoryV2(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNotesV2 adds notes to enrollment history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-history
-		AddHistoryNotesV2(ctx context.Context, request *RequestAddHistoryNotes) (*CreateResponse, *resty.Response, error)
-
-		// ExportHistoryV2 exports enrollment history in the specified format (JSON or CSV).
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size, export-fields, export-labels).
-		// The acceptHeader determines the export format (application/json or text/csv).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-enrollment-history-export
-		ExportHistoryV2(ctx context.Context, acceptHeader string, rsqlQuery map[string]string, request *RequestExportHistory) ([]byte, *resty.Response, error)
-
-		// ListAccessGroupsV3 lists all ADUE access groups with pagination support.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-access-groups
-		ListAccessGroupsV3(ctx context.Context, rsqlQuery map[string]string) (*ListResponseAccessGroups, *resty.Response, error)
-
-		// GetAccessGroupByIDV3 retrieves an ADUE access group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-access-groups-id
-		GetAccessGroupByIDV3(ctx context.Context, id string) (*ResourceAccountDrivenUserEnrollmentAccessGroup, *resty.Response, error)
-
-		// CreateAccessGroupV3 creates a new ADUE access group.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-enrollment-access-groups
-		CreateAccessGroupV3(ctx context.Context, request *ResourceAccountDrivenUserEnrollmentAccessGroup) (*CreateResponse, *resty.Response, error)
-
-		// UpdateAccessGroupByIDV3 updates an ADUE access group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-enrollment-access-groups-id
-		UpdateAccessGroupByIDV3(ctx context.Context, id string, request *ResourceAccountDrivenUserEnrollmentAccessGroup) (*ResourceAccountDrivenUserEnrollmentAccessGroup, *resty.Response, error)
-
-		// DeleteAccessGroupByIDV3 deletes an ADUE access group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-enrollment-access-groups-id
-		DeleteAccessGroupByIDV3(ctx context.Context, id string) (*resty.Response, error)
-
-		// ListLanguageMessagesV3 returns all configured enrollment language messages.
-		//
-		// Automatically fetches all pages. The API supports pagination and sorting but not RSQL filtering.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-languages
-		ListLanguageMessagesV3(ctx context.Context) (*ListResponseLanguageMessages, *resty.Response, error)
-
-		// GetLanguageMessageV3 retrieves enrollment messaging for a specific language code.
-		//
-		// Validates the language code against available codes before making the request.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-languages-languageid
-		GetLanguageMessageV3(ctx context.Context, languageCode string) (*ResourceEnrollmentLanguage, *resty.Response, error)
-
-		// UpdateLanguageMessageV3 updates enrollment messaging for a specific language code.
-		//
-		// Validates the language code against available codes before making the request.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-enrollment-languages-languageid
-		UpdateLanguageMessageV3(ctx context.Context, languageCode string, request *ResourceEnrollmentLanguage) (*ResourceEnrollmentLanguage, *resty.Response, error)
-
-		// DeleteLanguageMessageV3 deletes enrollment messaging for a specific language code.
-		//
-		// Validates the language code against available codes before making the request.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-enrollment-languages-languageid
-		DeleteLanguageMessageV3(ctx context.Context, languageCode string) (*resty.Response, error)
-
-		// DeleteMultipleLanguageMessagesV3 deletes multiple enrollment language messages by their codes.
-		//
-		// Validates all language codes against available codes before making the request.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-enrollment-languages-delete-multiple
-		DeleteMultipleLanguageMessagesV3(ctx context.Context, request *RequestDeleteMultipleLanguages) (*resty.Response, error)
-
-		// ListLanguageCodesV3 retrieves the list of available languages and their ISO 639-1 codes.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-language-codes
-		ListLanguageCodesV3(ctx context.Context) ([]ResourceLanguageCode, *resty.Response, error)
-
-		// ListFilteredLanguageCodesV3 returns language codes not yet added to enrollment.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-enrollment-filtered-language-codes
-		ListFilteredLanguageCodesV3(ctx context.Context) ([]ResourceLanguageCode, *resty.Response, error)
-
-		// GetV4 retrieves the current enrollment configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
-		GetV4(ctx context.Context) (*ResourceEnrollment, *resty.Response, error)
-
-		// UpdateV4 updates the enrollment configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v4-enrollment
-		UpdateV4(ctx context.Context, request *ResourceEnrollment) (*ResourceEnrollment, *resty.Response, error)
-	}
-
 	// Service handles communication with the enrollment-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v4-enrollment
@@ -134,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ EnrollmentServiceInterface = (*Enrollment)(nil)
 
 func NewEnrollment(client transport.HTTPClient) *Enrollment {
 	return &Enrollment{client: client}

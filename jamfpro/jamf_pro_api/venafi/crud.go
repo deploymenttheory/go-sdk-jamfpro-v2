@@ -11,76 +11,6 @@ import (
 )
 
 type (
-	// VenafiServiceInterface defines the interface for Venafi PKI operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi
-	VenafiServiceInterface interface {
-		// Create creates a new Venafi PKI configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi
-		Create(ctx context.Context, request *ResourceVenafi) (*ResponseVenafiCreated, *resty.Response, error)
-
-		// GetByID returns the Venafi PKI configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id
-		GetByID(ctx context.Context, id string) (*ResponseVenafi, *resty.Response, error)
-
-		// UpdateByID updates the Venafi PKI configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-pki-venafi-id
-		UpdateByID(ctx context.Context, id string, request *ResourceVenafi) (*ResponseVenafi, *resty.Response, error)
-
-		// DeleteByID deletes the Venafi PKI configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-venafi-id
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-
-		// GetConnectionStatus tests communication between Jamf Pro and the PKI Proxy Server.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-connection-status
-		GetConnectionStatus(ctx context.Context, id string) (*ResponseConnectionStatus, *resty.Response, error)
-
-		// GetDependentProfiles returns configuration profiles using the Venafi CA.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-dependent-profiles
-		GetDependentProfiles(ctx context.Context, id string) (*ResponseDependentProfiles, *resty.Response, error)
-
-		// GetHistory returns the history for a Venafi configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-history
-		GetHistory(ctx context.Context, id string, query map[string]string) (*ResponseHistory, *resty.Response, error)
-
-		// AddHistoryNote adds a note to the history for a Venafi configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi-id-history
-		AddHistoryNote(ctx context.Context, id string, request *HistoryNoteRequest) (*ResponseVenafiCreated, *resty.Response, error)
-
-		// GetJamfPublicKey downloads the certificate for securing Jamf Pro to PKI Proxy communication.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-jamf-public-key
-		GetJamfPublicKey(ctx context.Context, id string) (*resty.Response, []byte, error)
-
-		// GetProxyTrustStore downloads the PKI Proxy Server public key.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-venafi-id-proxy-trust-store
-		GetProxyTrustStore(ctx context.Context, id string) (*resty.Response, []byte, error)
-
-		// RegenerateJamfPublicKeyByIDV1 regenerates the Jamf public key for Venafi configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi-id-jamf-public-key-regenerate
-		RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// UploadProxyTrustStoreByIDV1 uploads the PKI Proxy Server public key (PEM certificate).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi-id-proxy-trust-store
-		UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pemCertificate []byte) (*resty.Response, error)
-
-		// DeleteProxyTrustStoreByIDV1 removes the PKI Proxy Server public key.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-venafi-id-proxy-trust-store
-		DeleteProxyTrustStoreByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the Venafi PKI-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi
@@ -88,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ VenafiServiceInterface = (*Venafi)(nil)
 
 func NewVenafi(client transport.HTTPClient) *Venafi {
 	return &Venafi{client: client}

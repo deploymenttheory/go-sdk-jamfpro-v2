@@ -10,48 +10,6 @@ import (
 )
 
 type (
-	// PatchExternalSourcesServiceInterface defines the interface for Classic API patch external source operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-	PatchExternalSourcesServiceInterface interface {
-		// List returns all patch external sources.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified patch external source by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		GetByID(ctx context.Context, id int) (*ResourcePatchExternalSource, *resty.Response, error)
-
-		// GetByName returns the specified patch external source by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		GetByName(ctx context.Context, name string) (*ResourcePatchExternalSource, *resty.Response, error)
-
-		// Create creates a new patch external source.
-		//
-		// Returns the created patch external source with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		Create(ctx context.Context, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *resty.Response, error)
-
-		// UpdateByID updates the specified patch external source by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		UpdateByID(ctx context.Context, id int, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *resty.Response, error)
-
-		// UpdateByName updates the specified patch external source by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		UpdateByName(ctx context.Context, name string, req *RequestPatchExternalSource) (*ResourcePatchExternalSource, *resty.Response, error)
-
-		// DeleteByID removes the specified patch external source by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-	}
-
 	// Service handles communication with the patch external source-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
@@ -59,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ PatchExternalSourcesServiceInterface = (*PatchExternalSources)(nil)
 
 // NewService returns a new patch external sources Service backed by the provided HTTP client.
 func NewPatchExternalSources(client transport.HTTPClient) *PatchExternalSources {

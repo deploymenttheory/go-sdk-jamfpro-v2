@@ -10,67 +10,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API Mac application operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/macapplications
-	ServiceInterface interface {
-		// List returns all Mac applications.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplications
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified Mac application by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified Mac application by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// GetByIDAndSubset returns a specific subset of a Mac application by ID.
-		// Subset values: General, Scope, SelfService, VPPCodes, VPP.
-		//
-		// URL: GET /JSSResource/macapplications/id/{id}/subset/{subset}
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbyiddatasubset
-		GetByIDAndSubset(ctx context.Context, id int, subset string) (*Resource, *resty.Response, error)
-
-		// GetByNameAndSubset returns a specific subset of a Mac application by name.
-		// Subset values: General, Scope, SelfService, VPPCodes, VPP.
-		//
-		// URL: GET /JSSResource/macapplications/name/{name}/subset/{subset}
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplicationsbynamedatasubset
-		GetByNameAndSubset(ctx context.Context, name, subset string) (*Resource, *resty.Response, error)
-
-		// Create creates a new Mac application.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmacapplicationbyid
-		Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified Mac application by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemacapplicationbyid
-		UpdateByID(ctx context.Context, id int, req *Resource) (*Resource, *resty.Response, error)
-
-		// UpdateByName updates the specified Mac application by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemacapplicationbyname
-		UpdateByName(ctx context.Context, name string, req *Resource) (*Resource, *resty.Response, error)
-
-		// DeleteByID removes the specified Mac application by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemacapplicationbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified Mac application by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemacapplicationbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the Mac applications-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/macapplications
@@ -78,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*MacApplications)(nil)
 
 // NewService returns a new Mac applications Service backed by the provided HTTP client.
 func NewMacApplications(client transport.HTTPClient) *MacApplications {

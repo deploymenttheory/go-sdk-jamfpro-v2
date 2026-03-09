@@ -10,82 +10,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API mobile device provisioning profile operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceprovisioningprofiles
-	ServiceInterface interface {
-		// List returns all mobile device provisioning profiles.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofiles
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified mobile device provisioning profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofilesbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified mobile device provisioning profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofilesbyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// GetByUUID returns the specified mobile device provisioning profile by UUID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofilesbyuuid
-		GetByUUID(ctx context.Context, uuid string) (*Resource, *resty.Response, error)
-
-		// CreateByID creates a new mobile device provisioning profile by ID (use 0 for new).
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyid
-		CreateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// CreateByName creates a new mobile device provisioning profile by name.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyname
-		CreateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// CreateByUUID creates a new mobile device provisioning profile by UUID.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyuuid
-		CreateByUUID(ctx context.Context, uuid string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified mobile device provisioning profile by ID.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyid
-		UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified mobile device provisioning profile by name.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyname
-		UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByUUID updates the specified mobile device provisioning profile by UUID.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyuuid
-		UpdateByUUID(ctx context.Context, uuid string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified mobile device provisioning profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceprovisioningprofilebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified mobile device provisioning profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceprovisioningprofilebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-
-		// DeleteByUUID removes the specified mobile device provisioning profile by UUID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceprovisioningprofilebyuuid
-		DeleteByUUID(ctx context.Context, uuid string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the mobile device provisioning profiles Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceprovisioningprofiles
@@ -93,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*MobileDeviceProvisioningProfiles)(nil)
 
 // NewService returns a new mobile device provisioning profiles Service backed by the provided HTTP client.
 func NewMobileDeviceProvisioningProfiles(client transport.HTTPClient) *MobileDeviceProvisioningProfiles {

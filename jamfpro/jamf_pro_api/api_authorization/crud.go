@@ -9,16 +9,6 @@ import (
 )
 
 type (
-	// ApiAuthorizationServiceInterface defines the interface for API authorization operations (read-only).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-auth
-	ApiAuthorizationServiceInterface interface {
-		// GetV1 returns the current authorization details associated with the API token.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-auth
-		GetV1(ctx context.Context) (*ResourceAuthV1, *resty.Response, error)
-	}
-
 	// Service handles communication with the API authorization-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-auth
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ApiAuthorizationServiceInterface = (*ApiAuthorization)(nil)
 
 func NewApiAuthorization(client transport.HTTPClient) *ApiAuthorization {
 	return &ApiAuthorization{client: client}

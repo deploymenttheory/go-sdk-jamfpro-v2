@@ -10,53 +10,6 @@ import (
 )
 
 type (
-	// PrintersServiceInterface defines the interface for Classic API printer operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/printers
-	PrintersServiceInterface interface {
-		// List returns all printers.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findprinters
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified printer by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findprintersbyid
-		GetByID(ctx context.Context, id int) (*ResourcePrinter, *resty.Response, error)
-
-		// GetByName returns the specified printer by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findprintersbyname
-		GetByName(ctx context.Context, name string) (*ResourcePrinter, *resty.Response, error)
-
-		// Create creates a new printer.
-		//
-		// Returns the created resource ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createprinterbyid
-		Create(ctx context.Context, req *RequestPrinter) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified printer by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateprinterbyid
-		UpdateByID(ctx context.Context, id int, req *RequestPrinter) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified printer by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateprinterbyname
-		UpdateByName(ctx context.Context, name string, req *RequestPrinter) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified printer by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteprinterbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified printer by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteprinterbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the printer-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/printers
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ PrintersServiceInterface = (*Printers)(nil)
 
 // NewService returns a new printers Service backed by the provided HTTP client.
 func NewPrinters(client transport.HTTPClient) *Printers {

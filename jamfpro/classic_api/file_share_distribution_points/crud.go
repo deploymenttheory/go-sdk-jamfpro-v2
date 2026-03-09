@@ -10,57 +10,6 @@ import (
 )
 
 type (
-	// FileShareDistributionPointsServiceInterface defines the interface for Classic API file share distribution point operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
-	FileShareDistributionPointsServiceInterface interface {
-		// List returns all file share distribution points.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified file share distribution point by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyid
-		GetByID(ctx context.Context, id int) (*ResourceFileShareDistributionPoint, *resty.Response, error)
-
-		// GetByName returns the specified file share distribution point by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyname
-		GetByName(ctx context.Context, name string) (*ResourceFileShareDistributionPoint, *resty.Response, error)
-
-		// Create creates a new file share distribution point.
-		//
-		// Returns the created distribution point ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdistributionpointbyid
-		Create(ctx context.Context, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified file share distribution point by ID.
-		//
-		// Returns the updated distribution point ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyid
-		UpdateByID(ctx context.Context, id int, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified file share distribution point by name.
-		//
-		// Returns the updated distribution point ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyname
-		UpdateByName(ctx context.Context, name string, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified file share distribution point by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedistributionpointbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified file share distribution point by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedistributionpointbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the file-share-distribution-points-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
@@ -68,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ FileShareDistributionPointsServiceInterface = (*FileShareDistributionPoints)(nil)
 
 // NewService returns a new file share distribution points Service backed by the provided HTTP client.
 func NewFileShareDistributionPoints(client transport.HTTPClient) *FileShareDistributionPoints {

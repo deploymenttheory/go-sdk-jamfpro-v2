@@ -10,71 +10,11 @@ import (
 )
 
 type (
-	// EnrollmentCustomizationPreviewServiceInterface defines the interface for enrollment customization panel operations.
-	//
-	// Manages enrollment customization panels (LDAP, SSO, Text) and markdown parsing.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/enrollment-customization-preview
-	EnrollmentCustomizationPreviewServiceInterface interface {
-		// ParseMarkdown parses markdown to HTML.
-		ParseMarkdown(ctx context.Context, request *RequestParseMarkdown) (*ResponseParseMarkdown, *resty.Response, error)
-
-		// GetAllPanels returns all panels for an enrollment customization.
-		GetAllPanels(ctx context.Context, id string) (*PanelListResponse, *resty.Response, error)
-
-		// GetPanelByID returns a single panel by ID.
-		GetPanelByID(ctx context.Context, id, panelID string) (*ResourcePanel, *resty.Response, error)
-
-		// DeletePanel deletes a panel from an enrollment customization.
-		DeletePanel(ctx context.Context, id, panelID string) (*resty.Response, error)
-
-		// CreateLdapPanel creates an LDAP panel.
-		CreateLdapPanel(ctx context.Context, id string, request *ResourceLdapPanel) (*ResourceLdapPanel, *resty.Response, error)
-
-		// GetLdapPanel returns an LDAP panel by ID.
-		GetLdapPanel(ctx context.Context, id, panelID string) (*ResourceLdapPanel, *resty.Response, error)
-
-		// UpdateLdapPanel updates an LDAP panel.
-		UpdateLdapPanel(ctx context.Context, id, panelID string, request *ResourceLdapPanel) (*ResourceLdapPanel, *resty.Response, error)
-
-		// DeleteLdapPanel deletes an LDAP panel.
-		DeleteLdapPanel(ctx context.Context, id, panelID string) (*resty.Response, error)
-
-		// CreateSsoPanel creates an SSO panel.
-		CreateSsoPanel(ctx context.Context, id string, request *ResourceSsoPanel) (*ResourceSsoPanel, *resty.Response, error)
-
-		// GetSsoPanel returns an SSO panel by ID.
-		GetSsoPanel(ctx context.Context, id, panelID string) (*ResourceSsoPanel, *resty.Response, error)
-
-		// UpdateSsoPanel updates an SSO panel.
-		UpdateSsoPanel(ctx context.Context, id, panelID string, request *ResourceSsoPanel) (*ResourceSsoPanel, *resty.Response, error)
-
-		// DeleteSsoPanel deletes an SSO panel.
-		DeleteSsoPanel(ctx context.Context, id, panelID string) (*resty.Response, error)
-
-		// CreateTextPanel creates a text panel.
-		CreateTextPanel(ctx context.Context, id string, request *ResourceTextPanel) (*ResourceTextPanel, *resty.Response, error)
-
-		// GetTextPanel returns a text panel by ID.
-		GetTextPanel(ctx context.Context, id, panelID string) (*ResourceTextPanel, *resty.Response, error)
-
-		// UpdateTextPanel updates a text panel.
-		UpdateTextPanel(ctx context.Context, id, panelID string, request *ResourceTextPanel) (*ResourceTextPanel, *resty.Response, error)
-
-		// DeleteTextPanel deletes a text panel.
-		DeleteTextPanel(ctx context.Context, id, panelID string) (*resty.Response, error)
-
-		// GetTextPanelMarkdown returns the markdown for a text panel.
-		GetTextPanelMarkdown(ctx context.Context, id, panelID string) (*ResponseTextPanelMarkdown, *resty.Response, error)
-	}
-
 	// Service handles communication with the enrollment customization preview methods of the Jamf Pro API.
 	EnrollmentCustomizationPreview struct {
 		client transport.HTTPClient
 	}
 )
-
-var _ EnrollmentCustomizationPreviewServiceInterface = (*EnrollmentCustomizationPreview)(nil)
 
 func NewEnrollmentCustomizationPreview(client transport.HTTPClient) *EnrollmentCustomizationPreview {
 	return &EnrollmentCustomizationPreview{client: client}

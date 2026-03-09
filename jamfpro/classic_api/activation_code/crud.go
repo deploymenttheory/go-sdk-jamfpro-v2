@@ -10,21 +10,6 @@ import (
 )
 
 type (
-	// ActivationCodeServiceInterface defines the interface for Classic API activation code operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/activationcode
-	ActivationCodeServiceInterface interface {
-		// GetActivationCode retrieves the activation code information.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findactivationcode
-		GetActivationCode(ctx context.Context) (*ResourceActivationCode, *resty.Response, error)
-
-		// UpdateActivationCode updates the activation code information.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateactivationcode
-		UpdateActivationCode(ctx context.Context, request *RequestActivationCode) (*resty.Response, error)
-	}
-
 	// Service handles communication with the activation code-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/activationcode
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ActivationCodeServiceInterface = (*ActivationCode)(nil)
 
 // NewService returns a new activation code Service backed by the provided HTTP client.
 func NewActivationCode(client transport.HTTPClient) *ActivationCode {

@@ -11,44 +11,6 @@ import (
 )
 
 type (
-	// SmartComputerGroupsServiceInterface defines the interface for smart computer group operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
-	SmartComputerGroupsServiceInterface interface {
-		// List returns a paginated list of all smart computer groups.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
-		List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified smart computer group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups-id
-		GetByID(ctx context.Context, id string) (*ResourceSmartGroup, *resty.Response, error)
-
-		// GetByName returns a smart computer group by name (client-side filter over list).
-		GetByName(ctx context.Context, name string) (*ListItem, *resty.Response, error)
-
-		// GetMembership returns the computer IDs that are members of the specified smart group.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-group-membership-id
-		GetMembership(ctx context.Context, id string) (*MembershipResponse, *resty.Response, error)
-
-		// Create creates a new smart computer group.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-smart-groups
-		Create(ctx context.Context, request *RequestSmartGroup) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified smart computer group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-smart-groups-id
-		UpdateByID(ctx context.Context, id string, request *RequestSmartGroup) (*ResourceSmartGroup, *resty.Response, error)
-
-		// DeleteByID removes the specified smart computer group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-groups-smart-groups-id
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the smart computer groups methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
@@ -56,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SmartComputerGroupsServiceInterface = (*SmartComputerGroups)(nil)
 
 func NewSmartComputerGroups(client transport.HTTPClient) *SmartComputerGroups {
 	return &SmartComputerGroups{client: client}

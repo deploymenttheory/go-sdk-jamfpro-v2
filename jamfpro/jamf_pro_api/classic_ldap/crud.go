@@ -10,16 +10,6 @@ import (
 )
 
 type (
-	// ClassicLdapServiceInterface defines the interface for classic LDAP operations (read-only).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-classic-ldap-id
-	ClassicLdapServiceInterface interface {
-		// GetMappingsByIDV1 returns the LDAP attribute mappings for an OnPrem LDAP configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-classic-ldap-id
-		GetMappingsByIDV1(ctx context.Context, id string) (*ResourceOnPremLdapMappingsV1, *resty.Response, error)
-	}
-
 	// Service handles communication with the classic LDAP-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-classic-ldap-id
@@ -27,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ClassicLdapServiceInterface = (*ClassicLdap)(nil)
 
 func NewClassicLdap(client transport.HTTPClient) *ClassicLdap {
 	return &ClassicLdap{client: client}

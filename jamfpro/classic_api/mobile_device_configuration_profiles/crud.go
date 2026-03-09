@@ -11,69 +11,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API mobile device configuration profile operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceconfigurationprofiles
-	ServiceInterface interface {
-		// List returns all mobile device configuration profiles.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofiles
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified mobile device configuration profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified mobile device configuration profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// GetByIDWithSubset returns the specified mobile device configuration profile by ID with a data subset.
-		// Subset values: General, Scope, SelfService.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbyiddatasubset
-		GetByIDWithSubset(ctx context.Context, id int, subset string) (*Resource, *resty.Response, error)
-
-		// GetByNameWithSubset returns the specified mobile device configuration profile by name with a data subset.
-		// Subset values: General, Scope, SelfService.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofilesbynamedatasubset
-		GetByNameWithSubset(ctx context.Context, name, subset string) (*Resource, *resty.Response, error)
-
-		// Create creates a new mobile device configuration profile.
-		//
-		// Returns the created profile ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceconfigurationprofilebyid
-		Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified mobile device configuration profile by ID.
-		//
-		// Returns the updated profile ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceconfigurationprofilebyid
-		UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified mobile device configuration profile by name.
-		//
-		// Returns the updated profile ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceconfigurationprofilebyname
-		UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified mobile device configuration profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceconfigurationprofilebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified mobile device configuration profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceconfigurationprofilebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the mobile device configuration profiles Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceconfigurationprofiles
@@ -81,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*MobileDeviceConfigurationProfiles)(nil)
 
 // NewService returns a new mobile device configuration profiles Service backed by the provided HTTP client.
 func NewMobileDeviceConfigurationProfiles(client transport.HTTPClient) *MobileDeviceConfigurationProfiles {

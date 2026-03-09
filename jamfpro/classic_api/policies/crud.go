@@ -10,87 +10,6 @@ import (
 )
 
 type (
-	// PoliciesServiceInterface defines the interface for Classic API policy operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/policies
-	PoliciesServiceInterface interface {
-		// List returns all policies.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findpolicies
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified policy by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findpoliciesbyid
-		GetByID(ctx context.Context, id int) (*ResourcePolicy, *resty.Response, error)
-
-		// GetByName returns the specified policy by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findpoliciesbyname
-		GetByName(ctx context.Context, name string) (*ResourcePolicy, *resty.Response, error)
-
-		// Create creates a new policy.
-		//
-		// Returns the created policy ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createpolicybyid
-		Create(ctx context.Context, policy *ResourcePolicy) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified policy by ID.
-		//
-		// Returns the updated policy ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatepolicybyid
-		UpdateByID(ctx context.Context, id int, policy *ResourcePolicy) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified policy by name.
-		//
-		// Returns the updated policy ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatepolicybyname
-		UpdateByName(ctx context.Context, name string, policy *ResourcePolicy) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified policy by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletepolicybyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified policy by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletepolicybyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-
-		// GetByCreatedBy returns all policies filtered by creator type.
-		// Valid values are "jss" (GUI/API) or "casper" (Casper Remote).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findpoliciesbytype
-		GetByCreatedBy(ctx context.Context, createdBy string) (*ListResponse, *resty.Response, error)
-
-		// GetByCategory returns all policies in the specified category.
-		// Category may be specified by ID, name, or "None" for policies with no category.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findpoliciesbycategory
-		GetByCategory(ctx context.Context, category string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDWithSubset returns a subset of data for the specified policy by ID.
-		// Valid subsets: General, Scope, SelfService, PackageConfiguration, Scripts,
-		// Printers, DockItems, AccountMaintenance, Reboot, Maintenance, FilesProcesses,
-		// UserInteraction, DiskEncryption.
-		// Multiple subsets can be combined with ampersand (e.g., "General&Scope").
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findpoliciesbyidsubset
-		GetByIDWithSubset(ctx context.Context, id int, subset string) (*ResourcePolicy, *resty.Response, error)
-
-		// GetByNameWithSubset returns a subset of data for the specified policy by name.
-		// Valid subsets: General, Scope, SelfService, PackageConfiguration, Scripts,
-		// Printers, DockItems, AccountMaintenance, Reboot, Maintenance, FilesProcesses,
-		// UserInteraction, DiskEncryption.
-		// Multiple subsets can be combined with ampersand (e.g., "General&Scope").
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findpoliciesbynamesubset
-		GetByNameWithSubset(ctx context.Context, name string, subset string) (*ResourcePolicy, *resty.Response, error)
-	}
-
 	// Service handles communication with the policy-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/policies
@@ -98,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ PoliciesServiceInterface = (*Policies)(nil)
 
 // NewService returns a new policies Service backed by the provided HTTP client.
 func NewPolicies(client transport.HTTPClient) *Policies {

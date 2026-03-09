@@ -32,25 +32,6 @@ var ValidFileUploadResources = []string{
 }
 
 type (
-	// FileUploadsServiceInterface defines the interface for Classic API file upload operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/fileuploads
-	FileUploadsServiceInterface interface {
-		// CreateAttachment uploads a file to a specific resource in Jamf Pro.
-		//
-		// resource must be one of constants.ValidFileUploadResources.
-		// idType specifies whether identifier is an ID or name.
-		// identifier is the resource ID (e.g. "123") or name.
-		// filePath is the path to the file on disk.
-		// forceIpaUpload, when true and resource is mobiledeviceapplicationsipa,
-		// appends ?FORCE_IPA_UPLOAD=true to the request.
-		//
-		// Note: peripherals resource only supports ResourceIDTypeID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/fileuploads
-		CreateAttachment(ctx context.Context, resource string, idType ResourceIDType, identifier string, filePath string, forceIpaUpload bool) (*resty.Response, error)
-	}
-
 	// Service handles communication with the file-uploads-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/fileuploads
@@ -58,8 +39,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ FileUploadsServiceInterface = (*FileUploads)(nil)
 
 // NewService returns a new file uploads Service backed by the provided HTTP client.
 func NewFileUploads(client transport.HTTPClient) *FileUploads {

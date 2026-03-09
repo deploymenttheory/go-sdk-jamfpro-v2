@@ -12,19 +12,6 @@ import (
 )
 
 type (
-	// SelfServiceBrandingUploadServiceInterface defines the interface for self-service branding image upload operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_self-service-branding-images
-	SelfServiceBrandingUploadServiceInterface interface {
-		// Upload uploads a branding image file (multipart/form-data, field "file").
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_self-service-branding-images
-		Upload(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceBrandingImage, *resty.Response, error)
-
-		// UploadFromFile opens the file at filePath and uploads it via Upload.
-		UploadFromFile(ctx context.Context, filePath string) (*ResourceBrandingImage, *resty.Response, error)
-	}
-
 	// Service handles communication with the self-service branding images methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_self-service-branding-images
@@ -32,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SelfServiceBrandingUploadServiceInterface = (*SelfServiceBrandingUpload)(nil)
 
 func NewSelfServiceBrandingUpload(client transport.HTTPClient) *SelfServiceBrandingUpload {
 	return &SelfServiceBrandingUpload{client: client}

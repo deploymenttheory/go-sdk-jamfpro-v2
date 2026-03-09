@@ -10,53 +10,6 @@ import (
 )
 
 type (
-	// SoftwareUpdateServersServiceInterface defines the interface for Classic API software update server operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/softwareupdateservers
-	SoftwareUpdateServersServiceInterface interface {
-		// List returns all software update servers.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsoftwareupdateservers
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified software update server by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsoftwareupdateserversbyid
-		GetByID(ctx context.Context, id int) (*ResourceSoftwareUpdateServer, *resty.Response, error)
-
-		// GetByName returns the specified software update server by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsoftwareupdateserversbyname
-		GetByName(ctx context.Context, name string) (*ResourceSoftwareUpdateServer, *resty.Response, error)
-
-		// Create creates a new software update server.
-		//
-		// Returns the created software update server with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createsoftwareupdateserverbyid
-		Create(ctx context.Context, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *resty.Response, error)
-
-		// UpdateByID updates the specified software update server by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatesoftwareupdateserverbyid
-		UpdateByID(ctx context.Context, id int, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *resty.Response, error)
-
-		// UpdateByName updates the specified software update server by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatesoftwareupdateserverbyname
-		UpdateByName(ctx context.Context, name string, req *RequestSoftwareUpdateServer) (*ResourceSoftwareUpdateServer, *resty.Response, error)
-
-		// DeleteByID removes the specified software update server by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletesoftwareupdateserverbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified software update server by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletesoftwareupdateserverbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the software update server-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/softwareupdateservers
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SoftwareUpdateServersServiceInterface = (*SoftwareUpdateServers)(nil)
 
 // NewService returns a new software update servers Service backed by the provided HTTP client.
 func NewSoftwareUpdateServers(client transport.HTTPClient) *SoftwareUpdateServers {

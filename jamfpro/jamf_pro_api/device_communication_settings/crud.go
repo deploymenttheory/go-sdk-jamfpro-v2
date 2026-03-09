@@ -11,33 +11,6 @@ import (
 )
 
 type (
-	// DeviceCommunicationSettingsServiceInterface defines the interface for device communication settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings
-	DeviceCommunicationSettingsServiceInterface interface {
-		// GetV1 retrieves the current device communication settings (Get Device Communication Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings
-		GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *resty.Response, error)
-
-		// UpdateV1 updates the device communication settings (Update Device Communication Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-device-communication-settings
-		UpdateV1(ctx context.Context, request *ResourceDeviceCommunicationSettings) (*ResourceDeviceCommunicationSettings, *resty.Response, error)
-
-		// GetHistoryV1 returns the history for the device communication settings.
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNotesV1 adds a note to the device communication settings history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-communication-settings-history
-		AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error)
-	}
-
 	// Service handles communication with the device communication settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings
@@ -45,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DeviceCommunicationSettingsServiceInterface = (*DeviceCommunicationSettings)(nil)
 
 func NewDeviceCommunicationSettings(client transport.HTTPClient) *DeviceCommunicationSettings {
 	return &DeviceCommunicationSettings{client: client}

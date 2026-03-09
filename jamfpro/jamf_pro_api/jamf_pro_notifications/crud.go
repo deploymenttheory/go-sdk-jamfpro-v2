@@ -9,28 +9,6 @@ import (
 	"resty.dev/v3"
 )
 
-// ServiceInterface defines the interface for Jamf Pro notifications operations.
-//
-// Jamf Pro notifications provide alerts and messages for the currently authenticated
-// user within the context of their assigned site.
-//
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-type ServiceInterface interface {
-	// GetForUserAndSiteV1 retrieves all notifications for the current user and site.
-	//
-	// Returns a list of notifications filtered by the authenticated user's permissions
-	// and site assignment. Notifications include system alerts, updates, and messages
-	// relevant to the user's role.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-	GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error)
-
-	// DeleteByTypeAndIDV1 deletes a notification by type and ID.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-notifications-type-id
-	DeleteByTypeAndIDV1(ctx context.Context, notificationType, id string) (*resty.Response, error)
-}
-
 type (
 	// Service handles communication with the Jamf Pro notifications-related methods of the Jamf Pro API.
 	//
@@ -39,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*JamfProNotifications)(nil)
 
 // NewService creates a new Jamf Pro notifications service.
 func NewJamfProNotifications(client transport.HTTPClient) *JamfProNotifications {

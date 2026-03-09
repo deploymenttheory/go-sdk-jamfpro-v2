@@ -11,36 +11,6 @@ import (
 )
 
 type (
-	// AdvancedUserContentSearchesServiceInterface defines the interface for advanced user content search operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-user-content-searches
-	AdvancedUserContentSearchesServiceInterface interface {
-		// ListV1 returns all advanced user content searches (Get Advanced User Content Searches).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-user-content-searches
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified advanced user content search by ID (Get Advanced User Content Search by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-user-content-searches-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedUserContentSearch, *resty.Response, error)
-
-		// CreateV1 creates a new advanced user content search (Create Advanced User Content Search).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-user-content-searches
-		CreateV1(ctx context.Context, request *ResourceAdvancedUserContentSearch) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified advanced user content search by ID (Update Advanced User Content Search by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-advanced-user-content-searches-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedUserContentSearch) (*ResourceAdvancedUserContentSearch, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified advanced user content search by ID (Delete Advanced User Content Search by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-advanced-user-content-searches-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the advanced user content searches-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-user-content-searches
@@ -48,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AdvancedUserContentSearchesServiceInterface = (*AdvancedUserContentSearches)(nil)
 
 func NewAdvancedUserContentSearches(client transport.HTTPClient) *AdvancedUserContentSearches {
 	return &AdvancedUserContentSearches{client: client}

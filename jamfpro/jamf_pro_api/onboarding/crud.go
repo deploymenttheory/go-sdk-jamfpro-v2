@@ -11,58 +11,6 @@ import (
 )
 
 type (
-	// OnboardingServiceInterface defines the interface for onboarding settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding
-	OnboardingServiceInterface interface {
-		// GetV1 retrieves the current onboarding settings (Get Onboarding Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding
-		GetV1(ctx context.Context) (*ResponseOnboardingSettings, *resty.Response, error)
-
-		// UpdateV1 updates the onboarding settings (Update Onboarding Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-onboarding
-		UpdateV1(ctx context.Context, request *ResourceUpdateOnboardingSettings) (*ResponseOnboardingSettings, *resty.Response, error)
-
-		// GetEligibleAppsV1 returns the list of eligible apps for onboarding (Get Eligible Apps).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-eligible-apps
-		GetEligibleAppsV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *resty.Response, error)
-
-		// GetEligibleConfigurationProfilesV1 returns the list of eligible configuration profiles (Get Eligible Configuration Profiles).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-eligible-configuration-profiles
-		GetEligibleConfigurationProfilesV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *resty.Response, error)
-
-		// GetEligiblePoliciesV1 returns the list of eligible policies (Get Eligible Policies).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-eligible-policies
-		GetEligiblePoliciesV1(ctx context.Context, query map[string]string) (*ResponseEligibilityList, *resty.Response, error)
-
-		// GetHistoryV1 retrieves the onboarding history.
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNotesV1 adds notes to the onboarding history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-onboarding-history
-		AddHistoryNotesV1(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error)
-
-		// ExportHistoryV1 exports the onboarding history in the specified format (JSON or CSV).
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size, export-fields, export-labels).
-		// The Accept header determines the export format (application/json or text/csv).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-onboarding-history-export
-		ExportHistoryV1(ctx context.Context, acceptHeader string, rsqlQuery map[string]string, req *RequestExportHistory) ([]byte, *resty.Response, error)
-	}
-
 	// Service handles communication with the onboarding-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding
@@ -70,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ OnboardingServiceInterface = (*Onboarding)(nil)
 
 func NewOnboarding(client transport.HTTPClient) *Onboarding {
 	return &Onboarding{client: client}

@@ -10,92 +10,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API mobile device application operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceapplications
-	ServiceInterface interface {
-		// List returns all mobile device applications.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplications
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified mobile device application by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplicationsbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified mobile device application by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplicationsbyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// GetByBundleID returns the specified mobile device application by bundle ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplicationsbybundleid
-		GetByBundleID(ctx context.Context, bundleID string) (*Resource, *resty.Response, error)
-
-		// GetByBundleIDAndVersion returns the specified mobile device application by bundle ID and version.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplicationsbybundleidandversion
-		GetByBundleIDAndVersion(ctx context.Context, bundleID, version string) (*Resource, *resty.Response, error)
-
-		// GetByIDAndSubset returns a specific subset of a mobile device application by ID.
-		// Subset values: General, Scope, SelfService, VPP, AppConfiguration.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplicationsbyiddatasubset
-		GetByIDAndSubset(ctx context.Context, id int, subset string) (*Resource, *resty.Response, error)
-
-		// GetByNameAndSubset returns a specific subset of a mobile device application by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplicationsbynamedatasubset
-		GetByNameAndSubset(ctx context.Context, name, subset string) (*Resource, *resty.Response, error)
-
-		// Create creates a new mobile device application.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceapplicationbyid
-		Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified mobile device application by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceapplicationbyid
-		UpdateByID(ctx context.Context, id int, req *Resource) (*Resource, *resty.Response, error)
-
-		// UpdateByName updates the specified mobile device application by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceapplicationbyname
-		UpdateByName(ctx context.Context, name string, req *Resource) (*Resource, *resty.Response, error)
-
-		// UpdateByBundleID updates the specified mobile device application by bundle ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceapplicationbybundleid
-		UpdateByBundleID(ctx context.Context, bundleID string, req *Resource) (*Resource, *resty.Response, error)
-
-		// UpdateByIDAndVersion updates the specified mobile device application by ID and version.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceapplicationbyidandversion
-		UpdateByIDAndVersion(ctx context.Context, id int, version string, req *Resource) (*Resource, *resty.Response, error)
-
-		// DeleteByID removes the specified mobile device application by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceapplicationbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified mobile device application by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceapplicationbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-
-		// DeleteByBundleID removes the specified mobile device application by bundle ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceapplicationbybundleid
-		DeleteByBundleID(ctx context.Context, bundleID string) (*resty.Response, error)
-
-		// DeleteByBundleIDAndVersion removes the specified mobile device application by bundle ID and version.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceapplicationbybundleidandversion
-		DeleteByBundleIDAndVersion(ctx context.Context, bundleID, version string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the mobile device applications-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceapplications
@@ -103,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*MobileDeviceApplications)(nil)
 
 // NewService returns a new mobile device applications Service backed by the provided HTTP client.
 func NewMobileDeviceApplications(client transport.HTTPClient) *MobileDeviceApplications {

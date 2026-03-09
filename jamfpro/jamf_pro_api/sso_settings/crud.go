@@ -11,48 +11,6 @@ import (
 )
 
 type (
-	// SsoSettingsServiceInterface defines the interface for SSO settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-sso
-	SsoSettingsServiceInterface interface {
-		// GetV3 retrieves current Jamf SSO settings (Get SSO Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso
-		GetV3(ctx context.Context) (*ResourceSsoSettings, *resty.Response, error)
-
-		// UpdateV3 updates SSO settings (Update SSO Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-sso
-		UpdateV3(ctx context.Context, request *ResourceSsoSettings) (*ResourceSsoSettings, *resty.Response, error)
-
-		// GetEnrollmentCustomizationDependenciesV3 retrieves SSO enrollment customization dependencies (Get SSO Enrollment Customization Dependencies).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-dependencies
-		GetEnrollmentCustomizationDependenciesV3(ctx context.Context) (*ResponseSsoEnrollmentCustomizationDependencies, *resty.Response, error)
-
-		// DisableV3 disables SSO (Disable SSO).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-disable
-		DisableV3(ctx context.Context) (*resty.Response, error)
-
-		// GetHistoryV3 returns the history for SSO settings (Get SSO History).
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-history
-		GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error)
-
-		// AddHistoryNoteV3 adds a note to the history for SSO settings (Add SSO History Note).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-history
-		AddHistoryNoteV3(ctx context.Context, request *AddHistoryNoteRequest) (*CreateResponse, *resty.Response, error)
-
-		// DownloadMetadataV3 downloads the SAML metadata file (Download SAML Metadata).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-metadata-download
-		DownloadMetadataV3(ctx context.Context) ([]byte, *resty.Response, error)
-	}
-
 	// Service handles communication with the SSO settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso
@@ -60,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SsoSettingsServiceInterface = (*SsoSettings)(nil)
 
 func NewSsoSettings(client transport.HTTPClient) *SsoSettings {
 	return &SsoSettings{client: client}

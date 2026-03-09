@@ -10,27 +10,13 @@ import (
 	"resty.dev/v3"
 )
 
-// APNSClientPushStatusServiceInterface defines the interface for APNS client push status operations.
-type APNSClientPushStatusServiceInterface interface {
-	// ListV1 retrieves MDM clients with push notifications disabled.
-	ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
+type (
+	// Service provides methods for interacting with APNS client push status endpoints.
+	ApnsClientPushStatus struct {
+		client transport.HTTPClient
+	}
+)
 
-	// EnableAllClientsV1 creates a request to enable push notifications for all MDM clients with push disabled.
-	EnableAllClientsV1(ctx context.Context) (*resty.Response, error)
-
-	// GetEnableAllClientsStatusV1 retrieves the status of the most recent enable-all-clients request.
-	GetEnableAllClientsStatusV1(ctx context.Context) (*EnableAllClientsStatusResponse, *resty.Response, error)
-
-	// EnableClientV1 enables push notifications for a single MDM client by management ID.
-	EnableClientV1(ctx context.Context, req *EnableClientRequest) (*resty.Response, error)
-}
-
-// Service provides methods for interacting with APNS client push status endpoints.
-type ApnsClientPushStatus struct {
-	client transport.HTTPClient
-}
-
-var _ APNSClientPushStatusServiceInterface = (*ApnsClientPushStatus)(nil)
 
 // NewService creates a new apns_client_push_status service.
 func NewApnsClientPushStatus(client transport.HTTPClient) *ApnsClientPushStatus {

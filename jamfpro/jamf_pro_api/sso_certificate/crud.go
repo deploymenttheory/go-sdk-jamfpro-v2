@@ -9,41 +9,6 @@ import (
 )
 
 type (
-	// SsoCertificateServiceInterface defines the interface for SSO certificate operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert
-	SsoCertificateServiceInterface interface {
-		// GetV2 returns the certificate currently configured for SSO (Get SSO Certificate).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert
-		GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error)
-
-		// CreateV2 generates a new certificate for signing SSO requests (Create SSO Certificate).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert
-		CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error)
-
-		// UpdateV2 updates the certificate used for signing SSO requests (Update SSO Certificate).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-sso-cert
-		UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *resty.Response, error)
-
-		// DownloadV2 downloads the certificate used for signing SSO requests (Download SSO Certificate).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert-download
-		DownloadV2(ctx context.Context) ([]byte, *resty.Response, error)
-
-		// ParseV2 parses the provided keystore file and returns keystore information (Parse SSO Certificate).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert-parse
-		ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *resty.Response, error)
-
-		// DeleteV2 removes the currently configured SSO certificate (Delete SSO Certificate).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-sso-cert
-		DeleteV2(ctx context.Context) (*resty.Response, error)
-	}
-
 	// Service handles communication with the SSO certificate-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert
@@ -51,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SsoCertificateServiceInterface = (*SsoCertificate)(nil)
 
 func NewSsoCertificate(client transport.HTTPClient) *SsoCertificate {
 	return &SsoCertificate{client: client}

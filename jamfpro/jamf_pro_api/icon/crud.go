@@ -12,27 +12,6 @@ import (
 )
 
 type (
-	// IconServiceInterface defines the interface for icon operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
-	IconServiceInterface interface {
-		// GetByIDV1 returns icon metadata by ID (Get Icon).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-id
-		GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *resty.Response, error)
-
-		// UploadV1 uploads an icon image (Create Icon).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
-		UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, fileName string) (*ResourceIcon, *resty.Response, error)
-
-		// DownloadV1 downloads the icon image bytes (Download a self service icon).
-		// res: original, 300, or 512 (default original). scale: 0 = original, non-0 = scaled to 300.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-download-id
-		DownloadV1(ctx context.Context, id int, res, scale string) ([]byte, *resty.Response, error)
-	}
-
 	// Service handles communication with the icons-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
@@ -40,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ IconServiceInterface = (*Icon)(nil)
 
 func NewIcon(client transport.HTTPClient) *Icon {
 	return &Icon{client: client}

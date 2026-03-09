@@ -11,100 +11,6 @@ import (
 )
 
 type (
-	// DeviceEnrollmentsServiceInterface defines the interface for device enrollment operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments
-	DeviceEnrollmentsServiceInterface interface {
-		// ListV1 returns a paginated list of device enrollment objects.
-		//
-		// Supports optional pagination and sorting via rsqlQuery
-		// (keys: sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified device enrollment by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceDeviceEnrollment, *resty.Response, error)
-
-		// GetByNameV1 returns the specified device enrollment by name.
-		//
-		// Note: This performs a client-side search through all device enrollments.
-		GetByNameV1(ctx context.Context, name string) (*ResourceDeviceEnrollment, *resty.Response, error)
-
-		// GetHistoryV1 returns the history for the specified device enrollment.
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-history
-		GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// GetSyncStatesV1 retrieves all sync states for the specified device enrollment instance.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-syncs
-		GetSyncStatesV1(ctx context.Context, id string) ([]ResourceSyncState, *resty.Response, error)
-
-		// GetLatestSyncStateV1 retrieves the latest sync state for the specified device enrollment instance.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-syncs-latest
-		GetLatestSyncStateV1(ctx context.Context, id string) (*ResourceLatestSyncState, *resty.Response, error)
-
-		// GetAllSyncStatesV1 retrieves all sync states for all device enrollment instances.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-syncs
-		GetAllSyncStatesV1(ctx context.Context) ([]ResourceSyncState, *resty.Response, error)
-
-		// GetPublicKeyV1 retrieves the public key for device enrollments as a PEM file.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-public-key
-		GetPublicKeyV1(ctx context.Context) ([]byte, *resty.Response, error)
-
-		// CreateWithTokenV1 creates a new device enrollment instance using an MDM server token.
-		//
-		// Returns the created device enrollment's ID and href.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-upload-token
-		CreateWithTokenV1(ctx context.Context, request *RequestTokenUpload) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the metadata for the specified device enrollment by ID.
-		//
-		// Returns the full updated device enrollment resource.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-device-enrollments-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestUpdate) (*ResourceDeviceEnrollment, *resty.Response, error)
-
-		// UpdateTokenByIDV1 updates the token for the specified device enrollment by ID.
-		//
-		// Returns the full updated device enrollment resource.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-device-enrollments-id-upload-token
-		UpdateTokenByIDV1(ctx context.Context, id string, request *RequestTokenUpload) (*ResourceDeviceEnrollment, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified device enrollment by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-device-enrollments-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DisownDevicesByIDV1 disowns devices from the specified device enrollment instance.
-		//
-		// Returns a map of device serial numbers to operation status (SUCCESS/FAILED).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-id-disown
-		DisownDevicesByIDV1(ctx context.Context, id string, request *RequestDisown) (*ResponseDisown, *resty.Response, error)
-
-		// AddHistoryNotesV1 adds notes to the specified device enrollment's history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-device-enrollments-id-history
-		AddHistoryNotesV1(ctx context.Context, id string, request *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error)
-
-		// GetDevicesByIDV1 retrieves a list of devices assigned to the specified device enrollment instance.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-id-devices
-		GetDevicesByIDV1(ctx context.Context, id string) (*DevicesResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the device enrollments-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments
@@ -112,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DeviceEnrollmentsServiceInterface = (*DeviceEnrollments)(nil)
 
 // NewService returns a new device enrollments Service backed by the provided HTTP client.
 func NewDeviceEnrollments(client transport.HTTPClient) *DeviceEnrollments {

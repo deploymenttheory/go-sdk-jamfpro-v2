@@ -11,72 +11,6 @@ import (
 )
 
 type (
-	// CloudDistributionPointServiceInterface defines the interface for cloud distribution point operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point
-	CloudDistributionPointServiceInterface interface {
-		// GetV1 returns the current cloud distribution point configuration (Get Cloud Distribution Point).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point
-		GetV1(ctx context.Context) (*ResourceCloudDistributionPointV1, *resty.Response, error)
-
-		// CreateV1 provisions a cloud distribution point (Create Cloud Distribution Point).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point
-		CreateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *resty.Response, error)
-
-		// UpdateV1 updates the cloud distribution point configuration (Update Cloud Distribution Point).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-cloud-distribution-point
-		UpdateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *resty.Response, error)
-
-		// DeleteV1 removes the cloud distribution point configuration (Remove Cloud Distribution Point).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-cloud-distribution-point
-		DeleteV1(ctx context.Context) (*resty.Response, error)
-
-		// GetUploadCapabilityV1 returns the upload capability for the cloud distribution point.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-upload-capability
-		GetUploadCapabilityV1(ctx context.Context) (*UploadCapabilityV1, *resty.Response, error)
-
-		// GetTestConnectionV1 returns the test connection status for the cloud distribution point.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-test-connection
-		GetTestConnectionV1(ctx context.Context) (*TestConnectionV1, *resty.Response, error)
-
-		// GetHistoryV1 returns the history for the cloud distribution point.
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// GetFilesV1 returns the inventory files for the cloud distribution point.
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point-files
-		GetFilesV1(ctx context.Context, rsqlQuery map[string]string) (*FilesResponse, *resty.Response, error)
-
-		// AddHistoryNoteV1 adds a history note for the cloud distribution point (Add Cloud Distribution Point History Note).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-history
-		AddHistoryNoteV1(ctx context.Context, request *RequestHistoryNoteV1) (*HistoryItem, *resty.Response, error)
-
-		// FailUploadV1 marks a specific file upload as failed for the cloud distribution point.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-fail-upload-id
-		FailUploadV1(ctx context.Context, id string, fileName string, fileType string) (*resty.Response, error)
-
-		// RefreshInventoryV1 updates inventory data for the cloud distribution point.
-		//
-		// Optional file-name query param: if provided, checks availability of that file; otherwise forces an immediate inventory refresh.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point-refresh-inventory
-		RefreshInventoryV1(ctx context.Context, fileName string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the cloud distribution point methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point
@@ -84,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CloudDistributionPointServiceInterface = (*CloudDistributionPoint)(nil)
 
 func NewCloudDistributionPoint(client transport.HTTPClient) *CloudDistributionPoint {
 	return &CloudDistributionPoint{client: client}

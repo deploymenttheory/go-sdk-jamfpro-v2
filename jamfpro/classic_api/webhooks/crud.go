@@ -10,53 +10,6 @@ import (
 )
 
 type (
-	// WebhooksServiceInterface defines the interface for Classic API webhook operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/webhooks
-	WebhooksServiceInterface interface {
-		// List returns all webhooks.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooks
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified webhook by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooksbyid
-		GetByID(ctx context.Context, id int) (*ResourceWebhook, *resty.Response, error)
-
-		// GetByName returns the specified webhook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooksbyname
-		GetByName(ctx context.Context, name string) (*ResourceWebhook, *resty.Response, error)
-
-		// Create creates a new webhook.
-		//
-		// Returns the created webhook with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createwebhookbyid
-		Create(ctx context.Context, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error)
-
-		// UpdateByID updates the specified webhook by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatewebhookbyid
-		UpdateByID(ctx context.Context, id int, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error)
-
-		// UpdateByName updates the specified webhook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatewebhookbyname
-		UpdateByName(ctx context.Context, name string, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error)
-
-		// DeleteByID removes the specified webhook by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletewebhookbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified webhook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletewebhookbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the webhook-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/webhooks
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ WebhooksServiceInterface = (*Webhooks)(nil)
 
 // NewService returns a new webhooks Service backed by the provided HTTP client.
 func NewWebhooks(client transport.HTTPClient) *Webhooks {

@@ -11,114 +11,6 @@ import (
 )
 
 type (
-	// PatchSoftwareTitleConfigurationsServiceInterface defines the interface for patch software title configuration operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations
-	PatchSoftwareTitleConfigurationsServiceInterface interface {
-		// ListV2 returns all patch software title configurations.
-		//
-		// This endpoint retrieves all patch software title configurations with their details.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations
-		ListV2(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV2 returns the patch software title configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id
-		GetByIDV2(ctx context.Context, id string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
-
-		// GetByNameV2 returns the patch software title configuration by display name.
-		//
-		// This is a convenience method that calls ListV2 and filters by DisplayName.
-		GetByNameV2(ctx context.Context, name string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
-
-		// CreateV2 creates a new patch software title configuration.
-		// Returns CreateResponse (id, href).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations
-		CreateV2(ctx context.Context, config *ResourcePatchSoftwareTitleConfiguration) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV2 updates the patch software title configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-patch-software-title-configurations-id
-		UpdateByIDV2(ctx context.Context, id string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
-
-		// UpdateByNameV2 updates the patch software title configuration by display name.
-		UpdateByNameV2(ctx context.Context, name string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
-
-		// DeleteByIDV2 deletes the patch software title configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-software-title-configurations-id
-		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByNameV2 deletes the patch software title configuration by display name.
-		DeleteByNameV2(ctx context.Context, name string) (*resty.Response, error)
-
-		// GetDashboardStatusByIDV2 returns whether the software title configuration is on the dashboard.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-dashboard
-		GetDashboardStatusByIDV2(ctx context.Context, id string) (*ResourceDashboardStatus, *resty.Response, error)
-
-		// AddToDashboardByIDV2 adds the software title configuration to the dashboard.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations-id-dashboard
-		AddToDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// RemoveFromDashboardByIDV2 removes the software title configuration from the dashboard.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-software-title-configurations-id-dashboard
-		RemoveFromDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// GetDefinitionsByIDV2 returns paginated patch software title definitions.
-		//
-		// Query params: page, page-size, sort, filter (RSQL).
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-definitions
-		GetDefinitionsByIDV2(ctx context.Context, id string, query map[string]string) (*DefinitionsResponse, *resty.Response, error)
-
-		// GetDependenciesByIDV2 returns paginated dependencies (smart groups) for the configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-dependencies
-		GetDependenciesByIDV2(ctx context.Context, id string, query map[string]string) (*DependenciesResponse, *resty.Response, error)
-
-		// ExportReportByIDV2 exports patch reporting data as CSV bytes.
-		//
-		// Query params: filter (RSQL), columns-to-export (comma-separated column names).
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-export-report
-		ExportReportByIDV2(ctx context.Context, id string, query map[string]string) ([]byte, *resty.Response, error)
-
-		// GetExtensionAttributesByIDV2 returns extension attributes for the software title.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-extension-attributes
-		GetExtensionAttributesByIDV2(ctx context.Context, id string) ([]ResourceExtensionAttribute, *resty.Response, error)
-
-		// GetPatchReportByIDV2 returns paginated patch report for the configuration.
-		//
-		// Query params: page, page-size, sort, filter (RSQL).
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-patch-report
-		GetPatchReportByIDV2(ctx context.Context, id string, query map[string]string) (*PatchReportResponse, *resty.Response, error)
-
-		// GetPatchSummaryByIDV2 returns the patch summary for the configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-patch-summary
-		GetPatchSummaryByIDV2(ctx context.Context, id string) (*ResourcePatchSummary, *resty.Response, error)
-
-		// GetHistoryByIDV2 returns paginated history for the configuration.
-		//
-		// Query params: page, page-size, sort, filter (RSQL).
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-history
-		GetHistoryByIDV2(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteByIDV2 adds a history note to the configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations-id-history
-		AddHistoryNoteByIDV2(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *resty.Response, error)
-
-		// GetPatchVersionsByIDV2 returns patch versions for the configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-patch-summary-versions
-		GetPatchVersionsByIDV2(ctx context.Context, id string) ([]ResourcePatchVersion, *resty.Response, error)
-	}
-
 	// Service handles communication with the patch software title configurations-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations
@@ -126,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ PatchSoftwareTitleConfigurationsServiceInterface = (*PatchSoftwareTitleConfigurations)(nil)
 
 // NewService returns a new patch software title configurations Service backed by the provided HTTP client.
 func NewPatchSoftwareTitleConfigurations(client transport.HTTPClient) *PatchSoftwareTitleConfigurations {

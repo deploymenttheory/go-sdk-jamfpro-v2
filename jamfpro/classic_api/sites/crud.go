@@ -10,53 +10,6 @@ import (
 )
 
 type (
-	// SitesServiceInterface defines the interface for Classic API site operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/sites
-	SitesServiceInterface interface {
-		// List returns all sites.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsites
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified site by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsitesbyid
-		GetByID(ctx context.Context, id int) (*ResourceSite, *resty.Response, error)
-
-		// GetByName returns the specified site by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findsitesbyname
-		GetByName(ctx context.Context, name string) (*ResourceSite, *resty.Response, error)
-
-		// Create creates a new site.
-		//
-		// Returns the created site with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createsitebyid
-		Create(ctx context.Context, req *RequestSite) (*ResourceSite, *resty.Response, error)
-
-		// UpdateByID updates the specified site by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatesitebyid
-		UpdateByID(ctx context.Context, id int, req *RequestSite) (*ResourceSite, *resty.Response, error)
-
-		// UpdateByName updates the specified site by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatesitebyname
-		UpdateByName(ctx context.Context, name string, req *RequestSite) (*ResourceSite, *resty.Response, error)
-
-		// DeleteByID removes the specified site by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletesitebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified site by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletesitebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the sites-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/sites
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SitesServiceInterface = (*Sites)(nil)
 
 // NewService returns a new sites Service backed by the provided HTTP client.
 func NewSites(client transport.HTTPClient) *Sites {

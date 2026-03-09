@@ -11,33 +11,6 @@ import (
 )
 
 type (
-	// SelfServiceSettingsServiceInterface defines the interface for self-service settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings
-	SelfServiceSettingsServiceInterface interface {
-		// Get retrieves self-service settings (Get Self Service Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings
-		Get(ctx context.Context) (*ResourceSelfServiceSettings, *resty.Response, error)
-
-		// Update updates self-service settings (Update Self Service Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-self-service-settings
-		Update(ctx context.Context, request *ResourceSelfServiceSettings) (*ResourceSelfServiceSettings, *resty.Response, error)
-
-		// GetHistoryV1 returns the paginated history for Self Service settings.
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNotesV1 adds a note to the Self Service settings history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-self-service-settings-history
-		AddHistoryNotesV1(ctx context.Context, req *AddHistoryNotesRequest) (*AddHistoryNotesResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the self-service settings methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings
@@ -45,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SelfServiceSettingsServiceInterface = (*SelfServiceSettings)(nil)
 
 func NewSelfServiceSettings(client transport.HTTPClient) *SelfServiceSettings {
 	return &SelfServiceSettings{client: client}

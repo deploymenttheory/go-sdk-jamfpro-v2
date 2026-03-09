@@ -66,7 +66,3 @@ func TestUnit_MobileDeviceEnrollmentProfile_GetDownloadProfileV1_NoMockRegistere
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "failed to download profile")
 }
-
-func TestUnit_MobileDeviceEnrollmentProfile_InterfaceCompliance(t *testing.T) {
-	var _ MobileDeviceEnrollmentProfileServiceInterface = (*MobileDeviceEnrollmentProfile)(nil)
-}

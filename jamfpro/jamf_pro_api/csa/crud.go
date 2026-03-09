@@ -10,27 +10,6 @@ import (
 )
 
 type (
-	// CSAServiceInterface defines the interface for CSA Token operations.
-	// Uses v1 API. Manages CSA token exchange for cloud-hosted services authentication.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-csa-token
-	CSAServiceInterface interface {
-		// GetTokenExchangeDetailsV1 returns details regarding the CSA token exchange.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-csa-token
-		GetTokenExchangeDetailsV1(ctx context.Context) (*ResourceTokenExchangeDetails, *resty.Response, error)
-
-		// GetTenantIDV1 returns the CSA tenant ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-csa-tenant-id
-		GetTenantIDV1(ctx context.Context) (*ResourceTenantID, *resty.Response, error)
-
-		// DeleteTokenExchangeV1 deletes the CSA token exchange, disabling Jamf Pro's ability to authenticate with cloud-hosted services.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-csa-token
-		DeleteTokenExchangeV1(ctx context.Context) (*resty.Response, error)
-	}
-
 	// Service handles communication with the CSA Token-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-csa-token
@@ -38,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CSAServiceInterface = (*Csa)(nil)
 
 func NewCsa(client transport.HTTPClient) *Csa {
 	return &Csa{client: client}

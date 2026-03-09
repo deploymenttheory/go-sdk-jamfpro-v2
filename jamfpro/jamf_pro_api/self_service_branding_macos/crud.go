@@ -11,51 +11,6 @@ import (
 )
 
 type (
-	// SelfServiceBrandingMacOSServiceInterface defines the interface for self-service branding macOS operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos
-	SelfServiceBrandingMacOSServiceInterface interface {
-		// List returns all self-service branding configurations for macOS.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos
-		List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified self-service branding configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos-id
-		GetByID(ctx context.Context, id string) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// GetByName returns the specified self-service branding configuration by name.
-		//
-		// Performs a client-side search over the list of branding configurations.
-		GetByName(ctx context.Context, name string) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// Create creates a new self-service branding configuration for macOS.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-self-service-branding-macos
-		Create(ctx context.Context, request *ResourceSelfServiceBrandingMacOS) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// UpdateByID updates the specified self-service branding configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-self-service-branding-macos-id
-		UpdateByID(ctx context.Context, id string, request *ResourceSelfServiceBrandingMacOS) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// UpdateByName updates a self-service branding configuration by name.
-		//
-		// Performs GetByName then UpdateByID.
-		UpdateByName(ctx context.Context, name string, request *ResourceSelfServiceBrandingMacOS) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// DeleteByID removes the specified self-service branding configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-self-service-branding-macos-id
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByName removes a self-service branding configuration by name.
-		//
-		// Performs GetByName then DeleteByID.
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the self-service branding macOS methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos
@@ -63,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SelfServiceBrandingMacOSServiceInterface = (*SelfServiceBrandingMacos)(nil)
 
 func NewSelfServiceBrandingMacos(client transport.HTTPClient) *SelfServiceBrandingMacos {
 	return &SelfServiceBrandingMacos{client: client}

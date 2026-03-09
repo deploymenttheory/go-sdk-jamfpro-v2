@@ -9,16 +9,6 @@ import (
 )
 
 type (
-	// TimeZonesServiceInterface defines the interface for time zone operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-time-zones
-	TimeZonesServiceInterface interface {
-		// ListV1 returns all available time zones (Get Time Zones).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-time-zones
-		ListV1(ctx context.Context) ([]ResourceTimeZone, *resty.Response, error)
-	}
-
 	// Service handles communication with the time zones-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-time-zones
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ TimeZonesServiceInterface = (*TimeZones)(nil)
 
 func NewTimeZones(client transport.HTTPClient) *TimeZones {
 	return &TimeZones{client: client}

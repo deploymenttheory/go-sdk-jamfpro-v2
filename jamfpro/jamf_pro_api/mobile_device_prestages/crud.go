@@ -14,91 +14,6 @@ import (
 )
 
 type (
-	// MobileDevicePrestagesServiceInterface defines the interface for mobile device prestage operations.
-	// CRUD uses v3 API; device scope uses v2 API. Supports optimistic locking via versionLock.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-mobile-device-prestages
-	MobileDevicePrestagesServiceInterface interface {
-		// ListV3 returns all mobile device prestages using pagination.
-		//
-		// This method automatically fetches all pages and returns the complete list.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-mobile-device-prestages
-		ListV3(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV3 returns the mobile device prestage by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-mobile-device-prestages-id
-		GetByIDV3(ctx context.Context, id string) (*ResourceMobileDevicePrestage, *resty.Response, error)
-
-		// GetByNameV3 returns the mobile device prestage by display name.
-		//
-		// This is a convenience method that calls ListV3 and filters by DisplayName.
-		GetByNameV3(ctx context.Context, name string) (*ResourceMobileDevicePrestage, *resty.Response, error)
-
-		// CreateV3 creates a new mobile device prestage.
-		// Returns CreateResponse (id, href).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-mobile-device-prestages
-		CreateV3(ctx context.Context, prestage *ResourceMobileDevicePrestage) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV3 updates the mobile device prestage by ID.
-		// The current resource is fetched first so that all versionLock values
-		// are injected transparently. Callers do not need to supply versionLock.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-mobile-device-prestages-id
-		UpdateByIDV3(ctx context.Context, id string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *resty.Response, error)
-
-		// UpdateByNameV3 updates the mobile device prestage by display name.
-		UpdateByNameV3(ctx context.Context, name string, prestage *ResourceMobileDevicePrestage) (*ResourceMobileDevicePrestage, *resty.Response, error)
-
-		// DeleteByIDV3 deletes the mobile device prestage by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-mobile-device-prestages-id
-		DeleteByIDV3(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByNameV3 deletes the mobile device prestage by display name.
-		DeleteByNameV3(ctx context.Context, name string) (*resty.Response, error)
-
-		// GetScopeByIDV2 returns the device scope for the mobile device prestage by ID (v2 API).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-prestages-id-scope
-		GetScopeByIDV2(ctx context.Context, id string) (*ResourceDeviceScope, *resty.Response, error)
-
-		// ReplaceScopeByIDV2 replaces the device scope for the mobile device prestage by ID (v2 API).
-		ReplaceScopeByIDV2(ctx context.Context, id string, request *RequestReplaceScope) (*ResourceDeviceScope, *resty.Response, error)
-
-		// AddScopeByIDV2 adds device scope (serial numbers) to the mobile device prestage by ID (v2 API).
-		AddScopeByIDV2(ctx context.Context, id string, request *RequestAddScope) (*ResourceDeviceScope, *resty.Response, error)
-
-		// RemoveScopeByIDV2 removes device scope (serial numbers) from the mobile device prestage by ID (v2 API).
-		RemoveScopeByIDV2(ctx context.Context, id string, request *RequestRemoveScope) (*ResourceDeviceScope, *resty.Response, error)
-
-		// GetAllSyncsV2 returns all prestage sync states for all mobile device prestages (v2 API).
-		GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *resty.Response, error)
-
-		// GetSyncsByIDV2 returns sync states for a specific mobile device prestage by ID (v2 API).
-		GetSyncsByIDV2(ctx context.Context, id string) ([]ResourcePrestageSync, *resty.Response, error)
-
-		// GetLatestSyncByIDV2 returns the latest sync state for a mobile device prestage by ID (v2 API).
-		GetLatestSyncByIDV2(ctx context.Context, id string) (*ResourcePrestageSync, *resty.Response, error)
-
-		// GetAttachmentsByIDV3 returns attachments for a mobile device prestage by ID (v3 API).
-		GetAttachmentsByIDV3(ctx context.Context, id string) ([]ResourceAttachment, *resty.Response, error)
-
-		// UploadAttachmentV3 uploads an attachment to a mobile device prestage by ID (v3 API).
-		UploadAttachmentV3(ctx context.Context, id string, fileReader io.Reader, fileSize int64, fileName string) (*ResourceAttachmentUpload, *resty.Response, error)
-
-		// DeleteAttachmentsByIDV3 deletes attachments from a mobile device prestage by ID (v3 API).
-		DeleteAttachmentsByIDV3(ctx context.Context, id string, request *RequestDeleteAttachments) (*resty.Response, error)
-
-		// GetHistoryByIDV3 returns the history for a mobile device prestage by ID (v3 API).
-		GetHistoryByIDV3(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteByIDV3 adds a history note to a mobile device prestage by ID (v3 API).
-		AddHistoryNoteByIDV3(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *resty.Response, error)
-	}
-
 	// Service handles communication with the mobile device prestages-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-mobile-device-prestages
@@ -106,8 +21,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ MobileDevicePrestagesServiceInterface = (*MobileDevicePrestages)(nil)
 
 func NewMobileDevicePrestages(client transport.HTTPClient) *MobileDevicePrestages {
 	return &MobileDevicePrestages{client: client}

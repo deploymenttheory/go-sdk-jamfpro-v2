@@ -10,16 +10,6 @@ import (
 )
 
 type (
-	// DevicesServiceInterface defines the interface for devices operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-devices-id-groups
-	DevicesServiceInterface interface {
-		// GetGroupsV1 returns a list of groups that the specified device belongs to.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-devices-id-groups
-		GetGroupsV1(ctx context.Context, id string) ([]ResourceGroup, *resty.Response, error)
-	}
-
 	// Service handles communication with the devices-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-devices-id-groups
@@ -27,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DevicesServiceInterface = (*Devices)(nil)
 
 // NewService returns a new devices Service backed by the provided HTTP client.
 func NewDevices(client transport.HTTPClient) *Devices {

@@ -10,47 +10,6 @@ import (
 )
 
 type (
-	// DigicertServiceInterface defines the interface for DigiCert Trust Lifecycle Manager operations.
-	// Supports PKI integration with DigiCert Trust Lifecycle Manager for certificate management.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-digicert-trust-lifecycle-manager
-	DigicertServiceInterface interface {
-		// Create creates a new DigiCert Trust Lifecycle Manager configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-digicert-trust-lifecycle-manager
-		Create(ctx context.Context, request *ResourceDigicertTrustLifecycleManager) (*ResponseDigicertTrustLifecycleManagerCreated, *resty.Response, error)
-
-		// GetByID returns the DigiCert Trust Lifecycle Manager configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-digicert-trust-lifecycle-manager-id
-		GetByID(ctx context.Context, id string) (*ResponseDigicertTrustLifecycleManager, *resty.Response, error)
-
-		// UpdateByID updates the DigiCert Trust Lifecycle Manager configuration by ID using merge-patch semantics.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-pki-digicert-trust-lifecycle-manager-id
-		UpdateByID(ctx context.Context, id string, request *ResourceDigicertTrustLifecycleManager) (*resty.Response, error)
-
-		// DeleteByID deletes the DigiCert Trust Lifecycle Manager configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-digicert-trust-lifecycle-manager-id
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-
-		// ValidateClientCertificate validates the DigiCert Trust Lifecycle Manager client certificate.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-digicert-trust-lifecycle-manager-validate-client-certificate
-		ValidateClientCertificate(ctx context.Context, request *ValidateClientCertificateRequest) (*resty.Response, error)
-
-		// GetConnectionStatusByID returns the connection status for a DigiCert Trust Lifecycle Manager configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-digicert-trust-lifecycle-manager-id-connection-status
-		GetConnectionStatusByID(ctx context.Context, id string) (*ConnectionStatusResponse, *resty.Response, error)
-
-		// GetDependenciesByID returns the list of dependencies for a DigiCert Trust Lifecycle Manager configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-digicert-trust-lifecycle-manager-id-dependencies
-		GetDependenciesByID(ctx context.Context, id string) (*DependenciesResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the DigiCert Trust Lifecycle Manager-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-digicert-trust-lifecycle-manager
@@ -58,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DigicertServiceInterface = (*Digicert)(nil)
 
 func NewDigicert(client transport.HTTPClient) *Digicert {
 	return &Digicert{client: client}

@@ -10,21 +10,6 @@ import (
 )
 
 type (
-	// JamfAccountPreferencesServiceInterface defines the interface for Jamf Pro account preferences operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
-	JamfAccountPreferencesServiceInterface interface {
-		// GetV3 returns the current Jamf Pro account preferences.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
-		GetV3(ctx context.Context) (*ResourceAccountPreferences, *resty.Response, error)
-
-		// UpdateV3 updates Jamf Pro account preferences (PATCH).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v3-account-preferences
-		UpdateV3(ctx context.Context, request *ResourceAccountPreferences) (*ResourceAccountPreferences, *resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Pro account preferences methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfAccountPreferencesServiceInterface = (*JamfAccountPreferences)(nil)
 
 func NewJamfAccountPreferences(client transport.HTTPClient) *JamfAccountPreferences {
 	return &JamfAccountPreferences{client: client}

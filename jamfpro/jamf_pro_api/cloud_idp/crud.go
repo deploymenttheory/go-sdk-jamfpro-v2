@@ -11,63 +11,6 @@ import (
 )
 
 type (
-	// CloudIdpServiceInterface defines the interface for Cloud Identity Provider operations.
-	// Uses v1 API for all operations. Supports listing, exporting, testing, and history operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp
-	CloudIdpServiceInterface interface {
-		// ListV1 returns all Cloud Identity Provider configurations (Get Cloud Identity Providers).
-		//
-		// Query params (optional, pass via query): page, page-size, sort, filter.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp
-		ListV1(ctx context.Context, query map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the Cloud Identity Provider configuration by ID (Get Cloud Identity Provider Configuration by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceCloudIdProviderDetails, *resty.Response, error)
-
-		// GetByNameV1 returns the Cloud Identity Provider configuration by display name (searches first page of ListV1).
-		GetByNameV1(ctx context.Context, name string) (*ResourceCloudIdProviderDetails, *resty.Response, error)
-
-		// ExportV1 exports Cloud Identity Providers collection (Export Cloud Identity Providers).
-		//
-		// Query params (optional, pass via query): export-fields, export-labels, page, page-size, sort, filter.
-		// Request body can override query parameters to avoid URI length limits.
-		// Accept (optional): pass constants.TextCSV for CSV export, constants.ApplicationJSON or empty for JSON (default).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-export
-		ExportV1(ctx context.Context, query map[string]string, request *ExportRequest, accept ...string) (*resty.Response, []byte, error)
-
-		// GetHistoryByIDV1 returns the history for a Cloud Identity Provider configuration (Get History).
-		//
-		// Query params (optional, pass via query): page, page-size, sort, filter.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp-id-history
-		GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteByIDV1 adds a note to the history for a Cloud Identity Provider configuration (Add History Note).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-history
-		AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*resty.Response, error)
-
-		// TestGroupSearchByIDV1 performs a test group search to verify configuration and mappings (Test Group Search).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-test-group
-		TestGroupSearchByIDV1(ctx context.Context, id string, request *TestGroupSearchRequest) (*TestGroupSearchResponse, *resty.Response, error)
-
-		// TestUserSearchByIDV1 performs a test user search to verify configuration and mappings (Test User Search).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-test-user
-		TestUserSearchByIDV1(ctx context.Context, id string, request *TestUserSearchRequest) (*TestUserSearchResponse, *resty.Response, error)
-
-		// TestUserMembershipByIDV1 performs a test user membership search to verify configuration and mappings (Test User Membership).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-id-test-user-membership
-		TestUserMembershipByIDV1(ctx context.Context, id string, request *TestUserMembershipRequest) (*TestUserMembershipResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the Cloud Identity Provider-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-idp
@@ -75,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CloudIdpServiceInterface = (*CloudIdp)(nil)
 
 func NewCloudIdp(client transport.HTTPClient) *CloudIdp {
 	return &CloudIdp{client: client}

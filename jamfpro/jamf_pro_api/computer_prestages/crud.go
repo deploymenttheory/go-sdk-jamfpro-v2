@@ -12,75 +12,6 @@ import (
 )
 
 type (
-	// ComputerPrestagesServiceInterface defines the interface for computer prestage operations.
-	// CRUD uses v3 API; device scope uses v2 API. Supports optimistic locking via versionLock.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computer-prestages
-	ComputerPrestagesServiceInterface interface {
-		// ListV3 returns a page of computer prestages (Get Computer Prestages).
-		//
-		// Query params (optional, pass via query): page, page-size, sort (e.g. id:asc, displayName:desc).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computer-prestages
-		ListV3(ctx context.Context, query map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV3 returns the computer prestage by ID (Get Computer Prestage by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computer-prestages-id
-		GetByIDV3(ctx context.Context, id string) (*ResourceComputerPrestage, *resty.Response, error)
-
-		// GetByNameV3 returns the computer prestage by display name (searches first page of ListV3).
-		GetByNameV3(ctx context.Context, name string) (*ResourceComputerPrestage, *resty.Response, error)
-
-		// CreateV3 creates a new computer prestage (Create Computer Prestage).
-		// Returns CreateResponse (id, href).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-computer-prestages
-		CreateV3(ctx context.Context, request *ResourceComputerPrestage) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV3 updates the computer prestage by ID (Update Computer Prestage by ID).
-		// Include versionLock from the current resource for optimistic locking.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-computer-prestages-id
-		UpdateByIDV3(ctx context.Context, id string, request *ResourceComputerPrestage) (*ResourceComputerPrestage, *resty.Response, error)
-
-		// UpdateByNameV3 updates the computer prestage by display name.
-		UpdateByNameV3(ctx context.Context, name string, request *ResourceComputerPrestage) (*ResourceComputerPrestage, *resty.Response, error)
-
-		// DeleteByIDV3 deletes the computer prestage by ID (Delete Computer Prestage by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-computer-prestages-id
-		DeleteByIDV3(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByNameV3 deletes the computer prestage by display name.
-		DeleteByNameV3(ctx context.Context, name string) (*resty.Response, error)
-
-		// GetDeviceScopeByIDV2 returns the device scope for the computer prestage by ID (Get scope; v2 API).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-prestages-id-scope
-		GetDeviceScopeByIDV2(ctx context.Context, id string) (*ResourceDeviceScope, *resty.Response, error)
-
-		// ReplaceDeviceScopeByIDV2 replaces the device scope for the computer prestage by ID (Put scope; v2 API).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-prestages-id-scope
-		ReplaceDeviceScopeByIDV2(ctx context.Context, id string, request *ReplaceDeviceScopeRequest) (*ResourceDeviceScope, *resty.Response, error)
-
-		// GetAllDeviceScopeV2 returns device scope for all computer prestages (Get all scope; v2 API).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-prestages-scope
-		GetAllDeviceScopeV2(ctx context.Context) (*AllDeviceScopeResponse, *resty.Response, error)
-
-		// AddDeviceScopeByIDV2 adds device scope (serial numbers) to the computer prestage by ID (Post scope; v2 API).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-prestages-id-scope
-		AddDeviceScopeByIDV2(ctx context.Context, id string, request *AddDeviceScopeRequest) (*ResourceDeviceScope, *resty.Response, error)
-
-		// RemoveDeviceScopeByIDV2 removes device scope (serial numbers) from the computer prestage by ID (Post delete-multiple; v2 API).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-prestages-id-scope-delete-multiple
-		RemoveDeviceScopeByIDV2(ctx context.Context, id string, request *RemoveDeviceScopeRequest) (*ResourceDeviceScope, *resty.Response, error)
-	}
-
 	// Service handles communication with the computer prestages-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computer-prestages
@@ -88,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ComputerPrestagesServiceInterface = (*ComputerPrestages)(nil)
 
 func NewComputerPrestages(client transport.HTTPClient) *ComputerPrestages {
 	return &ComputerPrestages{client: client}

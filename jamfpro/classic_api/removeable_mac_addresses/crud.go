@@ -10,53 +10,6 @@ import (
 )
 
 type (
-	// RemoveableMacAddressesServiceInterface defines the interface for Classic API removeable MAC address operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
-	RemoveableMacAddressesServiceInterface interface {
-		// List returns all removeable MAC addresses.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified removeable MAC address by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddressesbyid
-		GetByID(ctx context.Context, id int) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// GetByName returns the specified removeable MAC address by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddressesbyname
-		GetByName(ctx context.Context, name string) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// Create creates a new removeable MAC address.
-		//
-		// Returns the created removeable MAC address with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createremovablemacaddressbyid
-		Create(ctx context.Context, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// UpdateByID updates the specified removeable MAC address by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateremovablemacaddressbyid
-		UpdateByID(ctx context.Context, id int, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// UpdateByName updates the specified removeable MAC address by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateremovablemacaddressbyname
-		UpdateByName(ctx context.Context, name string, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// DeleteByID removes the specified removeable MAC address by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteremovablemacaddressbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified removeable MAC address by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteremovablemacaddressbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the removeable MAC addresses-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ RemoveableMacAddressesServiceInterface = (*RemoveableMacAddresses)(nil)
 
 // NewService returns a new removeable MAC addresses Service backed by the provided HTTP client.
 func NewRemoveableMacAddresses(client transport.HTTPClient) *RemoveableMacAddresses {

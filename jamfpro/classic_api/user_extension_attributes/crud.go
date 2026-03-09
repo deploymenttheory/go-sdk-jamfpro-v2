@@ -10,57 +10,6 @@ import (
 )
 
 type (
-	// UserExtensionAttributesServiceInterface defines the interface for Classic API user extension attribute operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/userextensionattributes
-	UserExtensionAttributesServiceInterface interface {
-		// List returns all user extension attributes.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributes
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified user extension attribute by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyid
-		GetByID(ctx context.Context, id int) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// GetByName returns the specified user extension attribute by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyname
-		GetByName(ctx context.Context, name string) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// Create creates a new user extension attribute.
-		//
-		// Returns the created user extension attribute (full resource).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createuserextensionattributebyid
-		Create(ctx context.Context, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// UpdateByID updates the specified user extension attribute by ID.
-		//
-		// Returns the updated user extension attribute (full resource).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyid
-		UpdateByID(ctx context.Context, id int, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// UpdateByName updates the specified user extension attribute by name.
-		//
-		// Returns the updated user extension attribute (full resource).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyname
-		UpdateByName(ctx context.Context, name string, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// DeleteByID removes the specified user extension attribute by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified user extension attribute by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the user-extension-attributes-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/userextensionattributes
@@ -68,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ UserExtensionAttributesServiceInterface = (*UserExtensionAttributes)(nil)
 
 // NewService returns a new user extension attributes Service backed by the provided HTTP client.
 func NewUserExtensionAttributes(client transport.HTTPClient) *UserExtensionAttributes {

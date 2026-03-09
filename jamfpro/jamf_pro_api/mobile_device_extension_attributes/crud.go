@@ -11,56 +11,6 @@ import (
 )
 
 type (
-	// MobileDeviceExtensionAttributesServiceInterface defines the interface for mobile device extension attribute operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes
-	MobileDeviceExtensionAttributesServiceInterface interface {
-		// ListV1 returns all mobile device extension attribute objects (Get Mobile Device Extension Attribute objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified mobile device extension attribute by ID (Get specified Mobile Device Extension Attribute object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceMobileDeviceExtensionAttribute, *resty.Response, error)
-
-		// CreateV1 creates a new mobile device extension attribute (Create Mobile Device Extension Attribute record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes
-		CreateV1(ctx context.Context, request *RequestMobileDeviceExtensionAttribute) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified mobile device extension attribute by ID (Update specified Mobile Device Extension Attribute object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-mobile-device-extension-attributes-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestMobileDeviceExtensionAttribute) (*ResourceMobileDeviceExtensionAttribute, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified mobile device extension attribute by ID (Remove specified Mobile Device Extension Attribute record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mobile-device-extension-attributes-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteMobileDeviceExtensionAttributesByIDV1 deletes multiple mobile device extension attributes by their IDs (Delete multiple Mobile Device Extension Attributes by their IDs).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes-delete-multiple
-		DeleteMobileDeviceExtensionAttributesByIDV1(ctx context.Context, req *DeleteMobileDeviceExtensionAttributesByIDRequest) (*resty.Response, error)
-
-		// GetHistoryByIDV1 returns the history for the specified mobile device extension attribute by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id-history
-		GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteByIDV1 adds a history note to the specified mobile device extension attribute.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-extension-attributes-id-history
-		AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddHistoryNoteRequest) (*resty.Response, error)
-
-		// GetDataDependencyByIDV1 returns smart group dependent objects for the specified mobile device extension attribute.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes-id-data-dependency
-		GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the mobile device extension attributes-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes
@@ -68,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ MobileDeviceExtensionAttributesServiceInterface = (*MobileDeviceExtensionAttributes)(nil)
 
 func NewMobileDeviceExtensionAttributes(client transport.HTTPClient) *MobileDeviceExtensionAttributes {
 	return &MobileDeviceExtensionAttributes{client: client}

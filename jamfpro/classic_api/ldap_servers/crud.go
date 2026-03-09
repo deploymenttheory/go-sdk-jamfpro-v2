@@ -10,53 +10,6 @@ import (
 )
 
 type (
-	// LDAPServersServiceInterface defines the interface for Classic API LDAP server operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/ldapservers
-	LDAPServersServiceInterface interface {
-		// List returns all LDAP servers.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findldapservers
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified LDAP server by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findldapserversbyid
-		GetByID(ctx context.Context, id int) (*ResourceLDAPServer, *resty.Response, error)
-
-		// GetByName returns the specified LDAP server by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findldapserversbyname
-		GetByName(ctx context.Context, name string) (*ResourceLDAPServer, *resty.Response, error)
-
-		// Create creates a new LDAP server.
-		//
-		// Returns a ListItem with the created server's ID and name (not the full resource).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createldapserverbyid
-		Create(ctx context.Context, request *RequestLDAPServer) (*ListItem, *resty.Response, error)
-
-		// UpdateByID updates the specified LDAP server by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateldapserverbyid
-		UpdateByID(ctx context.Context, id int, request *RequestLDAPServer) (*ResourceLDAPServer, *resty.Response, error)
-
-		// UpdateByName updates the specified LDAP server by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateldapserverbyname
-		UpdateByName(ctx context.Context, name string, request *RequestLDAPServer) (*ResourceLDAPServer, *resty.Response, error)
-
-		// DeleteByID removes the specified LDAP server by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteldapserverbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified LDAP server by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteldapserverbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the LDAP servers-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/ldapservers
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ LDAPServersServiceInterface = (*LdapServers)(nil)
 
 // NewService returns a new LDAP servers Service backed by the provided HTTP client.
 func NewLdapServers(client transport.HTTPClient) *LdapServers {

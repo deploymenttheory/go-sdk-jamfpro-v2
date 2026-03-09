@@ -11,59 +11,6 @@ import (
 )
 
 type (
-	// AdcsSettingsServiceInterface defines the interface for AD CS Settings operations.
-	// Uses v1 API for all operations. Supports certificate management for PKI integration.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings
-	AdcsSettingsServiceInterface interface {
-		// CreateV1 creates a new AD CS configuration (Create AD CS Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings
-		CreateV1(ctx context.Context, request *ResourceAdcsSettings) (*ResponseAdcsSettingsCreated, *resty.Response, error)
-
-		// GetByIDV1 returns the AD CS configuration by ID (Get AD CS Settings by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id
-		GetByIDV1(ctx context.Context, id string) (*ResponseAdcsSettings, *resty.Response, error)
-
-		// UpdateByIDV1 updates the AD CS configuration by ID using merge-patch semantics (Update AD CS Settings by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-pki-adcs-settings-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdcsSettings) (*resty.Response, error)
-
-		// DeleteByIDV1 deletes the AD CS configuration by ID (Delete AD CS Settings by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-adcs-settings-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// ValidateServerCertificateV1 validates the AD CS Settings server certificate (Validate Server Certificate).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings-validate-certificate
-		ValidateServerCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*resty.Response, error)
-
-		// ValidateClientCertificateV1 validates the AD CS Settings client certificate (Validate Client Certificate).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings-validate-client-certificate
-		ValidateClientCertificateV1(ctx context.Context, request *ValidateCertificateRequest) (*resty.Response, error)
-
-		// GetDependenciesByIDV1 returns the list of dependencies for an AD CS Settings configuration (Get Dependencies).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id-dependencies
-		GetDependenciesByIDV1(ctx context.Context, id string) (*DependenciesResponse, *resty.Response, error)
-
-		// GetHistoryByIDV1 returns the history for an AD CS Settings configuration (Get History).
-		//
-		// Query params (optional, pass via query): page, page-size, sort, filter.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-adcs-settings-id-history
-		GetHistoryByIDV1(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteByIDV1 adds a note to the history for an AD CS Settings configuration (Add History Note).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings-id-history
-		AddHistoryNoteByIDV1(ctx context.Context, id string, request *HistoryNoteRequest) (*resty.Response, error)
-	}
-
 	// Service handles communication with the AD CS Settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings
@@ -71,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AdcsSettingsServiceInterface = (*AdcsSettings)(nil)
 
 func NewAdcsSettings(client transport.HTTPClient) *AdcsSettings {
 	return &AdcsSettings{client: client}

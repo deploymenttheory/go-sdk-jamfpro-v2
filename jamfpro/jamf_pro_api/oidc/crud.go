@@ -9,55 +9,6 @@ import (
 	"resty.dev/v3"
 )
 
-// ServiceInterface defines the interface for OIDC (OpenID Connect) operations.
-//
-// OIDC provides authentication and single sign-on capabilities for Jamf Pro
-// using industry-standard OpenID Connect protocols. These endpoints manage
-// OIDC certificates, keys, and authentication flows.
-//
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-public-key
-type ServiceInterface interface {
-	// GetDirectIdPLoginURLV1 retrieves the direct IdP login URL for OIDC.
-	//
-	// Returns the URL to initiate direct authentication with the configured
-	// OpenID Connect identity provider.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-direct-idp-login-url
-	GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDirectIdPLoginURL, *resty.Response, error)
-
-	// GetPublicKeyV1 retrieves the public key used for signing OIDC messages.
-	//
-	// Returns the JWKS (JSON Web Key Set) containing the public keys used to
-	// verify JWT tokens issued by Jamf Pro's OIDC implementation.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-public-key
-	GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *resty.Response, error)
-
-	// GetPublicFeaturesV1 retrieves the public OIDC configuration features.
-	//
-	// Returns whether Jamf ID authentication is enabled for the OIDC configuration.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-public-features
-	GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatures, *resty.Response, error)
-
-	// GenerateCertificateV1 generates a new certificate for signing OIDC messages.
-	//
-	// Creates a new key pair and certificate used for signing OIDC/JWT tokens.
-	// This operation invalidates the previous certificate and should be used
-	// carefully as it will require clients to refresh their cached public keys.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-oidc-generate-certificate
-	GenerateCertificateV1(ctx context.Context) (*resty.Response, error)
-
-	// GetRedirectURLV1 provides the redirect URL for OIDC authentication.
-	//
-	// Based on the original URL and user email address, returns the appropriate
-	// redirect URL to initiate OIDC authentication flow. Uses the v2 dispatch endpoint.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-oidc-dispatch
-	GetRedirectURLV1(ctx context.Context, request *RequestOIDCRedirectURL) (*ResourceOIDCRedirectURL, *resty.Response, error)
-}
-
 type (
 	// Service handles communication with the OIDC-related methods of the Jamf Pro API.
 	//
@@ -66,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*Oidc)(nil)
 
 // NewService creates a new OIDC service.
 func NewOidc(client transport.HTTPClient) *Oidc {

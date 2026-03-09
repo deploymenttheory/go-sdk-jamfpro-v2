@@ -11,94 +11,6 @@ import (
 )
 
 type (
-	// ComputerInventoryServiceInterface defines the interface for Computer Inventory operations.
-	// Uses v3 API for most operations; v1 API for device commands (erase, remove MDM profile).
-	// Manages computer inventory records, FileVault, attachments, and device management.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory
-	ComputerInventoryServiceInterface interface {
-		// ListV3 returns all computer inventory records using automatic pagination (Get Computer Inventory).
-		//
-		// Supports optional RSQL filtering via rsqlQuery (keys: filter, sort, section).
-		// Note: page and page-size are managed internally; all pages are fetched automatically.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory
-		ListV3(ctx context.Context, rsqlQuery map[string]string) (*ResponseComputerInventoryList, *resty.Response, error)
-
-		// CreateV3 creates a new computer inventory record (Create Computer Inventory record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-computers-inventory
-		CreateV3(ctx context.Context, request *ResourceComputerInventory) (*CreateComputerResponse, *resty.Response, error)
-
-		// GetByIDV3 returns the specified computer inventory by ID (Get Computer Inventory by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id
-		GetByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *resty.Response, error)
-
-		// GetDetailByIDV3 returns all sections of a computer (Get all sections of a computer).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-detail-id
-		GetDetailByIDV3(ctx context.Context, id string) (*ResourceComputerInventory, *resty.Response, error)
-
-		// UpdateByIDV3 updates the specified computer inventory by ID using merge-patch semantics (Update Computer Inventory).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v3-computers-inventory-detail-id
-		UpdateByIDV3(ctx context.Context, id string, request *ResourceComputerInventory) (*ResourceComputerInventory, *resty.Response, error)
-
-		// DeleteByIDV3 removes the specified computer inventory by ID (Delete Computer Inventory).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-computers-inventory-id
-		DeleteByIDV3(ctx context.Context, id string) (*resty.Response, error)
-
-		// ListFileVaultV3 returns all FileVault inventory records using automatic pagination (Get FileVault Inventory).
-		//
-		// Note: This endpoint only supports pagination (page, page-size), which is managed internally.
-		// No RSQL filtering or sorting is available for this endpoint.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-filevault
-		ListFileVaultV3(ctx context.Context) (*FileVaultInventoryList, *resty.Response, error)
-
-		// GetFileVaultByIDV3 returns FileVault details for the specified computer by ID (Get FileVault Inventory by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-filevault
-		GetFileVaultByIDV3(ctx context.Context, id string) (*FileVaultInventory, *resty.Response, error)
-
-		// GetRecoveryLockPasswordByIDV3 returns the recovery lock password for the specified computer by ID (Get Recovery Lock Password).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-view-recovery-lock-password
-		GetRecoveryLockPasswordByIDV3(ctx context.Context, id string) (*ResponseRecoveryLockPassword, *resty.Response, error)
-
-		// UploadAttachmentByIDV3 uploads an attachment and assigns it to a computer (Upload attachment).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-computers-inventory-id-attachments
-		UploadAttachmentByIDV3(ctx context.Context, computerID string, attachment []byte) (*resty.Response, error)
-
-		// GetAttachmentByIDV3 downloads a computer attachment by computer ID and attachment ID (Download attachment file).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-attachments-attachmentid
-		GetAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) ([]byte, *resty.Response, error)
-
-		// DeleteAttachmentByIDV3 deletes a computer attachment by computer ID and attachment ID (Delete Computer Attachment).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v3-computers-inventory-id-attachments-attachmentid
-		DeleteAttachmentByIDV3(ctx context.Context, computerID, attachmentID string) (*resty.Response, error)
-
-		// GetDeviceLockPinByIDV3 returns the device lock PIN for the specified computer by ID (Get Device Lock PIN).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory-id-view-device-lock-pin
-		GetDeviceLockPinByIDV3(ctx context.Context, id string) (*ResponseDeviceLockPin, *resty.Response, error)
-
-		// RemoveMDMProfileByIDV1 removes the MDM profile from a computer by its ID (Remove MDM Profile).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-inventory-id-remove-mdm-profile
-		RemoveMDMProfileByIDV1(ctx context.Context, id string) (*ResponseRemoveMDMProfile, *resty.Response, error)
-
-		// EraseByIDV1 erases a computer by its ID (Erase Computer).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-inventory-id-erase
-		EraseByIDV1(ctx context.Context, id string, request *RequestEraseDeviceComputer) (*resty.Response, error)
-	}
-
 	// Service handles communication with the Computer Inventory-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computers-inventory
@@ -106,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ComputerInventoryServiceInterface = (*ComputerInventory)(nil)
 
 func NewComputerInventory(client transport.HTTPClient) *ComputerInventory {
 	return &ComputerInventory{client: client}

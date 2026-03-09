@@ -10,46 +10,6 @@ import (
 )
 
 type (
-	// AppInstallersServiceInterface defines the interface for app installer operations.
-	//
-	// Jamf Pro API docs: Undocumented
-	AppInstallersServiceInterface interface {
-		// ListTitlesV1 returns all app installer titles (Get App Installer Title objects).
-		//
-		// Jamf Pro API docs: Undocumented
-		ListTitlesV1(ctx context.Context, rsqlQuery map[string]string) (*ListTitlesResponse, *resty.Response, error)
-
-		// GetTitleByIDV1 returns the specified app installer title by ID (Get specified App Installer Title object).
-		//
-		// Jamf Pro API docs: Undocumented
-		GetTitleByIDV1(ctx context.Context, id string) (*ResourceJamfAppCatalogAppInstaller, *resty.Response, error)
-
-		// ListDeploymentsV1 returns all app installer deployments (Get App Installer Deployment objects).
-		//
-		// Jamf Pro API docs: Undocumented
-		ListDeploymentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListDeploymentsResponse, *resty.Response, error)
-
-		// GetDeploymentByIDV1 returns the specified deployment by ID (Get specified App Installer Deployment object).
-		//
-		// Jamf Pro API docs: Undocumented
-		GetDeploymentByIDV1(ctx context.Context, id string) (*ResourceJamfAppCatalogDeployment, *resty.Response, error)
-
-		// CreateDeploymentV1 creates a new app installer deployment (Create App Installer Deployment record).
-		//
-		// Jamf Pro API docs: Undocumented
-		CreateDeploymentV1(ctx context.Context, request *RequestDeployment) (*CreateDeploymentResponse, *resty.Response, error)
-
-		// UpdateDeploymentByIDV1 updates the specified deployment by ID (Update specified App Installer Deployment object).
-		//
-		// Jamf Pro API docs: Undocumented
-		UpdateDeploymentByIDV1(ctx context.Context, id string, request *RequestDeployment) (*ResourceJamfAppCatalogDeployment, *resty.Response, error)
-
-		// DeleteDeploymentByIDV1 removes the specified deployment by ID (Remove specified App Installer Deployment record).
-		//
-		// Jamf Pro API docs: Undocumented
-		DeleteDeploymentByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the app installers-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: Undocumented
@@ -57,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AppInstallersServiceInterface = (*AppInstallers)(nil)
 
 func NewAppInstallers(client transport.HTTPClient) *AppInstallers {
 	return &AppInstallers{client: client}

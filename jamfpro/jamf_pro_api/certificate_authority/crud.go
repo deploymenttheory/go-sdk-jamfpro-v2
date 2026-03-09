@@ -10,36 +10,6 @@ import (
 )
 
 type (
-	// CertificateAuthorityServiceInterface defines the interface for certificate authority operations (read-only).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
-	CertificateAuthorityServiceInterface interface {
-		// GetV1 returns the active certificate authority X.509 details.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
-		GetV1(ctx context.Context) (*ResourceActiveCertificateAuthorityV1, *resty.Response, error)
-		// GetActiveCertificateAuthorityDERV1 returns the active certificate authority in DER format.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active-der
-		GetActiveCertificateAuthorityDERV1(ctx context.Context) (*resty.Response, []byte, error)
-		// GetActiveCertificateAuthorityPEMV1 returns the active certificate authority in PEM format.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active-pem
-		GetActiveCertificateAuthorityPEMV1(ctx context.Context) (*resty.Response, []byte, error)
-		// GetCertificateAuthorityByIDV1 returns X.509 details of the certificate authority with the given ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-id
-		GetCertificateAuthorityByIDV1(ctx context.Context, id string) (*ResourceActiveCertificateAuthorityV1, *resty.Response, error)
-		// GetCertificateAuthorityByIDDERV1 returns the certificate authority with the given ID in DER format.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-id-der
-		GetCertificateAuthorityByIDDERV1(ctx context.Context, id string) (*resty.Response, []byte, error)
-		// GetCertificateAuthorityByIDPEMV1 returns the certificate authority with the given ID in PEM format.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-id-pem
-		GetCertificateAuthorityByIDPEMV1(ctx context.Context, id string) (*resty.Response, []byte, error)
-	}
-
 	// Service handles communication with the certificate authority-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CertificateAuthorityServiceInterface = (*CertificateAuthority)(nil)
 
 func NewCertificateAuthority(client transport.HTTPClient) *CertificateAuthority {
 	return &CertificateAuthority{client: client}

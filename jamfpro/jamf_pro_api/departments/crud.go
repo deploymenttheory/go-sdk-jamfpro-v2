@@ -11,56 +11,6 @@ import (
 )
 
 type (
-	// DepartmentsServiceInterface defines the interface for department operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments
-	DepartmentsServiceInterface interface {
-		// ListV1 returns all department objects (Get Department objects).
-		//
-		// Returns a paged list of department objects. Optional query parameters support
-		// filtering and pagination (page, pageSize, sort).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified department by ID (Get specified Department object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceDepartment, *resty.Response, error)
-
-		// CreateV1 creates a new department record (Create Department record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments
-		CreateV1(ctx context.Context, request *RequestDepartment) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified department by ID (Update specified Department object).
-		//
-		// Returns the full updated department resource.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-departments-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestDepartment) (*ResourceDepartment, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified department by ID (Remove specified Department record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-departments-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// GetDepartmentHistoryV1 returns the history object for the specified department.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments-id-history
-		GetDepartmentHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddDepartmentHistoryNotesV1 adds notes to the specified department history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-id-history
-		AddDepartmentHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error)
-
-		// DeleteDepartmentsByIDV1 deletes multiple departments by their IDs.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-departments-delete-multiple
-		DeleteDepartmentsByIDV1(ctx context.Context, req *DeleteDepartmentsByIDRequest) (*resty.Response, error)
-	}
-
 	// Service handles communication with the departments-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-departments
@@ -68,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DepartmentsServiceInterface = (*Departments)(nil)
 
 func NewDepartments(client transport.HTTPClient) *Departments {
 	return &Departments{client: client}

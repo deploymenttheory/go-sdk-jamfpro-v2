@@ -11,26 +11,6 @@ import (
 )
 
 type (
-	// UserServiceInterface defines the interface for user operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_api-user
-	UserServiceInterface interface {
-		// Get returns the current authenticated user information.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_api-user
-		Get(ctx context.Context) (*ResourceUser, *resty.Response, error)
-
-		// ChangePassword changes the current user's password.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-user-change-password
-		ChangePassword(ctx context.Context, request *RequestChangePassword) (*resty.Response, error)
-
-		// UpdateSession updates the current user's session (change site).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_api-user-updateSession
-		UpdateSession(ctx context.Context, request *RequestUpdateSession) (*resty.Response, error)
-	}
-
 	// Service handles communication with the user-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_api-user
@@ -38,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ UserServiceInterface = (*User)(nil)
 
 func NewUser(client transport.HTTPClient) *User {
 	return &User{client: client}

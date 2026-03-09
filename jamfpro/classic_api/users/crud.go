@@ -12,67 +12,6 @@ import (
 )
 
 type (
-	// UsersServiceInterface defines the interface for Classic API user operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/users
-	UsersServiceInterface interface {
-		// List returns all users.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusers
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified user by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyid
-		GetByID(ctx context.Context, id int) (*ResourceUser, *resty.Response, error)
-
-		// GetByName returns the specified user by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyname
-		GetByName(ctx context.Context, name string) (*ResourceUser, *resty.Response, error)
-
-		// GetByEmail returns users matching the specified email.
-		// Note: Returns a list response even for a single match.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusersbyemailaddress
-		GetByEmail(ctx context.Context, email string) (*ListResponse, *resty.Response, error)
-
-		// Create creates a new user.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createuserbyid
-		Create(ctx context.Context, req *RequestUser) (*ResourceUser, *resty.Response, error)
-
-		// UpdateByID updates the specified user by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyid
-		UpdateByID(ctx context.Context, id int, req *RequestUser) (*ResourceUser, *resty.Response, error)
-
-		// UpdateByName updates the specified user by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyname
-		UpdateByName(ctx context.Context, name string, req *RequestUser) (*ResourceUser, *resty.Response, error)
-
-		// UpdateByEmail updates the specified user by email.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserbyemail
-		UpdateByEmail(ctx context.Context, email string, req *RequestUser) (*ResourceUser, *resty.Response, error)
-
-		// DeleteByID removes the specified user by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified user by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-
-		// DeleteByEmail removes the specified user by email.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserbyemail
-		DeleteByEmail(ctx context.Context, email string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the users-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/users
@@ -80,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ UsersServiceInterface = (*Users)(nil)
 
 // NewService returns a new users Service backed by the provided HTTP client.
 func NewUsers(client transport.HTTPClient) *Users {

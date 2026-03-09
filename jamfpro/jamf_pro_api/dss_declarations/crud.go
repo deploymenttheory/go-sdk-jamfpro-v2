@@ -10,16 +10,6 @@ import (
 )
 
 type (
-	// DSSDeclarationsServiceInterface defines the interface for DSS declarations operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
-	DSSDeclarationsServiceInterface interface {
-		// GetByUUIDV1 returns the specified DSS declaration by UUID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
-		GetByUUIDV1(ctx context.Context, uuid string) (*ResponseDSSDeclaration, *resty.Response, error)
-	}
-
 	// Service handles communication with the DSS declarations-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
@@ -27,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DSSDeclarationsServiceInterface = (*DssDeclarations)(nil)
 
 // NewService returns a new DSS declarations Service backed by the provided HTTP client.
 func NewDssDeclarations(client transport.HTTPClient) *DssDeclarations {

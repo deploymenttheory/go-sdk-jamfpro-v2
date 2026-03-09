@@ -9,16 +9,6 @@ import (
 )
 
 type (
-	// CloudInformationServiceInterface defines the interface for cloud information operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-information
-	CloudInformationServiceInterface interface {
-		// GetV1 returns information related to cloud setup (Get Cloud Information).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-information
-		GetV1(ctx context.Context) (*ResourceCloudInformation, *resty.Response, error)
-	}
-
 	// Service handles communication with the cloud information-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-information
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CloudInformationServiceInterface = (*CloudInformation)(nil)
 
 func NewCloudInformation(client transport.HTTPClient) *CloudInformation {
 	return &CloudInformation{client: client}

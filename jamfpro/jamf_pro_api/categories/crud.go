@@ -11,68 +11,6 @@ import (
 )
 
 type (
-	// CategoriesServiceInterface defines the interface for category operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-categories
-	CategoriesServiceInterface interface {
-		// ListV1 returns all category objects (Get Category objects).
-		//
-		// Returns a paged list of category objects. Optional query parameters support
-		// filtering and pagination (page, pageSize, sort).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-categories
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified category by ID (Get specified Category object).
-		//
-		// Returns a single category object for the given ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-categories-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceCategory, *resty.Response, error)
-
-		// CreateV1 creates a new category record (Create Category record).
-		//
-		// Creates a new category. The request body must include name; priority is optional.
-		// Returns the created category ID and href.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-categories
-		CreateV1(ctx context.Context, request *RequestCategory) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified category by ID (Update specified Category object).
-		//
-		// Updates an existing category. All updatable fields (name, priority) may be sent.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-categories-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestCategory) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified category by ID (Remove specified Category record).
-		//
-		// Permanently deletes the category. This operation cannot be undone.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-categories-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteCategoriesByIDV1 deletes multiple categories by their IDs (Delete multiple Categories by their IDs).
-		//
-		// Sends a POST to /api/v1/categories/delete-multiple with a body containing category IDs.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-categories-delete-multiple
-		DeleteCategoriesByIDV1(ctx context.Context, req *DeleteCategoriesByIDRequest) (*resty.Response, error)
-
-		// GetCategoryHistoryV1 returns the history object for the specified category (Get specified Category history object).
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-categories-id-history
-		GetCategoryHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*CategoryHistoryResponse, *resty.Response, error)
-
-		// AddCategoryHistoryNotesV1 adds notes to the specified category history (Add specified Category history object notes).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-categories-id-history
-		AddCategoryHistoryNotesV1(ctx context.Context, id string, req *AddCategoryHistoryNotesRequest) (*resty.Response, error)
-	}
-
 	// Service handles communication with the categories
 	// related methods of the Jamf Pro API.
 	//
@@ -81,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CategoriesServiceInterface = (*Categories)(nil)
 
 func NewCategories(client transport.HTTPClient) *Categories {
 	return &Categories{client: client}

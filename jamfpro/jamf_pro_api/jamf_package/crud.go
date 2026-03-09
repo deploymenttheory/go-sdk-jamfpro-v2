@@ -11,25 +11,6 @@ import (
 )
 
 type (
-	// JamfPackageServiceInterface defines the interface for Jamf package operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-package
-	JamfPackageServiceInterface interface {
-		// ListV1 returns an array of packages for the given application (protect or connect).
-		//
-		// GET /api/v1/jamf-package?application={protect|connect}
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-package
-		ListV1(ctx context.Context, application string) (ListV1Response, *resty.Response, error)
-
-		// GetV2 returns the package object for the given application (protect or connect).
-		//
-		// GET /api/v2/jamf-package?application={protect|connect}
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-package
-		GetV2(ctx context.Context, application string) (*ResourceJamfPackageV2, *resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf package-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-package
@@ -37,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfPackageServiceInterface = (*JamfPackage)(nil)
 
 func NewJamfPackage(client transport.HTTPClient) *JamfPackage {
 	return &JamfPackage{client: client}

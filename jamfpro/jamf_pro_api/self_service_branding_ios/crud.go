@@ -11,46 +11,6 @@ import (
 )
 
 type (
-	// SelfServiceBrandingMobileServiceInterface defines the interface for self-service
-	// branding mobile (iOS) operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-ios
-	SelfServiceBrandingMobileServiceInterface interface {
-		// ListV1 returns all self-service branding mobile configurations.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-ios
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified self-service branding mobile configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-ios-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceSelfServiceBrandingMobile, *resty.Response, error)
-
-		// GetByNameV1 returns the specified self-service branding mobile configuration by name.
-		GetByNameV1(ctx context.Context, name string) (*ResourceSelfServiceBrandingMobile, *resty.Response, error)
-
-		// CreateV1 creates a new self-service branding mobile configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-self-service-branding-ios
-		CreateV1(ctx context.Context, request *ResourceSelfServiceBrandingMobile) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified self-service branding mobile configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-self-service-branding-ios-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceSelfServiceBrandingMobile) (*ResourceSelfServiceBrandingMobile, *resty.Response, error)
-
-		// UpdateByNameV1 updates a self-service branding mobile configuration by name.
-		UpdateByNameV1(ctx context.Context, name string, request *ResourceSelfServiceBrandingMobile) (*ResourceSelfServiceBrandingMobile, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified self-service branding mobile configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-self-service-branding-ios-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByNameV1 removes a self-service branding mobile configuration by name.
-		DeleteByNameV1(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the self-service branding mobile-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-ios
@@ -58,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SelfServiceBrandingMobileServiceInterface = (*SelfServiceBrandingIos)(nil)
 
 func NewSelfServiceBrandingIos(client transport.HTTPClient) *SelfServiceBrandingIos {
 	return &SelfServiceBrandingIos{client: client}

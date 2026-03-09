@@ -10,81 +10,6 @@ import (
 )
 
 type (
-	// LocalAdminPasswordServiceInterface defines the interface for LAPS operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-pending-rotations
-	LocalAdminPasswordServiceInterface interface {
-		// GetPendingRotationsV2 retrieves a list of devices and usernames with pending LAPS rotations.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-pending-rotations
-		GetPendingRotationsV2(ctx context.Context) (*PendingRotationsResponse, *resty.Response, error)
-
-		// GetSettingsV2 retrieves current Jamf Pro LAPS settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-settings
-		GetSettingsV2(ctx context.Context) (*SettingsResource, *resty.Response, error)
-
-		// UpdateSettingsV2 updates the current Jamf Pro LAPS settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-local-admin-password-settings
-		UpdateSettingsV2(ctx context.Context, settings *SettingsResource) (*resty.Response, error)
-
-		// GetPasswordHistoryByClientManagementIDV2 retrieves the password view history for a specific username on a target device.
-		// History will include password, who viewed the password and when it was viewed.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-audit
-		GetPasswordHistoryByClientManagementIDV2(ctx context.Context, clientManagementID string, username string) (*PasswordHistoryResponse, *resty.Response, error)
-
-		// GetHistoryByUsernameV2 retrieves the LAPS history for a specific username on a target device.
-		// History includes date created, date last seen, expiration time, and rotational status.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-history
-		GetHistoryByUsernameV2(ctx context.Context, clientManagementID string, username string) (*AccountHistoryResponse, *resty.Response, error)
-
-		// GetCurrentPasswordByClientManagementIDV2 retrieves the current LAPS password for a specific username on a target device.
-		// Note: Once viewed, the password will be rotated based on rotation time settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-password
-		GetCurrentPasswordByClientManagementIDV2(ctx context.Context, clientManagementID string, username string) (*CurrentPasswordResponse, *resty.Response, error)
-
-		// GetAuditByUsernameAndGUIDV2 retrieves the password view history for a specific username and guid on a target device.
-		// Use when multiple accounts share the same username; guid disambiguates them.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-audit
-		GetAuditByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*PasswordHistoryResponse, *resty.Response, error)
-
-		// GetHistoryByUsernameAndGUIDV2 retrieves the LAPS history for a specific username and guid on a target device.
-		// Use when multiple accounts share the same username; guid disambiguates them.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-history
-		GetHistoryByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*AccountHistoryResponse, *resty.Response, error)
-
-		// GetPasswordByUsernameAndGUIDV2 retrieves the current LAPS password for a specific username and guid on a target device.
-		// Use when multiple accounts share the same username; guid disambiguates them.
-		// Note: Once viewed, the password will be rotated based on rotation time settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-password
-		GetPasswordByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*CurrentPasswordResponse, *resty.Response, error)
-
-		// GetFullHistoryByClientManagementIDV2 retrieves the complete history of all local admin passwords for all accounts
-		// on a specific device, including both viewing and rotation history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-history
-		GetFullHistoryByClientManagementIDV2(ctx context.Context, clientManagementID string) (*FullHistoryResponse, *resty.Response, error)
-
-		// GetCapableAccountsByClientManagementIDV2 retrieves a list of all admin accounts that are LAPS capable for a specific device.
-		// Capable accounts are returned in the AutoSetupAdminAccounts from QueryResponses.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-accounts
-		GetCapableAccountsByClientManagementIDV2(ctx context.Context, clientManagementID string) (*CapableAccountsResponse, *resty.Response, error)
-
-		// SetPasswordByClientManagementIDV2 sets LAPS passwords for all capable accounts on a device.
-		// The passwords are provided as a list of username/password pairs.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-local-admin-password-clientmanagementid-set-password
-		SetPasswordByClientManagementIDV2(ctx context.Context, clientManagementID string, passwordList *SetPasswordRequest) (*SetPasswordResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the local admin password methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-pending-rotations
@@ -92,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ LocalAdminPasswordServiceInterface = (*LocalAdminPassword)(nil)
 
 func NewLocalAdminPassword(client transport.HTTPClient) *LocalAdminPassword {
 	return &LocalAdminPassword{client: client}

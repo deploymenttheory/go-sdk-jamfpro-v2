@@ -9,16 +9,6 @@ import (
 )
 
 type (
-	// LocalesServiceInterface defines the interface for locale operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
-	LocalesServiceInterface interface {
-		// ListV1 returns all available locales (Get Locales).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
-		ListV1(ctx context.Context) ([]ResourceLocale, *resty.Response, error)
-	}
-
 	// Service handles communication with the locales-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ LocalesServiceInterface = (*Locales)(nil)
 
 func NewLocales(client transport.HTTPClient) *Locales {
 	return &Locales{client: client}

@@ -10,38 +10,6 @@ import (
 )
 
 type (
-	// AllowedFileExtensionsServiceInterface defines the interface for Classic API allowed file extension operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextension
-	AllowedFileExtensionsServiceInterface interface {
-		// List returns all allowed file extensions.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextension
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified allowed file extension by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextensionbyid
-		GetByID(ctx context.Context, id int) (*ResourceAllowedFileExtension, *resty.Response, error)
-
-		// GetByExtension returns the allowed file extension matching the given extension string.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextensionbyname
-		GetByExtension(ctx context.Context, extension string) (*ResourceAllowedFileExtension, *resty.Response, error)
-
-		// Create creates a new allowed file extension.
-		//
-		// Returns the created resource with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createallowedfileextensionbyid
-		Create(ctx context.Context, req *RequestAllowedFileExtension) (*ResourceAllowedFileExtension, *resty.Response, error)
-
-		// DeleteByID removes the specified allowed file extension by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteallowedfileextensionbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-	}
-
 	// Service handles communication with the allowed file extension-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextension
@@ -49,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AllowedFileExtensionsServiceInterface = (*AllowedFileExtensions)(nil)
 
 // NewService returns a new allowed file extensions Service backed by the provided HTTP client.
 func NewAllowedFileExtensions(client transport.HTTPClient) *AllowedFileExtensions {

@@ -10,44 +10,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for smart mobile device group operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-smart-groups
-	ServiceInterface interface {
-		// List returns all smart mobile device groups.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-smart-groups
-		List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified smart mobile device group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-smart-groups-id
-		GetByID(ctx context.Context, id string) (*ResourceSmartMobileDeviceGroup, *resty.Response, error)
-
-		// GetByName returns a smart mobile device group by name (uses List with filter).
-		GetByName(ctx context.Context, name string) (*ListItem, *resty.Response, error)
-
-		// GetMembership returns the membership of a smart mobile device group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-smart-group-membership-id
-		GetMembership(ctx context.Context, id string, rsqlQuery map[string]string) (*MembershipResponse, *resty.Response, error)
-
-		// Create creates a new smart mobile device group.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mobile-device-groups-smart-groups
-		Create(ctx context.Context, request *RequestSmartMobileDeviceGroup) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified smart mobile device group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-mobile-device-groups-smart-groups-id
-		UpdateByID(ctx context.Context, id string, request *RequestSmartMobileDeviceGroup) (*ResourceSmartMobileDeviceGroup, *resty.Response, error)
-
-		// DeleteByID removes the specified smart mobile device group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-mobile-device-groups-smart-groups-id
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the smart mobile device groups-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-smart-groups
@@ -55,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*SmartMobileDeviceGroups)(nil)
 
 // NewService returns a new smart mobile device groups service.
 func NewSmartMobileDeviceGroups(client transport.HTTPClient) *SmartMobileDeviceGroups {

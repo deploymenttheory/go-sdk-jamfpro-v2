@@ -11,22 +11,6 @@ import (
 )
 
 type (
-	// ServiceDiscoveryEnrollmentServiceInterface defines the interface for service discovery enrollment operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
-	ServiceDiscoveryEnrollmentServiceInterface interface {
-		// GetV1 returns all well-known service discovery settings (Get Service Discovery Enrollment Well-Known Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
-		GetV1(ctx context.Context) (*WellKnownSettingsResponseV1, *resty.Response, error)
-
-		// UpdateV1 updates the enrollment types for all organizations (Update Service Discovery Enrollment Well-Known Settings).
-		// Returns nil for the result when the API responds with 204 No Content.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-service-discovery-enrollment-well-known-settings
-		UpdateV1(ctx context.Context, request *WellKnownSettingsResponseV1) (*WellKnownSettingsResponseV1, *resty.Response, error)
-	}
-
 	// Service handles communication with the service discovery enrollment-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
@@ -34,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceDiscoveryEnrollmentServiceInterface = (*ServiceDiscoveryEnrollment)(nil)
 
 func NewServiceDiscoveryEnrollment(client transport.HTTPClient) *ServiceDiscoveryEnrollment {
 	return &ServiceDiscoveryEnrollment{client: client}

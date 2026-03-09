@@ -11,31 +11,6 @@ import (
 )
 
 type (
-	// JamfProUserAccountSettingsServiceInterface defines the interface for Jamf Pro user account settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-settings-keyid
-	JamfProUserAccountSettingsServiceInterface interface {
-		// GetSettingsV1 returns the user preferences for the authenticated user and key (username, key, values).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-settings-keyid
-		GetSettingsV1(ctx context.Context, keyID string) (*ResourceUserPreferencesSettings, *resty.Response, error)
-
-		// GetV1 returns the user setting value for the authenticated user and key (string value).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-keyid
-		GetV1(ctx context.Context, keyID string) (string, *resty.Response, error)
-
-		// PutV1 persists the user setting for the authenticated user and key.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-user-preferences-keyid
-		PutV1(ctx context.Context, keyID string, values RequestUserPreferences) (*resty.Response, error)
-
-		// DeleteV1 removes the specified setting for the authenticated user.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-user-preferences-keyid
-		DeleteV1(ctx context.Context, keyID string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Pro user account settings methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-settings-keyid
@@ -43,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfProUserAccountSettingsServiceInterface = (*JamfProUserAccountSettings)(nil)
 
 func NewJamfProUserAccountSettings(client transport.HTTPClient) *JamfProUserAccountSettings {
 	return &JamfProUserAccountSettings{client: client}

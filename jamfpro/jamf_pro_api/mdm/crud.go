@@ -11,39 +11,6 @@ import (
 )
 
 type (
-	// MDMServiceInterface defines the interface for MDM command operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
-	MDMServiceInterface interface {
-		// ListCommandsV2 retrieves information about MDM commands made by Jamf Pro.
-		//
-		// Supports optional RSQL filtering, pagination and sorting via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mdm-commands
-		ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (*ListCommandsResponse, *resty.Response, error)
-
-		// BlankPush sends an MDM blank push command to the specified devices.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-blank-push
-		BlankPush(ctx context.Context, clientManagementIDs []string) (*BlankPushResponse, *resty.Response, error)
-
-		// SendCommand sends an MDM command for creation and queuing.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
-		SendCommand(ctx context.Context, req *CommandRequest) (*CommandResponse, *resty.Response, error)
-
-		// DeployPackage deploys a package using an MDM command.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-deploy-package
-		DeployPackage(ctx context.Context, req *DeployPackageRequest) (*DeployPackageResponse, *resty.Response, error)
-
-		// RenewProfile renews MDM profiles for the specified device UDIDs.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mdm-renew-profile
-		RenewProfile(ctx context.Context, req *RenewProfileRequest) (*RenewProfileResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the MDM command methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
@@ -51,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ MDMServiceInterface = (*Mdm)(nil)
 
 // NewService returns a new MDM service.
 func NewMdm(client transport.HTTPClient) *Mdm {

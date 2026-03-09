@@ -10,21 +10,6 @@ import (
 )
 
 type (
-	// PolicyPropertiesServiceInterface defines the interface for policy properties operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
-	PolicyPropertiesServiceInterface interface {
-		// Get returns the current policy properties (Get Policy Properties).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
-		Get(ctx context.Context) (*ResourcePolicyProperties, *resty.Response, error)
-
-		// Update updates policy properties (Update Policy Properties).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-policy-properties
-		Update(ctx context.Context, request *ResourcePolicyProperties) (*ResourcePolicyProperties, *resty.Response, error)
-	}
-
 	// Service handles communication with the policy properties-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ PolicyPropertiesServiceInterface = (*PolicyProperties)(nil)
 
 func NewPolicyProperties(client transport.HTTPClient) *PolicyProperties {
 	return &PolicyProperties{client: client}

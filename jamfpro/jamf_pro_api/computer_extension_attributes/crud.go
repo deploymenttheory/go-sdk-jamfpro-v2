@@ -12,78 +12,6 @@ import (
 )
 
 type (
-	// ComputerExtensionAttributesServiceInterface defines the interface for computer extension attribute operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes
-	ComputerExtensionAttributesServiceInterface interface {
-		// ListV1 returns all computer extension attribute objects (Get Computer Extension Attribute objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified computer extension attribute by ID (Get specified Computer Extension Attribute object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceComputerExtensionAttribute, *resty.Response, error)
-
-		// CreateV1 creates a new computer extension attribute (Create Computer Extension Attribute record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes
-		CreateV1(ctx context.Context, request *RequestComputerExtensionAttribute) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified computer extension attribute by ID (Update specified Computer Extension Attribute object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-computer-extension-attributes-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestComputerExtensionAttribute) (*ResourceComputerExtensionAttribute, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified computer extension attribute by ID (Remove specified Computer Extension Attribute record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-computer-extension-attributes-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteComputerExtensionAttributesByIDV1 deletes multiple computer extension attributes by their IDs (Delete multiple Computer Extension Attributes by their IDs).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes-delete-multiple
-		DeleteComputerExtensionAttributesByIDV1(ctx context.Context, req *DeleteComputerExtensionAttributesByIDRequest) (*resty.Response, error)
-
-		// GetHistoryByIDV1 returns the history for a computer extension attribute (Get Computer Extension Attribute History).
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id-history
-		GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteByIDV1 adds a note to the history for a computer extension attribute (Add Computer Extension Attribute History Note).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes-id-history
-		AddHistoryNoteByIDV1(ctx context.Context, id string, req *AddHistoryNoteRequest) (*resty.Response, error)
-
-		// ListTemplatesV1 returns all computer extension attribute templates.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-templates
-		ListTemplatesV1(ctx context.Context, rsqlQuery map[string]string) (*TemplateListResponse, *resty.Response, error)
-
-		// GetTemplateByIDV1 returns the specified computer extension attribute template by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-templates-id
-		GetTemplateByIDV1(ctx context.Context, id string) (*ResourceComputerExtensionAttributeTemplate, *resty.Response, error)
-
-		// UploadV1 uploads a computer extension attribute (multipart/form-data).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-computer-extension-attributes-upload
-		UploadV1(ctx context.Context, fileReader io.Reader, fileSize int64, filename string) (*ResourceComputerExtensionAttribute, *resty.Response, error)
-
-		// GetDataDependencyByIDV1 returns smart group/advanced search dependent objects for the specified computer extension attribute.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id-data-dependency
-		GetDataDependencyByIDV1(ctx context.Context, id string) (*DataDependencyResponse, *resty.Response, error)
-
-		// DownloadByIDV1 downloads the specified computer extension attribute in XML format.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes-id-download
-		DownloadByIDV1(ctx context.Context, id string) ([]byte, *resty.Response, error)
-	}
-
 	// Service handles communication with the computer extension attributes-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes
@@ -91,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ComputerExtensionAttributesServiceInterface = (*ComputerExtensionAttributes)(nil)
 
 func NewComputerExtensionAttributes(client transport.HTTPClient) *ComputerExtensionAttributes {
 	return &ComputerExtensionAttributes{client: client}

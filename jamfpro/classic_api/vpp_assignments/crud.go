@@ -10,36 +10,6 @@ import (
 )
 
 type (
-	// VPPAssignmentsServiceInterface defines the interface for Classic API VPP assignment operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/vppassignments
-	VPPAssignmentsServiceInterface interface {
-		// List returns all VPP assignments.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignments
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified VPP assignment by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignmentbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// Create creates a new VPP assignment.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createvppassignmentbyid
-		Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified VPP assignment by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatevppassignmentbyid
-		UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified VPP assignment by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletevppassignmentbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-	}
-
 	// Service handles communication with the VPP assignments-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/vppassignments
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ VPPAssignmentsServiceInterface = (*VppAssignments)(nil)
 
 // NewService returns a new VPP assignments Service backed by the provided HTTP client.
 func NewVppAssignments(client transport.HTTPClient) *VppAssignments {

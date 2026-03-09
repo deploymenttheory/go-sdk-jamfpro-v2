@@ -11,61 +11,6 @@ import (
 )
 
 type (
-	// ScriptsServiceInterface defines the interface for script operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts
-	ScriptsServiceInterface interface {
-		// ListScriptsV1 returns a paged list of script objects.
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts
-		ListScriptsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetScriptByIDV1 returns the specified script by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts-id
-		GetScriptByIDV1(ctx context.Context, id string) (*ResourceScript, *resty.Response, error)
-
-		// CreateScriptV1 creates a new script record.
-		//
-		// Returns the created script's ID and href.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-scripts
-		CreateScriptV1(ctx context.Context, request *RequestScript) (*CreateResponse, *resty.Response, error)
-
-		// UpdateScriptByIDV1 replaces the specified script by ID.
-		//
-		// Returns the full updated script resource.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-scripts-id
-		UpdateScriptByIDV1(ctx context.Context, id string, request *RequestScript) (*ResourceScript, *resty.Response, error)
-
-		// DeleteScriptByIDV1 removes the specified script by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-scripts-id
-		DeleteScriptByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DownloadScriptByIDV1 downloads the script contents as plain text.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts-id-download
-		DownloadScriptByIDV1(ctx context.Context, id string) ([]byte, *resty.Response, error)
-
-		// GetScriptHistoryV1 returns the history object for the specified script.
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts-id-history
-		GetScriptHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ScriptHistoryResponse, *resty.Response, error)
-
-		// AddScriptHistoryNotesV1 adds notes to the specified script's history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-scripts-id-history
-		AddScriptHistoryNotesV1(ctx context.Context, id string, req *AddScriptHistoryNotesRequest) (*resty.Response, error)
-	}
-
 	// Service handles communication with the scripts-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-scripts
@@ -73,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ScriptsServiceInterface = (*Scripts)(nil)
 
 // NewService returns a new scripts Service backed by the provided HTTP client.
 func NewScripts(client transport.HTTPClient) *Scripts {

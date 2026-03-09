@@ -10,56 +10,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API ebook operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/ebooks
-	ServiceInterface interface {
-		// List returns all ebooks.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findebooks
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified ebook by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findebooksbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified ebook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findebooksbyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// GetByNameAndSubset returns a specific subset of an ebook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findebooksbynamedatasubset
-		GetByNameAndSubset(ctx context.Context, name, subset string) (*Resource, *resty.Response, error)
-
-		// Create creates a new ebook.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createebookbyid
-		Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified ebook by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateebookbyid
-		UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified ebook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateebookbyname
-		UpdateByName(ctx context.Context, name string, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified ebook by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteebookbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified ebook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteebookbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the ebooks-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/ebooks
@@ -67,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*Ebooks)(nil)
 
 // NewService returns a new ebooks Service backed by the provided HTTP client.
 func NewEbooks(client transport.HTTPClient) *Ebooks {

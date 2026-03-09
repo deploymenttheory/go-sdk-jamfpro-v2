@@ -10,16 +10,6 @@ import (
 )
 
 type (
-	// InventoryInformationServiceInterface defines the interface for inventory information operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
-	InventoryInformationServiceInterface interface {
-		// GetV1 returns statistics about managed/unmanaged devices and computers in the inventory.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
-		GetV1(ctx context.Context) (*ResourceInventoryInformation, *resty.Response, error)
-	}
-
 	// Service handles communication with the inventory information-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
@@ -27,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ InventoryInformationServiceInterface = (*InventoryInformation)(nil)
 
 // NewService returns a new inventory information Service backed by the provided HTTP client.
 func NewInventoryInformation(client transport.HTTPClient) *InventoryInformation {

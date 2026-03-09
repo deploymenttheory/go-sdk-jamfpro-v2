@@ -11,17 +11,6 @@ import (
 )
 
 type (
-	// ComputerInventoryCollectionServiceInterface defines the interface for Classic API computer inventory collection operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinventorycollection
-	ComputerInventoryCollectionServiceInterface interface {
-		// Get retrieves the computer inventory collection settings.
-		Get(ctx context.Context) (*ResourceComputerInventoryCollection, *resty.Response, error)
-
-		// Update updates the computer inventory collection settings.
-		Update(ctx context.Context, settings *ResourceComputerInventoryCollection) (*resty.Response, error)
-	}
-
 	// Service handles communication with the computer inventory collection-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinventorycollection
@@ -29,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ComputerInventoryCollectionServiceInterface = (*ComputerInventoryCollection)(nil)
 
 // NewService returns a new computer inventory collection Service backed by the provided HTTP client.
 func NewComputerInventoryCollection(client transport.HTTPClient) *ComputerInventoryCollection {

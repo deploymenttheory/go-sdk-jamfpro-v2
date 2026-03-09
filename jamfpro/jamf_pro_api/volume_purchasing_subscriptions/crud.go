@@ -10,36 +10,6 @@ import (
 )
 
 type (
-	// VolumePurchasingSubscriptionsServiceInterface defines the interface for volume purchasing subscription operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-subscriptions
-	VolumePurchasingSubscriptionsServiceInterface interface {
-		// ListV1 returns all volume purchasing subscription objects (Get Volume Purchasing Subscription objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-subscriptions
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified volume purchasing subscription by ID (Get specified Volume Purchasing Subscription object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-subscriptions-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceVolumePurchasingSubscription, *resty.Response, error)
-
-		// CreateV1 creates a new volume purchasing subscription (Create Volume Purchasing Subscription record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-subscriptions
-		CreateV1(ctx context.Context, request *RequestVolumePurchasingSubscription) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified volume purchasing subscription by ID (Update specified Volume Purchasing Subscription object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-volume-purchasing-subscriptions-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingSubscription) (*ResourceVolumePurchasingSubscription, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified volume purchasing subscription by ID (Remove specified Volume Purchasing Subscription record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-volume-purchasing-subscriptions-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the volume purchasing subscriptions-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-subscriptions
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ VolumePurchasingSubscriptionsServiceInterface = (*VolumePurchasingSubscriptions)(nil)
 
 func NewVolumePurchasingSubscriptions(client transport.HTTPClient) *VolumePurchasingSubscriptions {
 	return &VolumePurchasingSubscriptions{client: client}

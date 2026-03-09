@@ -11,48 +11,6 @@ import (
 )
 
 type (
-	// AdvancedMobileDeviceSearchesServiceInterface defines the interface for advanced mobile device search operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches
-	AdvancedMobileDeviceSearchesServiceInterface interface {
-		// ListV1 returns all advanced mobile device searches (Get Advanced Mobile Device Searches).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified advanced mobile device search by ID (Get Advanced Mobile Device Search by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceAdvancedMobileDeviceSearch, *resty.Response, error)
-
-		// CreateV1 creates a new advanced mobile device search (Create Advanced Mobile Device Search).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches
-		CreateV1(ctx context.Context, request *ResourceAdvancedMobileDeviceSearch) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified advanced mobile device search by ID (Update Advanced Mobile Device Search by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-advanced-mobile-device-searches-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceAdvancedMobileDeviceSearch) (*ResourceAdvancedMobileDeviceSearch, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified advanced mobile device search by ID (Delete Advanced Mobile Device Search by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-advanced-mobile-device-searches-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteMultipleV1 deletes multiple advanced mobile device searches by their IDs (Delete multiple Advanced Mobile Device Searches by their IDs).
-		//
-		// Sends a POST to /api/v1/advanced-mobile-device-searches/delete-multiple with a body containing search IDs.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-advanced-mobile-device-searches-delete-multiple
-		DeleteMultipleV1(ctx context.Context, req *DeleteAdvancedMobileDeviceSearchesByIDRequest) (*resty.Response, error)
-
-		// GetChoicesV1 returns criteria choices for advanced mobile device searches (Get Advanced Mobile Device Search Choices).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches-choices
-		GetChoicesV1(ctx context.Context, criteria, site, contains string) (*ChoicesResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the advanced mobile device searches-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches
@@ -60,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AdvancedMobileDeviceSearchesServiceInterface = (*AdvancedMobileDeviceSearches)(nil)
 
 func NewAdvancedMobileDeviceSearches(client transport.HTTPClient) *AdvancedMobileDeviceSearches {
 	return &AdvancedMobileDeviceSearches{client: client}

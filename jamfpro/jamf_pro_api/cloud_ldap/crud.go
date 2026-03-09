@@ -10,71 +10,6 @@ import (
 )
 
 type (
-	// CloudLdapServiceInterface defines the interface for Cloud LDAP operations.
-	// Uses v2 API for all operations. Supports Google and Azure LDAP integration.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-cloud-ldaps
-	CloudLdapServiceInterface interface {
-		// GetDefaultMappingsV2 returns the default field mappings for the specified provider (Get Default Mappings).
-		//
-		// providerName should be "GOOGLE" or "AZURE".
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-defaults-provider-mappings
-		GetDefaultMappingsV2(ctx context.Context, providerName string) (*ResponseDefaultMappings, *resty.Response, error)
-
-		// GetDefaultServerConfigurationV2 returns the default server configuration for the specified provider (Get Default Server Configuration).
-		//
-		// providerName should be "GOOGLE" or "AZURE".
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-defaults-provider-server-configuration
-		GetDefaultServerConfigurationV2(ctx context.Context, providerName string) (*ResponseDefaultServerConfiguration, *resty.Response, error)
-
-		// CreateV2 creates a new Cloud LDAP configuration (Create Cloud LDAP).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-cloud-ldaps
-		CreateV2(ctx context.Context, request *ResourceCloudLdap) (*ResponseCloudLdapCreated, *resty.Response, error)
-
-		// GetByIDV2 returns the Cloud LDAP configuration by ID (Get Cloud LDAP by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id
-		GetByIDV2(ctx context.Context, id string) (*ResourceCloudLdap, *resty.Response, error)
-
-		// UpdateByIDV2 updates the Cloud LDAP configuration by ID (Update Cloud LDAP by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-cloud-ldaps-id
-		UpdateByIDV2(ctx context.Context, id string, request *ResourceCloudLdap) (*ResourceCloudLdap, *resty.Response, error)
-
-		// DeleteByIDV2 deletes the Cloud LDAP configuration by ID (Delete Cloud LDAP by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-cloud-ldaps-id
-		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// GetBindConnectionPoolStatsByIDV2 returns bind connection pool statistics (Get Bind Connection Pool Statistics).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-bind
-		GetBindConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *resty.Response, error)
-
-		// GetSearchConnectionPoolStatsByIDV2 returns search connection pool statistics (Get Search Connection Pool Statistics).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-search
-		GetSearchConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *resty.Response, error)
-
-		// TestConnectionByIDV2 tests the communication with the specified cloud connection (Test Connection).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-status
-		TestConnectionByIDV2(ctx context.Context, id string) (*ConnectionStatusResponse, *resty.Response, error)
-
-		// GetMappingsByIDV2 returns the mappings configuration for the Cloud LDAP by ID (Get Mappings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-mappings
-		GetMappingsByIDV2(ctx context.Context, id string) (*CloudLdapMappings, *resty.Response, error)
-
-		// UpdateMappingsByIDV2 updates the mappings configuration for the Cloud LDAP by ID (Update Mappings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-cloud-ldaps-id-mappings
-		UpdateMappingsByIDV2(ctx context.Context, id string, request *CloudLdapMappings) (*CloudLdapMappings, *resty.Response, error)
-	}
-
 	// Service handles communication with the Cloud LDAP-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-cloud-ldaps
@@ -82,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CloudLdapServiceInterface = (*CloudLdap)(nil)
 
 func NewCloudLdap(client transport.HTTPClient) *CloudLdap {
 	return &CloudLdap{client: client}

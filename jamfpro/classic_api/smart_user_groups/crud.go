@@ -10,57 +10,6 @@ import (
 )
 
 type (
-	// SmartUserGroupsServiceInterface defines the interface for Classic API smart user group operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/usergroups
-	SmartUserGroupsServiceInterface interface {
-		// List returns all user groups (both smart and static).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroups
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified smart user group by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyid
-		GetByID(ctx context.Context, id int) (*ResourceSmartUserGroup, *resty.Response, error)
-
-		// GetByName returns the specified smart user group by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyname
-		GetByName(ctx context.Context, name string) (*ResourceSmartUserGroup, *resty.Response, error)
-
-		// Create creates a new smart user group.
-		//
-		// Returns the created user group ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createusergroupbyid
-		Create(ctx context.Context, req *RequestSmartUserGroup) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified smart user group by ID.
-		//
-		// Returns the updated user group ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyid
-		UpdateByID(ctx context.Context, id int, req *RequestSmartUserGroup) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified smart user group by name.
-		//
-		// Returns the updated user group ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyname
-		UpdateByName(ctx context.Context, name string, req *RequestSmartUserGroup) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified smart user group by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified smart user group by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the smart-user-groups-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/usergroups
@@ -68,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SmartUserGroupsServiceInterface = (*SmartUserGroups)(nil)
 
 // NewService returns a new smart user groups Service backed by the provided HTTP client.
 func NewSmartUserGroups(client transport.HTTPClient) *SmartUserGroups {

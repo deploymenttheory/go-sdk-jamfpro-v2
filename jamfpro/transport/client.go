@@ -11,61 +11,6 @@ import (
 // MultipartProgressCallback is called during multipart uploads to report progress.
 type MultipartProgressCallback func(fieldName string, fileName string, bytesWritten int64, totalBytes int64)
 
-// RSQLFilterBuilder builds RSQL filter expressions for Jamf Pro API endpoints
-// that support the filter query parameter.
-//
-// RSQL reference: https://developer.jamf.com/jamf-pro/docs/filtering-with-rsql
-//
-// Usage:
-//
-//	filter := client.RSQLBuilder().
-//	    EqualTo("general.name", "MacBook Pro").
-//	    And().
-//	    GreaterThan("hardware.totalRamMegabytes", "8192").
-//	    Build()
-//	    → general.name=="MacBook Pro";hardware.totalRamMegabytes>"8192"
-type RSQLFilterBuilder interface {
-	// EqualTo produces: field=="value". Wildcards (*) in value are preserved.
-	EqualTo(field, value string) RSQLFilterBuilder
-	// NotEqualTo produces: field!="value". Wildcards (*) in value are preserved.
-	NotEqualTo(field, value string) RSQLFilterBuilder
-	// LessThan produces: field<"value".
-	LessThan(field, value string) RSQLFilterBuilder
-	// LessOrEqual produces: field<="value".
-	LessOrEqual(field, value string) RSQLFilterBuilder
-	// GreaterThan produces: field>"value".
-	GreaterThan(field, value string) RSQLFilterBuilder
-	// GreaterOrEqual produces: field>="value".
-	GreaterOrEqual(field, value string) RSQLFilterBuilder
-
-	// In produces: field=in=(v1,v2,...).
-	In(field string, values ...string) RSQLFilterBuilder
-	// NotIn produces: field=out=(v1,v2,...).
-	NotIn(field string, values ...string) RSQLFilterBuilder
-
-	// Contains produces: field=="*value*" (substring match, literal * in value is escaped).
-	Contains(field, value string) RSQLFilterBuilder
-	// StartsWith produces: field=="value*" (prefix match, literal * in value is escaped).
-	StartsWith(field, value string) RSQLFilterBuilder
-	// EndsWith produces: field=="*value" (suffix match, literal * in value is escaped).
-	EndsWith(field, value string) RSQLFilterBuilder
-
-	// And appends a semicolon — logical AND in RSQL.
-	And() RSQLFilterBuilder
-	// Or appends a comma — logical OR in RSQL.
-	Or() RSQLFilterBuilder
-
-	// OpenGroup appends a left parenthesis for grouping sub-expressions.
-	OpenGroup() RSQLFilterBuilder
-	// CloseGroup appends a right parenthesis.
-	CloseGroup() RSQLFilterBuilder
-
-	// Build returns the completed RSQL filter string ready to use as rsqlQuery["filter"].
-	Build() string
-	// IsEmpty reports whether no expressions have been added yet.
-	IsEmpty() bool
-}
-
 // HTTPClient is the interface service implementations depend on.
 // The Transport struct in the client package satisfies this interface.
 type HTTPClient interface {
@@ -218,4 +163,59 @@ type HTTPClient interface {
 
 	// GetLogger returns the configured zap logger instance.
 	GetLogger() *zap.Logger
+}
+
+// RSQLFilterBuilder builds RSQL filter expressions for Jamf Pro API endpoints
+// that support the filter query parameter.
+//
+// RSQL reference: https://developer.jamf.com/jamf-pro/docs/filtering-with-rsql
+//
+// Usage:
+//
+//	filter := client.RSQLBuilder().
+//	    EqualTo("general.name", "MacBook Pro").
+//	    And().
+//	    GreaterThan("hardware.totalRamMegabytes", "8192").
+//	    Build()
+//	    → general.name=="MacBook Pro";hardware.totalRamMegabytes>"8192"
+type RSQLFilterBuilder interface {
+	// EqualTo produces: field=="value". Wildcards (*) in value are preserved.
+	EqualTo(field, value string) RSQLFilterBuilder
+	// NotEqualTo produces: field!="value". Wildcards (*) in value are preserved.
+	NotEqualTo(field, value string) RSQLFilterBuilder
+	// LessThan produces: field<"value".
+	LessThan(field, value string) RSQLFilterBuilder
+	// LessOrEqual produces: field<="value".
+	LessOrEqual(field, value string) RSQLFilterBuilder
+	// GreaterThan produces: field>"value".
+	GreaterThan(field, value string) RSQLFilterBuilder
+	// GreaterOrEqual produces: field>="value".
+	GreaterOrEqual(field, value string) RSQLFilterBuilder
+
+	// In produces: field=in=(v1,v2,...).
+	In(field string, values ...string) RSQLFilterBuilder
+	// NotIn produces: field=out=(v1,v2,...).
+	NotIn(field string, values ...string) RSQLFilterBuilder
+
+	// Contains produces: field=="*value*" (substring match, literal * in value is escaped).
+	Contains(field, value string) RSQLFilterBuilder
+	// StartsWith produces: field=="value*" (prefix match, literal * in value is escaped).
+	StartsWith(field, value string) RSQLFilterBuilder
+	// EndsWith produces: field=="*value" (suffix match, literal * in value is escaped).
+	EndsWith(field, value string) RSQLFilterBuilder
+
+	// And appends a semicolon — logical AND in RSQL.
+	And() RSQLFilterBuilder
+	// Or appends a comma — logical OR in RSQL.
+	Or() RSQLFilterBuilder
+
+	// OpenGroup appends a left parenthesis for grouping sub-expressions.
+	OpenGroup() RSQLFilterBuilder
+	// CloseGroup appends a right parenthesis.
+	CloseGroup() RSQLFilterBuilder
+
+	// Build returns the completed RSQL filter string ready to use as rsqlQuery["filter"].
+	Build() string
+	// IsEmpty reports whether no expressions have been added yet.
+	IsEmpty() bool
 }

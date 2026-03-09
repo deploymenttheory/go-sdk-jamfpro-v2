@@ -11,25 +11,6 @@ import (
 )
 
 type (
-	// CommandFlushServiceInterface defines the interface for Classic API command flush operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
-	CommandFlushServiceInterface interface {
-		// FlushByIDAndStatus clears MDM commands for a specific device or group by ID and status.
-		//
-		// Valid idType values: computers, computergroups, mobiledevices, or mobiledevicegroups
-		// Valid status values: Pending, Failed, or Pending+Failed
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
-		FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*resty.Response, error)
-
-		// FlushWithXML clears MDM commands using an XML request body for batch operations.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
-		FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*resty.Response, error)
-	}
-
 	// Service handles communication with the command-flush-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
@@ -38,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CommandFlushServiceInterface = (*CommandFlush)(nil)
 
 // NewService returns a new command flush Service backed by the provided HTTP client.
 func NewCommandFlush(client transport.HTTPClient) *CommandFlush {

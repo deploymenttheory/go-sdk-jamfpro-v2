@@ -10,53 +10,6 @@ import (
 )
 
 type (
-	// RestrictedSoftwareServiceInterface defines the interface for Classic API restricted software operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/restrictedsoftware
-	RestrictedSoftwareServiceInterface interface {
-		// ListRestrictedSoftware returns all restricted software.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findrestrictedsoftware
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetRestrictedSoftwareByID returns the specified restricted software by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findrestrictedsoftwarebyid
-		GetByID(ctx context.Context, id int) (*ResourceRestrictedSoftware, *resty.Response, error)
-
-		// GetRestrictedSoftwareByName returns the specified restricted software by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findrestrictedsoftwarebyname
-		GetByName(ctx context.Context, name string) (*ResourceRestrictedSoftware, *resty.Response, error)
-
-		// CreateRestrictedSoftware creates new restricted software.
-		//
-		// Returns the created restricted software's assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createrestrictedsoftwarebyid
-		Create(ctx context.Context, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateRestrictedSoftwareByID updates the specified restricted software by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updaterestrictedsoftwarebyid
-		UpdateByID(ctx context.Context, id int, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateRestrictedSoftwareByName updates the specified restricted software by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updaterestrictedsoftwarebyname
-		UpdateByName(ctx context.Context, name string, req *RequestRestrictedSoftware) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteRestrictedSoftwareByID removes the specified restricted software by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleterestrictedsoftwarebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteRestrictedSoftwareByName removes the specified restricted software by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleterestrictedsoftwarebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the restricted software-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/restrictedsoftware
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ RestrictedSoftwareServiceInterface = (*RestrictedSoftware)(nil)
 
 // NewService returns a new restricted software Service backed by the provided HTTP client.
 func NewRestrictedSoftware(client transport.HTTPClient) *RestrictedSoftware {

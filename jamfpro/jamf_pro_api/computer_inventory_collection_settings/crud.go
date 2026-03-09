@@ -10,33 +10,6 @@ import (
 )
 
 type (
-	// ComputerInventoryCollectionSettingsServiceInterface defines the interface for Computer Inventory Collection Settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
-	ComputerInventoryCollectionSettingsServiceInterface interface {
-		// GetV2 retrieves the computer inventory collection settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
-		GetV2(ctx context.Context) (*ResourceComputerInventoryCollectionSettings, *resty.Response, error)
-
-		// UpdateV2 updates the computer inventory collection settings.
-		//
-		// Returns 204 No Content on success with no response body.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-computer-inventory-collection-settings
-		UpdateV2(ctx context.Context, settings *ResourceComputerInventoryCollectionSettings) (*resty.Response, error)
-
-		// CreateCustomPathV2 creates a custom path for computer inventory collection settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-inventory-collection-settings-custom-path
-		CreateCustomPathV2(ctx context.Context, req *RequestCustomPath) (*SubsetPathItem, *resty.Response, error)
-
-		// DeleteCustomPathByIDV2 deletes a custom path by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-inventory-collection-settings-custom-path-id
-		DeleteCustomPathByIDV2(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the Computer Inventory Collection Settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
@@ -44,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ComputerInventoryCollectionSettingsServiceInterface = (*ComputerInventoryCollectionSettings)(nil)
 
 func NewComputerInventoryCollectionSettings(client transport.HTTPClient) *ComputerInventoryCollectionSettings {
 	return &ComputerInventoryCollectionSettings{client: client}

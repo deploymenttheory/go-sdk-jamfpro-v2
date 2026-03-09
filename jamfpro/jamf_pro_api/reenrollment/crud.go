@@ -11,31 +11,6 @@ import (
 )
 
 type (
-	// ReenrollmentServiceInterface defines the interface for re-enrollment settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-reenrollment
-	ReenrollmentServiceInterface interface {
-		// Get retrieves re-enrollment settings.
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-reenrollment
-		Get(ctx context.Context) (*ResourceReenrollmentSettings, *resty.Response, error)
-
-		// Update updates re-enrollment settings.
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-reenrollment
-		Update(ctx context.Context, request *ResourceReenrollmentSettings) (*ResourceReenrollmentSettings, *resty.Response, error)
-
-		// GetHistory returns paginated re-enrollment history (page, page-size, sort).
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-reenrollment-history
-		GetHistory(ctx context.Context, query map[string]string) (*ReenrollmentHistoryResponse, *resty.Response, error)
-
-		// AddHistoryNotes adds a note to re-enrollment history.
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-reenrollment-history
-		AddHistoryNotes(ctx context.Context, request *AddReenrollmentHistoryNotesRequest) (*ReenrollmentHistoryObject, *resty.Response, error)
-
-		// ExportHistory exports re-enrollment history. query may include page, page-size, sort, filter, export-fields, export-labels. body may override when URI exceeds ~2k chars. Uses Accept: text/csv,application/json.
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-reenrollment-history-export
-		ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*resty.Response, []byte, error)
-	}
-
 	// Service handles communication with the re-enrollment settings methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-reenrollment
@@ -43,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ReenrollmentServiceInterface = (*Reenrollment)(nil)
 
 func NewReenrollment(client transport.HTTPClient) *Reenrollment {
 	return &Reenrollment{client: client}

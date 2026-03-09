@@ -10,36 +10,6 @@ import (
 )
 
 type (
-	// BookmarksServiceInterface defines the interface for bookmark operations.
-	//
-	// Jamf Pro API docs: Undocumented
-	BookmarksServiceInterface interface {
-		// ListV1 returns all bookmarks. Optional rsqlQuery: filter (RSQL), sort, page, page-size (Get Bookmarks).
-		//
-		// Jamf Pro API docs: Undocumented
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified bookmark by ID (Get Bookmark by ID).
-		//
-		// Jamf Pro API docs: Undocumented-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceBookmark, *resty.Response, error)
-
-		// CreateV1 creates a new bookmark (Create Bookmark).
-		//
-		// Jamf Pro API docs: Undocumented
-		CreateV1(ctx context.Context, request *ResourceBookmark) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified bookmark by ID (Update Bookmark by ID).
-		//
-		// Jamf Pro API docs: Undocumented
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceBookmark) (*ResourceBookmark, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified bookmark by ID (Delete Bookmark by ID).
-		//
-		// Jamf Pro API docs: Undocumented
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the bookmarks-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: Undocumented
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ BookmarksServiceInterface = (*Bookmarks)(nil)
 
 func NewBookmarks(client transport.HTTPClient) *Bookmarks {
 	return &Bookmarks{client: client}

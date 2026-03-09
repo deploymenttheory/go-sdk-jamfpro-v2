@@ -10,21 +10,6 @@ import (
 )
 
 type (
-	// AccessManagementSettingsServiceInterface defines the interface for access management settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment-access-management
-	AccessManagementSettingsServiceInterface interface {
-		// GetV4 retrieves the current access management settings (Get Access Management Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment-access-management
-		GetV4(ctx context.Context) (*ResourceAccessManagementSettings, *resty.Response, error)
-
-		// CreateV4 configures the access management settings (Create/Update Access Management Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v4-enrollment-access-management
-		CreateV4(ctx context.Context, request *ResourceAccessManagementSettings) (*ResourceAccessManagementSettings, *resty.Response, error)
-	}
-
 	// Service handles communication with the access management settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment-access-management
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AccessManagementSettingsServiceInterface = (*AccessManagementSettings)(nil)
 
 func NewAccessManagementSettings(client transport.HTTPClient) *AccessManagementSettings {
 	return &AccessManagementSettings{client: client}

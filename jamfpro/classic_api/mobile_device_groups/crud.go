@@ -10,57 +10,6 @@ import (
 )
 
 type (
-	// MobileDeviceGroupsServiceInterface defines the interface for Classic API mobile device group operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledevicegroups
-	MobileDeviceGroupsServiceInterface interface {
-		// List returns all mobile device groups.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicegroups
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified mobile device group by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicegroupsbyid
-		GetByID(ctx context.Context, id int) (*ResourceMobileDeviceGroup, *resty.Response, error)
-
-		// GetByName returns the specified mobile device group by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicegroupsbyname
-		GetByName(ctx context.Context, name string) (*ResourceMobileDeviceGroup, *resty.Response, error)
-
-		// Create creates a new mobile device group.
-		//
-		// Returns the created mobile device group ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledevicegroupbyid
-		Create(ctx context.Context, req *RequestMobileDeviceGroup) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified mobile device group by ID.
-		//
-		// Returns the updated mobile device group ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicegroupbyid
-		UpdateByID(ctx context.Context, id int, req *RequestMobileDeviceGroup) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified mobile device group by name.
-		//
-		// Returns the updated mobile device group ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicegroupbyname
-		UpdateByName(ctx context.Context, name string, req *RequestMobileDeviceGroup) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified mobile device group by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicegroupbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified mobile device group by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicegroupbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the mobile-device-groups-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledevicegroups
@@ -68,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ MobileDeviceGroupsServiceInterface = (*MobileDeviceGroups)(nil)
 
 // NewService returns a new mobile device groups Service backed by the provided HTTP client.
 func NewMobileDeviceGroups(client transport.HTTPClient) *MobileDeviceGroups {

@@ -11,23 +11,6 @@ import (
 )
 
 type (
-	// SitesServiceInterface defines the interface for sites operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites
-	SitesServiceInterface interface {
-		// ListV1 returns all sites.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites
-		ListV1(ctx context.Context) ([]ResourceSite, *resty.Response, error)
-
-		// GetObjectsByIDV1 returns paginated objects for a site.
-		//
-		// Query params: page, page-size, sort, filter (RSQL)
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites-id-objects
-		GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ObjectsListResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the sites-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites
@@ -35,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SitesServiceInterface = (*Sites)(nil)
 
 func NewSites(client transport.HTTPClient) *Sites {
 	return &Sites{client: client}

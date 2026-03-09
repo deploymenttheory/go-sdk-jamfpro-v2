@@ -10,36 +10,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for static mobile device group operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-static-groups
-	ServiceInterface interface {
-		// List returns all static mobile device groups (Get Static Mobile Device Group objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-static-groups
-		List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified static mobile device group by ID (Get specified Static Mobile Device Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-static-groups-id
-		GetByID(ctx context.Context, id string) (*ResourceStaticMobileDeviceGroup, *resty.Response, error)
-
-		// Create creates a new static mobile device group (Create Static Mobile Device Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mobile-device-groups-static-groups
-		Create(ctx context.Context, request *RequestStaticMobileDeviceGroup) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified static mobile device group by ID (Update specified Static Mobile Device Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-mobile-device-groups-static-groups-id
-		UpdateByID(ctx context.Context, id string, request *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *resty.Response, error)
-
-		// DeleteByID removes the specified static mobile device group by ID (Remove specified Static Mobile Device Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-mobile-device-groups-static-groups-id
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the static mobile device groups-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-static-groups
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*StaticMobileDeviceGroups)(nil)
 
 func NewStaticMobileDeviceGroups(client transport.HTTPClient) *StaticMobileDeviceGroups {
 	return &StaticMobileDeviceGroups{client: client}

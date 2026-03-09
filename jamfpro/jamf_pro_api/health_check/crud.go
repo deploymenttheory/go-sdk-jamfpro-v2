@@ -9,22 +9,6 @@ import (
 )
 
 type (
-	// HealthCheckServiceInterface defines the interface for health check operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
-	HealthCheckServiceInterface interface {
-		// GetV1 returns whether the Jamf Pro API is healthy (Get Health Check).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
-		GetV1(ctx context.Context) (healthy bool, resp *resty.Response, err error)
-
-		// GetHealthStatusV1 returns request acceptance ratios for each concurrency group and time window.
-		// Only available in Jamf Cloud; returns 404 on non-cloud nodes.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-status
-		GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus, *resty.Response, error)
-	}
-
 	// Service handles communication with the health check-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
@@ -32,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ HealthCheckServiceInterface = (*HealthCheck)(nil)
 
 func NewHealthCheck(client transport.HTTPClient) *HealthCheck {
 	return &HealthCheck{client: client}

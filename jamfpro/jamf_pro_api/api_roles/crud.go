@@ -11,36 +11,6 @@ import (
 )
 
 type (
-	// APIRolesServiceInterface defines the interface for API role operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiroles
-	APIRolesServiceInterface interface {
-		// ListV1 returns all API role objects (Get API Role objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiroles
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified API role by ID (Get specified API Role object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getoneapirole
-		GetByIDV1(ctx context.Context, id string) (*ResourceAPIRole, *resty.Response, error)
-
-		// CreateV1 creates a new API role (Create API Role record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateapirole
-		CreateV1(ctx context.Context, request *RequestAPIRole) (*ResourceAPIRole, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified API role by ID (Update specified API Role object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/putupdateapirole
-		UpdateByIDV1(ctx context.Context, id string, request *RequestAPIRole) (*ResourceAPIRole, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified API role by ID (Remove specified API Role record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/deleteapirole
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the API roles-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiroles
@@ -48,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ APIRolesServiceInterface = (*ApiRoles)(nil)
 
 func NewApiRoles(client transport.HTTPClient) *ApiRoles {
 	return &ApiRoles{client: client}

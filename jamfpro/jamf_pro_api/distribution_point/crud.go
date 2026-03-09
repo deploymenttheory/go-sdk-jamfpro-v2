@@ -11,63 +11,6 @@ import (
 )
 
 type (
-	// DistributionPointServiceInterface defines the interface for Distribution Point operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points
-	DistributionPointServiceInterface interface {
-		// ListV1 retrieves all distribution points with pagination and RSQL filtering.
-		//
-		// Supports optional RSQL filtering, pagination and sorting via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		// Fields allowed in filter: name, serverName, principal, fileSharingConnectionType, httpsEnabled.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// CreateV1 creates a new distribution point.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points
-		CreateV1(ctx context.Context, request *RequestDistributionPoint) (*CreateResponse, *resty.Response, error)
-
-		// DeleteMultipleV1 deletes multiple distribution points at once.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points-delete-multiple
-		DeleteMultipleV1(ctx context.Context, ids []string) (*resty.Response, error)
-
-		// GetByIDV1 retrieves a single distribution point by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceDistributionPoint, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified distribution point by ID (full update with PUT).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-distribution-points-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified distribution point by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-distribution-points-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// PatchByIDV1 partially updates the specified distribution point by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-distribution-points-id
-		PatchByIDV1(ctx context.Context, id string, request *RequestDistributionPoint) (*ResourceDistributionPoint, *resty.Response, error)
-
-		// GetHistoryByIDV1 retrieves the history for a distribution point with pagination.
-		//
-		// Supports optional RSQL filtering, pagination and sorting via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points-id-history
-		GetHistoryByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error)
-
-		// CreateHistoryNoteV1 adds a history note to a distribution point.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-distribution-points-id-history
-		CreateHistoryNoteV1(ctx context.Context, id string, note string) (*HistoryEntry, *resty.Response, error)
-	}
-
 	// Service handles communication with the Distribution Point-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points
@@ -75,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DistributionPointServiceInterface = (*DistributionPoint)(nil)
 
 func NewDistributionPoint(client transport.HTTPClient) *DistributionPoint {
 	return &DistributionPoint{client: client}

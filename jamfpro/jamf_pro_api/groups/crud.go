@@ -11,68 +11,6 @@ import (
 )
 
 type (
-	// GroupsServiceInterface defines the interface for Groups operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-	GroupsServiceInterface interface {
-		// ListV1 retrieves a paginated list of groups.
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 retrieves a group by its platform ID (groupPlatformId).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *resty.Response, error)
-
-		// GetComputerGroupByNameV1 retrieves a computer group by its name (groupName).
-		//
-		// This method filters by groupName and groupType=COMPUTER.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		GetComputerGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *resty.Response, error)
-
-		// GetMobileGroupByNameV1 retrieves a mobile device group by its name (groupName).
-		//
-		// This method filters by groupName and groupType=MOBILE.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		GetMobileGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *resty.Response, error)
-
-		// GetComputerGroupByIDV1 retrieves a computer group by its Jamf Pro ID (groupJamfProId).
-		//
-		// This method filters by groupJamfProId and groupType=COMPUTER.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		GetComputerGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *resty.Response, error)
-
-		// GetMobileGroupByIDV1 retrieves a mobile device group by its Jamf Pro ID (groupJamfProId).
-		//
-		// This method filters by groupJamfProId and groupType=MOBILE.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
-		GetMobileGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *resty.Response, error)
-
-		// UpdateByIDV1 updates a group by its platform ID.
-		//
-		// For both smart and static groups, groupName and groupDescription can be updated.
-		// For smart groups, criteria can also be updated.
-		// For static groups, assignments can also be updated.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-groups-id
-		UpdateByIDV1(ctx context.Context, id string, req *RequestUpdateGroup) (*ResourceGroup, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified group by its platform ID.
-		//
-		// Returns a 400 error if the group is being used as a dependency.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-groups-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the Groups-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-groups
@@ -80,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ GroupsServiceInterface = (*Groups)(nil)
 
 func NewGroups(client transport.HTTPClient) *Groups {
 	return &Groups{client: client}

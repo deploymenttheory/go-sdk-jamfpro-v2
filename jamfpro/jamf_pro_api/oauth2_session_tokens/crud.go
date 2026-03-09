@@ -9,16 +9,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for OAuth2 session token operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oauth2-session-tokens
-	ServiceInterface interface {
-		// GetV1 retrieves OAuth2 session tokens (Get OAuth2 Session Tokens).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oauth2-session-tokens
-		GetV1(ctx context.Context) (*SessionTokenResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the OAuth2 session token-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-oauth2-session-tokens
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*Oauth2SessionTokens)(nil)
 
 func NewOauth2SessionTokens(client transport.HTTPClient) *Oauth2SessionTokens {
 	return &Oauth2SessionTokens{client: client}

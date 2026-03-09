@@ -11,61 +11,6 @@ import (
 )
 
 type (
-	// VolumePurchasingLocationsServiceInterface defines the interface for volume purchasing location operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
-	VolumePurchasingLocationsServiceInterface interface {
-		// ListV1 returns all volume purchasing location objects (Get Volume Purchasing Location objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified volume purchasing location by ID (Get specified Volume Purchasing Location object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceVolumePurchasingLocation, *resty.Response, error)
-
-		// CreateV1 creates a new volume purchasing location (Create Volume Purchasing Location record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations
-		CreateV1(ctx context.Context, request *RequestVolumePurchasingLocation) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified volume purchasing location by ID (Update specified Volume Purchasing Location object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-volume-purchasing-locations-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified volume purchasing location by ID (Remove specified Volume Purchasing Location record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-volume-purchasing-locations-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// ReclaimVolumePurchasingLocationByIDV1 reclaims the specified volume purchasing location by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-reclaim
-		ReclaimVolumePurchasingLocationByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// GetContentV1 returns the content for the specified volume purchasing location.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id-content
-		GetContentV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ContentListResponse, *resty.Response, error)
-
-		// GetHistoryV1 returns the history for the specified volume purchasing location.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id-history
-		GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error)
-
-		// AddHistoryNotesV1 adds history notes to the specified volume purchasing location.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-history
-		AddHistoryNotesV1(ctx context.Context, id string, request *AddHistoryNotesRequest) (*resty.Response, error)
-
-		// RevokeVolumePurchasingLocationLicensesByIDV1 revokes licenses for the specified volume purchasing location.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-revoke-licenses
-		RevokeVolumePurchasingLocationLicensesByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the volume purchasing locations-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
@@ -73,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ VolumePurchasingLocationsServiceInterface = (*VolumePurchasingLocations)(nil)
 
 func NewVolumePurchasingLocations(client transport.HTTPClient) *VolumePurchasingLocations {
 	return &VolumePurchasingLocations{client: client}

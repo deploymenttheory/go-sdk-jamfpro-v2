@@ -10,36 +10,6 @@ import (
 )
 
 type (
-	// ComputerInvitationsServiceInterface defines the interface for Classic API computer invitation operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
-	ComputerInvitationsServiceInterface interface {
-		// List returns all computer invitations.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified computer invitation by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyid
-		GetByID(ctx context.Context, id string) (*ResourceComputerInvitation, *resty.Response, error)
-
-		// GetByInvitationID returns the specified computer invitation by invitation ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyinvitation
-		GetByInvitationID(ctx context.Context, invitationID string) (*ResourceComputerInvitation, *resty.Response, error)
-
-		// Create creates a new computer invitation.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputerinvitationbyid
-		Create(ctx context.Context, req *ResourceComputerInvitation) (*ResourceComputerInvitation, *resty.Response, error)
-
-		// DeleteByID removes the specified computer invitation by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerinvitationbyid
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the computer-invitations-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ComputerInvitationsServiceInterface = (*ComputerInvitations)(nil)
 
 // NewService returns a new computer invitations Service backed by the provided HTTP client.
 func NewComputerInvitations(client transport.HTTPClient) *ComputerInvitations {

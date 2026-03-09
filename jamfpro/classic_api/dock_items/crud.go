@@ -10,51 +10,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API dock item operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/dockitems
-	ServiceInterface interface {
-		// List returns all dock items.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddockitems
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified dock item by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddockitemsbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified dock item by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddockitemsbyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// Create creates a new dock item.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdockitembyid
-		Create(ctx context.Context, req *Request) (*Resource, *resty.Response, error)
-
-		// UpdateByID updates the specified dock item by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedockitembyid
-		UpdateByID(ctx context.Context, id int, req *Request) (*Resource, *resty.Response, error)
-
-		// UpdateByName updates the specified dock item by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedockitembyname
-		UpdateByName(ctx context.Context, name string, req *Request) (*Resource, *resty.Response, error)
-
-		// DeleteByID removes the specified dock item by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedockitembyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified dock item by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedockitembyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the dock-items-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/dockitems
@@ -62,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*DockItems)(nil)
 
 // NewService returns a new dock items Service backed by the provided HTTP client.
 func NewDockItems(client transport.HTTPClient) *DockItems {

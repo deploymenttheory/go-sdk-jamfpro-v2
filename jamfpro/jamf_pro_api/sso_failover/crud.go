@@ -9,21 +9,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for SSO failover operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sso-failover
-	ServiceInterface interface {
-		// GetV1 retrieves the current SSO failover settings (Get SSO Failover Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sso-failover
-		GetV1(ctx context.Context) (*FailoverSettings, *resty.Response, error)
-
-		// RegenerateV1 generates a new SSO failover URL (Regenerate SSO Failover URL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-sso-failover-generate
-		RegenerateV1(ctx context.Context) (*FailoverSettings, *resty.Response, error)
-	}
-
 	// Service handles communication with the SSO failover-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sso-failover
@@ -31,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*SsoFailover)(nil)
 
 func NewSsoFailover(client transport.HTTPClient) *SsoFailover {
 	return &SsoFailover{client: client}

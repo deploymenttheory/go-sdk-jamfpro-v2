@@ -11,33 +11,6 @@ import (
 )
 
 type (
-	// EbooksServiceInterface defines the interface for ebook operations (Jamf Pro API v1).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks
-	EbooksServiceInterface interface {
-		// ListV1 returns all ebook objects (Get Ebook objects).
-		//
-		// Returns a paged list of ebook objects. Optional query parameters support
-		// pagination and sorting (page, page-size, sort).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified ebook by ID (Get specified Ebook object).
-		//
-		// Returns a single ebook object for the given ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *resty.Response, error)
-
-		// GetScopeByIDV1 returns the scope for the specified ebook by ID (Get specified scope of Ebook object).
-		//
-		// Returns scope with assignments, limitations, and exclusions.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks-id-scope
-		GetScopeByIDV1(ctx context.Context, id string) (*ResourceScope, *resty.Response, error)
-	}
-
 	// Service handles communication with the ebooks-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks
@@ -45,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ EbooksServiceInterface = (*Ebooks)(nil)
 
 func NewEbooks(client transport.HTTPClient) *Ebooks {
 	return &Ebooks{client: client}

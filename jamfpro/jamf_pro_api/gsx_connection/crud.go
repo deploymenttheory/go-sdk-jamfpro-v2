@@ -11,45 +11,6 @@ import (
 )
 
 type (
-	// GSXConnectionServiceInterface defines the interface for GSX connection operations.
-	//
-	// Manages GSX (Global Service Exchange) connection settings for Apple repair services.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection
-	GSXConnectionServiceInterface interface {
-		// GetV1 retrieves the GSX connection settings.
-		//
-		// Returns current configuration including keystore details and service account info.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection
-		GetV1(ctx context.Context) (*ResourceGSXConnection, *resty.Response, error)
-
-		// ReplaceV1 replaces the GSX connection settings via PUT.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-gsx-connection
-		ReplaceV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *resty.Response, error)
-
-		// UpdateV1 updates the GSX connection settings via PATCH.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-gsx-connection
-		UpdateV1(ctx context.Context, request *ResourceGSXConnection) (*ResourceGSXConnection, *resty.Response, error)
-
-		// GetHistoryV1 retrieves GSX connection history with optional sorting.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteV1 adds a history note to the GSX connection.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-gsx-connection-history
-		AddHistoryNoteV1(ctx context.Context, request *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *resty.Response, error)
-
-		// TestV1 tests the functionality of the GSX connection.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-gsx-connection-test
-		TestV1(ctx context.Context) (*resty.Response, error)
-	}
-
 	// Service handles communication with the GSX connection-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection
@@ -57,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ GSXConnectionServiceInterface = (*GsxConnection)(nil)
 
 func NewGsxConnection(client transport.HTTPClient) *GsxConnection {
 	return &GsxConnection{client: client}

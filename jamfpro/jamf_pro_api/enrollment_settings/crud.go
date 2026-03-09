@@ -9,16 +9,6 @@ import (
 )
 
 type (
-	// EnrollmentSettingsServiceInterface defines the interface for enrollment settings operations (v4).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
-	EnrollmentSettingsServiceInterface interface {
-		// GetV4 retrieves the current enrollment settings (Get Enrollment Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
-		GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *resty.Response, error)
-	}
-
 	// Service handles communication with the enrollment settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ EnrollmentSettingsServiceInterface = (*EnrollmentSettings)(nil)
 
 func NewEnrollmentSettings(client transport.HTTPClient) *EnrollmentSettings {
 	return &EnrollmentSettings{client: client}

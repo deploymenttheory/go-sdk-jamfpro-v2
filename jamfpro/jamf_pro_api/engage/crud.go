@@ -10,44 +10,6 @@ import (
 )
 
 type (
-	// EngageServiceInterface defines the interface for Engage operations.
-	//
-	// Note: This feature is deprecated in Jamf Pro v11.21.0 and later.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/v11.20.0/reference/get_v2-engage
-	EngageServiceInterface interface {
-		// GetV2 retrieves the Engage settings from the Jamf Pro server.
-		//
-		// Note: This feature is deprecated in Jamf Pro v11.21.0 and later.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/v11.20.0/reference/get_v2-engage
-		GetV2(ctx context.Context) (*ResourceEngageSettings, *resty.Response, error)
-
-		// UpdateV2 updates the Engage settings on the Jamf Pro server.
-		//
-		// Note: This feature is deprecated in Jamf Pro v11.21.0 and later.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/v11.20.0/reference/put_v2-engage
-		UpdateV2(ctx context.Context, settings *ResourceEngageSettings) (*ResourceEngageSettings, *resty.Response, error)
-
-		// GetHistoryV2 returns the history object for Engage settings.
-		//
-		// Supports optional RSQL filtering and pagination via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Note: This feature is deprecated in Jamf Pro v11.21.0 and later.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/v11.20.0/reference/get_v2-engage-history
-		GetHistoryV2(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNotesV2 adds notes to the Engage settings history.
-		//
-		// Note: This feature is deprecated in Jamf Pro v11.21.0 and later.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/v11.20.0/reference/post_v2-engage-history
-		AddHistoryNotesV2(ctx context.Context, req *RequestAddHistoryNotes) (*ResponseAddHistoryNotes, *resty.Response, error)
-	}
-
 	// Service handles communication with the Engage-related methods of the Jamf Pro API.
 	//
 	// Note: This feature is deprecated in Jamf Pro v11.21.0 and later.
@@ -57,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ EngageServiceInterface = (*Engage)(nil)
 
 // NewService returns a new Engage Service backed by the provided HTTP client.
 func NewEngage(client transport.HTTPClient) *Engage {

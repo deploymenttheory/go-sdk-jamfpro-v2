@@ -10,61 +10,6 @@ import (
 )
 
 type (
-	// MobileDevicesServiceInterface defines the interface for Classic API mobile device operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledevices
-	MobileDevicesServiceInterface interface {
-		// List returns all mobile devices.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevices
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified mobile device by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyid
-		GetByID(ctx context.Context, id string) (*ResponseMobileDevice, *resty.Response, error)
-
-		// GetByName returns the specified mobile device by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyname
-		GetByName(ctx context.Context, name string) (*ResponseMobileDevice, *resty.Response, error)
-
-		// GetByIDAndDataSubset returns a specific subset of data for the mobile device by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyid
-		GetByIDAndDataSubset(ctx context.Context, id, subset string) (*ResponseMobileDevice, *resty.Response, error)
-
-		// GetByNameAndDataSubset returns a specific subset of data for the mobile device by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevicesbyname
-		GetByNameAndDataSubset(ctx context.Context, name, subset string) (*ResponseMobileDevice, *resty.Response, error)
-
-		// Create creates a new mobile device.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledevicebyid
-		Create(ctx context.Context, device *ResponseMobileDevice) (*ResponseMobileDevice, *resty.Response, error)
-
-		// UpdateByID updates the specified mobile device by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicebyid
-		UpdateByID(ctx context.Context, id string, device *ResponseMobileDevice) (*ResponseMobileDevice, *resty.Response, error)
-
-		// UpdateByName updates the specified mobile device by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledevicebyname
-		UpdateByName(ctx context.Context, name string, device *ResponseMobileDevice) (*ResponseMobileDevice, *resty.Response, error)
-
-		// DeleteByID removes the specified mobile device by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicebyid
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByName removes the specified mobile device by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledevicebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the mobile-devices-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledevices
@@ -72,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ MobileDevicesServiceInterface = (*MobileDevices)(nil)
 
 // NewService returns a new mobile devices Service backed by the provided HTTP client.
 func NewMobileDevices(client transport.HTTPClient) *MobileDevices {

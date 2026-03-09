@@ -11,61 +11,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API computer history operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerhistory
-	ServiceInterface interface {
-		// GetByID retrieves computer history by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
-		GetByID(ctx context.Context, id string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByIDAndSubset retrieves a subset of computer history by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
-		GetByIDAndSubset(ctx context.Context, id string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByName retrieves computer history by computer name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
-		GetByName(ctx context.Context, name string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByNameAndSubset retrieves a subset of computer history by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
-		GetByNameAndSubset(ctx context.Context, name string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByUDID retrieves computer history by UDID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
-		GetByUDID(ctx context.Context, udid string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByUDIDAndSubset retrieves a subset of computer history by UDID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
-		GetByUDIDAndSubset(ctx context.Context, udid string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetBySerialNumber retrieves computer history by serial number.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
-		GetBySerialNumber(ctx context.Context, serialNumber string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetBySerialNumberAndSubset retrieves a subset of computer history by serial number.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
-		GetBySerialNumberAndSubset(ctx context.Context, serialNumber string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByMACAddress retrieves computer history by MAC address.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
-		GetByMACAddress(ctx context.Context, macAddress string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByMACAddressAndSubset retrieves a subset of computer history by MAC address.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
-		GetByMACAddressAndSubset(ctx context.Context, macAddress string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-	}
-
 	// Service handles communication with the computer-history-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerhistory
@@ -73,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*ComputerHistory)(nil)
 
 // NewService returns a new computer history Service backed by the provided HTTP client.
 func NewComputerHistory(client transport.HTTPClient) *ComputerHistory {

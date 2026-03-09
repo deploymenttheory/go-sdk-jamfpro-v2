@@ -10,21 +10,6 @@ import (
 )
 
 type (
-	// CacheSettingsServiceInterface defines the interface for cache settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cache-settings
-	CacheSettingsServiceInterface interface {
-		// GetV1 retrieves the current cache settings (Get Cache Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cache-settings
-		GetV1(ctx context.Context) (*ResourceCacheSettings, *resty.Response, error)
-
-		// UpdateV1 updates the cache settings (Update Cache Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-cache-settings
-		UpdateV1(ctx context.Context, request *ResourceCacheSettings) (*ResourceCacheSettings, *resty.Response, error)
-	}
-
 	// Service handles communication with the cache settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cache-settings
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CacheSettingsServiceInterface = (*CacheSettings)(nil)
 
 func NewCacheSettings(client transport.HTTPClient) *CacheSettings {
 	return &CacheSettings{client: client}

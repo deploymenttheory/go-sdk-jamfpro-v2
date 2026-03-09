@@ -9,16 +9,6 @@ import (
 )
 
 type (
-	// JamfProVersionServiceInterface defines the interface for Jamf Pro version (read-only).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-version
-	JamfProVersionServiceInterface interface {
-		// GetV1 returns the Jamf Pro server version (Get Jamf Pro Version).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-version
-		GetV1(ctx context.Context) (*ResourceJamfProVersion, *resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Pro version-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-version
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfProVersionServiceInterface = (*JamfProVersion)(nil)
 
 func NewJamfProVersion(client transport.HTTPClient) *JamfProVersion {
 	return &JamfProVersion{client: client}

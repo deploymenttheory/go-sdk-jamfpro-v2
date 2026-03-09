@@ -11,38 +11,6 @@ import (
 )
 
 type (
-	// SMTPServerServiceInterface defines the interface for SMTP server operations (singleton).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
-	SMTPServerServiceInterface interface {
-		// GetV2 returns the current SMTP server configuration (Get SMTP server).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
-		GetV2(ctx context.Context) (*ResourceSMTPServer, *resty.Response, error)
-
-		// UpdateV2 updates the SMTP server configuration (Update SMTP server).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
-		UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *resty.Response, error)
-
-		// GetHistoryV1 returns the paginated SMTP server history.
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteV1 adds a note to the SMTP server history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-history
-		AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *resty.Response, error)
-
-		// TestV1 tests the SMTP server configuration by sending a test email.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-test
-		TestV1(ctx context.Context, req *TestRequest) (*resty.Response, error)
-	}
-
 	// Service handles communication with the SMTP server-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
@@ -50,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SMTPServerServiceInterface = (*SmtpServer)(nil)
 
 func NewSmtpServer(client transport.HTTPClient) *SmtpServer {
 	return &SmtpServer{client: client}

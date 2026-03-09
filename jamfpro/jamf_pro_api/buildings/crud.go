@@ -11,76 +11,6 @@ import (
 )
 
 type (
-	// BuildingsServiceInterface defines the interface for building operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
-	BuildingsServiceInterface interface {
-		// ListV1 returns all building objects (Get Building objects).
-		//
-		// Returns a paged list of building objects. Optional query parameters support
-		// filtering and pagination (page, pageSize, sort).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified building by ID (Get specified Building object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceBuilding, *resty.Response, error)
-
-		// CreateV1 creates a new building record (Create Building record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings
-		CreateV1(ctx context.Context, request *RequestBuilding) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified building by ID (Update specified Building object).
-		//
-		// Returns the full updated building resource.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-buildings-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestBuilding) (*ResourceBuilding, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified building by ID (Remove specified Building record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-buildings-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteBuildingsByIDV1 deletes multiple buildings by their IDs (Delete multiple Buildings by their IDs).
-		//
-		// Sends a POST to /api/v1/buildings/delete-multiple with a body containing building IDs.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-delete-multiple
-		DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuildingsByIDRequest) (*resty.Response, error)
-
-		// GetBuildingHistoryV1 returns the history object for the specified building.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings-id-history
-		GetBuildingHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddBuildingHistoryNotesV1 adds notes to the specified building history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history
-		AddBuildingHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error)
-
-		// ExportV1 exports the buildings collection in the specified format (JSON or CSV).
-		//
-		// POST /api/v1/buildings/export. Optional query params: page, page-size, sort, filter,
-		// export-fields, export-labels. Optional body overrides when URI exceeds ~2k chars.
-		// acceptType should be constants.TextCSV or constants.ApplicationJSON.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-export
-		ExportV1(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
-
-		// ExportHistoryV1 exports the history for the specified building in the specified format (JSON or CSV).
-		//
-		// POST /api/v1/buildings/{id}/history/export. Optional query params: page, page-size, sort,
-		// filter, export-fields, export-labels. Optional body overrides when URI exceeds ~2k chars.
-		// acceptType should be constants.TextCSV or constants.ApplicationJSON.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history-export
-		ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
-	}
-
 	// Service handles communication with the buildings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-buildings
@@ -88,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ BuildingsServiceInterface = (*Buildings)(nil)
 
 func NewBuildings(client transport.HTTPClient) *Buildings {
 	return &Buildings{client: client}

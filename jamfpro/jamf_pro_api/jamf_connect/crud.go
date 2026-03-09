@@ -11,68 +11,6 @@ import (
 )
 
 type (
-	// JamfConnectServiceInterface defines the interface for Jamf Connect operations.
-	//
-	// Manages Jamf Connect settings and configuration profiles for the Jamf Connect app.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect
-	JamfConnectServiceInterface interface {
-		// GetSettingsV1 retrieves the Jamf Connect settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect
-		GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *resty.Response, error)
-
-		// ListConfigProfilesV1 lists all Jamf Connect config profiles with pagination support.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-config-profiles
-		ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetConfigProfileByUUIDV1 retrieves a specific Jamf Connect config profile by UUID.
-		//
-		// Helper method that searches through the list of profiles.
-		GetConfigProfileByUUIDV1(ctx context.Context, uuid string) (*ResourceJamfConnectConfigProfile, *resty.Response, error)
-
-		// GetConfigProfileByIDV1 retrieves a specific Jamf Connect config profile by profile ID.
-		//
-		// Helper method that searches through the list of profiles.
-		GetConfigProfileByIDV1(ctx context.Context, profileID int) (*ResourceJamfConnectConfigProfile, *resty.Response, error)
-
-		// GetConfigProfileByNameV1 retrieves a specific Jamf Connect config profile by name.
-		//
-		// Helper method that searches through the list of profiles.
-		GetConfigProfileByNameV1(ctx context.Context, name string) (*ResourceJamfConnectConfigProfile, *resty.Response, error)
-
-		// UpdateConfigProfileByUUIDV1 updates a Jamf Connect config profile by UUID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-jamf-connect-config-profiles-uuid
-		UpdateConfigProfileByUUIDV1(ctx context.Context, uuid string, request *ResourceJamfConnectConfigProfileUpdate) (*ResourceJamfConnectConfigProfile, *resty.Response, error)
-
-		// GetDeploymentTasksByIDV1 retrieves deployment tasks for a specific Jamf Connect deployment.
-		//
-		// Supports optional RSQL filtering, pagination and sorting via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-deployments-id-tasks
-		GetDeploymentTasksByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*DeploymentTasksResponse, *resty.Response, error)
-
-		// GetHistoryV1 retrieves the history for Jamf Connect.
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteV1 adds a note to the Jamf Connect history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-history
-		AddHistoryNoteV1(ctx context.Context, req *RequestAddHistoryNote) (*resty.Response, error)
-
-		// RetryDeploymentTasksByUUIDV1 retries Connect install tasks for specified computers.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-connect-deployments-configprofileuuid-tasks-retry
-		RetryDeploymentTasksByUUIDV1(ctx context.Context, uuid string, computerIDs []string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Connect-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect
@@ -80,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfConnectServiceInterface = (*JamfConnect)(nil)
 
 func NewJamfConnect(client transport.HTTPClient) *JamfConnect {
 	return &JamfConnect{client: client}

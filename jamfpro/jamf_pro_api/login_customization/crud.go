@@ -10,21 +10,6 @@ import (
 )
 
 type (
-	// LoginCustomizationServiceInterface defines the interface for login customization operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
-	LoginCustomizationServiceInterface interface {
-		// GetV1 returns the current login customization settings (Get Login Customization).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
-		GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *resty.Response, error)
-
-		// UpdateV1 updates login customization settings (Update Login Customization / PUT).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-login-customization
-		UpdateV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *resty.Response, error)
-	}
-
 	// Service handles communication with the login customization-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ LoginCustomizationServiceInterface = (*LoginCustomization)(nil)
 
 func NewLoginCustomization(client transport.HTTPClient) *LoginCustomization {
 	return &LoginCustomization{client: client}

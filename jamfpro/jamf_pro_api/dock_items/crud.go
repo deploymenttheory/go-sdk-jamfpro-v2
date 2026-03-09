@@ -10,33 +10,6 @@ import (
 )
 
 type (
-	// DockItemsServiceInterface defines the interface for dock item operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-dock-items
-	DockItemsServiceInterface interface {
-		// GetByIDV1 returns the specified dock item by ID (Get specified Dock Item object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dock-items-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceDockItem, *resty.Response, error)
-
-		// CreateV1 creates a new dock item record (Create Dock Item record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-dock-items
-		CreateV1(ctx context.Context, request *RequestDockItem) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified dock item by ID (Update specified Dock Item object).
-		//
-		// Returns the full updated dock item resource.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-dock-items-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestDockItem) (*ResourceDockItem, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified dock item by ID (Remove specified Dock Item record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-dock-items-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the dock items-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-dock-items
@@ -44,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DockItemsServiceInterface = (*DockItems)(nil)
 
 func NewDockItems(client transport.HTTPClient) *DockItems {
 	return &DockItems{client: client}

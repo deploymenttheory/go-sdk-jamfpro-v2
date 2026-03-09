@@ -9,16 +9,6 @@ import (
 )
 
 type (
-	// NotificationsServiceInterface defines the interface for notifications (read-only).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-	NotificationsServiceInterface interface {
-		// ListV1 returns all notifications for the current user and site (Get Notifications).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-		ListV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error)
-	}
-
 	// Service handles communication with the notifications methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ NotificationsServiceInterface = (*Notifications)(nil)
 
 func NewNotifications(client transport.HTTPClient) *Notifications {
 	return &Notifications{client: client}

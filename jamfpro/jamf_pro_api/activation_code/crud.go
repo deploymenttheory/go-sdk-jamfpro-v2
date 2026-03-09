@@ -11,36 +11,6 @@ import (
 )
 
 type (
-	// ActivationCodeServiceInterface defines the interface for activation code operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-activation-code-history
-	ActivationCodeServiceInterface interface {
-		// UpdateV1 updates the activation code in Jamf Pro.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-activation-code
-		UpdateV1(ctx context.Context, req *ActivationCodeRequest) (*resty.Response, error)
-
-		// UpdateOrganizationNameV1 updates the organization name in Jamf Pro.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-activation-code-organization-name
-		UpdateOrganizationNameV1(ctx context.Context, req *OrganizationNameRequest) (*resty.Response, error)
-
-		// GetHistoryV1 retrieves activation code history with optional RSQL filtering.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-activation-code-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteV1 adds a note to activation code history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-activation-code-history
-		AddHistoryNoteV1(ctx context.Context, req *HistoryNoteRequest) (*HistoryEntry, *resty.Response, error)
-
-		// ExportHistoryV1 exports activation code history in specified format (JSON or CSV).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-activation-code-history-export
-		ExportHistoryV1(ctx context.Context, queryParams map[string]string, req *HistoryExportRequest) (*HistoryExportResponse, *resty.Response, error)
-	}
-
 	// Service provides methods for interacting with activation code endpoints.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-activation-code-history
@@ -48,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ActivationCodeServiceInterface = (*ActivationCode)(nil)
 
 // NewService creates a new activation_code service.
 func NewActivationCode(client transport.HTTPClient) *ActivationCode {

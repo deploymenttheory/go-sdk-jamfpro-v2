@@ -10,51 +10,6 @@ import (
 )
 
 type (
-	// CloudAzureServiceInterface defines the interface for Cloud Azure (Azure Cloud IDP) operations.
-	// Uses v1 API for all operations. Supports Azure Active Directory integration.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-azure
-	CloudAzureServiceInterface interface {
-		// GetDefaultServerConfigurationV1 returns the default server configuration for Azure Cloud IDP (Get Default Server Configuration).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-defaults-server-configuration
-		GetDefaultServerConfigurationV1(ctx context.Context) (*CloudAzureServer, *resty.Response, error)
-
-		// GetByIDV1 returns the Azure Cloud IDP configuration by ID (Get Cloud Identity Provider by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceCloudAzure, *resty.Response, error)
-
-		// GetByNameV1 returns the Azure Cloud IDP configuration by display name (searches all providers).
-		GetByNameV1(ctx context.Context, name string) (*ResourceCloudAzure, *resty.Response, error)
-
-		// CreateV1 creates a new Azure Cloud IDP configuration (Create Cloud Identity Provider).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-azure
-		CreateV1(ctx context.Context, request *ResourceCloudAzure) (*ResponseCloudAzureCreated, *resty.Response, error)
-
-		// UpdateByIDV1 updates the Azure Cloud IDP configuration by ID (Update Cloud Identity Provider by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-cloud-azure-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceCloudAzure) (*ResourceCloudAzure, *resty.Response, error)
-
-		// UpdateByNameV1 updates the Azure Cloud IDP configuration by display name.
-		UpdateByNameV1(ctx context.Context, name string, request *ResourceCloudAzure) (*ResourceCloudAzure, *resty.Response, error)
-
-		// DeleteByIDV1 deletes the Azure Cloud IDP configuration by ID (Delete Cloud Identity Provider by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-cloud-azure-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByNameV1 deletes the Azure Cloud IDP configuration by display name.
-		DeleteByNameV1(ctx context.Context, name string) (*resty.Response, error)
-
-		// GetDefaultMappingsV1 returns the default field mappings for Azure Cloud IDP (Get Default Mappings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-defaults-mappings
-		GetDefaultMappingsV1(ctx context.Context) (*CloudAzureServerMappings, *resty.Response, error)
-	}
-
 	// Service handles communication with the Cloud Azure-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-azure
@@ -62,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CloudAzureServiceInterface = (*CloudAzure)(nil)
 
 func NewCloudAzure(client transport.HTTPClient) *CloudAzure {
 	return &CloudAzure{client: client}

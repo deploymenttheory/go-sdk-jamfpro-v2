@@ -11,39 +11,6 @@ import (
 )
 
 type (
-	// StaticComputerGroupsServiceInterface defines the interface for static computer group operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups
-	StaticComputerGroupsServiceInterface interface {
-		// ListV2 returns all static computer groups.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups
-		ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV2 returns the specified static computer group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups-id
-		GetByIDV2(ctx context.Context, id string) (*ResourceStaticGroup, *resty.Response, error)
-
-		// GetByNameV2 returns the specified static computer group by name.
-		GetByNameV2(ctx context.Context, name string) (*ResourceStaticGroup, *resty.Response, error)
-
-		// CreateV2 creates a new static computer group.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-static-groups
-		CreateV2(ctx context.Context, request *RequestStaticGroup) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV2 updates the specified static computer group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-static-groups-id
-		UpdateByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*RequestStaticGroup, *resty.Response, error)
-
-		// DeleteByIDV2 removes the specified static computer group by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-groups-static-groups-id
-		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the static computer groups-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups
@@ -51,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ StaticComputerGroupsServiceInterface = (*StaticComputerGroups)(nil)
 
 func NewStaticComputerGroups(client transport.HTTPClient) *StaticComputerGroups {
 	return &StaticComputerGroups{client: client}

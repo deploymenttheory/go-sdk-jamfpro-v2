@@ -10,51 +10,6 @@ import (
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API licensed software operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/licensedsoftware
-	ServiceInterface interface {
-		// List returns all licensed software.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findlicensedsoftware
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified licensed software by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findlicensedsoftwarebyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified licensed software by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findlicensedsoftwarebyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// Create creates a new licensed software item.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createlicensedsoftwarebyid
-		Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified licensed software by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatelicensedsoftwarebyid
-		UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified licensed software by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatelicensedsoftwarebyname
-		UpdateByName(ctx context.Context, name string, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified licensed software by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletelicensedsoftwarebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified licensed software by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletelicensedsoftwarebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the licensed-software-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/licensedsoftware
@@ -62,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*LicensedSoftware)(nil)
 
 // NewService returns a new licensed software Service backed by the provided HTTP client.
 func NewLicensedSoftware(client transport.HTTPClient) *LicensedSoftware {
