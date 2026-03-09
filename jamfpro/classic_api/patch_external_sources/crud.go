@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -77,11 +77,11 @@ func NewPatchExternalSources(client transport.HTTPClient) *PatchExternalSources 
 func (s *PatchExternalSources) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicPatchExternalSources
+	endpoint := constants.EndpointClassicPatchExternalSources
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -100,13 +100,13 @@ func (s *PatchExternalSources) GetByID(ctx context.Context, id int) (*ResourcePa
 		return nil, nil, fmt.Errorf("patch external source ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicPatchExternalSources, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicPatchExternalSources, id)
 
 	var result ResourcePatchExternalSource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -125,13 +125,13 @@ func (s *PatchExternalSources) GetByName(ctx context.Context, name string) (*Res
 		return nil, nil, fmt.Errorf("patch external source name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicPatchExternalSources, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicPatchExternalSources, name)
 
 	var result ResourcePatchExternalSource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -151,13 +151,13 @@ func (s *PatchExternalSources) Create(ctx context.Context, req *RequestPatchExte
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicPatchExternalSources)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicPatchExternalSources)
 
 	var result ResourcePatchExternalSource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -179,13 +179,13 @@ func (s *PatchExternalSources) UpdateByID(ctx context.Context, id int, req *Requ
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicPatchExternalSources, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicPatchExternalSources, id)
 
 	var result ResourcePatchExternalSource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -207,13 +207,13 @@ func (s *PatchExternalSources) UpdateByName(ctx context.Context, name string, re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicPatchExternalSources, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicPatchExternalSources, name)
 
 	var result ResourcePatchExternalSource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -232,11 +232,11 @@ func (s *PatchExternalSources) DeleteByID(ctx context.Context, id int) (*resty.R
 		return nil, fmt.Errorf("patch external source ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicPatchExternalSources, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicPatchExternalSources, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

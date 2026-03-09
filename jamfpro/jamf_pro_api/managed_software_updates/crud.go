@@ -7,7 +7,7 @@ import (
 	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -130,12 +130,12 @@ func NewManagedSoftwareUpdates(client transport.HTTPClient) *ManagedSoftwareUpda
 // URL: GET /api/v1/managed-software-updates/available-updates
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-available-updates
 func (s *ManagedSoftwareUpdates) GetAvailableUpdates(ctx context.Context) (*ResponseAvailableUpdates, *resty.Response, error) {
-	endpoint := EndpointManagedSoftwareUpdates + "/available-updates"
+	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/available-updates"
 
 	var result ResponseAvailableUpdates
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -150,11 +150,11 @@ func (s *ManagedSoftwareUpdates) GetAvailableUpdates(ctx context.Context) (*Resp
 // URL: GET /api/v1/managed-software-updates/plans
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans
 func (s *ManagedSoftwareUpdates) GetPlans(ctx context.Context, params url.Values) (*ResponsePlanList, *resty.Response, error) {
-	endpoint := EndpointManagedSoftwareUpdates + "/plans"
+	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/plans"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	queryParams := make(map[string]string)
@@ -191,12 +191,12 @@ func (s *ManagedSoftwareUpdates) GetPlanByUUID(ctx context.Context, uuid string)
 		return nil, nil, fmt.Errorf("uuid is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/plans/%s", EndpointManagedSoftwareUpdates, uuid)
+	endpoint := fmt.Sprintf("%s/plans/%s", constants.EndpointJamfProManagedSoftwareUpdates, uuid)
 
 	var result ResourcePlan
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -215,12 +215,12 @@ func (s *ManagedSoftwareUpdates) GetDeclarationsByPlanUUID(ctx context.Context, 
 		return nil, nil, fmt.Errorf("uuid is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/plans/%s/declarations", EndpointManagedSoftwareUpdates, uuid)
+	endpoint := fmt.Sprintf("%s/plans/%s/declarations", constants.EndpointJamfProManagedSoftwareUpdates, uuid)
 
 	var result ResponseDeclarationsList
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -239,13 +239,13 @@ func (s *ManagedSoftwareUpdates) CreatePlanByDeviceID(ctx context.Context, plan 
 		return nil, nil, fmt.Errorf("plan is required")
 	}
 
-	endpoint := EndpointManagedSoftwareUpdates + "/plans"
+	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/plans"
 
 	var result ResponsePlanCreate
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, plan, headers, &result)
@@ -264,13 +264,13 @@ func (s *ManagedSoftwareUpdates) CreatePlanByGroupID(ctx context.Context, plan *
 		return nil, nil, fmt.Errorf("plan is required")
 	}
 
-	endpoint := EndpointManagedSoftwareUpdates + "/plans/group"
+	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/plans/group"
 
 	var result ResponsePlanCreate
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, plan, headers, &result)
@@ -292,12 +292,12 @@ func (s *ManagedSoftwareUpdates) GetPlansByGroupID(ctx context.Context, groupID 
 		return nil, nil, fmt.Errorf("groupType is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/plans/group/%s?group-type=%s", EndpointManagedSoftwareUpdates, groupID, groupType)
+	endpoint := fmt.Sprintf("%s/plans/group/%s?group-type=%s", constants.EndpointJamfProManagedSoftwareUpdates, groupID, groupType)
 
 	var result ResponsePlanList
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -312,12 +312,12 @@ func (s *ManagedSoftwareUpdates) GetPlansByGroupID(ctx context.Context, groupID 
 // URL: GET /api/v1/managed-software-updates/plans/feature-toggle
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-feature-toggle
 func (s *ManagedSoftwareUpdates) GetFeatureToggle(ctx context.Context) (*RequestFeatureToggle, *resty.Response, error) {
-	endpoint := EndpointManagedSoftwareUpdates + "/plans/feature-toggle"
+	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/plans/feature-toggle"
 
 	var result RequestFeatureToggle
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -336,13 +336,13 @@ func (s *ManagedSoftwareUpdates) UpdateFeatureToggle(ctx context.Context, toggle
 		return nil, nil, fmt.Errorf("toggle is required")
 	}
 
-	endpoint := EndpointManagedSoftwareUpdates + "/plans/feature-toggle"
+	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/plans/feature-toggle"
 
 	var result ResponseFeatureToggle
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, toggle, headers, &result)
@@ -357,12 +357,12 @@ func (s *ManagedSoftwareUpdates) UpdateFeatureToggle(ctx context.Context, toggle
 // URL: GET /api/v1/managed-software-updates/plans/feature-toggle/status
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans-feature-toggle-status
 func (s *ManagedSoftwareUpdates) GetFeatureToggleStatus(ctx context.Context) (*ResponseFeatureToggleStatus, *resty.Response, error) {
-	endpoint := EndpointManagedSoftwareUpdates + "/plans/feature-toggle/status"
+	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/plans/feature-toggle/status"
 
 	var result ResponseFeatureToggleStatus
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -378,13 +378,13 @@ func (s *ManagedSoftwareUpdates) GetFeatureToggleStatus(ctx context.Context) (*R
 // URL: POST /api/v1/managed-software-updates/plans/feature-toggle/abandon
 // https://developer.jamf.com/jamf-pro/reference/post_v1-managed-software-updates-plans-feature-toggle-abandon
 func (s *ManagedSoftwareUpdates) ForceStopFeatureToggleProcess(ctx context.Context) (*ResponseError, *resty.Response, error) {
-	endpoint := EndpointManagedSoftwareUpdates + "/plans/feature-toggle/abandon"
+	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/plans/feature-toggle/abandon"
 
 	var result ResponseError
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
@@ -403,12 +403,12 @@ func (s *ManagedSoftwareUpdates) GetPlanEventsByUUID(ctx context.Context, uuid s
 		return nil, nil, fmt.Errorf("uuid is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/plans/%s/events", EndpointManagedSoftwareUpdates, uuid)
+	endpoint := fmt.Sprintf("%s/plans/%s/events", constants.EndpointJamfProManagedSoftwareUpdates, uuid)
 
 	var result ResponsePlanEvents
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -423,11 +423,11 @@ func (s *ManagedSoftwareUpdates) GetPlanEventsByUUID(ctx context.Context, uuid s
 // URL: GET /api/v1/managed-software-updates/update-statuses
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses
 func (s *ManagedSoftwareUpdates) GetUpdateStatuses(ctx context.Context, params url.Values) (*ResponseUpdateStatusList, *resty.Response, error) {
-	endpoint := EndpointManagedSoftwareUpdates + "/update-statuses"
+	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/update-statuses"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	queryParams := make(map[string]string)
@@ -464,12 +464,12 @@ func (s *ManagedSoftwareUpdates) GetUpdateStatusesByComputerGroup(ctx context.Co
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/update-statuses/computer-groups/%s", EndpointManagedSoftwareUpdates, id)
+	endpoint := fmt.Sprintf("%s/update-statuses/computer-groups/%s", constants.EndpointJamfProManagedSoftwareUpdates, id)
 
 	var result ResponseUpdateStatusList
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -488,12 +488,12 @@ func (s *ManagedSoftwareUpdates) GetUpdateStatusesByComputer(ctx context.Context
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/update-statuses/computers/%s", EndpointManagedSoftwareUpdates, id)
+	endpoint := fmt.Sprintf("%s/update-statuses/computers/%s", constants.EndpointJamfProManagedSoftwareUpdates, id)
 
 	var result ResponseUpdateStatusList
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -512,12 +512,12 @@ func (s *ManagedSoftwareUpdates) GetUpdateStatusesByMobileDeviceGroup(ctx contex
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/update-statuses/mobile-device-groups/%s", EndpointManagedSoftwareUpdates, id)
+	endpoint := fmt.Sprintf("%s/update-statuses/mobile-device-groups/%s", constants.EndpointJamfProManagedSoftwareUpdates, id)
 
 	var result ResponseUpdateStatusList
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -536,12 +536,12 @@ func (s *ManagedSoftwareUpdates) GetUpdateStatusesByMobileDevice(ctx context.Con
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/update-statuses/mobile-devices/%s", EndpointManagedSoftwareUpdates, id)
+	endpoint := fmt.Sprintf("%s/update-statuses/mobile-devices/%s", constants.EndpointJamfProManagedSoftwareUpdates, id)
 
 	var result ResponseUpdateStatusList
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

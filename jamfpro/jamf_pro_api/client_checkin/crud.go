@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -62,10 +62,10 @@ func NewClientCheckin(client transport.HTTPClient) *ClientCheckin {
 func (s *ClientCheckin) GetV3(ctx context.Context) (*ResourceClientCheckinSettings, *resty.Response, error) {
 	var result ResourceClientCheckinSettings
 
-	endpoint := EndpointClientCheckinV3
+	endpoint := constants.EndpointJamfProClientCheckinV3
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -83,7 +83,7 @@ func (s *ClientCheckin) GetV3(ctx context.Context) (*ResourceClientCheckinSettin
 func (s *ClientCheckin) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*ResourceClientCheckinHistory, *resty.Response, error) {
 	var result ResourceClientCheckinHistory
 
-	endpoint := EndpointClientCheckinHistoryV3
+	endpoint := constants.EndpointJamfProClientCheckinHistoryV3
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceClientCheckinHistoryEntry
@@ -95,7 +95,7 @@ func (s *ClientCheckin) GetHistoryV3(ctx context.Context, rsqlQuery map[string]s
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -115,9 +115,9 @@ func (s *ClientCheckin) AddHistoryNoteV3(ctx context.Context, request *RequestCl
 	}
 
 	var result CreateHistoryResponse
-	endpoint := EndpointClientCheckinHistoryV3
+	endpoint := constants.EndpointJamfProClientCheckinHistoryV3
 
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -135,11 +135,11 @@ func (s *ClientCheckin) UpdateV3(ctx context.Context, request *ResourceClientChe
 
 	var result ResourceClientCheckinSettings
 
-	endpoint := EndpointClientCheckinV3
+	endpoint := constants.EndpointJamfProClientCheckinV3
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)

@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -57,8 +57,8 @@ func NewDeviceCommunicationSettings(client transport.HTTPClient) *DeviceCommunic
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings
 func (s *DeviceCommunicationSettings) GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *resty.Response, error) {
 	var result ResourceDeviceCommunicationSettings
-	endpoint := EndpointDeviceCommunicationSettingsV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProDeviceCommunicationSettingsV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -74,8 +74,8 @@ func (s *DeviceCommunicationSettings) UpdateV1(ctx context.Context, request *Res
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourceDeviceCommunicationSettings
-	endpoint := EndpointDeviceCommunicationSettingsV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProDeviceCommunicationSettingsV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -99,9 +99,9 @@ func (s *DeviceCommunicationSettings) GetHistoryV1(ctx context.Context, rsqlQuer
 		return nil
 	}
 
-	endpoint := EndpointDeviceCommunicationSettingsHistoryV1
+	endpoint := constants.EndpointJamfProDeviceCommunicationSettingsHistoryV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -123,8 +123,8 @@ func (s *DeviceCommunicationSettings) AddHistoryNotesV1(ctx context.Context, req
 	}
 
 	var result ResponseAddHistoryNotes
-	endpoint := EndpointDeviceCommunicationSettingsHistoryV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProDeviceCommunicationSettingsHistoryV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err

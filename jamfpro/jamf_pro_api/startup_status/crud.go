@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -43,10 +43,10 @@ func NewStartupStatus(client transport.HTTPClient) *StartupStatus {
 func (s *StartupStatus) GetV1(ctx context.Context) (*ResourceStartupStatusV1, *resty.Response, error) {
 	var result ResourceStartupStatusV1
 
-	endpoint := EndpointStartupStatus
+	endpoint := constants.EndpointJamfProStartupStatus
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

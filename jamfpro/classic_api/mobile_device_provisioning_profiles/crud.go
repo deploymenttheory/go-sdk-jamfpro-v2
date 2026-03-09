@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -111,13 +111,13 @@ func NewMobileDeviceProvisioningProfiles(client transport.HTTPClient) *MobileDev
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofiles
 func (s *MobileDeviceProvisioningProfiles) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointMobileDeviceProvisioningProfiles
+	endpoint := constants.EndpointClassicMobileDeviceProvisioningProfiles
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -135,13 +135,13 @@ func (s *MobileDeviceProvisioningProfiles) GetByID(ctx context.Context, id int) 
 		return nil, nil, fmt.Errorf("mobile device provisioning profile ID must be a non-negative integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMobileDeviceProvisioningProfiles, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -159,13 +159,13 @@ func (s *MobileDeviceProvisioningProfiles) GetByName(ctx context.Context, name s
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, name)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -183,13 +183,13 @@ func (s *MobileDeviceProvisioningProfiles) GetByUUID(ctx context.Context, uuid s
 		return nil, nil, fmt.Errorf("mobile device provisioning profile UUID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
+	endpoint := fmt.Sprintf("%s/uuid/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, uuid)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -213,13 +213,13 @@ func (s *MobileDeviceProvisioningProfiles) CreateByID(ctx context.Context, id in
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMobileDeviceProvisioningProfiles, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -243,13 +243,13 @@ func (s *MobileDeviceProvisioningProfiles) CreateByName(ctx context.Context, nam
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -273,13 +273,13 @@ func (s *MobileDeviceProvisioningProfiles) CreateByUUID(ctx context.Context, uui
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
+	endpoint := fmt.Sprintf("%s/uuid/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, uuid)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -305,13 +305,13 @@ func (s *MobileDeviceProvisioningProfiles) UpdateByID(ctx context.Context, id in
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMobileDeviceProvisioningProfiles, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -337,13 +337,13 @@ func (s *MobileDeviceProvisioningProfiles) UpdateByName(ctx context.Context, nam
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -369,13 +369,13 @@ func (s *MobileDeviceProvisioningProfiles) UpdateByUUID(ctx context.Context, uui
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
+	endpoint := fmt.Sprintf("%s/uuid/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, uuid)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -395,11 +395,11 @@ func (s *MobileDeviceProvisioningProfiles) DeleteByID(ctx context.Context, id in
 		return nil, fmt.Errorf("mobile device provisioning profile ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMobileDeviceProvisioningProfiles, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -419,11 +419,11 @@ func (s *MobileDeviceProvisioningProfiles) DeleteByName(ctx context.Context, nam
 		return nil, fmt.Errorf("mobile device provisioning profile name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -443,11 +443,11 @@ func (s *MobileDeviceProvisioningProfiles) DeleteByUUID(ctx context.Context, uui
 		return nil, fmt.Errorf("mobile device provisioning profile UUID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
+	endpoint := fmt.Sprintf("%s/uuid/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, uuid)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

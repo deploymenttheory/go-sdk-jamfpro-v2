@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -49,10 +49,10 @@ func NewAccountPreferences(client transport.HTTPClient) *AccountPreferences {
 func (s *AccountPreferences) GetV3(ctx context.Context) (*ResourceAccountPreferencesV2, *resty.Response, error) {
 	var result ResourceAccountPreferencesV2
 
-	endpoint := EndpointAccountPreferencesV3
+	endpoint := constants.EndpointJamfProAccountPreferencesV3
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -73,11 +73,11 @@ func (s *AccountPreferences) UpdateV3(ctx context.Context, request *ResourceAcco
 
 	var result ResourceAccountPreferencesV2
 
-	endpoint := EndpointAccountPreferencesV3
+	endpoint := constants.EndpointJamfProAccountPreferencesV3
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)

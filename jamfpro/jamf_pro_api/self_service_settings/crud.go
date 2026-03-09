@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -61,9 +61,9 @@ func NewSelfServiceSettings(client transport.HTTPClient) *SelfServiceSettings {
 func (s *SelfServiceSettings) Get(ctx context.Context) (*ResourceSelfServiceSettings, *resty.Response, error) {
 	var result ResourceSelfServiceSettings
 
-	endpoint := EndpointSelfServiceSettingsV1
+	endpoint := constants.EndpointJamfProSelfServiceSettingsV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -83,10 +83,10 @@ func (s *SelfServiceSettings) Update(ctx context.Context, request *ResourceSelfS
 
 	var result ResourceSelfServiceSettings
 
-	endpoint := EndpointSelfServiceSettingsV1
+	endpoint := constants.EndpointJamfProSelfServiceSettingsV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -113,9 +113,9 @@ func (s *SelfServiceSettings) GetHistoryV1(ctx context.Context, rsqlQuery map[st
 		return nil
 	}
 
-	endpoint := EndpointSelfServiceSettingsHistoryV1
+	endpoint := constants.EndpointJamfProSelfServiceSettingsHistoryV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -137,8 +137,8 @@ func (s *SelfServiceSettings) AddHistoryNotesV1(ctx context.Context, req *AddHis
 	}
 
 	var result AddHistoryNotesResponse
-	endpoint := EndpointSelfServiceSettingsHistoryV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProSelfServiceSettingsHistoryV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err

@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -90,11 +90,11 @@ func NewPatchPolicies(client transport.HTTPClient) *PatchPolicies {
 func (s *PatchPolicies) ListV2(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointPatchPoliciesPolicyDetails
+	endpoint := constants.EndpointJamfProPatchPoliciesPolicyDetails
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -118,10 +118,10 @@ func (s *PatchPolicies) ListV2(ctx context.Context) (*ListResponse, *resty.Respo
 // URL: GET /api/v2/patch-policies
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
 func (s *PatchPolicies) ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *resty.Response, error) {
-	endpoint := EndpointPatchPoliciesV2
+	endpoint := constants.EndpointJamfProPatchPoliciesV2
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ListSummaryResponse
@@ -185,12 +185,12 @@ func (s *PatchPolicies) GetDashboardStatusV2(ctx context.Context, id string) (*D
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchPoliciesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchPoliciesV2, id)
 
 	var result DashboardStatusResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -209,11 +209,11 @@ func (s *PatchPolicies) AddToDashboardV2(ctx context.Context, id string) (*resty
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchPoliciesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchPoliciesV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -232,10 +232,10 @@ func (s *PatchPolicies) RemoveFromDashboardV2(ctx context.Context, id string) (*
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchPoliciesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchPoliciesV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -131,7 +131,7 @@ func NewDeviceEnrollments(client transport.HTTPClient) *DeviceEnrollments {
 func (s *DeviceEnrollments) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointDeviceEnrollmentsV1
+	endpoint := constants.EndpointJamfProDeviceEnrollmentsV1
 
 	mergePage := func(pageData []byte) error {
 		var items []ResourceDeviceEnrollment
@@ -143,7 +143,7 @@ func (s *DeviceEnrollments) ListV1(ctx context.Context, rsqlQuery map[string]str
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -163,10 +163,10 @@ func (s *DeviceEnrollments) GetByIDV1(ctx context.Context, id string) (*Resource
 
 	var result ResourceDeviceEnrollment
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -209,7 +209,7 @@ func (s *DeviceEnrollments) GetHistoryV1(ctx context.Context, id string, rsqlQue
 
 	var result HistoryResponse
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	mergePage := func(pageData []byte) error {
 		var items []ResourceHistoryEntry
@@ -221,7 +221,7 @@ func (s *DeviceEnrollments) GetHistoryV1(ctx context.Context, id string, rsqlQue
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -241,10 +241,10 @@ func (s *DeviceEnrollments) GetSyncStatesV1(ctx context.Context, id string) ([]R
 
 	var result []ResourceSyncState
 
-	endpoint := fmt.Sprintf("%s/%s/syncs", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/syncs", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -265,10 +265,10 @@ func (s *DeviceEnrollments) GetLatestSyncStateV1(ctx context.Context, id string)
 
 	var result ResourceLatestSyncState
 
-	endpoint := fmt.Sprintf("%s/%s/syncs/latest", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/syncs/latest", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -285,10 +285,10 @@ func (s *DeviceEnrollments) GetLatestSyncStateV1(ctx context.Context, id string)
 func (s *DeviceEnrollments) GetAllSyncStatesV1(ctx context.Context) ([]ResourceSyncState, *resty.Response, error) {
 	var result []ResourceSyncState
 
-	endpoint := fmt.Sprintf("%s/syncs", EndpointDeviceEnrollmentsV1)
+	endpoint := fmt.Sprintf("%s/syncs", constants.EndpointJamfProDeviceEnrollmentsV1)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -303,10 +303,10 @@ func (s *DeviceEnrollments) GetAllSyncStatesV1(ctx context.Context) ([]ResourceS
 // URL: GET /api/v1/device-enrollments/public-key
 // https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments-public-key
 func (s *DeviceEnrollments) GetPublicKeyV1(ctx context.Context) ([]byte, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/public-key", EndpointDeviceEnrollmentsV1)
+	endpoint := fmt.Sprintf("%s/public-key", constants.EndpointJamfProDeviceEnrollmentsV1)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationXPEMFile,
+		"Accept": constants.ApplicationXPEMFile,
 	}
 
 	resp, result, err := s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -330,11 +330,11 @@ func (s *DeviceEnrollments) CreateWithTokenV1(ctx context.Context, request *Requ
 
 	var result CreateResponse
 
-	endpoint := fmt.Sprintf("%s/upload-token", EndpointDeviceEnrollmentsV1)
+	endpoint := fmt.Sprintf("%s/upload-token", constants.EndpointJamfProDeviceEnrollmentsV1)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -361,11 +361,11 @@ func (s *DeviceEnrollments) UpdateByIDV1(ctx context.Context, id string, request
 
 	var result ResourceDeviceEnrollment
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -392,11 +392,11 @@ func (s *DeviceEnrollments) UpdateTokenByIDV1(ctx context.Context, id string, re
 
 	var result ResourceDeviceEnrollment
 
-	endpoint := fmt.Sprintf("%s/%s/upload-token", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/upload-token", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -415,10 +415,10 @@ func (s *DeviceEnrollments) DeleteByIDV1(ctx context.Context, id string) (*resty
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -445,11 +445,11 @@ func (s *DeviceEnrollments) DisownDevicesByIDV1(ctx context.Context, id string, 
 
 	var result ResponseDisown
 
-	endpoint := fmt.Sprintf("%s/%s/disown", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/disown", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -476,11 +476,11 @@ func (s *DeviceEnrollments) AddHistoryNotesV1(ctx context.Context, id string, re
 
 	var result ResponseAddHistoryNotes
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -499,12 +499,12 @@ func (s *DeviceEnrollments) GetDevicesByIDV1(ctx context.Context, id string) (*D
 		return nil, nil, fmt.Errorf("device enrollment ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/devices", EndpointDeviceEnrollmentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/devices", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
 	var result DevicesResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -49,12 +49,12 @@ func (s *Devices) GetGroupsV1(ctx context.Context, id string) ([]ResourceGroup, 
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/groups", EndpointDevicesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/groups", constants.EndpointJamfProDevicesV1, id)
 
 	var result []ResourceGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

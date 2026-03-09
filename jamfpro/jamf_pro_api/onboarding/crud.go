@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -86,10 +86,10 @@ func NewOnboarding(client transport.HTTPClient) *Onboarding {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding
 func (s *Onboarding) GetV1(ctx context.Context) (*ResponseOnboardingSettings, *resty.Response, error) {
 	var result ResponseOnboardingSettings
-	endpoint := EndpointOnboardingV1
+	endpoint := constants.EndpointJamfProOnboardingV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -107,8 +107,8 @@ func (s *Onboarding) UpdateV1(ctx context.Context, request *ResourceUpdateOnboar
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResponseOnboardingSettings
-	endpoint := EndpointOnboardingV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProOnboardingV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -131,8 +131,8 @@ func (s *Onboarding) GetEligibleAppsV1(ctx context.Context, query map[string]str
 		return nil
 	}
 
-	endpoint := EndpointEligibleApps
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProEligibleApps
+	headers := map[string]string{"Accept": constants.ApplicationJSON}
 	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
@@ -156,8 +156,8 @@ func (s *Onboarding) GetEligibleConfigurationProfilesV1(ctx context.Context, que
 		return nil
 	}
 
-	endpoint := EndpointEligibleConfigurationProfiles
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProEligibleConfigurationProfiles
+	headers := map[string]string{"Accept": constants.ApplicationJSON}
 	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
@@ -181,8 +181,8 @@ func (s *Onboarding) GetEligiblePoliciesV1(ctx context.Context, query map[string
 		return nil
 	}
 
-	endpoint := EndpointEligiblePolicies
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProEligiblePolicies
+	headers := map[string]string{"Accept": constants.ApplicationJSON}
 	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
@@ -196,7 +196,7 @@ func (s *Onboarding) GetEligiblePoliciesV1(ctx context.Context, query map[string
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-onboarding-history
 func (s *Onboarding) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/history", EndpointOnboardingV1)
+	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProOnboardingV1)
 
 	var result HistoryResponse
 
@@ -210,7 +210,7 @@ func (s *Onboarding) GetHistoryV1(ctx context.Context, rsqlQuery map[string]stri
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -233,13 +233,13 @@ func (s *Onboarding) AddHistoryNotesV1(ctx context.Context, req *RequestAddHisto
 		return nil, nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/history", EndpointOnboardingV1)
+	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProOnboardingV1)
 
 	var result ResponseAddHistoryNotes
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -256,10 +256,10 @@ func (s *Onboarding) AddHistoryNotesV1(ctx context.Context, req *RequestAddHisto
 // rsqlQuery supports: filter (RSQL), sort, page, page-size, export-fields, export-labels (all optional).
 // https://developer.jamf.com/jamf-pro/reference/post_v1-onboarding-history-export
 func (s *Onboarding) ExportHistoryV1(ctx context.Context, acceptHeader string, rsqlQuery map[string]string, req *RequestExportHistory) ([]byte, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/history/export", EndpointOnboardingV1)
+	endpoint := fmt.Sprintf("%s/history/export", constants.EndpointJamfProOnboardingV1)
 
 	if acceptHeader == "" {
-		acceptHeader = mime.ApplicationJSON
+		acceptHeader = constants.ApplicationJSON
 	}
 
 	headers := map[string]string{

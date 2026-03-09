@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -50,11 +50,11 @@ func NewActivationCode(client transport.HTTPClient) *ActivationCode {
 func (s *ActivationCode) GetActivationCode(ctx context.Context) (*ResourceActivationCode, *resty.Response, error) {
 	var result ResourceActivationCode
 
-	endpoint := EndpointClassicActivationCode
+	endpoint := constants.EndpointClassicActivationCode
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -73,11 +73,11 @@ func (s *ActivationCode) UpdateActivationCode(ctx context.Context, request *Requ
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointClassicActivationCode
+	endpoint := constants.EndpointClassicActivationCode
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, nil)

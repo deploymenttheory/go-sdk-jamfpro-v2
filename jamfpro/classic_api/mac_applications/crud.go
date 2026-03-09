@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -96,13 +96,13 @@ func NewMacApplications(client transport.HTTPClient) *MacApplications {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmacapplications
 func (s *MacApplications) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointMacApplications
+	endpoint := constants.EndpointClassicMacApplications
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -122,13 +122,13 @@ func (s *MacApplications) GetByID(ctx context.Context, id int) (*Resource, *rest
 		return nil, nil, fmt.Errorf("mac application ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMacApplications, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacApplications, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -148,13 +148,13 @@ func (s *MacApplications) GetByName(ctx context.Context, name string) (*Resource
 		return nil, nil, fmt.Errorf("mac application name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMacApplications, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacApplications, name)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -175,13 +175,13 @@ func (s *MacApplications) GetByIDAndSubset(ctx context.Context, id int, subset s
 		return nil, nil, fmt.Errorf("mac application subset cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d/subset/%s", EndpointMacApplications, id, subset)
+	endpoint := fmt.Sprintf("%s/id/%d/subset/%s", constants.EndpointClassicMacApplications, id, subset)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -202,13 +202,13 @@ func (s *MacApplications) GetByNameAndSubset(ctx context.Context, name, subset s
 		return nil, nil, fmt.Errorf("mac application subset cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s/subset/%s", EndpointMacApplications, name, subset)
+	endpoint := fmt.Sprintf("%s/name/%s/subset/%s", constants.EndpointClassicMacApplications, name, subset)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -231,13 +231,13 @@ func (s *MacApplications) Create(ctx context.Context, req *Resource) (*CreateUpd
 		return nil, nil, fmt.Errorf("mac application name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointMacApplications)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicMacApplications)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -263,13 +263,13 @@ func (s *MacApplications) UpdateByID(ctx context.Context, id int, req *Resource)
 		return nil, nil, fmt.Errorf("mac application name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMacApplications, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacApplications, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -295,13 +295,13 @@ func (s *MacApplications) UpdateByName(ctx context.Context, name string, req *Re
 		return nil, nil, fmt.Errorf("mac application name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMacApplications, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacApplications, name)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -321,11 +321,11 @@ func (s *MacApplications) DeleteByID(ctx context.Context, id int) (*resty.Respon
 		return nil, fmt.Errorf("mac application ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMacApplications, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacApplications, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -345,11 +345,11 @@ func (s *MacApplications) DeleteByName(ctx context.Context, name string) (*resty
 		return nil, fmt.Errorf("mac application name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMacApplications, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacApplications, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

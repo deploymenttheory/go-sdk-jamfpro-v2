@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -51,10 +51,10 @@ func NewSlasa(client transport.HTTPClient) *Slasa {
 // URL: GET /api/v1/managed-software-updates/slasa
 // https://developer.jamf.com/jamf-pro/reference/get_v1-slasa
 func (s *Slasa) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *resty.Response, error) {
-	endpoint := EndpointSLASAV1
+	endpoint := constants.EndpointJamfProSLASAV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceSLASAStatus
@@ -70,11 +70,11 @@ func (s *Slasa) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *resty.R
 // URL: POST /api/v1/managed-software-updates/slasa
 // https://developer.jamf.com/jamf-pro/reference/post_v1-slasa
 func (s *Slasa) AcceptV1(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointSLASAV1
+	endpoint := constants.EndpointJamfProSLASAV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)

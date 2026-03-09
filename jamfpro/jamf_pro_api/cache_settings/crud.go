@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -44,8 +44,8 @@ func NewCacheSettings(client transport.HTTPClient) *CacheSettings {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cache-settings
 func (s *CacheSettings) GetV1(ctx context.Context) (*ResourceCacheSettings, *resty.Response, error) {
 	var result ResourceCacheSettings
-	endpoint := EndpointCacheSettingsV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProCacheSettingsV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -61,8 +61,8 @@ func (s *CacheSettings) UpdateV1(ctx context.Context, request *ResourceCacheSett
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourceCacheSettings
-	endpoint := EndpointCacheSettingsV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProCacheSettingsV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err

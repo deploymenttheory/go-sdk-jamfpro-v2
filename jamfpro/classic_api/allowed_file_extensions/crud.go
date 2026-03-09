@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -67,11 +67,11 @@ func NewAllowedFileExtensions(client transport.HTTPClient) *AllowedFileExtension
 func (s *AllowedFileExtensions) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicAllowedFileExtensions
+	endpoint := constants.EndpointClassicAllowedFileExtensions
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -90,13 +90,13 @@ func (s *AllowedFileExtensions) GetByID(ctx context.Context, id int) (*ResourceA
 		return nil, nil, fmt.Errorf("allowed file extension ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicAllowedFileExtensions, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAllowedFileExtensions, id)
 
 	var result ResourceAllowedFileExtension
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -115,13 +115,13 @@ func (s *AllowedFileExtensions) GetByExtension(ctx context.Context, extension st
 		return nil, nil, fmt.Errorf("extension is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/extension/%s", EndpointClassicAllowedFileExtensions, extension)
+	endpoint := fmt.Sprintf("%s/extension/%s", constants.EndpointClassicAllowedFileExtensions, extension)
 
 	var result ResourceAllowedFileExtension
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -141,13 +141,13 @@ func (s *AllowedFileExtensions) Create(ctx context.Context, req *RequestAllowedF
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicAllowedFileExtensions)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicAllowedFileExtensions)
 
 	var result ResourceAllowedFileExtension
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -166,11 +166,11 @@ func (s *AllowedFileExtensions) DeleteByID(ctx context.Context, id int) (*resty.
 		return nil, fmt.Errorf("allowed file extension ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicAllowedFileExtensions, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAllowedFileExtensions, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

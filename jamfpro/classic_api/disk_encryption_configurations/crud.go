@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -82,11 +82,11 @@ func NewDiskEncryptionConfigurations(client transport.HTTPClient) *DiskEncryptio
 func (s *DiskEncryptionConfigurations) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicDiskEncryptionConfigurations
+	endpoint := constants.EndpointClassicDiskEncryptionConfigurations
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +105,13 @@ func (s *DiskEncryptionConfigurations) GetByID(ctx context.Context, id int) (*Re
 		return nil, nil, fmt.Errorf("disk encryption configuration ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDiskEncryptionConfigurations, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDiskEncryptionConfigurations, id)
 
 	var result ResourceDiskEncryptionConfiguration
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +130,13 @@ func (s *DiskEncryptionConfigurations) GetByName(ctx context.Context, name strin
 		return nil, nil, fmt.Errorf("disk encryption configuration name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDiskEncryptionConfigurations, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDiskEncryptionConfigurations, name)
 
 	var result ResourceDiskEncryptionConfiguration
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +156,13 @@ func (s *DiskEncryptionConfigurations) Create(ctx context.Context, req *RequestD
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicDiskEncryptionConfigurations)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicDiskEncryptionConfigurations)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +184,13 @@ func (s *DiskEncryptionConfigurations) UpdateByID(ctx context.Context, id int, r
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDiskEncryptionConfigurations, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDiskEncryptionConfigurations, id)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +212,13 @@ func (s *DiskEncryptionConfigurations) UpdateByName(ctx context.Context, name st
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDiskEncryptionConfigurations, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDiskEncryptionConfigurations, name)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +237,11 @@ func (s *DiskEncryptionConfigurations) DeleteByID(ctx context.Context, id int) (
 		return nil, fmt.Errorf("disk encryption configuration ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDiskEncryptionConfigurations, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDiskEncryptionConfigurations, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +260,11 @@ func (s *DiskEncryptionConfigurations) DeleteByName(ctx context.Context, name st
 		return nil, fmt.Errorf("disk encryption configuration name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDiskEncryptionConfigurations, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDiskEncryptionConfigurations, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

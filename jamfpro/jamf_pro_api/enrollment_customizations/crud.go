@@ -7,7 +7,7 @@ import (
 	"io"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -110,7 +110,7 @@ func NewEnrollmentCustomizations(client transport.HTTPClient) *EnrollmentCustomi
 func (s *EnrollmentCustomizations) ListV2(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointEnrollmentCustomizationsV2
+	endpoint := constants.EndpointJamfProEnrollmentCustomizationsV2
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceEnrollmentCustomization
@@ -122,7 +122,7 @@ func (s *EnrollmentCustomizations) ListV2(ctx context.Context, rsqlQuery map[str
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -141,12 +141,12 @@ func (s *EnrollmentCustomizations) GetByIDV2(ctx context.Context, id string) (*R
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointEnrollmentCustomizationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProEnrollmentCustomizationsV2, id)
 
 	var result ResourceEnrollmentCustomization
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -191,11 +191,11 @@ func (s *EnrollmentCustomizations) CreateV2(ctx context.Context, request *Resour
 
 	var result CreateResponse
 
-	endpoint := EndpointEnrollmentCustomizationsV2
+	endpoint := constants.EndpointJamfProEnrollmentCustomizationsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -223,13 +223,13 @@ func (s *EnrollmentCustomizations) UpdateByIDV2(ctx context.Context, id string, 
 		return nil, nil, fmt.Errorf("display name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointEnrollmentCustomizationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProEnrollmentCustomizationsV2, id)
 
 	var result ResourceEnrollmentCustomization
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -248,10 +248,10 @@ func (s *EnrollmentCustomizations) DeleteByIDV2(ctx context.Context, id string) 
 		return nil, fmt.Errorf("enrollment customization ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointEnrollmentCustomizationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProEnrollmentCustomizationsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -271,7 +271,7 @@ func (s *EnrollmentCustomizations) GetHistoryV2(ctx context.Context, id string, 
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointEnrollmentCustomizationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProEnrollmentCustomizationsV2, id)
 
 	var result HistoryResponse
 
@@ -285,7 +285,7 @@ func (s *EnrollmentCustomizations) GetHistoryV2(ctx context.Context, id string, 
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -310,13 +310,13 @@ func (s *EnrollmentCustomizations) AddHistoryNotesV2(ctx context.Context, id str
 		return nil, nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointEnrollmentCustomizationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProEnrollmentCustomizationsV2, id)
 
 	var result ResponseAddHistoryNotes
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -335,12 +335,12 @@ func (s *EnrollmentCustomizations) GetPrestagesV2(ctx context.Context, id string
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/prestages", EndpointEnrollmentCustomizationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/prestages", constants.EndpointJamfProEnrollmentCustomizationsV2, id)
 
 	var result PrestagesResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -363,12 +363,12 @@ func (s *EnrollmentCustomizations) UploadImageV2(ctx context.Context, fileReader
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ImageUploadResponse
 
-	resp, err := s.client.PostMultipart(ctx, EndpointEnrollmentCustomizationsImagesV2, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
+	resp, err := s.client.PostMultipart(ctx, constants.EndpointJamfProEnrollmentCustomizationsImagesV2, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -385,7 +385,7 @@ func (s *EnrollmentCustomizations) GetImageByIdV2(ctx context.Context, id string
 		return nil, nil, fmt.Errorf("image ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointEnrollmentCustomizationsImagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProEnrollmentCustomizationsImagesV2, id)
 
 	headers := map[string]string{
 		"Accept": "image/*",

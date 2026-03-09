@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -68,7 +68,7 @@ func NewMdm(client transport.HTTPClient) *Mdm {
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v2-mdm-commands
 func (s *Mdm) ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (*ListCommandsResponse, *resty.Response, error) {
-	endpoint := EndpointCommands
+	endpoint := constants.EndpointJamfProCommands
 
 	var result ListCommandsResponse
 
@@ -82,7 +82,7 @@ func (s *Mdm) ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -103,10 +103,10 @@ func (s *Mdm) BlankPush(ctx context.Context, clientManagementIDs []string) (*Bla
 	reqBody := map[string][]string{"clientManagementIds": clientManagementIDs}
 	var result BlankPushResponse
 
-	endpoint := EndpointBlankPush
+	endpoint := constants.EndpointJamfProBlankPush
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, reqBody, headers, &result)
@@ -127,10 +127,10 @@ func (s *Mdm) SendCommand(ctx context.Context, req *CommandRequest) (*CommandRes
 
 	var result CommandResponse
 
-	endpoint := EndpointCommands
+	endpoint := constants.EndpointJamfProCommands
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -149,12 +149,12 @@ func (s *Mdm) DeployPackage(ctx context.Context, req *DeployPackageRequest) (*De
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointDeployPackage + "?verbose=true"
+	endpoint := constants.EndpointJamfProDeployPackage + "?verbose=true"
 	var result DeployPackageResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -175,10 +175,10 @@ func (s *Mdm) RenewProfile(ctx context.Context, req *RenewProfileRequest) (*Rene
 
 	var result RenewProfileResponse
 
-	endpoint := EndpointProfileRenewal
+	endpoint := constants.EndpointJamfProProfileRenewal
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)

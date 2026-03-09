@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -90,13 +90,13 @@ func NewMobileDevices(client transport.HTTPClient) *MobileDevices {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledevices
 func (s *MobileDevices) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointMobileDevices
+	endpoint := constants.EndpointClassicMobileDevices
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -116,13 +116,13 @@ func (s *MobileDevices) GetByID(ctx context.Context, id string) (*ResponseMobile
 		return nil, nil, fmt.Errorf("mobile device ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s", EndpointMobileDevices, id)
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicMobileDevices, id)
 
 	var out ResponseMobileDevice
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -140,13 +140,13 @@ func (s *MobileDevices) GetByName(ctx context.Context, name string) (*ResponseMo
 		return nil, nil, fmt.Errorf("mobile device name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDevices, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDevices, name)
 
 	var out ResponseMobileDevice
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -167,13 +167,13 @@ func (s *MobileDevices) GetByIDAndDataSubset(ctx context.Context, id, subset str
 		return nil, nil, fmt.Errorf("data subset cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s/subset/%s", EndpointMobileDevices, id, subset)
+	endpoint := fmt.Sprintf("%s/id/%s/subset/%s", constants.EndpointClassicMobileDevices, id, subset)
 
 	var out ResponseMobileDevice
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -194,13 +194,13 @@ func (s *MobileDevices) GetByNameAndDataSubset(ctx context.Context, name, subset
 		return nil, nil, fmt.Errorf("data subset cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s/subset/%s", EndpointMobileDevices, name, subset)
+	endpoint := fmt.Sprintf("%s/name/%s/subset/%s", constants.EndpointClassicMobileDevices, name, subset)
 
 	var out ResponseMobileDevice
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -218,13 +218,13 @@ func (s *MobileDevices) Create(ctx context.Context, device *ResponseMobileDevice
 		return nil, nil, fmt.Errorf("mobile device is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointMobileDevices)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicMobileDevices)
 
 	var out ResponseMobileDevice
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, device, headers, &out)
@@ -247,13 +247,13 @@ func (s *MobileDevices) UpdateByID(ctx context.Context, id string, device *Respo
 		return nil, nil, fmt.Errorf("mobile device is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s", EndpointMobileDevices, id)
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicMobileDevices, id)
 
 	var out ResponseMobileDevice
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, device, headers, &out)
@@ -276,13 +276,13 @@ func (s *MobileDevices) UpdateByName(ctx context.Context, name string, device *R
 		return nil, nil, fmt.Errorf("mobile device is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDevices, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDevices, name)
 
 	var out ResponseMobileDevice
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, device, headers, &out)
@@ -302,11 +302,11 @@ func (s *MobileDevices) DeleteByID(ctx context.Context, id string) (*resty.Respo
 		return nil, fmt.Errorf("mobile device ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s", EndpointMobileDevices, id)
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicMobileDevices, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -326,11 +326,11 @@ func (s *MobileDevices) DeleteByName(ctx context.Context, name string) (*resty.R
 		return nil, fmt.Errorf("mobile device name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDevices, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDevices, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

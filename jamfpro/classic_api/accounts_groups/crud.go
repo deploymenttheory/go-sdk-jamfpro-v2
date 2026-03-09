@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -81,13 +81,13 @@ func (s *AccountsGroups) GetByID(ctx context.Context, id int) (*ResourceAccountG
 		return nil, nil, fmt.Errorf("account group ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/groupid/%d", EndpointClassicAccounts, id)
+	endpoint := fmt.Sprintf("%s/groupid/%d", constants.EndpointClassicAccounts, id)
 
 	var result ResourceAccountGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -106,13 +106,13 @@ func (s *AccountsGroups) GetByName(ctx context.Context, name string) (*ResourceA
 		return nil, nil, fmt.Errorf("account group name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/groupname/%s", EndpointClassicAccounts, name)
+	endpoint := fmt.Sprintf("%s/groupname/%s", constants.EndpointClassicAccounts, name)
 
 	var result ResourceAccountGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -132,13 +132,13 @@ func (s *AccountsGroups) Create(ctx context.Context, req *RequestAccountGroup) (
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/groupid/0", EndpointClassicAccounts)
+	endpoint := fmt.Sprintf("%s/groupid/0", constants.EndpointClassicAccounts)
 
 	var result CreateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -160,13 +160,13 @@ func (s *AccountsGroups) UpdateByID(ctx context.Context, id int, req *RequestAcc
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/groupid/%d", EndpointClassicAccounts, id)
+	endpoint := fmt.Sprintf("%s/groupid/%d", constants.EndpointClassicAccounts, id)
 
 	var result UpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -188,13 +188,13 @@ func (s *AccountsGroups) UpdateByName(ctx context.Context, name string, req *Req
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/groupname/%s", EndpointClassicAccounts, name)
+	endpoint := fmt.Sprintf("%s/groupname/%s", constants.EndpointClassicAccounts, name)
 
 	var result UpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -213,11 +213,11 @@ func (s *AccountsGroups) DeleteByID(ctx context.Context, id int) (*resty.Respons
 		return nil, fmt.Errorf("account group ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/groupid/%d", EndpointClassicAccounts, id)
+	endpoint := fmt.Sprintf("%s/groupid/%d", constants.EndpointClassicAccounts, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -236,11 +236,11 @@ func (s *AccountsGroups) DeleteByName(ctx context.Context, name string) (*resty.
 		return nil, fmt.Errorf("account group name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/groupname/%s", EndpointClassicAccounts, name)
+	endpoint := fmt.Sprintf("%s/groupname/%s", constants.EndpointClassicAccounts, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

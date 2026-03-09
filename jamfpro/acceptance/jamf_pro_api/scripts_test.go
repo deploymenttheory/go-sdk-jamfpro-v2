@@ -7,6 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/scripts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -90,7 +91,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	scriptName := acc.UniqueName("sdkv2_acc_acc-test-script")
 	createReq := &scripts.RequestScript{
 		Name:           scriptName,
-		Priority:       scripts.ScriptPriorityAfter,
+		Priority:       constants.ScriptPriorityAfter,
 		Info:           "Acceptance test script",
 		Notes:          "Created by automated acceptance test",
 		ScriptContents: "#!/bin/bash\necho 'acceptance test'",
@@ -159,7 +160,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, scriptID, fetched.ID)
 	assert.Equal(t, scriptName, fetched.Name)
-	assert.Equal(t, scripts.ScriptPriorityAfter, fetched.Priority)
+	assert.Equal(t, constants.ScriptPriorityAfter, fetched.Priority)
 	assert.Equal(t, createReq.ScriptContents, fetched.ScriptContents)
 	acc.LogTestSuccess(t, "GetByID: name=%q priority=%s", fetched.Name, fetched.Priority)
 
@@ -171,7 +172,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	updatedName := acc.UniqueName("sdkv2_acc_acc-test-script-updated")
 	updateReq := &scripts.RequestScript{
 		Name:           updatedName,
-		Priority:       scripts.ScriptPriorityBefore,
+		Priority:       constants.ScriptPriorityBefore,
 		Info:           "Updated acceptance test script",
 		Notes:          "Updated by automated acceptance test",
 		ScriptContents: "#!/bin/bash\necho 'updated acceptance test'",
@@ -200,7 +201,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	require.NotNil(t, verified)
 	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, updatedName, verified.Name, "name should reflect the update")
-	assert.Equal(t, scripts.ScriptPriorityBefore, verified.Priority, "priority should reflect the update")
+	assert.Equal(t, constants.ScriptPriorityBefore, verified.Priority, "priority should reflect the update")
 	acc.LogTestSuccess(t, "Update verified: name=%q priority=%s", verified.Name, verified.Priority)
 
 	// ------------------------------------------------------------------
@@ -281,7 +282,7 @@ func TestAcceptance_Scripts_list_with_rsql_filter(t *testing.T) {
 	name := acc.UniqueName("sdkv2_acc_acc-rsql-script")
 	createReq := &scripts.RequestScript{
 		Name:           name,
-		Priority:       scripts.ScriptPriorityAfter,
+		Priority:       constants.ScriptPriorityAfter,
 		ScriptContents: "#!/bin/bash\necho 'rsql test'",
 	}
 

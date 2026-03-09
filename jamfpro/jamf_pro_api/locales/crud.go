@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -43,10 +43,10 @@ func NewLocales(client transport.HTTPClient) *Locales {
 func (s *Locales) ListV1(ctx context.Context) ([]ResourceLocale, *resty.Response, error) {
 	var result []ResourceLocale
 
-	endpoint := EndpointLocalesV1
+	endpoint := constants.EndpointJamfProLocalesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

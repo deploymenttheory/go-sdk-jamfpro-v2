@@ -7,7 +7,7 @@ import (
 	"io"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -108,7 +108,7 @@ func NewComputerExtensionAttributes(client transport.HTTPClient) *ComputerExtens
 func (s *ComputerExtensionAttributes) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointComputerExtensionAttributesV1
+	endpoint := constants.EndpointJamfProComputerExtensionAttributesV1
 
 	mergePage := func(pageData []byte) error {
 		var items []ResourceComputerExtensionAttribute
@@ -120,7 +120,7 @@ func (s *ComputerExtensionAttributes) ListV1(ctx context.Context, rsqlQuery map[
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -139,12 +139,12 @@ func (s *ComputerExtensionAttributes) GetByIDV1(ctx context.Context, id string) 
 		return nil, nil, fmt.Errorf("computer extension attribute ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointComputerExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
 	var result ResourceComputerExtensionAttribute
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -165,11 +165,11 @@ func (s *ComputerExtensionAttributes) CreateV1(ctx context.Context, request *Req
 
 	var result CreateResponse
 
-	endpoint := EndpointComputerExtensionAttributesV1
+	endpoint := constants.EndpointJamfProComputerExtensionAttributesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -192,13 +192,13 @@ func (s *ComputerExtensionAttributes) UpdateByIDV1(ctx context.Context, id strin
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointComputerExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
 	var result ResourceComputerExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -217,10 +217,10 @@ func (s *ComputerExtensionAttributes) DeleteByIDV1(ctx context.Context, id strin
 		return nil, fmt.Errorf("computer extension attribute ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointComputerExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -239,11 +239,11 @@ func (s *ComputerExtensionAttributes) DeleteComputerExtensionAttributesByIDV1(ct
 		return nil, fmt.Errorf("ids are required")
 	}
 
-	endpoint := EndpointComputerExtensionAttributesV1 + "/delete-multiple"
+	endpoint := constants.EndpointJamfProComputerExtensionAttributesV1 + "/delete-multiple"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -263,7 +263,7 @@ func (s *ComputerExtensionAttributes) GetHistoryByIDV1(ctx context.Context, id s
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointComputerExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
 	var result HistoryResponse
 
@@ -277,7 +277,7 @@ func (s *ComputerExtensionAttributes) GetHistoryByIDV1(ctx context.Context, id s
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -298,11 +298,11 @@ func (s *ComputerExtensionAttributes) AddHistoryNoteByIDV1(ctx context.Context, 
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointComputerExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -319,7 +319,7 @@ func (s *ComputerExtensionAttributes) AddHistoryNoteByIDV1(ctx context.Context, 
 func (s *ComputerExtensionAttributes) ListTemplatesV1(ctx context.Context, rsqlQuery map[string]string) (*TemplateListResponse, *resty.Response, error) {
 	var result TemplateListResponse
 
-	endpoint := EndpointComputerExtensionAttributesV1 + "/templates"
+	endpoint := constants.EndpointJamfProComputerExtensionAttributesV1 + "/templates"
 
 	mergePage := func(pageData []byte) error {
 		var items []ResourceComputerExtensionAttributeTemplate
@@ -331,7 +331,7 @@ func (s *ComputerExtensionAttributes) ListTemplatesV1(ctx context.Context, rsqlQ
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -349,12 +349,12 @@ func (s *ComputerExtensionAttributes) GetTemplateByIDV1(ctx context.Context, id 
 		return nil, nil, fmt.Errorf("template ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/templates/%s", EndpointComputerExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/templates/%s", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
 	var result ResourceComputerExtensionAttributeTemplate
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -376,12 +376,12 @@ func (s *ComputerExtensionAttributes) UploadV1(ctx context.Context, fileReader i
 		return nil, nil, fmt.Errorf("filename is required")
 	}
 
-	endpoint := EndpointComputerExtensionAttributesV1 + "/upload"
+	endpoint := constants.EndpointJamfProComputerExtensionAttributesV1 + "/upload"
 
 	var result ResourceComputerExtensionAttribute
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.PostMultipart(ctx, endpoint, "file", filename, fileReader, fileSize, nil, headers, nil, &result)
@@ -400,12 +400,12 @@ func (s *ComputerExtensionAttributes) GetDataDependencyByIDV1(ctx context.Contex
 		return nil, nil, fmt.Errorf("computer extension attribute ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/data-dependency", EndpointComputerExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/data-dependency", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
 	var result DataDependencyResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -424,10 +424,10 @@ func (s *ComputerExtensionAttributes) DownloadByIDV1(ctx context.Context, id str
 		return nil, nil, fmt.Errorf("computer extension attribute ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/download", EndpointComputerExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/download", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationXML,
+		"Accept": constants.ApplicationXML,
 	}
 
 	var result []byte

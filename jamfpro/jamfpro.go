@@ -575,12 +575,6 @@ type (
 	PaginationLinks = client.PaginationLinks
 )
 
-// Re-export auth method constants.
-const (
-	AuthMethodOAuth2 = config.AuthMethodOAuth2
-	AuthMethodBasic  = config.AuthMethodBasic
-)
-
 // LoadAuthConfigFromFile loads authentication configuration from a JSON file.
 func LoadAuthConfigFromFile(path string) (*AuthConfig, error) {
 	return config.LoadAuthConfigFromFile(path)
@@ -614,6 +608,6 @@ var (
 
 // Re-export pagination helper functions.
 var (
-	HasNextPage         = client.HasNextPage
+	HasNextPage          = client.HasNextPage
 	ExtractParamsFromURL = client.ExtractParamsFromURL
 )

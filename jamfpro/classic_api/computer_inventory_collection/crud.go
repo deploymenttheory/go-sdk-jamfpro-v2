@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -47,11 +47,11 @@ func NewComputerInventoryCollection(client transport.HTTPClient) *ComputerInvent
 func (s *ComputerInventoryCollection) Get(ctx context.Context) (*ResourceComputerInventoryCollection, *resty.Response, error) {
 	var result ResourceComputerInventoryCollection
 
-	endpoint := EndpointClassicComputerInventoryCollection
+	endpoint := constants.EndpointClassicComputerInventoryCollection
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -70,7 +70,7 @@ func (s *ComputerInventoryCollection) Update(ctx context.Context, settings *Reso
 		return nil, fmt.Errorf("settings is required")
 	}
 
-	endpoint := EndpointClassicComputerInventoryCollection
+	endpoint := constants.EndpointClassicComputerInventoryCollection
 
 	requestBody := struct {
 		XMLName xml.Name `xml:"computer_inventory_collection"`
@@ -80,8 +80,8 @@ func (s *ComputerInventoryCollection) Update(ctx context.Context, settings *Reso
 	}
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, &requestBody, headers, nil)

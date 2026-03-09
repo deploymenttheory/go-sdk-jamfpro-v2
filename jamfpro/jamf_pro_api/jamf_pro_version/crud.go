@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -43,10 +43,10 @@ func NewJamfProVersion(client transport.HTTPClient) *JamfProVersion {
 func (s *JamfProVersion) GetV1(ctx context.Context) (*ResourceJamfProVersion, *resty.Response, error) {
 	var result ResourceJamfProVersion
 
-	endpoint := EndpointJamfProVersionV1
+	endpoint := constants.EndpointJamfProJamfProVersionV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

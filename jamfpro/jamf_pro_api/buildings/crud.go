@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -66,7 +66,7 @@ type (
 		//
 		// POST /api/v1/buildings/export. Optional query params: page, page-size, sort, filter,
 		// export-fields, export-labels. Optional body overrides when URI exceeds ~2k chars.
-		// acceptType should be mime.TextCSV or mime.ApplicationJSON.
+		// acceptType should be constants.TextCSV or constants.ApplicationJSON.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-export
 		ExportV1(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
@@ -75,7 +75,7 @@ type (
 		//
 		// POST /api/v1/buildings/{id}/history/export. Optional query params: page, page-size, sort,
 		// filter, export-fields, export-labels. Optional body overrides when URI exceeds ~2k chars.
-		// acceptType should be mime.TextCSV or mime.ApplicationJSON.
+		// acceptType should be constants.TextCSV or constants.ApplicationJSON.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-id-history-export
 		ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
@@ -106,7 +106,7 @@ func NewBuildings(client transport.HTTPClient) *Buildings {
 func (s *Buildings) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointBuildingsV1
+	endpoint := constants.EndpointJamfProBuildingsV1
 
 	mergePage := func(pageData []byte) error {
 		var items []ResourceBuilding
@@ -118,7 +118,7 @@ func (s *Buildings) ListV1(ctx context.Context, rsqlQuery map[string]string) (*L
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -139,12 +139,12 @@ func (s *Buildings) GetByIDV1(ctx context.Context, id string) (*ResourceBuilding
 		return nil, nil, fmt.Errorf("building ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointBuildingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBuildingsV1, id)
 
 	var result ResourceBuilding
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -166,11 +166,11 @@ func (s *Buildings) CreateV1(ctx context.Context, request *RequestBuilding) (*Cr
 
 	var result CreateResponse
 
-	endpoint := EndpointBuildingsV1
+	endpoint := constants.EndpointJamfProBuildingsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -194,13 +194,13 @@ func (s *Buildings) UpdateByIDV1(ctx context.Context, id string, request *Reques
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointBuildingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBuildingsV1, id)
 
 	var result ResourceBuilding
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -219,10 +219,10 @@ func (s *Buildings) DeleteByIDV1(ctx context.Context, id string) (*resty.Respons
 		return nil, fmt.Errorf("building ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointBuildingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBuildingsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -242,11 +242,11 @@ func (s *Buildings) DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuildi
 		return nil, fmt.Errorf("ids are required")
 	}
 
-	endpoint := EndpointBuildingsV1 + "/delete-multiple"
+	endpoint := constants.EndpointJamfProBuildingsV1 + "/delete-multiple"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -266,7 +266,7 @@ func (s *Buildings) GetBuildingHistoryV1(ctx context.Context, id string, rsqlQue
 		return nil, nil, fmt.Errorf("building ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointBuildingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProBuildingsV1, id)
 
 	var result HistoryResponse
 
@@ -280,7 +280,7 @@ func (s *Buildings) GetBuildingHistoryV1(ctx context.Context, id string, rsqlQue
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -305,11 +305,11 @@ func (s *Buildings) AddBuildingHistoryNotesV1(ctx context.Context, id string, re
 		return nil, fmt.Errorf("request body is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointBuildingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProBuildingsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -327,15 +327,15 @@ func (s *Buildings) AddBuildingHistoryNotesV1(ctx context.Context, id string, re
 // Accept: text/csv or application/json
 // https://developer.jamf.com/jamf-pro/reference/post_v1-buildings-export
 func (s *Buildings) ExportV1(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error) {
-	endpoint := EndpointBuildingsV1 + "/export"
+	endpoint := constants.EndpointJamfProBuildingsV1 + "/export"
 
 	if acceptType == "" {
-		acceptType = mime.ApplicationJSON
+		acceptType = constants.ApplicationJSON
 	}
 
 	headers := map[string]string{
 		"Accept":       acceptType,
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var body any
@@ -363,15 +363,15 @@ func (s *Buildings) ExportHistoryV1(ctx context.Context, id string, rsqlQuery ma
 		return nil, nil, fmt.Errorf("building ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history/export", EndpointBuildingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history/export", constants.EndpointJamfProBuildingsV1, id)
 
 	if acceptType == "" {
-		acceptType = mime.ApplicationJSON
+		acceptType = constants.ApplicationJSON
 	}
 
 	headers := map[string]string{
 		"Accept":       acceptType,
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var body any

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -109,10 +109,10 @@ func NewLocalAdminPassword(client transport.HTTPClient) *LocalAdminPassword {
 func (s *LocalAdminPassword) GetPendingRotationsV2(ctx context.Context) (*PendingRotationsResponse, *resty.Response, error) {
 	var result PendingRotationsResponse
 
-	endpoint := fmt.Sprintf("%s/pending-rotations", EndpointLocalAdminPasswordV2)
+	endpoint := fmt.Sprintf("%s/pending-rotations", constants.EndpointJamfProLocalAdminPasswordV2)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -129,10 +129,10 @@ func (s *LocalAdminPassword) GetPendingRotationsV2(ctx context.Context) (*Pendin
 func (s *LocalAdminPassword) GetSettingsV2(ctx context.Context) (*SettingsResource, *resty.Response, error) {
 	var result SettingsResource
 
-	endpoint := fmt.Sprintf("%s/settings", EndpointLocalAdminPasswordV2)
+	endpoint := fmt.Sprintf("%s/settings", constants.EndpointJamfProLocalAdminPasswordV2)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -151,11 +151,11 @@ func (s *LocalAdminPassword) UpdateSettingsV2(ctx context.Context, settings *Set
 		return nil, fmt.Errorf("settings is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/settings", EndpointLocalAdminPasswordV2)
+	endpoint := fmt.Sprintf("%s/settings", constants.EndpointJamfProLocalAdminPasswordV2)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, settings, headers, nil)
@@ -178,12 +178,12 @@ func (s *LocalAdminPassword) GetPasswordHistoryByClientManagementIDV2(ctx contex
 		return nil, nil, fmt.Errorf("username is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/audit", EndpointLocalAdminPasswordV2, clientManagementID, username)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/audit", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username)
 
 	var result PasswordHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -206,12 +206,12 @@ func (s *LocalAdminPassword) GetCurrentPasswordByClientManagementIDV2(ctx contex
 		return nil, nil, fmt.Errorf("username is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/password", EndpointLocalAdminPasswordV2, clientManagementID, username)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/password", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username)
 
 	var result CurrentPasswordResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -234,12 +234,12 @@ func (s *LocalAdminPassword) GetHistoryByUsernameV2(ctx context.Context, clientM
 		return nil, nil, fmt.Errorf("username is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/history", EndpointLocalAdminPasswordV2, clientManagementID, username)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/history", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username)
 
 	var result AccountHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -265,12 +265,12 @@ func (s *LocalAdminPassword) GetAuditByUsernameAndGUIDV2(ctx context.Context, cl
 		return nil, nil, fmt.Errorf("guid is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/audit", EndpointLocalAdminPasswordV2, clientManagementID, username, guid)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/audit", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username, guid)
 
 	var result PasswordHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -296,12 +296,12 @@ func (s *LocalAdminPassword) GetHistoryByUsernameAndGUIDV2(ctx context.Context, 
 		return nil, nil, fmt.Errorf("guid is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/history", EndpointLocalAdminPasswordV2, clientManagementID, username, guid)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/history", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username, guid)
 
 	var result AccountHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -328,12 +328,12 @@ func (s *LocalAdminPassword) GetPasswordByUsernameAndGUIDV2(ctx context.Context,
 		return nil, nil, fmt.Errorf("guid is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/password", EndpointLocalAdminPasswordV2, clientManagementID, username, guid)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/password", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username, guid)
 
 	var result CurrentPasswordResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -353,12 +353,12 @@ func (s *LocalAdminPassword) GetFullHistoryByClientManagementIDV2(ctx context.Co
 		return nil, nil, fmt.Errorf("clientManagementID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointLocalAdminPasswordV2, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID)
 
 	var result FullHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -378,12 +378,12 @@ func (s *LocalAdminPassword) GetCapableAccountsByClientManagementIDV2(ctx contex
 		return nil, nil, fmt.Errorf("clientManagementID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/accounts", EndpointLocalAdminPasswordV2, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s/accounts", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID)
 
 	var result CapableAccountsResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -406,13 +406,13 @@ func (s *LocalAdminPassword) SetPasswordByClientManagementIDV2(ctx context.Conte
 		return nil, nil, fmt.Errorf("passwordList is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/set-password", EndpointLocalAdminPasswordV2, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s/set-password", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID)
 
 	var result SetPasswordResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, passwordList, headers, &result)

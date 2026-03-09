@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -59,9 +59,9 @@ func NewReenrollment(client transport.HTTPClient) *Reenrollment {
 func (s *Reenrollment) Get(ctx context.Context) (*ResourceReenrollmentSettings, *resty.Response, error) {
 	var result ResourceReenrollmentSettings
 
-	endpoint := EndpointReenrollmentV1
+	endpoint := constants.EndpointJamfProReenrollmentV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -81,10 +81,10 @@ func (s *Reenrollment) Update(ctx context.Context, request *ResourceReenrollment
 
 	var result ResourceReenrollmentSettings
 
-	endpoint := EndpointReenrollmentV1
+	endpoint := constants.EndpointJamfProReenrollmentV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -109,10 +109,10 @@ func (s *Reenrollment) GetHistory(ctx context.Context, query map[string]string) 
 		return nil
 	}
 
-	endpoint := EndpointReenrollmentHistoryV1
+	endpoint := constants.EndpointJamfProReenrollmentHistoryV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
@@ -131,10 +131,10 @@ func (s *Reenrollment) AddHistoryNotes(ctx context.Context, request *AddReenroll
 	}
 	var result ReenrollmentHistoryObject
 
-	endpoint := EndpointReenrollmentHistoryV1
+	endpoint := constants.EndpointJamfProReenrollmentHistoryV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
@@ -146,12 +146,12 @@ func (s *Reenrollment) AddHistoryNotes(ctx context.Context, request *AddReenroll
 // ExportHistory exports re-enrollment history. query: page, page-size, sort, filter, export-fields, export-labels. body optional (overrides query when URI would exceed ~2k chars; use page, pageSize, sort, filter, fields). Uses Accept: text/csv,application/json and Content-Type: application/json when body is sent.
 // URL: POST /api/v1/reenrollment/history/export
 func (s *Reenrollment) ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*resty.Response, []byte, error) {
-	endpoint := EndpointReenrollmentHistoryExport
+	endpoint := constants.EndpointJamfProReenrollmentHistoryExport
 	headers := map[string]string{"Accept": "text/csv,application/json"}
 	var sendBody any
 	if body != nil {
 		sendBody = body
-		headers["Content-Type"] = mime.ApplicationJSON
+		headers["Content-Type"] = constants.ApplicationJSON
 	}
 	resp, err := s.client.PostWithQuery(ctx, endpoint, query, sendBody, headers, nil)
 	if err != nil {

@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -63,12 +63,12 @@ func (s *JamfProUserAccountSettings) GetSettingsV1(ctx context.Context, keyID st
 		return nil, nil, fmt.Errorf("keyId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesSettingsV1, keyID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesSettingsV1, keyID)
 
 	var result ResourceUserPreferencesSettings
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -89,10 +89,10 @@ func (s *JamfProUserAccountSettings) GetV1(ctx context.Context, keyID string) (s
 		return "", nil, fmt.Errorf("keyId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesV1, keyID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesV1, keyID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, body, err := s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -122,11 +122,11 @@ func (s *JamfProUserAccountSettings) PutV1(ctx context.Context, keyID string, va
 		return nil, fmt.Errorf("values is required and must not be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesV1, keyID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesV1, keyID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, values, headers, nil)
@@ -146,10 +146,10 @@ func (s *JamfProUserAccountSettings) DeleteV1(ctx context.Context, keyID string)
 		return nil, fmt.Errorf("keyId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesV1, keyID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesV1, keyID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -82,11 +82,11 @@ func NewSoftwareUpdateServers(client transport.HTTPClient) *SoftwareUpdateServer
 func (s *SoftwareUpdateServers) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicSoftwareUpdateServers
+	endpoint := constants.EndpointClassicSoftwareUpdateServers
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +105,13 @@ func (s *SoftwareUpdateServers) GetByID(ctx context.Context, id int) (*ResourceS
 		return nil, nil, fmt.Errorf("software update server ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicSoftwareUpdateServers, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSoftwareUpdateServers, id)
 
 	var result ResourceSoftwareUpdateServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +130,13 @@ func (s *SoftwareUpdateServers) GetByName(ctx context.Context, name string) (*Re
 		return nil, nil, fmt.Errorf("software update server name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicSoftwareUpdateServers, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSoftwareUpdateServers, name)
 
 	var result ResourceSoftwareUpdateServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +156,13 @@ func (s *SoftwareUpdateServers) Create(ctx context.Context, req *RequestSoftware
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicSoftwareUpdateServers)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicSoftwareUpdateServers)
 
 	var result ResourceSoftwareUpdateServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +184,13 @@ func (s *SoftwareUpdateServers) UpdateByID(ctx context.Context, id int, req *Req
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicSoftwareUpdateServers, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSoftwareUpdateServers, id)
 
 	var result ResourceSoftwareUpdateServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +212,13 @@ func (s *SoftwareUpdateServers) UpdateByName(ctx context.Context, name string, r
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicSoftwareUpdateServers, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSoftwareUpdateServers, name)
 
 	var result ResourceSoftwareUpdateServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +237,11 @@ func (s *SoftwareUpdateServers) DeleteByID(ctx context.Context, id int) (*resty.
 		return nil, fmt.Errorf("software update server ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicSoftwareUpdateServers, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSoftwareUpdateServers, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +260,11 @@ func (s *SoftwareUpdateServers) DeleteByName(ctx context.Context, name string) (
 		return nil, fmt.Errorf("software update server name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicSoftwareUpdateServers, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSoftwareUpdateServers, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

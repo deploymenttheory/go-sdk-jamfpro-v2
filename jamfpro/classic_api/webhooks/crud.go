@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -82,11 +82,11 @@ func NewWebhooks(client transport.HTTPClient) *Webhooks {
 func (s *Webhooks) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicWebhooks
+	endpoint := constants.EndpointClassicWebhooks
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +105,13 @@ func (s *Webhooks) GetByID(ctx context.Context, id int) (*ResourceWebhook, *rest
 		return nil, nil, fmt.Errorf("webhook ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicWebhooks, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicWebhooks, id)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +130,13 @@ func (s *Webhooks) GetByName(ctx context.Context, name string) (*ResourceWebhook
 		return nil, nil, fmt.Errorf("webhook name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicWebhooks, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicWebhooks, name)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +156,13 @@ func (s *Webhooks) Create(ctx context.Context, req *RequestWebhook) (*ResourceWe
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicWebhooks)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicWebhooks)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +184,13 @@ func (s *Webhooks) UpdateByID(ctx context.Context, id int, req *RequestWebhook) 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicWebhooks, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicWebhooks, id)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +212,13 @@ func (s *Webhooks) UpdateByName(ctx context.Context, name string, req *RequestWe
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicWebhooks, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicWebhooks, name)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +237,11 @@ func (s *Webhooks) DeleteByID(ctx context.Context, id int) (*resty.Response, err
 		return nil, fmt.Errorf("webhook ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicWebhooks, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicWebhooks, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +260,11 @@ func (s *Webhooks) DeleteByName(ctx context.Context, name string) (*resty.Respon
 		return nil, fmt.Errorf("webhook name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicWebhooks, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicWebhooks, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

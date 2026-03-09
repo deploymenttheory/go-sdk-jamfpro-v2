@@ -6,7 +6,7 @@ import (
 	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -46,10 +46,10 @@ func NewApiRolePrivileges(client transport.HTTPClient) *ApiRolePrivileges {
 func (s *ApiRolePrivileges) ListV1(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointAPIRolePrivilegesV1
+	endpoint := constants.EndpointJamfProAPIRolePrivilegesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -70,11 +70,11 @@ func (s *ApiRolePrivileges) SearchPrivilegesByNameV1(ctx context.Context, name s
 	if limit <= 0 {
 		limit = 15
 	}
-	endpoint := fmt.Sprintf("%s/search?name=%s&limit=%d", EndpointAPIRolePrivilegesV1, url.QueryEscape(name), limit)
+	endpoint := fmt.Sprintf("%s/search?name=%s&limit=%d", constants.EndpointJamfProAPIRolePrivilegesV1, url.QueryEscape(name), limit)
 	var result ListResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

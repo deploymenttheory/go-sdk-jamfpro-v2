@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -86,13 +86,13 @@ func (s *AdcsSettings) CreateV1(ctx context.Context, request *ResourceAdcsSettin
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointAdcsSettingsV1
+	endpoint := constants.EndpointJamfProAdcsSettingsV1
 
 	var result ResponseAdcsSettingsCreated
 
 	headers := map[string]string{
 		"Accept":       "*/*",
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -111,12 +111,12 @@ func (s *AdcsSettings) GetByIDV1(ctx context.Context, id string) (*ResponseAdcsS
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAdcsSettingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdcsSettingsV1, id)
 
 	var result ResponseAdcsSettings
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -138,11 +138,11 @@ func (s *AdcsSettings) UpdateByIDV1(ctx context.Context, id string, request *Res
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAdcsSettingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdcsSettingsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationMergePatchJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationMergePatchJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, nil)
@@ -161,10 +161,10 @@ func (s *AdcsSettings) DeleteByIDV1(ctx context.Context, id string) (*resty.Resp
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAdcsSettingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdcsSettingsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -183,10 +183,10 @@ func (s *AdcsSettings) ValidateServerCertificateV1(ctx context.Context, request 
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/validate-certificate", EndpointAdcsSettingsV1)
+	endpoint := fmt.Sprintf("%s/validate-certificate", constants.EndpointJamfProAdcsSettingsV1)
 
 	headers := map[string]string{
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -205,10 +205,10 @@ func (s *AdcsSettings) ValidateClientCertificateV1(ctx context.Context, request 
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/validate-client-certificate", EndpointAdcsSettingsV1)
+	endpoint := fmt.Sprintf("%s/validate-client-certificate", constants.EndpointJamfProAdcsSettingsV1)
 
 	headers := map[string]string{
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -227,12 +227,12 @@ func (s *AdcsSettings) GetDependenciesByIDV1(ctx context.Context, id string) (*D
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dependencies", EndpointAdcsSettingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/dependencies", constants.EndpointJamfProAdcsSettingsV1, id)
 
 	var result DependenciesResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -253,12 +253,12 @@ func (s *AdcsSettings) GetHistoryByIDV1(ctx context.Context, id string, query ma
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointAdcsSettingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProAdcsSettingsV1, id)
 
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -289,11 +289,11 @@ func (s *AdcsSettings) AddHistoryNoteByIDV1(ctx context.Context, id string, requ
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointAdcsSettingsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProAdcsSettingsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)

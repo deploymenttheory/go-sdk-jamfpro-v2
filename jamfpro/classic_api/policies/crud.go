@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -116,11 +116,11 @@ func NewPolicies(client transport.HTTPClient) *Policies {
 func (s *Policies) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicPolicies
+	endpoint := constants.EndpointClassicPolicies
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -139,13 +139,13 @@ func (s *Policies) GetByID(ctx context.Context, id int) (*ResourcePolicy, *resty
 		return nil, nil, fmt.Errorf("policy ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicPolicies, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicPolicies, id)
 
 	var result ResourcePolicy
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -164,13 +164,13 @@ func (s *Policies) GetByName(ctx context.Context, name string) (*ResourcePolicy,
 		return nil, nil, fmt.Errorf("policy name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicPolicies, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicPolicies, name)
 
 	var result ResourcePolicy
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -190,13 +190,13 @@ func (s *Policies) Create(ctx context.Context, policy *ResourcePolicy) (*CreateU
 		return nil, nil, fmt.Errorf("policy is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicPolicies)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicPolicies)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, policy, headers, &result)
@@ -219,13 +219,13 @@ func (s *Policies) UpdateByID(ctx context.Context, id int, policy *ResourcePolic
 		return nil, nil, fmt.Errorf("policy is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicPolicies, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicPolicies, id)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, policy, headers, &result)
@@ -248,13 +248,13 @@ func (s *Policies) UpdateByName(ctx context.Context, name string, policy *Resour
 		return nil, nil, fmt.Errorf("policy is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicPolicies, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicPolicies, name)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, policy, headers, &result)
@@ -273,11 +273,11 @@ func (s *Policies) DeleteByID(ctx context.Context, id int) (*resty.Response, err
 		return nil, fmt.Errorf("policy ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicPolicies, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicPolicies, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -296,11 +296,11 @@ func (s *Policies) DeleteByName(ctx context.Context, name string) (*resty.Respon
 		return nil, fmt.Errorf("policy name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicPolicies, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicPolicies, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -323,13 +323,13 @@ func (s *Policies) GetByCreatedBy(ctx context.Context, createdBy string) (*ListR
 		return nil, nil, fmt.Errorf("createdBy must be 'jss' or 'casper'")
 	}
 
-	endpoint := fmt.Sprintf("%s/createdBy/%s", EndpointClassicPolicies, createdBy)
+	endpoint := fmt.Sprintf("%s/createdBy/%s", constants.EndpointClassicPolicies, createdBy)
 
 	var result ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -349,13 +349,13 @@ func (s *Policies) GetByCategory(ctx context.Context, category string) (*ListRes
 		return nil, nil, fmt.Errorf("category is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/category/%s", EndpointClassicPolicies, category)
+	endpoint := fmt.Sprintf("%s/category/%s", constants.EndpointClassicPolicies, category)
 
 	var result ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -381,13 +381,13 @@ func (s *Policies) GetByIDWithSubset(ctx context.Context, id int, subset string)
 		return nil, nil, fmt.Errorf("subset is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d/subset/%s", EndpointClassicPolicies, id, subset)
+	endpoint := fmt.Sprintf("%s/id/%d/subset/%s", constants.EndpointClassicPolicies, id, subset)
 
 	var result ResourcePolicy
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -413,13 +413,13 @@ func (s *Policies) GetByNameWithSubset(ctx context.Context, name string, subset 
 		return nil, nil, fmt.Errorf("subset is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s/subset/%s", EndpointClassicPolicies, name, subset)
+	endpoint := fmt.Sprintf("%s/name/%s/subset/%s", constants.EndpointClassicPolicies, name, subset)
 
 	var result ResourcePolicy
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -13,7 +14,7 @@ import (
 func main() {
 	authConfig := &jamfpro.AuthConfig{
 		InstanceDomain:           "https://your-instance.jamfcloud.com",
-		AuthMethod:               jamfpro.AuthMethodOAuth2,
+		AuthMethod:               constants.AuthMethodOAuth2,
 		ClientID:                 "your-client-id",
 		ClientSecret:             "your-client-secret",
 		TokenRefreshBufferPeriod: 5 * time.Minute,

@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -109,10 +109,10 @@ func NewJcds(client transport.HTTPClient) *Jcds {
 // URL: GET /api/v1/jcds/files
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files
 func (s *Jcds) GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *resty.Response, error) {
-	endpoint := EndpointJCDSV1 + "/files"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/files"
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result []ResourceJCDSFile
@@ -132,10 +132,10 @@ func (s *Jcds) GetPackageURIByNameV1(ctx context.Context, packageName string) (*
 		return nil, nil, fmt.Errorf("package name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/files/%s", EndpointJCDSV1, packageName)
+	endpoint := fmt.Sprintf("%s/files/%s", constants.EndpointJamfProJCDSV1, packageName)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResponseJCDSFile
@@ -151,11 +151,11 @@ func (s *Jcds) GetPackageURIByNameV1(ctx context.Context, packageName string) (*
 // URL: POST /api/v1/jcds/renew-credentials
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-renew-credentials
 func (s *Jcds) RenewCredentialsV1(ctx context.Context) (*ResourceJCDSUploadCredentials, *resty.Response, error) {
-	endpoint := EndpointJCDSV1 + "/renew-credentials"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/renew-credentials"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var result ResourceJCDSUploadCredentials
@@ -177,11 +177,11 @@ func (s *Jcds) CreatePackageV1(ctx context.Context, filePath string) (*ResponseJ
 
 	// Step 1: Obtain AWS credentials for the package upload endpoint
 	var uploadCredentials ResourceJCDSUploadCredentials
-	endpoint := EndpointJCDSV1 + "/files"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/files"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &uploadCredentials)
@@ -261,11 +261,11 @@ func (s *Jcds) DeletePackageV1(ctx context.Context, filePath string) (*resty.Res
 
 	// Step 1: Obtain AWS credentials for the package deletion endpoint
 	var uploadCredentials ResourceJCDSUploadCredentials
-	endpoint := EndpointJCDSV1 + "/files"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/files"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &uploadCredentials)
@@ -314,11 +314,11 @@ func (s *Jcds) DeletePackageV1(ctx context.Context, filePath string) (*resty.Res
 // URL: POST /api/v1/jcds/refresh-inventory
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-refresh-inventory
 func (s *Jcds) RefreshInventoryV1(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointJCDSV1 + "/refresh-inventory"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/refresh-inventory"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)

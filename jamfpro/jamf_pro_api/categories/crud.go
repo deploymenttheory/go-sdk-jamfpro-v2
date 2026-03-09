@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -99,7 +99,7 @@ func NewCategories(client transport.HTTPClient) *Categories {
 func (s *Categories) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointCategoriesV1
+	endpoint := constants.EndpointJamfProCategoriesV1
 
 	mergePage := func(pageData []byte) error {
 		var items []ResourceCategory
@@ -111,7 +111,7 @@ func (s *Categories) ListV1(ctx context.Context, rsqlQuery map[string]string) (*
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -129,12 +129,12 @@ func (s *Categories) GetByIDV1(ctx context.Context, id string) (*ResourceCategor
 		return nil, nil, fmt.Errorf("category ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCategoriesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCategoriesV1, id)
 
 	var result ResourceCategory
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,11 +156,11 @@ func (s *Categories) CreateV1(ctx context.Context, request *RequestCategory) (*C
 
 	var result CreateUpdateResponse
 
-	endpoint := EndpointCategoriesV1
+	endpoint := constants.EndpointJamfProCategoriesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -184,13 +184,13 @@ func (s *Categories) UpdateByIDV1(ctx context.Context, id string, request *Reque
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCategoriesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCategoriesV1, id)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -209,10 +209,10 @@ func (s *Categories) DeleteByIDV1(ctx context.Context, id string) (*resty.Respon
 		return nil, fmt.Errorf("category ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCategoriesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCategoriesV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -232,11 +232,11 @@ func (s *Categories) DeleteCategoriesByIDV1(ctx context.Context, req *DeleteCate
 		return nil, fmt.Errorf("ids are required")
 	}
 
-	endpoint := EndpointCategoriesV1 + "/delete-multiple"
+	endpoint := constants.EndpointJamfProCategoriesV1 + "/delete-multiple"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -256,7 +256,7 @@ func (s *Categories) GetCategoryHistoryV1(ctx context.Context, id string, rsqlQu
 		return nil, nil, fmt.Errorf("category ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointCategoriesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProCategoriesV1, id)
 
 	var result CategoryHistoryResponse
 
@@ -270,7 +270,7 @@ func (s *Categories) GetCategoryHistoryV1(ctx context.Context, id string, rsqlQu
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -292,11 +292,11 @@ func (s *Categories) AddCategoryHistoryNotesV1(ctx context.Context, id string, r
 		return nil, fmt.Errorf("request body is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointCategoriesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProCategoriesV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)

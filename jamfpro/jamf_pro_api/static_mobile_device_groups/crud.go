@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -59,10 +59,10 @@ func NewStaticMobileDeviceGroups(client transport.HTTPClient) *StaticMobileDevic
 func (s *StaticMobileDeviceGroups) List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointStaticGroupsV2
+	endpoint := constants.EndpointJamfProStaticMobileDeviceGroups2V2
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -80,12 +80,12 @@ func (s *StaticMobileDeviceGroups) GetByID(ctx context.Context, id string) (*Res
 		return nil, nil, fmt.Errorf("static mobile device group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticMobileDeviceGroups2V2, id)
 
 	var result ResourceStaticMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -109,11 +109,11 @@ func (s *StaticMobileDeviceGroups) Create(ctx context.Context, request *RequestS
 
 	var result CreateResponse
 
-	endpoint := EndpointStaticGroupsV2
+	endpoint := constants.EndpointJamfProStaticMobileDeviceGroups2V2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -139,13 +139,13 @@ func (s *StaticMobileDeviceGroups) UpdateByID(ctx context.Context, id string, re
 		request.Assignments = []StaticMobileDeviceGroupAssignment{}
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticMobileDeviceGroups2V2, id)
 
 	var result ResourceStaticMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
@@ -163,10 +163,10 @@ func (s *StaticMobileDeviceGroups) DeleteByID(ctx context.Context, id string) (*
 		return nil, fmt.Errorf("static mobile device group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticMobileDeviceGroups2V2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

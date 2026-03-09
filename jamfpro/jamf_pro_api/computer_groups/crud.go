@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -100,7 +100,7 @@ func NewComputerGroups(client transport.HTTPClient) *ComputerGroups {
 func (s *ComputerGroups) ListSmartV2(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *resty.Response, error) {
 	var result ListSmartResponse
 
-	endpoint := EndpointSmartGroupsV2
+	endpoint := constants.EndpointJamfProSmartComputerGroupsV2
 
 	mergePage := func(pageData []byte) error {
 		var pageResults []ResourceSmartGroup
@@ -114,7 +114,7 @@ func (s *ComputerGroups) ListSmartV2(ctx context.Context, rsqlQuery map[string]s
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -148,12 +148,12 @@ func (s *ComputerGroups) GetSmartByIDV2(ctx context.Context, id string) (*Resour
 		return nil, nil, fmt.Errorf("smart group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartComputerGroupsV2, id)
 
 	var result ResourceSmartGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -173,11 +173,11 @@ func (s *ComputerGroups) CreateSmartV2(ctx context.Context, request *RequestSmar
 
 	var result CreateSmartResponse
 
-	endpoint := EndpointSmartGroupsV2
+	endpoint := constants.EndpointJamfProSmartComputerGroupsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -199,13 +199,13 @@ func (s *ComputerGroups) UpdateSmartV2(ctx context.Context, id string, request *
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartComputerGroupsV2, id)
 
 	var result ResourceSmartGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -223,10 +223,10 @@ func (s *ComputerGroups) DeleteSmartV2(ctx context.Context, id string) (*resty.R
 		return nil, fmt.Errorf("smart group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartComputerGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -248,7 +248,7 @@ func (s *ComputerGroups) ListStaticV2(ctx context.Context, rsqlQuery map[string]
 
 	result.Results = []ResourceStaticGroup{}
 
-	endpoint := EndpointStaticGroupsV2
+	endpoint := constants.EndpointJamfProStaticComputerGroupsV2
 
 	mergePage := func(pageData []byte) error {
 		var pageResults []ResourceStaticGroup
@@ -260,7 +260,7 @@ func (s *ComputerGroups) ListStaticV2(ctx context.Context, rsqlQuery map[string]
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -294,12 +294,12 @@ func (s *ComputerGroups) GetStaticByIDV2(ctx context.Context, id string) (*Resou
 		return nil, nil, fmt.Errorf("static group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticComputerGroupsV2, id)
 
 	var result ResourceStaticGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -319,11 +319,11 @@ func (s *ComputerGroups) CreateStaticV2(ctx context.Context, request *RequestSta
 
 	var result CreateStaticResponse
 
-	endpoint := EndpointStaticGroupsV2
+	endpoint := constants.EndpointJamfProStaticComputerGroupsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -345,13 +345,13 @@ func (s *ComputerGroups) UpdateStaticByIDV2(ctx context.Context, id string, requ
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticComputerGroupsV2, id)
 
 	var result ResourceStaticGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -369,10 +369,10 @@ func (s *ComputerGroups) DeleteStaticByIDV2(ctx context.Context, id string) (*re
 		return nil, fmt.Errorf("static group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticComputerGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -392,10 +392,10 @@ func (s *ComputerGroups) DeleteStaticByIDV2(ctx context.Context, id string) (*re
 func (s *ComputerGroups) ListAllV1(ctx context.Context) ([]ResourceGroupV1, *resty.Response, error) {
 	var result []ResourceGroupV1
 
-	endpoint := EndpointComputerGroupsV1
+	endpoint := constants.EndpointJamfProComputerGroupsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -413,12 +413,12 @@ func (s *ComputerGroups) GetSmartGroupMembershipByIDV2(ctx context.Context, id s
 		return nil, nil, fmt.Errorf("smart group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupMembershipV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartComputerGroupMembershipV2, id)
 
 	var result SmartGroupMembershipResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

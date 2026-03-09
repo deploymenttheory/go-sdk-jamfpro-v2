@@ -5,15 +5,31 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
 
 // fileUploadFormFieldName is the form field name expected by the Classic API file uploads endpoint.
 // See: https://developer.jamf.com/jamf-pro/reference/fileuploads
 const fileUploadFormFieldName = "name"
+
+// ValidFileUploadResources contains the list of valid resources for file uploads.
+var ValidFileUploadResources = []string{
+	"computers",
+	"mobiledevices",
+	"enrollmentprofiles",
+	"printers",
+	"peripherals",
+	"policies",
+	"ebooks",
+	"mobiledeviceapplications",
+	"icon",
+	"mobiledeviceapplicationsipa",
+	"diskencryptionconfigurations",
+}
 
 type (
 	// FileUploadsServiceInterface defines the interface for Classic API file upload operations.
@@ -22,7 +38,7 @@ type (
 	FileUploadsServiceInterface interface {
 		// CreateAttachment uploads a file to a specific resource in Jamf Pro.
 		//
-		// resource must be one of ValidFileUploadResources.
+		// resource must be one of constants.ValidFileUploadResources.
 		// idType specifies whether identifier is an ID or name.
 		// identifier is the resource ID (e.g. "123") or name.
 		// filePath is the path to the file on disk.
@@ -56,14 +72,7 @@ func NewFileUploads(client transport.HTTPClient) *FileUploads {
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/fileuploads
 func (s *FileUploads) CreateAttachment(ctx context.Context, resource string, idType ResourceIDType, identifier string, filePath string, forceIpaUpload bool) (*resty.Response, error) {
 	// Validate resource
-	validResource := false
-	for _, r := range ValidFileUploadResources {
-		if r == resource {
-			validResource = true
-			break
-		}
-	}
-	if !validResource {
+	if !slices.Contains(ValidFileUploadResources, resource) {
 		return nil, fmt.Errorf("invalid resource type: %s", resource)
 	}
 
@@ -104,8 +113,7 @@ func (s *FileUploads) CreateAttachment(ctx context.Context, resource string, idT
 		fileName = filepath.Base(filePath)
 	}
 
-	// Construct endpoint
-	endpoint := fmt.Sprintf("%s/%s/%s/%s", EndpointFileUploads, resource, idType, identifier)
+	endpoint := fmt.Sprintf("%s/%s/%s/%s", constants.EndpointClassicFileUploads, resource, idType, identifier)
 
 	// Add query parameter for IPA upload if specified
 	if forceIpaUpload && resource == "mobiledeviceapplicationsipa" {
@@ -113,7 +121,7 @@ func (s *FileUploads) CreateAttachment(ctx context.Context, resource string, idT
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationXML,
+		"Accept": constants.ApplicationXML,
 	}
 
 	var result any

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -43,10 +43,10 @@ func NewOauth2SessionTokens(client transport.HTTPClient) *Oauth2SessionTokens {
 func (s *Oauth2SessionTokens) GetV1(ctx context.Context) (*SessionTokenResponse, *resty.Response, error) {
 	var result SessionTokenResponse
 
-	endpoint := EndpointOAuth2SessionTokensV1
+	endpoint := constants.EndpointJamfProOAuth2SessionTokensV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

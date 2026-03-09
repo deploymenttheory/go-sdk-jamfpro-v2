@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -89,13 +89,13 @@ func applySiteDefault(computer *ResponseComputer) {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputers
 func (s *Computers) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointComputers
+	endpoint := constants.EndpointClassicComputers
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -114,13 +114,13 @@ func (s *Computers) GetByID(ctx context.Context, id string) (*ResponseComputer, 
 		return nil, nil, fmt.Errorf("computer ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s", EndpointComputers, id)
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputers, id)
 
 	var out ResponseComputer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -139,13 +139,13 @@ func (s *Computers) GetByName(ctx context.Context, name string) (*ResponseComput
 		return nil, nil, fmt.Errorf("computer name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointComputers, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputers, name)
 
 	var out ResponseComputer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -167,13 +167,13 @@ func (s *Computers) Create(ctx context.Context, computer *ResponseComputer) (*Re
 		return nil, nil, fmt.Errorf("computer name is required")
 	}
 
-	endpoint := EndpointComputers
+	endpoint := constants.EndpointClassicComputers
 
 	var out ResponseComputer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, computer, headers, &out)
@@ -197,13 +197,13 @@ func (s *Computers) UpdateByID(ctx context.Context, id string, computer *Respons
 
 	applySiteDefault(computer)
 
-	endpoint := fmt.Sprintf("%s/id/%s", EndpointComputers, id)
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputers, id)
 
 	var out ResponseComputer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, computer, headers, &out)
@@ -227,13 +227,13 @@ func (s *Computers) UpdateByName(ctx context.Context, name string, computer *Res
 
 	applySiteDefault(computer)
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointComputers, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputers, name)
 
 	var out ResponseComputer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, computer, headers, &out)
@@ -252,11 +252,11 @@ func (s *Computers) DeleteByID(ctx context.Context, id string) (*resty.Response,
 		return nil, fmt.Errorf("computer ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s", EndpointComputers, id)
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputers, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -275,11 +275,11 @@ func (s *Computers) DeleteByName(ctx context.Context, name string) (*resty.Respo
 		return nil, fmt.Errorf("computer name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointComputers, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputers, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

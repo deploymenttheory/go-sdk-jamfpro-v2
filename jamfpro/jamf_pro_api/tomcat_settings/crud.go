@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -36,11 +36,11 @@ func NewTomcatSettings(client transport.HTTPClient) *TomcatSettings {
 // IssueTomcatSslCertificate generates an SSL certificate via Jamf CA.
 // URL: POST /api/settings/issueTomcatSslCertificate
 func (s *TomcatSettings) IssueTomcatSslCertificate(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointIssueTomcatSslCertificate
+	endpoint := constants.EndpointJamfProIssueTomcatSslCertificate
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)

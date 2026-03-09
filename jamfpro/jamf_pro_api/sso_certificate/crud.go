@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -67,9 +67,9 @@ func NewSsoCertificate(client transport.HTTPClient) *SsoCertificate {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert
 func (s *SsoCertificate) GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error) {
 	var result ResourceSSOKeystoreResponse
-	endpoint := EndpointSSOCertV2
+	endpoint := constants.EndpointJamfProSSOCertV2
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
@@ -83,10 +83,10 @@ func (s *SsoCertificate) GetV2(ctx context.Context) (*ResourceSSOKeystoreRespons
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert
 func (s *SsoCertificate) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error) {
 	var result ResourceSSOKeystoreResponse
-	endpoint := EndpointSSOCertV2
+	endpoint := constants.EndpointJamfProSSOCertV2
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
 	if err != nil {
@@ -100,10 +100,10 @@ func (s *SsoCertificate) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResp
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-sso-cert
 func (s *SsoCertificate) UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *resty.Response, error) {
 	var result ResourceSSOKeystoreResponse
-	endpoint := EndpointSSOCertV2
+	endpoint := constants.EndpointJamfProSSOCertV2
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
@@ -117,9 +117,9 @@ func (s *SsoCertificate) UpdateV2(ctx context.Context, request *UpdateKeystoreRe
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert-download
 func (s *SsoCertificate) DownloadV2(ctx context.Context) ([]byte, *resty.Response, error) {
 	var result []byte
-	endpoint := EndpointSSOCertDownloadV2
+	endpoint := constants.EndpointJamfProSSOCertDownloadV2
 	headers := map[string]string{
-		"Accept": mime.ApplicationOctetStream,
+		"Accept": constants.ApplicationOctetStream,
 	}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
@@ -133,10 +133,10 @@ func (s *SsoCertificate) DownloadV2(ctx context.Context) ([]byte, *resty.Respons
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-sso-cert-parse
 func (s *SsoCertificate) ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *resty.Response, error) {
 	var result ParseKeystoreResponse
-	endpoint := EndpointSSOCertParseV2
+	endpoint := constants.EndpointJamfProSSOCertParseV2
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
@@ -149,9 +149,9 @@ func (s *SsoCertificate) ParseV2(ctx context.Context, request *ParseKeystoreRequ
 // URL: DELETE /api/v2/sso/cert
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-sso-cert
 func (s *SsoCertificate) DeleteV2(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointSSOCertV2
+	endpoint := constants.EndpointJamfProSSOCertV2
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -45,12 +45,12 @@ func NewInventoryInformation(client transport.HTTPClient) *InventoryInformation 
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
 func (s *InventoryInformation) GetV1(ctx context.Context) (*ResourceInventoryInformation, *resty.Response, error) {
-	endpoint := EndpointInventoryInformationV1
+	endpoint := constants.EndpointJamfProInventoryInformationV1
 
 	var result ResourceInventoryInformation
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

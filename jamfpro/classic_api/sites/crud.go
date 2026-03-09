@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -82,11 +82,11 @@ func NewSites(client transport.HTTPClient) *Sites {
 func (s *Sites) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicSites
+	endpoint := constants.EndpointClassicSites
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +105,13 @@ func (s *Sites) GetByID(ctx context.Context, id int) (*ResourceSite, *resty.Resp
 		return nil, nil, fmt.Errorf("site ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicSites, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSites, id)
 
 	var result ResourceSite
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +130,13 @@ func (s *Sites) GetByName(ctx context.Context, name string) (*ResourceSite, *res
 		return nil, nil, fmt.Errorf("site name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicSites, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSites, name)
 
 	var result ResourceSite
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +156,13 @@ func (s *Sites) Create(ctx context.Context, req *RequestSite) (*ResourceSite, *r
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicSites)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicSites)
 
 	var result ResourceSite
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +184,13 @@ func (s *Sites) UpdateByID(ctx context.Context, id int, req *RequestSite) (*Reso
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicSites, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSites, id)
 
 	var result ResourceSite
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +212,13 @@ func (s *Sites) UpdateByName(ctx context.Context, name string, req *RequestSite)
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicSites, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSites, name)
 
 	var result ResourceSite
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +237,11 @@ func (s *Sites) DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 		return nil, fmt.Errorf("site ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicSites, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSites, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +260,11 @@ func (s *Sites) DeleteByName(ctx context.Context, name string) (*resty.Response,
 		return nil, fmt.Errorf("site name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicSites, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSites, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

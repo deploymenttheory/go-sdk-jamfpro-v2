@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -68,11 +68,11 @@ func (s *MdmRenewal) UpdateDeviceCommonDetailsV1(ctx context.Context, request *R
 		return nil, fmt.Errorf("clientManagementId is required")
 	}
 
-	endpoint := EndpointDeviceCommonDetailsV1
+	endpoint := constants.EndpointJamfProDeviceCommonDetailsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, nil)
@@ -90,12 +90,12 @@ func (s *MdmRenewal) GetDeviceCommonDetailsV1(ctx context.Context, clientManagem
 		return nil, nil, fmt.Errorf("clientManagementId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDeviceCommonDetailsV1, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDeviceCommonDetailsV1, clientManagementID)
 
 	var result DeviceCommonDetails
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -113,12 +113,12 @@ func (s *MdmRenewal) GetRenewalStrategiesV1(ctx context.Context, clientManagemen
 		return nil, nil, fmt.Errorf("clientManagementId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointRenewalStrategiesV1, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProRenewalStrategiesV1, clientManagementID)
 
 	var result []RenewalErrorWithStrategies
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -137,10 +137,10 @@ func (s *MdmRenewal) DeleteRenewalStrategiesV1(ctx context.Context, clientManage
 		return nil, fmt.Errorf("clientManagementId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointRenewalStrategiesV1, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProRenewalStrategiesV1, clientManagementID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

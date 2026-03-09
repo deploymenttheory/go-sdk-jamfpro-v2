@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -50,10 +50,10 @@ func NewMacosConfigurationProfileCustomSettings(client transport.HTTPClient) *Ma
 // GetSchemaList retrieves the list of custom settings schemas.
 // URL: GET /api/config-profiles/macos/custom-settings/v1/schema-list
 func (s *MacosConfigurationProfileCustomSettings) GetSchemaList(ctx context.Context) (*ResponseCustomSettingsSchemaList, *resty.Response, error) {
-	endpoint := EndpointCustomSettingsSchemaList
+	endpoint := constants.EndpointJamfProCustomSettingsSchemaList
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResponseCustomSettingsSchemaList
@@ -72,10 +72,10 @@ func (s *MacosConfigurationProfileCustomSettings) GetByPayloadUUID(ctx context.C
 		return nil, nil, fmt.Errorf("payload UUID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointConfigProfilesMacOS, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProConfigProfilesMacOS, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceConfigProfile
@@ -94,11 +94,11 @@ func (s *MacosConfigurationProfileCustomSettings) Create(ctx context.Context, pr
 		return nil, nil, fmt.Errorf("profile is required")
 	}
 
-	endpoint := EndpointConfigProfilesMacOS
+	endpoint := constants.EndpointJamfProConfigProfilesMacOS
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var result ResponseConfigProfileCreate

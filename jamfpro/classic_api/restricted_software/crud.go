@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -82,11 +82,11 @@ func NewRestrictedSoftware(client transport.HTTPClient) *RestrictedSoftware {
 func (s *RestrictedSoftware) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicRestrictedSoftware
+	endpoint := constants.EndpointClassicRestrictedSoftware
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +105,13 @@ func (s *RestrictedSoftware) GetByID(ctx context.Context, id int) (*ResourceRest
 		return nil, nil, fmt.Errorf("restricted software ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicRestrictedSoftware, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicRestrictedSoftware, id)
 
 	var result ResourceRestrictedSoftware
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +130,13 @@ func (s *RestrictedSoftware) GetByName(ctx context.Context, name string) (*Resou
 		return nil, nil, fmt.Errorf("restricted software name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicRestrictedSoftware, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicRestrictedSoftware, name)
 
 	var result ResourceRestrictedSoftware
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +156,13 @@ func (s *RestrictedSoftware) Create(ctx context.Context, req *RequestRestrictedS
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicRestrictedSoftware)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicRestrictedSoftware)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +184,13 @@ func (s *RestrictedSoftware) UpdateByID(ctx context.Context, id int, req *Reques
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicRestrictedSoftware, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicRestrictedSoftware, id)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +212,13 @@ func (s *RestrictedSoftware) UpdateByName(ctx context.Context, name string, req 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicRestrictedSoftware, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicRestrictedSoftware, name)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +237,11 @@ func (s *RestrictedSoftware) DeleteByID(ctx context.Context, id int) (*resty.Res
 		return nil, fmt.Errorf("restricted software ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicRestrictedSoftware, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicRestrictedSoftware, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +260,11 @@ func (s *RestrictedSoftware) DeleteByName(ctx context.Context, name string) (*re
 		return nil, fmt.Errorf("restricted software name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicRestrictedSoftware, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicRestrictedSoftware, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

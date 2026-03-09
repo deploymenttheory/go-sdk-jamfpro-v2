@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_package/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -25,7 +26,7 @@ func TestUnit_JamfPackage_ListV1_Success_Protect(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListV1Mock()
 
-	result, resp, err := svc.ListV1(context.Background(), ApplicationProtect)
+	result, resp, err := svc.ListV1(context.Background(), constants.ApplicationProtect)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -46,7 +47,7 @@ func TestUnit_JamfPackage_ListV1_Success_Connect(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListV1Mock()
 
-	result, resp, err := svc.ListV1(context.Background(), ApplicationConnect)
+	result, resp, err := svc.ListV1(context.Background(), constants.ApplicationConnect)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -100,7 +101,7 @@ func TestUnit_JamfPackage_ListV1_InvalidApplication_Unknown(t *testing.T) {
 func TestUnit_JamfPackage_ListV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.ListV1(context.Background(), ApplicationProtect)
+	result, resp, err := svc.ListV1(context.Background(), constants.ApplicationProtect)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -111,7 +112,7 @@ func TestUnit_JamfPackage_ListV1_InvalidJSON(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListV1InvalidJSONMock()
 
-	result, resp, err := svc.ListV1(context.Background(), ApplicationProtect)
+	result, resp, err := svc.ListV1(context.Background(), constants.ApplicationProtect)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -123,7 +124,7 @@ func TestUnit_JamfPackage_ListV1_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListV1NotFoundErrorMock()
 
-	result, resp, err := svc.ListV1(context.Background(), ApplicationProtect)
+	result, resp, err := svc.ListV1(context.Background(), constants.ApplicationProtect)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -134,7 +135,7 @@ func TestUnit_JamfPackage_GetV2_Success_Protect(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetV2Mock()
 
-	result, resp, err := svc.GetV2(context.Background(), ApplicationProtect)
+	result, resp, err := svc.GetV2(context.Background(), constants.ApplicationProtect)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -153,7 +154,7 @@ func TestUnit_JamfPackage_GetV2_Success_Connect(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetV2Mock()
 
-	result, resp, err := svc.GetV2(context.Background(), ApplicationConnect)
+	result, resp, err := svc.GetV2(context.Background(), constants.ApplicationConnect)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -200,7 +201,7 @@ func TestUnit_JamfPackage_GetV2_InvalidApplication_Unknown(t *testing.T) {
 func TestUnit_JamfPackage_GetV2_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	result, resp, err := svc.GetV2(context.Background(), ApplicationProtect)
+	result, resp, err := svc.GetV2(context.Background(), constants.ApplicationProtect)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Nil(t, resp)
@@ -211,7 +212,7 @@ func TestUnit_JamfPackage_GetV2_InvalidJSON(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetV2InvalidJSONMock()
 
-	result, resp, err := svc.GetV2(context.Background(), ApplicationProtect)
+	result, resp, err := svc.GetV2(context.Background(), constants.ApplicationProtect)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -223,7 +224,7 @@ func TestUnit_JamfPackage_GetV2_NotFound(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterGetV2NotFoundErrorMock()
 
-	result, resp, err := svc.GetV2(context.Background(), ApplicationProtect)
+	result, resp, err := svc.GetV2(context.Background(), constants.ApplicationProtect)
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	require.NotNil(t, resp)
@@ -234,7 +235,7 @@ func TestUnit_JamfPackage_ListV1_EmptyResult(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterListV1EmptyMock()
 
-	result, resp, err := svc.ListV1(context.Background(), ApplicationProtect)
+	result, resp, err := svc.ListV1(context.Background(), constants.ApplicationProtect)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

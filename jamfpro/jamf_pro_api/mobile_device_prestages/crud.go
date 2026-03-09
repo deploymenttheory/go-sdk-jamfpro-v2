@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
 	"resty.dev/v3"
 )
@@ -120,11 +120,11 @@ func NewMobileDevicePrestages(client transport.HTTPClient) *MobileDevicePrestage
 func (s *MobileDevicePrestages) ListV3(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointMobileDevicePrestagesV3
+	endpoint := constants.EndpointJamfProMobileDevicePrestagesV3
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -152,12 +152,12 @@ func (s *MobileDevicePrestages) GetByIDV3(ctx context.Context, id string) (*Reso
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDevicePrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDevicePrestagesV3, id)
 
 	var result ResourceMobileDevicePrestage
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -203,11 +203,11 @@ func (s *MobileDevicePrestages) CreateV3(ctx context.Context, prestage *Resource
 
 	var result CreateResponse
 
-	endpoint := EndpointMobileDevicePrestagesV3
+	endpoint := constants.EndpointJamfProMobileDevicePrestagesV3
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, prestage, headers, &result)
@@ -246,13 +246,13 @@ func (s *MobileDevicePrestages) UpdateByIDV3(ctx context.Context, id string, pre
 	version_locking.EnsureVersionLock(&current.LocationInformation, &prestage.LocationInformation)
 	version_locking.EnsureVersionLock(&current.PurchasingInformation, &prestage.PurchasingInformation)
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDevicePrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDevicePrestagesV3, id)
 
 	var result ResourceMobileDevicePrestage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, prestage, headers, &result)
@@ -288,13 +288,13 @@ func (s *MobileDevicePrestages) UpdateByNameV3(ctx context.Context, name string,
 	version_locking.EnsureVersionLock(&existing.LocationInformation, &prestage.LocationInformation)
 	version_locking.EnsureVersionLock(&existing.PurchasingInformation, &prestage.PurchasingInformation)
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDevicePrestagesV3, existing.ID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDevicePrestagesV3, existing.ID)
 
 	var result ResourceMobileDevicePrestage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err = s.client.Put(ctx, endpoint, prestage, headers, &result)
@@ -313,10 +313,10 @@ func (s *MobileDevicePrestages) DeleteByIDV3(ctx context.Context, id string) (*r
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDevicePrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDevicePrestagesV3, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -349,12 +349,12 @@ func (s *MobileDevicePrestages) GetScopeByIDV2(ctx context.Context, id string) (
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/scope", EndpointMobileDevicePrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/scope", constants.EndpointJamfProMobileDevicePrestagesV2, id)
 
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -383,13 +383,13 @@ func (s *MobileDevicePrestages) ReplaceScopeByIDV2(ctx context.Context, id strin
 
 	version_locking.EnsureVersionLock(currentScope, request)
 
-	endpoint := fmt.Sprintf("%s/%s/scope", EndpointMobileDevicePrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/scope", constants.EndpointJamfProMobileDevicePrestagesV2, id)
 
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -417,13 +417,13 @@ func (s *MobileDevicePrestages) AddScopeByIDV2(ctx context.Context, id string, r
 
 	version_locking.EnsureVersionLock(currentScope, request)
 
-	endpoint := fmt.Sprintf("%s/%s/scope", EndpointMobileDevicePrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/scope", constants.EndpointJamfProMobileDevicePrestagesV2, id)
 
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -451,13 +451,13 @@ func (s *MobileDevicePrestages) RemoveScopeByIDV2(ctx context.Context, id string
 
 	version_locking.EnsureVersionLock(currentScope, request)
 
-	endpoint := fmt.Sprintf("%s/%s/scope/delete-multiple", EndpointMobileDevicePrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/scope/delete-multiple", constants.EndpointJamfProMobileDevicePrestagesV2, id)
 
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -471,12 +471,12 @@ func (s *MobileDevicePrestages) RemoveScopeByIDV2(ctx context.Context, id string
 // GetAllSyncsV2 returns all prestage sync states for all mobile device prestages.
 // URL: GET /api/v2/mobile-device-prestages/syncs
 func (s *MobileDevicePrestages) GetAllSyncsV2(ctx context.Context) ([]ResourcePrestageSync, *resty.Response, error) {
-	endpoint := EndpointMobileDevicePrestagesV2 + "/syncs"
+	endpoint := constants.EndpointJamfProMobileDevicePrestagesV2 + "/syncs"
 
 	var result []ResourcePrestageSync
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -494,12 +494,12 @@ func (s *MobileDevicePrestages) GetSyncsByIDV2(ctx context.Context, id string) (
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/syncs", EndpointMobileDevicePrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/syncs", constants.EndpointJamfProMobileDevicePrestagesV2, id)
 
 	var result []ResourcePrestageSync
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -517,12 +517,12 @@ func (s *MobileDevicePrestages) GetLatestSyncByIDV2(ctx context.Context, id stri
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/syncs/latest", EndpointMobileDevicePrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/syncs/latest", constants.EndpointJamfProMobileDevicePrestagesV2, id)
 
 	var result ResourcePrestageSync
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -540,12 +540,12 @@ func (s *MobileDevicePrestages) GetAttachmentsByIDV3(ctx context.Context, id str
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/attachments", EndpointMobileDevicePrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s/attachments", constants.EndpointJamfProMobileDevicePrestagesV3, id)
 
 	var result []ResourceAttachment
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -569,10 +569,10 @@ func (s *MobileDevicePrestages) UploadAttachmentV3(ctx context.Context, id strin
 		return nil, nil, fmt.Errorf("file name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/attachments", EndpointMobileDevicePrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s/attachments", constants.EndpointJamfProMobileDevicePrestagesV3, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceAttachmentUpload
@@ -616,11 +616,11 @@ func (s *MobileDevicePrestages) DeleteAttachmentsByIDV3(ctx context.Context, id 
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/attachments/delete-multiple", EndpointMobileDevicePrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s/attachments/delete-multiple", constants.EndpointJamfProMobileDevicePrestagesV3, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -639,7 +639,7 @@ func (s *MobileDevicePrestages) GetHistoryByIDV3(ctx context.Context, id string,
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointMobileDevicePrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProMobileDevicePrestagesV3, id)
 
 	var result HistoryResponse
 
@@ -653,7 +653,7 @@ func (s *MobileDevicePrestages) GetHistoryByIDV3(ctx context.Context, id string,
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
@@ -677,13 +677,13 @@ func (s *MobileDevicePrestages) AddHistoryNoteByIDV3(ctx context.Context, id str
 		return nil, nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointMobileDevicePrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProMobileDevicePrestagesV3, id)
 
 	var result ResponseAddHistoryNote
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)

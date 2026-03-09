@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -124,10 +124,10 @@ func NewJamfProtect(client transport.HTTPClient) *JamfProtect {
 // URL: GET /api/v1/jamf-protect
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect
 func (s *JamfProtect) GetSettingsV1(ctx context.Context) (*ResourceJamfProtectSettings, *resty.Response, error) {
-	endpoint := EndpointJamfProtectV1
+	endpoint := constants.EndpointJamfProJamfProtectV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceJamfProtectSettings
@@ -147,11 +147,11 @@ func (s *JamfProtect) UpdateSettingsV1(ctx context.Context, request *RequestJamf
 		return nil, nil, fmt.Errorf("Jamf Protect settings request cannot be nil")
 	}
 
-	endpoint := EndpointJamfProtectV1
+	endpoint := constants.EndpointJamfProJamfProtectV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var result ResourceJamfProtectSettings
@@ -171,11 +171,11 @@ func (s *JamfProtect) RegisterV1(ctx context.Context, request *RequestJamfProtec
 		return nil, nil, fmt.Errorf("Jamf Protect registration request cannot be nil")
 	}
 
-	endpoint := EndpointJamfProtectRegisterV1
+	endpoint := constants.EndpointJamfProJamfProtectRegisterV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var result ResourceJamfProtectSettings
@@ -191,11 +191,11 @@ func (s *JamfProtect) RegisterV1(ctx context.Context, request *RequestJamfProtec
 // URL: POST /api/v1/jamf-protect/plans/sync
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-protect-plans-sync
 func (s *JamfProtect) SyncPlansV1(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointJamfProtectPlansV1 + "/sync"
+	endpoint := constants.EndpointJamfProJamfProtectPlansV1 + "/sync"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -246,7 +246,7 @@ func (s *JamfProtect) ListDeploymentTasksV1(ctx context.Context, deploymentID st
 		return nil, nil, fmt.Errorf("deployment ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/tasks", EndpointJamfProtectDeploymentsV1, deploymentID)
+	endpoint := fmt.Sprintf("%s/%s/tasks", constants.EndpointJamfProJamfProtectDeploymentsV1, deploymentID)
 
 	var result ListResponseJamfProtectDeploymentTasks
 
@@ -260,7 +260,7 @@ func (s *JamfProtect) ListDeploymentTasksV1(ctx context.Context, deploymentID st
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -278,11 +278,11 @@ func (s *JamfProtect) RetryDeploymentTasksV1(ctx context.Context, deploymentID s
 		return nil, fmt.Errorf("deployment ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/tasks/retry", EndpointJamfProtectDeploymentsV1, deploymentID)
+	endpoint := fmt.Sprintf("%s/%s/tasks/retry", constants.EndpointJamfProJamfProtectDeploymentsV1, deploymentID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -297,7 +297,7 @@ func (s *JamfProtect) RetryDeploymentTasksV1(ctx context.Context, deploymentID s
 // URL: GET /api/v1/jamf-protect/history
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect-history
 func (s *JamfProtect) ListHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectHistory, *resty.Response, error) {
-	endpoint := EndpointJamfProtectHistoryV1
+	endpoint := constants.EndpointJamfProJamfProtectHistoryV1
 
 	var result ListResponseJamfProtectHistory
 
@@ -311,7 +311,7 @@ func (s *JamfProtect) ListHistoryV1(ctx context.Context, rsqlQuery map[string]st
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -330,11 +330,11 @@ func (s *JamfProtect) CreateHistoryNoteV1(ctx context.Context, request *RequestJ
 		return nil, nil, fmt.Errorf("Jamf Protect history note request cannot be nil")
 	}
 
-	endpoint := EndpointJamfProtectHistoryV1
+	endpoint := constants.EndpointJamfProJamfProtectHistoryV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var result ResourceJamfProtectHistoryCreate
@@ -350,7 +350,7 @@ func (s *JamfProtect) CreateHistoryNoteV1(ctx context.Context, request *RequestJ
 // URL: GET /api/v1/jamf-protect/plans
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-protect-plans
 func (s *JamfProtect) ListPlansV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponseJamfProtectPlans, *resty.Response, error) {
-	endpoint := EndpointJamfProtectPlansV1
+	endpoint := constants.EndpointJamfProJamfProtectPlansV1
 
 	var result ListResponseJamfProtectPlans
 
@@ -364,7 +364,7 @@ func (s *JamfProtect) ListPlansV1(ctx context.Context, rsqlQuery map[string]stri
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -378,10 +378,10 @@ func (s *JamfProtect) ListPlansV1(ctx context.Context, rsqlQuery map[string]stri
 // URL: DELETE /api/v1/jamf-protect
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-jamf-protect
 func (s *JamfProtect) DeleteIntegrationV1(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointJamfProtectV1
+	endpoint := constants.EndpointJamfProJamfProtectV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

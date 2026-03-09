@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -87,13 +87,13 @@ func (s *EnrollmentCustomizationPreview) ParseMarkdown(ctx context.Context, requ
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/parse-markdown", EndpointEnrollmentCustomizationPreviewV1)
+	endpoint := fmt.Sprintf("%s/parse-markdown", constants.EndpointJamfProEnrollmentCustomizationPreviewV1)
 
 	var result ResponseParseMarkdown
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -111,12 +111,12 @@ func (s *EnrollmentCustomizationPreview) GetAllPanels(ctx context.Context, id st
 		return nil, nil, fmt.Errorf("enrollment customization ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/all", EndpointEnrollmentCustomizationPreviewV1, id)
+	endpoint := fmt.Sprintf("%s/%s/all", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id)
 
 	var result PanelListResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -137,12 +137,12 @@ func (s *EnrollmentCustomizationPreview) GetPanelByID(ctx context.Context, id, p
 		return nil, nil, fmt.Errorf("panel ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/all/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/all/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	var result ResourcePanel
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -163,10 +163,10 @@ func (s *EnrollmentCustomizationPreview) DeletePanel(ctx context.Context, id, pa
 		return nil, fmt.Errorf("panel ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/all/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/all/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -193,13 +193,13 @@ func (s *EnrollmentCustomizationPreview) CreateLdapPanel(ctx context.Context, id
 		return nil, nil, fmt.Errorf("title is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/ldap", EndpointEnrollmentCustomizationPreviewV1, id)
+	endpoint := fmt.Sprintf("%s/%s/ldap", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id)
 
 	var result ResourceLdapPanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -220,12 +220,12 @@ func (s *EnrollmentCustomizationPreview) GetLdapPanel(ctx context.Context, id, p
 		return nil, nil, fmt.Errorf("panel ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/ldap/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/ldap/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	var result ResourceLdapPanel
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -255,13 +255,13 @@ func (s *EnrollmentCustomizationPreview) UpdateLdapPanel(ctx context.Context, id
 		return nil, nil, fmt.Errorf("title is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/ldap/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/ldap/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	var result ResourceLdapPanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -282,10 +282,10 @@ func (s *EnrollmentCustomizationPreview) DeleteLdapPanel(ctx context.Context, id
 		return nil, fmt.Errorf("panel ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/ldap/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/ldap/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -309,13 +309,13 @@ func (s *EnrollmentCustomizationPreview) CreateSsoPanel(ctx context.Context, id 
 		return nil, nil, fmt.Errorf("display name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/sso", EndpointEnrollmentCustomizationPreviewV1, id)
+	endpoint := fmt.Sprintf("%s/%s/sso", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id)
 
 	var result ResourceSsoPanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -336,12 +336,12 @@ func (s *EnrollmentCustomizationPreview) GetSsoPanel(ctx context.Context, id, pa
 		return nil, nil, fmt.Errorf("panel ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/sso/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/sso/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	var result ResourceSsoPanel
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -368,13 +368,13 @@ func (s *EnrollmentCustomizationPreview) UpdateSsoPanel(ctx context.Context, id,
 		return nil, nil, fmt.Errorf("display name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/sso/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/sso/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	var result ResourceSsoPanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -395,10 +395,10 @@ func (s *EnrollmentCustomizationPreview) DeleteSsoPanel(ctx context.Context, id,
 		return nil, fmt.Errorf("panel ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/sso/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/sso/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -428,13 +428,13 @@ func (s *EnrollmentCustomizationPreview) CreateTextPanel(ctx context.Context, id
 		return nil, nil, fmt.Errorf("body is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/text", EndpointEnrollmentCustomizationPreviewV1, id)
+	endpoint := fmt.Sprintf("%s/%s/text", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id)
 
 	var result ResourceTextPanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -455,12 +455,12 @@ func (s *EnrollmentCustomizationPreview) GetTextPanel(ctx context.Context, id, p
 		return nil, nil, fmt.Errorf("panel ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/text/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/text/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	var result ResourceTextPanel
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -493,13 +493,13 @@ func (s *EnrollmentCustomizationPreview) UpdateTextPanel(ctx context.Context, id
 		return nil, nil, fmt.Errorf("body is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/text/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/text/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	var result ResourceTextPanel
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -520,10 +520,10 @@ func (s *EnrollmentCustomizationPreview) DeleteTextPanel(ctx context.Context, id
 		return nil, fmt.Errorf("panel ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/text/%s", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/text/%s", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -544,12 +544,12 @@ func (s *EnrollmentCustomizationPreview) GetTextPanelMarkdown(ctx context.Contex
 		return nil, nil, fmt.Errorf("panel ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/text/%s/markdown", EndpointEnrollmentCustomizationPreviewV1, id, panelID)
+	endpoint := fmt.Sprintf("%s/%s/text/%s/markdown", constants.EndpointJamfProEnrollmentCustomizationPreviewV1, id, panelID)
 
 	var result ResponseTextPanelMarkdown
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

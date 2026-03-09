@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -86,11 +86,11 @@ func NewAdvancedUserSearches(client transport.HTTPClient) *AdvancedUserSearches 
 func (s *AdvancedUserSearches) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicAdvancedUserSearches
+	endpoint := constants.EndpointClassicAdvancedUserSearches
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -109,13 +109,13 @@ func (s *AdvancedUserSearches) GetByID(ctx context.Context, id int) (*ResourceAd
 		return nil, nil, fmt.Errorf("advanced user search ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicAdvancedUserSearches, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAdvancedUserSearches, id)
 
 	var result ResourceAdvancedUserSearch
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -134,13 +134,13 @@ func (s *AdvancedUserSearches) GetByName(ctx context.Context, name string) (*Res
 		return nil, nil, fmt.Errorf("advanced user search name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicAdvancedUserSearches, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicAdvancedUserSearches, name)
 
 	var result ResourceAdvancedUserSearch
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -160,13 +160,13 @@ func (s *AdvancedUserSearches) Create(ctx context.Context, req *RequestAdvancedU
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicAdvancedUserSearches)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicAdvancedUserSearches)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -189,13 +189,13 @@ func (s *AdvancedUserSearches) UpdateByID(ctx context.Context, id int, req *Requ
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicAdvancedUserSearches, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAdvancedUserSearches, id)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -218,13 +218,13 @@ func (s *AdvancedUserSearches) UpdateByName(ctx context.Context, name string, re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicAdvancedUserSearches, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicAdvancedUserSearches, name)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -243,11 +243,11 @@ func (s *AdvancedUserSearches) DeleteByID(ctx context.Context, id int) (*resty.R
 		return nil, fmt.Errorf("advanced user search ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicAdvancedUserSearches, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAdvancedUserSearches, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -266,11 +266,11 @@ func (s *AdvancedUserSearches) DeleteByName(ctx context.Context, name string) (*
 		return nil, fmt.Errorf("advanced user search name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicAdvancedUserSearches, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicAdvancedUserSearches, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

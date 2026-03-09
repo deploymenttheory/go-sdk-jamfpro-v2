@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"resty.dev/v3"
 )
@@ -40,7 +41,7 @@ func NewBranding(client transport.HTTPClient) *Branding {
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-branding-images-download-id
 func (s *Branding) DownloadBrandingImageV1(ctx context.Context, id string) ([]byte, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/%s", EndpointBrandingImagesDownloadV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBrandingImagesDownloadV1, id)
 	headers := map[string]string{"Accept": "image/*"}
 
 	resp, body, err := s.client.GetBytes(ctx, endpoint, nil, headers)

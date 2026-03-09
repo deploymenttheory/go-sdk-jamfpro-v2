@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -90,7 +90,7 @@ func NewVolumePurchasingLocations(client transport.HTTPClient) *VolumePurchasing
 func (s *VolumePurchasingLocations) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointVolumePurchasingLocationsV1
+	endpoint := constants.EndpointJamfProVolumePurchasingLocationsV1
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceVolumePurchasingLocation
@@ -102,7 +102,7 @@ func (s *VolumePurchasingLocations) ListV1(ctx context.Context, rsqlQuery map[st
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -120,12 +120,12 @@ func (s *VolumePurchasingLocations) GetByIDV1(ctx context.Context, id string) (*
 		return nil, nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	var result ResourceVolumePurchasingLocation
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -146,11 +146,11 @@ func (s *VolumePurchasingLocations) CreateV1(ctx context.Context, request *Reque
 
 	var result CreateResponse
 
-	endpoint := EndpointVolumePurchasingLocationsV1
+	endpoint := constants.EndpointJamfProVolumePurchasingLocationsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -173,13 +173,13 @@ func (s *VolumePurchasingLocations) UpdateByIDV1(ctx context.Context, id string,
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	var result ResourceVolumePurchasingLocation
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
@@ -198,10 +198,10 @@ func (s *VolumePurchasingLocations) DeleteByIDV1(ctx context.Context, id string)
 		return nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -220,11 +220,11 @@ func (s *VolumePurchasingLocations) ReclaimVolumePurchasingLocationByIDV1(ctx co
 		return nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/reclaim", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/reclaim", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -243,7 +243,7 @@ func (s *VolumePurchasingLocations) GetContentV1(ctx context.Context, id string,
 		return nil, nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/content", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/content", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	var result ContentListResponse
 	result.Results = []VolumePurchasingSubsetContent{}
@@ -258,7 +258,7 @@ func (s *VolumePurchasingLocations) GetContentV1(ctx context.Context, id string,
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -276,7 +276,7 @@ func (s *VolumePurchasingLocations) GetHistoryV1(ctx context.Context, id string,
 		return nil, nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	var result HistoryListResponse
 	result.Results = []HistoryEntry{}
@@ -291,7 +291,7 @@ func (s *VolumePurchasingLocations) GetHistoryV1(ctx context.Context, id string,
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -313,11 +313,11 @@ func (s *VolumePurchasingLocations) AddHistoryNotesV1(ctx context.Context, id st
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -336,11 +336,11 @@ func (s *VolumePurchasingLocations) RevokeVolumePurchasingLocationLicensesByIDV1
 		return nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/revoke-licenses", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/revoke-licenses", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)

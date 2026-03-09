@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -73,12 +73,12 @@ func NewCloudAzure(client transport.HTTPClient) *CloudAzure {
 // URL: GET /api/v1/cloud-azure/defaults/server-configuration
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-defaults-server-configuration
 func (s *CloudAzure) GetDefaultServerConfigurationV1(ctx context.Context) (*CloudAzureServer, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/defaults/server-configuration", EndpointCloudAzureV1)
+	endpoint := fmt.Sprintf("%s/defaults/server-configuration", constants.EndpointJamfProCloudAzureV1)
 
 	var result CloudAzureServer
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -97,12 +97,12 @@ func (s *CloudAzure) GetByIDV1(ctx context.Context, id string) (*ResourceCloudAz
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCloudAzureV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudAzureV1, id)
 
 	var result ResourceCloudAzure
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -120,12 +120,12 @@ func (s *CloudAzure) GetByNameV1(ctx context.Context, name string) (*ResourceClo
 		return nil, nil, fmt.Errorf("name is required")
 	}
 
-	endpoint := EndpointCloudAzureV1
+	endpoint := constants.EndpointJamfProCloudAzureV1
 
 	var providers []ResourceCloudAzure
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &providers)
@@ -150,13 +150,13 @@ func (s *CloudAzure) CreateV1(ctx context.Context, request *ResourceCloudAzure) 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointCloudAzureV1
+	endpoint := constants.EndpointJamfProCloudAzureV1
 
 	var result ResponseCloudAzureCreated
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -178,13 +178,13 @@ func (s *CloudAzure) UpdateByIDV1(ctx context.Context, id string, request *Resou
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCloudAzureV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudAzureV1, id)
 
 	var result ResourceCloudAzure
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -217,10 +217,10 @@ func (s *CloudAzure) DeleteByIDV1(ctx context.Context, id string) (*resty.Respon
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCloudAzureV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudAzureV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -249,12 +249,12 @@ func (s *CloudAzure) DeleteByNameV1(ctx context.Context, name string) (*resty.Re
 // URL: GET /api/v1/cloud-azure/defaults/mappings
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-azure-defaults-mappings
 func (s *CloudAzure) GetDefaultMappingsV1(ctx context.Context) (*CloudAzureServerMappings, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/defaults/mappings", EndpointCloudAzureV1)
+	endpoint := fmt.Sprintf("%s/defaults/mappings", constants.EndpointJamfProCloudAzureV1)
 
 	var result CloudAzureServerMappings
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

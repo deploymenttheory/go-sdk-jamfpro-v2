@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -93,10 +93,10 @@ func NewJamfConnect(client transport.HTTPClient) *JamfConnect {
 func (s *JamfConnect) GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, *resty.Response, error) {
 	var result ResourceJamfConnect
 
-	endpoint := EndpointJamfConnectV1
+	endpoint := constants.EndpointJamfProJamfConnectV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -111,7 +111,7 @@ func (s *JamfConnect) GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, 
 // URL: GET /api/v1/jamf-connect/config-profiles
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-config-profiles
 func (s *JamfConnect) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/config-profiles", EndpointJamfConnectV1)
+	endpoint := fmt.Sprintf("%s/config-profiles", constants.EndpointJamfProJamfConnectV1)
 
 	var result ListResponse
 
@@ -125,7 +125,7 @@ func (s *JamfConnect) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[st
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -213,13 +213,13 @@ func (s *JamfConnect) UpdateConfigProfileByUUIDV1(ctx context.Context, uuid stri
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/config-profiles/%s", EndpointJamfConnectV1, uuid)
+	endpoint := fmt.Sprintf("%s/config-profiles/%s", constants.EndpointJamfProJamfConnectV1, uuid)
 
 	var result ResourceJamfConnectConfigProfile
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -239,7 +239,7 @@ func (s *JamfConnect) GetDeploymentTasksByIDV1(ctx context.Context, id string, r
 		return nil, nil, fmt.Errorf("deployment ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/deployments/%s/tasks", EndpointJamfConnectV1, id)
+	endpoint := fmt.Sprintf("%s/deployments/%s/tasks", constants.EndpointJamfProJamfConnectV1, id)
 
 	var result DeploymentTasksResponse
 
@@ -253,7 +253,7 @@ func (s *JamfConnect) GetDeploymentTasksByIDV1(ctx context.Context, id string, r
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -268,7 +268,7 @@ func (s *JamfConnect) GetDeploymentTasksByIDV1(ctx context.Context, id string, r
 // Query params (optional): page, page-size, sort, filter (RSQL).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-connect-history
 func (s *JamfConnect) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/history", EndpointJamfConnectV1)
+	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProJamfConnectV1)
 
 	var result HistoryResponse
 
@@ -282,7 +282,7 @@ func (s *JamfConnect) GetHistoryV1(ctx context.Context, rsqlQuery map[string]str
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -303,10 +303,10 @@ func (s *JamfConnect) AddHistoryNoteV1(ctx context.Context, req *RequestAddHisto
 		return nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/history", EndpointJamfConnectV1)
+	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProJamfConnectV1)
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -329,15 +329,15 @@ func (s *JamfConnect) RetryDeploymentTasksByUUIDV1(ctx context.Context, uuid str
 		return nil, fmt.Errorf("at least one computer ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/deployments/%s/tasks/retry", EndpointJamfConnectV1, uuid)
+	endpoint := fmt.Sprintf("%s/deployments/%s/tasks/retry", constants.EndpointJamfProJamfConnectV1, uuid)
 
 	requestBody := &ResourceJamfConnectTaskRetry{
 		IDs: computerIDs,
 	}
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, requestBody, headers, nil)

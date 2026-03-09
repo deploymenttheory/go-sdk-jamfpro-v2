@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
@@ -10,7 +11,7 @@ import (
 func TestOpenTelemetryAlwaysEnabled(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)

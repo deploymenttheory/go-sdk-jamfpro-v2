@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -86,11 +86,11 @@ func NewAdvancedComputerSearches(client transport.HTTPClient) *AdvancedComputerS
 func (s *AdvancedComputerSearches) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicAdvancedComputerSearches
+	endpoint := constants.EndpointClassicAdvancedComputerSearches
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -109,13 +109,13 @@ func (s *AdvancedComputerSearches) GetByID(ctx context.Context, id int) (*Resour
 		return nil, nil, fmt.Errorf("advanced computer search ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicAdvancedComputerSearches, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAdvancedComputerSearches, id)
 
 	var result ResourceAdvancedComputerSearch
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -134,13 +134,13 @@ func (s *AdvancedComputerSearches) GetByName(ctx context.Context, name string) (
 		return nil, nil, fmt.Errorf("advanced computer search name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicAdvancedComputerSearches, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicAdvancedComputerSearches, name)
 
 	var result ResourceAdvancedComputerSearch
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -160,13 +160,13 @@ func (s *AdvancedComputerSearches) Create(ctx context.Context, req *RequestAdvan
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicAdvancedComputerSearches)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicAdvancedComputerSearches)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -189,13 +189,13 @@ func (s *AdvancedComputerSearches) UpdateByID(ctx context.Context, id int, req *
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicAdvancedComputerSearches, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAdvancedComputerSearches, id)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -218,13 +218,13 @@ func (s *AdvancedComputerSearches) UpdateByName(ctx context.Context, name string
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicAdvancedComputerSearches, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicAdvancedComputerSearches, name)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -243,11 +243,11 @@ func (s *AdvancedComputerSearches) DeleteByID(ctx context.Context, id int) (*res
 		return nil, fmt.Errorf("advanced computer search ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicAdvancedComputerSearches, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAdvancedComputerSearches, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -266,11 +266,11 @@ func (s *AdvancedComputerSearches) DeleteByName(ctx context.Context, name string
 		return nil, fmt.Errorf("advanced computer search name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicAdvancedComputerSearches, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicAdvancedComputerSearches, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

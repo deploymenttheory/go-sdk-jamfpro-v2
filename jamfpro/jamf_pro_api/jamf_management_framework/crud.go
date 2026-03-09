@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -53,12 +53,12 @@ func (s *JamfManagementFramework) RedeployV1(ctx context.Context, computerID str
 		return nil, nil, fmt.Errorf("computer ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/redeploy/%s", EndpointJamfManagementFrameworkV1, id)
+	endpoint := fmt.Sprintf("%s/redeploy/%s", constants.EndpointJamfProJamfManagementFrameworkV1, id)
 
 	var result RedeployResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)

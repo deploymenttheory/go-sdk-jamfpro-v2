@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -44,7 +44,7 @@ type (
 		GetEAColumns(ctx context.Context) (*ExtensionAttributeColumnResult, *resty.Response, error)
 
 		// Export exports inventory preload records. Optional query params and body.
-		// acceptType: mime.TextCSV or mime.ApplicationJSON.
+		// acceptType: constants.TextCSV or constants.ApplicationJSON.
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-inventory-preload-export
 		Export(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
@@ -115,10 +115,10 @@ func (s *InventoryPreload) CreateFromCSV(ctx context.Context, fileReader io.Read
 		fileName = "inventory-preload.csv"
 	}
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
 		"Content-Type": "multipart/form-data",
 	}
-	endpoint := EndpointInventoryPreloadV2 + "/csv"
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/csv"
 	var result CreateFromCSVResponse
 	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
 	if err != nil {
@@ -148,8 +148,8 @@ func (s *InventoryPreload) CreateFromCSVFile(ctx context.Context, filePath strin
 // GetCSVTemplate downloads the inventory preload CSV template.
 // URL: GET /api/v2/inventory-preload/csv-template
 func (s *InventoryPreload) GetCSVTemplate(ctx context.Context) ([]byte, *resty.Response, error) {
-	endpoint := EndpointInventoryPreloadV2 + "/csv-template"
-	headers := map[string]string{"Accept": mime.TextCSV}
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/csv-template"
+	headers := map[string]string{"Accept": constants.TextCSV}
 	resp, body, err := s.client.GetBytes(ctx, endpoint, nil, headers)
 	if err != nil {
 		return nil, resp, err
@@ -164,10 +164,10 @@ func (s *InventoryPreload) ValidateCSV(ctx context.Context, fileReader io.Reader
 		fileName = "inventory-preload.csv"
 	}
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
 		"Content-Type": "multipart/form-data",
 	}
-	endpoint := EndpointInventoryPreloadV2 + "/csv-validate"
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/csv-validate"
 	var result CSVValidationSuccess
 	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
 	if err != nil {
@@ -201,8 +201,8 @@ func (s *InventoryPreload) ValidateCSVFile(ctx context.Context, filePath string)
 // GetEAColumns returns extension attribute columns.
 // URL: GET /api/v2/inventory-preload/ea-columns
 func (s *InventoryPreload) GetEAColumns(ctx context.Context) (*ExtensionAttributeColumnResult, *resty.Response, error) {
-	endpoint := EndpointInventoryPreloadV2 + "/ea-columns"
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/ea-columns"
+	headers := map[string]string{"Accept": constants.ApplicationJSON}
 	var result ExtensionAttributeColumnResult
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
@@ -218,13 +218,13 @@ func (s *InventoryPreload) GetEAColumns(ctx context.Context) (*ExtensionAttribut
 // Export exports inventory preload records.
 // URL: POST /api/v2/inventory-preload/export
 func (s *InventoryPreload) Export(ctx context.Context, rsqlQuery map[string]string, req *ExportRequest, acceptType string) ([]byte, *resty.Response, error) {
-	endpoint := EndpointInventoryPreloadV2 + "/export"
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/export"
 	if acceptType == "" {
-		acceptType = mime.ApplicationJSON
+		acceptType = constants.ApplicationJSON
 	}
 	headers := map[string]string{
 		"Accept":       acceptType,
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 	var body any
 	if req != nil {
@@ -244,8 +244,8 @@ func (s *InventoryPreload) Export(ctx context.Context, rsqlQuery map[string]stri
 // ListHistory returns paginated inventory preload history.
 // URL: GET /api/v2/inventory-preload/history
 func (s *InventoryPreload) ListHistory(ctx context.Context, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error) {
-	endpoint := EndpointInventoryPreloadV2 + "/history"
-	headers := map[string]string{"Accept": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/history"
+	headers := map[string]string{"Accept": constants.ApplicationJSON}
 	var result HistoryListResponse
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
 	if err != nil {
@@ -260,10 +260,10 @@ func (s *InventoryPreload) AddHistoryNote(ctx context.Context, req *AddHistoryNo
 	if req == nil {
 		return nil, nil, fmt.Errorf("request body is required")
 	}
-	endpoint := EndpointInventoryPreloadV2 + "/history"
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/history"
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 	var result AddHistoryNoteResponse
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -280,10 +280,10 @@ func (s *InventoryPreload) AddHistoryNote(ctx context.Context, req *AddHistoryNo
 // ListRecords returns paginated inventory preload records.
 // URL: GET /api/v2/inventory-preload/records
 func (s *InventoryPreload) ListRecords(ctx context.Context, rsqlQuery map[string]string) (*RecordListResponse, *resty.Response, error) {
-	endpoint := EndpointInventoryPreloadV2 + "/records"
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/records"
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result RecordListResponse
@@ -312,11 +312,11 @@ func (s *InventoryPreload) CreateRecord(ctx context.Context, record *InventoryPr
 		return nil, nil, fmt.Errorf("record is required")
 	}
 
-	endpoint := EndpointInventoryPreloadV2 + "/records"
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/records"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var result CreateRecordResponse
@@ -331,10 +331,10 @@ func (s *InventoryPreload) CreateRecord(ctx context.Context, record *InventoryPr
 // DeleteAllRecords deletes all inventory preload records.
 // URL: POST /api/v2/inventory-preload/records/delete-all
 func (s *InventoryPreload) DeleteAllRecords(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointInventoryPreloadV2 + "/records/delete-all"
+	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/records/delete-all"
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -351,10 +351,10 @@ func (s *InventoryPreload) GetRecordByID(ctx context.Context, id string) (*Inven
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/records/%s", EndpointInventoryPreloadV2, id)
+	endpoint := fmt.Sprintf("%s/records/%s", constants.EndpointJamfProInventoryPreloadV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result InventoryPreloadRecord
@@ -375,11 +375,11 @@ func (s *InventoryPreload) UpdateRecord(ctx context.Context, id string, record *
 	if record == nil {
 		return nil, nil, fmt.Errorf("record is required")
 	}
-	endpoint := fmt.Sprintf("%s/records/%s", EndpointInventoryPreloadV2, id)
+	endpoint := fmt.Sprintf("%s/records/%s", constants.EndpointJamfProInventoryPreloadV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 	var result InventoryPreloadRecord
 
@@ -396,10 +396,10 @@ func (s *InventoryPreload) DeleteRecord(ctx context.Context, id string) (*resty.
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/records/%s", EndpointInventoryPreloadV2, id)
+	endpoint := fmt.Sprintf("%s/records/%s", constants.EndpointJamfProInventoryPreloadV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -67,11 +67,11 @@ func NewVppAccounts(client transport.HTTPClient) *VppAccounts {
 func (s *VppAccounts) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicVPPAccounts
+	endpoint := constants.EndpointClassicVPPAccounts
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -90,13 +90,13 @@ func (s *VppAccounts) GetByID(ctx context.Context, id int) (*ResourceVPPAccount,
 		return nil, nil, fmt.Errorf("VPP account ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicVPPAccounts, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAccounts, id)
 
 	var result ResourceVPPAccount
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -116,13 +116,13 @@ func (s *VppAccounts) Create(ctx context.Context, req *RequestVPPAccount) (*Reso
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicVPPAccounts)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicVPPAccounts)
 
 	var result ResourceVPPAccount
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -144,13 +144,13 @@ func (s *VppAccounts) UpdateByID(ctx context.Context, id int, req *RequestVPPAcc
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicVPPAccounts, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAccounts, id)
 
 	var result ResourceVPPAccount
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -169,11 +169,11 @@ func (s *VppAccounts) DeleteByID(ctx context.Context, id int) (*resty.Response, 
 		return nil, fmt.Errorf("VPP account ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicVPPAccounts, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAccounts, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

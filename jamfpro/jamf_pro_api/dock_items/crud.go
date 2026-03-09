@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -63,12 +63,12 @@ func (s *DockItems) GetByIDV1(ctx context.Context, id string) (*ResourceDockItem
 		return nil, nil, fmt.Errorf("dock item ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDockItemsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDockItemsV1, id)
 
 	var result ResourceDockItem
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -90,11 +90,11 @@ func (s *DockItems) CreateV1(ctx context.Context, request *RequestDockItem) (*Cr
 
 	var result CreateResponse
 
-	endpoint := EndpointDockItemsV1
+	endpoint := constants.EndpointJamfProDockItemsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -118,13 +118,13 @@ func (s *DockItems) UpdateByIDV1(ctx context.Context, id string, request *Reques
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDockItemsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDockItemsV1, id)
 
 	var result ResourceDockItem
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -143,10 +143,10 @@ func (s *DockItems) DeleteByIDV1(ctx context.Context, id string) (*resty.Respons
 		return nil, fmt.Errorf("dock item ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDockItemsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDockItemsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -49,10 +49,10 @@ func (s *DssDeclarations) GetByUUIDV1(ctx context.Context, uuid string) (*Respon
 
 	var result ResponseDSSDeclaration
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDSSDeclarationsV1, uuid)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDSSDeclarationsV1, uuid)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

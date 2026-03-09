@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -69,11 +69,11 @@ func (s *CommandFlush) FlushByIDAndStatus(ctx context.Context, idType string, id
 	// URL encode status if it contains +
 	encodedStatus := strings.ReplaceAll(status, "+", "%2B")
 
-	endpoint := fmt.Sprintf("%s/%s/id/%s/status/%s", EndpointCommandFlush, idType, id, encodedStatus)
+	endpoint := fmt.Sprintf("%s/%s/id/%s/status/%s", constants.EndpointClassicCommandFlush, idType, id, encodedStatus)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -93,11 +93,11 @@ func (s *CommandFlush) FlushWithXML(ctx context.Context, req *RequestCommandFlus
 		return nil, err
 	}
 
-	endpoint := EndpointCommandFlush
+	endpoint := constants.EndpointClassicCommandFlush
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.DeleteWithBody(ctx, endpoint, req, headers, nil)

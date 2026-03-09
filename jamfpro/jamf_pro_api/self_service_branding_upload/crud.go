@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"resty.dev/v3"
 )
@@ -47,7 +48,7 @@ func (s *SelfServiceBrandingUpload) Upload(ctx context.Context, fileReader io.Re
 	}
 	headers := map[string]string{"Content-Type": "multipart/form-data"}
 	var result ResourceBrandingImage
-	resp, err := s.client.PostMultipart(ctx, EndpointBrandingImages, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
+	resp, err := s.client.PostMultipart(ctx, constants.EndpointJamfProBrandingImages, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
 	if err != nil {
 		return nil, resp, err
 	}

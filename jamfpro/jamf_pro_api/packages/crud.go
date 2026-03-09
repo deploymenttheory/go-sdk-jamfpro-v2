@@ -10,7 +10,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/crypto"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_distribution_point"
 	"resty.dev/v3"
 )
@@ -151,7 +151,7 @@ func NewPackages(client transport.HTTPClient) *Packages {
 func (s *Packages) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointPackagesV1
+	endpoint := constants.EndpointJamfProPackagesV1
 
 	mergePage := func(pageData []byte) error {
 		var pageResponse ListResponse
@@ -164,7 +164,7 @@ func (s *Packages) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Li
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -181,12 +181,12 @@ func (s *Packages) GetByIDV1(ctx context.Context, id string) (*ResourcePackage, 
 		return nil, nil, fmt.Errorf("package ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointPackagesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPackagesV1, id)
 
 	var result ResourcePackage
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -208,11 +208,11 @@ func (s *Packages) CreateV1(ctx context.Context, request *RequestPackage) (*Crea
 
 	var result CreateResponse
 
-	endpoint := EndpointPackagesV1
+	endpoint := constants.EndpointJamfProPackagesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -235,8 +235,8 @@ func (s *Packages) UploadV1(ctx context.Context, id string, filePath string) (*C
 	}
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	f, err := os.Open(filePath)
@@ -250,7 +250,7 @@ func (s *Packages) UploadV1(ctx context.Context, id string, filePath string) (*C
 		return nil, nil, fmt.Errorf("stat package file: %w", err)
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/upload", EndpointPackagesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/upload", constants.EndpointJamfProPackagesV1, id)
 	fileName := info.Name()
 	if fileName == "" {
 		fileName = filePath
@@ -278,13 +278,13 @@ func (s *Packages) UpdateByIDV1(ctx context.Context, id string, request *Resourc
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointPackagesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPackagesV1, id)
 
 	var result ResourcePackage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -317,7 +317,7 @@ func (s *Packages) AssignManifestToPackageV1(ctx context.Context, id string, man
 		return nil, nil, fmt.Errorf("stat manifest file: %w", err)
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/manifest", EndpointPackagesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/manifest", constants.EndpointJamfProPackagesV1, id)
 	fileName := info.Name()
 	if fileName == "" {
 		fileName = manifestPath
@@ -325,8 +325,8 @@ func (s *Packages) AssignManifestToPackageV1(ctx context.Context, id string, man
 
 	var result CreateResponse
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, f, info.Size(), nil, headers, nil, &result)
@@ -345,10 +345,10 @@ func (s *Packages) DeletePackageManifestV1(ctx context.Context, id string) (*res
 		return nil, fmt.Errorf("package ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/manifest", EndpointPackagesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/manifest", constants.EndpointJamfProPackagesV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -367,10 +367,10 @@ func (s *Packages) DeleteByIDV1(ctx context.Context, id string) (*resty.Response
 		return nil, fmt.Errorf("package ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointPackagesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPackagesV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -390,11 +390,11 @@ func (s *Packages) DeletePackagesByIDV1(ctx context.Context, req *DeletePackages
 		return nil, fmt.Errorf("ids are required")
 	}
 
-	endpoint := EndpointPackagesV1 + "/delete-multiple"
+	endpoint := constants.EndpointJamfProPackagesV1 + "/delete-multiple"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -414,12 +414,12 @@ func (s *Packages) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[st
 		return nil, nil, fmt.Errorf("package ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointPackagesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProPackagesV1, id)
 
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -442,11 +442,11 @@ func (s *Packages) AddHistoryNotesV1(ctx context.Context, id string, req *AddHis
 		return nil, fmt.Errorf("request body is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointPackagesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProPackagesV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -462,13 +462,13 @@ func (s *Packages) AddHistoryNotesV1(ctx context.Context, id string, req *AddHis
 // Query params: export-fields, export-labels, page, page-size, sort, filter
 // https://developer.jamf.com/jamf-pro/reference/post_v1-packages-export
 func (s *Packages) ExportV1(ctx context.Context, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *resty.Response, error) {
-	endpoint := EndpointPackagesExport
+	endpoint := constants.EndpointJamfProPackagesExport
 	if acceptType == "" {
-		acceptType = mime.ApplicationJSON
+		acceptType = constants.ApplicationJSON
 	}
 	headers := map[string]string{
 		"Accept":       acceptType,
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 	var reqBody any
 	if body != nil {
@@ -489,13 +489,13 @@ func (s *Packages) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s%s", EndpointPackagesV1, id, EndpointPackagesHistoryExport)
+	endpoint := fmt.Sprintf("%s/%s%s", constants.EndpointJamfProPackagesV1, id, constants.EndpointJamfProPackagesHistoryExport)
 	if acceptType == "" {
-		acceptType = mime.ApplicationJSON
+		acceptType = constants.ApplicationJSON
 	}
 	headers := map[string]string{
 		"Accept":       acceptType,
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 	var reqBody any
 	if body != nil {

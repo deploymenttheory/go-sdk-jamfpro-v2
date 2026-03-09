@@ -6,7 +6,7 @@ import (
 	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -73,10 +73,10 @@ func NewAdvancedMobileDeviceSearches(client transport.HTTPClient) *AdvancedMobil
 func (s *AdvancedMobileDeviceSearches) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointAdvancedMobileDeviceSearchesV1
+	endpoint := constants.EndpointJamfProAdvancedMobileDeviceSearchesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -93,11 +93,11 @@ func (s *AdvancedMobileDeviceSearches) GetByIDV1(ctx context.Context, id string)
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedMobileDeviceSearchesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedMobileDeviceSearchesV1, id)
 	var result ResourceAdvancedMobileDeviceSearch
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -118,11 +118,11 @@ func (s *AdvancedMobileDeviceSearches) CreateV1(ctx context.Context, request *Re
 
 	var result CreateResponse
 
-	endpoint := EndpointAdvancedMobileDeviceSearchesV1
+	endpoint := constants.EndpointJamfProAdvancedMobileDeviceSearchesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -144,13 +144,13 @@ func (s *AdvancedMobileDeviceSearches) UpdateByIDV1(ctx context.Context, id stri
 		return nil, nil, fmt.Errorf("search is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedMobileDeviceSearchesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedMobileDeviceSearchesV1, id)
 
 	var result ResourceAdvancedMobileDeviceSearch
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -168,10 +168,10 @@ func (s *AdvancedMobileDeviceSearches) DeleteByIDV1(ctx context.Context, id stri
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedMobileDeviceSearchesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedMobileDeviceSearchesV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -191,11 +191,11 @@ func (s *AdvancedMobileDeviceSearches) DeleteMultipleV1(ctx context.Context, req
 		return nil, fmt.Errorf("ids are required")
 	}
 
-	endpoint := EndpointAdvancedMobileDeviceSearchesV1 + "/delete-multiple"
+	endpoint := constants.EndpointJamfProAdvancedMobileDeviceSearchesV1 + "/delete-multiple"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -211,14 +211,14 @@ func (s *AdvancedMobileDeviceSearches) DeleteMultipleV1(ctx context.Context, req
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-mobile-device-searches-choices
 func (s *AdvancedMobileDeviceSearches) GetChoicesV1(ctx context.Context, criteria, site, contains string) (*ChoicesResponse, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/choices?criteria=%s&site=%s&contains=%s",
-		EndpointAdvancedMobileDeviceSearchesV1,
+		constants.EndpointJamfProAdvancedMobileDeviceSearchesV1,
 		url.QueryEscape(criteria),
 		url.QueryEscape(site),
 		url.QueryEscape(contains))
 	var result ChoicesResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

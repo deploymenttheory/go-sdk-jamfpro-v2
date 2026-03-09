@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -56,10 +56,10 @@ func (s *Ldap) GetLdapGroupsV1(ctx context.Context, rsqlQuery map[string]string)
 
 	var result ListGroupsResponseV1
 
-	endpoint := EndpointLdapGroupsV1
+	endpoint := constants.EndpointJamfProLdapGroupsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -76,10 +76,10 @@ func (s *Ldap) GetLdapGroupsV1(ctx context.Context, rsqlQuery map[string]string)
 func (s *Ldap) GetLdapServersV1(ctx context.Context) ([]ResourceLdapServerV1, *resty.Response, error) {
 	var result []ResourceLdapServerV1
 
-	endpoint := EndpointLdapServersV1
+	endpoint := constants.EndpointJamfProLdapServersV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -96,10 +96,10 @@ func (s *Ldap) GetLdapServersV1(ctx context.Context) ([]ResourceLdapServerV1, *r
 func (s *Ldap) GetLdapServersOnlyV1(ctx context.Context) ([]ResourceLdapServerV1, *resty.Response, error) {
 	var result []ResourceLdapServerV1
 
-	endpoint := EndpointLdapServersOnlyV1
+	endpoint := constants.EndpointJamfProLdapServersOnlyV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

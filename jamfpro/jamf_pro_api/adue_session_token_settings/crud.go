@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -49,10 +49,10 @@ func NewAdueSessionTokenSettings(client transport.HTTPClient) *AdueSessionTokenS
 func (s *AdueSessionTokenSettings) GetV1(ctx context.Context) (*ResourceADUETokenSettings, *resty.Response, error) {
 	var result ResourceADUETokenSettings
 
-	endpoint := EndpointADUESessionTokenSettingsV1
+	endpoint := constants.EndpointJamfProADUESessionTokenSettingsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -73,10 +73,10 @@ func (s *AdueSessionTokenSettings) UpdateV1(ctx context.Context, request *Resour
 
 	var result ResourceADUETokenSettings
 
-	endpoint := EndpointADUESessionTokenSettingsV1
+	endpoint := constants.EndpointJamfProADUESessionTokenSettingsV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)

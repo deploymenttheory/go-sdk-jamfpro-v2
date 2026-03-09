@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -48,9 +48,9 @@ func NewSsoFailover(client transport.HTTPClient) *SsoFailover {
 func (s *SsoFailover) GetV1(ctx context.Context) (*FailoverSettings, *resty.Response, error) {
 	var result FailoverSettings
 
-	endpoint := EndpointSSOFailoverV1
+	endpoint := constants.EndpointJamfProSSOFailoverV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -67,10 +67,10 @@ func (s *SsoFailover) GetV1(ctx context.Context) (*FailoverSettings, *resty.Resp
 func (s *SsoFailover) RegenerateV1(ctx context.Context) (*FailoverSettings, *resty.Response, error) {
 	var result FailoverSettings
 
-	endpoint := EndpointSSOFailoverGenerateV1
+	endpoint := constants.EndpointJamfProSSOFailoverGenerateV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)

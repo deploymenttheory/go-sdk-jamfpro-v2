@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -64,10 +64,10 @@ func NewVolumePurchasingSubscriptions(client transport.HTTPClient) *VolumePurcha
 func (s *VolumePurchasingSubscriptions) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointVolumePurchasingSubscriptionsV1
+	endpoint := constants.EndpointJamfProVolumePurchasingSubscriptionsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -86,12 +86,12 @@ func (s *VolumePurchasingSubscriptions) GetByIDV1(ctx context.Context, id string
 		return nil, nil, fmt.Errorf("volume purchasing subscription ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingSubscriptionsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingSubscriptionsV1, id)
 
 	var result ResourceVolumePurchasingSubscription
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -112,11 +112,11 @@ func (s *VolumePurchasingSubscriptions) CreateV1(ctx context.Context, request *R
 
 	var result CreateResponse
 
-	endpoint := EndpointVolumePurchasingSubscriptionsV1
+	endpoint := constants.EndpointJamfProVolumePurchasingSubscriptionsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -139,13 +139,13 @@ func (s *VolumePurchasingSubscriptions) UpdateByIDV1(ctx context.Context, id str
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingSubscriptionsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingSubscriptionsV1, id)
 
 	var result ResourceVolumePurchasingSubscription
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -164,10 +164,10 @@ func (s *VolumePurchasingSubscriptions) DeleteByIDV1(ctx context.Context, id str
 		return nil, fmt.Errorf("volume purchasing subscription ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingSubscriptionsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingSubscriptionsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

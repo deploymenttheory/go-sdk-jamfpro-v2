@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -79,13 +79,13 @@ func NewDockItems(client transport.HTTPClient) *DockItems {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddockitems
 func (s *DockItems) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointDockItems
+	endpoint := constants.EndpointClassicDockItems
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -104,13 +104,13 @@ func (s *DockItems) GetByID(ctx context.Context, id int) (*Resource, *resty.Resp
 		return nil, nil, fmt.Errorf("dock item ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointDockItems, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDockItems, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -129,13 +129,13 @@ func (s *DockItems) GetByName(ctx context.Context, name string) (*Resource, *res
 		return nil, nil, fmt.Errorf("dock item name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointDockItems, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDockItems, name)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -157,13 +157,13 @@ func (s *DockItems) Create(ctx context.Context, req *Request) (*Resource, *resty
 		return nil, nil, fmt.Errorf("dock item name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointDockItems)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicDockItems)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -188,13 +188,13 @@ func (s *DockItems) UpdateByID(ctx context.Context, id int, req *Request) (*Reso
 		return nil, nil, fmt.Errorf("dock item name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointDockItems, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDockItems, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -219,13 +219,13 @@ func (s *DockItems) UpdateByName(ctx context.Context, name string, req *Request)
 		return nil, nil, fmt.Errorf("dock item name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointDockItems, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDockItems, name)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -244,11 +244,11 @@ func (s *DockItems) DeleteByID(ctx context.Context, id int) (*resty.Response, er
 		return nil, fmt.Errorf("dock item ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointDockItems, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDockItems, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -267,11 +267,11 @@ func (s *DockItems) DeleteByName(ctx context.Context, name string) (*resty.Respo
 		return nil, fmt.Errorf("dock item name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointDockItems, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDockItems, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

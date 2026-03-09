@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -46,11 +46,11 @@ func NewPatchManagement(client transport.HTTPClient) *PatchManagement {
 // URL: POST /api/v2/patch-management-accept-disclaimer
 // https://developer.jamf.com/jamf-pro/reference/post_v2-patch-management-accept-disclaimer
 func (s *PatchManagement) AcceptDisclaimerV2(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointPatchManagementAcceptDisclaimerV2
+	endpoint := constants.EndpointJamfProPatchManagementAcceptDisclaimerV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)

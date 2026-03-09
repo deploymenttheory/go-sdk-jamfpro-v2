@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -51,11 +51,11 @@ func NewIcon(client transport.HTTPClient) *Icon {
 // URL: GET /api/v1/icon/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-id
 func (s *Icon) GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/%d", EndpointIconV1, id)
+	endpoint := fmt.Sprintf("%s/%d", constants.EndpointJamfProIconV1, id)
 	var result ResourceIcon
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -73,7 +73,7 @@ func (s *Icon) UploadV1(ctx context.Context, fileReader io.Reader, fileSize int6
 	if fileName == "" {
 		fileName = "icon.png"
 	}
-	endpoint := EndpointIconV1
+	endpoint := constants.EndpointJamfProIconV1
 
 	headers := map[string]string{
 		"Content-Type": "multipart/form-data",
@@ -111,7 +111,7 @@ func (s *Icon) UploadV1FromFile(ctx context.Context, filePath string) (*Resource
 // URL: GET /api/v1/icon/download/{id}?res=...&scale=...
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-icon-download-id
 func (s *Icon) DownloadV1(ctx context.Context, id int, res, scale string) ([]byte, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/%d", EndpointIconsDownloadV1, id)
+	endpoint := fmt.Sprintf("%s/%d", constants.EndpointJamfProIconsDownloadV1, id)
 	if res == "" {
 		res = "original"
 	}

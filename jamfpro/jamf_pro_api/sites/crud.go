@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -45,10 +45,10 @@ func NewSites(client transport.HTTPClient) *Sites {
 // ListV1 returns all sites.
 // URL: GET /api/v1/sites
 func (s *Sites) ListV1(ctx context.Context) ([]ResourceSite, *resty.Response, error) {
-	endpoint := EndpointSitesV1
+	endpoint := constants.EndpointJamfProSitesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result []ResourceSite
@@ -67,7 +67,7 @@ func (s *Sites) GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[s
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/objects", EndpointSitesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/objects", constants.EndpointJamfProSitesV1, id)
 
 	var result ObjectsListResponse
 
@@ -81,7 +81,7 @@ func (s *Sites) GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[s
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {

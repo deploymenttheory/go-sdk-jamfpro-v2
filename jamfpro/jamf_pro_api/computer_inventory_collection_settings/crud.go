@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -55,12 +55,12 @@ func NewComputerInventoryCollectionSettings(client transport.HTTPClient) *Comput
 // URL: GET /api/v2/computer-inventory-collection-settings
 // https://developer.jamf.com/jamf-pro/reference/get_v2-computer-inventory-collection-settings
 func (s *ComputerInventoryCollectionSettings) GetV2(ctx context.Context) (*ResourceComputerInventoryCollectionSettings, *resty.Response, error) {
-	endpoint := EndpointComputerInventoryCollectionSettingsV2
+	endpoint := constants.EndpointJamfProComputerInventoryCollectionSettingsV2
 
 	var result ResourceComputerInventoryCollectionSettings
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -80,11 +80,11 @@ func (s *ComputerInventoryCollectionSettings) UpdateV2(ctx context.Context, sett
 		return nil, fmt.Errorf("settings is required")
 	}
 
-	endpoint := EndpointComputerInventoryCollectionSettingsV2
+	endpoint := constants.EndpointJamfProComputerInventoryCollectionSettingsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, settings, headers, nil)
@@ -106,13 +106,13 @@ func (s *ComputerInventoryCollectionSettings) CreateCustomPathV2(ctx context.Con
 		return nil, nil, fmt.Errorf("path is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/custom-path", EndpointComputerInventoryCollectionSettingsV2)
+	endpoint := fmt.Sprintf("%s/custom-path", constants.EndpointJamfProComputerInventoryCollectionSettingsV2)
 
 	var result SubsetPathItem
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -131,10 +131,10 @@ func (s *ComputerInventoryCollectionSettings) DeleteCustomPathByIDV2(ctx context
 		return nil, fmt.Errorf("custom path ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/custom-path/%s", EndpointComputerInventoryCollectionSettingsV2, id)
+	endpoint := fmt.Sprintf("%s/custom-path/%s", constants.EndpointJamfProComputerInventoryCollectionSettingsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

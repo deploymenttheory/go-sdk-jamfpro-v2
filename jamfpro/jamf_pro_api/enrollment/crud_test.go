@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -118,7 +118,7 @@ func TestUnit_Enrollment_ExportHistoryV2_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportHistoryV2Mock()
 
-	data, resp, err := svc.ExportHistoryV2(context.Background(), mime.TextCSV, nil, nil)
+	data, resp, err := svc.ExportHistoryV2(context.Background(), constants.TextCSV, nil, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 	require.NotNil(t, resp)
@@ -139,7 +139,7 @@ func TestUnit_Enrollment_ExportHistoryV2_WithRequest(t *testing.T) {
 		Sort:     []string{"id:desc"},
 	}
 
-	data, resp, err := svc.ExportHistoryV2(context.Background(), mime.ApplicationJSON, nil, request)
+	data, resp, err := svc.ExportHistoryV2(context.Background(), constants.ApplicationJSON, nil, request)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 	require.NotNil(t, resp)
@@ -531,7 +531,7 @@ func TestUnit_Enrollment_AddHistoryNotesV2_Error(t *testing.T) {
 func TestUnit_Enrollment_ExportHistoryV2_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	data, resp, err := svc.ExportHistoryV2(context.Background(), mime.ApplicationJSON, nil, nil)
+	data, resp, err := svc.ExportHistoryV2(context.Background(), constants.ApplicationJSON, nil, nil)
 	require.Error(t, err)
 	assert.Nil(t, data)
 	_ = resp

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -74,12 +74,12 @@ func NewEngage(client transport.HTTPClient) *Engage {
 // Note: This feature is deprecated in Jamf Pro v11.21.0 and later.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/v11.20.0/reference/get_v2-engage
 func (s *Engage) GetV2(ctx context.Context) (*ResourceEngageSettings, *resty.Response, error) {
-	endpoint := EndpointEngageV2
+	endpoint := constants.EndpointJamfProEngageV2
 
 	var result ResourceEngageSettings
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -99,13 +99,13 @@ func (s *Engage) UpdateV2(ctx context.Context, settings *ResourceEngageSettings)
 		return nil, nil, fmt.Errorf("settings cannot be nil")
 	}
 
-	endpoint := EndpointEngageV2
+	endpoint := constants.EndpointJamfProEngageV2
 
 	var result ResourceEngageSettings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, settings, headers, &result)
@@ -122,12 +122,12 @@ func (s *Engage) UpdateV2(ctx context.Context, settings *ResourceEngageSettings)
 // Note: This feature is deprecated in Jamf Pro v11.21.0 and later.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/v11.20.0/reference/get_v2-engage-history
 func (s *Engage) GetHistoryV2(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/history", EndpointEngageV2)
+	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProEngageV2)
 
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -150,13 +150,13 @@ func (s *Engage) AddHistoryNotesV2(ctx context.Context, req *RequestAddHistoryNo
 		return nil, nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/history", EndpointEngageV2)
+	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProEngageV2)
 
 	var result ResponseAddHistoryNotes
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)

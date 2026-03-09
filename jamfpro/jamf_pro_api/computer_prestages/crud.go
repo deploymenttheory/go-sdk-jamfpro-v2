@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
 	"resty.dev/v3"
 )
@@ -103,7 +103,7 @@ func (s *ComputerPrestages) ListV3(ctx context.Context, query map[string]string)
 		Results: []ResourceComputerPrestage{},
 	}
 
-	endpoint := EndpointComputerPrestagesV3
+	endpoint := constants.EndpointJamfProComputerPrestagesV3
 
 	mergePage := func(pageData []byte) error {
 		var pageResults []ResourceComputerPrestage
@@ -116,7 +116,7 @@ func (s *ComputerPrestages) ListV3(ctx context.Context, query map[string]string)
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
@@ -134,12 +134,12 @@ func (s *ComputerPrestages) GetByIDV3(ctx context.Context, id string) (*Resource
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointComputerPrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProComputerPrestagesV3, id)
 
 	var result ResourceComputerPrestage
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -177,11 +177,11 @@ func (s *ComputerPrestages) CreateV3(ctx context.Context, request *ResourceCompu
 
 	var result CreateResponse
 
-	endpoint := EndpointComputerPrestagesV3
+	endpoint := constants.EndpointJamfProComputerPrestagesV3
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -222,12 +222,12 @@ func (s *ComputerPrestages) UpdateByIDV3(ctx context.Context, id string, request
 		version_locking.EnsureVersionLock(current.AccountSettings, request.AccountSettings)
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointComputerPrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProComputerPrestagesV3, id)
 	var result ResourceComputerPrestage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -261,12 +261,12 @@ func (s *ComputerPrestages) UpdateByNameV3(ctx context.Context, name string, req
 		version_locking.EnsureVersionLock(existing.AccountSettings, request.AccountSettings)
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointComputerPrestagesV3, existing.ID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProComputerPrestagesV3, existing.ID)
 	var result ResourceComputerPrestage
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err = s.client.Put(ctx, endpoint, request, headers, &result)
@@ -284,10 +284,10 @@ func (s *ComputerPrestages) DeleteByIDV3(ctx context.Context, id string) (*resty
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointComputerPrestagesV3, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProComputerPrestagesV3, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -315,12 +315,12 @@ func (s *ComputerPrestages) GetDeviceScopeByIDV2(ctx context.Context, id string)
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/scope", EndpointComputerPrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/scope", constants.EndpointJamfProComputerPrestagesV2, id)
 
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -351,13 +351,13 @@ func (s *ComputerPrestages) ReplaceDeviceScopeByIDV2(ctx context.Context, id str
 
 	version_locking.EnsureVersionLock(currentScope, request)
 
-	endpoint := fmt.Sprintf("%s/%s/scope", EndpointComputerPrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/scope", constants.EndpointJamfProComputerPrestagesV2, id)
 
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -372,12 +372,12 @@ func (s *ComputerPrestages) ReplaceDeviceScopeByIDV2(ctx context.Context, id str
 // URL: GET /api/v2/computer-prestages/scope
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-prestages-scope
 func (s *ComputerPrestages) GetAllDeviceScopeV2(ctx context.Context) (*AllDeviceScopeResponse, *resty.Response, error) {
-	endpoint := EndpointComputerPrestagesV2 + "/scope"
+	endpoint := constants.EndpointJamfProComputerPrestagesV2 + "/scope"
 
 	var result AllDeviceScopeResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -406,13 +406,13 @@ func (s *ComputerPrestages) AddDeviceScopeByIDV2(ctx context.Context, id string,
 
 	version_locking.EnsureVersionLock(currentScope, request)
 
-	endpoint := fmt.Sprintf("%s/%s/scope", EndpointComputerPrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/scope", constants.EndpointJamfProComputerPrestagesV2, id)
 
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -441,13 +441,13 @@ func (s *ComputerPrestages) RemoveDeviceScopeByIDV2(ctx context.Context, id stri
 
 	version_locking.EnsureVersionLock(currentScope, request)
 
-	endpoint := fmt.Sprintf("%s/%s/scope/delete-multiple", EndpointComputerPrestagesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/scope/delete-multiple", constants.EndpointJamfProComputerPrestagesV2, id)
 
 	var result ResourceDeviceScope
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)

@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -70,9 +70,9 @@ func NewGsxConnection(client transport.HTTPClient) *GsxConnection {
 func (s *GsxConnection) GetV1(ctx context.Context) (*ResourceGSXConnection, *resty.Response, error) {
 	var result ResourceGSXConnection
 
-	endpoint := EndpointGSXConnectionV1
+	endpoint := constants.EndpointJamfProGSXConnectionV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -93,10 +93,10 @@ func (s *GsxConnection) ReplaceV1(ctx context.Context, request *ResourceGSXConne
 
 	var result ResourceGSXConnection
 
-	endpoint := EndpointGSXConnectionV1
+	endpoint := constants.EndpointJamfProGSXConnectionV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationMergePatchJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationMergePatchJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -117,10 +117,10 @@ func (s *GsxConnection) UpdateV1(ctx context.Context, request *ResourceGSXConnec
 
 	var result ResourceGSXConnection
 
-	endpoint := EndpointGSXConnectionV1
+	endpoint := constants.EndpointJamfProGSXConnectionV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationMergePatchJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationMergePatchJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
@@ -135,7 +135,7 @@ func (s *GsxConnection) UpdateV1(ctx context.Context, request *ResourceGSXConnec
 // URL: GET /api/v1/gsx-connection/history
 // https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection-history
 func (s *GsxConnection) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/history", EndpointGSXConnectionV1)
+	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProGSXConnectionV1)
 
 	var result HistoryResponse
 
@@ -149,7 +149,7 @@ func (s *GsxConnection) GetHistoryV1(ctx context.Context, rsqlQuery map[string]s
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -169,11 +169,11 @@ func (s *GsxConnection) AddHistoryNoteV1(ctx context.Context, request *AddHistor
 
 	var result AddHistoryNoteResponse
 
-	endpoint := fmt.Sprintf("%s/history", EndpointGSXConnectionV1)
+	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProGSXConnectionV1)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -188,10 +188,10 @@ func (s *GsxConnection) AddHistoryNoteV1(ctx context.Context, request *AddHistor
 // URL: POST /api/v1/gsx-connection/test
 // https://developer.jamf.com/jamf-pro/reference/post_v1-gsx-connection-test
 func (s *GsxConnection) TestV1(ctx context.Context) (*resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/test", EndpointGSXConnectionV1)
+	endpoint := fmt.Sprintf("%s/test", constants.EndpointJamfProGSXConnectionV1)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)

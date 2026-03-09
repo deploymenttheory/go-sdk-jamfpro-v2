@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -63,7 +63,7 @@ func NewEbooks(client transport.HTTPClient) *Ebooks {
 func (s *Ebooks) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointEbooksV1
+	endpoint := constants.EndpointJamfProEbooksV1
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceEbook
@@ -75,7 +75,7 @@ func (s *Ebooks) ListV1(ctx context.Context, rsqlQuery map[string]string) (*List
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -93,12 +93,12 @@ func (s *Ebooks) GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *res
 		return nil, nil, fmt.Errorf("ebook ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointEbooksV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProEbooksV1, id)
 
 	var result ResourceEbook
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -117,12 +117,12 @@ func (s *Ebooks) GetScopeByIDV1(ctx context.Context, id string) (*ResourceScope,
 		return nil, nil, fmt.Errorf("ebook ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/scope", EndpointEbooksV1, id)
+	endpoint := fmt.Sprintf("%s/%s/scope", constants.EndpointJamfProEbooksV1, id)
 
 	var result ResourceScope
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

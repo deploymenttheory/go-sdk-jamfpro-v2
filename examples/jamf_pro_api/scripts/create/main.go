@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/scripts"
 )
 
@@ -22,7 +23,7 @@ func main() {
 
 	req := &scripts.RequestScript{
 		Name:           "go-sdk-v2-Script",
-		Priority:       scripts.ScriptPriorityAfter,
+		Priority:       constants.ScriptPriorityAfter,
 		Info:           "Example script created by SDK",
 		Notes:          "For testing purposes only",
 		ScriptContents: "#!/bin/bash\necho 'Hello from Jamf Pro SDK example'",

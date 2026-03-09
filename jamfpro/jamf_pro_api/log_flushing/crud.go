@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -77,10 +77,10 @@ func NewLogFlushing(client transport.HTTPClient) *LogFlushing {
 // URL: GET /api/v1/log-flushing
 // https://developer.jamf.com/jamf-pro/reference/get_v1-log-flushing
 func (s *LogFlushing) GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSettings, *resty.Response, error) {
-	endpoint := EndpointLogFlushingV1
+	endpoint := constants.EndpointJamfProLogFlushingV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceLogFlushingSettings
@@ -96,10 +96,10 @@ func (s *LogFlushing) GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSe
 // URL: GET /api/v1/log-flushing/task
 // https://developer.jamf.com/jamf-pro/reference/get_v1-log-flushing-task
 func (s *LogFlushing) ListTasksV1(ctx context.Context) ([]ResourceLogFlushingTask, *resty.Response, error) {
-	endpoint := EndpointLogFlushingV1 + "/task"
+	endpoint := constants.EndpointJamfProLogFlushingV1 + "/task"
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result []ResourceLogFlushingTask
@@ -119,10 +119,10 @@ func (s *LogFlushing) GetTaskByIDV1(ctx context.Context, id string) (*ResourceLo
 		return nil, nil, fmt.Errorf("task ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/task/%s", EndpointLogFlushingV1, id)
+	endpoint := fmt.Sprintf("%s/task/%s", constants.EndpointJamfProLogFlushingV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceLogFlushingTask
@@ -142,11 +142,11 @@ func (s *LogFlushing) QueueTaskV1(ctx context.Context, request *RequestLogFlushi
 		return nil, nil, fmt.Errorf("log flushing task request cannot be nil")
 	}
 
-	endpoint := EndpointLogFlushingV1 + "/task"
+	endpoint := constants.EndpointJamfProLogFlushingV1 + "/task"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var result CreateResponse
@@ -166,10 +166,10 @@ func (s *LogFlushing) DeleteTaskByIDV1(ctx context.Context, id string) (*resty.R
 		return nil, fmt.Errorf("task ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/task/%s", EndpointLogFlushingV1, id)
+	endpoint := fmt.Sprintf("%s/task/%s", constants.EndpointJamfProLogFlushingV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

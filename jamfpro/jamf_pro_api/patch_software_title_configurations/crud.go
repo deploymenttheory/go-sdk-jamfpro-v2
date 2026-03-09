@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -144,11 +144,11 @@ func NewPatchSoftwareTitleConfigurations(client transport.HTTPClient) *PatchSoft
 func (s *PatchSoftwareTitleConfigurations) ListV2(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointPatchSoftwareTitleConfigurationsV2
+	endpoint := constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -167,12 +167,12 @@ func (s *PatchSoftwareTitleConfigurations) GetByIDV2(ctx context.Context, id str
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResourcePatchSoftwareTitleConfiguration
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -222,11 +222,11 @@ func (s *PatchSoftwareTitleConfigurations) CreateV2(ctx context.Context, config 
 
 	var result CreateResponse
 
-	endpoint := EndpointPatchSoftwareTitleConfigurationsV2
+	endpoint := constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, config, headers, &result)
@@ -249,13 +249,13 @@ func (s *PatchSoftwareTitleConfigurations) UpdateByIDV2(ctx context.Context, id 
 		return nil, nil, fmt.Errorf("config is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResourcePatchSoftwareTitleConfiguration
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, config, headers, &result)
@@ -288,10 +288,10 @@ func (s *PatchSoftwareTitleConfigurations) DeleteByIDV2(ctx context.Context, id 
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -327,12 +327,12 @@ func (s *PatchSoftwareTitleConfigurations) GetDashboardStatusByIDV2(ctx context.
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResourceDashboardStatus
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -350,11 +350,11 @@ func (s *PatchSoftwareTitleConfigurations) AddToDashboardByIDV2(ctx context.Cont
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -372,10 +372,10 @@ func (s *PatchSoftwareTitleConfigurations) RemoveFromDashboardByIDV2(ctx context
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -397,13 +397,13 @@ func (s *PatchSoftwareTitleConfigurations) GetDefinitionsByIDV2(ctx context.Cont
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/definitions", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/definitions", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result DefinitionsResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -442,13 +442,13 @@ func (s *PatchSoftwareTitleConfigurations) GetDependenciesByIDV2(ctx context.Con
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dependencies", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dependencies", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result DependenciesResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -486,10 +486,10 @@ func (s *PatchSoftwareTitleConfigurations) ExportReportByIDV2(ctx context.Contex
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/export-report", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/export-report", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.TextCSV,
+		"Accept": constants.TextCSV,
 	}
 
 	resp, body, err := s.client.GetBytes(ctx, endpoint, query, headers)
@@ -507,12 +507,12 @@ func (s *PatchSoftwareTitleConfigurations) GetExtensionAttributesByIDV2(ctx cont
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/extension-attributes", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/extension-attributes", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result []ResourceExtensionAttribute
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -530,13 +530,13 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchReportByIDV2(ctx context.Cont
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/patch-report", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/patch-report", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result PatchReportResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -574,12 +574,12 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchSummaryByIDV2(ctx context.Con
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/patch-summary", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/patch-summary", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResourcePatchSummary
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -601,13 +601,13 @@ func (s *PatchSoftwareTitleConfigurations) GetHistoryByIDV2(ctx context.Context,
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -651,13 +651,13 @@ func (s *PatchSoftwareTitleConfigurations) AddHistoryNoteByIDV2(ctx context.Cont
 		return nil, nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResponseAddHistoryNote
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -679,12 +679,12 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchVersionsByIDV2(ctx context.Co
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/patch-summary/versions", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/patch-summary/versions", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result []ResourcePatchVersion
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

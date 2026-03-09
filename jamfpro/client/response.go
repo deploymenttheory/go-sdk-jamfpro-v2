@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -22,9 +22,9 @@ func (t *Transport) validateResponse(resp *resty.Response, method, path string) 
 	if !resp.IsError() && bodyLen > 0 {
 		contentType := resp.Header().Get("Content-Type")
 		if contentType != "" &&
-			!strings.HasPrefix(contentType, mime.ApplicationJSON) &&
-			!strings.HasPrefix(contentType, mime.ApplicationXML) &&
-			!strings.HasPrefix(contentType, "text/xml") {
+			!strings.HasPrefix(contentType, constants.ApplicationJSON) &&
+			!strings.HasPrefix(contentType, constants.ApplicationXML) &&
+			!strings.HasPrefix(contentType, constants.TextXML) {
 			t.logger.Warn("Unexpected Content-Type in response",
 				zap.String("method", method),
 				zap.String("path", path),

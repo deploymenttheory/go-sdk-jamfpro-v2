@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -35,7 +35,7 @@ type (
 		//
 		// Query params (optional, pass via query): export-fields, export-labels, page, page-size, sort, filter.
 		// Request body can override query parameters to avoid URI length limits.
-		// Accept (optional): pass mime.TextCSV for CSV export, mime.ApplicationJSON or empty for JSON (default).
+		// Accept (optional): pass constants.TextCSV for CSV export, constants.ApplicationJSON or empty for JSON (default).
 		//
 		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-export
 		ExportV1(ctx context.Context, query map[string]string, request *ExportRequest, accept ...string) (*resty.Response, []byte, error)
@@ -91,7 +91,7 @@ func (s *CloudIdp) ListV1(ctx context.Context, query map[string]string) (*ListRe
 	var result ListResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -103,7 +103,7 @@ func (s *CloudIdp) ListV1(ctx context.Context, query map[string]string) (*ListRe
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, EndpointCloudIdpV1, query, headers, mergePage)
+	resp, err := s.client.GetPaginated(ctx, constants.EndpointJamfProCloudIdpV1, query, headers, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -120,12 +120,12 @@ func (s *CloudIdp) GetByIDV1(ctx context.Context, id string) (*ResourceCloudIdPr
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCloudIdpV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudIdpV1, id)
 
 	var result ResourceCloudIdProviderDetails
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -160,19 +160,19 @@ func (s *CloudIdp) GetByNameV1(ctx context.Context, name string) (*ResourceCloud
 
 // ExportV1 exports Cloud Identity Providers collection.
 // URL: POST /api/v1/cloud-idp/export
-// Accept header: pass mime.TextCSV for CSV export, mime.ApplicationJSON or omit for JSON (default).
+// Accept header: pass constants.TextCSV for CSV export, constants.ApplicationJSON or omit for JSON (default).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-idp-export
 func (s *CloudIdp) ExportV1(ctx context.Context, query map[string]string, request *ExportRequest, accept ...string) (*resty.Response, []byte, error) {
-	endpoint := fmt.Sprintf("%s/export", EndpointCloudIdpV1)
+	endpoint := fmt.Sprintf("%s/export", constants.EndpointJamfProCloudIdpV1)
 
-	acceptHeader := mime.ApplicationJSON
+	acceptHeader := constants.ApplicationJSON
 	if len(accept) > 0 && accept[0] != "" {
 		acceptHeader = accept[0]
 	}
 
 	headers := map[string]string{
 		"Accept":       acceptHeader,
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var resp *resty.Response
@@ -199,7 +199,7 @@ func (s *CloudIdp) GetHistoryByIDV1(ctx context.Context, id string, query map[st
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointCloudIdpV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProCloudIdpV1, id)
 
 	var result HistoryResponse
 
@@ -213,7 +213,7 @@ func (s *CloudIdp) GetHistoryByIDV1(ctx context.Context, id string, query map[st
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
 	if err != nil {
@@ -234,11 +234,11 @@ func (s *CloudIdp) AddHistoryNoteByIDV1(ctx context.Context, id string, request 
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointCloudIdpV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProCloudIdpV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -260,13 +260,13 @@ func (s *CloudIdp) TestGroupSearchByIDV1(ctx context.Context, id string, request
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/test-group", EndpointCloudIdpV1, id)
+	endpoint := fmt.Sprintf("%s/%s/test-group", constants.EndpointJamfProCloudIdpV1, id)
 
 	var result TestGroupSearchResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -288,13 +288,13 @@ func (s *CloudIdp) TestUserSearchByIDV1(ctx context.Context, id string, request 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/test-user", EndpointCloudIdpV1, id)
+	endpoint := fmt.Sprintf("%s/%s/test-user", constants.EndpointJamfProCloudIdpV1, id)
 
 	var result TestUserSearchResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -316,13 +316,13 @@ func (s *CloudIdp) TestUserMembershipByIDV1(ctx context.Context, id string, requ
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/test-user-membership", EndpointCloudIdpV1, id)
+	endpoint := fmt.Sprintf("%s/%s/test-user-membership", constants.EndpointJamfProCloudIdpV1, id)
 
 	var result TestUserMembershipResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)

@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -85,7 +85,7 @@ func NewMobileDeviceExtensionAttributes(client transport.HTTPClient) *MobileDevi
 func (s *MobileDeviceExtensionAttributes) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointMobileDeviceExtensionAttributesV1
+	endpoint := constants.EndpointJamfProMobileDeviceExtensionAttributesV1
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceMobileDeviceExtensionAttribute
@@ -97,7 +97,7 @@ func (s *MobileDeviceExtensionAttributes) ListV1(ctx context.Context, rsqlQuery 
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -116,12 +116,12 @@ func (s *MobileDeviceExtensionAttributes) GetByIDV1(ctx context.Context, id stri
 		return nil, nil, fmt.Errorf("mobile device extension attribute ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDeviceExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDeviceExtensionAttributesV1, id)
 
 	var result ResourceMobileDeviceExtensionAttribute
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -142,11 +142,11 @@ func (s *MobileDeviceExtensionAttributes) CreateV1(ctx context.Context, request 
 
 	var result CreateResponse
 
-	endpoint := EndpointMobileDeviceExtensionAttributesV1
+	endpoint := constants.EndpointJamfProMobileDeviceExtensionAttributesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -169,13 +169,13 @@ func (s *MobileDeviceExtensionAttributes) UpdateByIDV1(ctx context.Context, id s
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDeviceExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDeviceExtensionAttributesV1, id)
 
 	var result ResourceMobileDeviceExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -194,10 +194,10 @@ func (s *MobileDeviceExtensionAttributes) DeleteByIDV1(ctx context.Context, id s
 		return nil, fmt.Errorf("mobile device extension attribute ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointMobileDeviceExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDeviceExtensionAttributesV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -216,11 +216,11 @@ func (s *MobileDeviceExtensionAttributes) DeleteMobileDeviceExtensionAttributesB
 		return nil, fmt.Errorf("ids are required")
 	}
 
-	endpoint := EndpointMobileDeviceExtensionAttributesV1 + "/delete-multiple"
+	endpoint := constants.EndpointJamfProMobileDeviceExtensionAttributesV1 + "/delete-multiple"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -240,7 +240,7 @@ func (s *MobileDeviceExtensionAttributes) GetHistoryByIDV1(ctx context.Context, 
 		return nil, nil, fmt.Errorf("mobile device extension attribute ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointMobileDeviceExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProMobileDeviceExtensionAttributesV1, id)
 
 	var result HistoryResponse
 
@@ -254,7 +254,7 @@ func (s *MobileDeviceExtensionAttributes) GetHistoryByIDV1(ctx context.Context, 
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -275,11 +275,11 @@ func (s *MobileDeviceExtensionAttributes) AddHistoryNoteByIDV1(ctx context.Conte
 		return nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointMobileDeviceExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProMobileDeviceExtensionAttributesV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
@@ -298,12 +298,12 @@ func (s *MobileDeviceExtensionAttributes) GetDataDependencyByIDV1(ctx context.Co
 		return nil, nil, fmt.Errorf("mobile device extension attribute ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/data-dependency", EndpointMobileDeviceExtensionAttributesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/data-dependency", constants.EndpointJamfProMobileDeviceExtensionAttributesV1, id)
 
 	var result DataDependencyResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -78,10 +78,10 @@ func NewOidc(client transport.HTTPClient) *Oidc {
 // URL: GET /api/v1/oidc/direct-idp-login-url
 // https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-direct-idp-login-url
 func (s *Oidc) GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDirectIdPLoginURL, *resty.Response, error) {
-	endpoint := EndpointOIDCV1 + "/direct-idp-login-url"
+	endpoint := constants.EndpointJamfProOIDCV1 + "/direct-idp-login-url"
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceOIDCDirectIdPLoginURL
@@ -97,10 +97,10 @@ func (s *Oidc) GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDirectI
 // URL: GET /api/v1/oidc/public-key
 // https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-public-key
 func (s *Oidc) GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *resty.Response, error) {
-	endpoint := EndpointOIDCV1 + "/public-key"
+	endpoint := constants.EndpointJamfProOIDCV1 + "/public-key"
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceOIDCPublicKey
@@ -116,10 +116,10 @@ func (s *Oidc) GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *res
 // URL: GET /api/v1/oidc/public-features
 // https://developer.jamf.com/jamf-pro/reference/get_v1-oidc-public-features
 func (s *Oidc) GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatures, *resty.Response, error) {
-	endpoint := EndpointOIDCV1 + "/public-features"
+	endpoint := constants.EndpointJamfProOIDCV1 + "/public-features"
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourcePublicFeatures
@@ -135,11 +135,11 @@ func (s *Oidc) GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatures
 // URL: POST /api/v1/oidc/generate-certificate
 // https://developer.jamf.com/jamf-pro/reference/post_v1-oidc-generate-certificate
 func (s *Oidc) GenerateCertificateV1(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointOIDCV1 + "/generate-certificate"
+	endpoint := constants.EndpointJamfProOIDCV1 + "/generate-certificate"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -158,11 +158,11 @@ func (s *Oidc) GetRedirectURLV1(ctx context.Context, request *RequestOIDCRedirec
 		return nil, nil, fmt.Errorf("OIDC redirect URL request cannot be nil")
 	}
 
-	endpoint := EndpointOIDCV2 + "/dispatch"
+	endpoint := constants.EndpointJamfProOIDCV2 + "/dispatch"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var result ResourceOIDCRedirectURL

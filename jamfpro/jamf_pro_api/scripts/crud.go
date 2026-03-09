@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -92,7 +92,7 @@ func NewScripts(client transport.HTTPClient) *Scripts {
 func (s *Scripts) ListScriptsV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointScriptsV1
+	endpoint := constants.EndpointJamfProScriptsV1
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceScript
@@ -104,7 +104,7 @@ func (s *Scripts) ListScriptsV1(ctx context.Context, rsqlQuery map[string]string
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -122,12 +122,12 @@ func (s *Scripts) GetScriptByIDV1(ctx context.Context, id string) (*ResourceScri
 		return nil, nil, fmt.Errorf("script ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointScriptsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProScriptsV1, id)
 
 	var result ResourceScript
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -148,11 +148,11 @@ func (s *Scripts) CreateScriptV1(ctx context.Context, request *RequestScript) (*
 
 	var result CreateResponse
 
-	endpoint := EndpointScriptsV1
+	endpoint := constants.EndpointJamfProScriptsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -176,13 +176,13 @@ func (s *Scripts) UpdateScriptByIDV1(ctx context.Context, id string, request *Re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointScriptsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProScriptsV1, id)
 
 	var result ResourceScript
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -201,10 +201,10 @@ func (s *Scripts) DeleteScriptByIDV1(ctx context.Context, id string) (*resty.Res
 		return nil, fmt.Errorf("script ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointScriptsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProScriptsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -223,7 +223,7 @@ func (s *Scripts) DownloadScriptByIDV1(ctx context.Context, id string) ([]byte, 
 		return nil, nil, fmt.Errorf("script ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/download", EndpointScriptsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/download", constants.EndpointJamfProScriptsV1, id)
 
 	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, map[string]string{"Accept": "text/plain"})
 	if err != nil {
@@ -242,12 +242,12 @@ func (s *Scripts) GetScriptHistoryV1(ctx context.Context, id string, rsqlQuery m
 		return nil, nil, fmt.Errorf("script ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointScriptsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProScriptsV1, id)
 
 	var result ScriptHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -269,11 +269,11 @@ func (s *Scripts) AddScriptHistoryNotesV1(ctx context.Context, id string, req *A
 		return nil, fmt.Errorf("request body is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointScriptsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProScriptsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)

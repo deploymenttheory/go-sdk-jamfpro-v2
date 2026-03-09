@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -53,11 +53,11 @@ func (s *DeclarativeDeviceManagement) ForceSyncV1(ctx context.Context, clientMan
 		return nil, fmt.Errorf("clientManagementID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/sync", EndpointDeclarativeDeviceManagementV1, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s/sync", constants.EndpointJamfProDeclarativeDeviceManagementV1, clientManagementID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -76,12 +76,12 @@ func (s *DeclarativeDeviceManagement) GetStatusItemsV1(ctx context.Context, clie
 		return nil, nil, fmt.Errorf("clientManagementID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/status-items", EndpointDeclarativeDeviceManagementV1, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s/status-items", constants.EndpointJamfProDeclarativeDeviceManagementV1, clientManagementID)
 
 	var result ResourceStatusItems
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -103,12 +103,12 @@ func (s *DeclarativeDeviceManagement) GetStatusItemByKeyV1(ctx context.Context, 
 		return nil, nil, fmt.Errorf("key is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/status-items/%s", EndpointDeclarativeDeviceManagementV1, clientManagementID, key)
+	endpoint := fmt.Sprintf("%s/%s/status-items/%s", constants.EndpointJamfProDeclarativeDeviceManagementV1, clientManagementID, key)
 
 	var result StatusItem
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

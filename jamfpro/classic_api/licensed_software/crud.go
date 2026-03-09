@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -80,13 +80,13 @@ func NewLicensedSoftware(client transport.HTTPClient) *LicensedSoftware {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findlicensedsoftware
 func (s *LicensedSoftware) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointLicensedSoftware
+	endpoint := constants.EndpointClassicLicensedSoftware
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -106,13 +106,13 @@ func (s *LicensedSoftware) GetByID(ctx context.Context, id int) (*Resource, *res
 		return nil, nil, fmt.Errorf("licensed software ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointLicensedSoftware, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLicensedSoftware, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -132,13 +132,13 @@ func (s *LicensedSoftware) GetByName(ctx context.Context, name string) (*Resourc
 		return nil, nil, fmt.Errorf("licensed software name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointLicensedSoftware, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLicensedSoftware, name)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -159,13 +159,13 @@ func (s *LicensedSoftware) Create(ctx context.Context, req *Resource) (*CreateUp
 		return nil, nil, fmt.Errorf("licensed software name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointLicensedSoftware)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicLicensedSoftware)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -191,13 +191,13 @@ func (s *LicensedSoftware) UpdateByID(ctx context.Context, id int, req *Resource
 		return nil, nil, fmt.Errorf("licensed software name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointLicensedSoftware, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLicensedSoftware, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -221,13 +221,13 @@ func (s *LicensedSoftware) UpdateByName(ctx context.Context, name string, req *R
 		return nil, nil, fmt.Errorf("licensed software name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointLicensedSoftware, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLicensedSoftware, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -247,11 +247,11 @@ func (s *LicensedSoftware) DeleteByID(ctx context.Context, id int) (*resty.Respo
 		return nil, fmt.Errorf("licensed software ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointLicensedSoftware, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLicensedSoftware, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -271,11 +271,11 @@ func (s *LicensedSoftware) DeleteByName(ctx context.Context, name string) (*rest
 		return nil, fmt.Errorf("licensed software name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointLicensedSoftware, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLicensedSoftware, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

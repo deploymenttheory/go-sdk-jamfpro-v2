@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -48,10 +48,10 @@ func NewUser(client transport.HTTPClient) *User {
 // Get returns the current authenticated user information.
 // URL: GET /api/user
 func (s *User) Get(ctx context.Context) (*ResourceUser, *resty.Response, error) {
-	endpoint := EndpointUser
+	endpoint := constants.EndpointJamfProUser
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceUser
@@ -77,11 +77,11 @@ func (s *User) ChangePassword(ctx context.Context, request *RequestChangePasswor
 		return nil, fmt.Errorf("newPassword is required and cannot be empty")
 	}
 
-	endpoint := EndpointChangePasswordV1
+	endpoint := constants.EndpointJamfProChangePasswordV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -100,11 +100,11 @@ func (s *User) UpdateSession(ctx context.Context, request *RequestUpdateSession)
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointUpdateSession
+	endpoint := constants.EndpointJamfProUpdateSession
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)

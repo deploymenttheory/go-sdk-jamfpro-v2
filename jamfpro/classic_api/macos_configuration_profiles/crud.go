@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/plist"
 	"resty.dev/v3"
 )
@@ -87,13 +87,13 @@ func NewMacosConfigurationProfiles(client transport.HTTPClient) *MacosConfigurat
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofiles
 func (s *MacosConfigurationProfiles) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointMacOSConfigurationProfiles
+	endpoint := constants.EndpointClassicMacOSConfigurationProfiles
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -113,13 +113,13 @@ func (s *MacosConfigurationProfiles) GetByID(ctx context.Context, id int) (*Reso
 		return nil, nil, fmt.Errorf("macOS configuration profile ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMacOSConfigurationProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -139,13 +139,13 @@ func (s *MacosConfigurationProfiles) GetByName(ctx context.Context, name string)
 		return nil, nil, fmt.Errorf("macOS configuration profile name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMacOSConfigurationProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -168,13 +168,13 @@ func (s *MacosConfigurationProfiles) Create(ctx context.Context, req *RequestRes
 		return nil, nil, fmt.Errorf("macOS configuration profile name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointMacOSConfigurationProfiles)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicMacOSConfigurationProfiles)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -225,13 +225,13 @@ func (s *MacosConfigurationProfiles) UpdateByID(ctx context.Context, id int, req
 		}
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMacOSConfigurationProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -282,13 +282,13 @@ func (s *MacosConfigurationProfiles) UpdateByName(ctx context.Context, name stri
 		}
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMacOSConfigurationProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -308,11 +308,11 @@ func (s *MacosConfigurationProfiles) DeleteByID(ctx context.Context, id int) (*r
 		return nil, fmt.Errorf("macOS configuration profile ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMacOSConfigurationProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -332,11 +332,11 @@ func (s *MacosConfigurationProfiles) DeleteByName(ctx context.Context, name stri
 		return nil, fmt.Errorf("macOS configuration profile name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMacOSConfigurationProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

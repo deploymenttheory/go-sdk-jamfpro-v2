@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -57,11 +57,11 @@ func (s *JamfProSystemInitialization) Initialize(ctx context.Context, request *R
 		return nil, fmt.Errorf("request cannot be nil")
 	}
 
-	endpoint := EndpointSystemInitialize
+	endpoint := constants.EndpointJamfProSystemInitialize
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -76,15 +76,15 @@ func (s *JamfProSystemInitialization) Initialize(ctx context.Context, request *R
 // URL: POST /api/v1/system/initialize-database-connection
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize-database-connection
 func (s *JamfProSystemInitialization) InitializeDatabaseConnection(ctx context.Context, password string) (*resty.Response, error) {
-	endpoint := EndpointInitializeDatabaseConnection
+	endpoint := constants.EndpointJamfProInitializeDatabaseConnection
 
 	request := &ResourceDatabasePassword{
 		Password: password,
 	}
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -103,11 +103,11 @@ func (s *JamfProSystemInitialization) PlatformInitialize(ctx context.Context, re
 		return nil, fmt.Errorf("request cannot be nil")
 	}
 
-	endpoint := EndpointSystemPlatformInitializeV1
+	endpoint := constants.EndpointJamfProSystemPlatformInitializeV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)

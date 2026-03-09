@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/scripts/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -124,7 +125,7 @@ func TestUnit_Scripts_CreateV1_Success(t *testing.T) {
 
 	req := &RequestScript{
 		Name:           "Test Script",
-		Priority:       ScriptPriorityAfter,
+		Priority:       constants.ScriptPriorityAfter,
 		ScriptContents: "#!/bin/bash\necho hello",
 	}
 	result, resp, err := svc.CreateScriptV1(context.Background(), req)
@@ -151,7 +152,7 @@ func TestUnit_Scripts_CreateV1_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterConflictErrorMock()
 
-	req := &RequestScript{Name: "Duplicate Script", Priority: ScriptPriorityAfter}
+	req := &RequestScript{Name: "Duplicate Script", Priority: constants.ScriptPriorityAfter}
 	result, resp, err := svc.CreateScriptV1(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
@@ -169,7 +170,7 @@ func TestUnit_Scripts_UpdateByIDV1_Success(t *testing.T) {
 
 	req := &RequestScript{
 		Name:     "Install Homebrew Updated",
-		Priority: ScriptPriorityBefore,
+		Priority: constants.ScriptPriorityBefore,
 	}
 	result, resp, err := svc.UpdateScriptByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -86,13 +86,13 @@ func NewSmartUserGroups(client transport.HTTPClient) *SmartUserGroups {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroups
 func (s *SmartUserGroups) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointSmartUserGroups
+	endpoint := constants.EndpointClassicSmartUserGroups
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -112,13 +112,13 @@ func (s *SmartUserGroups) GetByID(ctx context.Context, id int) (*ResourceSmartUs
 		return nil, nil, fmt.Errorf("user group ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointSmartUserGroups, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSmartUserGroups, id)
 
 	var out ResourceSmartUserGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -138,13 +138,13 @@ func (s *SmartUserGroups) GetByName(ctx context.Context, name string) (*Resource
 		return nil, nil, fmt.Errorf("user group name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointSmartUserGroups, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSmartUserGroups, name)
 
 	var out ResourceSmartUserGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -166,13 +166,13 @@ func (s *SmartUserGroups) Create(ctx context.Context, req *RequestSmartUserGroup
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointSmartUserGroups)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicSmartUserGroups)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -197,13 +197,13 @@ func (s *SmartUserGroups) UpdateByID(ctx context.Context, id int, req *RequestSm
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointSmartUserGroups, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSmartUserGroups, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -228,13 +228,13 @@ func (s *SmartUserGroups) UpdateByName(ctx context.Context, name string, req *Re
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointSmartUserGroups, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSmartUserGroups, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -254,11 +254,11 @@ func (s *SmartUserGroups) DeleteByID(ctx context.Context, id int) (*resty.Respon
 		return nil, fmt.Errorf("user group ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointSmartUserGroups, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSmartUserGroups, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -278,11 +278,11 @@ func (s *SmartUserGroups) DeleteByName(ctx context.Context, name string) (*resty
 		return nil, fmt.Errorf("user group name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointSmartUserGroups, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSmartUserGroups, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

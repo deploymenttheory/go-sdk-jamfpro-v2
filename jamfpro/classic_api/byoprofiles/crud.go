@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -86,11 +86,11 @@ func NewByoprofiles(client transport.HTTPClient) *Byoprofiles {
 func (s *Byoprofiles) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicBYOProfiles
+	endpoint := constants.EndpointClassicBYOProfiles
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -109,13 +109,13 @@ func (s *Byoprofiles) GetByID(ctx context.Context, id int) (*ResourceBYOProfile,
 		return nil, nil, fmt.Errorf("BYO profile ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicBYOProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicBYOProfiles, id)
 
 	var result ResourceBYOProfile
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -134,13 +134,13 @@ func (s *Byoprofiles) GetByName(ctx context.Context, name string) (*ResourceBYOP
 		return nil, nil, fmt.Errorf("BYO profile name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicBYOProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicBYOProfiles, name)
 
 	var result ResourceBYOProfile
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -160,13 +160,13 @@ func (s *Byoprofiles) Create(ctx context.Context, req *RequestBYOProfile) (*Crea
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicBYOProfiles)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicBYOProfiles)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -189,13 +189,13 @@ func (s *Byoprofiles) UpdateByID(ctx context.Context, id int, req *RequestBYOPro
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicBYOProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicBYOProfiles, id)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -218,13 +218,13 @@ func (s *Byoprofiles) UpdateByName(ctx context.Context, name string, req *Reques
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicBYOProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicBYOProfiles, name)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -243,11 +243,11 @@ func (s *Byoprofiles) DeleteByID(ctx context.Context, id int) (*resty.Response, 
 		return nil, fmt.Errorf("BYO profile ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicBYOProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicBYOProfiles, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -266,11 +266,11 @@ func (s *Byoprofiles) DeleteByName(ctx context.Context, name string) (*resty.Res
 		return nil, fmt.Errorf("BYO profile name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicBYOProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicBYOProfiles, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

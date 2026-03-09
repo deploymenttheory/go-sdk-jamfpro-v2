@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -82,11 +82,11 @@ func NewNetworkSegments(client transport.HTTPClient) *NetworkSegments {
 func (s *NetworkSegments) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicNetworkSegments
+	endpoint := constants.EndpointClassicNetworkSegments
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +105,13 @@ func (s *NetworkSegments) GetByID(ctx context.Context, id int) (*ResourceNetwork
 		return nil, nil, fmt.Errorf("network segment ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicNetworkSegments, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicNetworkSegments, id)
 
 	var result ResourceNetworkSegment
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +130,13 @@ func (s *NetworkSegments) GetByName(ctx context.Context, name string) (*Resource
 		return nil, nil, fmt.Errorf("network segment name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicNetworkSegments, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicNetworkSegments, name)
 
 	var result ResourceNetworkSegment
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +156,13 @@ func (s *NetworkSegments) Create(ctx context.Context, req *RequestNetworkSegment
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicNetworkSegments)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicNetworkSegments)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +184,13 @@ func (s *NetworkSegments) UpdateByID(ctx context.Context, id int, req *RequestNe
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicNetworkSegments, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicNetworkSegments, id)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +212,13 @@ func (s *NetworkSegments) UpdateByName(ctx context.Context, name string, req *Re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicNetworkSegments, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicNetworkSegments, name)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +237,11 @@ func (s *NetworkSegments) DeleteByID(ctx context.Context, id int) (*resty.Respon
 		return nil, fmt.Errorf("network segment ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicNetworkSegments, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicNetworkSegments, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +260,11 @@ func (s *NetworkSegments) DeleteByName(ctx context.Context, name string) (*resty
 		return nil, fmt.Errorf("network segment name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicNetworkSegments, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicNetworkSegments, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

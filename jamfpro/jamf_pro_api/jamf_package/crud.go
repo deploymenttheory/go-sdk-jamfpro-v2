@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -47,8 +47,8 @@ func NewJamfPackage(client transport.HTTPClient) *JamfPackage {
 // validateApplication validates that application is "protect" or "connect".
 func validateApplication(application string) error {
 	app := strings.ToLower(strings.TrimSpace(application))
-	if app != ApplicationProtect && app != ApplicationConnect {
-		return fmt.Errorf("application must be %q or %q, got %q", ApplicationProtect, ApplicationConnect, application)
+	if app != constants.ApplicationProtect && app != constants.ApplicationConnect {
+		return fmt.Errorf("application must be %q or %q, got %q", constants.ApplicationProtect, constants.ApplicationConnect, application)
 	}
 	return nil
 }
@@ -72,10 +72,10 @@ func (s *JamfPackage) ListV1(ctx context.Context, application string) (ListV1Res
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointJamfPackageV1, rsqlQuery, headers, &result)
+	resp, err := s.client.Get(ctx, constants.EndpointJamfProJamfPackageV1, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf packages: %w", err)
 	}
@@ -98,10 +98,10 @@ func (s *JamfPackage) GetV2(ctx context.Context, application string) (*ResourceJ
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
-	resp, err := s.client.Get(ctx, EndpointJamfPackageV2, rsqlQuery, headers, &result)
+	resp, err := s.client.Get(ctx, constants.EndpointJamfProJamfPackageV2, rsqlQuery, headers, &result)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get jamf package: %w", err)
 	}

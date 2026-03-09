@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -43,10 +43,10 @@ func NewCloudInformation(client transport.HTTPClient) *CloudInformation {
 func (s *CloudInformation) GetV1(ctx context.Context) (*ResourceCloudInformation, *resty.Response, error) {
 	var result ResourceCloudInformation
 
-	endpoint := EndpointCloudInformationV1
+	endpoint := constants.EndpointJamfProCloudInformationV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

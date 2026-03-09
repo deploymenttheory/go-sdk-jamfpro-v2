@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -92,7 +92,7 @@ func NewGroups(client transport.HTTPClient) *Groups {
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
 func (s *Groups) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointGroupsV1
+	endpoint := constants.EndpointJamfProGroupsV1
 
 	var result ListResponse
 
@@ -106,7 +106,7 @@ func (s *Groups) ListV1(ctx context.Context, rsqlQuery map[string]string) (*List
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -124,12 +124,12 @@ func (s *Groups) GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *res
 		return nil, nil, fmt.Errorf("group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProGroupsV1, id)
 
 	var result ResourceGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -247,13 +247,13 @@ func (s *Groups) UpdateByIDV1(ctx context.Context, id string, req *RequestUpdate
 		return nil, nil, fmt.Errorf("request body is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProGroupsV1, id)
 
 	var result ResourceGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, req, headers, &result)
@@ -272,10 +272,10 @@ func (s *Groups) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, 
 		return nil, fmt.Errorf("group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProGroupsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

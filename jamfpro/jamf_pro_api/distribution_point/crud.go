@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -92,7 +92,7 @@ func NewDistributionPoint(client transport.HTTPClient) *DistributionPoint {
 func (s *DistributionPoint) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointV1
+	endpoint := constants.EndpointJamfProDistributionPointsV1
 
 	mergePage := func(pageData []byte) error {
 		var items []ResourceDistributionPoint
@@ -104,7 +104,7 @@ func (s *DistributionPoint) ListV1(ctx context.Context, rsqlQuery map[string]str
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -127,11 +127,11 @@ func (s *DistributionPoint) CreateV1(ctx context.Context, request *RequestDistri
 
 	var result CreateResponse
 
-	endpoint := EndpointV1
+	endpoint := constants.EndpointJamfProDistributionPointsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -150,13 +150,13 @@ func (s *DistributionPoint) DeleteMultipleV1(ctx context.Context, ids []string) 
 		return nil, fmt.Errorf("at least one ID is required")
 	}
 
-	endpoint := EndpointV1DeleteMultiple
+	endpoint := constants.EndpointJamfProDistributionPointsDeleteMultipleV1
 
 	request := DeleteMultipleRequest{IDs: ids}
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -175,12 +175,12 @@ func (s *DistributionPoint) GetByIDV1(ctx context.Context, id string) (*Resource
 		return nil, nil, fmt.Errorf("distribution point ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDistributionPointsV1, id)
 
 	var result ResourceDistributionPoint
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -203,13 +203,13 @@ func (s *DistributionPoint) UpdateByIDV1(ctx context.Context, id string, request
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDistributionPointsV1, id)
 
 	var result ResourceDistributionPoint
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -228,10 +228,10 @@ func (s *DistributionPoint) DeleteByIDV1(ctx context.Context, id string) (*resty
 		return nil, fmt.Errorf("distribution point ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDistributionPointsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -254,13 +254,13 @@ func (s *DistributionPoint) PatchByIDV1(ctx context.Context, id string, request 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDistributionPointsV1, id)
 
 	var result ResourceDistributionPoint
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
@@ -279,7 +279,7 @@ func (s *DistributionPoint) GetHistoryByIDV1(ctx context.Context, id string, rsq
 		return nil, nil, fmt.Errorf("distribution point ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProDistributionPointsV1, id)
 
 	var result HistoryListResponse
 
@@ -293,7 +293,7 @@ func (s *DistributionPoint) GetHistoryByIDV1(ctx context.Context, id string, rsq
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -318,15 +318,15 @@ func (s *DistributionPoint) CreateHistoryNoteV1(ctx context.Context, id string, 
 		return nil, nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProDistributionPointsV1, id)
 
 	request := CreateHistoryNoteRequest{Note: note}
 
 	var result HistoryEntry
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)

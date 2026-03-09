@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -82,11 +82,11 @@ func NewLdapServers(client transport.HTTPClient) *LdapServers {
 func (s *LdapServers) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicLDAPServers
+	endpoint := constants.EndpointClassicLDAPServers
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +105,13 @@ func (s *LdapServers) GetByID(ctx context.Context, id int) (*ResourceLDAPServer,
 		return nil, nil, fmt.Errorf("LDAP server ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicLDAPServers, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLDAPServers, id)
 
 	var result ResourceLDAPServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +130,13 @@ func (s *LdapServers) GetByName(ctx context.Context, name string) (*ResourceLDAP
 		return nil, nil, fmt.Errorf("LDAP server name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicLDAPServers, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLDAPServers, name)
 
 	var result ResourceLDAPServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +156,13 @@ func (s *LdapServers) Create(ctx context.Context, request *RequestLDAPServer) (*
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicLDAPServers)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicLDAPServers)
 
 	var createResp CreateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &createResp)
@@ -192,13 +192,13 @@ func (s *LdapServers) UpdateByID(ctx context.Context, id int, request *RequestLD
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicLDAPServers, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLDAPServers, id)
 
 	var result ResourceLDAPServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -221,13 +221,13 @@ func (s *LdapServers) UpdateByName(ctx context.Context, name string, request *Re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicLDAPServers, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLDAPServers, name)
 
 	var result ResourceLDAPServer
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -246,11 +246,11 @@ func (s *LdapServers) DeleteByID(ctx context.Context, id int) (*resty.Response, 
 		return nil, fmt.Errorf("LDAP server ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicLDAPServers, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLDAPServers, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -269,11 +269,11 @@ func (s *LdapServers) DeleteByName(ctx context.Context, name string) (*resty.Res
 		return nil, fmt.Errorf("LDAP server name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicLDAPServers, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLDAPServers, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

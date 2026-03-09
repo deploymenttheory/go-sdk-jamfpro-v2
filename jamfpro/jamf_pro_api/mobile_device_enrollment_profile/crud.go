@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -50,10 +50,10 @@ func (s *MobileDeviceEnrollmentProfile) GetDownloadProfileV1(ctx context.Context
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/download-profile", EndpointMobileDeviceEnrollmentProfileV1, id)
+	endpoint := fmt.Sprintf("%s/%s/download-profile", constants.EndpointJamfProMobileDeviceEnrollmentProfileV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationXAppleAspenConfig,
+		"Accept": constants.ApplicationXAppleAspenConfig,
 	}
 
 	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)

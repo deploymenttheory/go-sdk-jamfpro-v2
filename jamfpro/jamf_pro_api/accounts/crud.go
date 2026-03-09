@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -61,12 +61,12 @@ func NewAccounts(client transport.HTTPClient) *Accounts {
 // Note: page and page-size are managed internally by GetPaginated.
 // https://developer.jamf.com/jamf-pro/reference/get_v1-accounts
 func (s *Accounts) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointAccountsV1
+	endpoint := constants.EndpointJamfProAccountsV1
 
 	var result ListResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -94,12 +94,12 @@ func (s *Accounts) GetByIDV1(ctx context.Context, id string) (*ResourceAccount, 
 		return nil, nil, fmt.Errorf("account ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAccountsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAccountsV1, id)
 
 	var result ResourceAccount
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -118,13 +118,13 @@ func (s *Accounts) CreateV1(ctx context.Context, req *RequestAccount) (*CreateRe
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointAccountsV1
+	endpoint := constants.EndpointJamfProAccountsV1
 
 	var result CreateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -143,7 +143,7 @@ func (s *Accounts) DeleteByIDV1(ctx context.Context, id string) (*resty.Response
 		return nil, fmt.Errorf("account ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAccountsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAccountsV1, id)
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, nil, nil)
 	if err != nil {

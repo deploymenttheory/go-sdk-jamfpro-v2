@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -102,13 +102,13 @@ func (s *Venafi) Create(ctx context.Context, request *ResourceVenafi) (*Response
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointVenafiV1
+	endpoint := constants.EndpointJamfProVenafiV1
 
 	var result ResponseVenafiCreated
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -126,12 +126,12 @@ func (s *Venafi) GetByID(ctx context.Context, id string) (*ResponseVenafi, *rest
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVenafiV1, id)
 
 	var result ResponseVenafi
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -152,13 +152,13 @@ func (s *Venafi) UpdateByID(ctx context.Context, id string, request *ResourceVen
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVenafiV1, id)
 
 	var result ResponseVenafi
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
@@ -176,10 +176,10 @@ func (s *Venafi) DeleteByID(ctx context.Context, id string) (*resty.Response, er
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVenafiV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -197,12 +197,12 @@ func (s *Venafi) GetConnectionStatus(ctx context.Context, id string) (*ResponseC
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/connection-status", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s/connection-status", constants.EndpointJamfProVenafiV1, id)
 
 	var result ResponseConnectionStatus
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -220,12 +220,12 @@ func (s *Venafi) GetDependentProfiles(ctx context.Context, id string) (*Response
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dependent-profiles", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s/dependent-profiles", constants.EndpointJamfProVenafiV1, id)
 
 	var result ResponseDependentProfiles
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -243,7 +243,7 @@ func (s *Venafi) GetHistory(ctx context.Context, id string, query map[string]str
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProVenafiV1, id)
 
 	var result ResponseHistory
 
@@ -257,7 +257,7 @@ func (s *Venafi) GetHistory(ctx context.Context, id string, query map[string]str
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
@@ -279,13 +279,13 @@ func (s *Venafi) AddHistoryNote(ctx context.Context, id string, request *History
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProVenafiV1, id)
 
 	var result ResponseVenafiCreated
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -303,10 +303,10 @@ func (s *Venafi) GetJamfPublicKey(ctx context.Context, id string) (*resty.Respon
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/jamf-public-key", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s/jamf-public-key", constants.EndpointJamfProVenafiV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationPEMCertificateChain,
+		"Accept": constants.ApplicationPEMCertificateChain,
 	}
 
 	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -324,10 +324,10 @@ func (s *Venafi) GetProxyTrustStore(ctx context.Context, id string) (*resty.Resp
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", constants.EndpointJamfProVenafiV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationPEMCertificateChain,
+		"Accept": constants.ApplicationPEMCertificateChain,
 	}
 
 	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -345,10 +345,10 @@ func (s *Venafi) RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) (
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/jamf-public-key/regenerate", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s/jamf-public-key/regenerate", constants.EndpointJamfProVenafiV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -369,11 +369,11 @@ func (s *Venafi) UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pem
 		return nil, fmt.Errorf("pem certificate is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", constants.EndpointJamfProVenafiV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationPEMCertificateChain,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationPEMCertificateChain,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, pemCertificate, headers, nil)
@@ -391,10 +391,10 @@ func (s *Venafi) DeleteProxyTrustStoreByIDV1(ctx context.Context, id string) (*r
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", EndpointVenafiV1, id)
+	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", constants.EndpointJamfProVenafiV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

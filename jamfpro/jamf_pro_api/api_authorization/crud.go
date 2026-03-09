@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -39,10 +39,10 @@ func NewApiAuthorization(client transport.HTTPClient) *ApiAuthorization {
 func (s *ApiAuthorization) GetV1(ctx context.Context) (*ResourceAuthV1, *resty.Response, error) {
 	var result ResourceAuthV1
 
-	endpoint := EndpointAuthV1
+	endpoint := constants.EndpointJamfProAuthV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -64,10 +64,10 @@ func NewBookmarks(client transport.HTTPClient) *Bookmarks {
 func (s *Bookmarks) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointBookmarksV1
+	endpoint := constants.EndpointJamfProBookmarksV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -85,11 +85,11 @@ func (s *Bookmarks) GetByIDV1(ctx context.Context, id string) (*ResourceBookmark
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBookmarksV1, id)
 	var result ResourceBookmark
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -110,11 +110,11 @@ func (s *Bookmarks) CreateV1(ctx context.Context, request *ResourceBookmark) (*C
 
 	var result CreateResponse
 
-	endpoint := EndpointBookmarksV1
+	endpoint := constants.EndpointJamfProBookmarksV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -137,13 +137,13 @@ func (s *Bookmarks) UpdateByIDV1(ctx context.Context, id string, request *Resour
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBookmarksV1, id)
 
 	var result ResourceBookmark
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -161,10 +161,10 @@ func (s *Bookmarks) DeleteByIDV1(ctx context.Context, id string) (*resty.Respons
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBookmarksV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

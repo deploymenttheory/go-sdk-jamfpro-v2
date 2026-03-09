@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -68,10 +68,10 @@ func NewSmartMobileDeviceGroups(client transport.HTTPClient) *SmartMobileDeviceG
 func (s *SmartMobileDeviceGroups) List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointSmartGroupsV2
+	endpoint := constants.EndpointJamfProSmartMobileDeviceGroups2V2
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -89,12 +89,12 @@ func (s *SmartMobileDeviceGroups) GetByID(ctx context.Context, id string) (*Reso
 		return nil, nil, fmt.Errorf("smart mobile device group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartMobileDeviceGroups2V2, id)
 
 	var result ResourceSmartMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -135,12 +135,12 @@ func (s *SmartMobileDeviceGroups) GetMembership(ctx context.Context, id string, 
 		return nil, nil, fmt.Errorf("smart mobile device group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupMembership, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartMobileDeviceGroupMembership, id)
 
 	var result MembershipResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -160,11 +160,11 @@ func (s *SmartMobileDeviceGroups) Create(ctx context.Context, request *RequestSm
 
 	var result CreateResponse
 
-	endpoint := EndpointSmartGroupsV2
+	endpoint := constants.EndpointJamfProSmartMobileDeviceGroups2V2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -186,13 +186,13 @@ func (s *SmartMobileDeviceGroups) UpdateByID(ctx context.Context, id string, req
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartMobileDeviceGroups2V2, id)
 
 	var result ResourceSmartMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -210,10 +210,10 @@ func (s *SmartMobileDeviceGroups) DeleteByID(ctx context.Context, id string) (*r
 		return nil, fmt.Errorf("smart mobile device group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartMobileDeviceGroups2V2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

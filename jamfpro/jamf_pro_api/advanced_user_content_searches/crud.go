@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -63,10 +63,10 @@ func NewAdvancedUserContentSearches(client transport.HTTPClient) *AdvancedUserCo
 func (s *AdvancedUserContentSearches) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointAdvancedUserContentSearchesV1
+	endpoint := constants.EndpointJamfProAdvancedUserContentSearchesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -94,11 +94,11 @@ func (s *AdvancedUserContentSearches) GetByIDV1(ctx context.Context, id string) 
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedUserContentSearchesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedUserContentSearchesV1, id)
 	var result ResourceAdvancedUserContentSearch
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -119,11 +119,11 @@ func (s *AdvancedUserContentSearches) CreateV1(ctx context.Context, request *Res
 
 	var result CreateResponse
 
-	endpoint := EndpointAdvancedUserContentSearchesV1
+	endpoint := constants.EndpointJamfProAdvancedUserContentSearchesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -145,13 +145,13 @@ func (s *AdvancedUserContentSearches) UpdateByIDV1(ctx context.Context, id strin
 		return nil, nil, fmt.Errorf("search is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedUserContentSearchesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedUserContentSearchesV1, id)
 
 	var result ResourceAdvancedUserContentSearch
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -169,10 +169,10 @@ func (s *AdvancedUserContentSearches) DeleteByIDV1(ctx context.Context, id strin
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointAdvancedUserContentSearchesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedUserContentSearchesV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

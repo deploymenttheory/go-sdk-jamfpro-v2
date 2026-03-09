@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/crypto"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/packages/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -382,7 +382,7 @@ func TestUnit_Packages_ExportV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportPackagesMock()
 
-	body, resp, err := svc.ExportV1(context.Background(), nil, nil, mime.ApplicationJSON)
+	body, resp, err := svc.ExportV1(context.Background(), nil, nil, constants.ApplicationJSON)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
@@ -397,7 +397,7 @@ func TestUnit_Packages_ExportV1_WithQueryAndBody(t *testing.T) {
 	query := map[string]string{"page": "0", "page-size": "100"}
 	page, pageSize := 0, 50
 	exportBody := &ExportRequest{Page: &page, PageSize: &pageSize}
-	body, resp, err := svc.ExportV1(context.Background(), query, exportBody, mime.ApplicationJSON)
+	body, resp, err := svc.ExportV1(context.Background(), query, exportBody, constants.ApplicationJSON)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
@@ -408,7 +408,7 @@ func TestUnit_Packages_ExportV1_CSV(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportPackagesMock()
 
-	body, resp, err := svc.ExportV1(context.Background(), nil, nil, mime.TextCSV)
+	body, resp, err := svc.ExportV1(context.Background(), nil, nil, constants.TextCSV)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
@@ -429,7 +429,7 @@ func TestUnit_Packages_ExportV1_EmptyAcceptDefaultsToJSON(t *testing.T) {
 func TestUnit_Packages_ExportV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	body, resp, err := svc.ExportV1(context.Background(), nil, nil, mime.ApplicationJSON)
+	body, resp, err := svc.ExportV1(context.Background(), nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, body)
 	assert.Nil(t, resp)
@@ -443,7 +443,7 @@ func TestUnit_Packages_ExportHistoryV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportHistoryMock()
 
-	body, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, mime.ApplicationJSON)
+	body, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, constants.ApplicationJSON)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
@@ -458,7 +458,7 @@ func TestUnit_Packages_ExportHistoryV1_WithQueryAndBody(t *testing.T) {
 	query := map[string]string{"page": "0"}
 	page := 0
 	exportBody := &ExportRequest{Page: &page}
-	body, resp, err := svc.ExportHistoryV1(context.Background(), "1", query, exportBody, mime.ApplicationJSON)
+	body, resp, err := svc.ExportHistoryV1(context.Background(), "1", query, exportBody, constants.ApplicationJSON)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, body)
@@ -468,7 +468,7 @@ func TestUnit_Packages_ExportHistoryV1_WithQueryAndBody(t *testing.T) {
 func TestUnit_Packages_ExportHistoryV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	body, resp, err := svc.ExportHistoryV1(context.Background(), "", nil, nil, mime.ApplicationJSON)
+	body, resp, err := svc.ExportHistoryV1(context.Background(), "", nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, body)
 	assert.Nil(t, resp)
@@ -478,7 +478,7 @@ func TestUnit_Packages_ExportHistoryV1_EmptyID(t *testing.T) {
 func TestUnit_Packages_ExportHistoryV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	body, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, mime.ApplicationJSON)
+	body, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, body)
 	assert.Nil(t, resp)

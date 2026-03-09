@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -85,13 +85,13 @@ func NewComputerGroups(client transport.HTTPClient) *ComputerGroups {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputergroups
 func (s *ComputerGroups) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointComputerGroups
+	endpoint := constants.EndpointClassicComputerGroups
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -110,13 +110,13 @@ func (s *ComputerGroups) GetByID(ctx context.Context, id int) (*ResourceComputer
 		return nil, nil, fmt.Errorf("computer group ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointComputerGroups, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicComputerGroups, id)
 
 	var out ResourceComputerGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -135,13 +135,13 @@ func (s *ComputerGroups) GetByName(ctx context.Context, name string) (*ResourceC
 		return nil, nil, fmt.Errorf("computer group name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointComputerGroups, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputerGroups, name)
 
 	var out ResourceComputerGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -165,13 +165,13 @@ func (s *ComputerGroups) Create(ctx context.Context, req *RequestComputerGroup) 
 		return nil, nil, fmt.Errorf("computer group name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointComputerGroups)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicComputerGroups)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -198,13 +198,13 @@ func (s *ComputerGroups) UpdateByID(ctx context.Context, id int, req *RequestCom
 		return nil, nil, fmt.Errorf("computer group name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointComputerGroups, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicComputerGroups, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -231,13 +231,13 @@ func (s *ComputerGroups) UpdateByName(ctx context.Context, name string, req *Req
 		return nil, nil, fmt.Errorf("computer group name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointComputerGroups, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputerGroups, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -256,11 +256,11 @@ func (s *ComputerGroups) DeleteByID(ctx context.Context, id int) (*resty.Respons
 		return nil, fmt.Errorf("computer group ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointComputerGroups, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicComputerGroups, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -279,11 +279,11 @@ func (s *ComputerGroups) DeleteByName(ctx context.Context, name string) (*resty.
 		return nil, fmt.Errorf("computer group name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointComputerGroups, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputerGroups, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

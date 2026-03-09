@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -51,10 +51,10 @@ func NewJamfProNotifications(client transport.HTTPClient) *JamfProNotifications 
 // URL: GET /api/v1/notifications
 // https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
 func (s *JamfProNotifications) GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error) {
-	endpoint := EndpointNotificationsV1
+	endpoint := constants.EndpointJamfProNotificationsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result []ResourceNotification
@@ -77,10 +77,10 @@ func (s *JamfProNotifications) DeleteByTypeAndIDV1(ctx context.Context, notifica
 		return nil, fmt.Errorf("notification id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/%s", EndpointNotificationsV1, notificationType, id)
+	endpoint := fmt.Sprintf("%s/%s/%s", constants.EndpointJamfProNotificationsV1, notificationType, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

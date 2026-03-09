@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
@@ -49,11 +49,11 @@ func (s *CloudLdapKeystore) ValidateV1(ctx context.Context, request *ValidateKey
 
 	var result ResponseValidateKeystore
 
-	Endpoint := EndpointCloudLdapKeystoreV1
+	Endpoint := constants.EndpointJamfProCloudLdapKeystoreV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, Endpoint, request, headers, &result)
