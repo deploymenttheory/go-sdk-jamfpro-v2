@@ -5,39 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// MDMRenewalServiceInterface defines the interface for MDM renewal operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-device-common-details-clientmanagementid
-	MDMRenewalServiceInterface interface {
-		// UpdateDeviceCommonDetailsV1 partially updates device common details (PATCH).
-		// The clientManagementId must be provided in the request body.
-		// Returns 204 No Content on success.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-mdm-renewal-device-common-details
-		UpdateDeviceCommonDetailsV1(ctx context.Context, request *RequestDeviceCommonDetailsUpdate) (*resty.Response, error)
-
-		// GetDeviceCommonDetailsV1 returns device common details for the given client management ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-device-common-details-clientmanagementid
-		GetDeviceCommonDetailsV1(ctx context.Context, clientManagementID string) (*DeviceCommonDetails, *resty.Response, error)
-
-		// GetRenewalStrategiesV1 returns MDM renewal errors and strategies for the given client management ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-renewal-strategies-clientmanagementid
-		GetRenewalStrategiesV1(ctx context.Context, clientManagementID string) ([]RenewalErrorWithStrategies, *resty.Response, error)
-
-		// DeleteRenewalStrategiesV1 deletes all renewal strategies and errors for the given client management ID.
-		// Returns 204 No Content on success.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mdm-renewal-renewal-strategies-clientmanagementid
-		DeleteRenewalStrategiesV1(ctx context.Context, clientManagementID string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the MDM renewal-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-device-common-details-clientmanagementid
@@ -45,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ MDMRenewalServiceInterface = (*MdmRenewal)(nil)
 
 func NewMdmRenewal(client transport.HTTPClient) *MdmRenewal {
 	return &MdmRenewal{client: client}
@@ -68,11 +38,11 @@ func (s *MdmRenewal) UpdateDeviceCommonDetailsV1(ctx context.Context, request *R
 		return nil, fmt.Errorf("clientManagementId is required")
 	}
 
-	endpoint := EndpointDeviceCommonDetailsV1
+	endpoint := constants.EndpointJamfProDeviceCommonDetailsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, nil)
@@ -90,12 +60,12 @@ func (s *MdmRenewal) GetDeviceCommonDetailsV1(ctx context.Context, clientManagem
 		return nil, nil, fmt.Errorf("clientManagementId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDeviceCommonDetailsV1, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDeviceCommonDetailsV1, clientManagementID)
 
 	var result DeviceCommonDetails
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -113,12 +83,12 @@ func (s *MdmRenewal) GetRenewalStrategiesV1(ctx context.Context, clientManagemen
 		return nil, nil, fmt.Errorf("clientManagementId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointRenewalStrategiesV1, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProRenewalStrategiesV1, clientManagementID)
 
 	var result []RenewalErrorWithStrategies
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -137,10 +107,10 @@ func (s *MdmRenewal) DeleteRenewalStrategiesV1(ctx context.Context, clientManage
 		return nil, fmt.Errorf("clientManagementId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointRenewalStrategiesV1, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProRenewalStrategiesV1, clientManagementID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

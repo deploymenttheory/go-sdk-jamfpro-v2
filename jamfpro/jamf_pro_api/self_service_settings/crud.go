@@ -6,38 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// SelfServiceSettingsServiceInterface defines the interface for self-service settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings
-	SelfServiceSettingsServiceInterface interface {
-		// Get retrieves self-service settings (Get Self Service Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings
-		Get(ctx context.Context) (*ResourceSelfServiceSettings, *resty.Response, error)
-
-		// Update updates self-service settings (Update Self Service Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-self-service-settings
-		Update(ctx context.Context, request *ResourceSelfServiceSettings) (*ResourceSelfServiceSettings, *resty.Response, error)
-
-		// GetHistoryV1 returns the paginated history for Self Service settings.
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNotesV1 adds a note to the Self Service settings history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-self-service-settings-history
-		AddHistoryNotesV1(ctx context.Context, req *AddHistoryNotesRequest) (*AddHistoryNotesResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the self-service settings methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings
@@ -45,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SelfServiceSettingsServiceInterface = (*SelfServiceSettings)(nil)
 
 func NewSelfServiceSettings(client transport.HTTPClient) *SelfServiceSettings {
 	return &SelfServiceSettings{client: client}
@@ -61,9 +32,9 @@ func NewSelfServiceSettings(client transport.HTTPClient) *SelfServiceSettings {
 func (s *SelfServiceSettings) Get(ctx context.Context) (*ResourceSelfServiceSettings, *resty.Response, error) {
 	var result ResourceSelfServiceSettings
 
-	endpoint := EndpointSelfServiceSettingsV1
+	endpoint := constants.EndpointJamfProSelfServiceSettingsV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -83,10 +54,10 @@ func (s *SelfServiceSettings) Update(ctx context.Context, request *ResourceSelfS
 
 	var result ResourceSelfServiceSettings
 
-	endpoint := EndpointSelfServiceSettingsV1
+	endpoint := constants.EndpointJamfProSelfServiceSettingsV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -113,9 +84,9 @@ func (s *SelfServiceSettings) GetHistoryV1(ctx context.Context, rsqlQuery map[st
 		return nil
 	}
 
-	endpoint := EndpointSelfServiceSettingsHistoryV1
+	endpoint := constants.EndpointJamfProSelfServiceSettingsHistoryV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -137,8 +108,8 @@ func (s *SelfServiceSettings) AddHistoryNotesV1(ctx context.Context, req *AddHis
 	}
 
 	var result AddHistoryNotesResponse
-	endpoint := EndpointSelfServiceSettingsHistoryV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProSelfServiceSettingsHistoryV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err

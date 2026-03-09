@@ -5,76 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// CloudLdapServiceInterface defines the interface for Cloud LDAP operations.
-	// Uses v2 API for all operations. Supports Google and Azure LDAP integration.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-cloud-ldaps
-	CloudLdapServiceInterface interface {
-		// GetDefaultMappingsV2 returns the default field mappings for the specified provider (Get Default Mappings).
-		//
-		// providerName should be "GOOGLE" or "AZURE".
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-defaults-provider-mappings
-		GetDefaultMappingsV2(ctx context.Context, providerName string) (*ResponseDefaultMappings, *resty.Response, error)
-
-		// GetDefaultServerConfigurationV2 returns the default server configuration for the specified provider (Get Default Server Configuration).
-		//
-		// providerName should be "GOOGLE" or "AZURE".
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-defaults-provider-server-configuration
-		GetDefaultServerConfigurationV2(ctx context.Context, providerName string) (*ResponseDefaultServerConfiguration, *resty.Response, error)
-
-		// CreateV2 creates a new Cloud LDAP configuration (Create Cloud LDAP).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-cloud-ldaps
-		CreateV2(ctx context.Context, request *ResourceCloudLdap) (*ResponseCloudLdapCreated, *resty.Response, error)
-
-		// GetByIDV2 returns the Cloud LDAP configuration by ID (Get Cloud LDAP by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id
-		GetByIDV2(ctx context.Context, id string) (*ResourceCloudLdap, *resty.Response, error)
-
-		// UpdateByIDV2 updates the Cloud LDAP configuration by ID (Update Cloud LDAP by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-cloud-ldaps-id
-		UpdateByIDV2(ctx context.Context, id string, request *ResourceCloudLdap) (*ResourceCloudLdap, *resty.Response, error)
-
-		// DeleteByIDV2 deletes the Cloud LDAP configuration by ID (Delete Cloud LDAP by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-cloud-ldaps-id
-		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// GetBindConnectionPoolStatsByIDV2 returns bind connection pool statistics (Get Bind Connection Pool Statistics).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-bind
-		GetBindConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *resty.Response, error)
-
-		// GetSearchConnectionPoolStatsByIDV2 returns search connection pool statistics (Get Search Connection Pool Statistics).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-search
-		GetSearchConnectionPoolStatsByIDV2(ctx context.Context, id string) (*ConnectionPoolStats, *resty.Response, error)
-
-		// TestConnectionByIDV2 tests the communication with the specified cloud connection (Test Connection).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-connection-status
-		TestConnectionByIDV2(ctx context.Context, id string) (*ConnectionStatusResponse, *resty.Response, error)
-
-		// GetMappingsByIDV2 returns the mappings configuration for the Cloud LDAP by ID (Get Mappings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-cloud-ldaps-id-mappings
-		GetMappingsByIDV2(ctx context.Context, id string) (*CloudLdapMappings, *resty.Response, error)
-
-		// UpdateMappingsByIDV2 updates the mappings configuration for the Cloud LDAP by ID (Update Mappings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-cloud-ldaps-id-mappings
-		UpdateMappingsByIDV2(ctx context.Context, id string, request *CloudLdapMappings) (*CloudLdapMappings, *resty.Response, error)
-	}
-
 	// Service handles communication with the Cloud LDAP-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-cloud-ldaps
@@ -82,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CloudLdapServiceInterface = (*CloudLdap)(nil)
 
 func NewCloudLdap(client transport.HTTPClient) *CloudLdap {
 	return &CloudLdap{client: client}
@@ -97,12 +30,12 @@ func (s *CloudLdap) GetDefaultMappingsV2(ctx context.Context, providerName strin
 		return nil, nil, fmt.Errorf("providerName is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/defaults/%s/mappings", EndpointCloudLdapV2, providerName)
+	endpoint := fmt.Sprintf("%s/defaults/%s/mappings", constants.EndpointJamfProCloudLdapV2, providerName)
 
 	var result ResponseDefaultMappings
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -121,12 +54,12 @@ func (s *CloudLdap) GetDefaultServerConfigurationV2(ctx context.Context, provide
 		return nil, nil, fmt.Errorf("providerName is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/defaults/%s/server-configuration", EndpointCloudLdapV2, providerName)
+	endpoint := fmt.Sprintf("%s/defaults/%s/server-configuration", constants.EndpointJamfProCloudLdapV2, providerName)
 
 	var result ResponseDefaultServerConfiguration
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -145,13 +78,13 @@ func (s *CloudLdap) CreateV2(ctx context.Context, request *ResourceCloudLdap) (*
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointCloudLdapV2
+	endpoint := constants.EndpointJamfProCloudLdapV2
 
 	var result ResponseCloudLdapCreated
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -170,12 +103,12 @@ func (s *CloudLdap) GetByIDV2(ctx context.Context, id string) (*ResourceCloudLda
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCloudLdapV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudLdapV2, id)
 
 	var result ResourceCloudLdap
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -197,13 +130,13 @@ func (s *CloudLdap) UpdateByIDV2(ctx context.Context, id string, request *Resour
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCloudLdapV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudLdapV2, id)
 
 	var result ResourceCloudLdap
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -222,10 +155,10 @@ func (s *CloudLdap) DeleteByIDV2(ctx context.Context, id string) (*resty.Respons
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointCloudLdapV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudLdapV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -244,12 +177,12 @@ func (s *CloudLdap) GetBindConnectionPoolStatsByIDV2(ctx context.Context, id str
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/connection/bind", EndpointCloudLdapV2, id)
+	endpoint := fmt.Sprintf("%s/%s/connection/bind", constants.EndpointJamfProCloudLdapV2, id)
 
 	var result ConnectionPoolStats
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -268,12 +201,12 @@ func (s *CloudLdap) GetSearchConnectionPoolStatsByIDV2(ctx context.Context, id s
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/connection/search", EndpointCloudLdapV2, id)
+	endpoint := fmt.Sprintf("%s/%s/connection/search", constants.EndpointJamfProCloudLdapV2, id)
 
 	var result ConnectionPoolStats
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -292,12 +225,12 @@ func (s *CloudLdap) TestConnectionByIDV2(ctx context.Context, id string) (*Conne
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/connection/status", EndpointCloudLdapV2, id)
+	endpoint := fmt.Sprintf("%s/%s/connection/status", constants.EndpointJamfProCloudLdapV2, id)
 
 	var result ConnectionStatusResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -316,12 +249,12 @@ func (s *CloudLdap) GetMappingsByIDV2(ctx context.Context, id string) (*CloudLda
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/mappings", EndpointCloudLdapV2, id)
+	endpoint := fmt.Sprintf("%s/%s/mappings", constants.EndpointJamfProCloudLdapV2, id)
 
 	var result CloudLdapMappings
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -343,13 +276,13 @@ func (s *CloudLdap) UpdateMappingsByIDV2(ctx context.Context, id string, request
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/mappings", EndpointCloudLdapV2, id)
+	endpoint := fmt.Sprintf("%s/%s/mappings", constants.EndpointJamfProCloudLdapV2, id)
 
 	var result CloudLdapMappings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)

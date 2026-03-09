@@ -7,60 +7,11 @@ import (
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ApiIntegrationsServiceInterface defines the interface for API integrations operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-integrations
-	ApiIntegrationsServiceInterface interface {
-		// ListV1 returns a page of API integrations (Get API Integrations / Get with Search Criteria).
-		//
-		// Query params (optional, pass via rsqlQuery): page (default 0), page-size (default 100),
-		// sort (e.g. "id:asc", "displayName:desc"), filter (RSQL, e.g. displayName=="IntegrationName").
-		// Allowed sort/filter fields: id, displayName.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-integrations
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the API integration by ID (Get API Integration by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getoneapiintegration
-		GetByIDV1(ctx context.Context, id string) (*ResourceApiIntegration, *resty.Response, error)
-
-		// GetByNameV1 returns the API integration by display name (searches first page of ListV1).
-		GetByNameV1(ctx context.Context, name string) (*ResourceApiIntegration, *resty.Response, error)
-
-		// CreateV1 creates a new API integration (Create API Integration).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateapiintegration
-		CreateV1(ctx context.Context, request *RequestApiIntegration) (*ResourceApiIntegration, *resty.Response, error)
-
-		// UpdateByIDV1 updates the API integration by ID (Update API Integration by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/putupdateapiintegration
-		UpdateByIDV1(ctx context.Context, id string, request *RequestApiIntegration) (*ResourceApiIntegration, *resty.Response, error)
-
-		// UpdateByNameV1 updates the API integration by display name.
-		UpdateByNameV1(ctx context.Context, name string, request *RequestApiIntegration) (*ResourceApiIntegration, *resty.Response, error)
-
-		// DeleteByIDV1 deletes the API integration by ID (Delete API Integration by ID).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/deleteapiintegration
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByNameV1 deletes the API integration by display name.
-		DeleteByNameV1(ctx context.Context, name string) (*resty.Response, error)
-
-		// RefreshClientCredentialsByIDV1 creates client credentials for the API integration by ID (Create client credentials).
-		// POST /api/v1/api-integrations/{id}/client-credentials
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateclientcredentials
-		RefreshClientCredentialsByIDV1(ctx context.Context, id string) (*ResourceClientCredentials, *resty.Response, error)
-	}
-
 	// Service handles communication with the API integrations-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-integrations
@@ -68,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ApiIntegrationsServiceInterface = (*ApiIntegrations)(nil)
 
 func NewApiIntegrations(client transport.HTTPClient) *ApiIntegrations {
 	return &ApiIntegrations{client: client}
@@ -83,10 +32,10 @@ func NewApiIntegrations(client transport.HTTPClient) *ApiIntegrations {
 func (s *ApiIntegrations) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointApiIntegrationsV1
+	endpoint := constants.EndpointJamfProApiIntegrationsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -116,12 +65,12 @@ func (s *ApiIntegrations) GetByIDV1(ctx context.Context, id string) (*ResourceAp
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointApiIntegrationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProApiIntegrationsV1, id)
 
 	var result ResourceApiIntegration
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -154,11 +103,11 @@ func (s *ApiIntegrations) CreateV1(ctx context.Context, request *RequestApiInteg
 	}
 	var result ResourceApiIntegration
 
-	endpoint := EndpointApiIntegrationsV1
+	endpoint := constants.EndpointJamfProApiIntegrationsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -180,12 +129,12 @@ func (s *ApiIntegrations) UpdateByIDV1(ctx context.Context, id string, request *
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointApiIntegrationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProApiIntegrationsV1, id)
 	var result ResourceApiIntegration
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -212,10 +161,10 @@ func (s *ApiIntegrations) DeleteByIDV1(ctx context.Context, id string) (*resty.R
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointApiIntegrationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProApiIntegrationsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -243,12 +192,12 @@ func (s *ApiIntegrations) RefreshClientCredentialsByIDV1(ctx context.Context, id
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s/client-credentials", EndpointApiIntegrationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/client-credentials", constants.EndpointJamfProApiIntegrationsV1, id)
 
 	var result ResourceClientCredentials
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)

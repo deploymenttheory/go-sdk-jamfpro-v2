@@ -4,21 +4,11 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// LocalesServiceInterface defines the interface for locale operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
-	LocalesServiceInterface interface {
-		// ListV1 returns all available locales (Get Locales).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
-		ListV1(ctx context.Context) ([]ResourceLocale, *resty.Response, error)
-	}
-
 	// Service handles communication with the locales-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ LocalesServiceInterface = (*Locales)(nil)
 
 func NewLocales(client transport.HTTPClient) *Locales {
 	return &Locales{client: client}
@@ -43,10 +31,10 @@ func NewLocales(client transport.HTTPClient) *Locales {
 func (s *Locales) ListV1(ctx context.Context) ([]ResourceLocale, *resty.Response, error) {
 	var result []ResourceLocale
 
-	endpoint := EndpointLocalesV1
+	endpoint := constants.EndpointJamfProLocalesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

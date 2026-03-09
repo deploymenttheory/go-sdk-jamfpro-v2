@@ -7,12 +7,8 @@ import (
 	"os"
 	"strconv"
 	"time"
-)
 
-// AuthMethod constants for the Jamf Pro authentication methods.
-const (
-	AuthMethodOAuth2 = "oauth2"
-	AuthMethodBasic  = "basic"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 )
 
 // AuthConfig holds authentication configuration for the Jamf Pro API.
@@ -51,15 +47,15 @@ func (a *AuthConfig) Validate() error {
 	if a.InstanceDomain == "" {
 		return fmt.Errorf("instance domain is required")
 	}
-	if a.AuthMethod != AuthMethodOAuth2 && a.AuthMethod != AuthMethodBasic {
-		return fmt.Errorf("auth method must be %q or %q", AuthMethodOAuth2, AuthMethodBasic)
+	if a.AuthMethod != constants.AuthMethodOAuth2 && a.AuthMethod != constants.AuthMethodBasic {
+		return fmt.Errorf("auth method must be %q or %q", constants.AuthMethodOAuth2, constants.AuthMethodBasic)
 	}
-	if a.AuthMethod == AuthMethodOAuth2 {
+	if a.AuthMethod == constants.AuthMethodOAuth2 {
 		if a.ClientID == "" || a.ClientSecret == "" {
 			return fmt.Errorf("client_id and client_secret are required for oauth2")
 		}
 	}
-	if a.AuthMethod == AuthMethodBasic {
+	if a.AuthMethod == constants.AuthMethodBasic {
 		if a.Username == "" || a.Password == "" {
 			return fmt.Errorf("username and password are required for basic auth")
 		}

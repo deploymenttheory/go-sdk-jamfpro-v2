@@ -5,58 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// IBeaconsServiceInterface defines the interface for Classic API iBeacon operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/ibeacons
-	IBeaconsServiceInterface interface {
-		// List returns all iBeacons.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findibeacons
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified iBeacon by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findibeaconsbyid
-		GetByID(ctx context.Context, id int) (*ResourceIBeacon, *resty.Response, error)
-
-		// GetByName returns the specified iBeacon by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findibeaconsbyname
-		GetByName(ctx context.Context, name string) (*ResourceIBeacon, *resty.Response, error)
-
-		// Create creates a new iBeacon.
-		//
-		// Returns the created iBeacon with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createibeaconbyid
-		Create(ctx context.Context, req *RequestIBeacon) (*ResourceIBeacon, *resty.Response, error)
-
-		// UpdateByID updates the specified iBeacon by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateibeaconbyid
-		UpdateByID(ctx context.Context, id int, req *RequestIBeacon) (*ResourceIBeacon, *resty.Response, error)
-
-		// UpdateByName updates the specified iBeacon by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateibeaconbyname
-		UpdateByName(ctx context.Context, name string, req *RequestIBeacon) (*ResourceIBeacon, *resty.Response, error)
-
-		// DeleteByID removes the specified iBeacon by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteibeaconbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified iBeacon by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteibeaconbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the iBeacon-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/ibeacons
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ IBeaconsServiceInterface = (*Ibeacons)(nil)
 
 // NewService returns a new iBeacons Service backed by the provided HTTP client.
 func NewIbeacons(client transport.HTTPClient) *Ibeacons {
@@ -82,11 +33,11 @@ func NewIbeacons(client transport.HTTPClient) *Ibeacons {
 func (s *Ibeacons) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicIBeacons
+	endpoint := constants.EndpointClassicIBeacons
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +56,13 @@ func (s *Ibeacons) GetByID(ctx context.Context, id int) (*ResourceIBeacon, *rest
 		return nil, nil, fmt.Errorf("iBeacon ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicIBeacons, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicIBeacons, id)
 
 	var result ResourceIBeacon
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +81,13 @@ func (s *Ibeacons) GetByName(ctx context.Context, name string) (*ResourceIBeacon
 		return nil, nil, fmt.Errorf("iBeacon name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicIBeacons, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicIBeacons, name)
 
 	var result ResourceIBeacon
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +107,13 @@ func (s *Ibeacons) Create(ctx context.Context, req *RequestIBeacon) (*ResourceIB
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicIBeacons)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicIBeacons)
 
 	var result ResourceIBeacon
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +135,13 @@ func (s *Ibeacons) UpdateByID(ctx context.Context, id int, req *RequestIBeacon) 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicIBeacons, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicIBeacons, id)
 
 	var result ResourceIBeacon
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +163,13 @@ func (s *Ibeacons) UpdateByName(ctx context.Context, name string, req *RequestIB
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicIBeacons, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicIBeacons, name)
 
 	var result ResourceIBeacon
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +188,11 @@ func (s *Ibeacons) DeleteByID(ctx context.Context, id int) (*resty.Response, err
 		return nil, fmt.Errorf("iBeacon ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicIBeacons, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicIBeacons, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +211,11 @@ func (s *Ibeacons) DeleteByName(ctx context.Context, name string) (*resty.Respon
 		return nil, fmt.Errorf("iBeacon name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicIBeacons, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicIBeacons, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

@@ -6,119 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// PatchSoftwareTitleConfigurationsServiceInterface defines the interface for patch software title configuration operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations
-	PatchSoftwareTitleConfigurationsServiceInterface interface {
-		// ListV2 returns all patch software title configurations.
-		//
-		// This endpoint retrieves all patch software title configurations with their details.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations
-		ListV2(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV2 returns the patch software title configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id
-		GetByIDV2(ctx context.Context, id string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
-
-		// GetByNameV2 returns the patch software title configuration by display name.
-		//
-		// This is a convenience method that calls ListV2 and filters by DisplayName.
-		GetByNameV2(ctx context.Context, name string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
-
-		// CreateV2 creates a new patch software title configuration.
-		// Returns CreateResponse (id, href).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations
-		CreateV2(ctx context.Context, config *ResourcePatchSoftwareTitleConfiguration) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV2 updates the patch software title configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-patch-software-title-configurations-id
-		UpdateByIDV2(ctx context.Context, id string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
-
-		// UpdateByNameV2 updates the patch software title configuration by display name.
-		UpdateByNameV2(ctx context.Context, name string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error)
-
-		// DeleteByIDV2 deletes the patch software title configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-software-title-configurations-id
-		DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByNameV2 deletes the patch software title configuration by display name.
-		DeleteByNameV2(ctx context.Context, name string) (*resty.Response, error)
-
-		// GetDashboardStatusByIDV2 returns whether the software title configuration is on the dashboard.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-dashboard
-		GetDashboardStatusByIDV2(ctx context.Context, id string) (*ResourceDashboardStatus, *resty.Response, error)
-
-		// AddToDashboardByIDV2 adds the software title configuration to the dashboard.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations-id-dashboard
-		AddToDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// RemoveFromDashboardByIDV2 removes the software title configuration from the dashboard.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-software-title-configurations-id-dashboard
-		RemoveFromDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// GetDefinitionsByIDV2 returns paginated patch software title definitions.
-		//
-		// Query params: page, page-size, sort, filter (RSQL).
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-definitions
-		GetDefinitionsByIDV2(ctx context.Context, id string, query map[string]string) (*DefinitionsResponse, *resty.Response, error)
-
-		// GetDependenciesByIDV2 returns paginated dependencies (smart groups) for the configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-dependencies
-		GetDependenciesByIDV2(ctx context.Context, id string, query map[string]string) (*DependenciesResponse, *resty.Response, error)
-
-		// ExportReportByIDV2 exports patch reporting data as CSV bytes.
-		//
-		// Query params: filter (RSQL), columns-to-export (comma-separated column names).
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-export-report
-		ExportReportByIDV2(ctx context.Context, id string, query map[string]string) ([]byte, *resty.Response, error)
-
-		// GetExtensionAttributesByIDV2 returns extension attributes for the software title.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-extension-attributes
-		GetExtensionAttributesByIDV2(ctx context.Context, id string) ([]ResourceExtensionAttribute, *resty.Response, error)
-
-		// GetPatchReportByIDV2 returns paginated patch report for the configuration.
-		//
-		// Query params: page, page-size, sort, filter (RSQL).
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-patch-report
-		GetPatchReportByIDV2(ctx context.Context, id string, query map[string]string) (*PatchReportResponse, *resty.Response, error)
-
-		// GetPatchSummaryByIDV2 returns the patch summary for the configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-patch-summary
-		GetPatchSummaryByIDV2(ctx context.Context, id string) (*ResourcePatchSummary, *resty.Response, error)
-
-		// GetHistoryByIDV2 returns paginated history for the configuration.
-		//
-		// Query params: page, page-size, sort, filter (RSQL).
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-history
-		GetHistoryByIDV2(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteByIDV2 adds a history note to the configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations-id-history
-		AddHistoryNoteByIDV2(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *resty.Response, error)
-
-		// GetPatchVersionsByIDV2 returns patch versions for the configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id-patch-summary-versions
-		GetPatchVersionsByIDV2(ctx context.Context, id string) ([]ResourcePatchVersion, *resty.Response, error)
-	}
-
 	// Service handles communication with the patch software title configurations-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations
@@ -126,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ PatchSoftwareTitleConfigurationsServiceInterface = (*PatchSoftwareTitleConfigurations)(nil)
 
 // NewService returns a new patch software title configurations Service backed by the provided HTTP client.
 func NewPatchSoftwareTitleConfigurations(client transport.HTTPClient) *PatchSoftwareTitleConfigurations {
@@ -144,11 +34,11 @@ func NewPatchSoftwareTitleConfigurations(client transport.HTTPClient) *PatchSoft
 func (s *PatchSoftwareTitleConfigurations) ListV2(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointPatchSoftwareTitleConfigurationsV2
+	endpoint := constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -167,12 +57,12 @@ func (s *PatchSoftwareTitleConfigurations) GetByIDV2(ctx context.Context, id str
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResourcePatchSoftwareTitleConfiguration
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -222,11 +112,11 @@ func (s *PatchSoftwareTitleConfigurations) CreateV2(ctx context.Context, config 
 
 	var result CreateResponse
 
-	endpoint := EndpointPatchSoftwareTitleConfigurationsV2
+	endpoint := constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, config, headers, &result)
@@ -249,13 +139,13 @@ func (s *PatchSoftwareTitleConfigurations) UpdateByIDV2(ctx context.Context, id 
 		return nil, nil, fmt.Errorf("config is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResourcePatchSoftwareTitleConfiguration
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, config, headers, &result)
@@ -288,10 +178,10 @@ func (s *PatchSoftwareTitleConfigurations) DeleteByIDV2(ctx context.Context, id 
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -327,12 +217,12 @@ func (s *PatchSoftwareTitleConfigurations) GetDashboardStatusByIDV2(ctx context.
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResourceDashboardStatus
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -350,11 +240,11 @@ func (s *PatchSoftwareTitleConfigurations) AddToDashboardByIDV2(ctx context.Cont
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -372,10 +262,10 @@ func (s *PatchSoftwareTitleConfigurations) RemoveFromDashboardByIDV2(ctx context
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -397,13 +287,13 @@ func (s *PatchSoftwareTitleConfigurations) GetDefinitionsByIDV2(ctx context.Cont
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/definitions", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/definitions", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result DefinitionsResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -442,13 +332,13 @@ func (s *PatchSoftwareTitleConfigurations) GetDependenciesByIDV2(ctx context.Con
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dependencies", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dependencies", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result DependenciesResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -486,10 +376,10 @@ func (s *PatchSoftwareTitleConfigurations) ExportReportByIDV2(ctx context.Contex
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/export-report", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/export-report", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.TextCSV,
+		"Accept": constants.TextCSV,
 	}
 
 	resp, body, err := s.client.GetBytes(ctx, endpoint, query, headers)
@@ -507,12 +397,12 @@ func (s *PatchSoftwareTitleConfigurations) GetExtensionAttributesByIDV2(ctx cont
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/extension-attributes", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/extension-attributes", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result []ResourceExtensionAttribute
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -530,13 +420,13 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchReportByIDV2(ctx context.Cont
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/patch-report", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/patch-report", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result PatchReportResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -574,12 +464,12 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchSummaryByIDV2(ctx context.Con
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/patch-summary", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/patch-summary", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResourcePatchSummary
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -601,13 +491,13 @@ func (s *PatchSoftwareTitleConfigurations) GetHistoryByIDV2(ctx context.Context,
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result HistoryResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -651,13 +541,13 @@ func (s *PatchSoftwareTitleConfigurations) AddHistoryNoteByIDV2(ctx context.Cont
 		return nil, nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result ResponseAddHistoryNote
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -679,12 +569,12 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchVersionsByIDV2(ctx context.Co
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/patch-summary/versions", EndpointPatchSoftwareTitleConfigurationsV2, id)
+	endpoint := fmt.Sprintf("%s/%s/patch-summary/versions", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
 	var result []ResourcePatchVersion
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

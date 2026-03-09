@@ -4,26 +4,11 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ServiceInterface defines the interface for SSO failover operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sso-failover
-	ServiceInterface interface {
-		// GetV1 retrieves the current SSO failover settings (Get SSO Failover Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sso-failover
-		GetV1(ctx context.Context) (*FailoverSettings, *resty.Response, error)
-
-		// RegenerateV1 generates a new SSO failover URL (Regenerate SSO Failover URL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-sso-failover-generate
-		RegenerateV1(ctx context.Context) (*FailoverSettings, *resty.Response, error)
-	}
-
 	// Service handles communication with the SSO failover-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sso-failover
@@ -31,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*SsoFailover)(nil)
 
 func NewSsoFailover(client transport.HTTPClient) *SsoFailover {
 	return &SsoFailover{client: client}
@@ -48,9 +31,9 @@ func NewSsoFailover(client transport.HTTPClient) *SsoFailover {
 func (s *SsoFailover) GetV1(ctx context.Context) (*FailoverSettings, *resty.Response, error) {
 	var result FailoverSettings
 
-	endpoint := EndpointSSOFailoverV1
+	endpoint := constants.EndpointJamfProSSOFailoverV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -67,10 +50,10 @@ func (s *SsoFailover) GetV1(ctx context.Context) (*FailoverSettings, *resty.Resp
 func (s *SsoFailover) RegenerateV1(ctx context.Context) (*FailoverSettings, *resty.Response, error) {
 	var result FailoverSettings
 
-	endpoint := EndpointSSOFailoverGenerateV1
+	endpoint := constants.EndpointJamfProSSOFailoverGenerateV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)

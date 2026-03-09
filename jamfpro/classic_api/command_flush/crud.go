@@ -6,30 +6,11 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// CommandFlushServiceInterface defines the interface for Classic API command flush operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
-	CommandFlushServiceInterface interface {
-		// FlushByIDAndStatus clears MDM commands for a specific device or group by ID and status.
-		//
-		// Valid idType values: computers, computergroups, mobiledevices, or mobiledevicegroups
-		// Valid status values: Pending, Failed, or Pending+Failed
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
-		FlushByIDAndStatus(ctx context.Context, idType string, id string, status string) (*resty.Response, error)
-
-		// FlushWithXML clears MDM commands using an XML request body for batch operations.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
-		FlushWithXML(ctx context.Context, req *RequestCommandFlush) (*resty.Response, error)
-	}
-
 	// Service handles communication with the command-flush-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
@@ -38,8 +19,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CommandFlushServiceInterface = (*CommandFlush)(nil)
 
 // NewService returns a new command flush Service backed by the provided HTTP client.
 func NewCommandFlush(client transport.HTTPClient) *CommandFlush {
@@ -69,11 +48,11 @@ func (s *CommandFlush) FlushByIDAndStatus(ctx context.Context, idType string, id
 	// URL encode status if it contains +
 	encodedStatus := strings.ReplaceAll(status, "+", "%2B")
 
-	endpoint := fmt.Sprintf("%s/%s/id/%s/status/%s", EndpointCommandFlush, idType, id, encodedStatus)
+	endpoint := fmt.Sprintf("%s/%s/id/%s/status/%s", constants.EndpointClassicCommandFlush, idType, id, encodedStatus)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -93,11 +72,11 @@ func (s *CommandFlush) FlushWithXML(ctx context.Context, req *RequestCommandFlus
 		return nil, err
 	}
 
-	endpoint := EndpointCommandFlush
+	endpoint := constants.EndpointClassicCommandFlush
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.DeleteWithBody(ctx, endpoint, req, headers, nil)

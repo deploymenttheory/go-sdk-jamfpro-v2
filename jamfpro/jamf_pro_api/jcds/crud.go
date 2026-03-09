@@ -11,83 +11,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
-
-// ServiceInterface defines the interface for Jamf Cloud Distribution Service (JCDS) operations.
-//
-// JCDS is Jamf's cloud-based content delivery service using AWS S3 for storing
-// and distributing packages to managed devices. This service provides operations
-// for uploading, downloading, and managing packages in JCDS.
-//
-// Reference: https://grahamrpugh.com/2023/08/21/introducing-jcds2.html
-//
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files
-type ServiceInterface interface {
-	// GetPackagesV1 retrieves a list of all files stored in JCDS.
-	//
-	// Returns metadata for all packages including filename, size, MD5, SHA3, and region.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files
-	GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *resty.Response, error)
-
-	// GetPackageURIByNameV1 retrieves the S3 URI for a specific package by name.
-	//
-	// Returns the S3 URI that can be used to access the package directly.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files-filename
-	GetPackageURIByNameV1(ctx context.Context, packageName string) (*ResponseJCDSFile, *resty.Response, error)
-
-	// RenewCredentialsV1 obtains fresh AWS credentials for JCDS operations.
-	//
-	// Returns temporary AWS credentials (access key, secret key, session token)
-	// that can be used to perform S3 operations on the JCDS bucket.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-renew-credentials
-	RenewCredentialsV1(ctx context.Context) (*ResourceJCDSUploadCredentials, *resty.Response, error)
-
-	// CreatePackageV1 uploads a package file to JCDS using AWS S3.
-	//
-	// This is a multi-step operation:
-	// 1. Obtains temporary AWS credentials from Jamf Pro
-	// 2. Configures AWS SDK with those credentials
-	// 3. Uploads the file to S3 with progress tracking
-	// 4. Returns the S3 URI of the uploaded file
-	//
-	// The filePath must be an absolute path to a .pkg, .dmg, or .zip file.
-	// Progress is reported to stdout during upload.
-	//
-	// Note: This operation uploads the file but does not create package metadata
-	// in Jamf Pro. Use the Packages service to register the package after upload.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-files
-	CreatePackageV1(ctx context.Context, filePath string) (*ResponseJCDSFile, *resty.Response, error)
-
-	// DeletePackageV1 deletes a package file from JCDS using AWS S3.
-	//
-	// This is a multi-step operation:
-	// 1. Obtains temporary AWS credentials from Jamf Pro
-	// 2. Configures AWS SDK with those credentials
-	// 3. Deletes the file from S3
-	//
-	// The filePath should be the same path used during upload. Only the filename
-	// is used for deletion.
-	//
-	// Note: This operation deletes the file from S3 but does not remove package
-	// metadata from Jamf Pro. Use the Packages service to manage package records.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-files (for credentials)
-	DeletePackageV1(ctx context.Context, filePath string) (*resty.Response, error)
-
-	// RefreshInventoryV1 triggers Jamf Pro to refresh its inventory of JCDS packages.
-	//
-	// This endpoint should be called after uploading or deleting files from JCDS
-	// to ensure Jamf Pro's package inventory is synchronized with S3.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-refresh-inventory
-	RefreshInventoryV1(ctx context.Context) (*resty.Response, error)
-}
 
 type (
 	// Service handles communication with the JCDS-related methods of the Jamf Pro API.
@@ -98,8 +24,6 @@ type (
 	}
 )
 
-var _ ServiceInterface = (*Jcds)(nil)
-
 // NewService creates a new JCDS service.
 func NewJcds(client transport.HTTPClient) *Jcds {
 	return &Jcds{client: client}
@@ -109,10 +33,10 @@ func NewJcds(client transport.HTTPClient) *Jcds {
 // URL: GET /api/v1/jcds/files
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files
 func (s *Jcds) GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *resty.Response, error) {
-	endpoint := EndpointJCDSV1 + "/files"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/files"
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result []ResourceJCDSFile
@@ -132,10 +56,10 @@ func (s *Jcds) GetPackageURIByNameV1(ctx context.Context, packageName string) (*
 		return nil, nil, fmt.Errorf("package name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/files/%s", EndpointJCDSV1, packageName)
+	endpoint := fmt.Sprintf("%s/files/%s", constants.EndpointJamfProJCDSV1, packageName)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResponseJCDSFile
@@ -151,11 +75,11 @@ func (s *Jcds) GetPackageURIByNameV1(ctx context.Context, packageName string) (*
 // URL: POST /api/v1/jcds/renew-credentials
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-renew-credentials
 func (s *Jcds) RenewCredentialsV1(ctx context.Context) (*ResourceJCDSUploadCredentials, *resty.Response, error) {
-	endpoint := EndpointJCDSV1 + "/renew-credentials"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/renew-credentials"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	var result ResourceJCDSUploadCredentials
@@ -177,11 +101,11 @@ func (s *Jcds) CreatePackageV1(ctx context.Context, filePath string) (*ResponseJ
 
 	// Step 1: Obtain AWS credentials for the package upload endpoint
 	var uploadCredentials ResourceJCDSUploadCredentials
-	endpoint := EndpointJCDSV1 + "/files"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/files"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &uploadCredentials)
@@ -261,11 +185,11 @@ func (s *Jcds) DeletePackageV1(ctx context.Context, filePath string) (*resty.Res
 
 	// Step 1: Obtain AWS credentials for the package deletion endpoint
 	var uploadCredentials ResourceJCDSUploadCredentials
-	endpoint := EndpointJCDSV1 + "/files"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/files"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &uploadCredentials)
@@ -314,11 +238,11 @@ func (s *Jcds) DeletePackageV1(ctx context.Context, filePath string) (*resty.Res
 // URL: POST /api/v1/jcds/refresh-inventory
 // https://developer.jamf.com/jamf-pro/reference/post_v1-jcds-refresh-inventory
 func (s *Jcds) RefreshInventoryV1(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointJCDSV1 + "/refresh-inventory"
+	endpoint := constants.EndpointJamfProJCDSV1 + "/refresh-inventory"
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)

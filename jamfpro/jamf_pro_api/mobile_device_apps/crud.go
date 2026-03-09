@@ -5,23 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// MobileDeviceAppsServiceInterface defines the interface for mobile device apps operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-apps-reinstall-app-config
-	MobileDeviceAppsServiceInterface interface {
-		// ReinstallAppConfigV1 redeploys the managed app configuration for a specific app on a specific device
-		// using the $APP_CONFIG_REINSTALL_CODE generated during deployment.
-		// This endpoint does not require authorization, only the re-install code.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-apps-reinstall-app-config
-		ReinstallAppConfigV1(ctx context.Context, request *RequestReinstallAppConfig) (*resty.Response, error)
-	}
-
 	// Service handles communication with the mobile device apps-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-apps-reinstall-app-config
@@ -29,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ MobileDeviceAppsServiceInterface = (*MobileDeviceApps)(nil)
 
 // NewService returns a new mobile device apps Service backed by the provided HTTP client.
 func NewMobileDeviceApps(client transport.HTTPClient) *MobileDeviceApps {
@@ -54,11 +40,11 @@ func (s *MobileDeviceApps) ReinstallAppConfigV1(ctx context.Context, request *Re
 		return nil, fmt.Errorf("reinstallCode is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/reinstall-app-config", EndpointMobileDeviceAppsV1)
+	endpoint := fmt.Sprintf("%s/reinstall-app-config", constants.EndpointJamfProMobileDeviceAppsV1)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)

@@ -5,41 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ComputerInvitationsServiceInterface defines the interface for Classic API computer invitation operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
-	ComputerInvitationsServiceInterface interface {
-		// List returns all computer invitations.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified computer invitation by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyid
-		GetByID(ctx context.Context, id string) (*ResourceComputerInvitation, *resty.Response, error)
-
-		// GetByInvitationID returns the specified computer invitation by invitation ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerinvitationbyinvitation
-		GetByInvitationID(ctx context.Context, invitationID string) (*ResourceComputerInvitation, *resty.Response, error)
-
-		// Create creates a new computer invitation.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputerinvitationbyid
-		Create(ctx context.Context, req *ResourceComputerInvitation) (*ResourceComputerInvitation, *resty.Response, error)
-
-		// DeleteByID removes the specified computer invitation by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletecomputerinvitationbyid
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the computer-invitations-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ComputerInvitationsServiceInterface = (*ComputerInvitations)(nil)
 
 // NewService returns a new computer invitations Service backed by the provided HTTP client.
 func NewComputerInvitations(client transport.HTTPClient) *ComputerInvitations {
@@ -64,13 +32,13 @@ func NewComputerInvitations(client transport.HTTPClient) *ComputerInvitations {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
 func (s *ComputerInvitations) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointComputerInvitations
+	endpoint := constants.EndpointClassicComputerInvitations
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -89,13 +57,13 @@ func (s *ComputerInvitations) GetByID(ctx context.Context, id string) (*Resource
 		return nil, nil, fmt.Errorf("computer invitation ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s", EndpointComputerInvitations, id)
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputerInvitations, id)
 
 	var out ResourceComputerInvitation
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -114,13 +82,13 @@ func (s *ComputerInvitations) GetByInvitationID(ctx context.Context, invitationI
 		return nil, nil, fmt.Errorf("computer invitation invitation ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/invitation/%s", EndpointComputerInvitations, invitationID)
+	endpoint := fmt.Sprintf("%s/invitation/%s", constants.EndpointClassicComputerInvitations, invitationID)
 
 	var out ResourceComputerInvitation
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -139,13 +107,13 @@ func (s *ComputerInvitations) Create(ctx context.Context, req *ResourceComputerI
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointComputerInvitations)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicComputerInvitations)
 
 	var out ResourceComputerInvitation
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -164,11 +132,11 @@ func (s *ComputerInvitations) DeleteByID(ctx context.Context, id string) (*resty
 		return nil, fmt.Errorf("computer invitation ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s", EndpointComputerInvitations, id)
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputerInvitations, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

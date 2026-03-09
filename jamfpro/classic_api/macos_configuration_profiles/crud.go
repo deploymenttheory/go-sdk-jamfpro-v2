@@ -5,63 +5,12 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/plist"
 	"resty.dev/v3"
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API macOS configuration profile operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/osxconfigurationprofiles
-	ServiceInterface interface {
-		// List returns all macOS configuration profiles.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofiles
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified macOS configuration profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified macOS configuration profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofilesbyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// Create creates a new macOS configuration profile.
-		//
-		// Returns the created profile ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createosxconfigurationprofilebyid
-		Create(ctx context.Context, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified macOS configuration profile by ID.
-		//
-		// Returns the updated profile ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyid
-		UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified macOS configuration profile by name.
-		//
-		// Returns the updated profile ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateosxconfigurationprofilebyname
-		UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified macOS configuration profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified macOS configuration profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteosxconfigurationprofilebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the macOS configuration profiles Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/osxconfigurationprofiles
@@ -69,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*MacosConfigurationProfiles)(nil)
 
 // NewService returns a new macOS configuration profiles Service backed by the provided HTTP client.
 func NewMacosConfigurationProfiles(client transport.HTTPClient) *MacosConfigurationProfiles {
@@ -87,13 +34,13 @@ func NewMacosConfigurationProfiles(client transport.HTTPClient) *MacosConfigurat
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofiles
 func (s *MacosConfigurationProfiles) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointMacOSConfigurationProfiles
+	endpoint := constants.EndpointClassicMacOSConfigurationProfiles
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -113,13 +60,13 @@ func (s *MacosConfigurationProfiles) GetByID(ctx context.Context, id int) (*Reso
 		return nil, nil, fmt.Errorf("macOS configuration profile ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMacOSConfigurationProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -139,13 +86,13 @@ func (s *MacosConfigurationProfiles) GetByName(ctx context.Context, name string)
 		return nil, nil, fmt.Errorf("macOS configuration profile name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMacOSConfigurationProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -168,13 +115,13 @@ func (s *MacosConfigurationProfiles) Create(ctx context.Context, req *RequestRes
 		return nil, nil, fmt.Errorf("macOS configuration profile name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointMacOSConfigurationProfiles)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicMacOSConfigurationProfiles)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -225,13 +172,13 @@ func (s *MacosConfigurationProfiles) UpdateByID(ctx context.Context, id int, req
 		}
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMacOSConfigurationProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -282,13 +229,13 @@ func (s *MacosConfigurationProfiles) UpdateByName(ctx context.Context, name stri
 		}
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMacOSConfigurationProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -308,11 +255,11 @@ func (s *MacosConfigurationProfiles) DeleteByID(ctx context.Context, id int) (*r
 		return nil, fmt.Errorf("macOS configuration profile ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMacOSConfigurationProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -332,11 +279,11 @@ func (s *MacosConfigurationProfiles) DeleteByName(ctx context.Context, name stri
 		return nil, fmt.Errorf("macOS configuration profile name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMacOSConfigurationProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

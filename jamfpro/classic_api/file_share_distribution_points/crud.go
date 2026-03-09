@@ -5,62 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// FileShareDistributionPointsServiceInterface defines the interface for Classic API file share distribution point operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
-	FileShareDistributionPointsServiceInterface interface {
-		// List returns all file share distribution points.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified file share distribution point by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyid
-		GetByID(ctx context.Context, id int) (*ResourceFileShareDistributionPoint, *resty.Response, error)
-
-		// GetByName returns the specified file share distribution point by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddistributionpointsbyname
-		GetByName(ctx context.Context, name string) (*ResourceFileShareDistributionPoint, *resty.Response, error)
-
-		// Create creates a new file share distribution point.
-		//
-		// Returns the created distribution point ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdistributionpointbyid
-		Create(ctx context.Context, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified file share distribution point by ID.
-		//
-		// Returns the updated distribution point ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyid
-		UpdateByID(ctx context.Context, id int, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified file share distribution point by name.
-		//
-		// Returns the updated distribution point ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedistributionpointbyname
-		UpdateByName(ctx context.Context, name string, req *RequestFileShareDistributionPoint) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified file share distribution point by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedistributionpointbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified file share distribution point by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedistributionpointbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the file-share-distribution-points-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
@@ -68,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ FileShareDistributionPointsServiceInterface = (*FileShareDistributionPoints)(nil)
 
 // NewService returns a new file share distribution points Service backed by the provided HTTP client.
 func NewFileShareDistributionPoints(client transport.HTTPClient) *FileShareDistributionPoints {
@@ -85,13 +32,13 @@ func NewFileShareDistributionPoints(client transport.HTTPClient) *FileShareDistr
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
 func (s *FileShareDistributionPoints) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointFileShareDistributionPoints
+	endpoint := constants.EndpointClassicFileShareDistributionPoints
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -110,13 +57,13 @@ func (s *FileShareDistributionPoints) GetByID(ctx context.Context, id int) (*Res
 		return nil, nil, fmt.Errorf("distribution point ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointFileShareDistributionPoints, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicFileShareDistributionPoints, id)
 
 	var out ResourceFileShareDistributionPoint
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -135,13 +82,13 @@ func (s *FileShareDistributionPoints) GetByName(ctx context.Context, name string
 		return nil, nil, fmt.Errorf("distribution point name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointFileShareDistributionPoints, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicFileShareDistributionPoints, name)
 
 	var out ResourceFileShareDistributionPoint
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -165,13 +112,13 @@ func (s *FileShareDistributionPoints) Create(ctx context.Context, req *RequestFi
 		return nil, nil, fmt.Errorf("distribution point name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointFileShareDistributionPoints)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicFileShareDistributionPoints)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -198,13 +145,13 @@ func (s *FileShareDistributionPoints) UpdateByID(ctx context.Context, id int, re
 		return nil, nil, fmt.Errorf("distribution point name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointFileShareDistributionPoints, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicFileShareDistributionPoints, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -231,13 +178,13 @@ func (s *FileShareDistributionPoints) UpdateByName(ctx context.Context, name str
 		return nil, nil, fmt.Errorf("distribution point name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointFileShareDistributionPoints, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicFileShareDistributionPoints, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -256,11 +203,11 @@ func (s *FileShareDistributionPoints) DeleteByID(ctx context.Context, id int) (*
 		return nil, fmt.Errorf("distribution point ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointFileShareDistributionPoints, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicFileShareDistributionPoints, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -278,11 +225,11 @@ func (s *FileShareDistributionPoints) DeleteByName(ctx context.Context, name str
 		return nil, fmt.Errorf("distribution point name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointFileShareDistributionPoints, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicFileShareDistributionPoints, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

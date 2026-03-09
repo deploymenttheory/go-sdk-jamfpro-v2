@@ -11,7 +11,7 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -183,11 +183,11 @@ func (m *SmartUserGroupsMock) registerError(method, path string, statusCode int,
 func (m *SmartUserGroupsMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		headers := http.Header{"Content-Type": {mime.ApplicationXML}}
+		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
 		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("SmartUserGroupsMock: no response registered for %s %s", method, path)
 	}
 
-	headers := http.Header{"Content-Type": {mime.ApplicationXML}}
+	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
 	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {

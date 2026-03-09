@@ -3,8 +3,6 @@ package jamfpro
 import (
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	classic_accounts "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/accounts"
 	classic_accounts_groups "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/accounts_groups"
 	classic_activation_code "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/activation_code"
@@ -51,6 +49,8 @@ import (
 	classic_vpp_accounts "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/vpp_accounts"
 	classic_vpp_assignments "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/vpp_assignments"
 	classic_webhooks "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/webhooks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/access_management_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/account_preferences"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/accounts"
@@ -173,6 +173,41 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/volume_purchasing_locations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/volume_purchasing_subscriptions"
 	"go.uber.org/zap"
+)
+
+// Re-export client configuration options.
+var (
+	WithBaseURL               = client.WithBaseURL
+	WithTimeout               = client.WithTimeout
+	WithRetryCount            = client.WithRetryCount
+	WithRetryWaitTime         = client.WithRetryWaitTime
+	WithRetryMaxWaitTime      = client.WithRetryMaxWaitTime
+	WithLogger                = client.WithLogger
+	WithDebug                 = client.WithDebug
+	WithUserAgent             = client.WithUserAgent
+	WithGlobalHeader          = client.WithGlobalHeader
+	WithGlobalHeaders         = client.WithGlobalHeaders
+	WithProxy                 = client.WithProxy
+	WithTLSClientConfig       = client.WithTLSClientConfig
+	WithTransport             = client.WithTransport
+	WithInsecureSkipVerify    = client.WithInsecureSkipVerify
+	WithMaxConcurrentRequests = client.WithMaxConcurrentRequests
+	WithMandatoryRequestDelay = client.WithMandatoryRequestDelay
+	WithTotalRetryDuration    = client.WithTotalRetryDuration
+)
+
+// Re-export pagination helper functions.
+var (
+	HasNextPage          = client.HasNextPage
+	ExtractParamsFromURL = client.ExtractParamsFromURL
+)
+
+// Re-export configuration types and functions for convenience.
+// Users should only need to import the jamfpro package.
+type (
+	AuthConfig      = config.AuthConfig
+	ClientOption    = client.ClientOption
+	PaginationLinks = client.PaginationLinks
 )
 
 // ClassicAPIClient groups all Classic API services.
@@ -567,20 +602,6 @@ func (c *Client) GetTransport() *client.Transport {
 	return c.transport
 }
 
-// Re-export configuration types and functions for convenience.
-// Users should only need to import the jamfpro package.
-type (
-	AuthConfig      = config.AuthConfig
-	ClientOption    = client.ClientOption
-	PaginationLinks = client.PaginationLinks
-)
-
-// Re-export auth method constants.
-const (
-	AuthMethodOAuth2 = config.AuthMethodOAuth2
-	AuthMethodBasic  = config.AuthMethodBasic
-)
-
 // LoadAuthConfigFromFile loads authentication configuration from a JSON file.
 func LoadAuthConfigFromFile(path string) (*AuthConfig, error) {
 	return config.LoadAuthConfigFromFile(path)
@@ -590,30 +611,3 @@ func LoadAuthConfigFromFile(path string) (*AuthConfig, error) {
 func AuthConfigFromEnv() *AuthConfig {
 	return config.AuthConfigFromEnv()
 }
-
-// Re-export client configuration options.
-var (
-	WithBaseURL               = client.WithBaseURL
-	WithTimeout               = client.WithTimeout
-	WithRetryCount            = client.WithRetryCount
-	WithRetryWaitTime         = client.WithRetryWaitTime
-	WithRetryMaxWaitTime      = client.WithRetryMaxWaitTime
-	WithLogger                = client.WithLogger
-	WithDebug                 = client.WithDebug
-	WithUserAgent             = client.WithUserAgent
-	WithGlobalHeader          = client.WithGlobalHeader
-	WithGlobalHeaders         = client.WithGlobalHeaders
-	WithProxy                 = client.WithProxy
-	WithTLSClientConfig       = client.WithTLSClientConfig
-	WithTransport             = client.WithTransport
-	WithInsecureSkipVerify    = client.WithInsecureSkipVerify
-	WithMaxConcurrentRequests = client.WithMaxConcurrentRequests
-	WithMandatoryRequestDelay = client.WithMandatoryRequestDelay
-	WithTotalRetryDuration    = client.WithTotalRetryDuration
-)
-
-// Re-export pagination helper functions.
-var (
-	HasNextPage         = client.HasNextPage
-	ExtractParamsFromURL = client.ExtractParamsFromURL
-)

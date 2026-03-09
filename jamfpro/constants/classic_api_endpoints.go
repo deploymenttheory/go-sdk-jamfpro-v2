@@ -1,0 +1,55 @@
+package constants
+
+// ============================================================================
+// Classic API Endpoints
+// ============================================================================
+// Classic API documentation: https://developer.jamf.com/jamf-pro/reference
+
+const (
+	EndpointClassicAccounts                          = "/JSSResource/accounts"
+	EndpointClassicAccountsGroups                    = "/JSSResource/accounts" // Shares endpoint with accounts, uses different path suffixes
+	EndpointClassicActivationCode                    = "/JSSResource/activationcode"
+	EndpointClassicAdvancedComputerSearches          = "/JSSResource/advancedcomputersearches"
+	EndpointClassicAdvancedUserSearches              = "/JSSResource/advancedusersearches"
+	EndpointClassicAllowedFileExtensions             = "/JSSResource/allowedfileextensions"
+	EndpointClassicBYOProfiles                       = "/JSSResource/byoprofiles"
+	EndpointClassicClasses                           = "/JSSResource/classes"
+	EndpointClassicCommandFlush                      = "/JSSResource/commandflush"
+	EndpointClassicComputerGroups                    = "/JSSResource/computergroups"
+	EndpointClassicComputerHistory                   = "/JSSResource/computerhistory"
+	EndpointClassicComputerInventoryCollection       = "/JSSResource/computerinventorycollection"
+	EndpointClassicComputerInvitations               = "/JSSResource/computerinvitations"
+	EndpointClassicComputers                         = "/JSSResource/computers"
+	EndpointClassicDirectoryBindings                 = "/JSSResource/directorybindings"
+	EndpointClassicDiskEncryptionConfigurations      = "/JSSResource/diskencryptionconfigurations"
+	EndpointClassicDockItems                         = "/JSSResource/dockitems"
+	EndpointClassicEbooks                            = "/JSSResource/ebooks"
+	EndpointClassicFileShareDistributionPoints       = "/JSSResource/distributionpoints"
+	EndpointClassicFileUploads                       = "/JSSResource/fileuploads"
+	EndpointClassicIBeacons                          = "/JSSResource/ibeacons"
+	EndpointClassicLDAPServers                       = "/JSSResource/ldapservers"
+	EndpointClassicLicensedSoftware                  = "/JSSResource/licensedsoftware"
+	EndpointClassicMacApplications                   = "/JSSResource/macapplications"
+	EndpointClassicMacOSConfigurationProfiles        = "/JSSResource/osxconfigurationprofiles"
+	EndpointClassicMobileDeviceApplications          = "/JSSResource/mobiledeviceapplications"
+	EndpointClassicMobileDeviceConfigurationProfiles = "/JSSResource/mobiledeviceconfigurationprofiles"
+	EndpointClassicMobileDeviceEnrollmentProfiles    = "/JSSResource/mobiledeviceenrollmentprofiles"
+	EndpointClassicMobileDeviceGroups                = "/JSSResource/mobiledevicegroups"
+	EndpointClassicMobileDeviceProvisioningProfiles  = "/JSSResource/mobiledeviceprovisioningprofiles"
+	EndpointClassicMobileDevices                     = "/JSSResource/mobiledevices"
+	EndpointClassicNetworkSegments                   = "/JSSResource/networksegments"
+	EndpointClassicPatchExternalSources              = "/JSSResource/patchexternalsources"
+	EndpointClassicPolicies                          = "/JSSResource/policies"
+	EndpointClassicPrinters                          = "/JSSResource/printers"
+	EndpointClassicRemoveableMacAddresses            = "/JSSResource/removablemacaddresses"
+	EndpointClassicRestrictedSoftware                = "/JSSResource/restrictedsoftware"
+	EndpointClassicSites                             = "/JSSResource/sites"
+	EndpointClassicSmartUserGroups                   = "/JSSResource/usergroups"
+	EndpointClassicSoftwareUpdateServers             = "/JSSResource/softwareupdateservers"
+	EndpointClassicStaticUserGroups                  = "/JSSResource/usergroups"
+	EndpointClassicUserExtensionAttributes           = "/JSSResource/userextensionattributes"
+	EndpointClassicUsers                             = "/JSSResource/users"
+	EndpointClassicVPPAccounts                       = "/JSSResource/vppaccounts"
+	EndpointClassicVPPAssignments                    = "/JSSResource/vppassignments"
+	EndpointClassicWebhooks                          = "/JSSResource/webhooks"
+)

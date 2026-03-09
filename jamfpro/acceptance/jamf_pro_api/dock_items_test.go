@@ -6,6 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/dock_items"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -75,7 +76,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	createReq := &dock_items.RequestDockItem{
 		Name: acc.UniqueName("sdkv2_acc_acc-test-dock"),
 		Path: "/Applications/Safari.app",
-		Type: dock_items.TypeApp,
+		Type: constants.TypeApp,
 	}
 	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateDockItemV1 should not return an error")
@@ -118,7 +119,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	updateReq := &dock_items.RequestDockItem{
 		Name: acc.UniqueName("sdkv2_acc_acc-test-dock-updated"),
 		Path: "/Applications/Google Chrome.app",
-		Type: dock_items.TypeApp,
+		Type: constants.TypeApp,
 	}
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, dockItemID, updateReq)
 	require.NoError(t, err)
@@ -167,7 +168,7 @@ func TestAcceptance_DockItems_validation_errors(t *testing.T) {
 
 	t.Run("UpdateDockItemByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.UpdateByIDV1(context.Background(), "", &dock_items.RequestDockItem{
-			Name: "sdkv2_acc_x", Path: "/path", Type: dock_items.TypeApp,
+			Name: "sdkv2_acc_x", Path: "/path", Type: constants.TypeApp,
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")

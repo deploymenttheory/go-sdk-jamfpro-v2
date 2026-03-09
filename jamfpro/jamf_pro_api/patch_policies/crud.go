@@ -6,65 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// PatchPoliciesServiceInterface defines the interface for patch policy operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
-	PatchPoliciesServiceInterface interface {
-		// ListV2 returns a list of all patch policies with full details.
-		//
-		// This endpoint retrieves all patch policies with their details from /policy-details.
-		// The v2 API is read-only for patch policies. Create/Update/Delete operations
-		// require the Classic API (XML).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
-		ListV2(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// ListSummaryV2 returns a list of patch policy summaries.
-		//
-		// This endpoint retrieves patch policy summaries (policyName, policyEnabled,
-		// policyTargetVersion, softwareTitle, pending, completed, deferred, failed)
-		// from GET /api/v2/patch-policies. Lighter-weight than ListV2 which uses /policy-details.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
-		ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *resty.Response, error)
-
-		// GetByIDV2 returns the patch policy by ID.
-		//
-		// This method retrieves all patch policies and filters by ID.
-		// The v2 API does not provide a direct endpoint for fetching by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
-		GetByIDV2(ctx context.Context, id string) (*ResourcePatchPolicy, *resty.Response, error)
-
-		// GetByNameV2 returns the patch policy by name.
-		//
-		// This method retrieves all patch policies and filters by name.
-		// The v2 API does not provide a direct endpoint for fetching by name.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-policy-details
-		GetByNameV2(ctx context.Context, name string) (*ResourcePatchPolicy, *resty.Response, error)
-
-		// GetDashboardStatusV2 checks if a patch policy is on the dashboard.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies-id-dashboard
-		GetDashboardStatusV2(ctx context.Context, id string) (*DashboardStatusResponse, *resty.Response, error)
-
-		// AddToDashboardV2 adds a patch policy to the dashboard.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-policies-id-dashboard
-		AddToDashboardV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// RemoveFromDashboardV2 removes a patch policy from the dashboard.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-policies-id-dashboard
-		RemoveFromDashboardV2(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the patch policies-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
@@ -72,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ PatchPoliciesServiceInterface = (*PatchPolicies)(nil)
 
 // NewService returns a new patch policies Service backed by the provided HTTP client.
 func NewPatchPolicies(client transport.HTTPClient) *PatchPolicies {
@@ -90,11 +34,11 @@ func NewPatchPolicies(client transport.HTTPClient) *PatchPolicies {
 func (s *PatchPolicies) ListV2(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointPatchPoliciesPolicyDetails
+	endpoint := constants.EndpointJamfProPatchPoliciesPolicyDetails
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -118,10 +62,10 @@ func (s *PatchPolicies) ListV2(ctx context.Context) (*ListResponse, *resty.Respo
 // URL: GET /api/v2/patch-policies
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
 func (s *PatchPolicies) ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *resty.Response, error) {
-	endpoint := EndpointPatchPoliciesV2
+	endpoint := constants.EndpointJamfProPatchPoliciesV2
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ListSummaryResponse
@@ -185,12 +129,12 @@ func (s *PatchPolicies) GetDashboardStatusV2(ctx context.Context, id string) (*D
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchPoliciesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchPoliciesV2, id)
 
 	var result DashboardStatusResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -209,11 +153,11 @@ func (s *PatchPolicies) AddToDashboardV2(ctx context.Context, id string) (*resty
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchPoliciesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchPoliciesV2, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -232,10 +176,10 @@ func (s *PatchPolicies) RemoveFromDashboardV2(ctx context.Context, id string) (*
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dashboard", EndpointPatchPoliciesV2, id)
+	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchPoliciesV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

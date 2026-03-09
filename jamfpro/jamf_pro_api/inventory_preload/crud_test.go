@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/inventory_preload/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -202,7 +202,7 @@ func TestUnit_InventoryPreload_Export_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportMock()
 
-	data, resp, err := svc.Export(context.Background(), nil, nil, mime.ApplicationJSON)
+	data, resp, err := svc.Export(context.Background(), nil, nil, constants.ApplicationJSON)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 	require.NotNil(t, resp)
@@ -227,7 +227,7 @@ func TestUnit_InventoryPreload_Export_WithQueryAndBody(t *testing.T) {
 
 	query := map[string]string{"page": "0", "page-size": "100"}
 	req := &ExportRequest{Page: intPtr(0), PageSize: intPtr(100)}
-	data, resp, err := svc.Export(context.Background(), query, req, mime.ApplicationJSON)
+	data, resp, err := svc.Export(context.Background(), query, req, constants.ApplicationJSON)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 	require.NotNil(t, resp)
@@ -237,7 +237,7 @@ func TestUnit_InventoryPreload_Export_WithQueryAndBody(t *testing.T) {
 func TestUnit_InventoryPreload_Export_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	_, resp, err := svc.Export(context.Background(), nil, nil, mime.ApplicationJSON)
+	_, resp, err := svc.Export(context.Background(), nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "export inventory preload")

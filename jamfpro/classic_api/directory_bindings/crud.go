@@ -6,58 +6,11 @@ import (
 	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// DirectoryBindingsServiceInterface defines the interface for Classic API directory binding operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/directorybindings
-	DirectoryBindingsServiceInterface interface {
-		// List returns all directory bindings.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddirectorybindings
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified directory binding by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddirectorybindingsbyid
-		GetByID(ctx context.Context, id int) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// GetByName returns the specified directory binding by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddirectorybindingsbyname
-		GetByName(ctx context.Context, name string) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// Create creates a new directory binding.
-		//
-		// Returns the created directory binding with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createdirectorybindingbyid
-		Create(ctx context.Context, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// UpdateByID updates the specified directory binding by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedirectorybindingbyid
-		UpdateByID(ctx context.Context, id int, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// UpdateByName updates the specified directory binding by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatedirectorybindingbyname
-		UpdateByName(ctx context.Context, name string, req *RequestDirectoryBinding) (*ResourceDirectoryBinding, *resty.Response, error)
-
-		// DeleteDirectoryBindingByID removes the specified directory binding by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedirectorybindingbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteDirectoryBindingByName removes the specified directory binding by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletedirectorybindingbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the directory binding-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/directorybindings
@@ -65,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DirectoryBindingsServiceInterface = (*DirectoryBindings)(nil)
 
 // NewService returns a new directory bindings Service backed by the provided HTTP client.
 func NewDirectoryBindings(client transport.HTTPClient) *DirectoryBindings {
@@ -83,11 +34,11 @@ func NewDirectoryBindings(client transport.HTTPClient) *DirectoryBindings {
 func (s *DirectoryBindings) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicDirectoryBindings
+	endpoint := constants.EndpointClassicDirectoryBindings
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -106,13 +57,13 @@ func (s *DirectoryBindings) GetByID(ctx context.Context, id int) (*ResourceDirec
 		return nil, nil, fmt.Errorf("directory binding ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDirectoryBindings, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDirectoryBindings, id)
 
 	var result ResourceDirectoryBinding
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -131,13 +82,13 @@ func (s *DirectoryBindings) GetByName(ctx context.Context, name string) (*Resour
 		return nil, nil, fmt.Errorf("directory binding name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, url.PathEscape(name))
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDirectoryBindings, url.PathEscape(name))
 
 	var result ResourceDirectoryBinding
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -157,13 +108,13 @@ func (s *DirectoryBindings) Create(ctx context.Context, req *RequestDirectoryBin
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicDirectoryBindings)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicDirectoryBindings)
 
 	var result ResourceDirectoryBinding
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -185,13 +136,13 @@ func (s *DirectoryBindings) UpdateByID(ctx context.Context, id int, req *Request
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDirectoryBindings, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDirectoryBindings, id)
 
 	var result ResourceDirectoryBinding
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -213,13 +164,13 @@ func (s *DirectoryBindings) UpdateByName(ctx context.Context, name string, req *
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, url.PathEscape(name))
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDirectoryBindings, url.PathEscape(name))
 
 	var result ResourceDirectoryBinding
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -238,11 +189,11 @@ func (s *DirectoryBindings) DeleteByID(ctx context.Context, id int) (*resty.Resp
 		return nil, fmt.Errorf("directory binding ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDirectoryBindings, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDirectoryBindings, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -261,11 +212,11 @@ func (s *DirectoryBindings) DeleteByName(ctx context.Context, name string) (*res
 		return nil, fmt.Errorf("directory binding name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDirectoryBindings, url.PathEscape(name))
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDirectoryBindings, url.PathEscape(name))
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

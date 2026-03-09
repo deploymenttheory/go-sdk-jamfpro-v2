@@ -6,22 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ComputerInventoryCollectionServiceInterface defines the interface for Classic API computer inventory collection operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinventorycollection
-	ComputerInventoryCollectionServiceInterface interface {
-		// Get retrieves the computer inventory collection settings.
-		Get(ctx context.Context) (*ResourceComputerInventoryCollection, *resty.Response, error)
-
-		// Update updates the computer inventory collection settings.
-		Update(ctx context.Context, settings *ResourceComputerInventoryCollection) (*resty.Response, error)
-	}
-
 	// Service handles communication with the computer inventory collection-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinventorycollection
@@ -29,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ComputerInventoryCollectionServiceInterface = (*ComputerInventoryCollection)(nil)
 
 // NewService returns a new computer inventory collection Service backed by the provided HTTP client.
 func NewComputerInventoryCollection(client transport.HTTPClient) *ComputerInventoryCollection {
@@ -47,11 +34,11 @@ func NewComputerInventoryCollection(client transport.HTTPClient) *ComputerInvent
 func (s *ComputerInventoryCollection) Get(ctx context.Context) (*ResourceComputerInventoryCollection, *resty.Response, error) {
 	var result ResourceComputerInventoryCollection
 
-	endpoint := EndpointClassicComputerInventoryCollection
+	endpoint := constants.EndpointClassicComputerInventoryCollection
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -70,7 +57,7 @@ func (s *ComputerInventoryCollection) Update(ctx context.Context, settings *Reso
 		return nil, fmt.Errorf("settings is required")
 	}
 
-	endpoint := EndpointClassicComputerInventoryCollection
+	endpoint := constants.EndpointClassicComputerInventoryCollection
 
 	requestBody := struct {
 		XMLName xml.Name `xml:"computer_inventory_collection"`
@@ -80,8 +67,8 @@ func (s *ComputerInventoryCollection) Update(ctx context.Context, settings *Reso
 	}
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, &requestBody, headers, nil)

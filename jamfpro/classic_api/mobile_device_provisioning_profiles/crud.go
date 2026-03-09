@@ -5,87 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API mobile device provisioning profile operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceprovisioningprofiles
-	ServiceInterface interface {
-		// List returns all mobile device provisioning profiles.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofiles
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified mobile device provisioning profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofilesbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// GetByName returns the specified mobile device provisioning profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofilesbyname
-		GetByName(ctx context.Context, name string) (*Resource, *resty.Response, error)
-
-		// GetByUUID returns the specified mobile device provisioning profile by UUID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofilesbyuuid
-		GetByUUID(ctx context.Context, uuid string) (*Resource, *resty.Response, error)
-
-		// CreateByID creates a new mobile device provisioning profile by ID (use 0 for new).
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyid
-		CreateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// CreateByName creates a new mobile device provisioning profile by name.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyname
-		CreateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// CreateByUUID creates a new mobile device provisioning profile by UUID.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createmobiledeviceprovisioningprofilebyuuid
-		CreateByUUID(ctx context.Context, uuid string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified mobile device provisioning profile by ID.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyid
-		UpdateByID(ctx context.Context, id int, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified mobile device provisioning profile by name.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyname
-		UpdateByName(ctx context.Context, name string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByUUID updates the specified mobile device provisioning profile by UUID.
-		// Returns the assigned ID from the Classic API response.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatemobiledeviceprovisioningprofilebyuuid
-		UpdateByUUID(ctx context.Context, uuid string, req *RequestResource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified mobile device provisioning profile by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceprovisioningprofilebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified mobile device provisioning profile by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceprovisioningprofilebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-
-		// DeleteByUUID removes the specified mobile device provisioning profile by UUID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletemobiledeviceprovisioningprofilebyuuid
-		DeleteByUUID(ctx context.Context, uuid string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the mobile device provisioning profiles Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceprovisioningprofiles
@@ -93,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*MobileDeviceProvisioningProfiles)(nil)
 
 // NewService returns a new mobile device provisioning profiles Service backed by the provided HTTP client.
 func NewMobileDeviceProvisioningProfiles(client transport.HTTPClient) *MobileDeviceProvisioningProfiles {
@@ -111,13 +33,13 @@ func NewMobileDeviceProvisioningProfiles(client transport.HTTPClient) *MobileDev
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findmobiledeviceprovisioningprofiles
 func (s *MobileDeviceProvisioningProfiles) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointMobileDeviceProvisioningProfiles
+	endpoint := constants.EndpointClassicMobileDeviceProvisioningProfiles
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -135,13 +57,13 @@ func (s *MobileDeviceProvisioningProfiles) GetByID(ctx context.Context, id int) 
 		return nil, nil, fmt.Errorf("mobile device provisioning profile ID must be a non-negative integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMobileDeviceProvisioningProfiles, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -159,13 +81,13 @@ func (s *MobileDeviceProvisioningProfiles) GetByName(ctx context.Context, name s
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, name)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -183,13 +105,13 @@ func (s *MobileDeviceProvisioningProfiles) GetByUUID(ctx context.Context, uuid s
 		return nil, nil, fmt.Errorf("mobile device provisioning profile UUID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
+	endpoint := fmt.Sprintf("%s/uuid/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, uuid)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -213,13 +135,13 @@ func (s *MobileDeviceProvisioningProfiles) CreateByID(ctx context.Context, id in
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMobileDeviceProvisioningProfiles, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -243,13 +165,13 @@ func (s *MobileDeviceProvisioningProfiles) CreateByName(ctx context.Context, nam
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -273,13 +195,13 @@ func (s *MobileDeviceProvisioningProfiles) CreateByUUID(ctx context.Context, uui
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
+	endpoint := fmt.Sprintf("%s/uuid/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, uuid)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -305,13 +227,13 @@ func (s *MobileDeviceProvisioningProfiles) UpdateByID(ctx context.Context, id in
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMobileDeviceProvisioningProfiles, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -337,13 +259,13 @@ func (s *MobileDeviceProvisioningProfiles) UpdateByName(ctx context.Context, nam
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -369,13 +291,13 @@ func (s *MobileDeviceProvisioningProfiles) UpdateByUUID(ctx context.Context, uui
 		return nil, nil, fmt.Errorf("mobile device provisioning profile name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
+	endpoint := fmt.Sprintf("%s/uuid/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, uuid)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -395,11 +317,11 @@ func (s *MobileDeviceProvisioningProfiles) DeleteByID(ctx context.Context, id in
 		return nil, fmt.Errorf("mobile device provisioning profile ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointMobileDeviceProvisioningProfiles, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMobileDeviceProvisioningProfiles, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -419,11 +341,11 @@ func (s *MobileDeviceProvisioningProfiles) DeleteByName(ctx context.Context, nam
 		return nil, fmt.Errorf("mobile device provisioning profile name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointMobileDeviceProvisioningProfiles, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -443,11 +365,11 @@ func (s *MobileDeviceProvisioningProfiles) DeleteByUUID(ctx context.Context, uui
 		return nil, fmt.Errorf("mobile device provisioning profile UUID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/uuid/%s", EndpointMobileDeviceProvisioningProfiles, uuid)
+	endpoint := fmt.Sprintf("%s/uuid/%s", constants.EndpointClassicMobileDeviceProvisioningProfiles, uuid)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

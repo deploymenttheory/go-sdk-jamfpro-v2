@@ -4,21 +4,11 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// TimeZonesServiceInterface defines the interface for time zone operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-time-zones
-	TimeZonesServiceInterface interface {
-		// ListV1 returns all available time zones (Get Time Zones).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-time-zones
-		ListV1(ctx context.Context) ([]ResourceTimeZone, *resty.Response, error)
-	}
-
 	// Service handles communication with the time zones-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-time-zones
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ TimeZonesServiceInterface = (*TimeZones)(nil)
 
 func NewTimeZones(client transport.HTTPClient) *TimeZones {
 	return &TimeZones{client: client}
@@ -43,10 +31,10 @@ func NewTimeZones(client transport.HTTPClient) *TimeZones {
 func (s *TimeZones) ListV1(ctx context.Context) ([]ResourceTimeZone, *resty.Response, error) {
 	var result []ResourceTimeZone
 
-	endpoint := EndpointTimeZonesV1
+	endpoint := constants.EndpointJamfProTimeZonesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

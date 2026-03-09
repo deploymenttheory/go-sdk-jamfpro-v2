@@ -6,49 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// JamfRemoteAssistServiceInterface defines the interface for Jamf Remote Assist operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-remote-assist-session
-	JamfRemoteAssistServiceInterface interface {
-		// ListSessionsV1 retrieves session history items (v1, no pagination).
-		//
-		// Returns up to 100 latest session history items.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-remote-assist-session
-		ListSessionsV1(ctx context.Context) ([]SessionHistory, *resty.Response, error)
-
-		// GetSessionByIDV1 retrieves a single session history item by ID (v1).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-remote-assist-session-id
-		GetSessionByIDV1(ctx context.Context, id string) (*SessionHistory, *resty.Response, error)
-
-		// ListSessionsV2 retrieves session history items with pagination and RSQL filtering (v2).
-		//
-		// Supports optional RSQL filtering, pagination and sorting via rsqlQuery
-		// (keys: filter, sort, page, page-size).
-		// Fields allowed in filter: sessionId, deviceId, sessionAdminId.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-remote-assist-session
-		ListSessionsV2(ctx context.Context, rsqlQuery map[string]string) (*ListSessionsResponse, *resty.Response, error)
-
-		// GetSessionByIDV2 retrieves a single session history item by ID with details (v2).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-remote-assist-session-id
-		GetSessionByIDV2(ctx context.Context, id string) (*SessionHistory, *resty.Response, error)
-
-		// ExportSessionsV2 exports Jamf Remote Assist sessions history.
-		//
-		// Returns CSV or JSON format based on Accept header.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-jamf-remote-assist-session-export
-		ExportSessionsV2(ctx context.Context, request *ExportSessionsRequest, acceptType string) ([]byte, *resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Remote Assist-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-remote-assist-session
@@ -56,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfRemoteAssistServiceInterface = (*JamfRemoteAssist)(nil)
 
 func NewJamfRemoteAssist(client transport.HTTPClient) *JamfRemoteAssist {
 	return &JamfRemoteAssist{client: client}
@@ -72,12 +32,12 @@ func NewJamfRemoteAssist(client transport.HTTPClient) *JamfRemoteAssist {
 // Returns up to 100 latest session history items.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-remote-assist-session
 func (s *JamfRemoteAssist) ListSessionsV1(ctx context.Context) ([]SessionHistory, *resty.Response, error) {
-	endpoint := EndpointSessionV1
+	endpoint := constants.EndpointJamfProSessionV1
 
 	var result []SessionHistory
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -96,12 +56,12 @@ func (s *JamfRemoteAssist) GetSessionByIDV1(ctx context.Context, id string) (*Se
 		return nil, nil, fmt.Errorf("session ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSessionV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSessionV1, id)
 
 	var result SessionHistory
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -122,7 +82,7 @@ func (s *JamfRemoteAssist) GetSessionByIDV1(ctx context.Context, id string) (*Se
 // Fields allowed in filter: sessionId, deviceId, sessionAdminId.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-remote-assist-session
 func (s *JamfRemoteAssist) ListSessionsV2(ctx context.Context, rsqlQuery map[string]string) (*ListSessionsResponse, *resty.Response, error) {
-	endpoint := EndpointSessionV2
+	endpoint := constants.EndpointJamfProSessionV2
 
 	var result ListSessionsResponse
 
@@ -136,7 +96,7 @@ func (s *JamfRemoteAssist) ListSessionsV2(ctx context.Context, rsqlQuery map[str
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -155,12 +115,12 @@ func (s *JamfRemoteAssist) GetSessionByIDV2(ctx context.Context, id string) (*Se
 		return nil, nil, fmt.Errorf("session ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSessionV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSessionV2, id)
 
 	var result SessionHistory
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -185,13 +145,13 @@ func (s *JamfRemoteAssist) ExportSessionsV2(ctx context.Context, request *Export
 		acceptType = "text/csv"
 	}
 
-	endpoint := fmt.Sprintf("%s/export", EndpointSessionV2)
+	endpoint := fmt.Sprintf("%s/export", constants.EndpointJamfProSessionV2)
 
 	var result []byte
 
 	headers := map[string]string{
 		"Accept":       acceptType,
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)

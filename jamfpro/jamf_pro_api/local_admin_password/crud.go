@@ -5,86 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// LocalAdminPasswordServiceInterface defines the interface for LAPS operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-pending-rotations
-	LocalAdminPasswordServiceInterface interface {
-		// GetPendingRotationsV2 retrieves a list of devices and usernames with pending LAPS rotations.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-pending-rotations
-		GetPendingRotationsV2(ctx context.Context) (*PendingRotationsResponse, *resty.Response, error)
-
-		// GetSettingsV2 retrieves current Jamf Pro LAPS settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-settings
-		GetSettingsV2(ctx context.Context) (*SettingsResource, *resty.Response, error)
-
-		// UpdateSettingsV2 updates the current Jamf Pro LAPS settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-local-admin-password-settings
-		UpdateSettingsV2(ctx context.Context, settings *SettingsResource) (*resty.Response, error)
-
-		// GetPasswordHistoryByClientManagementIDV2 retrieves the password view history for a specific username on a target device.
-		// History will include password, who viewed the password and when it was viewed.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-audit
-		GetPasswordHistoryByClientManagementIDV2(ctx context.Context, clientManagementID string, username string) (*PasswordHistoryResponse, *resty.Response, error)
-
-		// GetHistoryByUsernameV2 retrieves the LAPS history for a specific username on a target device.
-		// History includes date created, date last seen, expiration time, and rotational status.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-history
-		GetHistoryByUsernameV2(ctx context.Context, clientManagementID string, username string) (*AccountHistoryResponse, *resty.Response, error)
-
-		// GetCurrentPasswordByClientManagementIDV2 retrieves the current LAPS password for a specific username on a target device.
-		// Note: Once viewed, the password will be rotated based on rotation time settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-password
-		GetCurrentPasswordByClientManagementIDV2(ctx context.Context, clientManagementID string, username string) (*CurrentPasswordResponse, *resty.Response, error)
-
-		// GetAuditByUsernameAndGUIDV2 retrieves the password view history for a specific username and guid on a target device.
-		// Use when multiple accounts share the same username; guid disambiguates them.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-audit
-		GetAuditByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*PasswordHistoryResponse, *resty.Response, error)
-
-		// GetHistoryByUsernameAndGUIDV2 retrieves the LAPS history for a specific username and guid on a target device.
-		// Use when multiple accounts share the same username; guid disambiguates them.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-history
-		GetHistoryByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*AccountHistoryResponse, *resty.Response, error)
-
-		// GetPasswordByUsernameAndGUIDV2 retrieves the current LAPS password for a specific username and guid on a target device.
-		// Use when multiple accounts share the same username; guid disambiguates them.
-		// Note: Once viewed, the password will be rotated based on rotation time settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-account-username-guid-password
-		GetPasswordByUsernameAndGUIDV2(ctx context.Context, clientManagementID string, username string, guid string) (*CurrentPasswordResponse, *resty.Response, error)
-
-		// GetFullHistoryByClientManagementIDV2 retrieves the complete history of all local admin passwords for all accounts
-		// on a specific device, including both viewing and rotation history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-history
-		GetFullHistoryByClientManagementIDV2(ctx context.Context, clientManagementID string) (*FullHistoryResponse, *resty.Response, error)
-
-		// GetCapableAccountsByClientManagementIDV2 retrieves a list of all admin accounts that are LAPS capable for a specific device.
-		// Capable accounts are returned in the AutoSetupAdminAccounts from QueryResponses.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-clientmanagementid-accounts
-		GetCapableAccountsByClientManagementIDV2(ctx context.Context, clientManagementID string) (*CapableAccountsResponse, *resty.Response, error)
-
-		// SetPasswordByClientManagementIDV2 sets LAPS passwords for all capable accounts on a device.
-		// The passwords are provided as a list of username/password pairs.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-local-admin-password-clientmanagementid-set-password
-		SetPasswordByClientManagementIDV2(ctx context.Context, clientManagementID string, passwordList *SetPasswordRequest) (*SetPasswordResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the local admin password methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-pending-rotations
@@ -92,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ LocalAdminPasswordServiceInterface = (*LocalAdminPassword)(nil)
 
 func NewLocalAdminPassword(client transport.HTTPClient) *LocalAdminPassword {
 	return &LocalAdminPassword{client: client}
@@ -109,10 +32,10 @@ func NewLocalAdminPassword(client transport.HTTPClient) *LocalAdminPassword {
 func (s *LocalAdminPassword) GetPendingRotationsV2(ctx context.Context) (*PendingRotationsResponse, *resty.Response, error) {
 	var result PendingRotationsResponse
 
-	endpoint := fmt.Sprintf("%s/pending-rotations", EndpointLocalAdminPasswordV2)
+	endpoint := fmt.Sprintf("%s/pending-rotations", constants.EndpointJamfProLocalAdminPasswordV2)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -129,10 +52,10 @@ func (s *LocalAdminPassword) GetPendingRotationsV2(ctx context.Context) (*Pendin
 func (s *LocalAdminPassword) GetSettingsV2(ctx context.Context) (*SettingsResource, *resty.Response, error) {
 	var result SettingsResource
 
-	endpoint := fmt.Sprintf("%s/settings", EndpointLocalAdminPasswordV2)
+	endpoint := fmt.Sprintf("%s/settings", constants.EndpointJamfProLocalAdminPasswordV2)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -151,11 +74,11 @@ func (s *LocalAdminPassword) UpdateSettingsV2(ctx context.Context, settings *Set
 		return nil, fmt.Errorf("settings is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/settings", EndpointLocalAdminPasswordV2)
+	endpoint := fmt.Sprintf("%s/settings", constants.EndpointJamfProLocalAdminPasswordV2)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, settings, headers, nil)
@@ -178,12 +101,12 @@ func (s *LocalAdminPassword) GetPasswordHistoryByClientManagementIDV2(ctx contex
 		return nil, nil, fmt.Errorf("username is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/audit", EndpointLocalAdminPasswordV2, clientManagementID, username)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/audit", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username)
 
 	var result PasswordHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -206,12 +129,12 @@ func (s *LocalAdminPassword) GetCurrentPasswordByClientManagementIDV2(ctx contex
 		return nil, nil, fmt.Errorf("username is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/password", EndpointLocalAdminPasswordV2, clientManagementID, username)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/password", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username)
 
 	var result CurrentPasswordResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -234,12 +157,12 @@ func (s *LocalAdminPassword) GetHistoryByUsernameV2(ctx context.Context, clientM
 		return nil, nil, fmt.Errorf("username is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/history", EndpointLocalAdminPasswordV2, clientManagementID, username)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/history", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username)
 
 	var result AccountHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -265,12 +188,12 @@ func (s *LocalAdminPassword) GetAuditByUsernameAndGUIDV2(ctx context.Context, cl
 		return nil, nil, fmt.Errorf("guid is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/audit", EndpointLocalAdminPasswordV2, clientManagementID, username, guid)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/audit", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username, guid)
 
 	var result PasswordHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -296,12 +219,12 @@ func (s *LocalAdminPassword) GetHistoryByUsernameAndGUIDV2(ctx context.Context, 
 		return nil, nil, fmt.Errorf("guid is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/history", EndpointLocalAdminPasswordV2, clientManagementID, username, guid)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/history", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username, guid)
 
 	var result AccountHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -328,12 +251,12 @@ func (s *LocalAdminPassword) GetPasswordByUsernameAndGUIDV2(ctx context.Context,
 		return nil, nil, fmt.Errorf("guid is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/password", EndpointLocalAdminPasswordV2, clientManagementID, username, guid)
+	endpoint := fmt.Sprintf("%s/%s/account/%s/%s/password", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID, username, guid)
 
 	var result CurrentPasswordResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -353,12 +276,12 @@ func (s *LocalAdminPassword) GetFullHistoryByClientManagementIDV2(ctx context.Co
 		return nil, nil, fmt.Errorf("clientManagementID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointLocalAdminPasswordV2, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID)
 
 	var result FullHistoryResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -378,12 +301,12 @@ func (s *LocalAdminPassword) GetCapableAccountsByClientManagementIDV2(ctx contex
 		return nil, nil, fmt.Errorf("clientManagementID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/accounts", EndpointLocalAdminPasswordV2, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s/accounts", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID)
 
 	var result CapableAccountsResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -406,13 +329,13 @@ func (s *LocalAdminPassword) SetPasswordByClientManagementIDV2(ctx context.Conte
 		return nil, nil, fmt.Errorf("passwordList is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/set-password", EndpointLocalAdminPasswordV2, clientManagementID)
+	endpoint := fmt.Sprintf("%s/%s/set-password", constants.EndpointJamfProLocalAdminPasswordV2, clientManagementID)
 
 	var result SetPasswordResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, passwordList, headers, &result)

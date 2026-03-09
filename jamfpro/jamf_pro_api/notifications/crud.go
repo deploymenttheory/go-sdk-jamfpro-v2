@@ -4,21 +4,11 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// NotificationsServiceInterface defines the interface for notifications (read-only).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-	NotificationsServiceInterface interface {
-		// ListV1 returns all notifications for the current user and site (Get Notifications).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
-		ListV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error)
-	}
-
 	// Service handles communication with the notifications methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
@@ -26,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ NotificationsServiceInterface = (*Notifications)(nil)
 
 func NewNotifications(client transport.HTTPClient) *Notifications {
 	return &Notifications{client: client}
@@ -39,10 +27,10 @@ func NewNotifications(client transport.HTTPClient) *Notifications {
 func (s *Notifications) ListV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error) {
 	var result []ResourceNotification
 
-	endpoint := EndpointNotificationsV1
+	endpoint := constants.EndpointJamfProNotificationsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -51,7 +51,3 @@ func TestUnit_TomcatSettings_IssueTomcatSslCertificate_NoMockRegistered(t *testi
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "no response registered")
 }
-
-func TestUnit_TomcatSettings_InterfaceCompliance(t *testing.T) {
-	var _ TomcatSettingsServiceInterface = (*TomcatSettings)(nil)
-}

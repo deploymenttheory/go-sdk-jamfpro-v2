@@ -6,44 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// JamfProServerURLServiceInterface defines the interface for Jamf Pro server URL operations.
-	//
-	// Manages the Jamf Pro server URL and unsecured enrollment URL settings.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-server-url
-	JamfProServerURLServiceInterface interface {
-		// GetV1 retrieves the Jamf Pro server URL settings.
-		//
-		// Returns the configured Jamf Pro server URL and unsecured enrollment URL.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-server-url
-		GetV1(ctx context.Context) (*ResourceJamfProServerURL, *resty.Response, error)
-
-		// UpdateV1 updates the Jamf Pro server URL settings.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-jamf-pro-server-url
-		UpdateV1(ctx context.Context, request *ResourceJamfProServerURL) (*ResourceJamfProServerURL, *resty.Response, error)
-
-		// GetHistoryV1 retrieves the Jamf Pro server URL settings history.
-		//
-		// GET /api/v1/jamf-pro-server-url/history. Query params: page, page-size, sort.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-server-url-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// CreateHistoryNoteV1 adds a note to the Jamf Pro server URL settings history.
-		//
-		// POST /api/v1/jamf-pro-server-url/history. Body: {"note": "string"}. Returns 201 Created.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-pro-server-url-history
-		CreateHistoryNoteV1(ctx context.Context, req *CreateHistoryNoteRequest) (*HistoryObject, *resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Pro server URL-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-server-url
@@ -51,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfProServerURLServiceInterface = (*JamfProServerUrl)(nil)
 
 func NewJamfProServerUrl(client transport.HTTPClient) *JamfProServerUrl {
 	return &JamfProServerUrl{client: client}
@@ -64,9 +29,9 @@ func NewJamfProServerUrl(client transport.HTTPClient) *JamfProServerUrl {
 func (s *JamfProServerUrl) GetV1(ctx context.Context) (*ResourceJamfProServerURL, *resty.Response, error) {
 	var result ResourceJamfProServerURL
 
-	endpoint := EndpointJamfProServerURLV1
+	endpoint := constants.EndpointJamfProJamfProServerURLV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -87,10 +52,10 @@ func (s *JamfProServerUrl) UpdateV1(ctx context.Context, request *ResourceJamfPr
 
 	var result ResourceJamfProServerURL
 
-	endpoint := EndpointJamfProServerURLV1
+	endpoint := constants.EndpointJamfProJamfProServerURLV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -106,7 +71,7 @@ func (s *JamfProServerUrl) UpdateV1(ctx context.Context, request *ResourceJamfPr
 
 // https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-server-url-history
 func (s *JamfProServerUrl) GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
-	endpoint := EndpointJamfProServerURLV1 + "/history"
+	endpoint := constants.EndpointJamfProJamfProServerURLV1 + "/history"
 
 	var result HistoryResponse
 
@@ -120,7 +85,7 @@ func (s *JamfProServerUrl) GetHistoryV1(ctx context.Context, rsqlQuery map[strin
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -144,12 +109,12 @@ func (s *JamfProServerUrl) CreateHistoryNoteV1(ctx context.Context, req *CreateH
 		return nil, nil, fmt.Errorf("note is required")
 	}
 
-	endpoint := EndpointJamfProServerURLV1 + "/history"
+	endpoint := constants.EndpointJamfProJamfProServerURLV1 + "/history"
 
 	var result HistoryObject
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)

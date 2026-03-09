@@ -5,41 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// BookmarksServiceInterface defines the interface for bookmark operations.
-	//
-	// Jamf Pro API docs: Undocumented
-	BookmarksServiceInterface interface {
-		// ListV1 returns all bookmarks. Optional rsqlQuery: filter (RSQL), sort, page, page-size (Get Bookmarks).
-		//
-		// Jamf Pro API docs: Undocumented
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified bookmark by ID (Get Bookmark by ID).
-		//
-		// Jamf Pro API docs: Undocumented-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceBookmark, *resty.Response, error)
-
-		// CreateV1 creates a new bookmark (Create Bookmark).
-		//
-		// Jamf Pro API docs: Undocumented
-		CreateV1(ctx context.Context, request *ResourceBookmark) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified bookmark by ID (Update Bookmark by ID).
-		//
-		// Jamf Pro API docs: Undocumented
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceBookmark) (*ResourceBookmark, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified bookmark by ID (Delete Bookmark by ID).
-		//
-		// Jamf Pro API docs: Undocumented
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the bookmarks-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: Undocumented
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ BookmarksServiceInterface = (*Bookmarks)(nil)
 
 func NewBookmarks(client transport.HTTPClient) *Bookmarks {
 	return &Bookmarks{client: client}
@@ -64,10 +32,10 @@ func NewBookmarks(client transport.HTTPClient) *Bookmarks {
 func (s *Bookmarks) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointBookmarksV1
+	endpoint := constants.EndpointJamfProBookmarksV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -85,11 +53,11 @@ func (s *Bookmarks) GetByIDV1(ctx context.Context, id string) (*ResourceBookmark
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBookmarksV1, id)
 	var result ResourceBookmark
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -110,11 +78,11 @@ func (s *Bookmarks) CreateV1(ctx context.Context, request *ResourceBookmark) (*C
 
 	var result CreateResponse
 
-	endpoint := EndpointBookmarksV1
+	endpoint := constants.EndpointJamfProBookmarksV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -137,13 +105,13 @@ func (s *Bookmarks) UpdateByIDV1(ctx context.Context, id string, request *Resour
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBookmarksV1, id)
 
 	var result ResourceBookmark
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -161,10 +129,10 @@ func (s *Bookmarks) DeleteByIDV1(ctx context.Context, id string) (*resty.Respons
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointBookmarksV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBookmarksV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

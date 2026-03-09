@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -66,7 +67,7 @@ func (h *tokenHolder) invalidate() error {
 		return nil
 	}
 
-	endpoint := strings.TrimSuffix(h.baseURL, "/") + invalidateTokenEndpoint
+	endpoint := strings.TrimSuffix(h.baseURL, "/") + constants.EndpointInvalidateToken
 
 	resp, err := h.restyClient.R().
 		SetAuthToken(currentToken).
@@ -100,7 +101,7 @@ func (h *tokenHolder) keepAlive() error {
 		return fmt.Errorf("keep-alive: no active token")
 	}
 
-	endpoint := strings.TrimSuffix(h.baseURL, "/") + keepAliveTokenEndpoint
+	endpoint := strings.TrimSuffix(h.baseURL, "/") + constants.EndpointKeepAliveToken
 
 	var result struct {
 		Token   string    `json:"token"`
@@ -130,7 +131,7 @@ func (h *tokenHolder) keepAlive() error {
 }
 
 func (h *tokenHolder) fetchOAuth2() (string, time.Time, error) {
-	endpoint := strings.TrimSuffix(h.baseURL, "/") + oAuthTokenEndpoint
+	endpoint := strings.TrimSuffix(h.baseURL, "/") + constants.EndpointOAuthToken
 
 	data := url.Values{}
 	data.Set("client_id", h.auth.ClientID)
@@ -185,7 +186,7 @@ func (h *tokenHolder) fetchOAuth2() (string, time.Time, error) {
 }
 
 func (h *tokenHolder) fetchBasic() (string, time.Time, error) {
-	endpoint := strings.TrimSuffix(h.baseURL, "/") + bearerTokenEndpoint
+	endpoint := strings.TrimSuffix(h.baseURL, "/") + constants.EndpointBearerToken
 
 	var result struct {
 		Token   string    `json:"token"`
@@ -260,9 +261,9 @@ func SetupAuthentication(restyClient *resty.Client, authConfig *config.AuthConfi
 	}
 
 	switch authConfig.AuthMethod {
-	case config.AuthMethodOAuth2:
+	case constants.AuthMethodOAuth2:
 		holder.fetchFn = holder.fetchOAuth2
-	case config.AuthMethodBasic:
+	case constants.AuthMethodBasic:
 		holder.fetchFn = holder.fetchBasic
 	default:
 		return nil, fmt.Errorf("unsupported auth method: %q", authConfig.AuthMethod)

@@ -5,58 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// DiskEncryptionConfigurationsServiceInterface defines the interface for Classic API disk encryption configuration operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/diskencryptionconfigurations
-	DiskEncryptionConfigurationsServiceInterface interface {
-		// List returns all disk encryption configurations.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddiskencryptionconfigurations
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified disk encryption configuration by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddiskencryptionconfigurationsbyid
-		GetByID(ctx context.Context, id int) (*ResourceDiskEncryptionConfiguration, *resty.Response, error)
-
-		// GetByName returns the specified disk encryption configuration by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finddiskencryptionconfigurationsbyname
-		GetByName(ctx context.Context, name string) (*ResourceDiskEncryptionConfiguration, *resty.Response, error)
-
-		// Create creates a new disk encryption configuration.
-		//
-		// Returns the created resource ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/creatediskencryptionconfigurationbyid
-		Create(ctx context.Context, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified disk encryption configuration by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatediskencryptionconfigurationbyid
-		UpdateByID(ctx context.Context, id int, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified disk encryption configuration by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatediskencryptionconfigurationbyname
-		UpdateByName(ctx context.Context, name string, req *RequestDiskEncryptionConfiguration) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified disk encryption configuration by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletediskencryptionconfigurationbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified disk encryption configuration by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletediskencryptionconfigurationbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the disk encryption configuration-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/diskencryptionconfigurations
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DiskEncryptionConfigurationsServiceInterface = (*DiskEncryptionConfigurations)(nil)
 
 // NewService returns a new disk encryption configurations Service backed by the provided HTTP client.
 func NewDiskEncryptionConfigurations(client transport.HTTPClient) *DiskEncryptionConfigurations {
@@ -82,11 +33,11 @@ func NewDiskEncryptionConfigurations(client transport.HTTPClient) *DiskEncryptio
 func (s *DiskEncryptionConfigurations) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicDiskEncryptionConfigurations
+	endpoint := constants.EndpointClassicDiskEncryptionConfigurations
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +56,13 @@ func (s *DiskEncryptionConfigurations) GetByID(ctx context.Context, id int) (*Re
 		return nil, nil, fmt.Errorf("disk encryption configuration ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDiskEncryptionConfigurations, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDiskEncryptionConfigurations, id)
 
 	var result ResourceDiskEncryptionConfiguration
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +81,13 @@ func (s *DiskEncryptionConfigurations) GetByName(ctx context.Context, name strin
 		return nil, nil, fmt.Errorf("disk encryption configuration name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDiskEncryptionConfigurations, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDiskEncryptionConfigurations, name)
 
 	var result ResourceDiskEncryptionConfiguration
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +107,13 @@ func (s *DiskEncryptionConfigurations) Create(ctx context.Context, req *RequestD
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicDiskEncryptionConfigurations)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicDiskEncryptionConfigurations)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +135,13 @@ func (s *DiskEncryptionConfigurations) UpdateByID(ctx context.Context, id int, r
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDiskEncryptionConfigurations, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDiskEncryptionConfigurations, id)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +163,13 @@ func (s *DiskEncryptionConfigurations) UpdateByName(ctx context.Context, name st
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDiskEncryptionConfigurations, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDiskEncryptionConfigurations, name)
 
 	var result CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +188,11 @@ func (s *DiskEncryptionConfigurations) DeleteByID(ctx context.Context, id int) (
 		return nil, fmt.Errorf("disk encryption configuration ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicDiskEncryptionConfigurations, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicDiskEncryptionConfigurations, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +211,11 @@ func (s *DiskEncryptionConfigurations) DeleteByName(ctx context.Context, name st
 		return nil, fmt.Errorf("disk encryption configuration name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicDiskEncryptionConfigurations, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicDiskEncryptionConfigurations, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

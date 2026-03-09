@@ -6,25 +6,11 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// JamfManagementFrameworkServiceInterface defines the interface for Jamf Management Framework operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-management-framework-redeploy-id
-	JamfManagementFrameworkServiceInterface interface {
-		// RedeployV1 redeploys the Jamf Management Framework for an enrolled device.
-		//
-		// POST /api/v1/jamf-management-framework/redeploy/{id}
-		//
-		// Returns 201 Created with deviceId and commandUuid when the command is successfully queued.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-management-framework-redeploy-id
-		RedeployV1(ctx context.Context, computerID string) (*RedeployResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Management Framework-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-management-framework-redeploy-id
@@ -32,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfManagementFrameworkServiceInterface = (*JamfManagementFramework)(nil)
 
 func NewJamfManagementFramework(client transport.HTTPClient) *JamfManagementFramework {
 	return &JamfManagementFramework{client: client}
@@ -53,12 +37,12 @@ func (s *JamfManagementFramework) RedeployV1(ctx context.Context, computerID str
 		return nil, nil, fmt.Errorf("computer ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/redeploy/%s", EndpointJamfManagementFrameworkV1, id)
+	endpoint := fmt.Sprintf("%s/redeploy/%s", constants.EndpointJamfProJamfManagementFrameworkV1, id)
 
 	var result RedeployResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)

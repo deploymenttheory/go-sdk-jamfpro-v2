@@ -6,77 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ComputerGroupsServiceInterface defines the interface for computer group operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
-	ComputerGroupsServiceInterface interface {
-		// ListSmartV2 returns all smart computer groups (Get Smart Computer Group objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
-		ListSmartV2(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *resty.Response, error)
-
-		// GetSmartByIDV2 returns the specified smart computer group by ID (Get specified Smart Computer Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups-id
-		GetSmartByIDV2(ctx context.Context, id string) (*ResourceSmartGroup, *resty.Response, error)
-
-		// CreateSmartV2 creates a new smart computer group (Create Smart Computer Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-smart-groups
-		CreateSmartV2(ctx context.Context, request *RequestSmartGroup) (*CreateSmartResponse, *resty.Response, error)
-
-		// UpdateSmartV2 updates the specified smart computer group by ID (Update specified Smart Computer Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-smart-groups-id
-		UpdateSmartV2(ctx context.Context, id string, request *RequestSmartGroup) (*ResourceSmartGroup, *resty.Response, error)
-
-		// DeleteSmartV2 removes the specified smart computer group by ID (Remove specified Smart Computer Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-groups-smart-groups-id
-		DeleteSmartV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// ListStaticV2 returns all static computer groups (Get Static Computer Group objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups
-		ListStaticV2(ctx context.Context, rsqlQuery map[string]string) (*ListStaticResponse, *resty.Response, error)
-
-		// GetStaticByIDV2 returns the specified static computer group by ID (Get specified Static Computer Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-static-groups-id
-		GetStaticByIDV2(ctx context.Context, id string) (*ResourceStaticGroup, *resty.Response, error)
-
-		// CreateStaticV2 creates a new static computer group (Create Static Computer Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-computer-groups-static-groups
-		CreateStaticV2(ctx context.Context, request *RequestStaticGroup) (*CreateStaticResponse, *resty.Response, error)
-
-		// UpdateStaticByIDV2 updates the specified static computer group by ID (Update specified Static Computer Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-computer-groups-static-groups-id
-		UpdateStaticByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*ResourceStaticGroup, *resty.Response, error)
-
-		// DeleteStaticByIDV2 removes the specified static computer group by ID (Remove specified Static Computer Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-computer-groups-static-groups-id
-		DeleteStaticByIDV2(ctx context.Context, id string) (*resty.Response, error)
-
-		// ListAllV1 returns a simple list of all computer groups (id, name, description, smartGroup).
-		// No pagination, just a simple list.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-groups
-		ListAllV1(ctx context.Context) ([]ResourceGroupV1, *resty.Response, error)
-
-		// GetSmartGroupMembershipByIDV2 returns the membership (computer IDs) for a smart group.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-group-membership-id
-		GetSmartGroupMembershipByIDV2(ctx context.Context, id string) (*SmartGroupMembershipResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the computer groups-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-computer-groups-smart-groups
@@ -84,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ComputerGroupsServiceInterface = (*ComputerGroups)(nil)
 
 func NewComputerGroups(client transport.HTTPClient) *ComputerGroups {
 	return &ComputerGroups{client: client}
@@ -100,7 +32,7 @@ func NewComputerGroups(client transport.HTTPClient) *ComputerGroups {
 func (s *ComputerGroups) ListSmartV2(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *resty.Response, error) {
 	var result ListSmartResponse
 
-	endpoint := EndpointSmartGroupsV2
+	endpoint := constants.EndpointJamfProSmartComputerGroupsV2
 
 	mergePage := func(pageData []byte) error {
 		var pageResults []ResourceSmartGroup
@@ -114,7 +46,7 @@ func (s *ComputerGroups) ListSmartV2(ctx context.Context, rsqlQuery map[string]s
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -148,12 +80,12 @@ func (s *ComputerGroups) GetSmartByIDV2(ctx context.Context, id string) (*Resour
 		return nil, nil, fmt.Errorf("smart group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartComputerGroupsV2, id)
 
 	var result ResourceSmartGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -173,11 +105,11 @@ func (s *ComputerGroups) CreateSmartV2(ctx context.Context, request *RequestSmar
 
 	var result CreateSmartResponse
 
-	endpoint := EndpointSmartGroupsV2
+	endpoint := constants.EndpointJamfProSmartComputerGroupsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -199,13 +131,13 @@ func (s *ComputerGroups) UpdateSmartV2(ctx context.Context, id string, request *
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartComputerGroupsV2, id)
 
 	var result ResourceSmartGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -223,10 +155,10 @@ func (s *ComputerGroups) DeleteSmartV2(ctx context.Context, id string) (*resty.R
 		return nil, fmt.Errorf("smart group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartComputerGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -248,7 +180,7 @@ func (s *ComputerGroups) ListStaticV2(ctx context.Context, rsqlQuery map[string]
 
 	result.Results = []ResourceStaticGroup{}
 
-	endpoint := EndpointStaticGroupsV2
+	endpoint := constants.EndpointJamfProStaticComputerGroupsV2
 
 	mergePage := func(pageData []byte) error {
 		var pageResults []ResourceStaticGroup
@@ -260,7 +192,7 @@ func (s *ComputerGroups) ListStaticV2(ctx context.Context, rsqlQuery map[string]
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -294,12 +226,12 @@ func (s *ComputerGroups) GetStaticByIDV2(ctx context.Context, id string) (*Resou
 		return nil, nil, fmt.Errorf("static group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticComputerGroupsV2, id)
 
 	var result ResourceStaticGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -319,11 +251,11 @@ func (s *ComputerGroups) CreateStaticV2(ctx context.Context, request *RequestSta
 
 	var result CreateStaticResponse
 
-	endpoint := EndpointStaticGroupsV2
+	endpoint := constants.EndpointJamfProStaticComputerGroupsV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -345,13 +277,13 @@ func (s *ComputerGroups) UpdateStaticByIDV2(ctx context.Context, id string, requ
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticComputerGroupsV2, id)
 
 	var result ResourceStaticGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -369,10 +301,10 @@ func (s *ComputerGroups) DeleteStaticByIDV2(ctx context.Context, id string) (*re
 		return nil, fmt.Errorf("static group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticComputerGroupsV2, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -392,10 +324,10 @@ func (s *ComputerGroups) DeleteStaticByIDV2(ctx context.Context, id string) (*re
 func (s *ComputerGroups) ListAllV1(ctx context.Context) ([]ResourceGroupV1, *resty.Response, error) {
 	var result []ResourceGroupV1
 
-	endpoint := EndpointComputerGroupsV1
+	endpoint := constants.EndpointJamfProComputerGroupsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -413,12 +345,12 @@ func (s *ComputerGroups) GetSmartGroupMembershipByIDV2(ctx context.Context, id s
 		return nil, nil, fmt.Errorf("smart group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupMembershipV2, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartComputerGroupMembershipV2, id)
 
 	var result SmartGroupMembershipResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

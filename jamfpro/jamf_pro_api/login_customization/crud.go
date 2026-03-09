@@ -5,26 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// LoginCustomizationServiceInterface defines the interface for login customization operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
-	LoginCustomizationServiceInterface interface {
-		// GetV1 returns the current login customization settings (Get Login Customization).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
-		GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *resty.Response, error)
-
-		// UpdateV1 updates login customization settings (Update Login Customization / PUT).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-login-customization
-		UpdateV1(ctx context.Context, request *ResourceLoginCustomizationV1) (*ResourceLoginCustomizationV1, *resty.Response, error)
-	}
-
 	// Service handles communication with the login customization-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-login-customization
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ LoginCustomizationServiceInterface = (*LoginCustomization)(nil)
 
 func NewLoginCustomization(client transport.HTTPClient) *LoginCustomization {
 	return &LoginCustomization{client: client}
@@ -49,10 +32,10 @@ func NewLoginCustomization(client transport.HTTPClient) *LoginCustomization {
 func (s *LoginCustomization) GetV1(ctx context.Context) (*ResourceLoginCustomizationV1, *resty.Response, error) {
 	var result ResourceLoginCustomizationV1
 
-	endpoint := EndpointLoginCustomizationV1
+	endpoint := constants.EndpointJamfProLoginCustomizationV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -73,11 +56,11 @@ func (s *LoginCustomization) UpdateV1(ctx context.Context, request *ResourceLogi
 
 	var result ResourceLoginCustomizationV1
 
-	endpoint := EndpointLoginCustomizationV1
+	endpoint := constants.EndpointJamfProLoginCustomizationV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)

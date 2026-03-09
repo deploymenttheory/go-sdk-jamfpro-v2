@@ -6,66 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// VolumePurchasingLocationsServiceInterface defines the interface for volume purchasing location operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
-	VolumePurchasingLocationsServiceInterface interface {
-		// ListV1 returns all volume purchasing location objects (Get Volume Purchasing Location objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified volume purchasing location by ID (Get specified Volume Purchasing Location object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceVolumePurchasingLocation, *resty.Response, error)
-
-		// CreateV1 creates a new volume purchasing location (Create Volume Purchasing Location record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations
-		CreateV1(ctx context.Context, request *RequestVolumePurchasingLocation) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified volume purchasing location by ID (Update specified Volume Purchasing Location object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-volume-purchasing-locations-id
-		UpdateByIDV1(ctx context.Context, id string, request *RequestVolumePurchasingLocation) (*ResourceVolumePurchasingLocation, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified volume purchasing location by ID (Remove specified Volume Purchasing Location record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-volume-purchasing-locations-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// ReclaimVolumePurchasingLocationByIDV1 reclaims the specified volume purchasing location by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-reclaim
-		ReclaimVolumePurchasingLocationByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// GetContentV1 returns the content for the specified volume purchasing location.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id-content
-		GetContentV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ContentListResponse, *resty.Response, error)
-
-		// GetHistoryV1 returns the history for the specified volume purchasing location.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id-history
-		GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error)
-
-		// AddHistoryNotesV1 adds history notes to the specified volume purchasing location.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-history
-		AddHistoryNotesV1(ctx context.Context, id string, request *AddHistoryNotesRequest) (*resty.Response, error)
-
-		// RevokeVolumePurchasingLocationLicensesByIDV1 revokes licenses for the specified volume purchasing location.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-volume-purchasing-locations-id-revoke-licenses
-		RevokeVolumePurchasingLocationLicensesByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the volume purchasing locations-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
@@ -73,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ VolumePurchasingLocationsServiceInterface = (*VolumePurchasingLocations)(nil)
 
 func NewVolumePurchasingLocations(client transport.HTTPClient) *VolumePurchasingLocations {
 	return &VolumePurchasingLocations{client: client}
@@ -90,7 +33,7 @@ func NewVolumePurchasingLocations(client transport.HTTPClient) *VolumePurchasing
 func (s *VolumePurchasingLocations) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointVolumePurchasingLocationsV1
+	endpoint := constants.EndpointJamfProVolumePurchasingLocationsV1
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceVolumePurchasingLocation
@@ -102,7 +45,7 @@ func (s *VolumePurchasingLocations) ListV1(ctx context.Context, rsqlQuery map[st
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -120,12 +63,12 @@ func (s *VolumePurchasingLocations) GetByIDV1(ctx context.Context, id string) (*
 		return nil, nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	var result ResourceVolumePurchasingLocation
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -146,11 +89,11 @@ func (s *VolumePurchasingLocations) CreateV1(ctx context.Context, request *Reque
 
 	var result CreateResponse
 
-	endpoint := EndpointVolumePurchasingLocationsV1
+	endpoint := constants.EndpointJamfProVolumePurchasingLocationsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -173,13 +116,13 @@ func (s *VolumePurchasingLocations) UpdateByIDV1(ctx context.Context, id string,
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	var result ResourceVolumePurchasingLocation
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
@@ -198,10 +141,10 @@ func (s *VolumePurchasingLocations) DeleteByIDV1(ctx context.Context, id string)
 		return nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -220,11 +163,11 @@ func (s *VolumePurchasingLocations) ReclaimVolumePurchasingLocationByIDV1(ctx co
 		return nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/reclaim", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/reclaim", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -243,7 +186,7 @@ func (s *VolumePurchasingLocations) GetContentV1(ctx context.Context, id string,
 		return nil, nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/content", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/content", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	var result ContentListResponse
 	result.Results = []VolumePurchasingSubsetContent{}
@@ -258,7 +201,7 @@ func (s *VolumePurchasingLocations) GetContentV1(ctx context.Context, id string,
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -276,7 +219,7 @@ func (s *VolumePurchasingLocations) GetHistoryV1(ctx context.Context, id string,
 		return nil, nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	var result HistoryListResponse
 	result.Results = []HistoryEntry{}
@@ -291,7 +234,7 @@ func (s *VolumePurchasingLocations) GetHistoryV1(ctx context.Context, id string,
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -313,11 +256,11 @@ func (s *VolumePurchasingLocations) AddHistoryNotesV1(ctx context.Context, id st
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/history", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -336,11 +279,11 @@ func (s *VolumePurchasingLocations) RevokeVolumePurchasingLocationLicensesByIDV1
 		return nil, fmt.Errorf("volume purchasing location ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/revoke-licenses", EndpointVolumePurchasingLocationsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/revoke-licenses", constants.EndpointJamfProVolumePurchasingLocationsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)

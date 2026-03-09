@@ -6,36 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// JamfProUserAccountSettingsServiceInterface defines the interface for Jamf Pro user account settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-settings-keyid
-	JamfProUserAccountSettingsServiceInterface interface {
-		// GetSettingsV1 returns the user preferences for the authenticated user and key (username, key, values).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-settings-keyid
-		GetSettingsV1(ctx context.Context, keyID string) (*ResourceUserPreferencesSettings, *resty.Response, error)
-
-		// GetV1 returns the user setting value for the authenticated user and key (string value).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-keyid
-		GetV1(ctx context.Context, keyID string) (string, *resty.Response, error)
-
-		// PutV1 persists the user setting for the authenticated user and key.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-user-preferences-keyid
-		PutV1(ctx context.Context, keyID string, values RequestUserPreferences) (*resty.Response, error)
-
-		// DeleteV1 removes the specified setting for the authenticated user.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-user-preferences-keyid
-		DeleteV1(ctx context.Context, keyID string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Pro user account settings methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-settings-keyid
@@ -43,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfProUserAccountSettingsServiceInterface = (*JamfProUserAccountSettings)(nil)
 
 func NewJamfProUserAccountSettings(client transport.HTTPClient) *JamfProUserAccountSettings {
 	return &JamfProUserAccountSettings{client: client}
@@ -63,12 +36,12 @@ func (s *JamfProUserAccountSettings) GetSettingsV1(ctx context.Context, keyID st
 		return nil, nil, fmt.Errorf("keyId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesSettingsV1, keyID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesSettingsV1, keyID)
 
 	var result ResourceUserPreferencesSettings
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -89,10 +62,10 @@ func (s *JamfProUserAccountSettings) GetV1(ctx context.Context, keyID string) (s
 		return "", nil, fmt.Errorf("keyId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesV1, keyID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesV1, keyID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, body, err := s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -122,11 +95,11 @@ func (s *JamfProUserAccountSettings) PutV1(ctx context.Context, keyID string, va
 		return nil, fmt.Errorf("values is required and must not be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesV1, keyID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesV1, keyID)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, values, headers, nil)
@@ -146,10 +119,10 @@ func (s *JamfProUserAccountSettings) DeleteV1(ctx context.Context, keyID string)
 		return nil, fmt.Errorf("keyId is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointUserPreferencesV1, keyID)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesV1, keyID)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

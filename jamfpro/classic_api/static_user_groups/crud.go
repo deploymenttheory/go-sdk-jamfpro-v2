@@ -5,62 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// StaticUserGroupsServiceInterface defines the interface for Classic API static user group operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/usergroups
-	StaticUserGroupsServiceInterface interface {
-		// List returns all user groups (both smart and static).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroups
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified static user group by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyid
-		GetByID(ctx context.Context, id int) (*ResourceStaticUserGroup, *resty.Response, error)
-
-		// GetByName returns the specified static user group by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroupsbyname
-		GetByName(ctx context.Context, name string) (*ResourceStaticUserGroup, *resty.Response, error)
-
-		// Create creates a new static user group.
-		//
-		// Returns the created user group ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createusergroupbyid
-		Create(ctx context.Context, req *RequestStaticUserGroup) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified static user group by ID.
-		//
-		// Returns the updated user group ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyid
-		UpdateByID(ctx context.Context, id int, req *RequestStaticUserGroup) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByName updates the specified static user group by name.
-		//
-		// Returns the updated user group ID only (Classic API behavior).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateusergroupbyname
-		UpdateByName(ctx context.Context, name string, req *RequestStaticUserGroup) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified static user group by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified static user group by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteusergroupbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the static-user-groups-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/usergroups
@@ -68,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ StaticUserGroupsServiceInterface = (*StaticUserGroups)(nil)
 
 // NewService returns a new static user groups Service backed by the provided HTTP client.
 func NewStaticUserGroups(client transport.HTTPClient) *StaticUserGroups {
@@ -86,13 +33,13 @@ func NewStaticUserGroups(client transport.HTTPClient) *StaticUserGroups {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroups
 func (s *StaticUserGroups) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointStaticUserGroups
+	endpoint := constants.EndpointClassicStaticUserGroups
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -112,13 +59,13 @@ func (s *StaticUserGroups) GetByID(ctx context.Context, id int) (*ResourceStatic
 		return nil, nil, fmt.Errorf("user group ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointStaticUserGroups, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicStaticUserGroups, id)
 
 	var out ResourceStaticUserGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -138,13 +85,13 @@ func (s *StaticUserGroups) GetByName(ctx context.Context, name string) (*Resourc
 		return nil, nil, fmt.Errorf("user group name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointStaticUserGroups, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicStaticUserGroups, name)
 
 	var out ResourceStaticUserGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -166,13 +113,13 @@ func (s *StaticUserGroups) Create(ctx context.Context, req *RequestStaticUserGro
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointStaticUserGroups)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicStaticUserGroups)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -197,13 +144,13 @@ func (s *StaticUserGroups) UpdateByID(ctx context.Context, id int, req *RequestS
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointStaticUserGroups, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicStaticUserGroups, id)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -228,13 +175,13 @@ func (s *StaticUserGroups) UpdateByName(ctx context.Context, name string, req *R
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointStaticUserGroups, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicStaticUserGroups, name)
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -254,11 +201,11 @@ func (s *StaticUserGroups) DeleteByID(ctx context.Context, id int) (*resty.Respo
 		return nil, fmt.Errorf("user group ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointStaticUserGroups, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicStaticUserGroups, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -278,11 +225,11 @@ func (s *StaticUserGroups) DeleteByName(ctx context.Context, name string) (*rest
 		return nil, fmt.Errorf("user group name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointStaticUserGroups, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicStaticUserGroups, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

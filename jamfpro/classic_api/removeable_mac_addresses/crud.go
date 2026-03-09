@@ -5,58 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// RemoveableMacAddressesServiceInterface defines the interface for Classic API removeable MAC address operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
-	RemoveableMacAddressesServiceInterface interface {
-		// List returns all removeable MAC addresses.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified removeable MAC address by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddressesbyid
-		GetByID(ctx context.Context, id int) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// GetByName returns the specified removeable MAC address by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddressesbyname
-		GetByName(ctx context.Context, name string) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// Create creates a new removeable MAC address.
-		//
-		// Returns the created removeable MAC address with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createremovablemacaddressbyid
-		Create(ctx context.Context, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// UpdateByID updates the specified removeable MAC address by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateremovablemacaddressbyid
-		UpdateByID(ctx context.Context, id int, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// UpdateByName updates the specified removeable MAC address by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateremovablemacaddressbyname
-		UpdateByName(ctx context.Context, name string, req *RequestRemoveableMacAddress) (*ResourceRemoveableMacAddress, *resty.Response, error)
-
-		// DeleteByID removes the specified removeable MAC address by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteremovablemacaddressbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified removeable MAC address by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteremovablemacaddressbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the removeable MAC addresses-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ RemoveableMacAddressesServiceInterface = (*RemoveableMacAddresses)(nil)
 
 // NewService returns a new removeable MAC addresses Service backed by the provided HTTP client.
 func NewRemoveableMacAddresses(client transport.HTTPClient) *RemoveableMacAddresses {
@@ -82,11 +33,11 @@ func NewRemoveableMacAddresses(client transport.HTTPClient) *RemoveableMacAddres
 func (s *RemoveableMacAddresses) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicRemoveableMacAddresses
+	endpoint := constants.EndpointClassicRemoveableMacAddresses
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +56,13 @@ func (s *RemoveableMacAddresses) GetByID(ctx context.Context, id int) (*Resource
 		return nil, nil, fmt.Errorf("removeable MAC address ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicRemoveableMacAddresses, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicRemoveableMacAddresses, id)
 
 	var result ResourceRemoveableMacAddress
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +81,13 @@ func (s *RemoveableMacAddresses) GetByName(ctx context.Context, name string) (*R
 		return nil, nil, fmt.Errorf("removeable MAC address name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicRemoveableMacAddresses, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicRemoveableMacAddresses, name)
 
 	var result ResourceRemoveableMacAddress
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +107,13 @@ func (s *RemoveableMacAddresses) Create(ctx context.Context, req *RequestRemovea
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicRemoveableMacAddresses)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicRemoveableMacAddresses)
 
 	var result ResourceRemoveableMacAddress
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +135,13 @@ func (s *RemoveableMacAddresses) UpdateByID(ctx context.Context, id int, req *Re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicRemoveableMacAddresses, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicRemoveableMacAddresses, id)
 
 	var result ResourceRemoveableMacAddress
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +163,13 @@ func (s *RemoveableMacAddresses) UpdateByName(ctx context.Context, name string, 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicRemoveableMacAddresses, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicRemoveableMacAddresses, name)
 
 	var result ResourceRemoveableMacAddress
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +188,11 @@ func (s *RemoveableMacAddresses) DeleteByID(ctx context.Context, id int) (*resty
 		return nil, fmt.Errorf("removeable MAC address ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicRemoveableMacAddresses, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicRemoveableMacAddresses, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +211,11 @@ func (s *RemoveableMacAddresses) DeleteByName(ctx context.Context, name string) 
 		return nil, fmt.Errorf("removeable MAC address name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicRemoveableMacAddresses, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicRemoveableMacAddresses, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

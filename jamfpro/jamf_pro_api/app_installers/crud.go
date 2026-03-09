@@ -5,51 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// AppInstallersServiceInterface defines the interface for app installer operations.
-	//
-	// Jamf Pro API docs: Undocumented
-	AppInstallersServiceInterface interface {
-		// ListTitlesV1 returns all app installer titles (Get App Installer Title objects).
-		//
-		// Jamf Pro API docs: Undocumented
-		ListTitlesV1(ctx context.Context, rsqlQuery map[string]string) (*ListTitlesResponse, *resty.Response, error)
-
-		// GetTitleByIDV1 returns the specified app installer title by ID (Get specified App Installer Title object).
-		//
-		// Jamf Pro API docs: Undocumented
-		GetTitleByIDV1(ctx context.Context, id string) (*ResourceJamfAppCatalogAppInstaller, *resty.Response, error)
-
-		// ListDeploymentsV1 returns all app installer deployments (Get App Installer Deployment objects).
-		//
-		// Jamf Pro API docs: Undocumented
-		ListDeploymentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListDeploymentsResponse, *resty.Response, error)
-
-		// GetDeploymentByIDV1 returns the specified deployment by ID (Get specified App Installer Deployment object).
-		//
-		// Jamf Pro API docs: Undocumented
-		GetDeploymentByIDV1(ctx context.Context, id string) (*ResourceJamfAppCatalogDeployment, *resty.Response, error)
-
-		// CreateDeploymentV1 creates a new app installer deployment (Create App Installer Deployment record).
-		//
-		// Jamf Pro API docs: Undocumented
-		CreateDeploymentV1(ctx context.Context, request *RequestDeployment) (*CreateDeploymentResponse, *resty.Response, error)
-
-		// UpdateDeploymentByIDV1 updates the specified deployment by ID (Update specified App Installer Deployment object).
-		//
-		// Jamf Pro API docs: Undocumented
-		UpdateDeploymentByIDV1(ctx context.Context, id string, request *RequestDeployment) (*ResourceJamfAppCatalogDeployment, *resty.Response, error)
-
-		// DeleteDeploymentByIDV1 removes the specified deployment by ID (Remove specified App Installer Deployment record).
-		//
-		// Jamf Pro API docs: Undocumented
-		DeleteDeploymentByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the app installers-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: Undocumented
@@ -57,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AppInstallersServiceInterface = (*AppInstallers)(nil)
 
 func NewAppInstallers(client transport.HTTPClient) *AppInstallers {
 	return &AppInstallers{client: client}
@@ -70,10 +28,10 @@ func NewAppInstallers(client transport.HTTPClient) *AppInstallers {
 func (s *AppInstallers) ListTitlesV1(ctx context.Context, rsqlQuery map[string]string) (*ListTitlesResponse, *resty.Response, error) {
 	var result ListTitlesResponse
 
-	endpoint := EndpointTitlesV1
+	endpoint := constants.EndpointJamfProAppInstallersTitlesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -91,11 +49,11 @@ func (s *AppInstallers) GetTitleByIDV1(ctx context.Context, id string) (*Resourc
 	if id == "" {
 		return nil, nil, fmt.Errorf("title ID is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointTitlesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAppInstallersTitlesV1, id)
 	var result ResourceJamfAppCatalogAppInstaller
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -112,10 +70,10 @@ func (s *AppInstallers) GetTitleByIDV1(ctx context.Context, id string) (*Resourc
 func (s *AppInstallers) ListDeploymentsV1(ctx context.Context, rsqlQuery map[string]string) (*ListDeploymentsResponse, *resty.Response, error) {
 	var result ListDeploymentsResponse
 
-	endpoint := EndpointDeploymentsV1
+	endpoint := constants.EndpointJamfProAppInstallersDeploymentsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
@@ -133,11 +91,11 @@ func (s *AppInstallers) GetDeploymentByIDV1(ctx context.Context, id string) (*Re
 	if id == "" {
 		return nil, nil, fmt.Errorf("deployment ID is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointDeploymentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAppInstallersDeploymentsV1, id)
 	var result ResourceJamfAppCatalogDeployment
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -158,11 +116,11 @@ func (s *AppInstallers) CreateDeploymentV1(ctx context.Context, request *Request
 
 	var result CreateDeploymentResponse
 
-	endpoint := EndpointDeploymentsV1
+	endpoint := constants.EndpointJamfProAppInstallersDeploymentsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -185,13 +143,13 @@ func (s *AppInstallers) UpdateDeploymentByIDV1(ctx context.Context, id string, r
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDeploymentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAppInstallersDeploymentsV1, id)
 
 	var result ResourceJamfAppCatalogDeployment
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -209,10 +167,10 @@ func (s *AppInstallers) DeleteDeploymentByIDV1(ctx context.Context, id string) (
 	if id == "" {
 		return nil, fmt.Errorf("deployment ID is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointDeploymentsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAppInstallersDeploymentsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

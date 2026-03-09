@@ -5,41 +5,16 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ServiceInterface defines the interface for Jamf Pro system initialization operations.
-	//
-	// These endpoints are used during initial Jamf Pro setup: system initialization
-	// and database connection configuration.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize
-	ServiceInterface interface {
-		// Initialize initializes a fresh Jamf Pro Server installation.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize
-		Initialize(ctx context.Context, request *ResourceSystemInitialize) (*resty.Response, error)
-
-		// InitializeDatabaseConnection sets up the database password during startup.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize-database-connection
-		InitializeDatabaseConnection(ctx context.Context, password string) (*resty.Response, error)
-
-		// PlatformInitialize sets up Jamf Pro Server with OIDC SSO and a federated user (no password required).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-platform-initialize
-		PlatformInitialize(ctx context.Context, request *ResourcePlatformInitialize) (*resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Pro system initialization API.
 	JamfProSystemInitialization struct {
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*JamfProSystemInitialization)(nil)
 
 func NewJamfProSystemInitialization(client transport.HTTPClient) *JamfProSystemInitialization {
 	return &JamfProSystemInitialization{client: client}
@@ -57,11 +32,11 @@ func (s *JamfProSystemInitialization) Initialize(ctx context.Context, request *R
 		return nil, fmt.Errorf("request cannot be nil")
 	}
 
-	endpoint := EndpointSystemInitialize
+	endpoint := constants.EndpointJamfProSystemInitialize
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -76,15 +51,15 @@ func (s *JamfProSystemInitialization) Initialize(ctx context.Context, request *R
 // URL: POST /api/v1/system/initialize-database-connection
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-system-initialize-database-connection
 func (s *JamfProSystemInitialization) InitializeDatabaseConnection(ctx context.Context, password string) (*resty.Response, error) {
-	endpoint := EndpointInitializeDatabaseConnection
+	endpoint := constants.EndpointJamfProInitializeDatabaseConnection
 
 	request := &ResourceDatabasePassword{
 		Password: password,
 	}
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -103,11 +78,11 @@ func (s *JamfProSystemInitialization) PlatformInitialize(ctx context.Context, re
 		return nil, fmt.Errorf("request cannot be nil")
 	}
 
-	endpoint := EndpointSystemPlatformInitializeV1
+	endpoint := constants.EndpointJamfProSystemPlatformInitializeV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)

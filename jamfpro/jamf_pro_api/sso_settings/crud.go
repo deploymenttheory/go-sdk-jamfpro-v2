@@ -6,53 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// SsoSettingsServiceInterface defines the interface for SSO settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-sso
-	SsoSettingsServiceInterface interface {
-		// GetV3 retrieves current Jamf SSO settings (Get SSO Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso
-		GetV3(ctx context.Context) (*ResourceSsoSettings, *resty.Response, error)
-
-		// UpdateV3 updates SSO settings (Update SSO Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v3-sso
-		UpdateV3(ctx context.Context, request *ResourceSsoSettings) (*ResourceSsoSettings, *resty.Response, error)
-
-		// GetEnrollmentCustomizationDependenciesV3 retrieves SSO enrollment customization dependencies (Get SSO Enrollment Customization Dependencies).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-dependencies
-		GetEnrollmentCustomizationDependenciesV3(ctx context.Context) (*ResponseSsoEnrollmentCustomizationDependencies, *resty.Response, error)
-
-		// DisableV3 disables SSO (Disable SSO).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-disable
-		DisableV3(ctx context.Context) (*resty.Response, error)
-
-		// GetHistoryV3 returns the history for SSO settings (Get SSO History).
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-history
-		GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error)
-
-		// AddHistoryNoteV3 adds a note to the history for SSO settings (Add SSO History Note).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-history
-		AddHistoryNoteV3(ctx context.Context, request *AddHistoryNoteRequest) (*CreateResponse, *resty.Response, error)
-
-		// DownloadMetadataV3 downloads the SAML metadata file (Download SAML Metadata).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-metadata-download
-		DownloadMetadataV3(ctx context.Context) ([]byte, *resty.Response, error)
-	}
-
 	// Service handles communication with the SSO settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso
@@ -60,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SsoSettingsServiceInterface = (*SsoSettings)(nil)
 
 func NewSsoSettings(client transport.HTTPClient) *SsoSettings {
 	return &SsoSettings{client: client}
@@ -77,9 +33,9 @@ func NewSsoSettings(client transport.HTTPClient) *SsoSettings {
 func (s *SsoSettings) GetV3(ctx context.Context) (*ResourceSsoSettings, *resty.Response, error) {
 	var result ResourceSsoSettings
 
-	endpoint := EndpointSsoV3
+	endpoint := constants.EndpointJamfProSsoV3
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -100,10 +56,10 @@ func (s *SsoSettings) UpdateV3(ctx context.Context, request *ResourceSsoSettings
 
 	var result ResourceSsoSettings
 
-	endpoint := EndpointSsoV3
+	endpoint := constants.EndpointJamfProSsoV3
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -120,9 +76,9 @@ func (s *SsoSettings) UpdateV3(ctx context.Context, request *ResourceSsoSettings
 func (s *SsoSettings) GetEnrollmentCustomizationDependenciesV3(ctx context.Context) (*ResponseSsoEnrollmentCustomizationDependencies, *resty.Response, error) {
 	var result ResponseSsoEnrollmentCustomizationDependencies
 
-	endpoint := EndpointDependenciesV3
+	endpoint := constants.EndpointJamfProDependenciesV3
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -137,10 +93,10 @@ func (s *SsoSettings) GetEnrollmentCustomizationDependenciesV3(ctx context.Conte
 // URL: POST /api/v3/sso/disable
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-disable
 func (s *SsoSettings) DisableV3(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointDisableV3
+	endpoint := constants.EndpointJamfProDisableV3
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -157,7 +113,7 @@ func (s *SsoSettings) DisableV3(ctx context.Context) (*resty.Response, error) {
 func (s *SsoSettings) GetHistoryV3(ctx context.Context, rsqlQuery map[string]string) (*HistoryListResponse, *resty.Response, error) {
 	var result HistoryListResponse
 
-	endpoint := EndpointHistoryV3
+	endpoint := constants.EndpointJamfProHistoryV3
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []HistoryEntry
@@ -169,7 +125,7 @@ func (s *SsoSettings) GetHistoryV3(ctx context.Context, rsqlQuery map[string]str
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -191,10 +147,10 @@ func (s *SsoSettings) AddHistoryNoteV3(ctx context.Context, request *AddHistoryN
 
 	var result CreateResponse
 
-	endpoint := EndpointHistoryV3
+	endpoint := constants.EndpointJamfProHistoryV3
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -211,9 +167,9 @@ func (s *SsoSettings) AddHistoryNoteV3(ctx context.Context, request *AddHistoryN
 func (s *SsoSettings) DownloadMetadataV3(ctx context.Context) ([]byte, *resty.Response, error) {
 	var result []byte
 
-	endpoint := EndpointMetadataDownloadV3
+	endpoint := constants.EndpointJamfProMetadataDownloadV3
 	headers := map[string]string{
-		"Accept": mime.ApplicationXML,
+		"Accept": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -6,36 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// AccountsServiceInterface defines the interface for user account operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-accounts
-	AccountsServiceInterface interface {
-		// ListV1 returns all user accounts with pagination, sorting, and filtering support.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-accounts
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the user account for the given id.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-accounts-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceAccount, *resty.Response, error)
-
-		// CreateV1 adds a new user account.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-accounts
-		CreateV1(ctx context.Context, req *RequestAccount) (*CreateResponse, *resty.Response, error)
-
-		// DeleteByIDV1 deletes the user account for the given id.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-accounts-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the accounts-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-accounts
@@ -43,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AccountsServiceInterface = (*Accounts)(nil)
 
 // NewService returns a new accounts Service backed by the provided HTTP client.
 func NewAccounts(client transport.HTTPClient) *Accounts {
@@ -61,12 +34,12 @@ func NewAccounts(client transport.HTTPClient) *Accounts {
 // Note: page and page-size are managed internally by GetPaginated.
 // https://developer.jamf.com/jamf-pro/reference/get_v1-accounts
 func (s *Accounts) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointAccountsV1
+	endpoint := constants.EndpointJamfProAccountsV1
 
 	var result ListResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -94,12 +67,12 @@ func (s *Accounts) GetByIDV1(ctx context.Context, id string) (*ResourceAccount, 
 		return nil, nil, fmt.Errorf("account ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAccountsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAccountsV1, id)
 
 	var result ResourceAccount
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -118,13 +91,13 @@ func (s *Accounts) CreateV1(ctx context.Context, req *RequestAccount) (*CreateRe
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointAccountsV1
+	endpoint := constants.EndpointJamfProAccountsV1
 
 	var result CreateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -143,7 +116,7 @@ func (s *Accounts) DeleteByIDV1(ctx context.Context, id string) (*resty.Response
 		return nil, fmt.Errorf("account ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAccountsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAccountsV1, id)
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, nil, nil)
 	if err != nil {

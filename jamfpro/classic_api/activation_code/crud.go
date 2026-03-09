@@ -5,26 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ActivationCodeServiceInterface defines the interface for Classic API activation code operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/activationcode
-	ActivationCodeServiceInterface interface {
-		// GetActivationCode retrieves the activation code information.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findactivationcode
-		GetActivationCode(ctx context.Context) (*ResourceActivationCode, *resty.Response, error)
-
-		// UpdateActivationCode updates the activation code information.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateactivationcode
-		UpdateActivationCode(ctx context.Context, request *RequestActivationCode) (*resty.Response, error)
-	}
-
 	// Service handles communication with the activation code-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/activationcode
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ActivationCodeServiceInterface = (*ActivationCode)(nil)
 
 // NewService returns a new activation code Service backed by the provided HTTP client.
 func NewActivationCode(client transport.HTTPClient) *ActivationCode {
@@ -50,11 +33,11 @@ func NewActivationCode(client transport.HTTPClient) *ActivationCode {
 func (s *ActivationCode) GetActivationCode(ctx context.Context) (*ResourceActivationCode, *resty.Response, error) {
 	var result ResourceActivationCode
 
-	endpoint := EndpointClassicActivationCode
+	endpoint := constants.EndpointClassicActivationCode
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -73,11 +56,11 @@ func (s *ActivationCode) UpdateActivationCode(ctx context.Context, request *Requ
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointClassicActivationCode
+	endpoint := constants.EndpointClassicActivationCode
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, nil)

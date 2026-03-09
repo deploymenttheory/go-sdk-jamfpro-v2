@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_idp/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -158,7 +158,7 @@ func TestUnit_CloudIdp_ExportV1_CSV(t *testing.T) {
 		},
 	}
 
-	resp, data, err := svc.ExportV1(ctx, nil, request, mime.TextCSV)
+	resp, data, err := svc.ExportV1(ctx, nil, request, constants.TextCSV)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)

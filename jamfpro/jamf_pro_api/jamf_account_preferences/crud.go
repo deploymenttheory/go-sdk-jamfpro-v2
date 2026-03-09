@@ -5,26 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// JamfAccountPreferencesServiceInterface defines the interface for Jamf Pro account preferences operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
-	JamfAccountPreferencesServiceInterface interface {
-		// GetV3 returns the current Jamf Pro account preferences.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
-		GetV3(ctx context.Context) (*ResourceAccountPreferences, *resty.Response, error)
-
-		// UpdateV3 updates Jamf Pro account preferences (PATCH).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v3-account-preferences
-		UpdateV3(ctx context.Context, request *ResourceAccountPreferences) (*ResourceAccountPreferences, *resty.Response, error)
-	}
-
 	// Service handles communication with the Jamf Pro account preferences methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ JamfAccountPreferencesServiceInterface = (*JamfAccountPreferences)(nil)
 
 func NewJamfAccountPreferences(client transport.HTTPClient) *JamfAccountPreferences {
 	return &JamfAccountPreferences{client: client}
@@ -50,10 +33,10 @@ func NewJamfAccountPreferences(client transport.HTTPClient) *JamfAccountPreferen
 func (s *JamfAccountPreferences) GetV3(ctx context.Context) (*ResourceAccountPreferences, *resty.Response, error) {
 	var result ResourceAccountPreferences
 
-	endpoint := EndpointAccountPreferencesV3
+	endpoint := constants.EndpointJamfProAccountPreferencesV3
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -76,11 +59,11 @@ func (s *JamfAccountPreferences) UpdateV3(ctx context.Context, request *Resource
 
 	var result ResourceAccountPreferences
 
-	endpoint := EndpointAccountPreferencesV3
+	endpoint := constants.EndpointJamfProAccountPreferencesV3
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)

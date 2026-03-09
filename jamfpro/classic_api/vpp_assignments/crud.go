@@ -5,41 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// VPPAssignmentsServiceInterface defines the interface for Classic API VPP assignment operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/vppassignments
-	VPPAssignmentsServiceInterface interface {
-		// List returns all VPP assignments.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignments
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified VPP assignment by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignmentbyid
-		GetByID(ctx context.Context, id int) (*Resource, *resty.Response, error)
-
-		// Create creates a new VPP assignment.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createvppassignmentbyid
-		Create(ctx context.Context, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// UpdateByID updates the specified VPP assignment by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatevppassignmentbyid
-		UpdateByID(ctx context.Context, id int, req *Resource) (*CreateUpdateResponse, *resty.Response, error)
-
-		// DeleteByID removes the specified VPP assignment by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletevppassignmentbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-	}
-
 	// Service handles communication with the VPP assignments-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/vppassignments
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ VPPAssignmentsServiceInterface = (*VppAssignments)(nil)
 
 // NewService returns a new VPP assignments Service backed by the provided HTTP client.
 func NewVppAssignments(client transport.HTTPClient) *VppAssignments {
@@ -65,13 +33,13 @@ func NewVppAssignments(client transport.HTTPClient) *VppAssignments {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignments
 func (s *VppAssignments) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointVPPAssignments
+	endpoint := constants.EndpointClassicVPPAssignments
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -91,13 +59,13 @@ func (s *VppAssignments) GetByID(ctx context.Context, id int) (*Resource, *resty
 		return nil, nil, fmt.Errorf("VPP assignment ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointVPPAssignments, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAssignments, id)
 
 	var out Resource
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -120,15 +88,15 @@ func (s *VppAssignments) Create(ctx context.Context, req *Resource) (*CreateUpda
 		return nil, nil, fmt.Errorf("VPP assignment name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointVPPAssignments)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicVPPAssignments)
 
 	requestBody := &RequestVPPAssignment{Resource: req}
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, requestBody, headers, &out)
@@ -154,15 +122,15 @@ func (s *VppAssignments) UpdateByID(ctx context.Context, id int, req *Resource) 
 		return nil, nil, fmt.Errorf("VPP assignment name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointVPPAssignments, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAssignments, id)
 
 	requestBody := &RequestVPPAssignment{Resource: req}
 
 	var out CreateUpdateResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, requestBody, headers, &out)
@@ -182,11 +150,11 @@ func (s *VppAssignments) DeleteByID(ctx context.Context, id int) (*resty.Respons
 		return nil, fmt.Errorf("VPP assignment ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointVPPAssignments, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAssignments, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

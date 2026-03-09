@@ -5,62 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// UserExtensionAttributesServiceInterface defines the interface for Classic API user extension attribute operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/userextensionattributes
-	UserExtensionAttributesServiceInterface interface {
-		// List returns all user extension attributes.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributes
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified user extension attribute by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyid
-		GetByID(ctx context.Context, id int) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// GetByName returns the specified user extension attribute by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributesbyname
-		GetByName(ctx context.Context, name string) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// Create creates a new user extension attribute.
-		//
-		// Returns the created user extension attribute (full resource).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createuserextensionattributebyid
-		Create(ctx context.Context, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// UpdateByID updates the specified user extension attribute by ID.
-		//
-		// Returns the updated user extension attribute (full resource).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyid
-		UpdateByID(ctx context.Context, id int, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// UpdateByName updates the specified user extension attribute by name.
-		//
-		// Returns the updated user extension attribute (full resource).
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updateuserextensionattributebyname
-		UpdateByName(ctx context.Context, name string, req *RequestUserExtensionAttribute) (*ResourceUserExtensionAttribute, *resty.Response, error)
-
-		// DeleteByID removes the specified user extension attribute by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified user extension attribute by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deleteuserextensionattributebyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the user-extension-attributes-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/userextensionattributes
@@ -68,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ UserExtensionAttributesServiceInterface = (*UserExtensionAttributes)(nil)
 
 // NewService returns a new user extension attributes Service backed by the provided HTTP client.
 func NewUserExtensionAttributes(client transport.HTTPClient) *UserExtensionAttributes {
@@ -86,13 +33,13 @@ func NewUserExtensionAttributes(client transport.HTTPClient) *UserExtensionAttri
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/finduserextensionattributes
 func (s *UserExtensionAttributes) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointUserExtensionAttributes
+	endpoint := constants.EndpointClassicUserExtensionAttributes
 
 	var out ListResponse
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -112,13 +59,13 @@ func (s *UserExtensionAttributes) GetByID(ctx context.Context, id int) (*Resourc
 		return nil, nil, fmt.Errorf("user extension attribute ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointUserExtensionAttributes, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicUserExtensionAttributes, id)
 
 	var out ResourceUserExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -138,13 +85,13 @@ func (s *UserExtensionAttributes) GetByName(ctx context.Context, name string) (*
 		return nil, nil, fmt.Errorf("user extension attribute name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointUserExtensionAttributes, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicUserExtensionAttributes, name)
 
 	var out ResourceUserExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
@@ -169,13 +116,13 @@ func (s *UserExtensionAttributes) Create(ctx context.Context, req *RequestUserEx
 		return nil, nil, fmt.Errorf("user extension attribute name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointUserExtensionAttributes)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicUserExtensionAttributes)
 
 	var out ResourceUserExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
@@ -203,13 +150,13 @@ func (s *UserExtensionAttributes) UpdateByID(ctx context.Context, id int, req *R
 		return nil, nil, fmt.Errorf("user extension attribute name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointUserExtensionAttributes, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicUserExtensionAttributes, id)
 
 	var out ResourceUserExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -237,13 +184,13 @@ func (s *UserExtensionAttributes) UpdateByName(ctx context.Context, name string,
 		return nil, nil, fmt.Errorf("user extension attribute name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointUserExtensionAttributes, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicUserExtensionAttributes, name)
 
 	var out ResourceUserExtensionAttribute
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
@@ -263,11 +210,11 @@ func (s *UserExtensionAttributes) DeleteByID(ctx context.Context, id int) (*rest
 		return nil, fmt.Errorf("user extension attribute ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointUserExtensionAttributes, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicUserExtensionAttributes, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -287,11 +234,11 @@ func (s *UserExtensionAttributes) DeleteByName(ctx context.Context, name string)
 		return nil, fmt.Errorf("user extension attribute name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointUserExtensionAttributes, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicUserExtensionAttributes, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

@@ -6,27 +6,11 @@ import (
 	"net/http"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ServiceDiscoveryEnrollmentServiceInterface defines the interface for service discovery enrollment operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
-	ServiceDiscoveryEnrollmentServiceInterface interface {
-		// GetV1 returns all well-known service discovery settings (Get Service Discovery Enrollment Well-Known Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
-		GetV1(ctx context.Context) (*WellKnownSettingsResponseV1, *resty.Response, error)
-
-		// UpdateV1 updates the enrollment types for all organizations (Update Service Discovery Enrollment Well-Known Settings).
-		// Returns nil for the result when the API responds with 204 No Content.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-service-discovery-enrollment-well-known-settings
-		UpdateV1(ctx context.Context, request *WellKnownSettingsResponseV1) (*WellKnownSettingsResponseV1, *resty.Response, error)
-	}
-
 	// Service handles communication with the service discovery enrollment-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
@@ -34,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceDiscoveryEnrollmentServiceInterface = (*ServiceDiscoveryEnrollment)(nil)
 
 func NewServiceDiscoveryEnrollment(client transport.HTTPClient) *ServiceDiscoveryEnrollment {
 	return &ServiceDiscoveryEnrollment{client: client}
@@ -51,10 +33,10 @@ func NewServiceDiscoveryEnrollment(client transport.HTTPClient) *ServiceDiscover
 func (s *ServiceDiscoveryEnrollment) GetV1(ctx context.Context) (*WellKnownSettingsResponseV1, *resty.Response, error) {
 	var result WellKnownSettingsResponseV1
 
-	endpoint := EndpointWellKnownSettingsV1
+	endpoint := constants.EndpointJamfProWellKnownSettingsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -73,11 +55,11 @@ func (s *ServiceDiscoveryEnrollment) UpdateV1(ctx context.Context, request *Well
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointWellKnownSettingsV1
+	endpoint := constants.EndpointJamfProWellKnownSettingsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, nil)

@@ -5,21 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// DSSDeclarationsServiceInterface defines the interface for DSS declarations operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
-	DSSDeclarationsServiceInterface interface {
-		// GetByUUIDV1 returns the specified DSS declaration by UUID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
-		GetByUUIDV1(ctx context.Context, uuid string) (*ResponseDSSDeclaration, *resty.Response, error)
-	}
-
 	// Service handles communication with the DSS declarations-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
@@ -27,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DSSDeclarationsServiceInterface = (*DssDeclarations)(nil)
 
 // NewService returns a new DSS declarations Service backed by the provided HTTP client.
 func NewDssDeclarations(client transport.HTTPClient) *DssDeclarations {
@@ -49,10 +37,10 @@ func (s *DssDeclarations) GetByUUIDV1(ctx context.Context, uuid string) (*Respon
 
 	var result ResponseDSSDeclaration
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointDSSDeclarationsV1, uuid)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDSSDeclarationsV1, uuid)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

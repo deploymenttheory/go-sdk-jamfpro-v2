@@ -6,56 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// SelfServiceBrandingMacOSServiceInterface defines the interface for self-service branding macOS operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos
-	SelfServiceBrandingMacOSServiceInterface interface {
-		// List returns all self-service branding configurations for macOS.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos
-		List(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified self-service branding configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos-id
-		GetByID(ctx context.Context, id string) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// GetByName returns the specified self-service branding configuration by name.
-		//
-		// Performs a client-side search over the list of branding configurations.
-		GetByName(ctx context.Context, name string) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// Create creates a new self-service branding configuration for macOS.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-self-service-branding-macos
-		Create(ctx context.Context, request *ResourceSelfServiceBrandingMacOS) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// UpdateByID updates the specified self-service branding configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-self-service-branding-macos-id
-		UpdateByID(ctx context.Context, id string, request *ResourceSelfServiceBrandingMacOS) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// UpdateByName updates a self-service branding configuration by name.
-		//
-		// Performs GetByName then UpdateByID.
-		UpdateByName(ctx context.Context, name string, request *ResourceSelfServiceBrandingMacOS) (*ResourceSelfServiceBrandingMacOS, *resty.Response, error)
-
-		// DeleteByID removes the specified self-service branding configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-self-service-branding-macos-id
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByName removes a self-service branding configuration by name.
-		//
-		// Performs GetByName then DeleteByID.
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the self-service branding macOS methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos
@@ -63,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SelfServiceBrandingMacOSServiceInterface = (*SelfServiceBrandingMacos)(nil)
 
 func NewSelfServiceBrandingMacos(client transport.HTTPClient) *SelfServiceBrandingMacos {
 	return &SelfServiceBrandingMacos{client: client}
@@ -88,10 +41,10 @@ func (s *SelfServiceBrandingMacos) List(ctx context.Context, rsqlQuery map[strin
 		return nil
 	}
 
-	endpoint := EndpointSelfServiceBrandingMacOSV1
+	endpoint := constants.EndpointJamfProSelfServiceBrandingMacOSV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -109,12 +62,12 @@ func (s *SelfServiceBrandingMacos) GetByID(ctx context.Context, id string) (*Res
 		return nil, nil, fmt.Errorf("self-service branding configuration ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSelfServiceBrandingMacOSV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSelfServiceBrandingMacOSV1, id)
 
 	var result ResourceSelfServiceBrandingMacOS
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -154,11 +107,11 @@ func (s *SelfServiceBrandingMacos) Create(ctx context.Context, request *Resource
 
 	var result ResourceSelfServiceBrandingMacOS
 
-	endpoint := EndpointSelfServiceBrandingMacOSV1
+	endpoint := constants.EndpointJamfProSelfServiceBrandingMacOSV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -180,13 +133,13 @@ func (s *SelfServiceBrandingMacos) UpdateByID(ctx context.Context, id string, re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSelfServiceBrandingMacOSV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSelfServiceBrandingMacOSV1, id)
 
 	var result ResourceSelfServiceBrandingMacOS
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -214,10 +167,10 @@ func (s *SelfServiceBrandingMacos) DeleteByID(ctx context.Context, id string) (*
 		return nil, fmt.Errorf("self-service branding configuration ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSelfServiceBrandingMacOSV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSelfServiceBrandingMacOSV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

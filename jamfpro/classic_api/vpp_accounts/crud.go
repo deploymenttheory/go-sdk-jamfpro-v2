@@ -5,43 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// VPPAccountsServiceInterface defines the interface for Classic API VPP account operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/vppaccounts
-	VPPAccountsServiceInterface interface {
-		// List returns all VPP accounts.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppadminaccount
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified VPP account by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppadminaccountbyid
-		GetByID(ctx context.Context, id int) (*ResourceVPPAccount, *resty.Response, error)
-
-		// Create creates a new VPP account.
-		//
-		// Returns the created VPP account with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createvppadminaccountbyid
-		Create(ctx context.Context, req *RequestVPPAccount) (*ResourceVPPAccount, *resty.Response, error)
-
-		// UpdateByID updates the specified VPP account by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatevppadminaccountbyid
-		UpdateByID(ctx context.Context, id int, req *RequestVPPAccount) (*ResourceVPPAccount, *resty.Response, error)
-
-		// DeleteByID removes the specified VPP account by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletevppadminaccountbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-	}
-
 	// Service handles communication with the VPP account-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/vppaccounts
@@ -49,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ VPPAccountsServiceInterface = (*VppAccounts)(nil)
 
 // NewService returns a new VPP accounts Service backed by the provided HTTP client.
 func NewVppAccounts(client transport.HTTPClient) *VppAccounts {
@@ -67,11 +33,11 @@ func NewVppAccounts(client transport.HTTPClient) *VppAccounts {
 func (s *VppAccounts) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicVPPAccounts
+	endpoint := constants.EndpointClassicVPPAccounts
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -90,13 +56,13 @@ func (s *VppAccounts) GetByID(ctx context.Context, id int) (*ResourceVPPAccount,
 		return nil, nil, fmt.Errorf("VPP account ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicVPPAccounts, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAccounts, id)
 
 	var result ResourceVPPAccount
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -116,13 +82,13 @@ func (s *VppAccounts) Create(ctx context.Context, req *RequestVPPAccount) (*Reso
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicVPPAccounts)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicVPPAccounts)
 
 	var result ResourceVPPAccount
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -144,13 +110,13 @@ func (s *VppAccounts) UpdateByID(ctx context.Context, id int, req *RequestVPPAcc
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicVPPAccounts, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAccounts, id)
 
 	var result ResourceVPPAccount
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -169,11 +135,11 @@ func (s *VppAccounts) DeleteByID(ctx context.Context, id int) (*resty.Response, 
 		return nil, fmt.Errorf("VPP account ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicVPPAccounts, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAccounts, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

@@ -6,26 +6,11 @@ import (
 	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// APIRolePrivilegesServiceInterface defines the interface for API role privilege operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/api-role-privileges
-	APIRolePrivilegesServiceInterface interface {
-		// ListV1 returns all API role privileges (Get API Role Privileges).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges
-		ListV1(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// SearchPrivilegesByNameV1 returns privileges matching the given name (Get API Role Privileges by name).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-role-privileges-search
-		SearchPrivilegesByNameV1(ctx context.Context, name string, limit int) (*ListResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the API role privileges-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/api-role-privileges
@@ -33,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ APIRolePrivilegesServiceInterface = (*ApiRolePrivileges)(nil)
 
 func NewApiRolePrivileges(client transport.HTTPClient) *ApiRolePrivileges {
 	return &ApiRolePrivileges{client: client}
@@ -46,10 +29,10 @@ func NewApiRolePrivileges(client transport.HTTPClient) *ApiRolePrivileges {
 func (s *ApiRolePrivileges) ListV1(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointAPIRolePrivilegesV1
+	endpoint := constants.EndpointJamfProAPIRolePrivilegesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -70,11 +53,11 @@ func (s *ApiRolePrivileges) SearchPrivilegesByNameV1(ctx context.Context, name s
 	if limit <= 0 {
 		limit = 15
 	}
-	endpoint := fmt.Sprintf("%s/search?name=%s&limit=%d", EndpointAPIRolePrivilegesV1, url.QueryEscape(name), limit)
+	endpoint := fmt.Sprintf("%s/search?name=%s&limit=%d", constants.EndpointJamfProAPIRolePrivilegesV1, url.QueryEscape(name), limit)
 	var result ListResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

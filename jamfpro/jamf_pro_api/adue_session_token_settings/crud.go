@@ -5,26 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// AdueSessionTokenSettingsServiceInterface defines the interface for ADUE session token settings operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-adue-session-token-settings
-	AdueSessionTokenSettingsServiceInterface interface {
-		// GetV1 retrieves ADUE session token settings (Get ADUE Session Token Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-adue-session-token-settings
-		GetV1(ctx context.Context) (*ResourceADUETokenSettings, *resty.Response, error)
-
-		// UpdateV1 updates ADUE session token settings (Update ADUE Session Token Settings).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-adue-session-token-settings
-		UpdateV1(ctx context.Context, request *ResourceADUETokenSettings) (*ResourceADUETokenSettings, *resty.Response, error)
-	}
-
 	// Service handles communication with the ADUE session token settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-adue-session-token-settings
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ AdueSessionTokenSettingsServiceInterface = (*AdueSessionTokenSettings)(nil)
 
 func NewAdueSessionTokenSettings(client transport.HTTPClient) *AdueSessionTokenSettings {
 	return &AdueSessionTokenSettings{client: client}
@@ -49,10 +32,10 @@ func NewAdueSessionTokenSettings(client transport.HTTPClient) *AdueSessionTokenS
 func (s *AdueSessionTokenSettings) GetV1(ctx context.Context) (*ResourceADUETokenSettings, *resty.Response, error) {
 	var result ResourceADUETokenSettings
 
-	endpoint := EndpointADUESessionTokenSettingsV1
+	endpoint := constants.EndpointJamfProADUESessionTokenSettingsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -73,10 +56,10 @@ func (s *AdueSessionTokenSettings) UpdateV1(ctx context.Context, request *Resour
 
 	var result ResourceADUETokenSettings
 
-	endpoint := EndpointADUESessionTokenSettingsV1
+	endpoint := constants.EndpointJamfProADUESessionTokenSettingsV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)

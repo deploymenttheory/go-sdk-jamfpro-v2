@@ -6,38 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// EbooksServiceInterface defines the interface for ebook operations (Jamf Pro API v1).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks
-	EbooksServiceInterface interface {
-		// ListV1 returns all ebook objects (Get Ebook objects).
-		//
-		// Returns a paged list of ebook objects. Optional query parameters support
-		// pagination and sorting (page, page-size, sort).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified ebook by ID (Get specified Ebook object).
-		//
-		// Returns a single ebook object for the given ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *resty.Response, error)
-
-		// GetScopeByIDV1 returns the scope for the specified ebook by ID (Get specified scope of Ebook object).
-		//
-		// Returns scope with assignments, limitations, and exclusions.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks-id-scope
-		GetScopeByIDV1(ctx context.Context, id string) (*ResourceScope, *resty.Response, error)
-	}
-
 	// Service handles communication with the ebooks-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-ebooks
@@ -45,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ EbooksServiceInterface = (*Ebooks)(nil)
 
 func NewEbooks(client transport.HTTPClient) *Ebooks {
 	return &Ebooks{client: client}
@@ -63,7 +34,7 @@ func NewEbooks(client transport.HTTPClient) *Ebooks {
 func (s *Ebooks) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointEbooksV1
+	endpoint := constants.EndpointJamfProEbooksV1
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceEbook
@@ -75,7 +46,7 @@ func (s *Ebooks) ListV1(ctx context.Context, rsqlQuery map[string]string) (*List
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -93,12 +64,12 @@ func (s *Ebooks) GetByIDV1(ctx context.Context, id string) (*ResourceEbook, *res
 		return nil, nil, fmt.Errorf("ebook ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointEbooksV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProEbooksV1, id)
 
 	var result ResourceEbook
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -117,12 +88,12 @@ func (s *Ebooks) GetScopeByIDV1(ctx context.Context, id string) (*ResourceScope,
 		return nil, nil, fmt.Errorf("ebook ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/scope", EndpointEbooksV1, id)
+	endpoint := fmt.Sprintf("%s/%s/scope", constants.EndpointJamfProEbooksV1, id)
 
 	var result ResourceScope
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

@@ -5,31 +5,9 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
-
-// ServiceInterface defines the interface for SLASA (Software License Agreement Service Acceptance) operations.
-//
-// SLASA is required for managed software updates in Jamf Pro. Administrators must accept the
-// Software License Agreement before using managed software update features.
-//
-// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-slasa
-type ServiceInterface interface {
-	// GetStatusV1 retrieves the current SLASA acceptance status.
-	//
-	// Returns whether the Software License Agreement has been accepted or not.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-slasa
-	GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *resty.Response, error)
-
-	// AcceptV1 accepts the SLASA (Software License Agreement Service Acceptance).
-	//
-	// Must be called before managed software updates can be used.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-slasa
-	AcceptV1(ctx context.Context) (*resty.Response, error)
-}
 
 type (
 	// Service handles communication with the SLASA-related methods of the Jamf Pro API.
@@ -40,8 +18,6 @@ type (
 	}
 )
 
-var _ ServiceInterface = (*Slasa)(nil)
-
 // NewService creates a new SLASA service.
 func NewSlasa(client transport.HTTPClient) *Slasa {
 	return &Slasa{client: client}
@@ -51,10 +27,10 @@ func NewSlasa(client transport.HTTPClient) *Slasa {
 // URL: GET /api/v1/managed-software-updates/slasa
 // https://developer.jamf.com/jamf-pro/reference/get_v1-slasa
 func (s *Slasa) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *resty.Response, error) {
-	endpoint := EndpointSLASAV1
+	endpoint := constants.EndpointJamfProSLASAV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result ResourceSLASAStatus
@@ -70,11 +46,11 @@ func (s *Slasa) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *resty.R
 // URL: POST /api/v1/managed-software-updates/slasa
 // https://developer.jamf.com/jamf-pro/reference/post_v1-slasa
 func (s *Slasa) AcceptV1(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointSLASAV1
+	endpoint := constants.EndpointJamfProSLASAV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)

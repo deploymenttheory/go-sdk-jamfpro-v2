@@ -4,27 +4,11 @@ import (
 	"context"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// HealthCheckServiceInterface defines the interface for health check operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
-	HealthCheckServiceInterface interface {
-		// GetV1 returns whether the Jamf Pro API is healthy (Get Health Check).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
-		GetV1(ctx context.Context) (healthy bool, resp *resty.Response, err error)
-
-		// GetHealthStatusV1 returns request acceptance ratios for each concurrency group and time window.
-		// Only available in Jamf Cloud; returns 404 on non-cloud nodes.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-status
-		GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus, *resty.Response, error)
-	}
-
 	// Service handles communication with the health check-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
@@ -32,8 +16,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ HealthCheckServiceInterface = (*HealthCheck)(nil)
 
 func NewHealthCheck(client transport.HTTPClient) *HealthCheck {
 	return &HealthCheck{client: client}
@@ -47,10 +29,10 @@ func NewHealthCheck(client transport.HTTPClient) *HealthCheck {
 // URL: GET /api/v1/health-check
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
 func (s *HealthCheck) GetV1(ctx context.Context) (bool, *resty.Response, error) {
-	endpoint := EndpointHealthCheckV1
+	endpoint := constants.EndpointJamfProHealthCheckV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, nil)
@@ -65,12 +47,12 @@ func (s *HealthCheck) GetV1(ctx context.Context) (bool, *resty.Response, error) 
 // URL: GET /api/v1/health-status
 // Only available in Jamf Cloud; returns 404 on non-cloud nodes.
 func (s *HealthCheck) GetHealthStatusV1(ctx context.Context) (*ResourceHealthStatus, *resty.Response, error) {
-	endpoint := EndpointHealthStatusV1
+	endpoint := constants.EndpointJamfProHealthStatusV1
 
 	var result ResourceHealthStatus
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

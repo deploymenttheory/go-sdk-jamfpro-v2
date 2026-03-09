@@ -6,31 +6,17 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
-// APNSClientPushStatusServiceInterface defines the interface for APNS client push status operations.
-type APNSClientPushStatusServiceInterface interface {
-	// ListV1 retrieves MDM clients with push notifications disabled.
-	ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
+type (
+	// Service provides methods for interacting with APNS client push status endpoints.
+	ApnsClientPushStatus struct {
+		client transport.HTTPClient
+	}
+)
 
-	// EnableAllClientsV1 creates a request to enable push notifications for all MDM clients with push disabled.
-	EnableAllClientsV1(ctx context.Context) (*resty.Response, error)
-
-	// GetEnableAllClientsStatusV1 retrieves the status of the most recent enable-all-clients request.
-	GetEnableAllClientsStatusV1(ctx context.Context) (*EnableAllClientsStatusResponse, *resty.Response, error)
-
-	// EnableClientV1 enables push notifications for a single MDM client by management ID.
-	EnableClientV1(ctx context.Context, req *EnableClientRequest) (*resty.Response, error)
-}
-
-// Service provides methods for interacting with APNS client push status endpoints.
-type ApnsClientPushStatus struct {
-	client transport.HTTPClient
-}
-
-var _ APNSClientPushStatusServiceInterface = (*ApnsClientPushStatus)(nil)
 
 // NewService creates a new apns_client_push_status service.
 func NewApnsClientPushStatus(client transport.HTTPClient) *ApnsClientPushStatus {
@@ -40,7 +26,7 @@ func NewApnsClientPushStatus(client transport.HTTPClient) *ApnsClientPushStatus 
 // ListV1 retrieves MDM clients with push notifications disabled with optional RSQL filtering.
 // See: https://developer.jamf.com/jamf-pro/reference/get_v1-apns-client-push-status
 func (s *ApnsClientPushStatus) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
-	endpoint := EndpointAPNSClientPushStatusV1
+	endpoint := constants.EndpointJamfProAPNSClientPushStatusV1
 	var result ListResponse
 
 	mergePage := func(pageData []byte) error {
@@ -53,7 +39,7 @@ func (s *ApnsClientPushStatus) ListV1(ctx context.Context, rsqlQuery map[string]
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -67,10 +53,10 @@ func (s *ApnsClientPushStatus) ListV1(ctx context.Context, rsqlQuery map[string]
 // POST /api/v1/apns-client-push-status/enable-all-clients
 // This is an asynchronous operation; use GetEnableAllClientsStatusV1 to check progress.
 func (s *ApnsClientPushStatus) EnableAllClientsV1(ctx context.Context) (*resty.Response, error) {
-	endpoint := EndpointEnableAllClientsV1
+	endpoint := constants.EndpointJamfProEnableAllClientsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
@@ -85,10 +71,10 @@ func (s *ApnsClientPushStatus) EnableAllClientsV1(ctx context.Context) (*resty.R
 // GET /api/v1/apns-client-push-status/enable-all-clients/status
 // Returns 404 if no recent request exists.
 func (s *ApnsClientPushStatus) GetEnableAllClientsStatusV1(ctx context.Context) (*EnableAllClientsStatusResponse, *resty.Response, error) {
-	endpoint := EndpointEnableAllClientsStatusV1
+	endpoint := constants.EndpointJamfProEnableAllClientsStatusV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result EnableAllClientsStatusResponse
@@ -111,11 +97,11 @@ func (s *ApnsClientPushStatus) EnableClientV1(ctx context.Context, req *EnableCl
 		return nil, fmt.Errorf("managementId is required")
 	}
 
-	endpoint := EndpointEnableClientV1
+	endpoint := constants.EndpointJamfProEnableClientV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)

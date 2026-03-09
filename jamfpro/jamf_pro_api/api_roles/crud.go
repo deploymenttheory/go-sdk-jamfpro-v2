@@ -6,41 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// APIRolesServiceInterface defines the interface for API role operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiroles
-	APIRolesServiceInterface interface {
-		// ListV1 returns all API role objects (Get API Role objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiroles
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified API role by ID (Get specified API Role object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getoneapirole
-		GetByIDV1(ctx context.Context, id string) (*ResourceAPIRole, *resty.Response, error)
-
-		// CreateV1 creates a new API role (Create API Role record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/postcreateapirole
-		CreateV1(ctx context.Context, request *RequestAPIRole) (*ResourceAPIRole, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified API role by ID (Update specified API Role object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/putupdateapirole
-		UpdateByIDV1(ctx context.Context, id string, request *RequestAPIRole) (*ResourceAPIRole, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified API role by ID (Remove specified API Role record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/deleteapirole
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the API roles-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiroles
@@ -48,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ APIRolesServiceInterface = (*ApiRoles)(nil)
 
 func NewApiRoles(client transport.HTTPClient) *ApiRoles {
 	return &ApiRoles{client: client}
@@ -67,11 +35,11 @@ func NewApiRoles(client transport.HTTPClient) *ApiRoles {
 func (s *ApiRoles) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointAPIRolesV1
+	endpoint := constants.EndpointJamfProAPIRolesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	mergePage := func(pageData []byte) error {
@@ -100,12 +68,12 @@ func (s *ApiRoles) GetByIDV1(ctx context.Context, id string) (*ResourceAPIRole, 
 		return nil, nil, fmt.Errorf("API role ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAPIRolesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAPIRolesV1, id)
 
 	var result ResourceAPIRole
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -126,11 +94,11 @@ func (s *ApiRoles) CreateV1(ctx context.Context, request *RequestAPIRole) (*Reso
 
 	var result ResourceAPIRole
 
-	endpoint := EndpointAPIRolesV1
+	endpoint := constants.EndpointJamfProAPIRolesV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -153,13 +121,13 @@ func (s *ApiRoles) UpdateByIDV1(ctx context.Context, id string, request *Request
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointAPIRolesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAPIRolesV1, id)
 
 	var result ResourceAPIRole
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -177,10 +145,10 @@ func (s *ApiRoles) DeleteByIDV1(ctx context.Context, id string) (*resty.Response
 	if id == "" {
 		return nil, fmt.Errorf("API role ID is required")
 	}
-	endpoint := fmt.Sprintf("%s/%s", EndpointAPIRolesV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAPIRolesV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

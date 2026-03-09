@@ -5,32 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ImpactAlertNotificationSettingsServiceInterface defines the interface for impact alert notification settings operations.
-	//
-	// Manages impact alert notification settings for scopeable and deployable objects.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-impact-alert-notification-settings
-	ImpactAlertNotificationSettingsServiceInterface interface {
-		// GetV1 retrieves the impact alert notification settings.
-		//
-		// Returns current configuration for alert notifications and confirmation codes.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-impact-alert-notification-settings
-		GetV1(ctx context.Context) (*ResourceImpactAlertNotificationSettings, *resty.Response, error)
-
-		// UpdateV1 updates the impact alert notification settings via PUT.
-		//
-		// Returns 204 No Content on success.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-impact-alert-notification-settings
-		UpdateV1(ctx context.Context, request *ResourceImpactAlertNotificationSettings) (*resty.Response, error)
-	}
-
 	// Service handles communication with the impact alert notification settings-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-impact-alert-notification-settings
@@ -38,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ImpactAlertNotificationSettingsServiceInterface = (*ImpactAlertNotificationSettings)(nil)
 
 func NewImpactAlertNotificationSettings(client transport.HTTPClient) *ImpactAlertNotificationSettings {
 	return &ImpactAlertNotificationSettings{client: client}
@@ -51,9 +28,9 @@ func NewImpactAlertNotificationSettings(client transport.HTTPClient) *ImpactAler
 func (s *ImpactAlertNotificationSettings) GetV1(ctx context.Context) (*ResourceImpactAlertNotificationSettings, *resty.Response, error) {
 	var result ResourceImpactAlertNotificationSettings
 
-	endpoint := EndpointImpactAlertNotificationSettingsV1
+	endpoint := constants.EndpointJamfProImpactAlertNotificationSettingsV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -72,10 +49,10 @@ func (s *ImpactAlertNotificationSettings) UpdateV1(ctx context.Context, request 
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointImpactAlertNotificationSettingsV1
+	endpoint := constants.EndpointJamfProImpactAlertNotificationSettingsV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, nil)

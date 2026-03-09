@@ -5,58 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// WebhooksServiceInterface defines the interface for Classic API webhook operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/webhooks
-	WebhooksServiceInterface interface {
-		// List returns all webhooks.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooks
-		List(ctx context.Context) (*ListResponse, *resty.Response, error)
-
-		// GetByID returns the specified webhook by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooksbyid
-		GetByID(ctx context.Context, id int) (*ResourceWebhook, *resty.Response, error)
-
-		// GetByName returns the specified webhook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findwebhooksbyname
-		GetByName(ctx context.Context, name string) (*ResourceWebhook, *resty.Response, error)
-
-		// Create creates a new webhook.
-		//
-		// Returns the created webhook with its assigned ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createwebhookbyid
-		Create(ctx context.Context, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error)
-
-		// UpdateByID updates the specified webhook by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatewebhookbyid
-		UpdateByID(ctx context.Context, id int, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error)
-
-		// UpdateByName updates the specified webhook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/updatewebhookbyname
-		UpdateByName(ctx context.Context, name string, req *RequestWebhook) (*ResourceWebhook, *resty.Response, error)
-
-		// DeleteByID removes the specified webhook by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletewebhookbyid
-		DeleteByID(ctx context.Context, id int) (*resty.Response, error)
-
-		// DeleteByName removes the specified webhook by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/deletewebhookbyname
-		DeleteByName(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the webhook-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/webhooks
@@ -64,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ WebhooksServiceInterface = (*Webhooks)(nil)
 
 // NewService returns a new webhooks Service backed by the provided HTTP client.
 func NewWebhooks(client transport.HTTPClient) *Webhooks {
@@ -82,11 +33,11 @@ func NewWebhooks(client transport.HTTPClient) *Webhooks {
 func (s *Webhooks) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	endpoint := EndpointClassicWebhooks
+	endpoint := constants.EndpointClassicWebhooks
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -105,13 +56,13 @@ func (s *Webhooks) GetByID(ctx context.Context, id int) (*ResourceWebhook, *rest
 		return nil, nil, fmt.Errorf("webhook ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicWebhooks, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicWebhooks, id)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -130,13 +81,13 @@ func (s *Webhooks) GetByName(ctx context.Context, name string) (*ResourceWebhook
 		return nil, nil, fmt.Errorf("webhook name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicWebhooks, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicWebhooks, name)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -156,13 +107,13 @@ func (s *Webhooks) Create(ctx context.Context, req *RequestWebhook) (*ResourceWe
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", EndpointClassicWebhooks)
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicWebhooks)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -184,13 +135,13 @@ func (s *Webhooks) UpdateByID(ctx context.Context, id int, req *RequestWebhook) 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicWebhooks, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicWebhooks, id)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -212,13 +163,13 @@ func (s *Webhooks) UpdateByName(ctx context.Context, name string, req *RequestWe
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicWebhooks, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicWebhooks, name)
 
 	var result ResourceWebhook
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -237,11 +188,11 @@ func (s *Webhooks) DeleteByID(ctx context.Context, id int) (*resty.Response, err
 		return nil, fmt.Errorf("webhook ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", EndpointClassicWebhooks, id)
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicWebhooks, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -260,11 +211,11 @@ func (s *Webhooks) DeleteByName(ctx context.Context, name string) (*resty.Respon
 		return nil, fmt.Errorf("webhook name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", EndpointClassicWebhooks, name)
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicWebhooks, name)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)

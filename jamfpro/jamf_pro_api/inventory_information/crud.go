@@ -5,21 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// InventoryInformationServiceInterface defines the interface for inventory information operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
-	InventoryInformationServiceInterface interface {
-		// GetV1 returns statistics about managed/unmanaged devices and computers in the inventory.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
-		GetV1(ctx context.Context) (*ResourceInventoryInformation, *resty.Response, error)
-	}
-
 	// Service handles communication with the inventory information-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
@@ -27,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ InventoryInformationServiceInterface = (*InventoryInformation)(nil)
 
 // NewService returns a new inventory information Service backed by the provided HTTP client.
 func NewInventoryInformation(client transport.HTTPClient) *InventoryInformation {
@@ -45,12 +33,12 @@ func NewInventoryInformation(client transport.HTTPClient) *InventoryInformation 
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
 func (s *InventoryInformation) GetV1(ctx context.Context) (*ResourceInventoryInformation, *resty.Response, error) {
-	endpoint := EndpointInventoryInformationV1
+	endpoint := constants.EndpointJamfProInventoryInformationV1
 
 	var result ResourceInventoryInformation
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

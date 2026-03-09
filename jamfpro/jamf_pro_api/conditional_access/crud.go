@@ -5,37 +5,16 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ConditionalAccessServiceInterface defines the interface for Conditional Access operations.
-	// Uses v1 API. Manages device compliance feature enablement for Conditional Access.
-	//
-	// Note: This API is undocumented in the official Jamf Pro API reference.
-	ConditionalAccessServiceInterface interface {
-		// GetDeviceComplianceFeatureToggleV1 returns the enablement state of the device compliance feature for Conditional Access.
-		//
-		// Note: This endpoint is undocumented.
-		GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*ResourceDeviceComplianceStatus, *resty.Response, error)
-
-		// GetDeviceComplianceInformationComputerV1 returns compliance information for a computer device.
-		// URL: GET /api/v1/conditional-access/device-compliance-information/computer/{deviceId}
-		GetDeviceComplianceInformationComputerV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *resty.Response, error)
-
-		// GetDeviceComplianceInformationMobileV1 returns compliance information for a mobile device.
-		// URL: GET /api/v1/conditional-access/device-compliance-information/mobile/{deviceId}
-		GetDeviceComplianceInformationMobileV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *resty.Response, error)
-	}
-
 	// Service handles communication with the Conditional Access-related methods of the Jamf Pro API.
 	ConditionalAccess struct {
 		client transport.HTTPClient
 	}
 )
-
-var _ ConditionalAccessServiceInterface = (*ConditionalAccess)(nil)
 
 func NewConditionalAccess(client transport.HTTPClient) *ConditionalAccess {
 	return &ConditionalAccess{client: client}
@@ -45,12 +24,12 @@ func NewConditionalAccess(client transport.HTTPClient) *ConditionalAccess {
 // URL: GET /api/v1/conditional-access/device-compliance/feature-toggle
 // Note: This endpoint is undocumented.
 func (s *ConditionalAccess) GetDeviceComplianceFeatureToggleV1(ctx context.Context) (*ResourceDeviceComplianceStatus, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/device-compliance/feature-toggle", EndpointConditionalAccessV1)
+	endpoint := fmt.Sprintf("%s/device-compliance/feature-toggle", constants.EndpointJamfProConditionalAccessV1)
 
 	var result ResourceDeviceComplianceStatus
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -64,12 +43,12 @@ func (s *ConditionalAccess) GetDeviceComplianceFeatureToggleV1(ctx context.Conte
 // GetDeviceComplianceInformationComputerV1 returns compliance information for a computer device.
 // URL: GET /api/v1/conditional-access/device-compliance-information/computer/{deviceId}
 func (s *ConditionalAccess) GetDeviceComplianceInformationComputerV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/device-compliance-information/computer/%s", EndpointConditionalAccessV1, deviceId)
+	endpoint := fmt.Sprintf("%s/device-compliance-information/computer/%s", constants.EndpointJamfProConditionalAccessV1, deviceId)
 
 	var result []ResourceDeviceComplianceInfo
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -83,12 +62,12 @@ func (s *ConditionalAccess) GetDeviceComplianceInformationComputerV1(ctx context
 // GetDeviceComplianceInformationMobileV1 returns compliance information for a mobile device.
 // URL: GET /api/v1/conditional-access/device-compliance-information/mobile/{deviceId}
 func (s *ConditionalAccess) GetDeviceComplianceInformationMobileV1(ctx context.Context, deviceId string) ([]ResourceDeviceComplianceInfo, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/device-compliance-information/mobile/%s", EndpointConditionalAccessV1, deviceId)
+	endpoint := fmt.Sprintf("%s/device-compliance-information/mobile/%s", constants.EndpointJamfProConditionalAccessV1, deviceId)
 
 	var result []ResourceDeviceComplianceInfo
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

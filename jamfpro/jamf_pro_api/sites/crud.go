@@ -6,28 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// SitesServiceInterface defines the interface for sites operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites
-	SitesServiceInterface interface {
-		// ListV1 returns all sites.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites
-		ListV1(ctx context.Context) ([]ResourceSite, *resty.Response, error)
-
-		// GetObjectsByIDV1 returns paginated objects for a site.
-		//
-		// Query params: page, page-size, sort, filter (RSQL)
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites-id-objects
-		GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[string]string) (*ObjectsListResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the sites-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-sites
@@ -36,8 +19,6 @@ type (
 	}
 )
 
-var _ SitesServiceInterface = (*Sites)(nil)
-
 func NewSites(client transport.HTTPClient) *Sites {
 	return &Sites{client: client}
 }
@@ -45,10 +26,10 @@ func NewSites(client transport.HTTPClient) *Sites {
 // ListV1 returns all sites.
 // URL: GET /api/v1/sites
 func (s *Sites) ListV1(ctx context.Context) ([]ResourceSite, *resty.Response, error) {
-	endpoint := EndpointSitesV1
+	endpoint := constants.EndpointJamfProSitesV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	var result []ResourceSite
@@ -67,7 +48,7 @@ func (s *Sites) GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[s
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/objects", EndpointSitesV1, id)
+	endpoint := fmt.Sprintf("%s/%s/objects", constants.EndpointJamfProSitesV1, id)
 
 	var result ObjectsListResponse
 
@@ -81,7 +62,7 @@ func (s *Sites) GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[s
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {

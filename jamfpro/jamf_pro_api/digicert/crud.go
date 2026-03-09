@@ -5,52 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// DigicertServiceInterface defines the interface for DigiCert Trust Lifecycle Manager operations.
-	// Supports PKI integration with DigiCert Trust Lifecycle Manager for certificate management.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-digicert-trust-lifecycle-manager
-	DigicertServiceInterface interface {
-		// Create creates a new DigiCert Trust Lifecycle Manager configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-digicert-trust-lifecycle-manager
-		Create(ctx context.Context, request *ResourceDigicertTrustLifecycleManager) (*ResponseDigicertTrustLifecycleManagerCreated, *resty.Response, error)
-
-		// GetByID returns the DigiCert Trust Lifecycle Manager configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-digicert-trust-lifecycle-manager-id
-		GetByID(ctx context.Context, id string) (*ResponseDigicertTrustLifecycleManager, *resty.Response, error)
-
-		// UpdateByID updates the DigiCert Trust Lifecycle Manager configuration by ID using merge-patch semantics.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-pki-digicert-trust-lifecycle-manager-id
-		UpdateByID(ctx context.Context, id string, request *ResourceDigicertTrustLifecycleManager) (*resty.Response, error)
-
-		// DeleteByID deletes the DigiCert Trust Lifecycle Manager configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-pki-digicert-trust-lifecycle-manager-id
-		DeleteByID(ctx context.Context, id string) (*resty.Response, error)
-
-		// ValidateClientCertificate validates the DigiCert Trust Lifecycle Manager client certificate.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-digicert-trust-lifecycle-manager-validate-client-certificate
-		ValidateClientCertificate(ctx context.Context, request *ValidateClientCertificateRequest) (*resty.Response, error)
-
-		// GetConnectionStatusByID returns the connection status for a DigiCert Trust Lifecycle Manager configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-digicert-trust-lifecycle-manager-id-connection-status
-		GetConnectionStatusByID(ctx context.Context, id string) (*ConnectionStatusResponse, *resty.Response, error)
-
-		// GetDependenciesByID returns the list of dependencies for a DigiCert Trust Lifecycle Manager configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-digicert-trust-lifecycle-manager-id-dependencies
-		GetDependenciesByID(ctx context.Context, id string) (*DependenciesResponse, *resty.Response, error)
-	}
-
 	// Service handles communication with the DigiCert Trust Lifecycle Manager-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-digicert-trust-lifecycle-manager
@@ -58,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ DigicertServiceInterface = (*Digicert)(nil)
 
 func NewDigicert(client transport.HTTPClient) *Digicert {
 	return &Digicert{client: client}
@@ -73,13 +30,13 @@ func (s *Digicert) Create(ctx context.Context, request *ResourceDigicertTrustLif
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := EndpointTrustLifecycleManagerV1
+	endpoint := constants.EndpointJamfProTrustLifecycleManagerV1
 
 	var result ResponseDigicertTrustLifecycleManagerCreated
 
 	headers := map[string]string{
-		"Accept":       "*/*",
-		"Content-Type": mime.ApplicationJSON,
+		"Accept": constants.AcceptAny,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -98,12 +55,12 @@ func (s *Digicert) GetByID(ctx context.Context, id string) (*ResponseDigicertTru
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointTrustLifecycleManagerV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProTrustLifecycleManagerV1, id)
 
 	var result ResponseDigicertTrustLifecycleManager
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -125,11 +82,11 @@ func (s *Digicert) UpdateByID(ctx context.Context, id string, request *ResourceD
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointTrustLifecycleManagerV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProTrustLifecycleManagerV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationMergePatchJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationMergePatchJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, nil)
@@ -148,10 +105,10 @@ func (s *Digicert) DeleteByID(ctx context.Context, id string) (*resty.Response, 
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointTrustLifecycleManagerV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProTrustLifecycleManagerV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -170,10 +127,10 @@ func (s *Digicert) ValidateClientCertificate(ctx context.Context, request *Valid
 		return nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/validate-client-certificate", EndpointTrustLifecycleManagerV1)
+	endpoint := fmt.Sprintf("%s/validate-client-certificate", constants.EndpointJamfProTrustLifecycleManagerV1)
 
 	headers := map[string]string{
-		"Content-Type": mime.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
@@ -192,12 +149,12 @@ func (s *Digicert) GetConnectionStatusByID(ctx context.Context, id string) (*Con
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/connection-status", EndpointTrustLifecycleManagerV1, id)
+	endpoint := fmt.Sprintf("%s/%s/connection-status", constants.EndpointJamfProTrustLifecycleManagerV1, id)
 
 	var result ConnectionStatusResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -216,12 +173,12 @@ func (s *Digicert) GetDependenciesByID(ctx context.Context, id string) (*Depende
 		return nil, nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/dependencies", EndpointTrustLifecycleManagerV1, id)
+	endpoint := fmt.Sprintf("%s/%s/dependencies", constants.EndpointJamfProTrustLifecycleManagerV1, id)
 
 	var result DependenciesResponse
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)

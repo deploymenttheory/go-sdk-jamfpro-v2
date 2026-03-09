@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/scripts"
 )
 
@@ -23,7 +24,7 @@ func main() {
 	id := "1" // Replace with the desired script ID
 	updateReq := &scripts.RequestScript{
 		Name:           "Updated Script Name",
-		Priority:       scripts.ScriptPriorityBefore,
+		Priority:       constants.ScriptPriorityBefore,
 		Info:           "Updated by SDK example",
 		ScriptContents: "#!/bin/bash\necho 'updated'",
 	}

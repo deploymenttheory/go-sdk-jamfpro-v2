@@ -6,86 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// MobileDeviceGroupsServiceInterface defines the interface for mobile device group operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-groups
-	MobileDeviceGroupsServiceInterface interface {
-		// ListSmartV1 returns all smart mobile device groups (Get Smart Mobile Device Group objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-groups
-		ListSmartV1(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *resty.Response, error)
-
-		// GetSmartByIDV1 returns the specified smart mobile device group by ID (Get specified Smart Mobile Device Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-groups-id
-		GetSmartByIDV1(ctx context.Context, id string) (*ResourceSmartMobileDeviceGroup, *resty.Response, error)
-
-		// CreateSmartV1 creates a new smart mobile device group (Create Smart Mobile Device Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-smart-groups
-		CreateSmartV1(ctx context.Context, request *RequestSmartMobileDeviceGroup) (*CreateSmartResponse, *resty.Response, error)
-
-		// UpdateSmartByIDV1 updates the specified smart mobile device group by ID (Update specified Smart Mobile Device Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-mobile-device-groups-smart-groups-id
-		UpdateSmartByIDV1(ctx context.Context, id string, request *RequestSmartMobileDeviceGroup) (*ResourceSmartMobileDeviceGroup, *resty.Response, error)
-
-		// DeleteSmartByIDV1 removes the specified smart mobile device group by ID (Remove specified Smart Mobile Device Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mobile-device-groups-smart-groups-id
-		DeleteSmartByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// ListStaticV1 returns all static mobile device groups (Get Static Mobile Device Group objects).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-groups
-		ListStaticV1(ctx context.Context, rsqlQuery map[string]string) (*ListStaticResponse, *resty.Response, error)
-
-		// GetStaticByIDV1 returns the specified static mobile device group by ID (Get specified Static Mobile Device Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-groups-id
-		GetStaticByIDV1(ctx context.Context, id string) (*ResourceStaticMobileDeviceGroup, *resty.Response, error)
-
-		// CreateStaticV1 creates a new static mobile device group (Create Static Mobile Device Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-static-groups
-		CreateStaticV1(ctx context.Context, request *RequestStaticMobileDeviceGroup) (*CreateStaticResponse, *resty.Response, error)
-
-		// UpdateStaticByIDV1 updates the specified static mobile device group by ID (Update specified Static Mobile Device Group object).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-mobile-device-groups-static-groups-id
-		UpdateStaticByIDV1(ctx context.Context, id string, request *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *resty.Response, error)
-
-		// DeleteStaticByIDV1 removes the specified static mobile device group by ID (Remove specified Static Mobile Device Group record).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mobile-device-groups-static-groups-id
-		DeleteStaticByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// ListAllV1 returns all mobile device groups (smart + static) as a simple list.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups
-		ListAllV1(ctx context.Context) ([]ResourceMobileDeviceGroupSummary, *resty.Response, error)
-
-		// GetStaticGroupMembershipV1 returns the mobile devices in the specified static group.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-group-membership-id
-		GetStaticGroupMembershipV1(ctx context.Context, id string, rsqlQuery map[string]string) (*GroupMembershipResponse, *resty.Response, error)
-
-		// GetSmartGroupMembershipV1 returns the mobile devices in the specified smart group.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-group-membership-id
-		GetSmartGroupMembershipV1(ctx context.Context, id string, rsqlQuery map[string]string) (*GroupMembershipResponse, *resty.Response, error)
-
-		// EraseDevicesByGroupIDV1 erases all devices in the specified mobile device group.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-id-erase
-		EraseDevicesByGroupIDV1(ctx context.Context, id string, request *RequestEraseDevices) (*resty.Response, error)
-	}
-
 	// Service handles communication with the mobile device groups-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-groups
@@ -93,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ MobileDeviceGroupsServiceInterface = (*MobileDeviceGroups)(nil)
 
 func NewMobileDeviceGroups(client transport.HTTPClient) *MobileDeviceGroups {
 	return &MobileDeviceGroups{client: client}
@@ -110,7 +33,7 @@ func NewMobileDeviceGroups(client transport.HTTPClient) *MobileDeviceGroups {
 func (s *MobileDeviceGroups) ListSmartV1(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *resty.Response, error) {
 	var result ListSmartResponse
 
-	endpoint := EndpointSmartGroupsV1
+	endpoint := constants.EndpointJamfProSmartMobileDeviceGroupsV1
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceSmartMobileDeviceGroup
@@ -122,7 +45,7 @@ func (s *MobileDeviceGroups) ListSmartV1(ctx context.Context, rsqlQuery map[stri
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -141,12 +64,12 @@ func (s *MobileDeviceGroups) GetSmartByIDV1(ctx context.Context, id string) (*Re
 		return nil, nil, fmt.Errorf("smart mobile device group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartMobileDeviceGroupsV1, id)
 
 	var result ResourceSmartMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -167,11 +90,11 @@ func (s *MobileDeviceGroups) CreateSmartV1(ctx context.Context, request *Request
 
 	var result CreateSmartResponse
 
-	endpoint := EndpointSmartGroupsV1
+	endpoint := constants.EndpointJamfProSmartMobileDeviceGroupsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -194,13 +117,13 @@ func (s *MobileDeviceGroups) UpdateSmartByIDV1(ctx context.Context, id string, r
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartMobileDeviceGroupsV1, id)
 
 	var result ResourceSmartMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -219,10 +142,10 @@ func (s *MobileDeviceGroups) DeleteSmartByIDV1(ctx context.Context, id string) (
 		return nil, fmt.Errorf("smart mobile device group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartMobileDeviceGroupsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -243,7 +166,7 @@ func (s *MobileDeviceGroups) DeleteSmartByIDV1(ctx context.Context, id string) (
 func (s *MobileDeviceGroups) ListStaticV1(ctx context.Context, rsqlQuery map[string]string) (*ListStaticResponse, *resty.Response, error) {
 	var result ListStaticResponse
 
-	endpoint := EndpointStaticGroupsV1
+	endpoint := constants.EndpointJamfProStaticMobileDeviceGroupsV1
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceStaticMobileDeviceGroup
@@ -255,7 +178,7 @@ func (s *MobileDeviceGroups) ListStaticV1(ctx context.Context, rsqlQuery map[str
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -273,12 +196,12 @@ func (s *MobileDeviceGroups) GetStaticByIDV1(ctx context.Context, id string) (*R
 		return nil, nil, fmt.Errorf("static mobile device group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticMobileDeviceGroupsV1, id)
 
 	var result ResourceStaticMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -303,11 +226,11 @@ func (s *MobileDeviceGroups) CreateStaticV1(ctx context.Context, request *Reques
 
 	var result CreateStaticResponse
 
-	endpoint := EndpointStaticGroupsV1
+	endpoint := constants.EndpointJamfProStaticMobileDeviceGroupsV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -334,13 +257,13 @@ func (s *MobileDeviceGroups) UpdateStaticByIDV1(ctx context.Context, id string, 
 		request.Assignments = []StaticMobileDeviceGroupAssignment{}
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticMobileDeviceGroupsV1, id)
 
 	var result ResourceStaticMobileDeviceGroup
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
@@ -359,10 +282,10 @@ func (s *MobileDeviceGroups) DeleteStaticByIDV1(ctx context.Context, id string) 
 		return nil, fmt.Errorf("static mobile device group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticMobileDeviceGroupsV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
@@ -383,10 +306,10 @@ func (s *MobileDeviceGroups) DeleteStaticByIDV1(ctx context.Context, id string) 
 func (s *MobileDeviceGroups) ListAllV1(ctx context.Context) ([]ResourceMobileDeviceGroupSummary, *resty.Response, error) {
 	var result []ResourceMobileDeviceGroupSummary
 
-	endpoint := EndpointMobileDeviceGroupsV1
+	endpoint := constants.EndpointJamfProMobileDeviceGroupsV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -407,7 +330,7 @@ func (s *MobileDeviceGroups) GetStaticGroupMembershipV1(ctx context.Context, id 
 
 	var result GroupMembershipResponse
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointStaticGroupMembershipV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticMobileDeviceGroupMembershipV1, id)
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceMobileDeviceMember
@@ -419,7 +342,7 @@ func (s *MobileDeviceGroups) GetStaticGroupMembershipV1(ctx context.Context, id 
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -441,7 +364,7 @@ func (s *MobileDeviceGroups) GetSmartGroupMembershipV1(ctx context.Context, id s
 
 	var result GroupMembershipResponse
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSmartGroupMembershipV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartMobileDeviceGroupMembershipV1, id)
 
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourceMobileDeviceMember
@@ -453,7 +376,7 @@ func (s *MobileDeviceGroups) GetSmartGroupMembershipV1(ctx context.Context, id s
 	}
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -471,11 +394,11 @@ func (s *MobileDeviceGroups) EraseDevicesByGroupIDV1(ctx context.Context, id str
 		return nil, fmt.Errorf("group ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/erase", EndpointMobileDeviceGroupsV1, id)
+	endpoint := fmt.Sprintf("%s/%s/erase", constants.EndpointJamfProMobileDeviceGroupsV1, id)
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)

@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/buildings/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -334,7 +334,7 @@ func TestUnit_Buildings_ExportV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportBuildingsMock()
 
-	data, resp, err := svc.ExportV1(context.Background(), nil, nil, mime.ApplicationJSON)
+	data, resp, err := svc.ExportV1(context.Background(), nil, nil, constants.ApplicationJSON)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, data)
@@ -361,7 +361,7 @@ func TestUnit_Buildings_ExportV1_WithQueryAndBody(t *testing.T) {
 
 	query := map[string]string{"page": "0", "page-size": "100"}
 	req := &ExportRequest{Page: intPtr(0), PageSize: intPtr(100)}
-	data, resp, err := svc.ExportV1(context.Background(), query, req, mime.ApplicationJSON)
+	data, resp, err := svc.ExportV1(context.Background(), query, req, constants.ApplicationJSON)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, data)
@@ -372,7 +372,7 @@ func TestUnit_Buildings_ExportV1_WithQueryAndBody(t *testing.T) {
 func TestUnit_Buildings_ExportV1_NoMockRegistered(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	data, resp, err := svc.ExportV1(context.Background(), nil, nil, mime.ApplicationJSON)
+	data, resp, err := svc.ExportV1(context.Background(), nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, data)
 	assert.Nil(t, resp)
@@ -384,7 +384,7 @@ func TestUnit_Buildings_ExportHistoryV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
 	mock.RegisterExportBuildingHistoryMock()
 
-	data, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, mime.ApplicationJSON)
+	data, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, constants.ApplicationJSON)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	require.NotNil(t, data)
@@ -408,7 +408,7 @@ func TestUnit_Buildings_ExportHistoryV1_EmptyAcceptType(t *testing.T) {
 func TestUnit_Buildings_ExportHistoryV1_EmptyID(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	data, resp, err := svc.ExportHistoryV1(context.Background(), "", nil, nil, mime.ApplicationJSON)
+	data, resp, err := svc.ExportHistoryV1(context.Background(), "", nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, data)
 	assert.Nil(t, resp)
@@ -419,7 +419,7 @@ func TestUnit_Buildings_ExportHistoryV1_EmptyID(t *testing.T) {
 func TestUnit_Buildings_ExportHistoryV1_NoMockRegistered(t *testing.T) {
 	svc, _ := setupMockService(t)
 
-	data, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, mime.ApplicationJSON)
+	data, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, data)
 	assert.Nil(t, resp)

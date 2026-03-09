@@ -5,26 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// PolicyPropertiesServiceInterface defines the interface for policy properties operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
-	PolicyPropertiesServiceInterface interface {
-		// Get returns the current policy properties (Get Policy Properties).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
-		Get(ctx context.Context) (*ResourcePolicyProperties, *resty.Response, error)
-
-		// Update updates policy properties (Update Policy Properties).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-policy-properties
-		Update(ctx context.Context, request *ResourcePolicyProperties) (*ResourcePolicyProperties, *resty.Response, error)
-	}
-
 	// Service handles communication with the policy properties-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
@@ -32,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ PolicyPropertiesServiceInterface = (*PolicyProperties)(nil)
 
 func NewPolicyProperties(client transport.HTTPClient) *PolicyProperties {
 	return &PolicyProperties{client: client}
@@ -48,8 +31,8 @@ func NewPolicyProperties(client transport.HTTPClient) *PolicyProperties {
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-policy-properties
 func (s *PolicyProperties) Get(ctx context.Context) (*ResourcePolicyProperties, *resty.Response, error) {
 	var result ResourcePolicyProperties
-	endpoint := EndpointPolicyPropertiesV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProPolicyPropertiesV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
@@ -65,8 +48,8 @@ func (s *PolicyProperties) Update(ctx context.Context, request *ResourcePolicyPr
 		return nil, nil, fmt.Errorf("request is required")
 	}
 	var result ResourcePolicyProperties
-	endpoint := EndpointPolicyPropertiesV1
-	headers := map[string]string{"Accept": mime.ApplicationJSON, "Content-Type": mime.ApplicationJSON}
+	endpoint := constants.EndpointJamfProPolicyPropertiesV1
+	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err

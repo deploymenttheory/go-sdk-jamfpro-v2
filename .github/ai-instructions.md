@@ -293,8 +293,8 @@ func (s *Service) GetV1(ctx context.Context, id string) (*ResourceType, *interfa
     endpoint := fmt.Sprintf("%s/%s", EndpointResourceV1, id)
 
     headers := map[string]string{
-        "Accept":       mime.ApplicationJSON,
-        "Content-Type": mime.ApplicationJSON,
+        "Accept":       constants.ApplicationJSON,
+        "Content-Type": constants.ApplicationJSON,
     }
 
     resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -317,8 +317,8 @@ func (s *Service) ListV1(ctx context.Context, params map[string]string) (*Resour
     endpoint := EndpointResourcesV1
 
     headers := map[string]string{
-        "Accept":       mime.ApplicationJSON,
-        "Content-Type": mime.ApplicationJSON,
+        "Accept":       constants.ApplicationJSON,
+        "Content-Type": constants.ApplicationJSON,
     }
 
     resp, err := s.client.GetPagination(ctx, endpoint, params, headers, &result)
@@ -341,8 +341,8 @@ func (s *Service) CreateV1(ctx context.Context, req *RequestResource) (*Resource
     endpoint := EndpointResourcesV1
 
     headers := map[string]string{
-        "Accept":       mime.ApplicationJSON,
-        "Content-Type": mime.ApplicationJSON,
+        "Accept":       constants.ApplicationJSON,
+        "Content-Type": constants.ApplicationJSON,
     }
 
     resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -365,8 +365,8 @@ func (s *Service) UpdateByIDV1(ctx context.Context, id string, req *RequestResou
     endpoint := fmt.Sprintf("%s/%s", EndpointResourcesV1, id)
 
     headers := map[string]string{
-        "Accept":       mime.ApplicationJSON,
-        "Content-Type": mime.ApplicationJSON,
+        "Accept":       constants.ApplicationJSON,
+        "Content-Type": constants.ApplicationJSON,
     }
 
     resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
@@ -387,8 +387,8 @@ func (s *Service) DeleteByIDV1(ctx context.Context, id string) (*interfaces.Resp
     endpoint := fmt.Sprintf("%s/%s", EndpointResourcesV1, id)
 
     headers := map[string]string{
-        "Accept":       mime.ApplicationJSON,
-        "Content-Type": mime.ApplicationJSON,
+        "Accept":       constants.ApplicationJSON,
+        "Content-Type": constants.ApplicationJSON,
     }
 
     resp, err := s.client.Delete(ctx, endpoint, headers)
@@ -424,8 +424,8 @@ func (s *Service) ListV1(ctx context.Context, params map[string]string) (*Resour
     endpoint := EndpointResourcesV1
 
     headers := map[string]string{
-        "Accept":       mime.ApplicationJSON,
-        "Content-Type": mime.ApplicationJSON,
+        "Accept":       constants.ApplicationJSON,
+        "Content-Type": constants.ApplicationJSON,
     }
 
     // params can include: filter, page, page-size, sort
@@ -670,8 +670,8 @@ func (s *Service) ListV1(ctx context.Context, params map[string]string) (*Resour
     endpoint := EndpointResourcesV1
 
     headers := map[string]string{
-        "Accept":       mime.ApplicationJSON,
-        "Content-Type": mime.ApplicationJSON,
+        "Accept":       constants.ApplicationJSON,
+        "Content-Type": constants.ApplicationJSON,
     }
 
     // GetPagination handles page, page-size, and other query parameters

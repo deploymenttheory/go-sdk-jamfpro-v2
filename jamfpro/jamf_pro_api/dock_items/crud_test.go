@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/dock_items/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -59,7 +60,7 @@ func TestUnit_DockItems_Create_Success(t *testing.T) {
 	req := &RequestDockItem{
 		Name: "Safari",
 		Path: "/Applications/Safari.app",
-		Type: TypeApp,
+		Type: constants.TypeApp,
 	}
 	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
@@ -88,7 +89,7 @@ func TestUnit_DockItems_Create_Conflict(t *testing.T) {
 	req := &RequestDockItem{
 		Name: "Duplicate",
 		Path: "/Applications/App.app",
-		Type: TypeApp,
+		Type: constants.TypeApp,
 	}
 	result, resp, err := svc.CreateV1(context.Background(), req)
 	assert.Error(t, err)
@@ -104,7 +105,7 @@ func TestUnit_DockItems_UpdateByID_Success(t *testing.T) {
 	req := &RequestDockItem{
 		Name: "Safari Updated",
 		Path: "/Applications/Safari.app",
-		Type: TypeApp,
+		Type: constants.TypeApp,
 	}
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
@@ -122,7 +123,7 @@ func TestUnit_DockItems_UpdateByID_EmptyID(t *testing.T) {
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &RequestDockItem{
 		Name: "x",
 		Path: "/path",
-		Type: TypeApp,
+		Type: constants.TypeApp,
 	})
 	assert.Error(t, err)
 	assert.Nil(t, result)

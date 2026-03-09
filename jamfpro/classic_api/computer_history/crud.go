@@ -6,66 +6,11 @@ import (
 	"net/url"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// ServiceInterface defines the interface for Classic API computer history operations.
-	//
-	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerhistory
-	ServiceInterface interface {
-		// GetByID retrieves computer history by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
-		GetByID(ctx context.Context, id string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByIDAndSubset retrieves a subset of computer history by ID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyid
-		GetByIDAndSubset(ctx context.Context, id string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByName retrieves computer history by computer name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
-		GetByName(ctx context.Context, name string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByNameAndSubset retrieves a subset of computer history by name.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyname
-		GetByNameAndSubset(ctx context.Context, name string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByUDID retrieves computer history by UDID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
-		GetByUDID(ctx context.Context, udid string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByUDIDAndSubset retrieves a subset of computer history by UDID.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyudid
-		GetByUDIDAndSubset(ctx context.Context, udid string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetBySerialNumber retrieves computer history by serial number.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
-		GetBySerialNumber(ctx context.Context, serialNumber string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetBySerialNumberAndSubset retrieves a subset of computer history by serial number.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybyserialnumber
-		GetBySerialNumberAndSubset(ctx context.Context, serialNumber string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByMACAddress retrieves computer history by MAC address.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
-		GetByMACAddress(ctx context.Context, macAddress string) (*ResourceComputerHistory, *resty.Response, error)
-
-		// GetByMACAddressAndSubset retrieves a subset of computer history by MAC address.
-		//
-		// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputerhistorybymacaddress
-		GetByMACAddressAndSubset(ctx context.Context, macAddress string, subset string) (*ResourceComputerHistory, *resty.Response, error)
-	}
-
 	// Service handles communication with the computer-history-related Classic API methods.
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerhistory
@@ -73,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ ServiceInterface = (*ComputerHistory)(nil)
 
 // NewService returns a new computer history Service backed by the provided HTTP client.
 func NewComputerHistory(client transport.HTTPClient) *ComputerHistory {
@@ -93,7 +36,7 @@ func (s *ComputerHistory) GetByID(ctx context.Context, id string) (*ResourceComp
 	if id == "" {
 		return nil, nil, fmt.Errorf("computer history ID cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/id/%s", EndpointComputerHistory, url.PathEscape(id)))
+	return s.get(ctx, fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputerHistory, url.PathEscape(id)))
 }
 
 // GetByIDAndSubset retrieves a subset of computer history by ID.
@@ -107,7 +50,7 @@ func (s *ComputerHistory) GetByIDAndSubset(ctx context.Context, id string, subse
 	if subset == "" {
 		return nil, nil, fmt.Errorf("subset cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/id/%s/subset/%s", EndpointComputerHistory, url.PathEscape(id), url.PathEscape(subset)))
+	return s.get(ctx, fmt.Sprintf("%s/id/%s/subset/%s", constants.EndpointClassicComputerHistory, url.PathEscape(id), url.PathEscape(subset)))
 }
 
 // GetByName retrieves computer history by computer name.
@@ -118,7 +61,7 @@ func (s *ComputerHistory) GetByName(ctx context.Context, name string) (*Resource
 	if name == "" {
 		return nil, nil, fmt.Errorf("computer name cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/name/%s", EndpointComputerHistory, url.PathEscape(name)))
+	return s.get(ctx, fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputerHistory, url.PathEscape(name)))
 }
 
 // GetByNameAndSubset retrieves a subset of computer history by name.
@@ -132,7 +75,7 @@ func (s *ComputerHistory) GetByNameAndSubset(ctx context.Context, name string, s
 	if subset == "" {
 		return nil, nil, fmt.Errorf("subset cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/name/%s/subset/%s", EndpointComputerHistory, url.PathEscape(name), url.PathEscape(subset)))
+	return s.get(ctx, fmt.Sprintf("%s/name/%s/subset/%s", constants.EndpointClassicComputerHistory, url.PathEscape(name), url.PathEscape(subset)))
 }
 
 // GetByUDID retrieves computer history by UDID.
@@ -143,7 +86,7 @@ func (s *ComputerHistory) GetByUDID(ctx context.Context, udid string) (*Resource
 	if udid == "" {
 		return nil, nil, fmt.Errorf("UDID cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/udid/%s", EndpointComputerHistory, url.PathEscape(udid)))
+	return s.get(ctx, fmt.Sprintf("%s/udid/%s", constants.EndpointClassicComputerHistory, url.PathEscape(udid)))
 }
 
 // GetByUDIDAndSubset retrieves a subset of computer history by UDID.
@@ -157,7 +100,7 @@ func (s *ComputerHistory) GetByUDIDAndSubset(ctx context.Context, udid string, s
 	if subset == "" {
 		return nil, nil, fmt.Errorf("subset cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/udid/%s/subset/%s", EndpointComputerHistory, url.PathEscape(udid), url.PathEscape(subset)))
+	return s.get(ctx, fmt.Sprintf("%s/udid/%s/subset/%s", constants.EndpointClassicComputerHistory, url.PathEscape(udid), url.PathEscape(subset)))
 }
 
 // GetBySerialNumber retrieves computer history by serial number.
@@ -168,7 +111,7 @@ func (s *ComputerHistory) GetBySerialNumber(ctx context.Context, serialNumber st
 	if serialNumber == "" {
 		return nil, nil, fmt.Errorf("serial number cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/serialnumber/%s", EndpointComputerHistory, url.PathEscape(serialNumber)))
+	return s.get(ctx, fmt.Sprintf("%s/serialnumber/%s", constants.EndpointClassicComputerHistory, url.PathEscape(serialNumber)))
 }
 
 // GetBySerialNumberAndSubset retrieves a subset of computer history by serial number.
@@ -182,7 +125,7 @@ func (s *ComputerHistory) GetBySerialNumberAndSubset(ctx context.Context, serial
 	if subset == "" {
 		return nil, nil, fmt.Errorf("subset cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/serialnumber/%s/subset/%s", EndpointComputerHistory, url.PathEscape(serialNumber), url.PathEscape(subset)))
+	return s.get(ctx, fmt.Sprintf("%s/serialnumber/%s/subset/%s", constants.EndpointClassicComputerHistory, url.PathEscape(serialNumber), url.PathEscape(subset)))
 }
 
 // GetByMACAddress retrieves computer history by MAC address.
@@ -193,7 +136,7 @@ func (s *ComputerHistory) GetByMACAddress(ctx context.Context, macAddress string
 	if macAddress == "" {
 		return nil, nil, fmt.Errorf("MAC address cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/macaddress/%s", EndpointComputerHistory, url.PathEscape(macAddress)))
+	return s.get(ctx, fmt.Sprintf("%s/macaddress/%s", constants.EndpointClassicComputerHistory, url.PathEscape(macAddress)))
 }
 
 // GetByMACAddressAndSubset retrieves a subset of computer history by MAC address.
@@ -207,15 +150,15 @@ func (s *ComputerHistory) GetByMACAddressAndSubset(ctx context.Context, macAddre
 	if subset == "" {
 		return nil, nil, fmt.Errorf("subset cannot be empty")
 	}
-	return s.get(ctx, fmt.Sprintf("%s/macaddress/%s/subset/%s", EndpointComputerHistory, url.PathEscape(macAddress), url.PathEscape(subset)))
+	return s.get(ctx, fmt.Sprintf("%s/macaddress/%s/subset/%s", constants.EndpointClassicComputerHistory, url.PathEscape(macAddress), url.PathEscape(subset)))
 }
 
 // get performs the GET request and unmarshals the response.
 func (s *ComputerHistory) get(ctx context.Context, endpoint string) (*ResourceComputerHistory, *resty.Response, error) {
 	var out ResourceComputerHistory
 	headers := map[string]string{
-		"Accept":       mime.ApplicationXML,
-		"Content-Type": mime.ApplicationXML,
+		"Accept":       constants.ApplicationXML,
+		"Content-Type": constants.ApplicationXML,
 	}
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
 	if err != nil {

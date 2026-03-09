@@ -5,41 +5,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// CertificateAuthorityServiceInterface defines the interface for certificate authority operations (read-only).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
-	CertificateAuthorityServiceInterface interface {
-		// GetV1 returns the active certificate authority X.509 details.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
-		GetV1(ctx context.Context) (*ResourceActiveCertificateAuthorityV1, *resty.Response, error)
-		// GetActiveCertificateAuthorityDERV1 returns the active certificate authority in DER format.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active-der
-		GetActiveCertificateAuthorityDERV1(ctx context.Context) (*resty.Response, []byte, error)
-		// GetActiveCertificateAuthorityPEMV1 returns the active certificate authority in PEM format.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active-pem
-		GetActiveCertificateAuthorityPEMV1(ctx context.Context) (*resty.Response, []byte, error)
-		// GetCertificateAuthorityByIDV1 returns X.509 details of the certificate authority with the given ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-id
-		GetCertificateAuthorityByIDV1(ctx context.Context, id string) (*ResourceActiveCertificateAuthorityV1, *resty.Response, error)
-		// GetCertificateAuthorityByIDDERV1 returns the certificate authority with the given ID in DER format.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-id-der
-		GetCertificateAuthorityByIDDERV1(ctx context.Context, id string) (*resty.Response, []byte, error)
-		// GetCertificateAuthorityByIDPEMV1 returns the certificate authority with the given ID in PEM format.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-id-pem
-		GetCertificateAuthorityByIDPEMV1(ctx context.Context, id string) (*resty.Response, []byte, error)
-	}
-
 	// Service handles communication with the certificate authority-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
@@ -47,8 +17,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ CertificateAuthorityServiceInterface = (*CertificateAuthority)(nil)
 
 func NewCertificateAuthority(client transport.HTTPClient) *CertificateAuthority {
 	return &CertificateAuthority{client: client}
@@ -62,11 +30,11 @@ func NewCertificateAuthority(client transport.HTTPClient) *CertificateAuthority 
 // URL: GET /api/v1/pki/certificate-authority/active
 // https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
 func (s *CertificateAuthority) GetV1(ctx context.Context) (*ResourceActiveCertificateAuthorityV1, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/active", EndpointCertificateAuthorityV1)
+	endpoint := fmt.Sprintf("%s/active", constants.EndpointJamfProCertificateAuthorityV1)
 	var result ResourceActiveCertificateAuthorityV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -81,9 +49,9 @@ func (s *CertificateAuthority) GetV1(ctx context.Context) (*ResourceActiveCertif
 // URL: GET /api/v1/pki/certificate-authority/active/der
 // https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active-der
 func (s *CertificateAuthority) GetActiveCertificateAuthorityDERV1(ctx context.Context) (*resty.Response, []byte, error) {
-	endpoint := fmt.Sprintf("%s/active/der", EndpointCertificateAuthorityV1)
+	endpoint := fmt.Sprintf("%s/active/der", constants.EndpointJamfProCertificateAuthorityV1)
 
-	headers := map[string]string{"Accept": mime.ApplicationPKIXCert}
+	headers := map[string]string{"Accept": constants.ApplicationPKIXCert}
 
 	return s.client.GetBytes(ctx, endpoint, nil, headers)
 }
@@ -92,10 +60,10 @@ func (s *CertificateAuthority) GetActiveCertificateAuthorityDERV1(ctx context.Co
 // URL: GET /api/v1/pki/certificate-authority/active/pem
 // https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active-pem
 func (s *CertificateAuthority) GetActiveCertificateAuthorityPEMV1(ctx context.Context) (*resty.Response, []byte, error) {
-	endpoint := fmt.Sprintf("%s/active/pem", EndpointCertificateAuthorityV1)
+	endpoint := fmt.Sprintf("%s/active/pem", constants.EndpointJamfProCertificateAuthorityV1)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationPEMCertificateChain,
+		"Accept": constants.ApplicationPEMCertificateChain,
 	}
 
 	return s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -105,11 +73,11 @@ func (s *CertificateAuthority) GetActiveCertificateAuthorityPEMV1(ctx context.Co
 // URL: GET /api/v1/pki/certificate-authority/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-id
 func (s *CertificateAuthority) GetCertificateAuthorityByIDV1(ctx context.Context, id string) (*ResourceActiveCertificateAuthorityV1, *resty.Response, error) {
-	endpoint := fmt.Sprintf("%s/%s", EndpointCertificateAuthorityV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCertificateAuthorityV1, id)
 	var result ResourceActiveCertificateAuthorityV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -124,10 +92,10 @@ func (s *CertificateAuthority) GetCertificateAuthorityByIDV1(ctx context.Context
 // URL: GET /api/v1/pki/certificate-authority/{id}/der
 // https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-id-der
 func (s *CertificateAuthority) GetCertificateAuthorityByIDDERV1(ctx context.Context, id string) (*resty.Response, []byte, error) {
-	endpoint := fmt.Sprintf("%s/%s/der", EndpointCertificateAuthorityV1, id)
+	endpoint := fmt.Sprintf("%s/%s/der", constants.EndpointJamfProCertificateAuthorityV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationPKIXCert,
+		"Accept": constants.ApplicationPKIXCert,
 	}
 
 	return s.client.GetBytes(ctx, endpoint, nil, headers)
@@ -137,10 +105,10 @@ func (s *CertificateAuthority) GetCertificateAuthorityByIDDERV1(ctx context.Cont
 // URL: GET /api/v1/pki/certificate-authority/{id}/pem
 // https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-id-pem
 func (s *CertificateAuthority) GetCertificateAuthorityByIDPEMV1(ctx context.Context, id string) (*resty.Response, []byte, error) {
-	endpoint := fmt.Sprintf("%s/%s/pem", EndpointCertificateAuthorityV1, id)
+	endpoint := fmt.Sprintf("%s/%s/pem", constants.EndpointJamfProCertificateAuthorityV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationPEMCertificateChain,
+		"Accept": constants.ApplicationPEMCertificateChain,
 	}
 
 	return s.client.GetBytes(ctx, endpoint, nil, headers)

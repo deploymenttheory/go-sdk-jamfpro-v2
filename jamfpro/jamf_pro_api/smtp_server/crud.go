@@ -6,43 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// SMTPServerServiceInterface defines the interface for SMTP server operations (singleton).
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
-	SMTPServerServiceInterface interface {
-		// GetV2 returns the current SMTP server configuration (Get SMTP server).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
-		GetV2(ctx context.Context) (*ResourceSMTPServer, *resty.Response, error)
-
-		// UpdateV2 updates the SMTP server configuration (Update SMTP server).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
-		UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *resty.Response, error)
-
-		// GetHistoryV1 returns the paginated SMTP server history.
-		//
-		// Query params (optional, pass via rsqlQuery): page, page-size, sort, filter (RSQL).
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-smtp-server-history
-		GetHistoryV1(ctx context.Context, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
-
-		// AddHistoryNoteV1 adds a note to the SMTP server history.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-history
-		AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRequest) (*AddHistoryNoteResponse, *resty.Response, error)
-
-		// TestV1 tests the SMTP server configuration by sending a test email.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-smtp-server-test
-		TestV1(ctx context.Context, req *TestRequest) (*resty.Response, error)
-	}
-
 	// Service handles communication with the SMTP server-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
@@ -50,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SMTPServerServiceInterface = (*SmtpServer)(nil)
 
 func NewSmtpServer(client transport.HTTPClient) *SmtpServer {
 	return &SmtpServer{client: client}
@@ -63,10 +29,10 @@ func NewSmtpServer(client transport.HTTPClient) *SmtpServer {
 func (s *SmtpServer) GetV2(ctx context.Context) (*ResourceSMTPServer, *resty.Response, error) {
 	var result ResourceSMTPServer
 
-	endpoint := EndpointSMTPServerV2
+	endpoint := constants.EndpointJamfProSMTPServerV2
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -87,11 +53,11 @@ func (s *SmtpServer) UpdateV2(ctx context.Context, request *ResourceSMTPServer) 
 
 	var result ResourceSMTPServer
 
-	endpoint := EndpointSMTPServerV2
+	endpoint := constants.EndpointJamfProSMTPServerV2
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationMergePatchJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationMergePatchJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -118,9 +84,9 @@ func (s *SmtpServer) GetHistoryV1(ctx context.Context, rsqlQuery map[string]stri
 		return nil
 	}
 
-	endpoint := EndpointSMTPServerHistoryV1
+	endpoint := constants.EndpointJamfProSMTPServerHistoryV1
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
@@ -142,10 +108,10 @@ func (s *SmtpServer) AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRe
 	}
 
 	var result AddHistoryNoteResponse
-	endpoint := EndpointSMTPServerHistoryV1
+	endpoint := constants.EndpointJamfProSMTPServerHistoryV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
@@ -167,10 +133,10 @@ func (s *SmtpServer) TestV1(ctx context.Context, req *TestRequest) (*resty.Respo
 		return nil, fmt.Errorf("recipientEmail is required")
 	}
 
-	endpoint := EndpointSMTPServerTestV1
+	endpoint := constants.EndpointJamfProSMTPServerTestV1
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)

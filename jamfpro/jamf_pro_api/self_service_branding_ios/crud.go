@@ -6,51 +6,11 @@ import (
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
 
 type (
-	// SelfServiceBrandingMobileServiceInterface defines the interface for self-service
-	// branding mobile (iOS) operations.
-	//
-	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-ios
-	SelfServiceBrandingMobileServiceInterface interface {
-		// ListV1 returns all self-service branding mobile configurations.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-ios
-		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
-
-		// GetByIDV1 returns the specified self-service branding mobile configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-ios-id
-		GetByIDV1(ctx context.Context, id string) (*ResourceSelfServiceBrandingMobile, *resty.Response, error)
-
-		// GetByNameV1 returns the specified self-service branding mobile configuration by name.
-		GetByNameV1(ctx context.Context, name string) (*ResourceSelfServiceBrandingMobile, *resty.Response, error)
-
-		// CreateV1 creates a new self-service branding mobile configuration.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-self-service-branding-ios
-		CreateV1(ctx context.Context, request *ResourceSelfServiceBrandingMobile) (*CreateResponse, *resty.Response, error)
-
-		// UpdateByIDV1 updates the specified self-service branding mobile configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-self-service-branding-ios-id
-		UpdateByIDV1(ctx context.Context, id string, request *ResourceSelfServiceBrandingMobile) (*ResourceSelfServiceBrandingMobile, *resty.Response, error)
-
-		// UpdateByNameV1 updates a self-service branding mobile configuration by name.
-		UpdateByNameV1(ctx context.Context, name string, request *ResourceSelfServiceBrandingMobile) (*ResourceSelfServiceBrandingMobile, *resty.Response, error)
-
-		// DeleteByIDV1 removes the specified self-service branding mobile configuration by ID.
-		//
-		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-self-service-branding-ios-id
-		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
-
-		// DeleteByNameV1 removes a self-service branding mobile configuration by name.
-		DeleteByNameV1(ctx context.Context, name string) (*resty.Response, error)
-	}
-
 	// Service handles communication with the self-service branding mobile-related methods of the Jamf Pro API.
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-ios
@@ -58,8 +18,6 @@ type (
 		client transport.HTTPClient
 	}
 )
-
-var _ SelfServiceBrandingMobileServiceInterface = (*SelfServiceBrandingIos)(nil)
 
 func NewSelfServiceBrandingIos(client transport.HTTPClient) *SelfServiceBrandingIos {
 	return &SelfServiceBrandingIos{client: client}
@@ -85,10 +43,10 @@ func (s *SelfServiceBrandingIos) ListV1(ctx context.Context, rsqlQuery map[strin
 		return nil
 	}
 
-	endpoint := EndpointSelfServiceBrandingMobileV1
+	endpoint := constants.EndpointJamfProSelfServiceBrandingMobileV1
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
@@ -107,12 +65,12 @@ func (s *SelfServiceBrandingIos) GetByIDV1(ctx context.Context, id string) (*Res
 		return nil, nil, fmt.Errorf("self-service branding mobile ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSelfServiceBrandingMobileV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSelfServiceBrandingMobileV1, id)
 
 	var result ResourceSelfServiceBrandingMobile
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
@@ -153,11 +111,11 @@ func (s *SelfServiceBrandingIos) CreateV1(ctx context.Context, request *Resource
 
 	var result CreateResponse
 
-	endpoint := EndpointSelfServiceBrandingMobileV1
+	endpoint := constants.EndpointJamfProSelfServiceBrandingMobileV1
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
@@ -180,13 +138,13 @@ func (s *SelfServiceBrandingIos) UpdateByIDV1(ctx context.Context, id string, re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSelfServiceBrandingMobileV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSelfServiceBrandingMobileV1, id)
 
 	var result ResourceSelfServiceBrandingMobile
 
 	headers := map[string]string{
-		"Accept":       mime.ApplicationJSON,
-		"Content-Type": mime.ApplicationJSON,
+		"Accept":       constants.ApplicationJSON,
+		"Content-Type": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
@@ -215,10 +173,10 @@ func (s *SelfServiceBrandingIos) DeleteByIDV1(ctx context.Context, id string) (*
 		return nil, fmt.Errorf("self-service branding mobile ID is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", EndpointSelfServiceBrandingMobileV1, id)
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSelfServiceBrandingMobileV1, id)
 
 	headers := map[string]string{
-		"Accept": mime.ApplicationJSON,
+		"Accept": constants.ApplicationJSON,
 	}
 
 	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
