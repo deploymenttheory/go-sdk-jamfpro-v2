@@ -22,16 +22,16 @@ func main() {
 	// WARNING: This operation will revoke all licenses for the specified VPP location
 	// Use with caution in production environments
 
-	resp, err := client.VolumePurchasingLocations.RevokeVolumePurchasingLocationLicensesByIDV1(ctx, vppLocationID)
+	resp, err := client.JamfProAPI.VolumePurchasingLocations.RevokeVolumePurchasingLocationLicensesByIDV1(ctx, vppLocationID)
 	if err != nil {
 		log.Fatalf("Error revoking licenses: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Licenses revoked successfully for VPP location ID: %s\n", vppLocationID)
 
 	// Optionally, verify by getting the location details
-	location, _, err := client.VolumePurchasingLocations.GetByIDV1(ctx, vppLocationID)
+	location, _, err := client.JamfProAPI.VolumePurchasingLocations.GetByIDV1(ctx, vppLocationID)
 	if err != nil {
 		log.Printf("Warning: Could not retrieve location details: %v", err)
 	} else {

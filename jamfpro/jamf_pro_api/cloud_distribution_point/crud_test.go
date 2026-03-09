@@ -1,0 +1,302 @@
+package cloud_distribution_point
+
+import (
+	"context"
+	"testing"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_distribution_point/mocks"
+	"github.com/stretchr/testify/require"
+)
+
+func setupMockService(t *testing.T) (*CloudDistributionPoint, *mocks.CloudDistributionPointMock) {
+	t.Helper()
+	mock := mocks.NewCloudDistributionPointMock()
+	mock.RegisterMocks()
+	return NewCloudDistributionPoint(mock), mock
+}
+
+func TestUnit_CloudDistributionPoint_GetV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode())
+	require.True(t, result.HasConnectionSucceeded)
+	require.Equal(t, "JCDS", result.CdnType)
+}
+
+func TestUnit_CloudDistributionPoint_GetUploadCapabilityV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetUploadCapabilityV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode())
+	require.True(t, result.DirectUploadCapable)
+}
+
+func TestUnit_CloudDistributionPoint_GetTestConnectionV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetTestConnectionV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode())
+	require.True(t, result.HasConnectionSucceeded)
+}
+
+func TestUnit_CloudDistributionPoint_DeleteV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteV1(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.Equal(t, 204, resp.StatusCode())
+}
+
+func TestUnit_CloudDistributionPoint_CreateV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestCloudDistributionPointV1{
+		CdnType: "JAMF_CLOUD",
+		Master:  true,
+	}
+	result, resp, err := svc.CreateV1(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 201, resp.StatusCode())
+	require.True(t, result.HasConnectionSucceeded)
+	require.Equal(t, "JCDS", result.CdnType)
+}
+
+func TestUnit_CloudDistributionPoint_UpdateV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestCloudDistributionPointV1{
+		CdnType: "JAMF_CLOUD",
+		Master:  true,
+	}
+	result, resp, err := svc.UpdateV1(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode())
+	require.True(t, result.HasConnectionSucceeded)
+}
+
+func TestUnit_CloudDistributionPoint_GetHistoryV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode())
+	require.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	require.Equal(t, 1, result.Results[0].ID)
+	require.Equal(t, "admin", result.Results[0].Username)
+	require.Equal(t, "Sso settings update", result.Results[0].Note)
+}
+
+func TestUnit_CloudDistributionPoint_GetFilesV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetFilesV1(context.Background(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 200, resp.StatusCode())
+	require.Equal(t, 2, result.TotalCount)
+	require.Len(t, result.Results, 2)
+	require.Equal(t, "file-001", result.Results[0].ID)
+	require.Equal(t, "package.pkg", result.Results[0].FileName)
+	require.Equal(t, "AVAILABLE", result.Results[0].Status)
+}
+
+func TestUnit_CloudDistributionPoint_CreateV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.CreateV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_CloudDistributionPoint_UpdateV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.UpdateV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_CloudDistributionPoint_GetV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, _, err := svc.GetV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_CreateV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	req := &RequestCloudDistributionPointV1{
+		CdnType: "JAMF_CLOUD",
+		Master:  true,
+	}
+	_, _, err := svc.CreateV1(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_UpdateV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	req := &RequestCloudDistributionPointV1{
+		CdnType: "JAMF_CLOUD",
+		Master:  true,
+	}
+	_, _, err := svc.UpdateV1(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_DeleteV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, err := svc.DeleteV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_GetUploadCapabilityV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, _, err := svc.GetUploadCapabilityV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_GetTestConnectionV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, _, err := svc.GetTestConnectionV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_GetHistoryV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, _, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_GetFilesV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, _, err := svc.GetFilesV1(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_AddHistoryNoteV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	req := &RequestHistoryNoteV1{Note: "Added history note via API"}
+	result, resp, err := svc.AddHistoryNoteV1(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 201, resp.StatusCode())
+	require.Equal(t, 2, result.ID)
+	require.Equal(t, "admin", result.Username)
+	require.Equal(t, "Added history note via API", result.Note)
+}
+
+func TestUnit_CloudDistributionPoint_AddHistoryNoteV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.AddHistoryNoteV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_CloudDistributionPoint_AddHistoryNoteV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	req := &RequestHistoryNoteV1{Note: "test note"}
+	_, _, err := svc.AddHistoryNoteV1(context.Background(), req)
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_FailUploadV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.FailUploadV1(context.Background(), "test-id", "package.pkg", "PACKAGE")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.Equal(t, 204, resp.StatusCode())
+}
+
+func TestUnit_CloudDistributionPoint_FailUploadV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.FailUploadV1(context.Background(), "", "package.pkg", "PACKAGE")
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_CloudDistributionPoint_FailUploadV1_EmptyFileName(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.FailUploadV1(context.Background(), "test-id", "", "PACKAGE")
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "fileName is required")
+}
+
+func TestUnit_CloudDistributionPoint_FailUploadV1_EmptyFileType(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.FailUploadV1(context.Background(), "test-id", "package.pkg", "")
+	require.Error(t, err)
+	require.Nil(t, resp)
+	require.Contains(t, err.Error(), "fileType is required")
+}
+
+func TestUnit_CloudDistributionPoint_FailUploadV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, err := svc.FailUploadV1(context.Background(), "test-id", "package.pkg", "PACKAGE")
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_RefreshInventoryV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.RefreshInventoryV1(context.Background(), "")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.Equal(t, 200, resp.StatusCode())
+}
+
+func TestUnit_CloudDistributionPoint_RefreshInventoryV1_WithFileName(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.RefreshInventoryV1(context.Background(), "package.pkg")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.Equal(t, 200, resp.StatusCode())
+}
+
+func TestUnit_CloudDistributionPoint_RefreshInventoryV1_Error(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, err := svc.RefreshInventoryV1(context.Background(), "")
+	require.Error(t, err)
+}
+
+func TestUnit_CloudDistributionPoint_GetHistoryV1_MergePageError(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	mock.RegisterHistoryInvalidMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, _, err := svc.GetHistoryV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "failed to get cloud distribution point history")
+}
+
+func TestUnit_CloudDistributionPoint_GetFilesV1_MergePageError(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	mock.RegisterFilesInvalidMock()
+	svc := NewCloudDistributionPoint(mock)
+	_, _, err := svc.GetFilesV1(context.Background(), nil)
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "failed to get cloud distribution point files")
+}
+
+func TestUnit_CloudDistributionPoint_NewService(t *testing.T) {
+	mock := mocks.NewCloudDistributionPointMock()
+	svc := NewCloudDistributionPoint(mock)
+	require.NotNil(t, svc)
+}

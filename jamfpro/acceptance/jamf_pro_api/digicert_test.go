@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/digicert"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/digicert"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -40,7 +40,7 @@ import (
 func TestAcceptance_Digicert_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Digicert
+	svc := acc.Client.JamfProAPI.Digicert
 
 	t.Run("Create_NilRequest", func(t *testing.T) {
 		_, _, err := svc.Create(context.Background(), nil)

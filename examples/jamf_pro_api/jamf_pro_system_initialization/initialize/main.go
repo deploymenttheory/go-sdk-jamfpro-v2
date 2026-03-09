@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_system_initialization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_pro_system_initialization"
 )
 
 func main() {
@@ -31,10 +31,10 @@ func main() {
 		JssUrl:          "https://your-instance.jamfcloud.com",
 	}
 
-	resp, err := jamfClient.JamfProSystemInitialization.Initialize(context.Background(), request)
+	resp, err := jamfClient.JamfProAPI.JamfProSystemInitialization.Initialize(context.Background(), request)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("Jamf Pro initialized successfully (status: %d)\n", resp.StatusCode)
+	fmt.Printf("Jamf Pro initialized successfully (status: %d)\n", resp.StatusCode())
 }

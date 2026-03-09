@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/printers"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/printers"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 		Model:    "Example Printer Model",
 	}
 
-	createdPrinter, _, err := jamfClient.ClassicPrinters.Create(context.Background(), newPrinter)
+	createdPrinter, _, err := jamfClient.ClassicAPI.Printers.Create(context.Background(), newPrinter)
 	if err != nil {
 		fmt.Printf("Error creating printer: %v\n", err)
 		return

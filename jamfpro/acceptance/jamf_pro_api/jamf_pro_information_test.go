@@ -40,7 +40,7 @@ import (
 
 func TestAcceptance_JamfProInformation_get(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.JamfProInformation
+	svc := acc.Client.JamfProAPI.JamfProInformation
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV2(ctx)

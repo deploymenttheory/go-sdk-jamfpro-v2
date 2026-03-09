@@ -22,7 +22,7 @@ func main() {
 	}
 
 	attrID := 1 // Replace with the desired user extension attribute ID to delete
-	_, err = jamfClient.ClassicUserExtensionAttributes.DeleteByID(context.Background(), attrID)
+	_, err = jamfClient.ClassicAPI.UserExtensionAttributes.DeleteByID(context.Background(), attrID)
 	if err != nil {
 		fmt.Printf("Error deleting user extension attribute by ID: %v\n", err)
 		return

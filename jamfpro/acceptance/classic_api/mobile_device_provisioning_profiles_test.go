@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/mobile_device_provisioning_profiles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_provisioning_profiles"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ import (
 func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMobileDeviceProvisioningProfiles
+	svc := acc.Client.ClassicAPI.MobileDeviceProvisioningProfiles
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -46,7 +46,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	require.NoError(t, err, "CreateByID should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created profile ID should be a positive integer")
 
 	profileID := created.ID
@@ -70,7 +70,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, p := range list.Profiles {
@@ -94,7 +94,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, profileID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, profileID, fetched.General.ID)
 	assert.Equal(t, profileName, fetched.General.Name)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.General.ID, fetched.General.Name)
@@ -110,7 +110,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, profileName)
 	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
+	assert.Equal(t, 200, fetchByNameResp.StatusCode())
 	assert.Equal(t, profileID, fetchedByName.General.ID)
 	assert.Equal(t, profileName, fetchedByName.General.Name)
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.General.ID, fetchedByName.General.Name)
@@ -131,7 +131,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 			acc.LogTestWarning(t, "GetByUUID returned error (may not be supported on this tenant): %v", err)
 		} else {
 			require.NotNil(t, fetchedByUUID)
-			assert.Equal(t, 200, uuidResp.StatusCode)
+			assert.Equal(t, 200, uuidResp.StatusCode())
 			assert.Equal(t, profileID, fetchedByUUID.General.ID)
 			acc.LogTestSuccess(t, "GetByUUID: ID=%d", fetchedByUUID.General.ID)
 		}
@@ -161,7 +161,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 		t.Skipf("Skipping update assertions: Classic API does not support XML-only provisioning profile updates on this tenant (status=%d)", updateResp.StatusCode())
 	}
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -185,7 +185,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 		t.Skipf("Skipping revert assertions: Classic API does not support XML-only provisioning profile updates on this tenant (status=%d)", revertResp.StatusCode())
 	}
 	require.NotNil(t, reverted)
-	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, revertResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -199,7 +199,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx7, profileID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, profileName, verified.General.Name, "name should reflect the revert")
 	acc.LogTestSuccess(t, "Name revert verified: %q", verified.General.Name)
 
@@ -214,7 +214,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx8, profileID)
 	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Profile ID=%d deleted", profileID)
 }
 
@@ -226,7 +226,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_lifecycle(t *testing.T) {
 func TestAcceptance_MobileDeviceProvisioningProfiles_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMobileDeviceProvisioningProfiles
+	svc := acc.Client.ClassicAPI.MobileDeviceProvisioningProfiles
 	ctx := context.Background()
 
 	profileName := acc.UniqueName("sdkv2_acc_acc-test-md-provisioning-profile-dbn")
@@ -262,7 +262,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_delete_by_name(t *testing.T
 	deleteResp, err := svc.DeleteByName(ctx2, profileName)
 	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Profile %q deleted by name", profileName)
 }
 
@@ -273,7 +273,7 @@ func TestAcceptance_MobileDeviceProvisioningProfiles_delete_by_name(t *testing.T
 func TestAcceptance_MobileDeviceProvisioningProfiles_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMobileDeviceProvisioningProfiles
+	svc := acc.Client.ClassicAPI.MobileDeviceProvisioningProfiles
 
 	t.Run("GetByID_NegativeID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), -1)

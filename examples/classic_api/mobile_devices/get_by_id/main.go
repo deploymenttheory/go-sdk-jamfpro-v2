@@ -23,7 +23,7 @@ func main() {
 	}
 
 	deviceID := "1" // Replace with the desired mobile device ID
-	device, _, err := jamfClient.ClassicMobileDevices.GetByID(context.Background(), deviceID)
+	device, _, err := jamfClient.ClassicAPI.MobileDevices.GetByID(context.Background(), deviceID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

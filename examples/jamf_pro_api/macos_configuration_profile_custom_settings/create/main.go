@@ -9,7 +9,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/macos_configuration_profile_custom_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/macos_configuration_profile_custom_settings"
 )
 
 func main() {
@@ -36,11 +36,11 @@ func main() {
 		},
 	}
 
-	result, resp, err := jamfClient.MacOSConfigProfileCustomSettings.Create(context.Background(), profile)
+	result, resp, err := jamfClient.JamfProAPI.MacosConfigProfileCustomSettings.Create(context.Background(), profile)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("Configuration profile created successfully (status: %d)\n", resp.StatusCode)
+	fmt.Printf("Configuration profile created successfully (status: %d)\n", resp.StatusCode())
 	fmt.Printf("New profile UUID: %s\n", result.UUID)
 }

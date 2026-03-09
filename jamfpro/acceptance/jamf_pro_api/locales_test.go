@@ -45,7 +45,7 @@ import (
 
 func TestAcceptance_Locales_list(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Locales
+	svc := acc.Client.JamfProAPI.Locales
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx)

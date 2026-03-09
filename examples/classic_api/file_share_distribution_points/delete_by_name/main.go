@@ -22,7 +22,7 @@ func main() {
 	}
 
 	dpName := "Main File Share DP" // Replace with the desired distribution point name to delete
-	_, err = jamfClient.ClassicFileShareDistributionPoints.DeleteByName(context.Background(), dpName)
+	_, err = jamfClient.ClassicAPI.FileShareDistributionPoints.DeleteByName(context.Background(), dpName)
 	if err != nil {
 		fmt.Printf("Error deleting file share distribution point by name: %v\n", err)
 		return

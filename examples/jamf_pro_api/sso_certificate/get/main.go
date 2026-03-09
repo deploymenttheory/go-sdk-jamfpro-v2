@@ -19,7 +19,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
-	result, _, err := jamfClient.SsoCertificate.GetV2(context.Background())
+	result, _, err := jamfClient.JamfProAPI.SsoCertificate.GetV2(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

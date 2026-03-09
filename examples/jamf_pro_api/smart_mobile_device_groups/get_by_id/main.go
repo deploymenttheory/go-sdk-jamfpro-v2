@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupID := "1" // Replace with the desired smart mobile device group ID
-	result, _, err := jamfClient.SmartMobileDeviceGroups.GetByID(context.Background(), groupID)
+	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetByID(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

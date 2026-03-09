@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	result, _, err := jamfClient.StartupStatus.GetV1(context.Background())
+	result, _, err := jamfClient.JamfProAPI.StartupStatus.GetV1(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

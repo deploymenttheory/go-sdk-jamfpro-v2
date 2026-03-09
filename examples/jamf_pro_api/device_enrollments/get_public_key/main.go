@@ -22,11 +22,11 @@ func main() {
 
 	ctx := context.Background()
 
-	publicKey, resp, err := jamfClient.DeviceEnrollments.GetPublicKeyV1(ctx)
+	publicKey, resp, err := jamfClient.JamfProAPI.DeviceEnrollments.GetPublicKeyV1(ctx)
 	if err != nil {
 		log.Fatalf("Failed to get device enrollments public key: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Public Key (PEM format):\n%s\n", string(publicKey))
 }

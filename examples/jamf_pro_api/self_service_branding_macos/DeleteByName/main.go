@@ -21,7 +21,7 @@ func main() {
 	}
 
 	brandingName := "Corporate Branding" // Replace with the desired branding configuration name to delete
-	_, err = jamfClient.SelfServiceBrandingMacOS.DeleteByName(context.Background(), brandingName)
+	_, err = jamfClient.JamfProAPI.SelfServiceBrandingMacos.DeleteByName(context.Background(), brandingName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

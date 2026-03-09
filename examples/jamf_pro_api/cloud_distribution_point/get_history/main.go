@@ -22,7 +22,7 @@ func main() {
 	}
 
 	// Example 1: Get all history
-	result, _, err := jamfClient.CloudDistributionPoint.GetHistoryV1(context.Background(), nil)
+	result, _, err := jamfClient.JamfProAPI.CloudDistributionPoint.GetHistoryV1(context.Background(), nil)
 	if err != nil {
 		fmt.Printf("Error getting cloud distribution point history: %v\n", err)
 		return
@@ -35,7 +35,7 @@ func main() {
 		"filter": `username==admin`,
 		"sort":   "date:desc",
 	}
-	result, _, err = jamfClient.CloudDistributionPoint.GetHistoryV1(context.Background(), rsqlQuery)
+	result, _, err = jamfClient.JamfProAPI.CloudDistributionPoint.GetHistoryV1(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error getting filtered history: %v\n", err)
 		return
@@ -48,7 +48,7 @@ func main() {
 		"page":      "0",
 		"page-size": "10",
 	}
-	result, _, err = jamfClient.CloudDistributionPoint.GetHistoryV1(context.Background(), rsqlQuery)
+	result, _, err = jamfClient.JamfProAPI.CloudDistributionPoint.GetHistoryV1(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error getting paginated history: %v\n", err)
 		return

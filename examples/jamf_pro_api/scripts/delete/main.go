@@ -21,7 +21,7 @@ func main() {
 	}
 
 	id := "1" // Replace with the desired script ID
-	_, err = jamfClient.Scripts.DeleteScriptByIDV1(context.Background(), id)
+	_, err = jamfClient.JamfProAPI.Scripts.DeleteScriptByIDV1(context.Background(), id)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

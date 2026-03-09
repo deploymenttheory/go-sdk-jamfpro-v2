@@ -28,12 +28,12 @@ func main() {
 		"sort":      "id:asc",
 	}
 
-	enrollments, resp, err := jamfClient.DeviceEnrollments.ListV1(ctx, rsqlQuery)
+	enrollments, resp, err := jamfClient.JamfProAPI.DeviceEnrollments.ListV1(ctx, rsqlQuery)
 	if err != nil {
 		log.Fatalf("Failed to list device enrollments: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Total Count: %d\n", enrollments.TotalCount)
 	fmt.Printf("Results:\n")
 	for _, enrollment := range enrollments.Results {

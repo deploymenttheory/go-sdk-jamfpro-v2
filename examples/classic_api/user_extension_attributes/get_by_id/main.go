@@ -23,7 +23,7 @@ func main() {
 	}
 
 	attrID := 1 // Replace with the desired user extension attribute ID
-	attr, _, err := jamfClient.ClassicUserExtensionAttributes.GetByID(context.Background(), attrID)
+	attr, _, err := jamfClient.ClassicAPI.UserExtensionAttributes.GetByID(context.Background(), attrID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

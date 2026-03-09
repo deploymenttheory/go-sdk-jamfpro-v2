@@ -21,7 +21,7 @@ func main() {
 	}
 
 	prestageID := "1" // Replace with the desired prestage ID to delete
-	_, err = jamfClient.MobileDevicePrestages.DeleteByIDV3(context.Background(), prestageID)
+	_, err = jamfClient.JamfProAPI.MobileDevicePrestages.DeleteByIDV3(context.Background(), prestageID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

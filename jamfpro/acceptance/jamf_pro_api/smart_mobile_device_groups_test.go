@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_mobile_device_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/smart_mobile_device_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -21,7 +21,7 @@ import (
 func TestAcceptance_SmartMobileDeviceGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartMobileDeviceGroups
+	svc := acc.Client.JamfProAPI.SmartMobileDeviceGroups
 	ctx := context.Background()
 
 	// 1. Create
@@ -113,7 +113,7 @@ func TestAcceptance_SmartMobileDeviceGroups_lifecycle(t *testing.T) {
 func TestAcceptance_SmartMobileDeviceGroups_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartMobileDeviceGroups
+	svc := acc.Client.JamfProAPI.SmartMobileDeviceGroups
 	ctx := context.Background()
 
 	groupName := acc.UniqueName("sdkv2_acc_rsql-smart-md")
@@ -149,7 +149,7 @@ func TestAcceptance_SmartMobileDeviceGroups_list_with_rsql_filter(t *testing.T) 
 	list, listResp, err := svc.List(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, g := range list.Results {
@@ -170,7 +170,7 @@ func TestAcceptance_SmartMobileDeviceGroups_list_with_rsql_filter(t *testing.T) 
 func TestAcceptance_SmartMobileDeviceGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartMobileDeviceGroups
+	svc := acc.Client.JamfProAPI.SmartMobileDeviceGroups
 
 	t.Run("GetByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), "")
@@ -221,7 +221,7 @@ func TestAcceptance_SmartMobileDeviceGroups_validation_errors(t *testing.T) {
 func TestAcceptance_SmartMobileDeviceGroups_list(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartMobileDeviceGroups
+	svc := acc.Client.JamfProAPI.SmartMobileDeviceGroups
 	ctx := context.Background()
 
 	list, resp, err := svc.List(ctx, map[string]string{"page": "0", "page-size": "100"})
@@ -239,7 +239,7 @@ func TestAcceptance_SmartMobileDeviceGroups_list(t *testing.T) {
 func TestAcceptance_SmartMobileDeviceGroups_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartMobileDeviceGroups
+	svc := acc.Client.JamfProAPI.SmartMobileDeviceGroups
 	ctx := context.Background()
 
 	list, resp, err := svc.List(ctx, map[string]string{"page": "0", "page-size": "1"})
@@ -265,7 +265,7 @@ func TestAcceptance_SmartMobileDeviceGroups_get_by_id(t *testing.T) {
 func TestAcceptance_SmartMobileDeviceGroups_get_membership(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartMobileDeviceGroups
+	svc := acc.Client.JamfProAPI.SmartMobileDeviceGroups
 	ctx := context.Background()
 
 	list, resp, err := svc.List(ctx, map[string]string{"page": "0", "page-size": "1"})

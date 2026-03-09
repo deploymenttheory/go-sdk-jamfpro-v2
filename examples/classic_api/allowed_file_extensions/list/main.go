@@ -25,7 +25,7 @@ func main() {
 	}
 
 	// Call the List function to retrieve the list of allowed file extensions
-	list, _, err := jamfClient.ClassicAllowedFileExtensions.List(context.Background())
+	list, _, err := jamfClient.ClassicAPI.AllowedFileExtensions.List(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -23,7 +23,7 @@ func main() {
 
 	clientManagementID := "your-client-management-id" // Replace with the desired client management ID
 
-	result, _, err := jamfClient.DeclarativeDeviceManagement.GetStatusItemsV1(context.Background(), clientManagementID)
+	result, _, err := jamfClient.JamfProAPI.DeclarativeDeviceManagement.GetStatusItemsV1(context.Background(), clientManagementID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -41,7 +41,7 @@ import (
 
 func TestAcceptance_JamfProVersion_get_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.JamfProVersion
+	svc := acc.Client.JamfProAPI.JamfProVersion
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV1(ctx)

@@ -5,14 +5,14 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_certificate"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/sso_certificate"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestAcceptance_SsoCertificate_get_v2(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoCertificate
+	svc := acc.Client.JamfProAPI.SsoCertificate
 	ctx := context.Background()
 	result, resp, err := svc.GetV2(ctx)
 	require.NoError(t, err)
@@ -25,7 +25,7 @@ func TestAcceptance_SsoCertificate_get_v2(t *testing.T) {
 
 func TestAcceptance_SsoCertificate_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoCertificate
+	svc := acc.Client.JamfProAPI.SsoCertificate
 	ctx := context.Background()
 
 	// Create a new certificate
@@ -69,7 +69,7 @@ func TestAcceptance_SsoCertificate_lifecycle(t *testing.T) {
 
 func TestAcceptance_SsoCertificate_update_v2(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoCertificate
+	svc := acc.Client.JamfProAPI.SsoCertificate
 	ctx := context.Background()
 
 	// This test requires a valid keystore file, which we don't have in the test environment
@@ -93,7 +93,7 @@ func TestAcceptance_SsoCertificate_update_v2(t *testing.T) {
 
 func TestAcceptance_SsoCertificate_parse_v2(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoCertificate
+	svc := acc.Client.JamfProAPI.SsoCertificate
 	ctx := context.Background()
 
 	// This test requires a valid keystore file, which we don't have in the test environment

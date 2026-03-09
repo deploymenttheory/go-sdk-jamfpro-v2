@@ -41,11 +41,11 @@ import (
 func TestAcceptance_JamfManagementFramework_redeploy_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfManagementFramework
+	svc := acc.Client.JamfProAPI.JamfManagementFramework
 	ctx := context.Background()
 
 	// Get a computer ID from inventory
-	list, _, err := acc.Client.ComputerInventory.ListV3(ctx, nil)
+	list, _, err := acc.Client.JamfProAPI.ComputerInventory.ListV3(ctx, nil)
 	require.NoError(t, err, "failed to list computer inventory")
 
 	if list == nil || list.TotalCount == 0 {
@@ -72,7 +72,7 @@ func TestAcceptance_JamfManagementFramework_redeploy_v1(t *testing.T) {
 func TestAcceptance_JamfManagementFramework_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfManagementFramework
+	svc := acc.Client.JamfProAPI.JamfManagementFramework
 
 	t.Run("RedeployV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.RedeployV1(context.Background(), "")

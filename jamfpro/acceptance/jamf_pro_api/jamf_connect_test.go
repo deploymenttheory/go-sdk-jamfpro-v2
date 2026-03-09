@@ -59,7 +59,7 @@ import (
 func TestAcceptance_JamfConnect_get_settings(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfConnect
+	svc := acc.Client.JamfProAPI.JamfConnect
 	ctx := context.Background()
 
 	// Get Jamf Connect settings
@@ -77,7 +77,7 @@ func TestAcceptance_JamfConnect_get_settings(t *testing.T) {
 func TestAcceptance_JamfConnect_list_and_get_profiles(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfConnect
+	svc := acc.Client.JamfProAPI.JamfConnect
 	ctx := context.Background()
 
 	// List all config profiles
@@ -113,7 +113,7 @@ func TestAcceptance_JamfConnect_list_and_get_profiles(t *testing.T) {
 func TestAcceptance_JamfConnect_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfConnect
+	svc := acc.Client.JamfProAPI.JamfConnect
 	ctx := context.Background()
 
 	// Test empty UUID validation

@@ -19,12 +19,12 @@ func main() {
 	// Replace with actual group platform ID
 	platformID := "platform-id-here"
 
-	group, resp, err := client.Groups.GetByIDV1(ctx, platformID)
+	group, resp, err := client.JamfProAPI.Groups.GetByIDV1(ctx, platformID)
 	if err != nil {
 		log.Fatalf("Error getting group: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Group Platform ID: %s\n", group.GroupPlatformId)
 	fmt.Printf("Group Jamf Pro ID: %s\n", group.GroupJamfProId)
 	fmt.Printf("Group Name: %s\n", group.GroupName)

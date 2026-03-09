@@ -21,7 +21,7 @@ func main() {
 	}
 
 	id := "1" // Replace with the desired script ID
-	data, _, err := jamfClient.Scripts.DownloadScriptByIDV1(context.Background(), id)
+	data, _, err := jamfClient.JamfProAPI.Scripts.DownloadScriptByIDV1(context.Background(), id)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

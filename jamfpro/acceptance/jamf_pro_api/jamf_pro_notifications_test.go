@@ -40,7 +40,7 @@ import (
 func TestAcceptance_JamfProNotifications_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProNotifications
+	svc := acc.Client.JamfProAPI.JamfProNotifications
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "GetForUserAndSiteV1", "Getting notifications for current user and site")
@@ -63,7 +63,7 @@ func TestAcceptance_JamfProNotifications_get_v1(t *testing.T) {
 func TestAcceptance_JamfProNotifications_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProNotifications
+	svc := acc.Client.JamfProAPI.JamfProNotifications
 
 	t.Run("DeleteByTypeAndIDV1_EmptyType", func(t *testing.T) {
 		_, err := svc.DeleteByTypeAndIDV1(context.Background(), "", "1")

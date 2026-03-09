@@ -22,7 +22,7 @@ func main() {
 	}
 
 	itemID := 1 // Replace with the desired dock item ID to delete
-	_, err = jamfClient.ClassicDockItems.DeleteByID(context.Background(), itemID)
+	_, err = jamfClient.ClassicAPI.DockItems.DeleteByID(context.Background(), itemID)
 	if err != nil {
 		fmt.Printf("Error deleting dock item by ID: %v\n", err)
 		return

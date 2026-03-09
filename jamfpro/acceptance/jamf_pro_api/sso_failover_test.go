@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_SsoFailover_get_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoFailover
+	svc := acc.Client.JamfProAPI.SsoFailover
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV1(ctx)
@@ -24,7 +24,7 @@ func TestAcceptance_SsoFailover_get_v1(t *testing.T) {
 
 func TestAcceptance_SsoFailover_regenerate_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoFailover
+	svc := acc.Client.JamfProAPI.SsoFailover
 	ctx := context.Background()
 
 	// Get current failover URL

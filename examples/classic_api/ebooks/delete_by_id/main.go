@@ -22,7 +22,7 @@ func main() {
 	}
 
 	ebookID := 1 // Replace with the desired ebook ID to delete
-	_, err = jamfClient.ClassicEbooks.DeleteByID(context.Background(), ebookID)
+	_, err = jamfClient.ClassicAPI.Ebooks.DeleteByID(context.Background(), ebookID)
 	if err != nil {
 		fmt.Printf("Error deleting ebook by ID: %v\n", err)
 		return

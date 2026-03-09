@@ -22,12 +22,12 @@ func main() {
 
 	ctx := context.Background()
 
-	settings, resp, err := client.ClassicComputerInventoryCollection.Get(ctx)
+	settings, resp, err := client.ClassicAPI.ComputerInventoryCollection.Get(ctx)
 	if err != nil {
 		log.Fatalf("Get failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Local User Accounts: %v\n", settings.LocalUserAccounts)
 	fmt.Printf("Home Directory Sizes: %v\n", settings.HomeDirectorySizes)
 	fmt.Printf("Hidden Accounts: %v\n", settings.HiddenAccounts)

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_ldap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_ldap"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -15,7 +15,7 @@ func TestCloudLdap_GetDefaults(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.CloudLdap
+	svc := acc.Client.JamfProAPI.CloudLdap
 
 	mappings, _, err := svc.GetDefaultMappingsV2(ctx, "GOOGLE")
 	if err != nil {
@@ -41,7 +41,7 @@ func TestCloudLdap_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.CloudLdap
+	svc := acc.Client.JamfProAPI.CloudLdap
 
 	displayName := acc.UniqueName("sdkv2_acc_Test Google LDAP")
 

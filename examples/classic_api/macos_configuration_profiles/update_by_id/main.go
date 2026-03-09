@@ -7,8 +7,8 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/macos_configuration_profiles"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/macos_configuration_profiles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 )
 
 func main() {
@@ -39,7 +39,7 @@ func main() {
 		},
 	}
 
-	updated, _, err := jamfClient.ClassicMacOSConfigurationProfiles.UpdateByID(context.Background(), 1, updateReq)
+	updated, _, err := jamfClient.ClassicAPI.MacOSConfigurationProfiles.UpdateByID(context.Background(), 1, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

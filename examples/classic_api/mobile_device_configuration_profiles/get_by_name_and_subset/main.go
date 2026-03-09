@@ -24,7 +24,7 @@ func main() {
 
 	profileName := "Wi-Fi Profile"
 	subset := "General" // Subset values: General, Scope, SelfService
-	profile, _, err := jamfClient.ClassicMobileDeviceConfigurationProfiles.GetByNameWithSubset(context.Background(), profileName, subset)
+	profile, _, err := jamfClient.ClassicAPI.MobileDeviceConfigurationProfiles.GetByNameWithSubset(context.Background(), profileName, subset)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -22,7 +22,7 @@ func main() {
 	}
 
 	id := "1" // Replace with the desired script ID
-	result, _, err := jamfClient.Scripts.GetScriptHistoryV1(context.Background(), id, nil)
+	result, _, err := jamfClient.JamfProAPI.Scripts.GetScriptHistoryV1(context.Background(), id, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

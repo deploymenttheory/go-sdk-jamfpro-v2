@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/adcs_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/adcs_settings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -14,7 +14,7 @@ import (
 func TestAdcsSettings_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdcsSettings
+	svc := acc.Client.JamfProAPI.AdcsSettings
 	ctx := context.Background()
 
 	displayName := acc.UniqueName("sdkv2_acc_Test ADCS")
@@ -91,7 +91,7 @@ func TestAdcsSettings_Lifecycle(t *testing.T) {
 func TestAdcsSettings_ValidateCertificates(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdcsSettings
+	svc := acc.Client.JamfProAPI.AdcsSettings
 	ctx := context.Background()
 
 	serverCertReq := &adcs_settings.ValidateCertificateRequest{

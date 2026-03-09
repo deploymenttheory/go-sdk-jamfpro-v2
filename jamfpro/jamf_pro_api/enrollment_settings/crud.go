@@ -1,0 +1,52 @@
+package enrollment_settings
+
+import (
+	"context"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
+)
+
+type (
+	// EnrollmentSettingsServiceInterface defines the interface for enrollment settings operations (v4).
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
+	EnrollmentSettingsServiceInterface interface {
+		// GetV4 retrieves the current enrollment settings (Get Enrollment Settings).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
+		GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *resty.Response, error)
+	}
+
+	// Service handles communication with the enrollment settings-related methods of the Jamf Pro API.
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
+	EnrollmentSettings struct {
+		client interfaces.HTTPClient
+	}
+)
+
+var _ EnrollmentSettingsServiceInterface = (*EnrollmentSettings)(nil)
+
+func NewEnrollmentSettings(client interfaces.HTTPClient) *EnrollmentSettings {
+	return &EnrollmentSettings{client: client}
+}
+
+// GetV4 retrieves the current enrollment settings.
+// URL: GET /api/v4/enrollment
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
+func (s *EnrollmentSettings) GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *resty.Response, error) {
+	var result ResourceEnrollmentSettingsV4
+	endpoint := EndpointEnrollmentSettingsV4
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/dock_items"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -66,7 +66,7 @@ import (
 func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DockItems
+	svc := acc.Client.JamfProAPI.DockItems
 	ctx := context.Background()
 
 	// 1. Create
@@ -80,7 +80,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateDockItemV1 should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	dockItemID := created.ID
@@ -105,7 +105,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, dockItemID, fetched.ID)
 	assert.Equal(t, createReq.Name, fetched.Name)
 	assert.Equal(t, createReq.Path, fetched.Path)
@@ -123,7 +123,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, dockItemID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	// API may not return body on update; verify via re-fetch below
 	acc.LogTestSuccess(t, "Dock item updated: ID=%s", dockItemID)
 
@@ -140,7 +140,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx, dockItemID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Dock item ID=%s deleted", dockItemID)
 }
 
@@ -151,7 +151,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 func TestAcceptance_DockItems_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DockItems
+	svc := acc.Client.JamfProAPI.DockItems
 
 	t.Run("GetDockItemByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")

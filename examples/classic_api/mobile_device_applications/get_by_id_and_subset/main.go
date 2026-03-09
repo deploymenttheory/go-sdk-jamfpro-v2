@@ -24,7 +24,7 @@ func main() {
 
 	appID := 1
 	subset := "General" // Subset values: General, Scope, SelfService, VPP, AppConfiguration
-	app, _, err := jamfClient.ClassicMobileDeviceApplications.GetByIDAndSubset(context.Background(), appID, subset)
+	app, _, err := jamfClient.ClassicAPI.MobileDeviceApplications.GetByIDAndSubset(context.Background(), appID, subset)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

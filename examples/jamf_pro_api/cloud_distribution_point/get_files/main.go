@@ -22,7 +22,7 @@ func main() {
 	}
 
 	// Example 1: Get all files
-	result, _, err := jamfClient.CloudDistributionPoint.GetFilesV1(context.Background(), nil)
+	result, _, err := jamfClient.JamfProAPI.CloudDistributionPoint.GetFilesV1(context.Background(), nil)
 	if err != nil {
 		fmt.Printf("Error getting cloud distribution point files: %v\n", err)
 		return
@@ -35,7 +35,7 @@ func main() {
 		"filter": `status==complete`,
 		"sort":   "fileName:asc",
 	}
-	result, _, err = jamfClient.CloudDistributionPoint.GetFilesV1(context.Background(), rsqlQuery)
+	result, _, err = jamfClient.JamfProAPI.CloudDistributionPoint.GetFilesV1(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error getting filtered files: %v\n", err)
 		return
@@ -48,7 +48,7 @@ func main() {
 		"page":      "0",
 		"page-size": "25",
 	}
-	result, _, err = jamfClient.CloudDistributionPoint.GetFilesV1(context.Background(), rsqlQuery)
+	result, _, err = jamfClient.JamfProAPI.CloudDistributionPoint.GetFilesV1(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error getting paginated files: %v\n", err)
 		return

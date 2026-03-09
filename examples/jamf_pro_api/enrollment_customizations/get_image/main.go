@@ -20,12 +20,12 @@ func main() {
 	// Replace with actual image ID
 	imageID := "123"
 
-	imageData, resp, err := client.EnrollmentCustomizations.GetImageByIdV2(ctx, imageID)
+	imageData, resp, err := client.JamfProAPI.EnrollmentCustomizations.GetImageByIdV2(ctx, imageID)
 	if err != nil {
 		log.Fatalf("Error downloading image: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Downloaded image size: %d bytes\n", len(imageData))
 
 	// Save the image to a file

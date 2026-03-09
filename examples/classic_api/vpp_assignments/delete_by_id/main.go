@@ -22,7 +22,7 @@ func main() {
 	}
 
 	vppAssignmentID := 1 // Replace with the desired VPP assignment ID to delete
-	_, err = jamfClient.ClassicVPPAssignments.DeleteByID(context.Background(), vppAssignmentID)
+	_, err = jamfClient.ClassicAPI.VppAssignments.DeleteByID(context.Background(), vppAssignmentID)
 	if err != nil {
 		fmt.Printf("Error deleting VPP assignment by ID: %v\n", err)
 		return

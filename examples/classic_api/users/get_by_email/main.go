@@ -22,7 +22,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	user, _, err := jamfClient.ClassicUsers.GetByEmail(context.Background(), "admin@example.com")
+	user, _, err := jamfClient.ClassicAPI.Users.GetByEmail(context.Background(), "admin@example.com")
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

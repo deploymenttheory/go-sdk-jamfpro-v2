@@ -22,7 +22,7 @@ func main() {
 	}
 
 	ebookName := "Sample Ebook" // Replace with the desired ebook name to delete
-	_, err = jamfClient.ClassicEbooks.DeleteByName(context.Background(), ebookName)
+	_, err = jamfClient.ClassicAPI.Ebooks.DeleteByName(context.Background(), ebookName)
 	if err != nil {
 		fmt.Printf("Error deleting ebook by name: %v\n", err)
 		return

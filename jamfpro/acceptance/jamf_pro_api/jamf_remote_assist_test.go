@@ -43,7 +43,7 @@ import (
 func TestAcceptance_JamfRemoteAssist_list_sessions(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfRemoteAssist
+	svc := acc.Client.JamfProAPI.JamfRemoteAssist
 	ctx := context.Background()
 
 	// 1. ListSessionsV1
@@ -52,7 +52,7 @@ func TestAcceptance_JamfRemoteAssist_list_sessions(t *testing.T) {
 	sessionsV1, respV1, err := svc.ListSessionsV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, respV1)
-	assert.Equal(t, 200, respV1.StatusCode)
+	assert.Equal(t, 200, respV1.StatusCode())
 	assert.GreaterOrEqual(t, len(sessionsV1), 0)
 	acc.LogTestSuccess(t, "ListSessionsV1: %d session(s)", len(sessionsV1))
 
@@ -63,7 +63,7 @@ func TestAcceptance_JamfRemoteAssist_list_sessions(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, listV2)
 	require.NotNil(t, respV2)
-	assert.Equal(t, 200, respV2.StatusCode)
+	assert.Equal(t, 200, respV2.StatusCode())
 	assert.GreaterOrEqual(t, listV2.TotalCount, 0)
 	acc.LogTestSuccess(t, "ListSessionsV2: totalCount=%d", listV2.TotalCount)
 
@@ -85,7 +85,7 @@ func TestAcceptance_JamfRemoteAssist_list_sessions(t *testing.T) {
 	sessionV1, getV1Resp, err := svc.GetSessionByIDV1(ctx, sessionID)
 	require.NoError(t, err)
 	require.NotNil(t, sessionV1)
-	assert.Equal(t, 200, getV1Resp.StatusCode)
+	assert.Equal(t, 200, getV1Resp.StatusCode())
 	assert.Equal(t, sessionID, sessionV1.SessionID)
 	acc.LogTestSuccess(t, "GetSessionByIDV1: sessionID=%s statusType=%s", sessionV1.SessionID, sessionV1.StatusType)
 
@@ -95,7 +95,7 @@ func TestAcceptance_JamfRemoteAssist_list_sessions(t *testing.T) {
 	sessionV2, getV2Resp, err := svc.GetSessionByIDV2(ctx, sessionID)
 	require.NoError(t, err)
 	require.NotNil(t, sessionV2)
-	assert.Equal(t, 200, getV2Resp.StatusCode)
+	assert.Equal(t, 200, getV2Resp.StatusCode())
 	assert.Equal(t, sessionID, sessionV2.SessionID)
 	acc.LogTestSuccess(t, "GetSessionByIDV2: sessionID=%s statusType=%s", sessionV2.SessionID, sessionV2.StatusType)
 }
@@ -104,7 +104,7 @@ func TestAcceptance_JamfRemoteAssist_list_sessions(t *testing.T) {
 func TestAcceptance_JamfRemoteAssist_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfRemoteAssist
+	svc := acc.Client.JamfProAPI.JamfRemoteAssist
 
 	t.Run("GetSessionByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetSessionByIDV1(context.Background(), "")

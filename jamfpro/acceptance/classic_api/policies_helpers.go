@@ -7,8 +7,8 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/policies"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/policies"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/require"
 )
 
@@ -121,7 +121,7 @@ func createMinimalPolicy(t *testing.T, name string) *policies.ResourcePolicy {
 
 // createPolicyWithCleanup creates a policy and registers cleanup.
 // Returns the created policy response and the policy ID.
-func createPolicyWithCleanup(t *testing.T, ctx context.Context, svc *policies.Service, req *policies.ResourcePolicy) (*policies.CreateUpdateResponse, int) {
+func createPolicyWithCleanup(t *testing.T, ctx context.Context, svc *policies.Policies, req *policies.ResourcePolicy) (*policies.CreateUpdateResponse, int) {
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel1()
 

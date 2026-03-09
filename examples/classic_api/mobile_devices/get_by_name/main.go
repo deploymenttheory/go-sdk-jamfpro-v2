@@ -23,7 +23,7 @@ func main() {
 	}
 
 	deviceName := "iPhone-01" // Replace with the desired mobile device name
-	device, _, err := jamfClient.ClassicMobileDevices.GetByName(context.Background(), deviceName)
+	device, _, err := jamfClient.ClassicAPI.MobileDevices.GetByName(context.Background(), deviceName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

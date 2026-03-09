@@ -24,7 +24,7 @@ func main() {
 	}
 
 	accountID := 1
-	account, _, err := jamfClient.ClassicAccounts.GetByID(context.Background(), accountID)
+	account, _, err := jamfClient.ClassicAPI.Accounts.GetByID(context.Background(), accountID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

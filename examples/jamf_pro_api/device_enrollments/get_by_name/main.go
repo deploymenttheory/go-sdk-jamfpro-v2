@@ -23,12 +23,12 @@ func main() {
 	ctx := context.Background()
 	enrollmentName := "Example Device Enrollment Instance"
 
-	enrollment, resp, err := jamfClient.DeviceEnrollments.GetByNameV1(ctx, enrollmentName)
+	enrollment, resp, err := jamfClient.JamfProAPI.DeviceEnrollments.GetByNameV1(ctx, enrollmentName)
 	if err != nil {
 		log.Fatalf("Failed to get device enrollment by name: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Device Enrollment:\n")
 	fmt.Printf("  ID: %s\n", enrollment.ID)
 	fmt.Printf("  Name: %s\n", enrollment.Name)

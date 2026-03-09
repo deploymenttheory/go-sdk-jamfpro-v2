@@ -23,7 +23,7 @@ func main() {
 	}
 
 	profileUUID := "550e8400-e29b-41d4-a716-446655440000"
-	profile, _, err := jamfClient.ClassicMobileDeviceProvisioningProfiles.GetByUUID(context.Background(), profileUUID)
+	profile, _, err := jamfClient.ClassicAPI.MobileDeviceProvisioningProfiles.GetByUUID(context.Background(), profileUUID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

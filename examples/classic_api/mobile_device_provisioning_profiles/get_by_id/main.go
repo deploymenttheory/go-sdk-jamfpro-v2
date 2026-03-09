@@ -23,7 +23,7 @@ func main() {
 	}
 
 	profileID := 1
-	profile, _, err := jamfClient.ClassicMobileDeviceProvisioningProfiles.GetByID(context.Background(), profileID)
+	profile, _, err := jamfClient.ClassicAPI.MobileDeviceProvisioningProfiles.GetByID(context.Background(), profileID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

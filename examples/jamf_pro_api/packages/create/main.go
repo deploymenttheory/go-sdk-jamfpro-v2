@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/packages"
 )
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
 		SuppressRegistration: packages.BoolPtr(false),
 	}
 
-	result, _, err := jamfClient.Packages.CreateV1(context.Background(), req)
+	result, _, err := jamfClient.JamfProAPI.Packages.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

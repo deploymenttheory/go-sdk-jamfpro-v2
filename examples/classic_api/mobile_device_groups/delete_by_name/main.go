@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupName := "go-sdk-v2-mobile-smart-group" // Replace with the desired mobile device group name to delete
-	_, err = jamfClient.ClassicMobileDeviceGroups.DeleteByName(context.Background(), groupName)
+	_, err = jamfClient.ClassicAPI.MobileDeviceGroups.DeleteByName(context.Background(), groupName)
 	if err != nil {
 		fmt.Printf("Error deleting mobile device group by name: %v\n", err)
 		return

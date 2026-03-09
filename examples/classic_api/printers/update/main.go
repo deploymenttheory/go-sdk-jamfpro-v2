@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/printers"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/printers"
 )
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 		Model:    "Updated Printer Model",
 	}
 
-	updatedPrinter, _, err := jamfClient.ClassicPrinters.UpdateByID(context.Background(), printerID, updateReq)
+	updatedPrinter, _, err := jamfClient.ClassicAPI.Printers.UpdateByID(context.Background(), printerID, updateReq)
 	if err != nil {
 		fmt.Printf("Error updating printer by ID: %v\n", err)
 		return

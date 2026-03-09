@@ -23,7 +23,7 @@ func main() {
 	}
 
 	profileID := 1 // Replace with the desired mobile device enrollment profile ID
-	profile, _, err := jamfClient.ClassicMobileDeviceEnrollmentProfiles.GetByID(context.Background(), profileID)
+	profile, _, err := jamfClient.ClassicAPI.MobileDeviceEnrollmentProfiles.GetByID(context.Background(), profileID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

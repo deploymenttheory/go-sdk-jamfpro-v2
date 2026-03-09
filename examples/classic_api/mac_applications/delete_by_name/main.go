@@ -22,7 +22,7 @@ func main() {
 	}
 
 	appName := "Sample Mac App" // Replace with the desired Mac application name to delete
-	_, err = jamfClient.ClassicMacApplications.DeleteByName(context.Background(), appName)
+	_, err = jamfClient.ClassicAPI.MacApplications.DeleteByName(context.Background(), appName)
 	if err != nil {
 		fmt.Printf("Error deleting Mac application by name: %v\n", err)
 		return

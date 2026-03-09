@@ -33,12 +33,12 @@ func main() {
 		log.Fatalf("Error getting file info: %v", err)
 	}
 
-	result, resp, err := client.EnrollmentCustomizations.UploadImageV2(ctx, file, fileInfo.Size(), fileInfo.Name())
+	result, resp, err := client.JamfProAPI.EnrollmentCustomizations.UploadImageV2(ctx, file, fileInfo.Size(), fileInfo.Name())
 	if err != nil {
 		log.Fatalf("Error uploading image: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Uploaded Image ID: %s\n", result.ID)
 	fmt.Printf("Image URL: %s\n", result.URL)
 }

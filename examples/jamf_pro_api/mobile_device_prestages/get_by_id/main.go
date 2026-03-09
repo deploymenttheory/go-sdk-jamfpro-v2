@@ -22,7 +22,7 @@ func main() {
 	}
 
 	prestageID := "1" // Replace with the desired prestage ID
-	result, _, err := jamfClient.MobileDevicePrestages.GetByIDV3(context.Background(), prestageID)
+	result, _, err := jamfClient.JamfProAPI.MobileDevicePrestages.GetByIDV3(context.Background(), prestageID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

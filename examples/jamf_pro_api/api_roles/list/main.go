@@ -22,7 +22,7 @@ func main() {
 	}
 
 	// Example 1: List all API roles
-	result, _, err := jamfClient.APIRoles.ListV1(context.Background(), nil)
+	result, _, err := jamfClient.JamfProAPI.ApiRoles.ListV1(context.Background(), nil)
 	if err != nil {
 		fmt.Printf("Error listing API roles: %v\n", err)
 		return
@@ -35,7 +35,7 @@ func main() {
 		"filter": `displayName=="Custom Role"`,
 		"sort":   "displayName:asc",
 	}
-	result, _, err = jamfClient.APIRoles.ListV1(context.Background(), rsqlQuery)
+	result, _, err = jamfClient.JamfProAPI.ApiRoles.ListV1(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error listing filtered roles: %v\n", err)
 		return

@@ -14,7 +14,7 @@ import (
 func TestAcceptance_VolumePurchasingSubscriptions_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.VolumePurchasingSubscriptions
+	svc := acc.Client.JamfProAPI.VolumePurchasingSubscriptions
 	ctx := context.Background()
 
 	list, resp, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "100"})
@@ -29,7 +29,7 @@ func TestAcceptance_VolumePurchasingSubscriptions_list_v1(t *testing.T) {
 func TestAcceptance_VolumePurchasingSubscriptions_get_by_idv1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.VolumePurchasingSubscriptions
+	svc := acc.Client.JamfProAPI.VolumePurchasingSubscriptions
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "1"})

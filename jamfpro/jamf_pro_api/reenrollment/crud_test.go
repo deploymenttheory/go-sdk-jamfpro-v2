@@ -1,0 +1,134 @@
+package reenrollment
+
+import (
+	"context"
+	"testing"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/reenrollment/mocks"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
+
+func setupMockService(t *testing.T) (*Reenrollment, *mocks.ReenrollmentMock) {
+	t.Helper()
+	mock := mocks.NewReenrollmentMock()
+	return NewReenrollment(mock), mock
+}
+
+func TestUnit_Reenrollment_Get_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetMock()
+
+	result, resp, err := svc.Get(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	assert.Equal(t, "DELETE_EVERYTHING", result.FlushMdmQueue)
+	assert.False(t, result.FlushPolicyHistory)
+}
+
+func TestUnit_Reenrollment_Update_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateMock()
+
+	request := &ResourceReenrollmentSettings{
+		FlushPolicyHistory: false, FlushLocationInformation: false,
+		FlushLocationInformationHistory: false, FlushExtensionAttributes: false,
+		FlushSoftwareUpdatePlans: false, FlushMdmQueue: "DELETE_EVERYTHING",
+	}
+	result, resp, err := svc.Update(context.Background(), request)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+}
+
+func TestUnit_Reenrollment_Update_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.Update(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_Reenrollment_GetHistory_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryMock()
+
+	result, resp, err := svc.GetHistory(context.Background(), map[string]string{"page": "0", "page-size": "100", "sort": "date:desc"})
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	assert.Equal(t, 1, result.TotalCount)
+	require.Len(t, result.Results, 1)
+	assert.Equal(t, "Test note", result.Results[0].Note)
+}
+
+func TestUnit_Reenrollment_AddHistoryNotes_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNotesMock()
+
+	request := &AddReenrollmentHistoryNotesRequest{Note: "Acceptance test note"}
+	result, resp, err := svc.AddHistoryNotes(context.Background(), request)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode())
+	assert.Equal(t, "Acceptance test note", result.Note)
+}
+
+func TestUnit_Reenrollment_AddHistoryNotes_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.AddHistoryNotes(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_Reenrollment_Get_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.Get(context.Background())
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_Reenrollment_GetHistory_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetHistory(context.Background(), nil)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+}
+
+func TestUnit_Reenrollment_ExportHistory_WithBody(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportHistoryMock()
+
+	page := 0
+	pageSize := 100
+	body := &ExportReenrollmentHistoryRequest{Page: &page, PageSize: &pageSize}
+	resp, data, err := svc.ExportHistory(context.Background(), nil, body)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, data)
+	require.Equal(t, 200, resp.StatusCode())
+}
+
+func TestUnit_Reenrollment_ExportHistory_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterExportHistoryMock()
+
+	resp, body, err := svc.ExportHistory(context.Background(), map[string]string{"page": "0", "page-size": "100"}, nil)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.NotNil(t, body)
+	assert.Equal(t, 200, resp.StatusCode())
+	assert.Greater(t, len(body), 0)
+}

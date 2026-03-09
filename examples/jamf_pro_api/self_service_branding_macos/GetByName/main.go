@@ -22,7 +22,7 @@ func main() {
 	}
 
 	brandingName := "Corporate Branding" // Replace with the desired branding configuration name
-	result, _, err := jamfClient.SelfServiceBrandingMacOS.GetByName(context.Background(), brandingName)
+	result, _, err := jamfClient.JamfProAPI.SelfServiceBrandingMacos.GetByName(context.Background(), brandingName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

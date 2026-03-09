@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/webhooks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/webhooks"
 )
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 		AuthenticationType: "NONE",
 	}
 
-	createdWebhook, _, err := jamfClient.ClassicWebhooks.Create(context.Background(), newWebhook)
+	createdWebhook, _, err := jamfClient.ClassicAPI.Webhooks.Create(context.Background(), newWebhook)
 	if err != nil {
 		fmt.Printf("Error creating webhook: %v\n", err)
 		return

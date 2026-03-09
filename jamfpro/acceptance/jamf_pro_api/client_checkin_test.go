@@ -45,7 +45,7 @@ import (
 
 func TestAcceptance_ClientCheckin_get(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClientCheckin
+	svc := acc.Client.JamfProAPI.ClientCheckin
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV3(ctx)

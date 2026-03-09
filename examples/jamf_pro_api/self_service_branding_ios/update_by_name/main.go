@@ -8,7 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_ios"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/self_service_branding_ios"
 )
 
 func main() {
@@ -35,7 +35,7 @@ func main() {
 		StatusBarTextColor:        "dark",
 	}
 
-	result, _, err := jamfClient.SelfServiceBrandingIOS.UpdateByNameV1(context.Background(), name, req)
+	result, _, err := jamfClient.JamfProAPI.SelfServiceBrandingIos.UpdateByNameV1(context.Background(), name, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

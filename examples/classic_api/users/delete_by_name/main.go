@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	_, err = jamfClient.ClassicUsers.DeleteByName(context.Background(), "go-sdk-v2-user")
+	_, err = jamfClient.ClassicAPI.Users.DeleteByName(context.Background(), "go-sdk-v2-user")
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

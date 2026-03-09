@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/gsx_connection"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/gsx_connection"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -60,7 +60,7 @@ import (
 func TestAcceptance_GSXConnection_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.GSXConnection
+	svc := acc.Client.JamfProAPI.GsxConnection
 	ctx := context.Background()
 
 	// Get current settings to preserve them
@@ -107,7 +107,7 @@ func TestAcceptance_GSXConnection_get_and_update(t *testing.T) {
 func TestAcceptance_GSXConnection_history(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.GSXConnection
+	svc := acc.Client.JamfProAPI.GsxConnection
 	ctx := context.Background()
 
 	// First, add a history note to ensure we have data to test with
@@ -154,7 +154,7 @@ func TestAcceptance_GSXConnection_history(t *testing.T) {
 func TestAcceptance_GSXConnection_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.GSXConnection
+	svc := acc.Client.JamfProAPI.GsxConnection
 	ctx := context.Background()
 
 	// Test nil request validation for UpdateV1

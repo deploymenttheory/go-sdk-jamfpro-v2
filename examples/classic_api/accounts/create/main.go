@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/accounts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/accounts"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 		Enabled:      "Enabled",
 	}
 
-	created, _, err := jamfClient.ClassicAccounts.Create(context.Background(), createReq)
+	created, _, err := jamfClient.ClassicAPI.Accounts.Create(context.Background(), createReq)
 	if err != nil {
 		fmt.Printf("Error creating account: %v\n", err)
 		return

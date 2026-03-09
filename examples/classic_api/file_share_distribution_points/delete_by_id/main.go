@@ -22,7 +22,7 @@ func main() {
 	}
 
 	dpID := 1 // Replace with the desired distribution point ID to delete
-	_, err = jamfClient.ClassicFileShareDistributionPoints.DeleteByID(context.Background(), dpID)
+	_, err = jamfClient.ClassicAPI.FileShareDistributionPoints.DeleteByID(context.Background(), dpID)
 	if err != nil {
 		fmt.Printf("Error deleting file share distribution point by ID: %v\n", err)
 		return

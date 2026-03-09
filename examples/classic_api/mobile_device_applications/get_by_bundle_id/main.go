@@ -23,7 +23,7 @@ func main() {
 	}
 
 	bundleID := "com.apple.mobilesafari" // Replace with the desired bundle ID
-	app, _, err := jamfClient.ClassicMobileDeviceApplications.GetByBundleID(context.Background(), bundleID)
+	app, _, err := jamfClient.ClassicAPI.MobileDeviceApplications.GetByBundleID(context.Background(), bundleID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

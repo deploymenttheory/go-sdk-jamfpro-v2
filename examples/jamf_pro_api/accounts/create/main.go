@@ -8,7 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/accounts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/accounts"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 		AccountType:               "DEFAULT",
 	}
 
-	result, _, err := jamfClient.Accounts.CreateV1(context.Background(), newAccount)
+	result, _, err := jamfClient.JamfProAPI.Accounts.CreateV1(context.Background(), newAccount)
 	if err != nil {
 		fmt.Printf("Error creating account: %v\n", err)
 		return

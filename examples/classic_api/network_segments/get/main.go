@@ -27,7 +27,7 @@ func main() {
 
 	// Example usage of GetNetworkSegmentByID
 	segmentID := 1 // Replace with the desired network segment ID
-	segment, _, err := jamfClient.ClassicNetworkSegments.GetByID(context.Background(), segmentID)
+	segment, _, err := jamfClient.ClassicAPI.NetworkSegments.GetByID(context.Background(), segmentID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

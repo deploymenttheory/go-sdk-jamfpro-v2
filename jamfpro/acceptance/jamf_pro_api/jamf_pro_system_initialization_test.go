@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_system_initialization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_pro_system_initialization"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -46,7 +46,7 @@ func TestAcceptance_JamfProSystemInitialization_initialize(t *testing.T) {
 		t.Skip("Skipping system initialization test (set JAMF_RUN_SYSTEM_INIT_TESTS=1 to run)")
 	}
 	acc.RequireClient(t)
-	svc := acc.Client.JamfProSystemInitialization
+	svc := acc.Client.JamfProAPI.JamfProSystemInitialization
 	ctx := context.Background()
 
 	request := &jamf_pro_system_initialization.ResourceSystemInitialize{
@@ -73,7 +73,7 @@ func TestAcceptance_JamfProSystemInitialization_initialize_database_connection(t
 		t.Skip("Skipping database initialization test (set JAMF_RUN_SYSTEM_INIT_TESTS=1 to run)")
 	}
 	acc.RequireClient(t)
-	svc := acc.Client.JamfProSystemInitialization
+	svc := acc.Client.JamfProAPI.JamfProSystemInitialization
 	ctx := context.Background()
 
 	password := os.Getenv("JAMF_DB_INIT_PASSWORD")

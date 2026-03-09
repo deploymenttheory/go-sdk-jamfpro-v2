@@ -8,10 +8,10 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/disk_encryption_configurations"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/dock_items"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/policies"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/disk_encryption_configurations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/dock_items"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/policies"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/scripts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -24,7 +24,7 @@ import (
 func TestAcceptance_Policies_minimum_config(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -48,7 +48,7 @@ func TestAcceptance_Policies_minimum_config(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, policyID, fetched.General.ID)
 	assert.Equal(t, policyName, fetched.General.Name)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.General.ID, fetched.General.Name)
@@ -64,7 +64,7 @@ func TestAcceptance_Policies_minimum_config(t *testing.T) {
 	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx3, policyName)
 	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
+	assert.Equal(t, 200, fetchByNameResp.StatusCode())
 	assert.Equal(t, policyID, fetchedByName.General.ID)
 	assert.Equal(t, policyName, fetchedByName.General.Name)
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.General.ID, fetchedByName.General.Name)
@@ -91,7 +91,7 @@ func TestAcceptance_Policies_minimum_config(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx4, policyID, updateReq)
 	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	assert.Equal(t, policyID, updated.ID, "updated policy ID should match")
 	acc.LogTestSuccess(t, "UpdateByID: ID=%d", updated.ID)
 
@@ -106,7 +106,7 @@ func TestAcceptance_Policies_minimum_config(t *testing.T) {
 	list, listResp, err := svc.List(ctx5)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -128,7 +128,7 @@ func TestAcceptance_Policies_minimum_config(t *testing.T) {
 func TestAcceptance_Policies_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
@@ -182,8 +182,8 @@ func TestAcceptance_Policies_validation_errors(t *testing.T) {
 
 func TestAcceptance_Policies_with_script(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
-	scriptSvc := acc.Client.Scripts
+	svc := acc.Client.ClassicAPI.Policies
+	scriptSvc := acc.Client.JamfProAPI.Scripts
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -207,7 +207,7 @@ func TestAcceptance_Policies_with_script(t *testing.T) {
 	createdScript, createScriptResp, err := scriptSvc.CreateScriptV1(ctx1, scriptReq)
 	require.NoError(t, err, "Create script should not return an error")
 	require.NotNil(t, createdScript)
-	assert.Equal(t, 201, createScriptResp.StatusCode)
+	assert.Equal(t, 201, createScriptResp.StatusCode())
 
 	scriptID := createdScript.ID
 	acc.LogTestSuccess(t, "Script created with ID=%s name=%q", scriptID, scriptName)
@@ -254,7 +254,7 @@ func TestAcceptance_Policies_with_script(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	require.Len(t, fetched.Scripts, 1, "Policy should have 1 script")
 	assert.Equal(t, scriptID, fetched.Scripts[0].ID)
 	assert.Equal(t, "After", fetched.Scripts[0].Priority)
@@ -267,7 +267,7 @@ func TestAcceptance_Policies_with_script(t *testing.T) {
 
 func TestAcceptance_Policies_maintenance(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating maintenance policy")
@@ -298,7 +298,7 @@ func TestAcceptance_Policies_maintenance(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.True(t, fetched.Maintenance.Recon)
 	assert.True(t, fetched.Maintenance.Permissions)
 	assert.True(t, fetched.Maintenance.SystemCache)
@@ -312,7 +312,7 @@ func TestAcceptance_Policies_maintenance(t *testing.T) {
 
 func TestAcceptance_Policies_files_and_processes(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating files and processes policy")
@@ -341,7 +341,7 @@ func TestAcceptance_Policies_files_and_processes(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, "/tmp/test_file.txt", fetched.FilesProcesses.SearchByPath)
 	assert.True(t, fetched.FilesProcesses.DeleteFile)
 	assert.True(t, fetched.FilesProcesses.UpdateLocateDatabase)
@@ -355,7 +355,7 @@ func TestAcceptance_Policies_files_and_processes(t *testing.T) {
 
 func TestAcceptance_Policies_self_service(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating self service policy")
@@ -387,7 +387,7 @@ func TestAcceptance_Policies_self_service(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.True(t, fetched.SelfService.UseForSelfService, "UseForSelfService should be true")
 	assert.Equal(t, "Test Self Service Policy", fetched.SelfService.SelfServiceDisplayName)
 	// Note: Some self service fields may not persist exactly as set
@@ -406,7 +406,7 @@ func TestAcceptance_Policies_self_service(t *testing.T) {
 
 func TestAcceptance_Policies_restart_options(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with restart options")
@@ -435,7 +435,7 @@ func TestAcceptance_Policies_restart_options(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Contains(t, fetched.Reboot.Message, "restart in 5 minutes")
 	assert.Equal(t, 5, fetched.Reboot.MinutesUntilReboot)
 	assert.True(t, fetched.Reboot.StartRebootTimerImmediately)
@@ -449,7 +449,7 @@ func TestAcceptance_Policies_restart_options(t *testing.T) {
 
 func TestAcceptance_Policies_user_interaction(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with user interaction")
@@ -475,7 +475,7 @@ func TestAcceptance_Policies_user_interaction(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Contains(t, fetched.UserInteraction.MessageStart, "about to run")
 	assert.True(t, fetched.UserInteraction.AllowUsersToDefer)
 	assert.Equal(t, 1440, fetched.UserInteraction.AllowDeferralMinutes)
@@ -489,8 +489,8 @@ func TestAcceptance_Policies_user_interaction(t *testing.T) {
 
 func TestAcceptance_Policies_dock_items(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
-	dockItemsSvc := acc.Client.ClassicDockItems
+	svc := acc.Client.ClassicAPI.Policies
+	dockItemsSvc := acc.Client.ClassicAPI.DockItems
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -512,7 +512,7 @@ func TestAcceptance_Policies_dock_items(t *testing.T) {
 	createdDock1, createDock1Resp, err := dockItemsSvc.Create(ctx1, dockItem1Req)
 	require.NoError(t, err, "Create dock item 1 should not return an error")
 	require.NotNil(t, createdDock1)
-	assert.Contains(t, []int{200, 201}, createDock1Resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createDock1Resp.StatusCode())
 
 	dockItem1ID := createdDock1.ID
 	acc.LogTestSuccess(t, "Dock item 1 created with ID=%d name=%q", dockItem1ID, dockItem1Name)
@@ -538,7 +538,7 @@ func TestAcceptance_Policies_dock_items(t *testing.T) {
 	createdDock2, createDock2Resp, err := dockItemsSvc.Create(ctx2, dockItem2Req)
 	require.NoError(t, err, "Create dock item 2 should not return an error")
 	require.NotNil(t, createdDock2)
-	assert.Contains(t, []int{200, 201}, createDock2Resp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createDock2Resp.StatusCode())
 
 	dockItem2ID := createdDock2.ID
 	acc.LogTestSuccess(t, "Dock item 2 created with ID=%d name=%q", dockItem2ID, dockItem2Name)
@@ -583,7 +583,7 @@ func TestAcceptance_Policies_dock_items(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	require.Len(t, fetched.DockItems, 2, "Policy should have 2 dock items")
 	assert.Equal(t, dockItem1ID, fetched.DockItems[0].ID)
 	assert.Equal(t, dockItem2ID, fetched.DockItems[1].ID)
@@ -596,7 +596,7 @@ func TestAcceptance_Policies_dock_items(t *testing.T) {
 
 func TestAcceptance_Policies_printers(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with printer settings")
@@ -619,7 +619,7 @@ func TestAcceptance_Policies_printers(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	// Verify printer settings were applied
 	acc.LogTestSuccess(t, "Printer policy verified: LeaveExistingDefault=%v", fetched.Printers.LeaveExistingDefault)
 }
@@ -631,8 +631,8 @@ func TestAcceptance_Policies_printers(t *testing.T) {
 
 func TestAcceptance_Policies_package(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
-	packagesSvc := acc.Client.Packages
+	svc := acc.Client.ClassicAPI.Policies
+	packagesSvc := acc.Client.JamfProAPI.Packages
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -688,7 +688,7 @@ func TestAcceptance_Policies_package(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	require.Len(t, fetched.PackageConfiguration.Packages, 1, "Policy should have 1 package")
 	assert.Equal(t, packageIDInt, fetched.PackageConfiguration.Packages[0].ID)
 	assert.Equal(t, "Install", fetched.PackageConfiguration.Packages[0].Action)
@@ -702,7 +702,7 @@ func TestAcceptance_Policies_package(t *testing.T) {
 
 func TestAcceptance_Policies_disk_encryption_individual(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with disk encryption (individual key)")
@@ -728,7 +728,7 @@ func TestAcceptance_Policies_disk_encryption_individual(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, "remediate", fetched.DiskEncryption.Action)
 	assert.Equal(t, "Individual", fetched.DiskEncryption.RemediateKeyType)
 	acc.LogTestSuccess(t, "Disk encryption (individual) policy verified")
@@ -741,8 +741,8 @@ func TestAcceptance_Policies_disk_encryption_individual(t *testing.T) {
 
 func TestAcceptance_Policies_disk_encryption_institutional(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
-	diskEncSvc := acc.Client.ClassicDiskEncryptionConfigurations
+	svc := acc.Client.ClassicAPI.Policies
+	diskEncSvc := acc.Client.ClassicAPI.DiskEncryptionConfigurations
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -802,7 +802,7 @@ func TestAcceptance_Policies_disk_encryption_institutional(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, "remediate", fetched.DiskEncryption.Action)
 	assert.Equal(t, "Individual", fetched.DiskEncryption.RemediateKeyType)
 	acc.LogTestSuccess(t, "Disk encryption policy verified")
@@ -814,7 +814,7 @@ func TestAcceptance_Policies_disk_encryption_institutional(t *testing.T) {
 
 func TestAcceptance_Policies_directory_binding(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with directory binding")
@@ -838,7 +838,7 @@ func TestAcceptance_Policies_directory_binding(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	acc.LogTestSuccess(t, "Directory binding policy structure verified")
 }
 
@@ -848,7 +848,7 @@ func TestAcceptance_Policies_directory_binding(t *testing.T) {
 
 func TestAcceptance_Policies_account_management(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with account management")
@@ -874,7 +874,7 @@ func TestAcceptance_Policies_account_management(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	require.NotNil(t, fetched.AccountMaintenance.ManagementAccount)
 	acc.LogTestSuccess(t, "Account management policy verified")
 }
@@ -885,7 +885,7 @@ func TestAcceptance_Policies_account_management(t *testing.T) {
 
 func TestAcceptance_Policies_create_local_account(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with new local account")
@@ -921,7 +921,7 @@ func TestAcceptance_Policies_create_local_account(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	require.NotNil(t, fetched.AccountMaintenance.Accounts)
 	require.Len(t, *fetched.AccountMaintenance.Accounts, 1)
 	assert.Equal(t, "Create", (*fetched.AccountMaintenance.Accounts)[0].Action)
@@ -935,7 +935,7 @@ func TestAcceptance_Policies_create_local_account(t *testing.T) {
 
 func TestAcceptance_Policies_delete_account(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with delete account")
@@ -971,7 +971,7 @@ func TestAcceptance_Policies_delete_account(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	require.NotNil(t, fetched.AccountMaintenance.Accounts)
 	require.Len(t, *fetched.AccountMaintenance.Accounts, 1)
 	assert.Equal(t, "Delete", (*fetched.AccountMaintenance.Accounts)[0].Action)
@@ -984,7 +984,7 @@ func TestAcceptance_Policies_delete_account(t *testing.T) {
 
 func TestAcceptance_Policies_reset_password(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with reset password")
@@ -1020,7 +1020,7 @@ func TestAcceptance_Policies_reset_password(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	require.NotNil(t, fetched.AccountMaintenance.Accounts)
 	require.Len(t, *fetched.AccountMaintenance.Accounts, 1)
 	assert.Equal(t, "Reset", (*fetched.AccountMaintenance.Accounts)[0].Action)
@@ -1033,7 +1033,7 @@ func TestAcceptance_Policies_reset_password(t *testing.T) {
 
 func TestAcceptance_Policies_filevault_disable_user(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with FileVault disable user")
@@ -1069,7 +1069,7 @@ func TestAcceptance_Policies_filevault_disable_user(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	if fetched.AccountMaintenance.Accounts != nil && len(*fetched.AccountMaintenance.Accounts) > 0 {
 		assert.Equal(t, "DisableFileVault", (*fetched.AccountMaintenance.Accounts)[0].Action)
 	}
@@ -1082,7 +1082,7 @@ func TestAcceptance_Policies_filevault_disable_user(t *testing.T) {
 
 func TestAcceptance_Policies_efi_password_set(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with EFI password set")
@@ -1107,7 +1107,7 @@ func TestAcceptance_Policies_efi_password_set(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	require.NotNil(t, fetched.AccountMaintenance.OpenFirmwareEfiPassword)
 	assert.Equal(t, "command", fetched.AccountMaintenance.OpenFirmwareEfiPassword.OfMode)
 	acc.LogTestSuccess(t, "EFI password set policy verified")
@@ -1119,7 +1119,7 @@ func TestAcceptance_Policies_efi_password_set(t *testing.T) {
 
 func TestAcceptance_Policies_efi_password_remove(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ClassicPolicies
+	svc := acc.Client.ClassicAPI.Policies
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating policy with EFI password remove")
@@ -1144,7 +1144,7 @@ func TestAcceptance_Policies_efi_password_remove(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, policyID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	require.NotNil(t, fetched.AccountMaintenance.OpenFirmwareEfiPassword)
 	assert.Equal(t, "none", fetched.AccountMaintenance.OpenFirmwareEfiPassword.OfMode)
 	acc.LogTestSuccess(t, "EFI password remove policy verified")

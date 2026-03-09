@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/file_uploads"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/file_uploads"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -24,8 +24,8 @@ import (
 func TestAcceptance_FileUploads_create_attachment(t *testing.T) {
 	acc.RequireClient(t)
 
-	policySvc := acc.Client.ClassicPolicies
-	fileSvc := acc.Client.ClassicFileUploads
+	policySvc := acc.Client.ClassicAPI.Policies
+	fileSvc := acc.Client.ClassicAPI.FileUploads
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -64,7 +64,7 @@ func TestAcceptance_FileUploads_create_attachment(t *testing.T) {
 	uploadResp, err := fileSvc.CreateAttachment(ctx2, "policies", file_uploads.ResourceIDTypeID, fmt.Sprintf("%d", policyID), tmpFile, false)
 	require.NoError(t, err, "CreateAttachment should not return an error")
 	require.NotNil(t, uploadResp)
-	assert.Contains(t, []int{200, 201}, uploadResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, uploadResp.StatusCode())
 	acc.LogTestSuccess(t, "File uploaded successfully to policy ID=%d", policyID)
 }
 
@@ -75,7 +75,7 @@ func TestAcceptance_FileUploads_create_attachment(t *testing.T) {
 func TestAcceptance_FileUploads_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicFileUploads
+	svc := acc.Client.ClassicAPI.FileUploads
 	tmpDir := t.TempDir()
 	tmpFile := filepath.Join(tmpDir, "test.txt")
 	_ = os.WriteFile(tmpFile, []byte("test"), 0644)

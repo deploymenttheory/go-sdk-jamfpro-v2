@@ -24,7 +24,7 @@ func main() {
 
 	profileID := 1
 	subset := "General" // Subset values: General, Scope, SelfService
-	profile, _, err := jamfClient.ClassicMobileDeviceConfigurationProfiles.GetByIDWithSubset(context.Background(), profileID, subset)
+	profile, _, err := jamfClient.ClassicAPI.MobileDeviceConfigurationProfiles.GetByIDWithSubset(context.Background(), profileID, subset)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

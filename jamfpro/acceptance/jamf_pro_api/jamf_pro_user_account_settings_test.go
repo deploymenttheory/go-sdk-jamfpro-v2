@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_pro_user_account_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_pro_user_account_settings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -45,7 +45,7 @@ const testUserPrefKey = "sdkv2_acc_test_pref_key"
 func TestAcceptance_JamfProUserAccountSettings_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProUserAccountSettings
+	svc := acc.Client.JamfProAPI.JamfProUserAccountSettings
 	ctx := context.Background()
 
 	// 1. Put (create/update) a preference
@@ -80,7 +80,7 @@ func TestAcceptance_JamfProUserAccountSettings_lifecycle(t *testing.T) {
 		acc.LogTestWarning(t, "GetSettingsV1 returned error: %v", err)
 	} else {
 		require.NotNil(t, settings)
-		assert.Equal(t, 200, settingsResp.StatusCode)
+		assert.Equal(t, 200, settingsResp.StatusCode())
 		assert.Equal(t, testUserPrefKey, settings.Key)
 		acc.LogTestSuccess(t, "GetSettingsV1: key=%s username=%s values=%v",
 			settings.Key, settings.Username, settings.Values)
@@ -94,7 +94,7 @@ func TestAcceptance_JamfProUserAccountSettings_lifecycle(t *testing.T) {
 		acc.LogTestWarning(t, "GetV1 returned error: %v", err)
 	} else {
 		require.NotNil(t, getResp)
-		assert.Equal(t, 200, getResp.StatusCode)
+		assert.Equal(t, 200, getResp.StatusCode())
 		acc.LogTestSuccess(t, "GetV1: key=%s value=%q", testUserPrefKey, val)
 	}
 
@@ -114,7 +114,7 @@ func TestAcceptance_JamfProUserAccountSettings_lifecycle(t *testing.T) {
 func TestAcceptance_JamfProUserAccountSettings_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProUserAccountSettings
+	svc := acc.Client.JamfProAPI.JamfProUserAccountSettings
 
 	t.Run("GetSettingsV1_EmptyKeyID", func(t *testing.T) {
 		_, _, err := svc.GetSettingsV1(context.Background(), "")

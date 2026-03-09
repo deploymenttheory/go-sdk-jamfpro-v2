@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	result, _, err := jamfClient.StaticMobileDeviceGroups.List(context.Background(), map[string]string{"page": "0", "page-size": "50"})
+	result, _, err := jamfClient.JamfProAPI.StaticMobileDeviceGroups.List(context.Background(), map[string]string{"page": "0", "page-size": "50"})
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

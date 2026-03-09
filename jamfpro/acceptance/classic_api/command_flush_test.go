@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/command_flush"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/command_flush"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -19,7 +19,7 @@ import (
 func TestAcceptance_CommandFlush_flush_by_id_and_status(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicCommandFlush
+	svc := acc.Client.ClassicAPI.CommandFlush
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -76,7 +76,7 @@ func TestAcceptance_CommandFlush_flush_by_id_and_status(t *testing.T) {
 func TestAcceptance_CommandFlush_flush_with_xml(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicCommandFlush
+	svc := acc.Client.ClassicAPI.CommandFlush
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -84,7 +84,7 @@ func TestAcceptance_CommandFlush_flush_with_xml(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "FlushWithXML", "Checking for mobile devices")
 
-	mobileDeviceSvc := acc.Client.ClassicMobileDevices
+	mobileDeviceSvc := acc.Client.ClassicAPI.MobileDevices
 	ctx0, cancel0 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel0()
 
@@ -125,7 +125,7 @@ func TestAcceptance_CommandFlush_flush_with_xml(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "FlushWithXML", "Checking for computers")
 
-	computerSvc := acc.Client.ClassicComputers
+	computerSvc := acc.Client.ClassicAPI.Computers
 	ctx2, cancel2 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel2()
 
@@ -170,7 +170,7 @@ func TestAcceptance_CommandFlush_flush_with_xml(t *testing.T) {
 func TestAcceptance_CommandFlush_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicCommandFlush
+	svc := acc.Client.ClassicAPI.CommandFlush
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

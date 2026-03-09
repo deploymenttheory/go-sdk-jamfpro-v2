@@ -13,7 +13,7 @@ func TestCSA_GetTokenExchangeDetails(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.Csa
+	svc := acc.Client.JamfProAPI.Csa
 
 	result, _, err := svc.GetTokenExchangeDetailsV1(ctx)
 	if err != nil {
@@ -29,7 +29,7 @@ func TestCSA_GetTenantID(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.Csa
+	svc := acc.Client.JamfProAPI.Csa
 
 	result, _, err := svc.GetTenantIDV1(ctx)
 	if err != nil {

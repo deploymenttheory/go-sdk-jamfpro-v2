@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupID := 1 // Replace with the desired mobile device group ID to delete
-	_, err = jamfClient.ClassicMobileDeviceGroups.DeleteByID(context.Background(), groupID)
+	_, err = jamfClient.ClassicAPI.MobileDeviceGroups.DeleteByID(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error deleting mobile device group by ID: %v\n", err)
 		return

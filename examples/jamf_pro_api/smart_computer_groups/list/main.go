@@ -25,7 +25,7 @@ func main() {
 		"page":      "0",
 		"page-size": "100",
 	}
-	result, _, err := jamfClient.SmartComputerGroups.List(context.Background(), rsqlQuery)
+	result, _, err := jamfClient.JamfProAPI.SmartComputerGroups.List(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/departments"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 	updateReq := &departments.RequestDepartment{
 		Name: "Updated Department Name",
 	}
-	result, _, err := jamfClient.Departments.UpdateByIDV1(context.Background(), id, updateReq)
+	result, _, err := jamfClient.JamfProAPI.Departments.UpdateByIDV1(context.Background(), id, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

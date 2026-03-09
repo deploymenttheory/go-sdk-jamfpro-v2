@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/distribution_point"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/distribution_point"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -20,7 +20,7 @@ import (
 func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DistributionPoint
+	svc := acc.Client.JamfProAPI.DistributionPoint
 	ctx := context.Background()
 
 	// 1. Create
@@ -39,7 +39,7 @@ func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateV1 should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	dpID := created.ID
@@ -64,7 +64,7 @@ func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, dpID, fetched.ID)
 	assert.Equal(t, name, fetched.Name)
 	acc.LogTestSuccess(t, "GetByIDV1: ID=%s name=%q", fetched.ID, fetched.Name)
@@ -84,7 +84,7 @@ func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, dpID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 202}, updateResp.StatusCode, "Update should return 200 or 202")
+	assert.Contains(t, []int{200, 202}, updateResp.StatusCode(), "Update should return 200 or 202")
 	acc.LogTestSuccess(t, "Distribution point updated: ID=%s", dpID)
 
 	// 4. Re-fetch to verify
@@ -99,7 +99,7 @@ func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx, dpID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Distribution point ID=%s deleted", dpID)
 }
 
@@ -110,7 +110,7 @@ func TestAcceptance_DistributionPoint_lifecycle(t *testing.T) {
 func TestAcceptance_DistributionPoint_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DistributionPoint
+	svc := acc.Client.JamfProAPI.DistributionPoint
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_rsql-distpoint")
@@ -144,7 +144,7 @@ func TestAcceptance_DistributionPoint_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, dp := range list.Results {
@@ -165,7 +165,7 @@ func TestAcceptance_DistributionPoint_list_with_rsql_filter(t *testing.T) {
 func TestAcceptance_DistributionPoint_bulk_delete(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DistributionPoint
+	svc := acc.Client.JamfProAPI.DistributionPoint
 	ctx := context.Background()
 
 	dp1, _, err := svc.CreateV1(ctx, &distribution_point.RequestDistributionPoint{
@@ -213,7 +213,7 @@ func TestAcceptance_DistributionPoint_bulk_delete(t *testing.T) {
 func TestAcceptance_DistributionPoint_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DistributionPoint
+	svc := acc.Client.JamfProAPI.DistributionPoint
 
 	t.Run("CreateV1_NilRequest", func(t *testing.T) {
 		_, _, err := svc.CreateV1(context.Background(), nil)

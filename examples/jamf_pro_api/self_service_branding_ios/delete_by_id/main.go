@@ -26,7 +26,7 @@ func main() {
 		id = os.Args[1]
 	}
 
-	_, err = jamfClient.SelfServiceBrandingIOS.DeleteByIDV1(context.Background(), id)
+	_, err = jamfClient.JamfProAPI.SelfServiceBrandingIos.DeleteByIDV1(context.Background(), id)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

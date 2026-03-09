@@ -21,10 +21,10 @@ func main() {
 	}
 
 	groupID := "1"
-	resp, err := jamfClient.SmartComputerGroups.DeleteByID(context.Background(), groupID)
+	resp, err := jamfClient.JamfProAPI.SmartComputerGroups.DeleteByID(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("Deleted smart computer group ID=%s (status=%d)\n", groupID, resp.StatusCode)
+	fmt.Printf("Deleted smart computer group ID=%s (status=%d)\n", groupID, resp.StatusCode())
 }

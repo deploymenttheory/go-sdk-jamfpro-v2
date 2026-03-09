@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/venafi"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/venafi"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 		Name: "Updated Venafi Certificate Authority",
 	}
 
-	result, _, err := jamfClient.Venafi.UpdateByID(context.Background(), venafiID, req)
+	result, _, err := jamfClient.JamfProAPI.Venafi.UpdateByID(context.Background(), venafiID, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

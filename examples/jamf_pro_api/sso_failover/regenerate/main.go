@@ -22,7 +22,7 @@ func main() {
 	}
 
 	// Get current failover URL
-	before, _, err := jamfClient.SsoFailover.GetV1(context.Background())
+	before, _, err := jamfClient.JamfProAPI.SsoFailover.GetV1(context.Background())
 	if err != nil {
 		fmt.Printf("Error getting current failover URL: %v\n", err)
 		return
@@ -32,7 +32,7 @@ func main() {
 	fmt.Println(string(out))
 
 	// Regenerate failover URL
-	result, _, err := jamfClient.SsoFailover.RegenerateV1(context.Background())
+	result, _, err := jamfClient.JamfProAPI.SsoFailover.RegenerateV1(context.Background())
 	if err != nil {
 		fmt.Printf("Error regenerating failover URL: %v\n", err)
 		return

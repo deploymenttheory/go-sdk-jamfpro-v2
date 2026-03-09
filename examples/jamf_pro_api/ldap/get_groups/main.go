@@ -26,7 +26,7 @@ func main() {
 	if search != "" {
 		params["q"] = search
 	}
-	result, _, err := jamfClient.Ldap.GetLdapGroupsV1(context.Background(), params)
+	result, _, err := jamfClient.JamfProAPI.Ldap.GetLdapGroupsV1(context.Background(), params)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

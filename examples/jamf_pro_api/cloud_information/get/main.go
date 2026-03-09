@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	result, _, err := jamfClient.CloudInformation.GetV1(context.Background())
+	result, _, err := jamfClient.JamfProAPI.CloudInformation.GetV1(context.Background())
 	if err != nil {
 		fmt.Printf("Error retrieving cloud information: %v\n", err)
 		return

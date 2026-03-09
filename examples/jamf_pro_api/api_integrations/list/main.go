@@ -22,7 +22,7 @@ func main() {
 	}
 
 	// Example 1: List all API integrations
-	result, _, err := jamfClient.ApiIntegrations.ListV1(context.Background(), nil)
+	result, _, err := jamfClient.JamfProAPI.ApiIntegrations.ListV1(context.Background(), nil)
 	if err != nil {
 		fmt.Printf("Error listing API integrations: %v\n", err)
 		return
@@ -35,7 +35,7 @@ func main() {
 		"filter": `displayName=="MyIntegration"`,
 		"sort":   "displayName:asc",
 	}
-	result, _, err = jamfClient.ApiIntegrations.ListV1(context.Background(), rsqlQuery)
+	result, _, err = jamfClient.JamfProAPI.ApiIntegrations.ListV1(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error listing filtered integrations: %v\n", err)
 		return

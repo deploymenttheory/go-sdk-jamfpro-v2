@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mdm_renewal"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mdm_renewal"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -38,7 +38,7 @@ import (
 func TestAcceptance_MDMRenewal_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MDMRenewal
+	svc := acc.Client.JamfProAPI.MdmRenewal
 
 	t.Run("GetDeviceCommonDetailsV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetDeviceCommonDetailsV1(context.Background(), "")

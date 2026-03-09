@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ibeacons"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ibeacons"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 		Minor: 2,
 	}
 
-	updatedIBeacon, _, err := jamfClient.ClassicIBeacons.UpdateByID(context.Background(), ibeaconID, updateReq)
+	updatedIBeacon, _, err := jamfClient.ClassicAPI.IBeacons.UpdateByID(context.Background(), ibeaconID, updateReq)
 	if err != nil {
 		fmt.Printf("Error updating iBeacon by ID: %v\n", err)
 		return

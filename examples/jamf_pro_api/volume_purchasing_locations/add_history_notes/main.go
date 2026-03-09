@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/volume_purchasing_locations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/volume_purchasing_locations"
 )
 
 func main() {
@@ -25,16 +25,16 @@ func main() {
 		ObjectHistoryNote: "Example history note added via API",
 	}
 
-	resp, err := client.VolumePurchasingLocations.AddHistoryNotesV1(ctx, vppLocationID, noteRequest)
+	resp, err := client.JamfProAPI.VolumePurchasingLocations.AddHistoryNotesV1(ctx, vppLocationID, noteRequest)
 	if err != nil {
 		log.Fatalf("Error adding history note: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("History note added successfully\n")
 
 	// Optionally, verify by getting the history
-	history, _, err := client.VolumePurchasingLocations.GetHistoryV1(ctx, vppLocationID, nil)
+	history, _, err := client.JamfProAPI.VolumePurchasingLocations.GetHistoryV1(ctx, vppLocationID, nil)
 	if err != nil {
 		log.Printf("Warning: Could not retrieve history: %v", err)
 	} else {

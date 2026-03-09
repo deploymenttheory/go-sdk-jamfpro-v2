@@ -25,7 +25,7 @@ func main() {
 
 	payloadUUID := "your-payload-uuid-here"
 
-	result, _, err := jamfClient.MacOSConfigProfileCustomSettings.GetByPayloadUUID(context.Background(), payloadUUID)
+	result, _, err := jamfClient.JamfProAPI.MacosConfigProfileCustomSettings.GetByPayloadUUID(context.Background(), payloadUUID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -26,11 +26,11 @@ func main() {
 	id := "1"
 	status := "Pending"
 
-	resp, err := jamfClient.ClassicCommandFlush.FlushByIDAndStatus(context.Background(), idType, id, status)
+	resp, err := jamfClient.ClassicAPI.CommandFlush.FlushByIDAndStatus(context.Background(), idType, id, status)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("Successfully cleared %s MDM commands for %s %s (Status: %d)\n", status, idType, id, resp.StatusCode)
+	fmt.Printf("Successfully cleared %s MDM commands for %s %s (Status: %d)\n", status, idType, id, resp.StatusCode())
 }

@@ -22,11 +22,11 @@ func main() {
 	// Note: Groups are typically managed through computer_groups or mobile_device_groups services.
 	// Direct deletion via the Groups API may not be supported for all group types.
 
-	resp, err := client.Groups.DeleteByIDV1(ctx, platformID)
+	resp, err := client.JamfProAPI.Groups.DeleteByIDV1(ctx, platformID)
 	if err != nil {
 		log.Fatalf("Error deleting group: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Group %s deleted successfully\n", platformID)
 }

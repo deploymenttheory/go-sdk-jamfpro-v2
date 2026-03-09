@@ -23,7 +23,7 @@ func main() {
 	}
 
 	groupID := 1 // Replace with the desired computer group ID
-	group, _, err := jamfClient.ClassicComputerGroups.GetByID(context.Background(), groupID)
+	group, _, err := jamfClient.ClassicAPI.ComputerGroups.GetByID(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

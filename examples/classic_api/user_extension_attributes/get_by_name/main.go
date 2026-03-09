@@ -23,7 +23,7 @@ func main() {
 	}
 
 	attrName := "Department" // Replace with the desired user extension attribute name
-	attr, _, err := jamfClient.ClassicUserExtensionAttributes.GetByName(context.Background(), attrName)
+	attr, _, err := jamfClient.ClassicAPI.UserExtensionAttributes.GetByName(context.Background(), attrName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

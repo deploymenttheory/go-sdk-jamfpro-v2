@@ -54,7 +54,7 @@ import (
 
 func TestAcceptance_CertificateAuthority_get_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.CertificateAuthority
+	svc := acc.Client.JamfProAPI.CertificateAuthority
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV1(ctx)

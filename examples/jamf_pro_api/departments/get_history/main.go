@@ -22,7 +22,7 @@ func main() {
 	}
 
 	id := "1" // Replace with the desired department ID
-	result, _, err := jamfClient.Departments.GetDepartmentHistoryV1(context.Background(), id, nil)
+	result, _, err := jamfClient.JamfProAPI.Departments.GetDepartmentHistoryV1(context.Background(), id, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

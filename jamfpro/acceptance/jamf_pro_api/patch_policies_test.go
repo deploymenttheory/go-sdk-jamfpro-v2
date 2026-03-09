@@ -57,7 +57,7 @@ import (
 
 func TestAcceptance_PatchPolicies_list_v2(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.PatchPolicies
+	svc := acc.Client.JamfProAPI.PatchPolicies
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV2(ctx)
@@ -107,7 +107,7 @@ func TestAcceptance_PatchPolicies_list_v2(t *testing.T) {
 
 func TestAcceptance_PatchPolicies_dashboard_operations(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.PatchPolicies
+	svc := acc.Client.JamfProAPI.PatchPolicies
 	ctx := context.Background()
 
 	// First, get a list of patch policies

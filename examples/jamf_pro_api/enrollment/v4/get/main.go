@@ -14,12 +14,12 @@ func main() {
 		log.Fatalf("Failed to create client: %v", err)
 	}
 
-	result, resp, err := client.Enrollment.GetV4(context.Background())
+	result, resp, err := client.JamfProAPI.Enrollment.GetV4(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to get enrollment settings: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Install Single Profile: %t\n", result.InstallSingleProfile)
 	fmt.Printf("Signing MDM Profile Enabled: %t\n", result.SigningMdmProfileEnabled)
 	fmt.Printf("Restrict Re-enrollment: %t\n", result.RestrictReenrollment)

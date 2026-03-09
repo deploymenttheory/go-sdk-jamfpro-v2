@@ -8,7 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/login_customization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/login_customization"
 )
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 		ActionText:              "Accept",
 	}
 
-	updated, _, err := jamfClient.LoginCustomization.UpdateV1(context.Background(), newLoginCustomization)
+	updated, _, err := jamfClient.JamfProAPI.LoginCustomization.UpdateV1(context.Background(), newLoginCustomization)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

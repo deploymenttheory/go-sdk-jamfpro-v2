@@ -1,0 +1,150 @@
+package mocks
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"path/filepath"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"go.uber.org/zap"
+	"resty.dev/v3"
+)
+
+type registeredResponse struct {
+	statusCode int
+	rawBody    []byte
+	errMsg     string
+}
+
+// CloudDistributionPointMock implements interfaces.HTTPClient.
+type CloudDistributionPointMock struct {
+	responses map[string]registeredResponse
+	logger    *zap.Logger
+}
+
+func NewCloudDistributionPointMock() *CloudDistributionPointMock {
+	return &CloudDistributionPointMock{
+		responses: make(map[string]registeredResponse),
+		logger:    zap.NewNop(),
+	}
+}
+
+func (m *CloudDistributionPointMock) register(method, path string, statusCode int, fixture string) {
+	var body []byte
+	if fixture != "" {
+		data, err := loadMockResponse(fixture)
+		if err != nil {
+			panic(err)
+		}
+		body = data
+	}
+	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
+}
+
+func (m *CloudDistributionPointMock) RegisterMocks() {
+	m.register("GET", "/api/v1/cloud-distribution-point", 200, "validate_get.json")
+	m.register("POST", "/api/v1/cloud-distribution-point", 201, "validate_get.json")
+	m.register("PATCH", "/api/v1/cloud-distribution-point", 200, "validate_get.json")
+	m.register("DELETE", "/api/v1/cloud-distribution-point", 204, "")
+	m.register("GET", "/api/v1/cloud-distribution-point/upload-capability", 200, "validate_upload_capability.json")
+	m.register("GET", "/api/v1/cloud-distribution-point/test-connection", 200, "validate_test_connection.json")
+	m.register("GET", "/api/v1/cloud-distribution-point/history", 200, "validate_history.json")
+	m.register("GET", "/api/v1/cloud-distribution-point/files", 200, "validate_files.json")
+	m.register("POST", "/api/v1/cloud-distribution-point/history", 201, "validate_history_note.json")
+	m.register("POST", "/api/v1/cloud-distribution-point/fail-upload/test-id", 204, "")
+	m.register("POST", "/api/v1/cloud-distribution-point/refresh-inventory", 200, "")
+}
+
+// RegisterHistoryInvalidMock registers GET history with invalid JSON for testing mergePage error paths.
+func (m *CloudDistributionPointMock) RegisterHistoryInvalidMock() {
+	m.register("GET", "/api/v1/cloud-distribution-point/history", 200, "validate_history_invalid.json")
+}
+
+// RegisterFilesInvalidMock registers GET files with invalid JSON for testing mergePage error paths.
+func (m *CloudDistributionPointMock) RegisterFilesInvalidMock() {
+	m.register("GET", "/api/v1/cloud-distribution-point/files", 200, "validate_files_invalid.json")
+}
+
+func (m *CloudDistributionPointMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*resty.Response, error) {
+	return m.dispatch("GET", path, result)
+}
+func (m *CloudDistributionPointMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
+	return m.dispatch("POST", path, result)
+}
+func (m *CloudDistributionPointMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
+	return m.dispatch("POST", path, result)
+}
+func (m *CloudDistributionPointMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
+	return m.dispatch("POST", path, result)
+}
+func (m *CloudDistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+	return m.dispatch("POST", path, result)
+}
+func (m *CloudDistributionPointMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
+	return m.dispatch("PUT", path, result)
+}
+func (m *CloudDistributionPointMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
+	return m.dispatch("PATCH", path, result)
+}
+func (m *CloudDistributionPointMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
+	return m.dispatch("DELETE", path, result)
+}
+func (m *CloudDistributionPointMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
+	return m.dispatch("DELETE", path, result)
+}
+func (m *CloudDistributionPointMock) GetBytes(ctx context.Context, path string, q map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
+	resp, err := m.dispatch("GET", path, nil)
+	if err != nil {
+		return resp, nil, err
+	}
+	return resp, resp.Bytes(), nil
+}
+func (m *CloudDistributionPointMock) GetPaginated(ctx context.Context, path string, q map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
+	resp, err := m.dispatch("GET", path, nil)
+	if err != nil {
+		return resp, err
+	}
+	bodyBytes := resp.Bytes()
+	if mergePage != nil && len(bodyBytes) > 0 {
+		var page struct {
+			Results json.RawMessage `json:"results"`
+		}
+		if err := json.Unmarshal(bodyBytes, &page); err != nil {
+			return resp, fmt.Errorf("mergePage failed: %w", err)
+		}
+		if err := mergePage(page.Results); err != nil {
+			return resp, fmt.Errorf("mergePage failed: %w", err)
+		}
+	}
+	return resp, nil
+}
+func (m *CloudDistributionPointMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *CloudDistributionPointMock) InvalidateToken() error                    { return nil }
+func (m *CloudDistributionPointMock) KeepAliveToken() error                     { return nil }
+func (m *CloudDistributionPointMock) GetLogger() *zap.Logger                    { return m.logger }
+
+func (m *CloudDistributionPointMock) dispatch(method, path string, result any) (*resty.Response, error) {
+	r, ok := m.responses[method+":"+path]
+	if !ok {
+		return nil, fmt.Errorf("no mock for %s %s", method, path)
+	}
+	headers := http.Header{"Content-Type": {"application/json"}}
+	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	if r.errMsg != "" {
+		return resp, fmt.Errorf("%s", r.errMsg)
+	}
+	if result != nil && len(r.rawBody) > 0 {
+		_ = json.Unmarshal(r.rawBody, result)
+	}
+	return resp, nil
+}
+
+func loadMockResponse(filename string) ([]byte, error) {
+	dir, _ := os.Getwd()
+	return os.ReadFile(filepath.Join(dir, "mocks", filename))
+}

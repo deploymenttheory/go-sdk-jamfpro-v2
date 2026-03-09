@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/user_extension_attributes"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/user_extension_attributes"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 		},
 	}
 
-	updated, _, err := jamfClient.ClassicUserExtensionAttributes.UpdateByID(context.Background(), attrID, updateReq)
+	updated, _, err := jamfClient.ClassicAPI.UserExtensionAttributes.UpdateByID(context.Background(), attrID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

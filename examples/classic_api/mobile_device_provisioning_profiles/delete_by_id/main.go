@@ -22,7 +22,7 @@ func main() {
 	}
 
 	profileID := 1
-	_, err = jamfClient.ClassicMobileDeviceProvisioningProfiles.DeleteByID(context.Background(), profileID)
+	_, err = jamfClient.ClassicAPI.MobileDeviceProvisioningProfiles.DeleteByID(context.Background(), profileID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

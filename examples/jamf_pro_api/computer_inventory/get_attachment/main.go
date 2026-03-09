@@ -24,7 +24,7 @@ func main() {
 	computerID := "1"
 	attachmentID := "100"
 
-	data, _, err := jamfClient.ComputerInventory.GetAttachmentByIDV3(context.Background(), computerID, attachmentID)
+	data, _, err := jamfClient.JamfProAPI.ComputerInventory.GetAttachmentByIDV3(context.Background(), computerID, attachmentID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -22,7 +22,7 @@ func main() {
 	}
 
 	profileName := "My Enrollment Profile" // Replace with the desired profile name to delete
-	_, err = jamfClient.ClassicMobileDeviceEnrollmentProfiles.DeleteByName(context.Background(), profileName)
+	_, err = jamfClient.ClassicAPI.MobileDeviceEnrollmentProfiles.DeleteByName(context.Background(), profileName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

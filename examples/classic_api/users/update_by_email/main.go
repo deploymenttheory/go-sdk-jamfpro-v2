@@ -7,8 +7,8 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/users"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/users"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 		},
 	}
 
-	updated, _, err := jamfClient.ClassicUsers.UpdateByEmail(context.Background(), "go-sdk-v2-user@example.com", updateReq)
+	updated, _, err := jamfClient.ClassicAPI.Users.UpdateByEmail(context.Background(), "go-sdk-v2-user@example.com", updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

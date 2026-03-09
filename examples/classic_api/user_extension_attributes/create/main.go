@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/user_extension_attributes"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/user_extension_attributes"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 		},
 	}
 
-	created, _, err := jamfClient.ClassicUserExtensionAttributes.Create(context.Background(), createReq)
+	created, _, err := jamfClient.ClassicAPI.UserExtensionAttributes.Create(context.Background(), createReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

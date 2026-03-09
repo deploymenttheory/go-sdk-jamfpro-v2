@@ -22,7 +22,7 @@ func main() {
 
 	customPathID := "1" // Replace with the desired custom path ID
 
-	_, err = jamfClient.ComputerInventoryCollectionSettings.DeleteCustomPathByIDV2(context.Background(), customPathID)
+	_, err = jamfClient.JamfProAPI.ComputerInventoryCollectionSettings.DeleteCustomPathByIDV2(context.Background(), customPathID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

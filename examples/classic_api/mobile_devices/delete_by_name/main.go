@@ -23,11 +23,11 @@ func main() {
 
 	deviceName := "iPhone-01" // Replace with the desired mobile device name to delete
 
-	resp, err := jamfClient.ClassicMobileDevices.DeleteByName(context.Background(), deviceName)
+	resp, err := jamfClient.ClassicAPI.MobileDevices.DeleteByName(context.Background(), deviceName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("Mobile device %q deleted. Status: %d\n", deviceName, resp.StatusCode)
+	fmt.Printf("Mobile device %q deleted. Status: %d\n", deviceName, resp.StatusCode())
 }

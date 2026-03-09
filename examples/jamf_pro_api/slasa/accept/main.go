@@ -25,10 +25,10 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	resp, err := jamfClient.SLASA.AcceptV1(context.Background())
+	resp, err := jamfClient.JamfProAPI.Slasa.AcceptV1(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("SLASA accepted successfully (status: %d)\n", resp.StatusCode)
+	fmt.Printf("SLASA accepted successfully (status: %d)\n", resp.StatusCode())
 }

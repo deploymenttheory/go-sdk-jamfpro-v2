@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_assignments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/vpp_assignments"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 		},
 	}
 
-	_, _, err = jamfClient.ClassicVPPAssignments.UpdateByID(context.Background(), vppAssignmentID, updateReq)
+	_, _, err = jamfClient.ClassicAPI.VppAssignments.UpdateByID(context.Background(), vppAssignmentID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -20,7 +20,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	_, err = jamfClient.Csa.DeleteTokenExchangeV1(context.Background())
+	_, err = jamfClient.JamfProAPI.Csa.DeleteTokenExchangeV1(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

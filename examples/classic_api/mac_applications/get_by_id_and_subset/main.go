@@ -24,7 +24,7 @@ func main() {
 
 	appID := 1                    // Replace with the desired Mac application ID
 	subset := "General"            // Subset values: General, Scope, SelfService, VPPCodes, VPP
-	app, _, err := jamfClient.ClassicMacApplications.GetByIDAndSubset(context.Background(), appID, subset)
+	app, _, err := jamfClient.ClassicAPI.MacApplications.GetByIDAndSubset(context.Background(), appID, subset)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

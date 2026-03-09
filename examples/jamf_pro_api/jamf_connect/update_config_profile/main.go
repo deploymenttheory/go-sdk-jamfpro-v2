@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_connect"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_connect"
 )
 
 func main() {
@@ -21,12 +21,12 @@ func main() {
 		AutoDeploymentType: "INSTALL_AUTOMATICALLY",
 	}
 
-	result, resp, err := client.JamfConnect.UpdateConfigProfileByUUIDV1(context.Background(), uuid, request)
+	result, resp, err := client.JamfProAPI.JamfConnect.UpdateConfigProfileByUUIDV1(context.Background(), uuid, request)
 	if err != nil {
 		log.Fatalf("Failed to update Jamf Connect config profile: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Updated Profile UUID: %s\n", result.UUID)
 	fmt.Printf("Updated Version: %s\n", result.Version)
 	fmt.Printf("Updated Auto Deployment Type: %s\n", result.AutoDeploymentType)

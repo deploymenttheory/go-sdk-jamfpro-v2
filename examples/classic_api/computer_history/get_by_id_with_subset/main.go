@@ -30,7 +30,7 @@ func main() {
 	if raw := os.Getenv("COMPUTER_ID"); raw != "" {
 		computerID = raw
 	} else {
-		list, _, err := client.ComputerInventory.ListV3(ctx, nil)
+		list, _, err := client.JamfProAPI.ComputerInventory.ListV3(ctx, nil)
 		if err != nil || list == nil || len(list.Results) == 0 {
 			log.Fatal("Set COMPUTER_ID or ensure at least one computer exists in inventory")
 		}
@@ -43,12 +43,12 @@ func main() {
 		subset = "General"
 	}
 
-	history, resp, err := client.ClassicComputerHistory.GetByIDAndSubset(ctx, computerID, subset)
+	history, resp, err := client.ClassicAPI.ComputerHistory.GetByIDAndSubset(ctx, computerID, subset)
 	if err != nil {
 		log.Fatalf("GetByIDAndSubset failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d (subset=%q)\n", resp.StatusCode, subset)
+	fmt.Printf("Status: %d (subset=%q)\n", resp.StatusCode(), subset)
 	xmlOut, err := xml.MarshalIndent(history, "", "  ")
 	if err != nil {
 		log.Fatalf("Error marshaling computer history: %v", err)

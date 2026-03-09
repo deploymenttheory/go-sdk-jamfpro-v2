@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/computer_groups"
 )
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.ComputerGroups.UpdateSmartV2(context.Background(), groupID, req)
+	result, _, err := jamfClient.JamfProAPI.ComputerGroups.UpdateSmartV2(context.Background(), groupID, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

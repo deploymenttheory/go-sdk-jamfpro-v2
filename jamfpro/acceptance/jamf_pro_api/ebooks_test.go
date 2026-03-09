@@ -55,7 +55,7 @@ import (
 func TestAcceptance_Ebooks_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Ebooks
+	svc := acc.Client.JamfProAPI.Ebooks
 	ctx := context.Background()
 
 	list, resp, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "100"})
@@ -75,7 +75,7 @@ func TestAcceptance_Ebooks_list_v1(t *testing.T) {
 func TestAcceptance_Ebooks_get_by_id_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Ebooks
+	svc := acc.Client.JamfProAPI.Ebooks
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "1"})
@@ -106,7 +106,7 @@ func TestAcceptance_Ebooks_get_by_id_v1(t *testing.T) {
 func TestAcceptance_Ebooks_get_scope_by_id_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Ebooks
+	svc := acc.Client.JamfProAPI.Ebooks
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "1"})
@@ -135,7 +135,7 @@ func TestAcceptance_Ebooks_get_scope_by_id_v1(t *testing.T) {
 func TestAcceptance_Ebooks_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Ebooks
+	svc := acc.Client.JamfProAPI.Ebooks
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")

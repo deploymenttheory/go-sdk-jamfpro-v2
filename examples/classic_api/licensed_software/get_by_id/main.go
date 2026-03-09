@@ -23,7 +23,7 @@ func main() {
 	}
 
 	licensedSoftwareID := 1 // Replace with the desired licensed software ID
-	ls, _, err := jamfClient.ClassicLicensedSoftware.GetByID(context.Background(), licensedSoftwareID)
+	ls, _, err := jamfClient.ClassicAPI.LicensedSoftware.GetByID(context.Background(), licensedSoftwareID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

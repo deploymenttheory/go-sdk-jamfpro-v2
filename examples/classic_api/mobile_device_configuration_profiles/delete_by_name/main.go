@@ -22,7 +22,7 @@ func main() {
 	}
 
 	profileName := "Wi-Fi Profile"
-	_, err = jamfClient.ClassicMobileDeviceConfigurationProfiles.DeleteByName(context.Background(), profileName)
+	_, err = jamfClient.ClassicAPI.MobileDeviceConfigurationProfiles.DeleteByName(context.Background(), profileName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

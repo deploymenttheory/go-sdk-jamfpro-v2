@@ -23,7 +23,7 @@ func main() {
 	}
 
 	profileName := "My Provisioning Profile"
-	profile, _, err := jamfClient.ClassicMobileDeviceProvisioningProfiles.GetByName(context.Background(), profileName)
+	profile, _, err := jamfClient.ClassicAPI.MobileDeviceProvisioningProfiles.GetByName(context.Background(), profileName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

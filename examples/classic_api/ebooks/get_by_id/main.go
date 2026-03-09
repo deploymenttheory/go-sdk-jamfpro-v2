@@ -23,7 +23,7 @@ func main() {
 	}
 
 	ebookID := 1 // Replace with the desired ebook ID
-	ebook, _, err := jamfClient.ClassicEbooks.GetByID(context.Background(), ebookID)
+	ebook, _, err := jamfClient.ClassicAPI.Ebooks.GetByID(context.Background(), ebookID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

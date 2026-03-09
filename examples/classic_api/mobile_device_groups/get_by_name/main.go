@@ -23,7 +23,7 @@ func main() {
 	}
 
 	groupName := "All Mobile Devices" // Replace with the desired mobile device group name
-	group, _, err := jamfClient.ClassicMobileDeviceGroups.GetByName(context.Background(), groupName)
+	group, _, err := jamfClient.ClassicAPI.MobileDeviceGroups.GetByName(context.Background(), groupName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

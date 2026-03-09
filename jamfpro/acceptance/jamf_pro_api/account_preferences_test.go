@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_AccountPreferences_get_v3(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.AccountPreferences
+	svc := acc.Client.JamfProAPI.AccountPreferences
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV3(ctx)
@@ -24,7 +24,7 @@ func TestAcceptance_AccountPreferences_get_v3(t *testing.T) {
 
 func TestAcceptance_AccountPreferences_update_v2(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.AccountPreferences
+	svc := acc.Client.JamfProAPI.AccountPreferences
 	ctx := context.Background()
 
 	current, _, err := svc.GetV3(ctx)

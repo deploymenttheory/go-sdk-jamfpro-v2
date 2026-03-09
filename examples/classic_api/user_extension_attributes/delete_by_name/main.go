@@ -22,7 +22,7 @@ func main() {
 	}
 
 	attrName := "Department" // Replace with the desired user extension attribute name to delete
-	_, err = jamfClient.ClassicUserExtensionAttributes.DeleteByName(context.Background(), attrName)
+	_, err = jamfClient.ClassicAPI.UserExtensionAttributes.DeleteByName(context.Background(), attrName)
 	if err != nil {
 		fmt.Printf("Error deleting user extension attribute by name: %v\n", err)
 		return

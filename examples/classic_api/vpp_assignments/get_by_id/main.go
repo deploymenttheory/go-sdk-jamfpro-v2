@@ -23,7 +23,7 @@ func main() {
 	}
 
 	vppAssignmentID := 1 // Replace with the desired VPP assignment ID
-	assignment, _, err := jamfClient.ClassicVPPAssignments.GetByID(context.Background(), vppAssignmentID)
+	assignment, _, err := jamfClient.ClassicAPI.VppAssignments.GetByID(context.Background(), vppAssignmentID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

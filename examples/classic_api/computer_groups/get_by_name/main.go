@@ -23,7 +23,7 @@ func main() {
 	}
 
 	groupName := "All Managed Clients" // Replace with the desired computer group name
-	group, _, err := jamfClient.ClassicComputerGroups.GetByName(context.Background(), groupName)
+	group, _, err := jamfClient.ClassicAPI.ComputerGroups.GetByName(context.Background(), groupName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

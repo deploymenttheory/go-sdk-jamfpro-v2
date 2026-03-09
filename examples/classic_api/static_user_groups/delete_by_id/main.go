@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupID := 1
-	_, err = jamfClient.ClassicStaticUserGroups.DeleteByID(context.Background(), groupID)
+	_, err = jamfClient.ClassicAPI.StaticUserGroups.DeleteByID(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

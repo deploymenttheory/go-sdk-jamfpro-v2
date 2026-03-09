@@ -27,7 +27,7 @@ func main() {
 		"sort":      "date:desc",
 	}
 
-	history, _, err := jamfClient.Engage.GetHistoryV2(context.Background(), rsqlQuery)
+	history, _, err := jamfClient.JamfProAPI.Engage.GetHistoryV2(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

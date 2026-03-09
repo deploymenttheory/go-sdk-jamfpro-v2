@@ -41,7 +41,7 @@ import (
 
 func TestAcceptance_SLASA_get_status_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SLASA
+	svc := acc.Client.JamfProAPI.Slasa
 	ctx := context.Background()
 
 	result, resp, err := svc.GetStatusV1(ctx)

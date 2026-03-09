@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ibeacons"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ibeacons"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 		Minor: 1,
 	}
 
-	createdIBeacon, _, err := jamfClient.ClassicIBeacons.Create(context.Background(), newIBeacon)
+	createdIBeacon, _, err := jamfClient.ClassicAPI.IBeacons.Create(context.Background(), newIBeacon)
 	if err != nil {
 		fmt.Printf("Error creating iBeacon: %v\n", err)
 		return

@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/service_discovery_enrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/service_discovery_enrollment"
 )
 
 func main() {
@@ -27,10 +27,10 @@ func main() {
 		},
 	}
 
-	_, resp, err := jamfClient.ServiceDiscoveryEnrollment.UpdateV1(context.Background(), request)
+	_, resp, err := jamfClient.JamfProAPI.ServiceDiscoveryEnrollment.UpdateV1(context.Background(), request)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("Updated well-known settings (HTTP %d)\n", resp.StatusCode)
+	fmt.Printf("Updated well-known settings (HTTP %d)\n", resp.StatusCode())
 }

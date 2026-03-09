@@ -24,7 +24,7 @@ func main() {
 	clientManagementID := "your-client-management-id" // Replace with the desired client management ID
 	key := "device.model.family"                       // Replace with the desired status item key
 
-	result, _, err := jamfClient.DeclarativeDeviceManagement.GetStatusItemByKeyV1(context.Background(), clientManagementID, key)
+	result, _, err := jamfClient.JamfProAPI.DeclarativeDeviceManagement.GetStatusItemByKeyV1(context.Background(), clientManagementID, key)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -20,14 +20,14 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	current, _, err := jamfClient.SsoSettings.GetV3(context.Background())
+	current, _, err := jamfClient.JamfProAPI.SsoSettings.GetV3(context.Background())
 	if err != nil {
 		fmt.Printf("Error getting current: %v\n", err)
 		return
 	}
 
 	current.SsoBypassAllowed = !current.SsoBypassAllowed
-	updated, _, err := jamfClient.SsoSettings.UpdateV3(context.Background(), current)
+	updated, _, err := jamfClient.JamfProAPI.SsoSettings.UpdateV3(context.Background(), current)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

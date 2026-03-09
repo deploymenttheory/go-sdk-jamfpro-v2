@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupID := 1 // Replace with the desired computer group ID to delete
-	_, err = jamfClient.ClassicComputerGroups.DeleteByID(context.Background(), groupID)
+	_, err = jamfClient.ClassicAPI.ComputerGroups.DeleteByID(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error deleting computer group by ID: %v\n", err)
 		return

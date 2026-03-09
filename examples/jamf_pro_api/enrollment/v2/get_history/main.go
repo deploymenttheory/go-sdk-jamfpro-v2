@@ -19,12 +19,12 @@ func main() {
 		"sort": "date:desc",
 	}
 
-	result, resp, err := client.Enrollment.GetHistoryV2(context.Background(), rsqlQuery)
+	result, resp, err := client.JamfProAPI.Enrollment.GetHistoryV2(context.Background(), rsqlQuery)
 	if err != nil {
 		log.Fatalf("Failed to get enrollment history: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Total History Entries: %d\n", result.TotalCount)
 
 	for i, entry := range result.Results {

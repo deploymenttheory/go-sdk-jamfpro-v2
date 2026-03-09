@@ -20,12 +20,12 @@ func main() {
 
 	ctx := context.Background()
 
-	list, resp, err := client.ClassicRemoveableMacAddresses.List(ctx)
+	list, resp, err := client.ClassicAPI.RemoveableMacAddresses.List(ctx)
 	if err != nil {
 		log.Fatalf("List failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Total count: %d\n", list.Size)
 	fmt.Println("\nRemoveable MAC Addresses:")
 	for _, mac := range list.Results {

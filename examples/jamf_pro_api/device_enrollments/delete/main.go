@@ -23,11 +23,11 @@ func main() {
 	ctx := context.Background()
 	enrollmentID := "1"
 
-	resp, err := jamfClient.DeviceEnrollments.DeleteByIDV1(ctx, enrollmentID)
+	resp, err := jamfClient.JamfProAPI.DeviceEnrollments.DeleteByIDV1(ctx, enrollmentID)
 	if err != nil {
 		log.Fatalf("Failed to delete device enrollment: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Successfully deleted device enrollment with ID: %s\n", enrollmentID)
 }

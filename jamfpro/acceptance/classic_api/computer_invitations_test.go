@@ -7,8 +7,8 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_invitations"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_invitations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ import (
 func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicComputerInvitations
+	svc := acc.Client.ClassicAPI.ComputerInvitations
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -30,7 +30,7 @@ func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	// ------------------------------------------------------------------
 	acc.LogTestStage(t, "PreCheck", "Checking if user-initiated enrollment is enabled for computers")
 
-	enrollmentSvc := acc.Client.EnrollmentSettings
+	enrollmentSvc := acc.Client.JamfProAPI.EnrollmentSettings
 	ctx0, cancel0 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
 	defer cancel0()
 
@@ -96,7 +96,7 @@ func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created computer invitation ID should be a positive integer")
 	assert.NotEmpty(t, created.Invitation, "created computer invitation should have invitation string")
 
@@ -121,7 +121,7 @@ func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx3)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -145,7 +145,7 @@ func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx4, invitationID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, created.ID, fetched.ID)
 	assert.Equal(t, created.Invitation, fetched.Invitation)
 	acc.LogTestSuccess(t, "GetByID: ID=%d invitation=%q", fetched.ID, fetched.Invitation)
@@ -161,7 +161,7 @@ func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	fetchedByInv, fetchByInvResp, err := svc.GetByInvitationID(ctx5, created.Invitation)
 	require.NoError(t, err, "GetByInvitationID should not return an error")
 	require.NotNil(t, fetchedByInv)
-	assert.Equal(t, 200, fetchByInvResp.StatusCode)
+	assert.Equal(t, 200, fetchByInvResp.StatusCode())
 	assert.Equal(t, created.ID, fetchedByInv.ID)
 	assert.Equal(t, created.Invitation, fetchedByInv.Invitation)
 	acc.LogTestSuccess(t, "GetByInvitationID: ID=%d invitation=%q", fetchedByInv.ID, fetchedByInv.Invitation)
@@ -177,7 +177,7 @@ func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx6, invitationID)
 	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Computer invitation ID=%s deleted", invitationID)
 }
 
@@ -188,7 +188,7 @@ func TestAcceptance_ComputerInvitations_lifecycle(t *testing.T) {
 func TestAcceptance_ComputerInvitations_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicComputerInvitations
+	svc := acc.Client.ClassicAPI.ComputerInvitations
 
 	t.Run("GetByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), "")

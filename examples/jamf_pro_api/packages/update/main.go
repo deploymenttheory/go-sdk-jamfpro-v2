@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/packages"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	}
 
 	packageID := "1" // Replace with the desired package ID
-	fetched, _, err := jamfClient.Packages.GetByIDV1(context.Background(), packageID)
+	fetched, _, err := jamfClient.JamfProAPI.Packages.GetByIDV1(context.Background(), packageID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
@@ -35,7 +35,7 @@ func main() {
 	updateReq.FillUserTemplate = packages.BoolPtr(true)
 	updateReq.FillExistingUsers = packages.BoolPtr(true)
 
-	result, _, err := jamfClient.Packages.UpdateByIDV1(context.Background(), packageID, updateReq)
+	result, _, err := jamfClient.JamfProAPI.Packages.UpdateByIDV1(context.Background(), packageID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

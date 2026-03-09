@@ -22,7 +22,7 @@ func main() {
 	}
 
 	id := "1" // Replace with the desired category ID
-	result, _, err := jamfClient.Categories.GetCategoryHistoryV1(context.Background(), id, nil)
+	result, _, err := jamfClient.JamfProAPI.Categories.GetCategoryHistoryV1(context.Background(), id, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

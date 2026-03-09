@@ -22,7 +22,7 @@ func main() {
 	}
 
 	licensedSoftwareName := "go-sdk-v2-licensed-software" // Replace with the desired licensed software name to delete
-	_, err = jamfClient.ClassicLicensedSoftware.DeleteByName(context.Background(), licensedSoftwareName)
+	_, err = jamfClient.ClassicAPI.LicensedSoftware.DeleteByName(context.Background(), licensedSoftwareName)
 	if err != nil {
 		fmt.Printf("Error deleting licensed software by name: %v\n", err)
 		return

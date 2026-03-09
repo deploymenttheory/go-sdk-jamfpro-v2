@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_LoginCustomization_get_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.LoginCustomization
+	svc := acc.Client.JamfProAPI.LoginCustomization
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV1(ctx)
@@ -23,7 +23,7 @@ func TestAcceptance_LoginCustomization_get_v1(t *testing.T) {
 
 func TestAcceptance_LoginCustomization_update_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.LoginCustomization
+	svc := acc.Client.JamfProAPI.LoginCustomization
 	ctx := context.Background()
 
 	current, _, err := svc.GetV1(ctx)

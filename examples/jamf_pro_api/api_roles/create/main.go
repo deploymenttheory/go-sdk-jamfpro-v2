@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/api_roles"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 		DisplayName: "go-sdk-v2-API-Role",
 		Privileges:  []string{"Read Computers"},
 	}
-	result, _, err := jamfClient.APIRoles.CreateV1(context.Background(), req)
+	result, _, err := jamfClient.JamfProAPI.ApiRoles.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

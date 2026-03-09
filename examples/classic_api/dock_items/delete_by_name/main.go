@@ -22,7 +22,7 @@ func main() {
 	}
 
 	itemName := "Safari" // Replace with the desired dock item name to delete
-	_, err = jamfClient.ClassicDockItems.DeleteByName(context.Background(), itemName)
+	_, err = jamfClient.ClassicAPI.DockItems.DeleteByName(context.Background(), itemName)
 	if err != nil {
 		fmt.Printf("Error deleting dock item by name: %v\n", err)
 		return

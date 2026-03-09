@@ -23,7 +23,7 @@ func main() {
 
 	groupID := "1" // Replace with the desired smart mobile device group ID
 	query := map[string]string{"page": "0", "page-size": "50"}
-	result, _, err := jamfClient.SmartMobileDeviceGroups.GetMembership(context.Background(), groupID, query)
+	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetMembership(context.Background(), groupID, query)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

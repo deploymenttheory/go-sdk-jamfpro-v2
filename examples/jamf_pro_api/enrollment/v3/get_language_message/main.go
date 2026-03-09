@@ -17,12 +17,12 @@ func main() {
 	// Get language message for English (en)
 	languageCode := "en"
 
-	result, resp, err := client.Enrollment.GetLanguageMessageV3(context.Background(), languageCode)
+	result, resp, err := client.JamfProAPI.Enrollment.GetLanguageMessageV3(context.Background(), languageCode)
 	if err != nil {
 		log.Fatalf("Failed to get language message: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Language Code: %s\n", result.LanguageCode)
 	fmt.Printf("Language Name: %s\n", result.Name)
 	fmt.Printf("Title: %s\n", result.Title)

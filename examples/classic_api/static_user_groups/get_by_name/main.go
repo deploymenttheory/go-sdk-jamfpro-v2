@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupName := "Static Test Group"
-	group, _, err := jamfClient.ClassicStaticUserGroups.GetByName(context.Background(), groupName)
+	group, _, err := jamfClient.ClassicAPI.StaticUserGroups.GetByName(context.Background(), groupName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

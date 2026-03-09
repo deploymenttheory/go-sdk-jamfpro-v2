@@ -7,14 +7,14 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/advanced_mobile_device_searches"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/advanced_mobile_device_searches"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestAcceptance_AdvancedMobileDeviceSearches_list_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.AdvancedMobileDeviceSearches
+	svc := acc.Client.JamfProAPI.AdvancedMobileDeviceSearches
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "100"})
@@ -27,7 +27,7 @@ func TestAcceptance_AdvancedMobileDeviceSearches_list_v1(t *testing.T) {
 
 func TestAcceptance_AdvancedMobileDeviceSearches_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.AdvancedMobileDeviceSearches
+	svc := acc.Client.JamfProAPI.AdvancedMobileDeviceSearches
 	ctx := context.Background()
 
 	name := fmt.Sprintf("acc-adv-md-search-%d", time.Now().UnixMilli())
@@ -44,7 +44,7 @@ func TestAcceptance_AdvancedMobileDeviceSearches_lifecycle(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	searchID := created.ID
@@ -67,5 +67,5 @@ func TestAcceptance_AdvancedMobileDeviceSearches_lifecycle(t *testing.T) {
 	delResp, err := svc.DeleteByIDV1(ctx, searchID)
 	require.NoError(t, err)
 	require.NotNil(t, delResp)
-	assert.Equal(t, 204, delResp.StatusCode)
+	assert.Equal(t, 204, delResp.StatusCode())
 }

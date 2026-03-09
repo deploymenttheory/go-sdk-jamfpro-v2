@@ -22,7 +22,7 @@ func main() {
 	}
 
 	buildingID := "1" // Replace with the desired building ID
-	history, _, err := jamfClient.Buildings.GetBuildingHistoryV1(context.Background(), buildingID, nil)
+	history, _, err := jamfClient.JamfProAPI.Buildings.GetBuildingHistoryV1(context.Background(), buildingID, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/impact_alert_notification_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/impact_alert_notification_settings"
 )
 
 func main() {
@@ -23,11 +23,11 @@ func main() {
 		DeployableObjectsConfirmationCodeEnabled: false,
 	}
 
-	resp, err := client.ImpactAlertNotificationSettings.UpdateV1(context.Background(), request)
+	resp, err := client.JamfProAPI.ImpactAlertNotificationSettings.UpdateV1(context.Background(), request)
 	if err != nil {
 		log.Fatalf("Failed to update impact alert notification settings: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Println("Impact alert notification settings updated successfully")
 }

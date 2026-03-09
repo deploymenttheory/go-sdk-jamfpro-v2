@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_ios"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/self_service_branding_ios"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -41,7 +41,7 @@ import (
 func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SelfServiceBrandingIOS
+	svc := acc.Client.JamfProAPI.SelfServiceBrandingIos
 	ctx := context.Background()
 
 	// 1. Create
@@ -57,7 +57,7 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateV1 should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	brandingID := created.ID
@@ -82,7 +82,7 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, brandingID, fetched.ID)
 	assert.Equal(t, createReq.BrandingName, fetched.BrandingName)
 	acc.LogTestSuccess(t, "GetByID: name=%q", fetched.BrandingName)
@@ -106,7 +106,7 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, brandingID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Branding updated: ID=%s", brandingID)
 
 	// 5. Re-fetch to verify
@@ -122,7 +122,7 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx, brandingID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Self-service branding mobile ID=%s deleted", brandingID)
 }
 
@@ -133,7 +133,7 @@ func TestAcceptance_SelfServiceBrandingIOS_lifecycle(t *testing.T) {
 func TestAcceptance_SelfServiceBrandingIOS_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SelfServiceBrandingIOS
+	svc := acc.Client.JamfProAPI.SelfServiceBrandingIos
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_rsql-ssb-mobile")
@@ -166,7 +166,7 @@ func TestAcceptance_SelfServiceBrandingIOS_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, b := range list.Results {
@@ -187,7 +187,7 @@ func TestAcceptance_SelfServiceBrandingIOS_list_with_rsql_filter(t *testing.T) {
 func TestAcceptance_SelfServiceBrandingIOS_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SelfServiceBrandingIOS
+	svc := acc.Client.JamfProAPI.SelfServiceBrandingIos
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")

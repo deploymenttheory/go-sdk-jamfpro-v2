@@ -13,7 +13,7 @@ func TestConditionalAccess_GetDeviceComplianceFeatureToggle(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ConditionalAccess
+	svc := acc.Client.JamfProAPI.ConditionalAccess
 
 	result, _, err := svc.GetDeviceComplianceFeatureToggleV1(ctx)
 	if err != nil {

@@ -23,7 +23,7 @@ func main() {
 	}
 
 	appName := "Sample Mac App" // Replace with the desired Mac application name
-	app, _, err := jamfClient.ClassicMacApplications.GetByName(context.Background(), appName)
+	app, _, err := jamfClient.ClassicAPI.MacApplications.GetByName(context.Background(), appName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

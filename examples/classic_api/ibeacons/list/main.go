@@ -25,7 +25,7 @@ func main() {
 	}
 
 	// Call the ListIBeacons function to retrieve the list of iBeacons
-	ibeaconsList, _, err := jamfClient.ClassicIBeacons.List(context.Background())
+	ibeaconsList, _, err := jamfClient.ClassicAPI.IBeacons.List(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

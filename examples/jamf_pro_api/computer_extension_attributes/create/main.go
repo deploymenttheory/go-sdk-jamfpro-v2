@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_extension_attributes"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/computer_extension_attributes"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 		InputType:            "Text Field",
 	}
 
-	result, _, err := jamfClient.ComputerExtensionAttributes.CreateV1(context.Background(), req)
+	result, _, err := jamfClient.JamfProAPI.ComputerExtensionAttributes.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

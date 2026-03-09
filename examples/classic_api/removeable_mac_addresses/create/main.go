@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/removeable_mac_addresses"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/removeable_mac_addresses"
 )
 
 func main() {
@@ -26,17 +26,17 @@ func main() {
 		Name: fmt.Sprintf("AA:BB:CC:DD:EE:%d", time.Now().UnixMilli()%1000),
 	}
 
-	created, resp, err := client.ClassicRemoveableMacAddresses.Create(ctx, req)
+	created, resp, err := client.ClassicAPI.RemoveableMacAddresses.Create(ctx, req)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Created removeable MAC address ID: %d\n", created.ID)
 	fmt.Printf("Name: %s\n", created.Name)
 
 	// Cleanup: delete the created removeable MAC address
-	if _, err := client.ClassicRemoveableMacAddresses.DeleteByID(ctx, created.ID); err != nil {
+	if _, err := client.ClassicAPI.RemoveableMacAddresses.DeleteByID(ctx, created.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: removeable MAC address deleted")

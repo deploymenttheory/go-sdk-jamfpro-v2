@@ -23,7 +23,7 @@ func main() {
 	}
 
 	itemName := "Safari" // Replace with the desired dock item name
-	item, _, err := jamfClient.ClassicDockItems.GetByName(context.Background(), itemName)
+	item, _, err := jamfClient.ClassicAPI.DockItems.GetByName(context.Background(), itemName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

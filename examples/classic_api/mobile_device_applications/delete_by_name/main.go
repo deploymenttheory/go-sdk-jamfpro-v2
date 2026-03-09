@@ -22,7 +22,7 @@ func main() {
 	}
 
 	appName := "go-sdk-v2-mobile-app" // Replace with the desired mobile device application name
-	_, err = jamfClient.ClassicMobileDeviceApplications.DeleteByName(context.Background(), appName)
+	_, err = jamfClient.ClassicAPI.MobileDeviceApplications.DeleteByName(context.Background(), appName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

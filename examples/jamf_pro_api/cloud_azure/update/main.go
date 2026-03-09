@@ -25,7 +25,7 @@ func main() {
 	cloudAzureID := "1"
 
 	// Get existing configuration first (UpdateByIDV1 requires full body)
-	existing, _, err := jamfClient.CloudAzure.GetByIDV1(context.Background(), cloudAzureID)
+	existing, _, err := jamfClient.JamfProAPI.CloudAzure.GetByIDV1(context.Background(), cloudAzureID)
 	if err != nil {
 		fmt.Printf("Error retrieving existing Azure Cloud IDP: %v\n", err)
 		return
@@ -36,7 +36,7 @@ func main() {
 	existing.Server.Enabled = true
 	existing.Server.SearchTimeout = 60
 
-	result, _, err := jamfClient.CloudAzure.UpdateByIDV1(context.Background(), cloudAzureID, existing)
+	result, _, err := jamfClient.JamfProAPI.CloudAzure.UpdateByIDV1(context.Background(), cloudAzureID, existing)
 	if err != nil {
 		fmt.Printf("Error updating Azure Cloud IDP: %v\n", err)
 		return

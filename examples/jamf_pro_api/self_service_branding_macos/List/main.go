@@ -26,7 +26,7 @@ func main() {
 		"page":      "0",
 		"page-size": "100",
 	}
-	result, _, err := jamfClient.SelfServiceBrandingMacOS.List(context.Background(), rsqlQuery)
+	result, _, err := jamfClient.JamfProAPI.SelfServiceBrandingMacos.List(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

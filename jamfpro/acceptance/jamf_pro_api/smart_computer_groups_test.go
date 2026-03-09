@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/smart_computer_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -40,7 +40,7 @@ import (
 func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartComputerGroups
+	svc := acc.Client.JamfProAPI.SmartComputerGroups
 	ctx := context.Background()
 
 	// 1. Create
@@ -84,7 +84,7 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, createReq.Name, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: name=%q", fetched.Name)
 
@@ -103,7 +103,7 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	membership, memResp, err := svc.GetMembership(ctx, groupID)
 	require.NoError(t, err)
 	require.NotNil(t, membership)
-	assert.Equal(t, 200, memResp.StatusCode)
+	assert.Equal(t, 200, memResp.StatusCode())
 	assert.NotNil(t, membership.Members)
 	acc.LogTestSuccess(t, "GetMembership: %d members", len(membership.Members))
 
@@ -120,7 +120,7 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx, groupID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 202}, updateResp.StatusCode)
+	assert.Contains(t, []int{200, 202}, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Smart computer group updated: ID=%s", groupID)
 
 	// 6. Re-fetch to verify
@@ -136,14 +136,14 @@ func TestAcceptance_SmartComputerGroups_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx, groupID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Smart computer group ID=%s deleted", groupID)
 }
 
 func TestAcceptance_SmartComputerGroups_list(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartComputerGroups
+	svc := acc.Client.JamfProAPI.SmartComputerGroups
 
 	result, resp, err := svc.List(context.Background(), map[string]string{"page": "0", "page-size": "100"})
 	require.NoError(t, err)
@@ -161,7 +161,7 @@ func TestAcceptance_SmartComputerGroups_list(t *testing.T) {
 func TestAcceptance_SmartComputerGroups_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartComputerGroups
+	svc := acc.Client.JamfProAPI.SmartComputerGroups
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_rsql-smart-cg")
@@ -197,7 +197,7 @@ func TestAcceptance_SmartComputerGroups_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.List(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, g := range list.Results {
@@ -214,7 +214,7 @@ func TestAcceptance_SmartComputerGroups_list_with_rsql_filter(t *testing.T) {
 func TestAcceptance_SmartComputerGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SmartComputerGroups
+	svc := acc.Client.JamfProAPI.SmartComputerGroups
 
 	t.Run("GetByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), "")

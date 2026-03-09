@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_prestages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/computer_prestages"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -82,7 +82,7 @@ func boolPtr(b bool) *bool { return &b }
 
 func TestAcceptance_ComputerPrestages_list_v3(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ComputerPrestages
+	svc := acc.Client.JamfProAPI.ComputerPrestages
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV3(ctx, nil)
@@ -96,7 +96,7 @@ func TestAcceptance_ComputerPrestages_list_v3(t *testing.T) {
 
 func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ComputerPrestages
+	svc := acc.Client.JamfProAPI.ComputerPrestages
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-computer-prestage")
 
@@ -224,7 +224,7 @@ func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, getByID)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	assert.Equal(t, name, getByID.DisplayName)
 
 	byName, resp, err := svc.GetByNameV3(ctx, name)
@@ -264,5 +264,5 @@ func TestAcceptance_ComputerPrestages_lifecycle_replace_scope(t *testing.T) {
 
 	delResp, err := svc.DeleteByIDV3(ctx, id)
 	require.NoError(t, err)
-	assert.Contains(t, []int{200, 204}, delResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, delResp.StatusCode())
 }

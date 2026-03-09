@@ -25,7 +25,7 @@ func main() {
 
 	// Example usage of DeleteByID
 	printerID := 1 // Replace with the desired printer ID to delete
-	_, err = jamfClient.ClassicPrinters.DeleteByID(context.Background(), printerID)
+	_, err = jamfClient.ClassicAPI.Printers.DeleteByID(context.Background(), printerID)
 	if err != nil {
 		fmt.Printf("Error deleting printer by ID: %v\n", err)
 		return

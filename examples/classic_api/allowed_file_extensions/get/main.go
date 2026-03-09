@@ -27,7 +27,7 @@ func main() {
 
 	// Example usage of GetByID
 	extensionID := 1 // Replace with the desired allowed file extension ID
-	ext, _, err := jamfClient.ClassicAllowedFileExtensions.GetByID(context.Background(), extensionID)
+	ext, _, err := jamfClient.ClassicAPI.AllowedFileExtensions.GetByID(context.Background(), extensionID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

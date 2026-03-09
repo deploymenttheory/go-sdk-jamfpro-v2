@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mdm"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mdm"
 )
 
 func main() {
@@ -46,12 +46,12 @@ func main() {
 		req.Manifest.Hash = "sha256-hash-of-package"
 	}
 
-	result, resp, err := client.MDM.DeployPackage(ctx, req)
+	result, resp, err := client.JamfProAPI.Mdm.DeployPackage(ctx, req)
 	if err != nil {
-		log.Fatalf("Failed to deploy package: %v (HTTP %d)", err, resp.StatusCode)
+		log.Fatalf("Failed to deploy package: %v (HTTP %d)", err, resp.StatusCode())
 	}
 
-	fmt.Printf("Package deployment initiated (HTTP %d)\n", resp.StatusCode)
+	fmt.Printf("Package deployment initiated (HTTP %d)\n", resp.StatusCode())
 	fmt.Printf("Queued commands: %d\n", len(result.QueuedCommands))
 	for _, qc := range result.QueuedCommands {
 		fmt.Printf("  Device %d: %s\n", qc.Device, qc.CommandUUID)

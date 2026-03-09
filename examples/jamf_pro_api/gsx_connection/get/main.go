@@ -14,12 +14,12 @@ func main() {
 		log.Fatalf("Failed to create client: %v", err)
 	}
 
-	result, resp, err := client.GSXConnection.GetV1(context.Background())
+	result, resp, err := client.JamfProAPI.GsxConnection.GetV1(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to get GSX connection settings: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("GSX Connection Enabled: %t\n", result.Enabled)
 	fmt.Printf("Username: %s\n", result.Username)
 	fmt.Printf("Service Account No: %s\n", result.ServiceAccountNo)

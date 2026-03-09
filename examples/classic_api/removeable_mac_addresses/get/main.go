@@ -33,12 +33,12 @@ func main() {
 
 	ctx := context.Background()
 
-	mac, resp, err := client.ClassicRemoveableMacAddresses.GetByID(ctx, id)
+	mac, resp, err := client.ClassicAPI.RemoveableMacAddresses.GetByID(ctx, id)
 	if err != nil {
 		log.Fatalf("GetByID failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("ID: %d\n", mac.ID)
 	fmt.Printf("Name: %s\n", mac.Name)
 }

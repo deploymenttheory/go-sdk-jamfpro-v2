@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/activation_code"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/activation_code"
 )
 
 func main() {
@@ -26,10 +26,10 @@ func main() {
 		ActivationCode: "12345678-1234-1234-1234-123456789012",
 	}
 
-	resp, err := jamfClient.ActivationCode.UpdateV1(context.Background(), req)
+	resp, err := jamfClient.JamfProAPI.ActivationCode.UpdateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error updating activation code: %v\n", err)
 		return
 	}
-	fmt.Printf("Activation code updated successfully (Status: %d)\n", resp.StatusCode)
+	fmt.Printf("Activation code updated successfully (Status: %d)\n", resp.StatusCode())
 }

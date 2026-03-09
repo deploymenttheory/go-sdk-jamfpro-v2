@@ -23,7 +23,7 @@ func main() {
 	}
 
 	computerName := "MacBook-Pro-01" // Replace with the desired computer name
-	computer, _, err := jamfClient.ClassicComputers.GetByName(context.Background(), computerName)
+	computer, _, err := jamfClient.ClassicAPI.Computers.GetByName(context.Background(), computerName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

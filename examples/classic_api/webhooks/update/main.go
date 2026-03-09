@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/webhooks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/webhooks"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 		AuthenticationType: "NONE",
 	}
 
-	updatedWebhook, _, err := jamfClient.ClassicWebhooks.UpdateByID(context.Background(), webhookID, updateReq)
+	updatedWebhook, _, err := jamfClient.ClassicAPI.Webhooks.UpdateByID(context.Background(), webhookID, updateReq)
 	if err != nil {
 		fmt.Printf("Error updating webhook by ID: %v\n", err)
 		return

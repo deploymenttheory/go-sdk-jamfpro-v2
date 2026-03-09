@@ -24,7 +24,7 @@ func main() {
 	// Replace "1" with the actual patch policy ID you want to retrieve
 	policyID := "1"
 
-	result, _, err := jamfClient.PatchPolicies.GetByIDV2(context.Background(), policyID)
+	result, _, err := jamfClient.JamfProAPI.PatchPolicies.GetByIDV2(context.Background(), policyID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

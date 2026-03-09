@@ -22,7 +22,7 @@ func main() {
 	}
 
 	appID := 1 // Replace with the desired mobile device application ID
-	_, err = jamfClient.ClassicMobileDeviceApplications.DeleteByID(context.Background(), appID)
+	_, err = jamfClient.ClassicAPI.MobileDeviceApplications.DeleteByID(context.Background(), appID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

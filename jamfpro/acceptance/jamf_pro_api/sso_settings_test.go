@@ -5,15 +5,15 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_settings"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/sso_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestAcceptance_SsoSettings_get_v3(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoSettings
+	svc := acc.Client.JamfProAPI.SsoSettings
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV3(ctx)
@@ -25,7 +25,7 @@ func TestAcceptance_SsoSettings_get_v3(t *testing.T) {
 
 func TestAcceptance_SsoSettings_get_enrollment_customization_dependencies(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoSettings
+	svc := acc.Client.JamfProAPI.SsoSettings
 	ctx := context.Background()
 
 	result, resp, err := svc.GetEnrollmentCustomizationDependenciesV3(ctx)
@@ -37,7 +37,7 @@ func TestAcceptance_SsoSettings_get_enrollment_customization_dependencies(t *tes
 
 func TestAcceptance_SsoSettings_update_v3(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoSettings
+	svc := acc.Client.JamfProAPI.SsoSettings
 	ctx := context.Background()
 
 	current, _, err := svc.GetV3(ctx)
@@ -59,7 +59,7 @@ func TestAcceptance_SsoSettings_update_v3(t *testing.T) {
 
 func TestAcceptance_SsoSettings_get_history_v3(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoSettings
+	svc := acc.Client.JamfProAPI.SsoSettings
 	ctx := context.Background()
 
 	// Add history note first
@@ -82,7 +82,7 @@ func TestAcceptance_SsoSettings_get_history_v3(t *testing.T) {
 
 func TestAcceptance_SsoSettings_add_history_note_v3(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SsoSettings
+	svc := acc.Client.JamfProAPI.SsoSettings
 	ctx := context.Background()
 
 	noteReq := &sso_settings.AddHistoryNoteRequest{

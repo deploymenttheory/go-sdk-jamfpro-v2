@@ -22,7 +22,7 @@ func main() {
 	}
 
 	licensedSoftwareID := 1 // Replace with the desired licensed software ID to delete
-	_, err = jamfClient.ClassicLicensedSoftware.DeleteByID(context.Background(), licensedSoftwareID)
+	_, err = jamfClient.ClassicAPI.LicensedSoftware.DeleteByID(context.Background(), licensedSoftwareID)
 	if err != nil {
 		fmt.Printf("Error deleting licensed software by ID: %v\n", err)
 		return

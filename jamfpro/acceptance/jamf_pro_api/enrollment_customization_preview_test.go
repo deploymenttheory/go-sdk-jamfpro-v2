@@ -7,8 +7,8 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customization_preview"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customizations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment_customization_preview"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment_customizations"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -47,7 +47,7 @@ import (
 func TestAcceptance_EnrollmentCustomizationPreview_parse_markdown(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.EnrollmentCustomizationPreview
+	svc := acc.Client.JamfProAPI.EnrollmentCustomizationPreview
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "ParseMarkdown", "Parsing markdown to HTML")
@@ -71,8 +71,8 @@ func TestAcceptance_EnrollmentCustomizationPreview_parse_markdown(t *testing.T) 
 func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	previewSvc := acc.Client.EnrollmentCustomizationPreview
-	ecSvc := acc.Client.EnrollmentCustomizations
+	previewSvc := acc.Client.JamfProAPI.EnrollmentCustomizationPreview
+	ecSvc := acc.Client.JamfProAPI.EnrollmentCustomizations
 	ctx := context.Background()
 
 	// Create an enrollment customization to use as the parent
@@ -89,7 +89,7 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 	})
 	require.NoError(t, err, "failed to create enrollment customization")
 	require.NotNil(t, ec)
-	assert.Contains(t, []int{200, 201}, ecResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, ecResp.StatusCode())
 
 	ecID := ec.ID
 	acc.LogTestSuccess(t, "Created enrollment customization ID=%s", ecID)
@@ -116,7 +116,7 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 	createdPanel, createPanelResp, err := previewSvc.CreateTextPanel(ctx, ecID, createPanelReq)
 	require.NoError(t, err)
 	require.NotNil(t, createdPanel)
-	assert.Contains(t, []int{200, 201}, createPanelResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createPanelResp.StatusCode())
 	assert.Positive(t, createdPanel.ID)
 
 	panelID := fmt.Sprintf("%d", createdPanel.ID)
@@ -134,7 +134,7 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 	panels, panelsResp, err := previewSvc.GetAllPanels(ctx, ecID)
 	require.NoError(t, err)
 	require.NotNil(t, panels)
-	assert.Equal(t, 200, panelsResp.StatusCode)
+	assert.Equal(t, 200, panelsResp.StatusCode())
 
 	found := false
 	for _, p := range panels.Panels {
@@ -157,7 +157,7 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetchedPanel)
-	assert.Equal(t, 200, fetchPanelResp.StatusCode)
+	assert.Equal(t, 200, fetchPanelResp.StatusCode())
 	assert.Equal(t, "Acceptance Test Panel", fetchedPanel.DisplayName)
 
 	// 4. UpdateTextPanel
@@ -174,7 +174,7 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 	updatedPanel, updatePanelResp, err := previewSvc.UpdateTextPanel(ctx, ecID, panelID, updatePanelReq)
 	require.NoError(t, err)
 	require.NotNil(t, updatedPanel)
-	assert.Equal(t, 200, updatePanelResp.StatusCode)
+	assert.Equal(t, 200, updatePanelResp.StatusCode())
 	assert.Equal(t, "Updated Acceptance Test Panel", updatedPanel.DisplayName)
 	acc.LogTestSuccess(t, "Text panel updated: ID=%s", panelID)
 
@@ -184,7 +184,7 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 	deleteResp, err := previewSvc.DeletePanel(ctx, ecID, panelID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Text panel ID=%s deleted", panelID)
 }
 
@@ -195,7 +195,7 @@ func TestAcceptance_EnrollmentCustomizationPreview_text_panel_lifecycle(t *testi
 func TestAcceptance_EnrollmentCustomizationPreview_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.EnrollmentCustomizationPreview
+	svc := acc.Client.JamfProAPI.EnrollmentCustomizationPreview
 
 	t.Run("ParseMarkdown_NilRequest", func(t *testing.T) {
 		_, _, err := svc.ParseMarkdown(context.Background(), nil)

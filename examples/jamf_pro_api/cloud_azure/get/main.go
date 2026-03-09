@@ -24,7 +24,7 @@ func main() {
 	// Replace "1" with the actual Azure Cloud IDP ID
 	cloudAzureID := "1"
 
-	result, _, err := jamfClient.CloudAzure.GetByIDV1(context.Background(), cloudAzureID)
+	result, _, err := jamfClient.JamfProAPI.CloudAzure.GetByIDV1(context.Background(), cloudAzureID)
 	if err != nil {
 		fmt.Printf("Error retrieving Azure Cloud IDP: %v\n", err)
 		return

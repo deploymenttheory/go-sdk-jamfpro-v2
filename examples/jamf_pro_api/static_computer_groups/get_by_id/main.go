@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupID := "1" // Replace with the desired static computer group ID
-	result, _, err := jamfClient.StaticComputerGroups.GetByIDV2(context.Background(), groupID)
+	result, _, err := jamfClient.JamfProAPI.StaticComputerGroups.GetByIDV2(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

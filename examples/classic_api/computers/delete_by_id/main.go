@@ -22,7 +22,7 @@ func main() {
 	}
 
 	computerID := "1" // Replace with the desired computer ID to delete
-	_, err = jamfClient.ClassicComputers.DeleteByID(context.Background(), computerID)
+	_, err = jamfClient.ClassicAPI.Computers.DeleteByID(context.Background(), computerID)
 	if err != nil {
 		fmt.Printf("Error deleting computer by ID: %v\n", err)
 		return

@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupName := "Engineering Workstations" // Replace with the desired static computer group name
-	result, _, err := jamfClient.StaticComputerGroups.GetByNameV2(context.Background(), groupName)
+	result, _, err := jamfClient.JamfProAPI.StaticComputerGroups.GetByNameV2(context.Background(), groupName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -23,7 +23,7 @@ func main() {
 	}
 
 	profileName := "My Enrollment Profile" // Replace with the desired profile name
-	profile, _, err := jamfClient.ClassicMobileDeviceEnrollmentProfiles.GetByName(context.Background(), profileName)
+	profile, _, err := jamfClient.ClassicAPI.MobileDeviceEnrollmentProfiles.GetByName(context.Background(), profileName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

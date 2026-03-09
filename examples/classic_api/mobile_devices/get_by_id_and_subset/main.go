@@ -24,7 +24,7 @@ func main() {
 
 	deviceID := "1"   // Replace with the desired mobile device ID
 	subset := "General" // Subset: General, Location, Purchasing, etc.
-	device, _, err := jamfClient.ClassicMobileDevices.GetByIDAndDataSubset(context.Background(), deviceID, subset)
+	device, _, err := jamfClient.ClassicAPI.MobileDevices.GetByIDAndDataSubset(context.Background(), deviceID, subset)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

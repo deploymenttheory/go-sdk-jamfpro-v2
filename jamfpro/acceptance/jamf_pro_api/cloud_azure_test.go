@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_azure"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_azure"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -14,7 +14,7 @@ import (
 func TestCloudAzure_GetDefaultServerConfiguration(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.CloudAzure
+	svc := acc.Client.JamfProAPI.CloudAzure
 	ctx := context.Background()
 
 	result, _, err := svc.GetDefaultServerConfigurationV1(ctx)
@@ -30,7 +30,7 @@ func TestCloudAzure_GetDefaultServerConfiguration(t *testing.T) {
 func TestCloudAzure_GetDefaultMappings(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.CloudAzure
+	svc := acc.Client.JamfProAPI.CloudAzure
 	ctx := context.Background()
 
 	result, _, err := svc.GetDefaultMappingsV1(ctx)
@@ -46,7 +46,7 @@ func TestCloudAzure_GetDefaultMappings(t *testing.T) {
 func TestCloudAzure_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.CloudAzure
+	svc := acc.Client.JamfProAPI.CloudAzure
 	ctx := context.Background()
 
 	displayName := acc.UniqueName("sdkv2_acc_Test Azure IDP")

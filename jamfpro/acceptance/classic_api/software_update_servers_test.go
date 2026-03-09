@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/software_update_servers"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/software_update_servers"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ import (
 func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicSoftwareUpdateServers
+	svc := acc.Client.ClassicAPI.SoftwareUpdateServers
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -43,7 +43,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	require.NoError(t, err, "CreateSoftwareUpdateServer should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created software update server ID should be a positive integer")
 
 	serverID := created.ID
@@ -67,7 +67,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListSoftwareUpdateServers should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -92,7 +92,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, serverID)
 	require.NoError(t, err, "GetSoftwareUpdateServerByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, serverID, fetched.ID)
 	assert.Equal(t, serverName, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.ID, fetched.Name)
@@ -108,7 +108,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, serverName)
 	require.NoError(t, err, "GetSoftwareUpdateServerByName should not return an error")
 	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
+	assert.Equal(t, 200, fetchByNameResp.StatusCode())
 	assert.Equal(t, serverID, fetchedByName.ID)
 	assert.Equal(t, serverName, fetchedByName.Name)
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.ID, fetchedByName.Name)
@@ -130,7 +130,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx5, serverID, updateReq)
 	require.NoError(t, err, "UpdateSoftwareUpdateServerByID should not return an error")
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -149,7 +149,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateSoftwareUpdateServerByName should not return an error")
 	require.NotNil(t, reverted)
-	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, revertResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -163,7 +163,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx7, serverID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, serverName, verified.Name, "name should reflect the revert")
 	acc.LogTestSuccess(t, "Name revert verified: %q", verified.Name)
 
@@ -178,7 +178,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx8, serverID)
 	require.NoError(t, err, "DeleteSoftwareUpdateServerByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Software update server ID=%d deleted", serverID)
 }
 
@@ -189,7 +189,7 @@ func TestAcceptance_SoftwareUpdateServers_lifecycle(t *testing.T) {
 func TestAcceptance_SoftwareUpdateServers_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicSoftwareUpdateServers
+	svc := acc.Client.ClassicAPI.SoftwareUpdateServers
 	ctx := context.Background()
 
 	serverName := acc.UniqueName("sdkv2_acc_acc-test-sus-dbn")
@@ -222,7 +222,7 @@ func TestAcceptance_SoftwareUpdateServers_delete_by_name(t *testing.T) {
 	deleteResp, err := svc.DeleteByName(ctx2, serverName)
 	require.NoError(t, err, "DeleteSoftwareUpdateServerByName should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Software update server %q deleted by name", serverName)
 }
 
@@ -233,7 +233,7 @@ func TestAcceptance_SoftwareUpdateServers_delete_by_name(t *testing.T) {
 func TestAcceptance_SoftwareUpdateServers_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicSoftwareUpdateServers
+	svc := acc.Client.ClassicAPI.SoftwareUpdateServers
 
 	t.Run("GetSoftwareUpdateServerByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

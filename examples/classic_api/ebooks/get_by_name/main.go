@@ -23,7 +23,7 @@ func main() {
 	}
 
 	ebookName := "Sample Ebook" // Replace with the desired ebook name
-	ebook, _, err := jamfClient.ClassicEbooks.GetByName(context.Background(), ebookName)
+	ebook, _, err := jamfClient.ClassicAPI.Ebooks.GetByName(context.Background(), ebookName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

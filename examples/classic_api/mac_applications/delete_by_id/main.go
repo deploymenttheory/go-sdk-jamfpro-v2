@@ -22,7 +22,7 @@ func main() {
 	}
 
 	appID := 1 // Replace with the desired Mac application ID to delete
-	_, err = jamfClient.ClassicMacApplications.DeleteByID(context.Background(), appID)
+	_, err = jamfClient.ClassicAPI.MacApplications.DeleteByID(context.Background(), appID)
 	if err != nil {
 		fmt.Printf("Error deleting Mac application by ID: %v\n", err)
 		return

@@ -23,7 +23,7 @@ func main() {
 	}
 
 	invitationID := "1" // Replace with the desired computer invitation ID
-	invitation, _, err := jamfClient.ClassicComputerInvitations.GetByID(context.Background(), invitationID)
+	invitation, _, err := jamfClient.ClassicAPI.ComputerInvitations.GetByID(context.Background(), invitationID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

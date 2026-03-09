@@ -13,7 +13,7 @@ func TestDeclarativeDeviceManagement_GetStatusItems(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.DeclarativeDeviceManagement
+	svc := acc.Client.JamfProAPI.DeclarativeDeviceManagement
 
 	clientManagementID := "test-device-id"
 
@@ -31,7 +31,7 @@ func TestDeclarativeDeviceManagement_GetStatusItemByKey(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.DeclarativeDeviceManagement
+	svc := acc.Client.JamfProAPI.DeclarativeDeviceManagement
 
 	clientManagementID := "test-device-id"
 	key := "device.model.family"
@@ -50,7 +50,7 @@ func TestDeclarativeDeviceManagement_ForceSync(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.DeclarativeDeviceManagement
+	svc := acc.Client.JamfProAPI.DeclarativeDeviceManagement
 
 	clientManagementID := "test-device-id"
 

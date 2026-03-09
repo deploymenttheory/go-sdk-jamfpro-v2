@@ -20,14 +20,14 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	current, _, err := jamfClient.SelfServiceSettings.Get(context.Background())
+	current, _, err := jamfClient.JamfProAPI.SelfServiceSettings.Get(context.Background())
 	if err != nil {
 		fmt.Printf("Error getting current: %v\n", err)
 		return
 	}
 
 	current.ConfigurationSettings.NotificationsEnabled = !current.ConfigurationSettings.NotificationsEnabled
-	updated, _, err := jamfClient.SelfServiceSettings.Update(context.Background(), current)
+	updated, _, err := jamfClient.JamfProAPI.SelfServiceSettings.Update(context.Background(), current)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

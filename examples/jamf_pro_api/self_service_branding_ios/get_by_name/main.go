@@ -27,7 +27,7 @@ func main() {
 		name = os.Args[1]
 	}
 
-	result, _, err := jamfClient.SelfServiceBrandingIOS.GetByNameV1(context.Background(), name)
+	result, _, err := jamfClient.JamfProAPI.SelfServiceBrandingIos.GetByNameV1(context.Background(), name)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/smart_mobile_device_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/smart_mobile_device_groups"
 )
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.SmartMobileDeviceGroups.UpdateByID(context.Background(), groupID, req)
+	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.UpdateByID(context.Background(), groupID, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

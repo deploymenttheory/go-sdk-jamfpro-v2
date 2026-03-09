@@ -23,7 +23,7 @@ func main() {
 	}
 
 	appID := 1 // Replace with the desired Mac application ID
-	app, _, err := jamfClient.ClassicMacApplications.GetByID(context.Background(), appID)
+	app, _, err := jamfClient.ClassicAPI.MacApplications.GetByID(context.Background(), appID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

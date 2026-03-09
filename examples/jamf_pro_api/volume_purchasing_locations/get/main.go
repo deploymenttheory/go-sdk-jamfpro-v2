@@ -22,7 +22,7 @@ func main() {
 	}
 
 	locationID := "1" // Replace with the desired volume purchasing location ID
-	result, _, err := jamfClient.VolumePurchasingLocations.GetByIDV1(context.Background(), locationID)
+	result, _, err := jamfClient.JamfProAPI.VolumePurchasingLocations.GetByIDV1(context.Background(), locationID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

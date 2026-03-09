@@ -26,7 +26,7 @@ func main() {
 		name = os.Args[1]
 	}
 
-	_, err = jamfClient.SelfServiceBrandingIOS.DeleteByNameV1(context.Background(), name)
+	_, err = jamfClient.JamfProAPI.SelfServiceBrandingIos.DeleteByNameV1(context.Background(), name)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

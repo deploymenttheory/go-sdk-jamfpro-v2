@@ -1,0 +1,89 @@
+package account_preferences
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"resty.dev/v3"
+)
+
+type (
+	// AccountPreferencesServiceInterface defines the interface for account preferences operations.
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
+	AccountPreferencesServiceInterface interface {
+		// GetV3 returns the current account preferences (Get Jamf Pro Account Preferences).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
+		GetV3(ctx context.Context) (*ResourceAccountPreferencesV2, *resty.Response, error)
+
+		// UpdateV3 updates account preferences (Update Jamf Pro Account Preferences / PATCH).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v3-account-preferences
+		UpdateV3(ctx context.Context, request *ResourceAccountPreferencesV2) (*ResourceAccountPreferencesV2, *resty.Response, error)
+	}
+
+	// Service handles communication with the account preferences-related methods of the Jamf Pro API.
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
+	AccountPreferences struct {
+		client interfaces.HTTPClient
+	}
+)
+
+var _ AccountPreferencesServiceInterface = (*AccountPreferences)(nil)
+
+func NewAccountPreferences(client interfaces.HTTPClient) *AccountPreferences {
+	return &AccountPreferences{client: client}
+}
+
+// -----------------------------------------------------------------------------
+// Jamf Pro API - Account Preferences Operations
+// -----------------------------------------------------------------------------
+
+// GetV3 returns the current account preferences.
+// URL: GET /api/v3/account-preferences
+// https://developer.jamf.com/jamf-pro/reference/get_v3-account-preferences
+func (s *AccountPreferences) GetV3(ctx context.Context) (*ResourceAccountPreferencesV2, *resty.Response, error) {
+	var result ResourceAccountPreferencesV2
+
+	endpoint := EndpointAccountPreferencesV3
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// UpdateV3 updates account preferences.
+// URL: PATCH /api/v3/account-preferences
+// https://developer.jamf.com/jamf-pro/reference/patch_v3-account-preferences
+func (s *AccountPreferences) UpdateV3(ctx context.Context, request *ResourceAccountPreferencesV2) (*ResourceAccountPreferencesV2, *resty.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	var result ResourceAccountPreferencesV2
+
+	endpoint := EndpointAccountPreferencesV3
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}

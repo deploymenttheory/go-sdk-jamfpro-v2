@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/scripts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/scripts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -79,7 +79,7 @@ import (
 func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Scripts
+	svc := acc.Client.JamfProAPI.Scripts
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -100,7 +100,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	require.NoError(t, err, "CreateScriptV1 should not return an error")
 	require.NotNil(t, created, "CreateScriptV1 result should not be nil")
 	require.NotNil(t, createResp, "CreateScriptV1 response should not be nil")
-	assert.Equal(t, 201, createResp.StatusCode, "expected 201 Created")
+	assert.Equal(t, 201, createResp.StatusCode(), "expected 201 Created")
 	assert.NotEmpty(t, created.ID, "created script ID should not be empty")
 	assert.NotEmpty(t, created.Href, "created script Href should not be empty")
 
@@ -125,7 +125,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	list, listResp, err := svc.ListScriptsV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err, "ListScriptsV1 should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.TotalCount, "total count should be positive")
 
 	found := false
@@ -156,7 +156,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err, "GetScriptByIDV1 should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, scriptID, fetched.ID)
 	assert.Equal(t, scriptName, fetched.Name)
 	assert.Equal(t, scripts.ScriptPriorityAfter, fetched.Priority)
@@ -183,7 +183,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateScriptByIDV1(ctx4, scriptID, updateReq)
 	require.NoError(t, err, "UpdateScriptByIDV1 should not return an error")
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	assert.Equal(t, scriptID, updated.ID)
 	acc.LogTestSuccess(t, "Script updated: ID=%s", updated.ID)
 
@@ -198,7 +198,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetScriptByIDV1(ctx5, scriptID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, updatedName, verified.Name, "name should reflect the update")
 	assert.Equal(t, scripts.ScriptPriorityBefore, verified.Priority, "priority should reflect the update")
 	acc.LogTestSuccess(t, "Update verified: name=%q priority=%s", verified.Name, verified.Priority)
@@ -217,7 +217,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	noteResp, err := svc.AddScriptHistoryNotesV1(ctx6, scriptID, noteReq)
 	require.NoError(t, err, "AddScriptHistoryNotesV1 should not return an error")
 	require.NotNil(t, noteResp)
-	assert.Contains(t, []int{200, 201}, noteResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, noteResp.StatusCode())
 	acc.LogTestSuccess(t, "History note added")
 
 	// ------------------------------------------------------------------
@@ -231,7 +231,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	history, historyResp, err := svc.GetScriptHistoryV1(ctx7, scriptID, nil)
 	require.NoError(t, err, "GetScriptHistoryV1 should not return an error")
 	require.NotNil(t, history)
-	assert.Equal(t, 200, historyResp.StatusCode)
+	assert.Equal(t, 200, historyResp.StatusCode())
 	assert.Positive(t, history.TotalCount, "history should have at least one entry")
 
 	noteFound := false
@@ -257,7 +257,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteScriptByIDV1(ctx8, scriptID)
 	require.NoError(t, err, "DeleteScriptByIDV1 should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Script ID=%s deleted", scriptID)
 }
 
@@ -270,7 +270,7 @@ func TestAcceptance_Scripts_lifecycle(t *testing.T) {
 func TestAcceptance_Scripts_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Scripts
+	svc := acc.Client.JamfProAPI.Scripts
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -317,7 +317,7 @@ func TestAcceptance_Scripts_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.ListScriptsV1(ctx2, rsqlQuery)
 	require.NoError(t, err, "ListScriptsV1 with RSQL filter should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, s := range list.Results {
@@ -339,7 +339,7 @@ func TestAcceptance_Scripts_list_with_rsql_filter(t *testing.T) {
 func TestAcceptance_Scripts_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Scripts
+	svc := acc.Client.JamfProAPI.Scripts
 
 	t.Run("GetScriptByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetScriptByIDV1(context.Background(), "")

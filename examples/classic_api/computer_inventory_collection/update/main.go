@@ -12,7 +12,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_inventory_collection"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_inventory_collection"
 )
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
 	ctx := context.Background()
 
 	// Fetch current settings
-	current, _, err := client.ClassicComputerInventoryCollection.Get(ctx)
+	current, _, err := client.ClassicAPI.ComputerInventoryCollection.Get(ctx)
 	if err != nil {
 		log.Fatalf("Get failed: %v", err)
 	}
@@ -50,11 +50,11 @@ func main() {
 		Plugins:                       current.Plugins,
 	}
 
-	resp, err := client.ClassicComputerInventoryCollection.Update(ctx, settings)
+	resp, err := client.ClassicAPI.ComputerInventoryCollection.Update(ctx, settings)
 	if err != nil {
 		log.Fatalf("Update failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Println("Computer inventory collection settings updated successfully")
 }

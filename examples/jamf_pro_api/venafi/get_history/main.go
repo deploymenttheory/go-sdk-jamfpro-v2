@@ -22,7 +22,7 @@ func main() {
 	}
 
 	venafiID := "1" // Replace with actual Venafi configuration ID
-	history, _, err := jamfClient.Venafi.GetHistory(context.Background(), venafiID, nil)
+	history, _, err := jamfClient.JamfProAPI.Venafi.GetHistory(context.Background(), venafiID, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

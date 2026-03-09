@@ -22,7 +22,7 @@ func main() {
 	}
 
 	invitationID := "1" // Replace with the desired computer invitation ID to delete
-	_, err = jamfClient.ClassicComputerInvitations.DeleteByID(context.Background(), invitationID)
+	_, err = jamfClient.ClassicAPI.ComputerInvitations.DeleteByID(context.Background(), invitationID)
 	if err != nil {
 		fmt.Printf("Error deleting computer invitation by ID: %v\n", err)
 		return

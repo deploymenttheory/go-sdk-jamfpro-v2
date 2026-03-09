@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/static_computer_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -38,7 +38,7 @@ import (
 func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.StaticComputerGroups
+	svc := acc.Client.JamfProAPI.StaticComputerGroups
 	ctx := context.Background()
 
 	// 1. Create
@@ -80,7 +80,7 @@ func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, groupID, fetched.ID)
 	assert.Equal(t, createReq.Name, fetched.Name)
 	acc.LogTestSuccess(t, "GetByIDV2: name=%q", fetched.Name)
@@ -105,7 +105,7 @@ func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV2(ctx, groupID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	require.Contains(t, []int{200, 202}, updateResp.StatusCode)
+	require.Contains(t, []int{200, 202}, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Static computer group updated: ID=%s", groupID)
 
 	// 5. Re-fetch to verify
@@ -121,14 +121,14 @@ func TestAcceptance_StaticComputerGroups_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV2(ctx, groupID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Static computer group ID=%s deleted", groupID)
 }
 
 func TestAcceptance_StaticComputerGroups_list(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.StaticComputerGroups
+	svc := acc.Client.JamfProAPI.StaticComputerGroups
 
 	result, resp, err := svc.ListV2(context.Background(), map[string]string{"page": "0", "page-size": "100"})
 	require.NoError(t, err)
@@ -142,7 +142,7 @@ func TestAcceptance_StaticComputerGroups_list(t *testing.T) {
 func TestAcceptance_StaticComputerGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.StaticComputerGroups
+	svc := acc.Client.JamfProAPI.StaticComputerGroups
 
 	t.Run("GetByIDV2_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV2(context.Background(), "")

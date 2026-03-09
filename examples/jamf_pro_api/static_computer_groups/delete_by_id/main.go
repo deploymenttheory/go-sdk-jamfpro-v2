@@ -21,7 +21,7 @@ func main() {
 	}
 
 	groupID := "1" // Replace with the desired static computer group ID to delete
-	_, err = jamfClient.StaticComputerGroups.DeleteByIDV2(context.Background(), groupID)
+	_, err = jamfClient.JamfProAPI.StaticComputerGroups.DeleteByIDV2(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

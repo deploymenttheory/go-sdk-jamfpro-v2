@@ -24,7 +24,7 @@ func main() {
 	// Replace "1" with the actual patch policy ID you want to check
 	policyID := "1"
 
-	result, _, err := jamfClient.PatchPolicies.GetDashboardStatusV2(context.Background(), policyID)
+	result, _, err := jamfClient.JamfProAPI.PatchPolicies.GetDashboardStatusV2(context.Background(), policyID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -37,11 +37,11 @@ import (
 func TestAcceptance_ClassicLdap_get_mappings_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicLdap
+	svc := acc.Client.JamfProAPI.ClassicLdap
 	ctx := context.Background()
 
 	// Get on-prem LDAP servers to find a valid ID
-	servers, _, err := acc.Client.Ldap.GetLdapServersOnlyV1(ctx)
+	servers, _, err := acc.Client.JamfProAPI.Ldap.GetLdapServersOnlyV1(ctx)
 	require.NoError(t, err)
 
 	if len(servers) == 0 {

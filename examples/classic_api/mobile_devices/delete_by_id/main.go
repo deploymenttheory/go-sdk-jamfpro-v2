@@ -23,11 +23,11 @@ func main() {
 
 	deviceID := "1" // Replace with the desired mobile device ID to delete
 
-	resp, err := jamfClient.ClassicMobileDevices.DeleteByID(context.Background(), deviceID)
+	resp, err := jamfClient.ClassicAPI.MobileDevices.DeleteByID(context.Background(), deviceID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("Mobile device ID %s deleted. Status: %d\n", deviceID, resp.StatusCode)
+	fmt.Printf("Mobile device ID %s deleted. Status: %d\n", deviceID, resp.StatusCode())
 }

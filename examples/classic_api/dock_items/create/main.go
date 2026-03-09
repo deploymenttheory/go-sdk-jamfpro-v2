@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/dock_items"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/dock_items"
 )
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 		Contents: "",
 	}
 
-	created, _, err := jamfClient.ClassicDockItems.Create(context.Background(), createReq)
+	created, _, err := jamfClient.ClassicAPI.DockItems.Create(context.Background(), createReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

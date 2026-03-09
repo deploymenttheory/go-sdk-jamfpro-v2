@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_accounts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/vpp_accounts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ import (
 func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicVPPAccounts
+	svc := acc.Client.ClassicAPI.VppAccounts
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -45,7 +45,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	require.NoError(t, err, "CreateVPPAccount should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created VPP account ID should be a positive integer")
 
 	accountID := created.ID
@@ -69,7 +69,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListVPPAccounts should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -94,7 +94,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, accountID)
 	require.NoError(t, err, "GetVPPAccountByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, accountID, fetched.ID)
 	assert.Equal(t, accountName, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.ID, fetched.Name)
@@ -115,7 +115,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx4, accountID, updateReq)
 	require.NoError(t, err, "UpdateVPPAccountByID should not return an error")
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -129,7 +129,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx5, accountID)
 	require.NoError(t, err, "DeleteVPPAccountByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "VPP account ID=%d deleted", accountID)
 }
 
@@ -140,7 +140,7 @@ func TestAcceptance_VPPAccounts_lifecycle(t *testing.T) {
 func TestAcceptance_VPPAccounts_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicVPPAccounts
+	svc := acc.Client.ClassicAPI.VppAccounts
 
 	t.Run("GetVPPAccountByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

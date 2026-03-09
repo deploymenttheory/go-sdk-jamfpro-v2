@@ -22,7 +22,7 @@ func main() {
 	}
 
 	brandingID := "1" // Replace with the desired branding configuration ID
-	result, _, err := jamfClient.SelfServiceBrandingMacOS.GetByID(context.Background(), brandingID)
+	result, _, err := jamfClient.JamfProAPI.SelfServiceBrandingMacos.GetByID(context.Background(), brandingID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

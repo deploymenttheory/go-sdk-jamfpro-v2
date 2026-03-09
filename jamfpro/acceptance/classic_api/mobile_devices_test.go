@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/mobile_devices"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_devices"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ import (
 func TestAcceptance_MobileDevices_list(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMobileDevices
+	svc := acc.Client.ClassicAPI.MobileDevices
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "List", "Listing mobile devices")
@@ -32,7 +32,7 @@ func TestAcceptance_MobileDevices_list(t *testing.T) {
 	list, listResp, err := svc.List(ctx1)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	acc.LogTestSuccess(t, "List returned %d mobile devices", list.Size)
 }
 
@@ -44,7 +44,7 @@ func TestAcceptance_MobileDevices_list(t *testing.T) {
 func TestAcceptance_MobileDevices_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMobileDevices
+	svc := acc.Client.ClassicAPI.MobileDevices
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "List", "Listing mobile devices to find one to fetch")
@@ -68,7 +68,7 @@ func TestAcceptance_MobileDevices_get_by_id(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, deviceID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, list.Results[0].ID, fetched.General.ID)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.General.ID, fetched.General.Name)
 }
@@ -81,7 +81,7 @@ func TestAcceptance_MobileDevices_get_by_id(t *testing.T) {
 func TestAcceptance_MobileDevices_get_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMobileDevices
+	svc := acc.Client.ClassicAPI.MobileDevices
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "List", "Listing mobile devices to find one to fetch")
@@ -113,7 +113,7 @@ func TestAcceptance_MobileDevices_get_by_name(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByName(ctx2, deviceName)
 	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetched.General.ID, fetched.General.Name)
 }
 
@@ -125,7 +125,7 @@ func TestAcceptance_MobileDevices_get_by_name(t *testing.T) {
 func TestAcceptance_MobileDevices_get_by_id_and_data_subset(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMobileDevices
+	svc := acc.Client.ClassicAPI.MobileDevices
 	ctx := context.Background()
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)
@@ -147,7 +147,7 @@ func TestAcceptance_MobileDevices_get_by_id_and_data_subset(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByIDAndDataSubset(ctx2, deviceID, "General")
 	require.NoError(t, err, "GetByIDAndDataSubset should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.NotEmpty(t, fetched.General.Name)
 	acc.LogTestSuccess(t, "GetByIDAndDataSubset: ID=%d", fetched.General.ID)
 }
@@ -159,7 +159,7 @@ func TestAcceptance_MobileDevices_get_by_id_and_data_subset(t *testing.T) {
 func TestAcceptance_MobileDevices_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMobileDevices
+	svc := acc.Client.ClassicAPI.MobileDevices
 
 	t.Run("GetByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), "")
@@ -217,7 +217,7 @@ func TestAcceptance_MobileDevices_validation_errors(t *testing.T) {
 func TestAcceptance_MobileDevices_update_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMobileDevices
+	svc := acc.Client.ClassicAPI.MobileDevices
 	ctx := context.Background()
 
 	ctx1, cancel1 := context.WithTimeout(ctx, acc.Config.RequestTimeout)

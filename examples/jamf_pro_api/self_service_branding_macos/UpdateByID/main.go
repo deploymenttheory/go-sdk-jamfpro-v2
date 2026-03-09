@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_macos"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/self_service_branding_macos"
 )
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 		HomeSubheading:        "Choose an item below",
 	}
 
-	result, _, err := jamfClient.SelfServiceBrandingMacOS.UpdateByID(context.Background(), brandingID, updateReq)
+	result, _, err := jamfClient.JamfProAPI.SelfServiceBrandingMacos.UpdateByID(context.Background(), brandingID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

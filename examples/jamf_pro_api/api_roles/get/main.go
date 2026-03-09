@@ -24,7 +24,7 @@ func main() {
 	// Replace "1" with the actual API role ID
 	roleID := "1"
 
-	result, _, err := jamfClient.APIRoles.GetByIDV1(context.Background(), roleID)
+	result, _, err := jamfClient.JamfProAPI.ApiRoles.GetByIDV1(context.Background(), roleID)
 	if err != nil {
 		fmt.Printf("Error retrieving API role: %v\n", err)
 		return

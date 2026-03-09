@@ -8,7 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/packages"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 	noteReq := &packages.AddHistoryNotesRequest{
 		Note: fmt.Sprintf("Example note added at %s", time.Now().Format(time.RFC3339)),
 	}
-	_, err = jamfClient.Packages.AddHistoryNotesV1(context.Background(), packageID, noteReq)
+	_, err = jamfClient.JamfProAPI.Packages.AddHistoryNotesV1(context.Background(), packageID, noteReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

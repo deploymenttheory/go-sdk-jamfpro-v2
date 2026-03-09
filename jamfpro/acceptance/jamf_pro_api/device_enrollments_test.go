@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -68,7 +68,7 @@ import (
 func TestAcceptance_DeviceEnrollments_list_and_get(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DeviceEnrollments
+	svc := acc.Client.JamfProAPI.DeviceEnrollments
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "List", "Listing device enrollments")
@@ -84,7 +84,7 @@ func TestAcceptance_DeviceEnrollments_list_and_get(t *testing.T) {
 	}
 
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.GreaterOrEqual(t, list.TotalCount, 0)
 	acc.LogTestSuccess(t, "Listed %d device enrollment(s)", list.TotalCount)
 
@@ -101,7 +101,7 @@ func TestAcceptance_DeviceEnrollments_list_and_get(t *testing.T) {
 	enrollment, getResp, err := svc.GetByIDV1(ctx, enrollmentID)
 	require.NoError(t, err)
 	require.NotNil(t, enrollment)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	assert.Equal(t, enrollmentID, enrollment.ID)
 	assert.Equal(t, enrollmentName, enrollment.Name)
 	acc.LogTestSuccess(t, "GetByID: name=%q", enrollment.Name)
@@ -110,7 +110,7 @@ func TestAcceptance_DeviceEnrollments_list_and_get(t *testing.T) {
 	enrollmentByName, getNameResp, err := svc.GetByNameV1(ctx, enrollmentName)
 	require.NoError(t, err)
 	require.NotNil(t, enrollmentByName)
-	assert.Equal(t, 200, getNameResp.StatusCode)
+	assert.Equal(t, 200, getNameResp.StatusCode())
 	assert.Equal(t, enrollmentID, enrollmentByName.ID)
 	assert.Equal(t, enrollmentName, enrollmentByName.Name)
 	acc.LogTestSuccess(t, "GetByName: ID=%s", enrollmentByName.ID)
@@ -119,7 +119,7 @@ func TestAcceptance_DeviceEnrollments_list_and_get(t *testing.T) {
 func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DeviceEnrollments
+	svc := acc.Client.JamfProAPI.DeviceEnrollments
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)
@@ -137,7 +137,7 @@ func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 	addResp, addRespHTTP, err := svc.AddHistoryNotesV1(ctx, enrollmentID, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, addResp)
-	assert.Equal(t, 201, addRespHTTP.StatusCode)
+	assert.Equal(t, 201, addRespHTTP.StatusCode())
 	acc.LogTestSuccess(t, "Added history note with ID: %s", addResp.ID)
 
 	acc.LogTestStage(t, "GetHistory", "Getting history for device enrollment ID=%s", enrollmentID)
@@ -149,7 +149,7 @@ func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, history)
-	assert.Equal(t, 200, histResp.StatusCode)
+	assert.Equal(t, 200, histResp.StatusCode())
 	assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 	acc.LogTestSuccess(t, "History entries: %d", history.TotalCount)
 
@@ -160,7 +160,7 @@ func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 		})
 		require.NoError(t, err)
 		require.NotNil(t, filteredHistory)
-		assert.Equal(t, 200, filtResp.StatusCode)
+		assert.Equal(t, 200, filtResp.StatusCode())
 		acc.LogTestSuccess(t, "RSQL filter returned %d result(s)", filteredHistory.TotalCount)
 	}
 }
@@ -168,7 +168,7 @@ func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 func TestAcceptance_DeviceEnrollments_sync_states(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DeviceEnrollments
+	svc := acc.Client.JamfProAPI.DeviceEnrollments
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)
@@ -183,14 +183,14 @@ func TestAcceptance_DeviceEnrollments_sync_states(t *testing.T) {
 	syncStates, syncResp, err := svc.GetSyncStatesV1(ctx, enrollmentID)
 	require.NoError(t, err)
 	require.NotNil(t, syncStates)
-	assert.Equal(t, 200, syncResp.StatusCode)
+	assert.Equal(t, 200, syncResp.StatusCode())
 	acc.LogTestSuccess(t, "Retrieved %d sync state(s)", len(syncStates))
 
 	acc.LogTestStage(t, "GetLatestSyncState", "Getting latest sync state for device enrollment ID=%s", enrollmentID)
 	latestSync, latestResp, err := svc.GetLatestSyncStateV1(ctx, enrollmentID)
 	require.NoError(t, err)
 	require.NotNil(t, latestSync)
-	assert.Equal(t, 200, latestResp.StatusCode)
+	assert.Equal(t, 200, latestResp.StatusCode())
 	assert.NotEmpty(t, latestSync.SyncState)
 	assert.Equal(t, enrollmentID, latestSync.InstanceID)
 	acc.LogTestSuccess(t, "Latest sync state: %s", latestSync.SyncState)
@@ -199,7 +199,7 @@ func TestAcceptance_DeviceEnrollments_sync_states(t *testing.T) {
 func TestAcceptance_DeviceEnrollments_all_sync_states(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DeviceEnrollments
+	svc := acc.Client.JamfProAPI.DeviceEnrollments
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "GetAllSyncStates", "Getting all sync states for all device enrollments")
@@ -211,14 +211,14 @@ func TestAcceptance_DeviceEnrollments_all_sync_states(t *testing.T) {
 	}
 
 	require.NotNil(t, allSyncStates)
-	assert.Equal(t, 200, allSyncResp.StatusCode)
+	assert.Equal(t, 200, allSyncResp.StatusCode())
 	acc.LogTestSuccess(t, "Retrieved %d total sync state(s) across all instances", len(allSyncStates))
 }
 
 func TestAcceptance_DeviceEnrollments_public_key(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DeviceEnrollments
+	svc := acc.Client.JamfProAPI.DeviceEnrollments
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "GetPublicKey", "Getting device enrollments public key")
@@ -230,7 +230,7 @@ func TestAcceptance_DeviceEnrollments_public_key(t *testing.T) {
 	}
 
 	require.NotNil(t, publicKey)
-	assert.Equal(t, 200, keyResp.StatusCode)
+	assert.Equal(t, 200, keyResp.StatusCode())
 	assert.NotEmpty(t, publicKey)
 
 	keyStr := string(publicKey)

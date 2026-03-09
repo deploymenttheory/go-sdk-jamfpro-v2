@@ -23,10 +23,10 @@ func main() {
 	// Replace "123" with the actual account ID you want to delete
 	accountID := "123"
 
-	resp, err := jamfClient.Accounts.DeleteByIDV1(context.Background(), accountID)
+	resp, err := jamfClient.JamfProAPI.Accounts.DeleteByIDV1(context.Background(), accountID)
 	if err != nil {
 		fmt.Printf("Error deleting account: %v\n", err)
 		return
 	}
-	fmt.Printf("Successfully deleted account (Status: %d)\n", resp.StatusCode)
+	fmt.Printf("Successfully deleted account (Status: %d)\n", resp.StatusCode())
 }

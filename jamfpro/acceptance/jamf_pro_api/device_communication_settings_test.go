@@ -48,7 +48,7 @@ import (
 
 func TestAcceptance_DeviceCommunicationSettings_get_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.DeviceCommunicationSettings
+	svc := acc.Client.JamfProAPI.DeviceCommunicationSettings
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV1(ctx)
@@ -60,7 +60,7 @@ func TestAcceptance_DeviceCommunicationSettings_get_v1(t *testing.T) {
 
 func TestAcceptance_DeviceCommunicationSettings_update_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.DeviceCommunicationSettings
+	svc := acc.Client.JamfProAPI.DeviceCommunicationSettings
 	ctx := context.Background()
 
 	current, _, err := svc.GetV1(ctx)

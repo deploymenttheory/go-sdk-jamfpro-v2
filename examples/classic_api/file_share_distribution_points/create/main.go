@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/file_share_distribution_points"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/file_share_distribution_points"
 )
 
 func main() {
@@ -35,7 +35,7 @@ func main() {
 		UsernamePasswordRequired: true,
 	}
 
-	created, _, err := jamfClient.ClassicFileShareDistributionPoints.Create(context.Background(), createReq)
+	created, _, err := jamfClient.ClassicAPI.FileShareDistributionPoints.Create(context.Background(), createReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

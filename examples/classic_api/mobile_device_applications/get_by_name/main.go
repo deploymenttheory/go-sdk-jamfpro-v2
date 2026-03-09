@@ -23,7 +23,7 @@ func main() {
 	}
 
 	appName := "Sample iOS App" // Replace with the desired mobile device application name
-	app, _, err := jamfClient.ClassicMobileDeviceApplications.GetByName(context.Background(), appName)
+	app, _, err := jamfClient.ClassicAPI.MobileDeviceApplications.GetByName(context.Background(), appName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

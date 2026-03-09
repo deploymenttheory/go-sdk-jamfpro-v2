@@ -21,7 +21,7 @@ func main() {
 	}
 
 	groupID := "1" // Replace with the desired static mobile device group ID to delete
-	_, err = jamfClient.StaticMobileDeviceGroups.DeleteByID(context.Background(), groupID)
+	_, err = jamfClient.JamfProAPI.StaticMobileDeviceGroups.DeleteByID(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

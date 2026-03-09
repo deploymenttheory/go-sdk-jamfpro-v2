@@ -22,7 +22,7 @@ func main() {
 	}
 
 	accountID := 1
-	_, err = jamfClient.ClassicAccounts.DeleteByID(context.Background(), accountID)
+	_, err = jamfClient.ClassicAPI.Accounts.DeleteByID(context.Background(), accountID)
 	if err != nil {
 		fmt.Printf("Error deleting account by ID: %v\n", err)
 		return

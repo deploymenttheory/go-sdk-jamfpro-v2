@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupName := "go-sdk-v2-smart-group" // Replace with the desired computer group name to delete
-	_, err = jamfClient.ClassicComputerGroups.DeleteByName(context.Background(), groupName)
+	_, err = jamfClient.ClassicAPI.ComputerGroups.DeleteByName(context.Background(), groupName)
 	if err != nil {
 		fmt.Printf("Error deleting computer group by name: %v\n", err)
 		return

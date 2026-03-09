@@ -24,7 +24,7 @@ func main() {
 	// Replace "1" with the actual API integration ID
 	integrationID := "1"
 
-	result, _, err := jamfClient.ApiIntegrations.GetByIDV1(context.Background(), integrationID)
+	result, _, err := jamfClient.JamfProAPI.ApiIntegrations.GetByIDV1(context.Background(), integrationID)
 	if err != nil {
 		fmt.Printf("Error retrieving API integration: %v\n", err)
 		return

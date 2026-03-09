@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupName := "go-sdk-v2-smart-user-group"
-	_, err = jamfClient.ClassicSmartUserGroups.DeleteByName(context.Background(), groupName)
+	_, err = jamfClient.ClassicAPI.SmartUserGroups.DeleteByName(context.Background(), groupName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

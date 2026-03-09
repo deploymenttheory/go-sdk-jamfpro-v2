@@ -34,7 +34,7 @@ import (
 func TestAcceptance_AppStoreCountryCodes_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AppStoreCountryCodes
+	svc := acc.Client.JamfProAPI.AppStoreCountryCodes
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx)

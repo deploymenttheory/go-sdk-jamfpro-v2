@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/restricted_software"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/restricted_software"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ import (
 func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicRestrictedSoftware
+	svc := acc.Client.ClassicAPI.RestrictedSoftware
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -53,7 +53,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Create: %v", err)
 	require.NotNil(t, created, "Create: created is nil")
 	require.NotNil(t, createResp, "Create: createResp is nil")
-	require.Contains(t, []int{200, 201}, createResp.StatusCode, "Create: expected status 200 or 201, got %d", createResp.StatusCode)
+	require.Contains(t, []int{200, 201}, createResp.StatusCode(), "Create: expected status 200 or 201, got %d", createResp.StatusCode())
 	require.Positive(t, created.ID, "Create: created.ID should be positive, got %d", created.ID)
 	// Classic API POST responses return only the assigned ID, not the full resource.
 
@@ -78,7 +78,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "List: %v", err)
 	require.NotNil(t, list, "List: list is nil")
-	require.Equal(t, 200, listResp.StatusCode, "List: status code")
+	require.Equal(t, 200, listResp.StatusCode(), "List: status code")
 	require.Positive(t, list.Size, "List: size should be positive, got %d", list.Size)
 
 	found := false
@@ -103,7 +103,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, swID)
 	require.NoError(t, err, "GetByID: %v", err)
 	require.NotNil(t, fetched, "GetByID: fetched is nil")
-	require.Equal(t, 200, fetchResp.StatusCode, "GetByID: status code")
+	require.Equal(t, 200, fetchResp.StatusCode(), "GetByID: status code")
 	require.Equal(t, swID, fetched.General.ID, "GetByID: ID")
 	require.Equal(t, swName, fetched.General.Name, "GetByID: Name")
 	require.Equal(t, "sdkv2_acc_testprocess.exe", fetched.General.ProcessName, "GetByID: ProcessName")
@@ -125,7 +125,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, swName)
 	require.NoError(t, err, "GetByName: %v", err)
 	require.NotNil(t, fetchedByName, "GetByName: fetched is nil")
-	require.Equal(t, 200, fetchByNameResp.StatusCode, "GetByName: status code")
+	require.Equal(t, 200, fetchByNameResp.StatusCode(), "GetByName: status code")
 	require.Equal(t, swID, fetchedByName.General.ID, "GetByName: ID")
 	require.Equal(t, swName, fetchedByName.General.Name, "GetByName: Name")
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.General.ID, fetchedByName.General.Name)
@@ -158,7 +158,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx5, swID, updateReq)
 	require.NoError(t, err, "UpdateByID: %v", err)
 	require.NotNil(t, updated, "UpdateByID: updated is nil")
-	require.Contains(t, []int{200, 201}, updateResp.StatusCode, "UpdateByID: expected status 200 or 201, got %d", updateResp.StatusCode)
+	require.Contains(t, []int{200, 201}, updateResp.StatusCode(), "UpdateByID: expected status 200 or 201, got %d", updateResp.StatusCode())
 	// Classic API PUT responses return only the resource ID, not the full resource.
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
@@ -173,7 +173,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx6, swID)
 	require.NoError(t, err, "GetByID (post-update): %v", err)
 	require.NotNil(t, verified, "GetByID (post-update): verified is nil")
-	require.Equal(t, 200, verifyResp.StatusCode, "GetByID (post-update): status code")
+	require.Equal(t, 200, verifyResp.StatusCode(), "GetByID (post-update): status code")
 	require.Equal(t, updatedName, verified.General.Name, "GetByID (post-update): name should reflect the update, got %q", verified.General.Name)
 	require.Equal(t, "sdkv2_acc_updatedprocess.exe", verified.General.ProcessName, "GetByID (post-update): ProcessName")
 	require.False(t, verified.General.MatchExactProcessName, "GetByID (post-update): MatchExactProcessName")
@@ -193,7 +193,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx7, swID)
 	require.NoError(t, err, "DeleteByID: %v", err)
 	require.NotNil(t, deleteResp, "DeleteByID: deleteResp is nil")
-	require.Contains(t, []int{200, 204}, deleteResp.StatusCode, "DeleteByID: expected status 200 or 204, got %d", deleteResp.StatusCode)
+	require.Contains(t, []int{200, 204}, deleteResp.StatusCode(), "DeleteByID: expected status 200 or 204, got %d", deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Restricted software ID=%d deleted", swID)
 }
 
@@ -205,7 +205,7 @@ func TestAcceptance_RestrictedSoftware_lifecycle(t *testing.T) {
 func TestAcceptance_RestrictedSoftware_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicRestrictedSoftware
+	svc := acc.Client.ClassicAPI.RestrictedSoftware
 	ctx := context.Background()
 
 	swName := acc.UniqueName("sdkv2_acc_acc-test-restricted-sw-dbn")
@@ -248,7 +248,7 @@ func TestAcceptance_RestrictedSoftware_delete_by_name(t *testing.T) {
 	deleteResp, err := svc.DeleteByName(ctx2, swName)
 	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Restricted software %q deleted by name", swName)
 }
 
@@ -260,7 +260,7 @@ func TestAcceptance_RestrictedSoftware_delete_by_name(t *testing.T) {
 func TestAcceptance_RestrictedSoftware_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicRestrictedSoftware
+	svc := acc.Client.ClassicAPI.RestrictedSoftware
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_inventory"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/computer_inventory"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.ComputerInventory.UpdateByIDV3(context.Background(), computerID, updateReq)
+	result, _, err := jamfClient.JamfProAPI.ComputerInventory.UpdateByIDV3(context.Background(), computerID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -7,8 +7,8 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/licensed_software"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/licensed_software"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 		},
 	}
 
-	updated, _, err := jamfClient.ClassicLicensedSoftware.UpdateByID(context.Background(), licensedSoftwareID, updateReq)
+	updated, _, err := jamfClient.ClassicAPI.LicensedSoftware.UpdateByID(context.Background(), licensedSoftwareID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

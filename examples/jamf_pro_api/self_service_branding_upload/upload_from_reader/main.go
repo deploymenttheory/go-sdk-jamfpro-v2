@@ -31,11 +31,11 @@ func main() {
 		log.Fatalf("Error getting file info: %v", err)
 	}
 
-	result, resp, err := client.SelfServiceBrandingUpload.Upload(ctx, file, fileInfo.Size(), fileInfo.Name())
+	result, resp, err := client.JamfProAPI.SelfServiceBrandingUpload.Upload(ctx, file, fileInfo.Size(), fileInfo.Name())
 	if err != nil {
 		log.Fatalf("Error uploading branding image: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Uploaded Image URL: %s\n", result.URL)
 }

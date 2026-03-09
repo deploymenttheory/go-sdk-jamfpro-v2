@@ -23,7 +23,7 @@ func main() {
 	}
 
 	itemID := 1 // Replace with the desired dock item ID
-	item, _, err := jamfClient.ClassicDockItems.GetByID(context.Background(), itemID)
+	item, _, err := jamfClient.ClassicAPI.DockItems.GetByID(context.Background(), itemID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

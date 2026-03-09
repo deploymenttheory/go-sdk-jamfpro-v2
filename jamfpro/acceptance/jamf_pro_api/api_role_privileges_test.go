@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_APIRolePrivileges_list_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.APIRolePrivileges
+	svc := acc.Client.JamfProAPI.ApiRolePrivileges
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx)
@@ -24,7 +24,7 @@ func TestAcceptance_APIRolePrivileges_list_v1(t *testing.T) {
 
 func TestAcceptance_APIRolePrivileges_search_by_name_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.APIRolePrivileges
+	svc := acc.Client.JamfProAPI.ApiRolePrivileges
 	ctx := context.Background()
 
 	result, resp, err := svc.SearchPrivilegesByNameV1(ctx, "Read", 20)

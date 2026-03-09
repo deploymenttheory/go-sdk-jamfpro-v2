@@ -24,7 +24,7 @@ func main() {
 
 	ebookName := "Sample Ebook" // Replace with the desired ebook name
 	subset := "General"        // Replace with desired subset: General, Scope, SelfService
-	ebook, _, err := jamfClient.ClassicEbooks.GetByNameAndSubset(context.Background(), ebookName, subset)
+	ebook, _, err := jamfClient.ClassicAPI.Ebooks.GetByNameAndSubset(context.Background(), ebookName, subset)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/categories"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 		Name:     "Updated Category Name",
 		Priority: 9,
 	}
-	result, _, err := jamfClient.Categories.UpdateByIDV1(context.Background(), id, updateReq)
+	result, _, err := jamfClient.JamfProAPI.Categories.UpdateByIDV1(context.Background(), id, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

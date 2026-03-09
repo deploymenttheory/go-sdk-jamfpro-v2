@@ -21,7 +21,7 @@ func main() {
 	}
 
 	brandingID := "1" // Replace with the desired branding configuration ID to delete
-	_, err = jamfClient.SelfServiceBrandingMacOS.DeleteByID(context.Background(), brandingID)
+	_, err = jamfClient.JamfProAPI.SelfServiceBrandingMacos.DeleteByID(context.Background(), brandingID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

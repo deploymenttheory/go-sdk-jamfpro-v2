@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/log_flushing"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/log_flushing"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -49,7 +49,7 @@ import (
 func TestAcceptance_LogFlushing_settings_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.LogFlushing
+	svc := acc.Client.JamfProAPI.LogFlushing
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "GetSettingsV1", "Getting log flushing settings")
@@ -70,7 +70,7 @@ func TestAcceptance_LogFlushing_settings_v1(t *testing.T) {
 func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.LogFlushing
+	svc := acc.Client.JamfProAPI.LogFlushing
 	ctx := context.Background()
 
 	// Get settings to find a valid qualifier
@@ -98,7 +98,7 @@ func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 	created, createResp, err := svc.QueueTaskV1(ctx, taskReq)
 	require.NoError(t, err, "QueueTaskV1 should not return an error")
 	require.NotNil(t, created)
-	require.Contains(t, []int{200, 201, 202}, createResp.StatusCode)
+	require.Contains(t, []int{200, 201, 202}, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	taskID := created.ID
@@ -123,7 +123,7 @@ func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, task)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	assert.Equal(t, taskID, task.ID)
 	assert.Equal(t, firstPolicy.Qualifier, task.Qualifier)
 	acc.LogTestSuccess(t, "GetTaskByIDV1: ID=%s state=%s", task.ID, task.State)
@@ -134,7 +134,7 @@ func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 	tasks, listResp, err := svc.ListTasksV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, listResp)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, tk := range tasks {
@@ -152,7 +152,7 @@ func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteTaskByIDV1(ctx, taskID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	require.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	require.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "DeleteTaskByIDV1: ID=%s deleted", taskID)
 }
 
@@ -160,7 +160,7 @@ func TestAcceptance_LogFlushing_task_lifecycle(t *testing.T) {
 func TestAcceptance_LogFlushing_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.LogFlushing
+	svc := acc.Client.JamfProAPI.LogFlushing
 
 	t.Run("QueueTaskV1_NilRequest", func(t *testing.T) {
 		_, _, err := svc.QueueTaskV1(context.Background(), nil)

@@ -36,11 +36,11 @@ import (
 func TestAcceptance_Branding_download_image_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Branding
+	svc := acc.Client.JamfProAPI.Branding
 	ctx := context.Background()
 
 	// Find an existing iOS branding config that has an icon image
-	list, _, err := acc.Client.SelfServiceBrandingIOS.ListV1(ctx, nil)
+	list, _, err := acc.Client.JamfProAPI.SelfServiceBrandingIos.ListV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, list)
 
@@ -54,7 +54,7 @@ func TestAcceptance_Branding_download_image_v1(t *testing.T) {
 
 	// Also check macOS branding configs if iOS had none
 	if imageID == "" {
-		macList, _, err := acc.Client.SelfServiceBrandingMacOS.List(ctx, nil)
+		macList, _, err := acc.Client.JamfProAPI.SelfServiceBrandingMacos.List(ctx, nil)
 		if err == nil && macList != nil {
 			for _, b := range macList.Results {
 				if b.IconId != nil && *b.IconId > 0 {

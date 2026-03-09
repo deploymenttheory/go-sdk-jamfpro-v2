@@ -20,12 +20,12 @@ func main() {
 	// Replace with actual volume purchasing location ID
 	vppLocationID := "1"
 
-	history, resp, err := client.VolumePurchasingLocations.GetHistoryV1(ctx, vppLocationID, nil)
+	history, resp, err := client.JamfProAPI.VolumePurchasingLocations.GetHistoryV1(ctx, vppLocationID, nil)
 	if err != nil {
 		log.Fatalf("Error getting volume purchasing location history: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Total History Entries: %d\n", history.TotalCount)
 
 	if len(history.Results) > 0 {

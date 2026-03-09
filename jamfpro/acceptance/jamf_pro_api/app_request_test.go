@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/app_request"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/app_request"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -54,7 +54,7 @@ import (
 func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AppRequest
+	svc := acc.Client.JamfProAPI.AppRequest
 	ctx := context.Background()
 
 	// 1. Create
@@ -69,7 +69,7 @@ func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 	created, createResp, err := svc.CreateFormInputFieldV1(ctx, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	require.Contains(t, []int{200, 201}, createResp.StatusCode)
+	require.Contains(t, []int{200, 201}, createResp.StatusCode())
 	assert.Positive(t, created.ID)
 
 	fieldID := created.ID
@@ -94,7 +94,7 @@ func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, fieldID, fetched.ID)
 	assert.Equal(t, title, fetched.Title)
 	acc.LogTestSuccess(t, "GetFormInputFieldByIDV1: ID=%d title=%q", fetched.ID, fetched.Title)
@@ -110,7 +110,7 @@ func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateFormInputFieldByIDV1(ctx, fieldID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	assert.Equal(t, updatedTitle, updated.Title)
 	acc.LogTestSuccess(t, "Form input field updated: ID=%d title=%q", fieldID, updatedTitle)
 
@@ -120,7 +120,7 @@ func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 	list, listResp, err := svc.ListFormInputFieldsV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, f := range list.Results {
@@ -137,7 +137,7 @@ func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteFormInputFieldByIDV1(ctx, fieldID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Form input field ID=%d deleted", fieldID)
 }
 
@@ -148,7 +148,7 @@ func TestAcceptance_AppRequest_form_input_fields_lifecycle(t *testing.T) {
 func TestAcceptance_AppRequest_settings_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AppRequest
+	svc := acc.Client.JamfProAPI.AppRequest
 	ctx := context.Background()
 
 	// 1. Get current settings
@@ -157,7 +157,7 @@ func TestAcceptance_AppRequest_settings_get_and_update(t *testing.T) {
 	original, getResp, err := svc.GetSettingsV1(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, original)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	acc.LogTestSuccess(t, "GetSettingsV1: isEnabled=%v appStoreLocale=%q", original.IsEnabled, original.AppStoreLocale)
 
 	// 2. Update (toggle enabled)
@@ -175,7 +175,7 @@ func TestAcceptance_AppRequest_settings_get_and_update(t *testing.T) {
 	}
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	assert.Equal(t, !original.IsEnabled, updated.IsEnabled)
 	acc.LogTestSuccess(t, "Settings updated: isEnabled=%v", updated.IsEnabled)
 
@@ -185,7 +185,7 @@ func TestAcceptance_AppRequest_settings_get_and_update(t *testing.T) {
 	restored, restoreResp, err := svc.UpdateSettingsV1(ctx, original)
 	require.NoError(t, err)
 	require.NotNil(t, restored)
-	assert.Equal(t, 200, restoreResp.StatusCode)
+	assert.Equal(t, 200, restoreResp.StatusCode())
 	assert.Equal(t, original.IsEnabled, restored.IsEnabled)
 	acc.LogTestSuccess(t, "Settings restored: isEnabled=%v", restored.IsEnabled)
 }
@@ -197,7 +197,7 @@ func TestAcceptance_AppRequest_settings_get_and_update(t *testing.T) {
 func TestAcceptance_AppRequest_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AppRequest
+	svc := acc.Client.JamfProAPI.AppRequest
 
 	t.Run("CreateFormInputFieldV1_NilRequest", func(t *testing.T) {
 		_, _, err := svc.CreateFormInputFieldV1(context.Background(), nil)

@@ -22,12 +22,12 @@ func main() {
 
 	ctx := context.Background()
 
-	syncStates, resp, err := jamfClient.DeviceEnrollments.GetAllSyncStatesV1(ctx)
+	syncStates, resp, err := jamfClient.JamfProAPI.DeviceEnrollments.GetAllSyncStatesV1(ctx)
 	if err != nil {
 		log.Fatalf("Failed to get all device enrollment sync states: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Total Sync States: %d\n", len(syncStates))
 	fmt.Printf("\nAll Sync States:\n")
 	for i, state := range syncStates {

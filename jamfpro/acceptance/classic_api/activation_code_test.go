@@ -18,7 +18,7 @@ import (
 func TestAcceptance_ActivationCode_get_activation_code(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicActivationCode
+	svc := acc.Client.ClassicAPI.ActivationCode
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Getting current activation code")
@@ -30,7 +30,7 @@ func TestAcceptance_ActivationCode_get_activation_code(t *testing.T) {
 	require.NoError(t, err, "GetActivationCode should not return an error")
 	require.NotNil(t, got)
 	require.NotNil(t, getResp)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 
 	acc.LogTestSuccess(t, "Retrieved activation code: org=%q code=%q",
 		got.OrganizationName, got.Code)
@@ -44,7 +44,7 @@ func TestAcceptance_ActivationCode_get_activation_code(t *testing.T) {
 func TestAcceptance_ActivationCode_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicActivationCode
+	svc := acc.Client.ClassicAPI.ActivationCode
 
 	t.Run("UpdateActivationCode_NilRequest", func(t *testing.T) {
 		_, err := svc.UpdateActivationCode(context.Background(), nil)

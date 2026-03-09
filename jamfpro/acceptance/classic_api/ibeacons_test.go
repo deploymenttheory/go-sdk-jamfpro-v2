@@ -8,7 +8,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ibeacons"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ibeacons"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -22,7 +22,7 @@ import (
 func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicIBeacons
+	svc := acc.Client.ClassicAPI.IBeacons
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -45,7 +45,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	require.NoError(t, err, "CreateIBeacon should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created iBeacon ID should be a positive integer")
 
 	beaconID := created.ID
@@ -69,7 +69,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListIBeacons should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -94,7 +94,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, beaconID)
 	require.NoError(t, err, "GetIBeaconByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, beaconID, fetched.ID)
 	assert.Equal(t, beaconName, fetched.Name)
 	assert.Equal(t, "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0", strings.ToUpper(fetched.UUID))
@@ -111,7 +111,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, beaconName)
 	require.NoError(t, err, "GetIBeaconByName should not return an error")
 	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
+	assert.Equal(t, 200, fetchByNameResp.StatusCode())
 	assert.Equal(t, beaconID, fetchedByName.ID)
 	assert.Equal(t, beaconName, fetchedByName.Name)
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.ID, fetchedByName.Name)
@@ -134,7 +134,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx5, beaconID, updateReq)
 	require.NoError(t, err, "UpdateIBeaconByID should not return an error")
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -154,7 +154,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateIBeaconByName should not return an error")
 	require.NotNil(t, reverted)
-	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, revertResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -168,7 +168,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx7, beaconID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, beaconName, verified.Name, "name should reflect the revert")
 	acc.LogTestSuccess(t, "Name revert verified: %q", verified.Name)
 
@@ -183,7 +183,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx8, beaconID)
 	require.NoError(t, err, "DeleteIBeaconByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "iBeacon ID=%d deleted", beaconID)
 }
 
@@ -194,7 +194,7 @@ func TestAcceptance_IBeacons_lifecycle(t *testing.T) {
 func TestAcceptance_IBeacons_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicIBeacons
+	svc := acc.Client.ClassicAPI.IBeacons
 	ctx := context.Background()
 
 	beaconName := acc.UniqueName("sdkv2_acc_acc-test-ibeacon-dbn")
@@ -228,7 +228,7 @@ func TestAcceptance_IBeacons_delete_by_name(t *testing.T) {
 	deleteResp, err := svc.DeleteByName(ctx2, beaconName)
 	require.NoError(t, err, "DeleteIBeaconByName should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "iBeacon %q deleted by name", beaconName)
 }
 
@@ -240,7 +240,7 @@ func TestAcceptance_IBeacons_delete_by_name(t *testing.T) {
 func TestAcceptance_IBeacons_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicIBeacons
+	svc := acc.Client.ClassicAPI.IBeacons
 
 	t.Run("GetIBeaconByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

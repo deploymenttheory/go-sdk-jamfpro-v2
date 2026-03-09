@@ -25,7 +25,7 @@ func main() {
 	}
 
 	// Call the ListNetworkSegments function to retrieve the list of network segments
-	list, _, err := jamfClient.ClassicNetworkSegments.List(context.Background())
+	list, _, err := jamfClient.ClassicAPI.NetworkSegments.List(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

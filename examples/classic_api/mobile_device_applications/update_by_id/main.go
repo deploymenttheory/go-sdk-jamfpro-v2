@@ -7,8 +7,8 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/mobile_device_applications"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_applications"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 )
 
 func main() {
@@ -47,7 +47,7 @@ func main() {
 		},
 	}
 
-	_, _, err = jamfClient.ClassicMobileDeviceApplications.UpdateByID(context.Background(), appID, updateReq)
+	_, _, err = jamfClient.ClassicAPI.MobileDeviceApplications.UpdateByID(context.Background(), appID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

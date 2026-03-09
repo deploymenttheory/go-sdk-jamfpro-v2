@@ -17,12 +17,12 @@ func main() {
 	ctx := context.Background()
 
 	// List all enrollment customizations
-	customizations, resp, err := client.EnrollmentCustomizations.ListV2(ctx, nil)
+	customizations, resp, err := client.JamfProAPI.EnrollmentCustomizations.ListV2(ctx, nil)
 	if err != nil {
 		log.Fatalf("Error listing enrollment customizations: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Total enrollment customizations: %d\n", customizations.TotalCount)
 	for _, c := range customizations.Results {
 		fmt.Printf("- ID: %s, Name: %s, Description: %s\n", c.ID, c.DisplayName, c.Description)
@@ -35,11 +35,11 @@ func main() {
 		"sort":      "id:asc",
 	}
 
-	paginatedList, paginatedResp, err := client.EnrollmentCustomizations.ListV2(ctx, rsqlQuery)
+	paginatedList, paginatedResp, err := client.JamfProAPI.EnrollmentCustomizations.ListV2(ctx, rsqlQuery)
 	if err != nil {
 		log.Fatalf("Error listing enrollment customizations with pagination: %v", err)
 	}
 
-	fmt.Printf("\nPaginated Status: %d\n", paginatedResp.StatusCode)
+	fmt.Printf("\nPaginated Status: %d\n", paginatedResp.StatusCode())
 	fmt.Printf("Paginated Total: %d\n", paginatedList.TotalCount)
 }

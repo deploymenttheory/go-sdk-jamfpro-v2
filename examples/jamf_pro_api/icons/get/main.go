@@ -22,7 +22,7 @@ func main() {
 	}
 
 	iconID := 1 // Replace with the desired icon ID
-	result, _, err := jamfClient.Icon.GetByIDV1(context.Background(), iconID)
+	result, _, err := jamfClient.JamfProAPI.Icon.GetByIDV1(context.Background(), iconID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

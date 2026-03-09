@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/groups"
 	"github.com/stretchr/testify/require"
 )
 
@@ -62,7 +62,7 @@ func TestAcceptance_Groups_list(t *testing.T) {
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "List", "Listing all groups")
-	result, resp, err := acc.Client.Groups.ListV1(ctx, nil)
+	result, resp, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, nil)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
@@ -88,7 +88,7 @@ func TestAcceptance_Groups_list_with_pagination(t *testing.T) {
 		"sort":      "groupName:asc",
 	}
 
-	result, resp, err := acc.Client.Groups.ListV1(ctx, rsqlQuery)
+	result, resp, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, rsqlQuery)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
@@ -101,7 +101,7 @@ func TestAcceptance_Groups_list_with_rsql_filter(t *testing.T) {
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Setup", "Listing all groups")
-	allGroups, allResp, err := acc.Client.Groups.ListV1(ctx, nil)
+	allGroups, allResp, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, allResp)
 
@@ -118,7 +118,7 @@ func TestAcceptance_Groups_list_with_rsql_filter(t *testing.T) {
 		"filter": `groupType=="COMPUTER"`,
 	}
 
-	filteredGroups, filteredResp, err := acc.Client.Groups.ListV1(ctx, rsqlQuery)
+	filteredGroups, filteredResp, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, filteredResp)
 	require.NotNil(t, filteredGroups)
@@ -139,7 +139,7 @@ func TestAcceptance_Groups_get_by_id(t *testing.T) {
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Setup", "Listing groups to get an ID")
-	listResult, _, err := acc.Client.Groups.ListV1(ctx, nil)
+	listResult, _, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, nil)
 	require.NoError(t, err)
 
 	if len(listResult.Results) == 0 {
@@ -151,7 +151,7 @@ func TestAcceptance_Groups_get_by_id(t *testing.T) {
 	acc.LogTestSuccess(t, "Using platform ID: %s", platformID)
 
 	acc.LogTestStage(t, "GetByID", "Getting group by platform ID")
-	result, resp, err := acc.Client.Groups.GetByIDV1(ctx, platformID)
+	result, resp, err := acc.Client.JamfProAPI.Groups.GetByIDV1(ctx, platformID)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
@@ -171,7 +171,7 @@ func TestAcceptance_Groups_get_computer_group_by_name(t *testing.T) {
 		"page-size": "1",
 	}
 
-	listResult, _, err := acc.Client.Groups.ListV1(ctx, rsqlQuery)
+	listResult, _, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 
 	if len(listResult.Results) == 0 {
@@ -183,7 +183,7 @@ func TestAcceptance_Groups_get_computer_group_by_name(t *testing.T) {
 	acc.LogTestSuccess(t, "Using computer group name: %s", groupName)
 
 	acc.LogTestStage(t, "GetByName", "Getting computer group by name")
-	result, resp, err := acc.Client.Groups.GetComputerGroupByNameV1(ctx, groupName)
+	result, resp, err := acc.Client.JamfProAPI.Groups.GetComputerGroupByNameV1(ctx, groupName)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
@@ -204,7 +204,7 @@ func TestAcceptance_Groups_get_mobile_group_by_name(t *testing.T) {
 		"page-size": "1",
 	}
 
-	listResult, _, err := acc.Client.Groups.ListV1(ctx, rsqlQuery)
+	listResult, _, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 
 	if len(listResult.Results) == 0 {
@@ -216,7 +216,7 @@ func TestAcceptance_Groups_get_mobile_group_by_name(t *testing.T) {
 	acc.LogTestSuccess(t, "Using mobile group name: %s", groupName)
 
 	acc.LogTestStage(t, "GetByName", "Getting mobile group by name")
-	result, resp, err := acc.Client.Groups.GetMobileGroupByNameV1(ctx, groupName)
+	result, resp, err := acc.Client.JamfProAPI.Groups.GetMobileGroupByNameV1(ctx, groupName)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
@@ -237,7 +237,7 @@ func TestAcceptance_Groups_get_computer_group_by_jamf_pro_id(t *testing.T) {
 		"page-size": "1",
 	}
 
-	listResult, _, err := acc.Client.Groups.ListV1(ctx, rsqlQuery)
+	listResult, _, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 
 	if len(listResult.Results) == 0 {
@@ -249,7 +249,7 @@ func TestAcceptance_Groups_get_computer_group_by_jamf_pro_id(t *testing.T) {
 	acc.LogTestSuccess(t, "Using Jamf Pro ID: %s", jamfProID)
 
 	acc.LogTestStage(t, "GetByJamfProID", "Getting computer group by Jamf Pro ID")
-	result, resp, err := acc.Client.Groups.GetComputerGroupByIDV1(ctx, jamfProID)
+	result, resp, err := acc.Client.JamfProAPI.Groups.GetComputerGroupByIDV1(ctx, jamfProID)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
@@ -270,7 +270,7 @@ func TestAcceptance_Groups_get_mobile_group_by_jamf_pro_id(t *testing.T) {
 		"page-size": "1",
 	}
 
-	listResult, _, err := acc.Client.Groups.ListV1(ctx, rsqlQuery)
+	listResult, _, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 
 	if len(listResult.Results) == 0 {
@@ -282,7 +282,7 @@ func TestAcceptance_Groups_get_mobile_group_by_jamf_pro_id(t *testing.T) {
 	acc.LogTestSuccess(t, "Using Jamf Pro ID: %s", jamfProID)
 
 	acc.LogTestStage(t, "GetByJamfProID", "Getting mobile group by Jamf Pro ID")
-	result, resp, err := acc.Client.Groups.GetMobileGroupByIDV1(ctx, jamfProID)
+	result, resp, err := acc.Client.JamfProAPI.Groups.GetMobileGroupByIDV1(ctx, jamfProID)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
@@ -298,7 +298,7 @@ func TestAcceptance_Groups_update(t *testing.T) {
 
 	// Find a group to update
 	acc.LogTestStage(t, "Setup", "Finding a group to test update")
-	listResult, _, err := acc.Client.Groups.ListV1(ctx, map[string]string{
+	listResult, _, err := acc.Client.JamfProAPI.Groups.ListV1(ctx, map[string]string{
 		"page":      "0",
 		"page-size": "1",
 	})
@@ -323,7 +323,7 @@ func TestAcceptance_Groups_update(t *testing.T) {
 		GroupDescription: fmt.Sprintf("%s - Updated by acceptance test", originalDescription),
 	}
 
-	updated, updateResp, err := acc.Client.Groups.UpdateByIDV1(ctx, platformID, updateReq)
+	updated, updateResp, err := acc.Client.JamfProAPI.Groups.UpdateByIDV1(ctx, platformID, updateReq)
 
 	if err != nil {
 		// Some groups may not be modifiable (e.g., built-in groups)
@@ -343,7 +343,7 @@ func TestAcceptance_Groups_update(t *testing.T) {
 		GroupDescription: originalDescription,
 	}
 
-	_, restoreResp, err := acc.Client.Groups.UpdateByIDV1(ctx, platformID, restoreReq)
+	_, restoreResp, err := acc.Client.JamfProAPI.Groups.UpdateByIDV1(ctx, platformID, restoreReq)
 	if err == nil {
 		require.NotNil(t, restoreResp)
 		acc.LogTestSuccess(t, "Restored original group settings")

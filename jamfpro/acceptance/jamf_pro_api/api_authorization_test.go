@@ -42,7 +42,7 @@ import (
 func TestAcceptance_ApiAuthorization_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ApiAuthorization
+	svc := acc.Client.JamfProAPI.ApiAuthorization
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Getting API authorization details")

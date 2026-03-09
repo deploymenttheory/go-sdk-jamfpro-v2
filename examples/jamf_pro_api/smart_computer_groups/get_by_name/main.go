@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupName := "All Macs"
-	result, _, err := jamfClient.SmartComputerGroups.GetByName(context.Background(), groupName)
+	result, _, err := jamfClient.JamfProAPI.SmartComputerGroups.GetByName(context.Background(), groupName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

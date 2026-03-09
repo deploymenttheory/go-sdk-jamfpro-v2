@@ -24,7 +24,7 @@ func main() {
 	// Replace "1" with the actual account ID you want to retrieve
 	accountID := "1"
 
-	result, _, err := jamfClient.Accounts.GetByIDV1(context.Background(), accountID)
+	result, _, err := jamfClient.JamfProAPI.Accounts.GetByIDV1(context.Background(), accountID)
 	if err != nil {
 		fmt.Printf("Error retrieving account: %v\n", err)
 		return

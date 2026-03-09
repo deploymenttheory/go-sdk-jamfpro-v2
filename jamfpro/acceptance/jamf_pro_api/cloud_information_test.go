@@ -14,7 +14,7 @@ func TestAcceptance_CloudInformation_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 
-	result, resp, err := client.CloudInformation.GetV1(context.Background())
+	result, resp, err := client.JamfProAPI.CloudInformation.GetV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)

@@ -39,11 +39,11 @@ import (
 func TestAcceptance_Devices_get_groups_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Devices
+	svc := acc.Client.JamfProAPI.Devices
 	ctx := context.Background()
 
 	// Get a mobile device ID from smart mobile device groups membership
-	groupList, resp, err := acc.Client.SmartMobileDeviceGroups.List(ctx, map[string]string{"page": "0", "page-size": "1"})
+	groupList, resp, err := acc.Client.JamfProAPI.SmartMobileDeviceGroups.List(ctx, map[string]string{"page": "0", "page-size": "1"})
 	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Skip("Smart mobile device groups endpoint not available (404)")
 	}
@@ -55,7 +55,7 @@ func TestAcceptance_Devices_get_groups_v1(t *testing.T) {
 	}
 
 	// Get membership of the first group to find a device ID
-	membership, _, err := acc.Client.SmartMobileDeviceGroups.GetMembership(ctx, groupList.Results[0].GroupID, map[string]string{"page": "0", "page-size": "1"})
+	membership, _, err := acc.Client.JamfProAPI.SmartMobileDeviceGroups.GetMembership(ctx, groupList.Results[0].GroupID, map[string]string{"page": "0", "page-size": "1"})
 	require.NoError(t, err)
 	require.NotNil(t, membership)
 
@@ -79,7 +79,7 @@ func TestAcceptance_Devices_get_groups_v1(t *testing.T) {
 func TestAcceptance_Devices_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Devices
+	svc := acc.Client.JamfProAPI.Devices
 
 	t.Run("GetGroupsV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetGroupsV1(context.Background(), "")

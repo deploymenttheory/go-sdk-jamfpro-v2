@@ -23,7 +23,7 @@ func main() {
 	}
 
 	profileName := "Wi-Fi Profile"
-	profile, _, err := jamfClient.ClassicMobileDeviceConfigurationProfiles.GetByName(context.Background(), profileName)
+	profile, _, err := jamfClient.ClassicAPI.MobileDeviceConfigurationProfiles.GetByName(context.Background(), profileName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

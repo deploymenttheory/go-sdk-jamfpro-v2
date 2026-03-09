@@ -37,7 +37,7 @@ import (
 
 func TestAcceptance_PatchManagement_accept_disclaimer_v2(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.PatchManagement
+	svc := acc.Client.JamfProAPI.PatchManagement
 	ctx := context.Background()
 
 	resp, err := svc.AcceptDisclaimerV2(ctx)

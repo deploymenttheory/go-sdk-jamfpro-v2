@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupID := "1"
-	result, _, err := jamfClient.SmartComputerGroups.GetMembership(context.Background(), groupID)
+	result, _, err := jamfClient.JamfProAPI.SmartComputerGroups.GetMembership(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/mobile_device_provisioning_profiles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_provisioning_profiles"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 		},
 	}
 
-	updated, _, err := jamfClient.ClassicMobileDeviceProvisioningProfiles.UpdateByID(context.Background(), profileID, updateReq)
+	updated, _, err := jamfClient.ClassicAPI.MobileDeviceProvisioningProfiles.UpdateByID(context.Background(), profileID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

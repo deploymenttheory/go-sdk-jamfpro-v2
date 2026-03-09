@@ -7,8 +7,8 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 )
 
 func main() {
@@ -45,7 +45,7 @@ func main() {
 		},
 	}
 
-	updated, _, err := jamfClient.ClassicComputerGroups.UpdateByID(context.Background(), groupID, updateReq)
+	updated, _, err := jamfClient.ClassicAPI.ComputerGroups.UpdateByID(context.Background(), groupID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

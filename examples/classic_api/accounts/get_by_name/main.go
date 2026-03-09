@@ -23,7 +23,7 @@ func main() {
 	}
 
 	accountName := "testuser"
-	account, _, err := jamfClient.ClassicAccounts.GetByName(context.Background(), accountName)
+	account, _, err := jamfClient.ClassicAPI.Accounts.GetByName(context.Background(), accountName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

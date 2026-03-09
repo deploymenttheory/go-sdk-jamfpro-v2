@@ -42,7 +42,7 @@ import (
 func TestAcceptance_DSSDeclarations_get_by_uuid(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.DSSDeclarations
+	svc := acc.Client.JamfProAPI.DssDeclarations
 	ctx := context.Background()
 
 	testUUID := "550e8400-e29b-41d4-a716-446655440000"

@@ -25,7 +25,7 @@ func main() {
 
 	// Example usage of DeleteByID
 	extensionID := 1 // Replace with the desired allowed file extension ID to delete
-	_, err = jamfClient.ClassicAllowedFileExtensions.DeleteByID(context.Background(), extensionID)
+	_, err = jamfClient.ClassicAPI.AllowedFileExtensions.DeleteByID(context.Background(), extensionID)
 	if err != nil {
 		fmt.Printf("Error deleting allowed file extension by ID: %v\n", err)
 		return

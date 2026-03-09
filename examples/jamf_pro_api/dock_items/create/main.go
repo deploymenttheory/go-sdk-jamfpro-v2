@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/dock_items"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/dock_items"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 		Type: dock_items.TypeApp,
 	}
 
-	result, _, err := jamfClient.DockItems.CreateV1(context.Background(), req)
+	result, _, err := jamfClient.JamfProAPI.DockItems.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

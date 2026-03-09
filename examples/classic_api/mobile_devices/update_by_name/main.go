@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/mobile_devices"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_devices"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 	deviceName := "iPhone-01" // Replace with the desired mobile device name
 
 	// Fetch existing device first
-	existing, _, err := jamfClient.ClassicMobileDevices.GetByName(context.Background(), deviceName)
+	existing, _, err := jamfClient.ClassicAPI.MobileDevices.GetByName(context.Background(), deviceName)
 	if err != nil {
 		fmt.Printf("Error fetching device: %v\n", err)
 		return
@@ -48,7 +48,7 @@ func main() {
 	updateReq.Location.Department = "IT"
 	updateReq.Location.Username = "jdoe"
 
-	updated, _, err := jamfClient.ClassicMobileDevices.UpdateByName(context.Background(), deviceName, updateReq)
+	updated, _, err := jamfClient.ClassicAPI.MobileDevices.UpdateByName(context.Background(), deviceName, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

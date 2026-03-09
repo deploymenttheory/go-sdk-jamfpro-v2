@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/apns_client_push_status"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/apns_client_push_status"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -17,7 +17,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 
 	// Test 1: List all clients with push disabled (no filter)
 	t.Run("ListAll", func(t *testing.T) {
-		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), nil)
+		result, resp, err := client.JamfProAPI.ApnsClientPushStatus.ListV1(context.Background(), nil)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
@@ -32,7 +32,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 			"filter": `deviceType=="MOBILE_DEVICE"`,
 		}
 
-		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ApnsClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
@@ -51,7 +51,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 			"filter": `deviceType=="COMPUTER"`,
 		}
 
-		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ApnsClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -70,7 +70,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 			"sort":   "pushDisabledTime:desc",
 		}
 
-		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ApnsClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		if err != nil {
 			acc.LogTestWarning(t, "FilterByDateRange returned error (date filter may not be supported): %v", err)
 			return
@@ -87,7 +87,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 			"sort":   "pushDisabledTime:asc",
 		}
 
-		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ApnsClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		if err != nil {
 			acc.LogTestWarning(t, "ComplexRSQLFilter returned error (complex filter may not be supported): %v", err)
 			return
@@ -110,7 +110,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 			"sort":      "pushDisabledTime:desc",
 		}
 
-		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ApnsClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -124,7 +124,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 			"sort": "deviceType:asc,pushDisabledTime:desc",
 		}
 
-		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ApnsClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -137,7 +137,7 @@ func TestAcceptance_APNSClientPushStatus_list_v1(t *testing.T) {
 			"sort": "managementId:asc",
 		}
 
-		result, resp, err := client.APNSClientPushStatus.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ApnsClientPushStatus.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -150,7 +150,7 @@ func TestAcceptance_APNSClientPushStatus_enable_all_clients_v1(t *testing.T) {
 	acc.RequireClient(t)
 	client := acc.Client
 
-	resp, err := client.APNSClientPushStatus.EnableAllClientsV1(context.Background())
+	resp, err := client.JamfProAPI.ApnsClientPushStatus.EnableAllClientsV1(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	// API may return 200 or 202 depending on implementation
@@ -163,7 +163,7 @@ func TestAcceptance_APNSClientPushStatus_get_enable_all_clients_status_v1(t *tes
 	acc.RequireClient(t)
 	client := acc.Client
 
-	result, resp, err := client.APNSClientPushStatus.GetEnableAllClientsStatusV1(context.Background())
+	result, resp, err := client.JamfProAPI.ApnsClientPushStatus.GetEnableAllClientsStatusV1(context.Background())
 	// 404 is valid if no recent enable-all-clients request exists
 	if err != nil && resp != nil && resp.StatusCode() == 404 {
 		t.Log("No recent enable-all-clients request (404) - skipping status check")
@@ -185,10 +185,10 @@ func TestAcceptance_APNSClientPushStatus_enable_client_v1(t *testing.T) {
 	client := acc.Client
 
 	// First list clients with push disabled to get a managementId
-	listResult, listResp, err := client.APNSClientPushStatus.ListV1(context.Background(), map[string]string{"page-size": "1"})
+	listResult, listResp, err := client.JamfProAPI.ApnsClientPushStatus.ListV1(context.Background(), map[string]string{"page-size": "1"})
 	require.NoError(t, err)
 	require.NotNil(t, listResult)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	if listResult.TotalCount == 0 {
 		t.Skip("No clients with push disabled - cannot test EnableClientV1")
@@ -197,7 +197,7 @@ func TestAcceptance_APNSClientPushStatus_enable_client_v1(t *testing.T) {
 	managementID := listResult.Results[0].ManagementID
 	req := &apns_client_push_status.EnableClientRequest{ManagementID: managementID}
 
-	resp, err := client.APNSClientPushStatus.EnableClientV1(context.Background(), req)
+	resp, err := client.JamfProAPI.ApnsClientPushStatus.EnableClientV1(context.Background(), req)
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 204, resp.StatusCode())

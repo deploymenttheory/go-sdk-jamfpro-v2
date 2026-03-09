@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/dock_items"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/dock_items"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ import (
 func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicDockItems
+	svc := acc.Client.ClassicAPI.DockItems
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -44,7 +44,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created dock item ID should be a positive integer")
 
 	itemID := created.ID
@@ -68,7 +68,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -93,7 +93,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, itemID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, itemID, fetched.ID)
 	assert.Equal(t, itemName, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.ID, fetched.Name)
@@ -109,7 +109,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, itemName)
 	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
+	assert.Equal(t, 200, fetchByNameResp.StatusCode())
 	assert.Equal(t, itemID, fetchedByName.ID)
 	assert.Equal(t, itemName, fetchedByName.Name)
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.ID, fetchedByName.Name)
@@ -132,7 +132,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx5, itemID, updateReq)
 	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -152,7 +152,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
-	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, revertResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -166,7 +166,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx7, itemID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, itemName, verified.Name, "name should reflect the revert")
 	acc.LogTestSuccess(t, "Name revert verified: %q", verified.Name)
 
@@ -181,7 +181,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx8, itemID)
 	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Dock item ID=%d deleted", itemID)
 }
 
@@ -192,7 +192,7 @@ func TestAcceptance_DockItems_lifecycle(t *testing.T) {
 func TestAcceptance_DockItems_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicDockItems
+	svc := acc.Client.ClassicAPI.DockItems
 	ctx := context.Background()
 
 	itemName := acc.UniqueName("sdkv2_acc_acc-test-dockitem-dbn")
@@ -226,7 +226,7 @@ func TestAcceptance_DockItems_delete_by_name(t *testing.T) {
 	deleteResp, err := svc.DeleteByName(ctx2, itemName)
 	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Dock item %q deleted by name", itemName)
 }
 
@@ -237,7 +237,7 @@ func TestAcceptance_DockItems_delete_by_name(t *testing.T) {
 func TestAcceptance_DockItems_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicDockItems
+	svc := acc.Client.ClassicAPI.DockItems
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

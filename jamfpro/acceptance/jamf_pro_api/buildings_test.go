@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/buildings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -78,7 +78,7 @@ import (
 func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Buildings
+	svc := acc.Client.JamfProAPI.Buildings
 	ctx := context.Background()
 
 	// 1. Create
@@ -95,7 +95,7 @@ func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateBuildingV1 should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	buildingID := created.ID
@@ -117,7 +117,7 @@ func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, b := range list.Results {
@@ -142,7 +142,7 @@ func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, buildingID, fetched.ID)
 	assert.Equal(t, createReq.Name, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: name=%q", fetched.Name)
@@ -161,7 +161,7 @@ func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, buildingID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	assert.Equal(t, updateReq.Name, updated.Name)
 	acc.LogTestSuccess(t, "Building updated: ID=%s", buildingID)
 
@@ -180,13 +180,13 @@ func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	noteResp, err := svc.AddBuildingHistoryNotesV1(ctx, buildingID, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, noteResp)
-	assert.Contains(t, []int{200, 201}, noteResp.StatusCode, "Add history note returns 200 or 201")
+	assert.Contains(t, []int{200, 201}, noteResp.StatusCode(), "Add history note returns 200 or 201")
 	acc.LogTestSuccess(t, "History note added")
 
 	history, histResp, err := svc.GetBuildingHistoryV1(ctx, buildingID, nil)
 	require.NoError(t, err)
 	require.NotNil(t, history)
-	assert.Equal(t, 200, histResp.StatusCode)
+	assert.Equal(t, 200, histResp.StatusCode())
 	assert.GreaterOrEqual(t, history.TotalCount, 1)
 	acc.LogTestSuccess(t, "History entries: %d", history.TotalCount)
 
@@ -196,7 +196,7 @@ func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx, buildingID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Building ID=%s deleted", buildingID)
 }
 
@@ -207,7 +207,7 @@ func TestAcceptance_Buildings_lifecycle(t *testing.T) {
 func TestAcceptance_Buildings_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Buildings
+	svc := acc.Client.JamfProAPI.Buildings
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_acc-rsql-building")
@@ -238,7 +238,7 @@ func TestAcceptance_Buildings_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, b := range list.Results {
@@ -259,7 +259,7 @@ func TestAcceptance_Buildings_list_with_rsql_filter(t *testing.T) {
 func TestAcceptance_Buildings_bulk_delete(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Buildings
+	svc := acc.Client.JamfProAPI.Buildings
 	ctx := context.Background()
 
 	// Create two buildings to bulk delete
@@ -312,7 +312,7 @@ func TestAcceptance_Buildings_bulk_delete(t *testing.T) {
 func TestAcceptance_Buildings_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Buildings
+	svc := acc.Client.JamfProAPI.Buildings
 
 	t.Run("GetBuildingByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")

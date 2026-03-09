@@ -8,7 +8,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cache_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cache_settings"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 		MemcachedEndpoints:         []cache_settings.CacheSettingsSubsetMemcachedEndpoint{},
 	}
 
-	updated, _, err := jamfClient.CacheSettings.UpdateV1(context.Background(), &settings)
+	updated, _, err := jamfClient.JamfProAPI.CacheSettings.UpdateV1(context.Background(), &settings)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

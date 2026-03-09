@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/departments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/departments"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 		Name: "go-sdk-v2-Department",
 	}
 
-	result, _, err := jamfClient.Departments.CreateV1(context.Background(), req)
+	result, _, err := jamfClient.JamfProAPI.Departments.CreateV1(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

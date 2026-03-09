@@ -26,7 +26,7 @@ func main() {
 		"sort": "id:desc",
 	}
 
-	result, _, err := jamfClient.SelfServiceBrandingIOS.ListV1(context.Background(), query)
+	result, _, err := jamfClient.JamfProAPI.SelfServiceBrandingIos.ListV1(context.Background(), query)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

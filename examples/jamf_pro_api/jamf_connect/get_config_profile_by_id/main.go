@@ -15,12 +15,12 @@ func main() {
 	}
 
 	profileID := 1
-	result, resp, err := client.JamfConnect.GetConfigProfileByIDV1(context.Background(), profileID)
+	result, resp, err := client.JamfProAPI.JamfConnect.GetConfigProfileByIDV1(context.Background(), profileID)
 	if err != nil {
 		log.Fatalf("Failed to get Jamf Connect config profile by ID: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("UUID: %s\n", result.UUID)
 	fmt.Printf("Profile ID: %d\n", result.ProfileID)
 	fmt.Printf("Profile Name: %s\n", result.ProfileName)
