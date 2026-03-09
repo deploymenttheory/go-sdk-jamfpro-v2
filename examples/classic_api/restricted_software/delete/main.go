@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/restricted_software"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/restricted_software"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 )
 
 func main() {
@@ -37,17 +37,17 @@ func main() {
 			AllComputers: true,
 		},
 	}
-	created, _, err := client.ClassicRestrictedSoftware.Create(ctx, createReq)
+	created, _, err := client.ClassicAPI.RestrictedSoftware.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
 	fmt.Printf("Created restricted software ID: %d\n", created.ID)
 
-	resp, err := client.ClassicRestrictedSoftware.DeleteByID(ctx, created.ID)
+	resp, err := client.ClassicAPI.RestrictedSoftware.DeleteByID(ctx, created.ID)
 	if err != nil {
 		log.Fatalf("DeleteByID failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d (200 = success)\n", resp.StatusCode)
+	fmt.Printf("Status: %d (200 = success)\n", resp.StatusCode())
 	fmt.Println("Restricted software deleted successfully")
 }

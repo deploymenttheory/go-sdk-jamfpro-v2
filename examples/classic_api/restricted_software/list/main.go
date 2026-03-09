@@ -18,12 +18,12 @@ func main() {
 		log.Fatalf("failed to create client: %v", err)
 	}
 
-	list, resp, err := client.ClassicRestrictedSoftware.List(context.Background())
+	list, resp, err := client.ClassicAPI.RestrictedSoftware.List(context.Background())
 	if err != nil {
 		log.Fatalf("List failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Total restricted software items: %d\n", list.Size)
 	for _, item := range list.Results {
 		fmt.Printf("  ID=%-5d  Name=%s\n", item.ID, item.Name)

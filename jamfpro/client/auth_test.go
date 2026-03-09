@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
@@ -16,18 +17,18 @@ import (
 func TestAuthConfig_Validate(t *testing.T) {
 	tests := []struct {
 		name    string
-		cfg     *AuthConfig
+		cfg     *config.AuthConfig
 		wantErr string
 	}{
 		{"nil", nil, ""},
-		{"missing instance", &AuthConfig{InstanceDomain: "", AuthMethod: AuthMethodOAuth2}, "instance domain"},
-		{"invalid method", &AuthConfig{InstanceDomain: "https://x.com", AuthMethod: "invalid"}, "auth method must"},
-		{"oauth2 missing client_id", &AuthConfig{InstanceDomain: "https://x.com", AuthMethod: AuthMethodOAuth2, ClientSecret: "s"}, "client_id and client_secret"},
-		{"oauth2 missing client_secret", &AuthConfig{InstanceDomain: "https://x.com", AuthMethod: AuthMethodOAuth2, ClientID: "c"}, "client_id and client_secret"},
-		{"oauth2 ok", &AuthConfig{InstanceDomain: "https://x.com", AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}, ""},
-		{"basic missing username", &AuthConfig{InstanceDomain: "https://x.com", AuthMethod: AuthMethodBasic, Password: "p"}, "username and password"},
-		{"basic missing password", &AuthConfig{InstanceDomain: "https://x.com", AuthMethod: AuthMethodBasic, Username: "u"}, "username and password"},
-		{"basic ok", &AuthConfig{InstanceDomain: "https://x.com", AuthMethod: AuthMethodBasic, Username: "u", Password: "p"}, ""},
+		{"missing instance", &config.AuthConfig{InstanceDomain: "", AuthMethod: config.AuthMethodOAuth2}, "instance domain"},
+		{"invalid method", &config.AuthConfig{InstanceDomain: "https://x.com", AuthMethod: "invalid"}, "auth method must"},
+		{"oauth2 missing client_id", &config.AuthConfig{InstanceDomain: "https://x.com", AuthMethod: config.AuthMethodOAuth2, ClientSecret: "s"}, "client_id and client_secret"},
+		{"oauth2 missing client_secret", &config.AuthConfig{InstanceDomain: "https://x.com", AuthMethod: config.AuthMethodOAuth2, ClientID: "c"}, "client_id and client_secret"},
+		{"oauth2 ok", &config.AuthConfig{InstanceDomain: "https://x.com", AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}, ""},
+		{"basic missing username", &config.AuthConfig{InstanceDomain: "https://x.com", AuthMethod: config.AuthMethodBasic, Password: "p"}, "username and password"},
+		{"basic missing password", &config.AuthConfig{InstanceDomain: "https://x.com", AuthMethod: config.AuthMethodBasic, Username: "u"}, "username and password"},
+		{"basic ok", &config.AuthConfig{InstanceDomain: "https://x.com", AuthMethod: config.AuthMethodBasic, Username: "u", Password: "p"}, ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -66,9 +67,9 @@ func TestSetupAuthentication_OAuth2(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	cfg := &AuthConfig{
+	cfg := &config.AuthConfig{
 		InstanceDomain:   srv.URL,
-		AuthMethod:       AuthMethodOAuth2,
+		AuthMethod:       config.AuthMethodOAuth2,
 		ClientID:         "cid",
 		ClientSecret:     "secret",
 		HideSensitiveData: true,
@@ -102,9 +103,9 @@ func TestSetupAuthentication_Basic(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	cfg := &AuthConfig{
+	cfg := &config.AuthConfig{
 		InstanceDomain: srv.URL,
-		AuthMethod:     AuthMethodBasic,
+		AuthMethod:     config.AuthMethodBasic,
 		Username:       "u",
 		Password:       "p",
 	}
@@ -118,7 +119,7 @@ func TestSetupAuthentication_Basic(t *testing.T) {
 }
 
 func TestSetupAuthentication_InvalidMethod(t *testing.T) {
-	cfg := &AuthConfig{InstanceDomain: "https://x.com", AuthMethod: "other", ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: "https://x.com", AuthMethod: "other", ClientID: "c", ClientSecret: "s"}
 	logger := zap.NewNop()
 	restyClient := resty.New()
 	_, err := SetupAuthentication(restyClient, cfg, logger)

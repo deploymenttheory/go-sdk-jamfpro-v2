@@ -19,12 +19,12 @@ func main() {
 	// Replace with actual computer group name
 	groupName := "All Managed Clients"
 
-	group, resp, err := client.Groups.GetComputerGroupByNameV1(ctx, groupName)
+	group, resp, err := client.JamfProAPI.Groups.GetComputerGroupByNameV1(ctx, groupName)
 	if err != nil {
 		log.Fatalf("Error getting computer group by name: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Group Platform ID: %s\n", group.GroupPlatformId)
 	fmt.Printf("Group Jamf Pro ID: %s\n", group.GroupJamfProId)
 	fmt.Printf("Group Name: %s\n", group.GroupName)

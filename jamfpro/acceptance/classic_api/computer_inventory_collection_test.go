@@ -17,7 +17,7 @@ import (
 func TestAcceptance_ComputerInventoryCollection_get(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicComputerInventoryCollection
+	svc := acc.Client.ClassicAPI.ComputerInventoryCollection
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Getting computer inventory collection settings")
@@ -29,7 +29,7 @@ func TestAcceptance_ComputerInventoryCollection_get(t *testing.T) {
 	require.NoError(t, err, "Get should not return an error")
 	require.NotNil(t, got)
 	require.NotNil(t, getResp)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 
 	acc.LogTestSuccess(t, "Retrieved computer inventory collection: local_user_accounts=%v inclue_applications=%v",
 		got.LocalUserAccounts, got.InclueApplications)
@@ -44,7 +44,7 @@ func TestAcceptance_ComputerInventoryCollection_get(t *testing.T) {
 func TestAcceptance_ComputerInventoryCollection_update(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicComputerInventoryCollection
+	svc := acc.Client.ClassicAPI.ComputerInventoryCollection
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Getting current computer inventory collection settings")
@@ -64,7 +64,7 @@ func TestAcceptance_ComputerInventoryCollection_update(t *testing.T) {
 	updateResp, err := svc.Update(ctx2, current)
 	require.NoError(t, err, "Update should not return an error")
 	require.NotNil(t, updateResp)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 
 	acc.LogTestSuccess(t, "Updated computer inventory collection (restored original settings)")
 }
@@ -77,7 +77,7 @@ func TestAcceptance_ComputerInventoryCollection_update(t *testing.T) {
 func TestAcceptance_ComputerInventoryCollection_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicComputerInventoryCollection
+	svc := acc.Client.ClassicAPI.ComputerInventoryCollection
 
 	t.Run("Update_NilSettings", func(t *testing.T) {
 		_, err := svc.Update(context.Background(), nil)

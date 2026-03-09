@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	ebookName := "Sample Ebook" // Replace with the desired ebook name to delete
-	_, err = jamfClient.ClassicEbooks.DeleteByName(context.Background(), ebookName)
+	_, err = jamfClient.ClassicAPI.Ebooks.DeleteByName(context.Background(), ebookName)
 	if err != nil {
 		fmt.Printf("Error deleting ebook by name: %v\n", err)
 		return

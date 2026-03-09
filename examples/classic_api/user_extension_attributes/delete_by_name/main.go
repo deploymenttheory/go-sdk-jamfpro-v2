@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	attrName := "Department" // Replace with the desired user extension attribute name to delete
-	_, err = jamfClient.ClassicUserExtensionAttributes.DeleteByName(context.Background(), attrName)
+	_, err = jamfClient.ClassicAPI.UserExtensionAttributes.DeleteByName(context.Background(), attrName)
 	if err != nil {
 		fmt.Printf("Error deleting user extension attribute by name: %v\n", err)
 		return

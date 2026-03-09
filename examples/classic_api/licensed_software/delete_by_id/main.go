@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	licensedSoftwareID := 1 // Replace with the desired licensed software ID to delete
-	_, err = jamfClient.ClassicLicensedSoftware.DeleteByID(context.Background(), licensedSoftwareID)
+	_, err = jamfClient.ClassicAPI.LicensedSoftware.DeleteByID(context.Background(), licensedSoftwareID)
 	if err != nil {
 		fmt.Printf("Error deleting licensed software by ID: %v\n", err)
 		return

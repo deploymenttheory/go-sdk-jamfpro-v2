@@ -6,12 +6,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_enrollments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/device_enrollments"
 )
 
 func main() {
-	authConfig := client.AuthConfigFromEnv()
+	authConfig := jamfpro.AuthConfigFromEnv()
 	if err := authConfig.Validate(); err != nil {
 		log.Fatalf("Invalid auth config: %v", err)
 	}
@@ -30,12 +29,12 @@ func main() {
 		SiteId:                "1",
 	}
 
-	updated, resp, err := jamfClient.DeviceEnrollments.UpdateByIDV1(ctx, enrollmentID, request)
+	updated, resp, err := jamfClient.JamfProAPI.DeviceEnrollments.UpdateByIDV1(ctx, enrollmentID, request)
 	if err != nil {
 		log.Fatalf("Failed to update device enrollment: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Updated Device Enrollment:\n")
 	fmt.Printf("  ID: %s\n", updated.ID)
 	fmt.Printf("  Name: %s\n", updated.Name)

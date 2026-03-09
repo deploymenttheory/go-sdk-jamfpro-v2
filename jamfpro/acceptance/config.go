@@ -8,11 +8,10 @@ import (
 	"time"
 
 	jamfpro "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 // TestConfig holds configuration for acceptance tests driven by environment variables.
-// All credential variables mirror the names read by client.AuthConfigFromEnv().
+// All credential variables mirror the names read by jamfpro.AuthConfigFromEnv().
 type TestConfig struct {
 	// Auth (read by client.AuthConfigFromEnv — see jamfpro/client/env.go)
 	InstanceDomain string
@@ -56,7 +55,7 @@ func init() {
 // InitClient creates the shared Jamf Pro client from environment variables.
 // Returns an error if required credentials are absent.
 func InitClient() error {
-	authConfig := client.AuthConfigFromEnv()
+	authConfig := jamfpro.AuthConfigFromEnv()
 	if err := authConfig.Validate(); err != nil {
 		return fmt.Errorf("invalid acceptance test credentials: %w", err)
 	}

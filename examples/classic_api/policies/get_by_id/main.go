@@ -30,7 +30,7 @@ func main() {
 			log.Fatalf("invalid POLICY_ID %q: %v", raw, err)
 		}
 	} else {
-		list, _, err := client.ClassicPolicies.List(ctx)
+		list, _, err := client.ClassicAPI.Policies.List(ctx)
 		if err != nil || len(list.Results) == 0 {
 			log.Fatal("Set POLICY_ID or ensure at least one policy exists")
 		}
@@ -38,12 +38,12 @@ func main() {
 		fmt.Printf("Using first policy ID: %d\n", id)
 	}
 
-	policy, resp, err := client.ClassicPolicies.GetByID(ctx, id)
+	policy, resp, err := client.ClassicAPI.Policies.GetByID(ctx, id)
 	if err != nil {
 		log.Fatalf("GetByID failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 
 	// Display policy details as JSON for readability
 	policyJSON, err := json.MarshalIndent(policy, "", "  ")

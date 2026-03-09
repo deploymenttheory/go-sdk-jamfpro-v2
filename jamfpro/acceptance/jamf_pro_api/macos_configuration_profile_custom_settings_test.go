@@ -42,7 +42,7 @@ import (
 
 func TestAcceptance_MacOSConfigProfileCustomSettings_get_schema_list(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.MacOSConfigProfileCustomSettings
+	svc := acc.Client.JamfProAPI.MacosConfigProfileCustomSettings
 	ctx := context.Background()
 
 	result, resp, err := svc.GetSchemaList(ctx)

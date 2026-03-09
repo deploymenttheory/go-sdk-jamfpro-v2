@@ -29,7 +29,7 @@ func main() {
 	if raw := os.Getenv("SERIAL_NUMBER"); raw != "" {
 		serialNumber = raw
 	} else {
-		list, _, err := client.ComputerInventory.ListV3(ctx, nil)
+		list, _, err := client.JamfProAPI.ComputerInventory.ListV3(ctx, nil)
 		if err != nil || list == nil || len(list.Results) == 0 {
 			log.Fatal("Set SERIAL_NUMBER or ensure at least one computer exists in inventory")
 		}
@@ -40,12 +40,12 @@ func main() {
 		fmt.Printf("Using first computer serial: %s\n", serialNumber)
 	}
 
-	history, resp, err := client.ClassicComputerHistory.GetBySerialNumber(ctx, serialNumber)
+	history, resp, err := client.ClassicAPI.ComputerHistory.GetBySerialNumber(ctx, serialNumber)
 	if err != nil {
 		log.Fatalf("GetBySerialNumber failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	xmlOut, err := xml.MarshalIndent(history, "", "  ")
 	if err != nil {
 		log.Fatalf("Error marshaling computer history: %v", err)

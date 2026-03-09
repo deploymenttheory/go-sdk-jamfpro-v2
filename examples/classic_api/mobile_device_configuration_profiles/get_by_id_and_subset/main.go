@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -24,7 +23,7 @@ func main() {
 
 	profileID := 1
 	subset := "General" // Subset values: General, Scope, SelfService
-	profile, _, err := jamfClient.ClassicMobileDeviceConfigurationProfiles.GetByIDWithSubset(context.Background(), profileID, subset)
+	profile, _, err := jamfClient.ClassicAPI.MobileDeviceConfigurationProfiles.GetByIDWithSubset(context.Background(), profileID, subset)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

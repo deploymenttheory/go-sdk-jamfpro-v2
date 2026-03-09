@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_apps"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mobile_device_apps"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -35,7 +35,7 @@ import (
 func TestAcceptance_MobileDeviceApps_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceApps
+	svc := acc.Client.JamfProAPI.MobileDeviceApps
 
 	t.Run("ReinstallAppConfigV1_NilRequest", func(t *testing.T) {
 		_, err := svc.ReinstallAppConfigV1(context.Background(), nil)

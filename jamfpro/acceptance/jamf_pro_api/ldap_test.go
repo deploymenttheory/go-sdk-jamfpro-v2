@@ -54,7 +54,7 @@ import (
 
 func TestAcceptance_Ldap_get_ldap_groups_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Ldap
+	svc := acc.Client.JamfProAPI.Ldap
 	ctx := context.Background()
 
 	result, resp, err := svc.GetLdapGroupsV1(ctx, map[string]string{"q": "test"})
@@ -67,7 +67,7 @@ func TestAcceptance_Ldap_get_ldap_groups_v1(t *testing.T) {
 
 func TestAcceptance_Ldap_get_ldap_servers_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Ldap
+	svc := acc.Client.JamfProAPI.Ldap
 	ctx := context.Background()
 
 	result, resp, err := svc.GetLdapServersV1(ctx)
@@ -79,7 +79,7 @@ func TestAcceptance_Ldap_get_ldap_servers_v1(t *testing.T) {
 
 func TestAcceptance_Ldap_get_ldap_groups_v1_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Ldap
+	svc := acc.Client.JamfProAPI.Ldap
 	ctx := context.Background()
 
 	// First, get all LDAP groups to find one to filter for

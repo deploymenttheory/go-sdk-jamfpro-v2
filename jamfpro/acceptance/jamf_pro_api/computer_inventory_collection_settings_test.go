@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_inventory_collection_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/computer_inventory_collection_settings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -69,7 +69,7 @@ func TestComputerInventoryCollectionSettings_GetAndUpdate(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventoryCollectionSettings
+	svc := acc.Client.JamfProAPI.ComputerInventoryCollectionSettings
 
 	original, _, err := svc.GetV2(ctx)
 	require.NoError(t, err)
@@ -98,7 +98,7 @@ func TestComputerInventoryCollectionSettings_CustomPath(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventoryCollectionSettings
+	svc := acc.Client.JamfProAPI.ComputerInventoryCollectionSettings
 
 	createReq := &computer_inventory_collection_settings.RequestCustomPath{
 		Scope: "USER_LIBRARY",

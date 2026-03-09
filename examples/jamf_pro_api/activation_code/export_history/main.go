@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/activation_code"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/activation_code"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -36,7 +35,7 @@ func main() {
 		Sort:     []string{"date:desc"},
 	}
 
-	result, resp, err := jamfClient.ActivationCode.ExportHistoryV1(context.Background(), queryParams, req)
+	result, resp, err := jamfClient.JamfProAPI.ActivationCode.ExportHistoryV1(context.Background(), queryParams, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
@@ -47,5 +46,5 @@ func main() {
 		log.Fatalf("Failed to marshal result: %v", err)
 	}
 
-	fmt.Printf("Response (Status: %d):\n%s\n", resp.StatusCode, string(out))
+	fmt.Printf("Response (Status: %d):\n%s\n", resp.StatusCode(), string(out))
 }

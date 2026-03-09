@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment"
 )
 
 func main() {
@@ -26,12 +26,12 @@ func main() {
 		RequireEula:                        true,
 	}
 
-	result, resp, err := client.Enrollment.CreateAccessGroupV3(context.Background(), request)
+	result, resp, err := client.JamfProAPI.Enrollment.CreateAccessGroupV3(context.Background(), request)
 	if err != nil {
 		log.Fatalf("Failed to create ADUE access group: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Created Access Group ID: %s\n", result.ID)
 	fmt.Printf("Href: %s\n", result.Href)
 }

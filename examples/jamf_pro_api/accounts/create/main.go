@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/accounts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/accounts"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -37,7 +36,7 @@ func main() {
 		AccountType:               "DEFAULT",
 	}
 
-	result, _, err := jamfClient.Accounts.CreateV1(context.Background(), newAccount)
+	result, _, err := jamfClient.JamfProAPI.Accounts.CreateV1(context.Background(), newAccount)
 	if err != nil {
 		fmt.Printf("Error creating account: %v\n", err)
 		return

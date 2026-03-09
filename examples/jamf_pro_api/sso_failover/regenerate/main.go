@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	// Get current failover URL
-	before, _, err := jamfClient.SsoFailover.GetV1(context.Background())
+	before, _, err := jamfClient.JamfProAPI.SsoFailover.GetV1(context.Background())
 	if err != nil {
 		fmt.Printf("Error getting current failover URL: %v\n", err)
 		return
@@ -32,7 +31,7 @@ func main() {
 	fmt.Println(string(out))
 
 	// Regenerate failover URL
-	result, _, err := jamfClient.SsoFailover.RegenerateV1(context.Background())
+	result, _, err := jamfClient.JamfProAPI.SsoFailover.RegenerateV1(context.Background())
 	if err != nil {
 		fmt.Printf("Error regenerating failover URL: %v\n", err)
 		return

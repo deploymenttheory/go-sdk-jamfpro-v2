@@ -6,11 +6,10 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	authConfig := client.AuthConfigFromEnv()
+	authConfig := jamfpro.AuthConfigFromEnv()
 	if err := authConfig.Validate(); err != nil {
 		log.Fatalf("Failed to validate auth config: %v", err)
 	}
@@ -19,7 +18,7 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	result, _, err := jamfClient.JamfProVersion.GetV1(context.Background())
+	result, _, err := jamfClient.JamfProAPI.JamfProVersion.GetV1(context.Background())
 	if err != nil {
 		log.Fatalf("Get Jamf Pro version: %v", err)
 	}

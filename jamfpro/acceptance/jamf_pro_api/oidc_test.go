@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/oidc"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/oidc"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -45,7 +45,7 @@ import (
 func TestAcceptance_OIDC_public_endpoints_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.OIDC
+	svc := acc.Client.JamfProAPI.Oidc
 	ctx := context.Background()
 
 	// GetPublicFeaturesV1 — always returns whether Jamf ID auth is enabled
@@ -55,7 +55,7 @@ func TestAcceptance_OIDC_public_endpoints_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, features)
 	require.NotNil(t, featuresResp)
-	assert.Equal(t, 200, featuresResp.StatusCode)
+	assert.Equal(t, 200, featuresResp.StatusCode())
 	acc.LogTestSuccess(t, "GetPublicFeaturesV1: jamfIdAuthEnabled=%v", features.JamfIdAuthenticationEnabled)
 
 	// GetPublicKeyV1 — returns the JWKS public key set
@@ -65,7 +65,7 @@ func TestAcceptance_OIDC_public_endpoints_v1(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, pubKey)
 	require.NotNil(t, pubKeyResp)
-	assert.Equal(t, 200, pubKeyResp.StatusCode)
+	assert.Equal(t, 200, pubKeyResp.StatusCode())
 	acc.LogTestSuccess(t, "GetPublicKeyV1: %d key(s) in JWKS", len(pubKey.Keys))
 
 	// GetDirectIdPLoginURLV1 — may fail if OIDC IdP is not configured
@@ -77,7 +77,7 @@ func TestAcceptance_OIDC_public_endpoints_v1(t *testing.T) {
 	} else {
 		require.NotNil(t, loginURL)
 		require.NotNil(t, loginResp)
-		assert.Equal(t, 200, loginResp.StatusCode)
+		assert.Equal(t, 200, loginResp.StatusCode())
 		acc.LogTestSuccess(t, "GetDirectIdPLoginURLV1: url=%s", loginURL.URL)
 	}
 }
@@ -86,7 +86,7 @@ func TestAcceptance_OIDC_public_endpoints_v1(t *testing.T) {
 func TestAcceptance_OIDC_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.OIDC
+	svc := acc.Client.JamfProAPI.Oidc
 
 	t.Run("GetRedirectURLV1_NilRequest", func(t *testing.T) {
 		_, _, err := svc.GetRedirectURLV1(context.Background(), nil)

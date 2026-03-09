@@ -25,12 +25,12 @@ func main() {
 	}
 	deviceIDs := []string{deviceID}
 
-	result, resp, err := client.MDM.BlankPush(ctx, deviceIDs)
+	result, resp, err := client.JamfProAPI.Mdm.BlankPush(ctx, deviceIDs)
 	if err != nil {
-		log.Fatalf("Failed to send blank push: %v (HTTP %d)", err, resp.StatusCode)
+		log.Fatalf("Failed to send blank push: %v (HTTP %d)", err, resp.StatusCode())
 	}
 
-	fmt.Printf("Blank push sent successfully (HTTP %d)\n", resp.StatusCode)
+	fmt.Printf("Blank push sent successfully (HTTP %d)\n", resp.StatusCode())
 	if len(result.ErrorUUIDs) > 0 {
 		fmt.Printf("Devices with errors: %v\n", result.ErrorUUIDs)
 	} else {

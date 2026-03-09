@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	groupName := "go-sdk-v2-mobile-smart-group" // Replace with the desired mobile device group name to delete
-	_, err = jamfClient.ClassicMobileDeviceGroups.DeleteByName(context.Background(), groupName)
+	_, err = jamfClient.ClassicAPI.MobileDeviceGroups.DeleteByName(context.Background(), groupName)
 	if err != nil {
 		fmt.Printf("Error deleting mobile device group by name: %v\n", err)
 		return

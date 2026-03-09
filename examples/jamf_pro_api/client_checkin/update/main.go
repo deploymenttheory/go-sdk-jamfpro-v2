@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	// Option 1: Get current settings, modify, then update
-	current, _, err := jamfClient.ClientCheckin.GetV3(context.Background())
+	current, _, err := jamfClient.JamfProAPI.ClientCheckin.GetV3(context.Background())
 	if err != nil {
 		fmt.Printf("Error getting current settings: %v\n", err)
 		return
@@ -31,7 +30,7 @@ func main() {
 	settings.CheckInFrequency = 15
 	settings.CreateHooks = true
 
-	result, _, err := jamfClient.ClientCheckin.UpdateV3(context.Background(), &settings)
+	result, _, err := jamfClient.JamfProAPI.ClientCheckin.UpdateV3(context.Background(), &settings)
 	if err != nil {
 		fmt.Printf("Error updating client check-in settings: %v\n", err)
 		return

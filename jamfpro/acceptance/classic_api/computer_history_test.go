@@ -19,14 +19,14 @@ import (
 func TestAcceptance_ComputerHistory_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicComputerHistory
+	svc := acc.Client.ClassicAPI.ComputerHistory
 	ctx := context.Background()
 
 	var computerID string
 	if raw := os.Getenv("COMPUTER_ID"); raw != "" {
 		computerID = raw
 	} else {
-		invSvc := acc.Client.ComputerInventory
+		invSvc := acc.Client.JamfProAPI.ComputerInventory
 		list, _, err := invSvc.ListV3(ctx, nil)
 		if err != nil || list == nil || len(list.Results) == 0 {
 			t.Skip("Set COMPUTER_ID or ensure at least one computer exists in inventory")
@@ -56,14 +56,14 @@ func TestAcceptance_ComputerHistory_get_by_id(t *testing.T) {
 func TestAcceptance_ComputerHistory_get_by_id_and_subset(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicComputerHistory
+	svc := acc.Client.ClassicAPI.ComputerHistory
 	ctx := context.Background()
 
 	var computerID string
 	if raw := os.Getenv("COMPUTER_ID"); raw != "" {
 		computerID = raw
 	} else {
-		invSvc := acc.Client.ComputerInventory
+		invSvc := acc.Client.JamfProAPI.ComputerInventory
 		list, _, err := invSvc.ListV3(ctx, nil)
 		if err != nil || list == nil || len(list.Results) == 0 {
 			t.Skip("Set COMPUTER_ID or ensure at least one computer exists in inventory")
@@ -92,12 +92,12 @@ func TestAcceptance_ComputerHistory_get_by_id_and_subset(t *testing.T) {
 func TestAcceptance_ComputerHistory_get_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicComputerHistory
+	svc := acc.Client.ClassicAPI.ComputerHistory
 	ctx := context.Background()
 
 	computerName := os.Getenv("COMPUTER_NAME")
 	if computerName == "" {
-		invSvc := acc.Client.ComputerInventory
+		invSvc := acc.Client.JamfProAPI.ComputerInventory
 		list, _, err := invSvc.ListV3(ctx, nil)
 		if err != nil || list == nil || len(list.Results) == 0 {
 			t.Skip("Set COMPUTER_NAME or ensure at least one computer exists in inventory")
@@ -126,7 +126,7 @@ func TestAcceptance_ComputerHistory_get_by_name(t *testing.T) {
 func TestAcceptance_ComputerHistory_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicComputerHistory
+	svc := acc.Client.ClassicAPI.ComputerHistory
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

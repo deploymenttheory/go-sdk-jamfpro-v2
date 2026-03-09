@@ -6,15 +6,14 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/macos_configuration_profiles"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/macos_configuration_profiles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -39,7 +38,7 @@ func main() {
 		},
 	}
 
-	updated, _, err := jamfClient.ClassicMacOSConfigurationProfiles.UpdateByName(context.Background(), "go-sdk-v2-macos-profile", updateReq)
+	updated, _, err := jamfClient.ClassicAPI.MacOSConfigurationProfiles.UpdateByName(context.Background(), "go-sdk-v2-macos-profile", updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

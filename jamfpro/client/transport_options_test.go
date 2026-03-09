@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	"crypto/tls"
 	"net/http"
 	"testing"
@@ -14,7 +15,7 @@ import (
 func TestWithBaseURL(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg, WithBaseURL("https://custom.example.com"))
 	require.NoError(t, err)
 	assert.Equal(t, "https://custom.example.com", tr.BaseURL)
@@ -24,7 +25,7 @@ func TestWithLogger(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	logger := zap.NewNop()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg, WithLogger(logger))
 	require.NoError(t, err)
 	assert.Same(t, logger, tr.GetLogger())
@@ -33,7 +34,7 @@ func TestWithLogger(t *testing.T) {
 func TestWithLogger_Nil(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	_, err := NewTransport(cfg, WithLogger(nil))
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "logger")
@@ -42,7 +43,7 @@ func TestWithLogger_Nil(t *testing.T) {
 func TestWithTimeout(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	_, err := NewTransport(cfg, WithTimeout(30*time.Second))
 	require.NoError(t, err)
 }
@@ -50,7 +51,7 @@ func TestWithTimeout(t *testing.T) {
 func TestWithRetryCount_WithRetryWaitTime_WithRetryMaxWaitTime(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	_, err := NewTransport(cfg, WithRetryCount(2), WithRetryWaitTime(time.Second), WithRetryMaxWaitTime(10*time.Second))
 	require.NoError(t, err)
 }
@@ -58,7 +59,7 @@ func TestWithRetryCount_WithRetryWaitTime_WithRetryMaxWaitTime(t *testing.T) {
 func TestWithUserAgent_WithGlobalHeader_WithGlobalHeaders(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg, WithUserAgent("custom/1.0"), WithGlobalHeader("A", "a"), WithGlobalHeaders(map[string]string{"B": "b"}))
 	require.NoError(t, err)
 	assert.Equal(t, "custom/1.0", tr.userAgent)
@@ -69,7 +70,7 @@ func TestWithUserAgent_WithGlobalHeader_WithGlobalHeaders(t *testing.T) {
 func TestWithProxy_WithTLSClientConfig_WithTransport_WithInsecureSkipVerify(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	_, err := NewTransport(cfg, WithProxy("http://proxy:8080"), WithTLSClientConfig(&tls.Config{}), WithTransport(http.DefaultTransport), WithInsecureSkipVerify())
 	require.NoError(t, err)
 }
@@ -77,7 +78,7 @@ func TestWithProxy_WithTLSClientConfig_WithTransport_WithInsecureSkipVerify(t *t
 func TestWithMaxConcurrentRequests_WithMandatoryRequestDelay_WithTotalRetryDuration(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg, WithMaxConcurrentRequests(2), WithMandatoryRequestDelay(time.Millisecond), WithTotalRetryDuration(10*time.Second))
 	require.NoError(t, err)
 	assert.NotNil(t, tr.sem)
@@ -88,7 +89,7 @@ func TestWithMaxConcurrentRequests_WithMandatoryRequestDelay_WithTotalRetryDurat
 func TestWithMaxConcurrentRequests_Zero(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg, WithMaxConcurrentRequests(0))
 	require.NoError(t, err)
 	assert.Nil(t, tr.sem)
@@ -97,7 +98,7 @@ func TestWithMaxConcurrentRequests_Zero(t *testing.T) {
 func TestWithDebug(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	_, err := NewTransport(cfg, WithDebug())
 	require.NoError(t, err)
 }

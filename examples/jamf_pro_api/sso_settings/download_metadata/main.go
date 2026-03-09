@@ -20,12 +20,12 @@ func main() {
 	ctx := context.Background()
 
 	// Download the SAML metadata file
-	metadata, resp, err := client.SsoSettings.DownloadMetadataV3(ctx)
+	metadata, resp, err := client.JamfProAPI.SsoSettings.DownloadMetadataV3(ctx)
 	if err != nil {
 		log.Fatalf("Error downloading SAML metadata: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Downloaded metadata size: %d bytes\n", len(metadata))
 
 	// Save the metadata to a file

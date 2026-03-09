@@ -29,7 +29,7 @@ func main() {
 			log.Fatalf("invalid SITE_ID %q: %v", raw, err)
 		}
 	} else {
-		list, _, err := client.ClassicSites.List(ctx)
+		list, _, err := client.ClassicAPI.Sites.List(ctx)
 		if err != nil || len(list.Results) == 0 {
 			log.Fatal("Set SITE_ID or ensure at least one site exists")
 		}
@@ -37,12 +37,12 @@ func main() {
 		fmt.Printf("Using first site ID: %d\n", id)
 	}
 
-	site, resp, err := client.ClassicSites.GetByID(ctx, id)
+	site, resp, err := client.ClassicAPI.Sites.GetByID(ctx, id)
 	if err != nil {
 		log.Fatalf("GetByID failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("ID:   %d\n", site.ID)
 	fmt.Printf("Name: %s\n", site.Name)
 }

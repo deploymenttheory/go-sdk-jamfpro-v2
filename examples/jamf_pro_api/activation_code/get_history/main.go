@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	// Example 1: Get all history
-	result, _, err := jamfClient.ActivationCode.GetHistoryV1(context.Background(), nil)
+	result, _, err := jamfClient.JamfProAPI.ActivationCode.GetHistoryV1(context.Background(), nil)
 	if err != nil {
 		fmt.Printf("Error getting activation code history: %v\n", err)
 		return
@@ -35,7 +34,7 @@ func main() {
 		"filter": `username==admin`,
 		"sort":   "date:desc",
 	}
-	result, _, err = jamfClient.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
+	result, _, err = jamfClient.JamfProAPI.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error getting filtered history: %v\n", err)
 		return

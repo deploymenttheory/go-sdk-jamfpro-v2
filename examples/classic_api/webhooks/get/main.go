@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
@@ -16,7 +15,7 @@ func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
 	// Initialize the Jamf Pro client with the HTTP client configuration
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -27,7 +26,7 @@ func main() {
 
 	// Example usage of GetByID
 	webhookID := 4 // Replace with the desired webhook ID
-	webhookByID, _, err := jamfClient.ClassicWebhooks.GetByID(context.Background(), webhookID)
+	webhookByID, _, err := jamfClient.ClassicAPI.Webhooks.GetByID(context.Background(), webhookID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

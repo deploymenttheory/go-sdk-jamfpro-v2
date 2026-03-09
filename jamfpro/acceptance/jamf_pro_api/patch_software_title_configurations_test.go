@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/patch_software_title_configurations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/patch_software_title_configurations"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -70,7 +70,7 @@ import (
 
 func TestAcceptance_PatchSoftwareTitleConfigurations_list_v2(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.PatchSoftwareTitleConfigurations
+	svc := acc.Client.JamfProAPI.PatchSoftwareTitleConfigurations
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV2(ctx)
@@ -83,7 +83,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_list_v2(t *testing.T) {
 
 func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.PatchSoftwareTitleConfigurations
+	svc := acc.Client.JamfProAPI.PatchSoftwareTitleConfigurations
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-patch-config")
 

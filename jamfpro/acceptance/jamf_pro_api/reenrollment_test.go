@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/reenrollment"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/reenrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -15,7 +15,7 @@ import (
 
 func TestAcceptance_Reenrollment_get(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Reenrollment
+	svc := acc.Client.JamfProAPI.Reenrollment
 	ctx := context.Background()
 
 	result, resp, err := svc.Get(ctx)
@@ -27,7 +27,7 @@ func TestAcceptance_Reenrollment_get(t *testing.T) {
 
 func TestAcceptance_Reenrollment_update(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Reenrollment
+	svc := acc.Client.JamfProAPI.Reenrollment
 	ctx := context.Background()
 
 	current, _, err := svc.Get(ctx)
@@ -48,7 +48,7 @@ func TestAcceptance_Reenrollment_update(t *testing.T) {
 
 func TestAcceptance_Reenrollment_get_history(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Reenrollment
+	svc := acc.Client.JamfProAPI.Reenrollment
 	ctx := context.Background()
 
 	// Add history note first
@@ -72,7 +72,7 @@ func TestAcceptance_Reenrollment_get_history(t *testing.T) {
 
 func TestAcceptance_Reenrollment_add_history_notes(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Reenrollment
+	svc := acc.Client.JamfProAPI.Reenrollment
 	ctx := context.Background()
 
 	request := &reenrollment.AddReenrollmentHistoryNotesRequest{Note: "Acceptance test note from go-sdk-jamfpro-v2"}
@@ -86,7 +86,7 @@ func TestAcceptance_Reenrollment_add_history_notes(t *testing.T) {
 
 func TestAcceptance_Reenrollment_export_history(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Reenrollment
+	svc := acc.Client.JamfProAPI.Reenrollment
 	ctx := context.Background()
 
 	resp, body, err := svc.ExportHistory(ctx, map[string]string{"page": "0", "page-size": "100"}, nil)

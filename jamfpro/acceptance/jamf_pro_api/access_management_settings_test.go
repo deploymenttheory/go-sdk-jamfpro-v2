@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_AccessManagementSettings_get_v4(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.AccessManagementSettings
+	svc := acc.Client.JamfProAPI.AccessManagementSettings
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV4(ctx)

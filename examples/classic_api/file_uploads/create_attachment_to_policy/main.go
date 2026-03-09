@@ -17,7 +17,7 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/file_uploads"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/file_uploads"
 )
 
 func main() {
@@ -47,10 +47,10 @@ func main() {
 
 	ctx := context.Background()
 
-	resp, err := client.ClassicFileUploads.CreateAttachment(ctx, "policies", file_uploads.ResourceIDTypeID, policyID, filePath, false)
+	resp, err := client.ClassicAPI.FileUploads.CreateAttachment(ctx, "policies", file_uploads.ResourceIDTypeID, policyID, filePath, false)
 	if err != nil {
 		log.Fatalf("CreateAttachment failed: %v", err)
 	}
 
-	fmt.Printf("File uploaded successfully. Status: %d\n", resp.StatusCode)
+	fmt.Printf("File uploaded successfully. Status: %d\n", resp.StatusCode())
 }

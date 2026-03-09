@@ -1,0 +1,644 @@
+package packages
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+	"time"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/crypto"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_distribution_point"
+	"resty.dev/v3"
+)
+
+type (
+	// PackagesServiceInterface defines the interface for package operations.
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages
+	PackagesServiceInterface interface {
+		// ListV1 returns all package objects (Get Package objects).
+		//
+		// Returns a paged list of package objects. Optional query parameters support
+		// filtering and pagination (page, pageSize, sort).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages
+		ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error)
+
+		// GetByIDV1 returns the specified package by ID (Get specified Package object).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id
+		GetByIDV1(ctx context.Context, id string) (*ResourcePackage, *resty.Response, error)
+
+		// CreateV1 creates a new package record (Create Package record).
+		//
+		// Creates metadata only; file upload is a separate step via UploadV1.
+		// Required: PackageName, FileName, CategoryID, Priority, and the seven *bool fields.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages
+		CreateV1(ctx context.Context, request *RequestPackage) (*CreateResponse, *resty.Response, error)
+
+		// UploadV1 uploads a package file to an existing package record.
+		//
+		// Call CreateV1 first to create metadata, then upload the file.
+		// filePath is the path to the package file on disk.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-upload
+		UploadV1(ctx context.Context, id string, filePath string) (*CreateResponse, *resty.Response, error)
+
+		// UpdateByIDV1 updates the specified package by ID (Update specified Package object).
+		//
+		// Sends full ResourcePackage (typically from GetByIDV1, then modify and PUT).
+		// Metadata only; no file upload.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-packages-id
+		UpdateByIDV1(ctx context.Context, id string, request *ResourcePackage) (*ResourcePackage, *resty.Response, error)
+
+		// AssignManifestToPackageV1 assigns a manifest file to an existing package.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-manifest
+		AssignManifestToPackageV1(ctx context.Context, id string, manifestPath string) (*CreateResponse, *resty.Response, error)
+
+		// DeletePackageManifestV1 removes the manifest from a package.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-packages-id-manifest
+		DeletePackageManifestV1(ctx context.Context, id string) (*resty.Response, error)
+
+		// DeleteByIDV1 removes the specified package by ID (Remove specified Package record).
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-packages-id
+		DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error)
+
+		// DeletePackagesByIDV1 deletes multiple packages by their IDs (Delete multiple Packages by their IDs).
+		//
+		// Sends a POST to /api/v1/packages/delete-multiple with a body containing package IDs.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-delete-multiple
+		DeletePackagesByIDV1(ctx context.Context, req *DeletePackagesByIDRequest) (*resty.Response, error)
+
+		// GetHistoryV1 returns the history object for the specified package.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id-history
+		GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error)
+
+		// AddHistoryNotesV1 adds notes to the specified package history.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history
+		AddHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error)
+
+		// ExportV1 exports the packages collection as CSV or JSON.
+		//
+		// Query params: export-fields, export-labels, page, page-size, sort, filter.
+		// Optional request body overrides query params for long URIs.
+		// Accept header: text/csv or application/json. Returns raw bytes.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-export
+		ExportV1(ctx context.Context, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
+
+		// ExportHistoryV1 exports the package history for a specified package as CSV or JSON.
+		//
+		// Query params: export-fields, export-labels, page, page-size, sort, filter.
+		// Optional request body overrides query params for long URIs.
+		// Accept header: text/csv or application/json. Returns raw bytes.
+		//
+		// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history-export
+		ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *resty.Response, error)
+
+		// CreateAndUpload creates package metadata, uploads the file, and verifies SHA3_512.
+		// Convenience method for creating and uploading a package.
+		//
+		// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Create metadata (FileName, MD5 set from file);
+		// 3) Upload file; 4) Poll until HashType==SHA3_512 and HashValue populated; 5) Verify hash.
+		CreateAndUpload(ctx context.Context, filePath string, req *RequestPackage) (*CreateResponse, *resty.Response, error)
+
+		// UpdateAndUpload updates package metadata, uploads a new file, and verifies SHA3_512.
+		// Convenience method for updating and uploading a package.
+		//
+		// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Update metadata (FileName, MD5 set from file);
+		// 3) Upload file; 4) Poll until HashType==SHA3_512 and HashValue populated; 5) Verify hash.
+		UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *resty.Response, error)
+	}
+
+	// Service handles communication with the packages-related methods of the Jamf Pro API.
+	//
+	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages
+	Packages struct {
+		client                 transport.HTTPClient
+		cloudDistributionPoint cloud_distribution_point.CloudDistributionPointServiceInterface
+	}
+)
+
+var _ PackagesServiceInterface = (*Packages)(nil)
+
+func NewPackages(client transport.HTTPClient) *Packages {
+	return &Packages{
+		client:                 client,
+		cloudDistributionPoint: cloud_distribution_point.NewCloudDistributionPoint(client),
+	}
+}
+
+// -----------------------------------------------------------------------------
+// Jamf Pro API - Packages CRUD Operations
+// -----------------------------------------------------------------------------
+
+// ListV1 returns all package objects (Get Package objects).
+// URL: GET /api/v1/packages
+// Query Params: page, pageSize, sort (optional)
+// https://developer.jamf.com/jamf-pro/reference/get_v1-packages
+func (s *Packages) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
+	var result ListResponse
+
+	endpoint := EndpointPackagesV1
+
+	mergePage := func(pageData []byte) error {
+		var pageResponse ListResponse
+		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+			return fmt.Errorf("failed to unmarshal page: %w", err)
+		}
+		result.Results = append(result.Results, pageResponse.Results...)
+		result.TotalCount = pageResponse.TotalCount
+		return nil
+	}
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to list packages: %w", err)
+	}
+	return &result, resp, nil
+}
+
+// GetByIDV1 returns the specified package by ID (Get specified Package object).
+// URL: GET /api/v1/packages/{id}
+// https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id
+func (s *Packages) GetByIDV1(ctx context.Context, id string) (*ResourcePackage, *resty.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("package ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s", EndpointPackagesV1, id)
+
+	var result ResourcePackage
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// CreateV1 creates a new package record (Create Package record).
+// URL: POST /api/v1/packages
+// Body: JSON with metadata (name, category, info, notes, priority, etc.) - no file upload
+// https://developer.jamf.com/jamf-pro/reference/post_v1-packages
+func (s *Packages) CreateV1(ctx context.Context, request *RequestPackage) (*CreateResponse, *resty.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	var result CreateResponse
+
+	endpoint := EndpointPackagesV1
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// UploadV1 uploads a package file to an existing package record.
+// URL: POST /api/v1/packages/{id}/upload
+// https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-upload
+func (s *Packages) UploadV1(ctx context.Context, id string, filePath string) (*CreateResponse, *resty.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("package ID is required")
+	}
+	if filePath == "" {
+		return nil, nil, fmt.Errorf("file path is required")
+	}
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	f, err := os.Open(filePath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("open package file: %w", err)
+	}
+	defer f.Close()
+
+	info, err := f.Stat()
+	if err != nil {
+		return nil, nil, fmt.Errorf("stat package file: %w", err)
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/upload", EndpointPackagesV1, id)
+	fileName := info.Name()
+	if fileName == "" {
+		fileName = filePath
+	}
+
+	var result CreateResponse
+	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, f, info.Size(), nil, headers, nil, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// UpdateByIDV1 updates the specified package by ID (Update specified Package object).
+// URL: PUT /api/v1/packages/{id}
+// Body: JSON with full ResourcePackage - no file upload
+// https://developer.jamf.com/jamf-pro/reference/put_v1-packages-id
+func (s *Packages) UpdateByIDV1(ctx context.Context, id string, request *ResourcePackage) (*ResourcePackage, *resty.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s", EndpointPackagesV1, id)
+
+	var result ResourcePackage
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// AssignManifestToPackageV1 assigns a manifest file to an existing package.
+// URL: POST /api/v1/packages/{id}/manifest
+// https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-manifest
+func (s *Packages) AssignManifestToPackageV1(ctx context.Context, id string, manifestPath string) (*CreateResponse, *resty.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("package ID is required")
+	}
+	if manifestPath == "" {
+		return nil, nil, fmt.Errorf("manifest path is required")
+	}
+
+	f, err := os.Open(manifestPath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("open manifest file: %w", err)
+	}
+	defer f.Close()
+
+	info, err := f.Stat()
+	if err != nil {
+		return nil, nil, fmt.Errorf("stat manifest file: %w", err)
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/manifest", EndpointPackagesV1, id)
+	fileName := info.Name()
+	if fileName == "" {
+		fileName = manifestPath
+	}
+
+	var result CreateResponse
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, f, info.Size(), nil, headers, nil, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// DeletePackageManifestV1 removes the manifest from a package.
+// URL: DELETE /api/v1/packages/{id}/manifest
+// https://developer.jamf.com/jamf-pro/reference/delete_v1-packages-id-manifest
+func (s *Packages) DeletePackageManifestV1(ctx context.Context, id string) (*resty.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("package ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/manifest", EndpointPackagesV1, id)
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// DeleteByIDV1 removes the specified package by ID (Remove specified Package record).
+// URL: DELETE /api/v1/packages/{id}
+// https://developer.jamf.com/jamf-pro/reference/delete_v1-packages-id
+func (s *Packages) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("package ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s", EndpointPackagesV1, id)
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// DeletePackagesByIDV1 deletes multiple packages by their IDs (Delete multiple Packages by their IDs).
+// URL: POST /api/v1/packages/delete-multiple
+// Body: JSON with ids (array of package IDs)
+// https://developer.jamf.com/jamf-pro/reference/post_v1-packages-delete-multiple
+func (s *Packages) DeletePackagesByIDV1(ctx context.Context, req *DeletePackagesByIDRequest) (*resty.Response, error) {
+	if req == nil || len(req.IDs) == 0 {
+		return nil, fmt.Errorf("ids are required")
+	}
+
+	endpoint := EndpointPackagesV1 + "/delete-multiple"
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// GetHistoryV1 returns the history object for the specified package.
+// URL: GET /api/v1/packages/{id}/history
+// Query Params: filter, sort, page, page-size (optional)
+// https://developer.jamf.com/jamf-pro/reference/get_v1-packages-id-history
+func (s *Packages) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string) (*HistoryResponse, *resty.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("package ID is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/history", EndpointPackagesV1, id)
+
+	var result HistoryResponse
+
+	headers := map[string]string{
+		"Accept": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
+// AddHistoryNotesV1 adds notes to the specified package history.
+// URL: POST /api/v1/packages/{id}/history
+// Body: JSON with note
+// https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history
+func (s *Packages) AddHistoryNotesV1(ctx context.Context, id string, req *AddHistoryNotesRequest) (*resty.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("package ID is required")
+	}
+	if req == nil {
+		return nil, fmt.Errorf("request body is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/history", EndpointPackagesV1, id)
+
+	headers := map[string]string{
+		"Accept":       mime.ApplicationJSON,
+		"Content-Type": mime.ApplicationJSON,
+	}
+
+	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// ExportV1 exports the packages collection as CSV or JSON.
+// URL: POST /api/v1/packages/export
+// Query params: export-fields, export-labels, page, page-size, sort, filter
+// https://developer.jamf.com/jamf-pro/reference/post_v1-packages-export
+func (s *Packages) ExportV1(ctx context.Context, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *resty.Response, error) {
+	endpoint := EndpointPackagesExport
+	if acceptType == "" {
+		acceptType = mime.ApplicationJSON
+	}
+	headers := map[string]string{
+		"Accept":       acceptType,
+		"Content-Type": mime.ApplicationJSON,
+	}
+	var reqBody any
+	if body != nil {
+		reqBody = body
+	}
+	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, reqBody, headers, nil)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to export packages: %w", err)
+	}
+	return resp.Bytes(), resp, nil
+}
+
+// ExportHistoryV1 exports the package history for a specified package as CSV or JSON.
+// URL: POST /api/v1/packages/{id}/history/export
+// Query params: export-fields, export-labels, page, page-size, sort, filter
+// https://developer.jamf.com/jamf-pro/reference/post_v1-packages-id-history-export
+func (s *Packages) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map[string]string, body *ExportRequest, acceptType string) ([]byte, *resty.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("package ID is required")
+	}
+	endpoint := fmt.Sprintf("%s/%s%s", EndpointPackagesV1, id, EndpointPackagesHistoryExport)
+	if acceptType == "" {
+		acceptType = mime.ApplicationJSON
+	}
+	headers := map[string]string{
+		"Accept":       acceptType,
+		"Content-Type": mime.ApplicationJSON,
+	}
+	var reqBody any
+	if body != nil {
+		reqBody = body
+	}
+	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, reqBody, headers, nil)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to export package history: %w", err)
+	}
+	return resp.Bytes(), resp, nil
+}
+
+// CreateAndUpload creates package metadata, uploads the file, and verifies SHA3_512.
+// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Create metadata; 3) Upload file;
+// 4) Refresh cloud distribution point inventory (forces immediate hash recalculation); 5) Poll until HashType==SHA3_512; 6) Verify hash.
+func (s *Packages) CreateAndUpload(ctx context.Context, filePath string, req *RequestPackage) (*CreateResponse, *resty.Response, error) {
+	if filePath == "" {
+		return nil, nil, fmt.Errorf("file path is required")
+	}
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	initialHash, err := crypto.CalculateSHA3_512(filePath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("SHA3_512: %w", err)
+	}
+	md5Hash, err := crypto.CalculateMD5(filePath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("MD5: %w", err)
+	}
+
+	createReq := *req
+	createReq.FileName = filepath.Base(filePath)
+	createReq.MD5 = md5Hash
+
+	created, resp, err := s.CreateV1(ctx, &createReq)
+	if err != nil {
+		return nil, resp, fmt.Errorf("create metadata: %w", err)
+	}
+	packageID := created.ID
+
+	_, resp, err = s.UploadV1(ctx, packageID, filePath)
+	if err != nil {
+		return nil, resp, fmt.Errorf("upload file: %w", err)
+	}
+
+	const maxAttempts = 60
+	const sleepBetween = 3 * time.Second
+	var uploaded *ResourcePackage
+	for i := 1; i <= maxAttempts; i++ {
+
+		_, refreshErr := s.cloudDistributionPoint.RefreshInventoryV1(ctx, createReq.FileName)
+		if refreshErr != nil {
+			return nil, resp, fmt.Errorf("refresh cloud distribution point inventory: %w", refreshErr)
+		}
+		uploaded, resp, err = s.GetByIDV1(ctx, packageID)
+		if err != nil {
+			return nil, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
+		}
+		if uploaded.HashType == "SHA3_512" && uploaded.HashValue != "" {
+			break
+		}
+		if i < maxAttempts {
+			time.Sleep(sleepBetween)
+		}
+	}
+
+	if uploaded.HashType != "SHA3_512" || uploaded.HashValue == "" {
+		return nil, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
+	}
+	if uploaded.HashValue != initialHash {
+		return nil, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.HashValue)
+	}
+
+	return created, resp, nil
+}
+
+// UpdateAndUpload updates package metadata, uploads a new file, and verifies SHA3_512.
+// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Update metadata; 3) Upload file;
+// 4) Refresh cloud distribution point inventory (forces immediate hash recalculation); 5) Poll until HashType==SHA3_512; 6) Verify hash.
+func (s *Packages) UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *resty.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("package ID is required")
+	}
+	if filePath == "" {
+		return nil, nil, fmt.Errorf("file path is required")
+	}
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	initialHash, err := crypto.CalculateSHA3_512(filePath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("SHA3_512: %w", err)
+	}
+	md5Hash, err := crypto.CalculateMD5(filePath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("MD5: %w", err)
+	}
+
+	updateReq := *req
+	updateReq.FileName = filepath.Base(filePath)
+	updateReq.MD5 = md5Hash
+
+	updated, resp, err := s.UpdateByIDV1(ctx, id, &updateReq)
+	if err != nil {
+		return nil, resp, fmt.Errorf("update metadata: %w", err)
+	}
+
+	_, resp, err = s.UploadV1(ctx, id, filePath)
+	if err != nil {
+		return nil, resp, fmt.Errorf("upload file: %w", err)
+	}
+
+	const maxAttempts = 60
+	const sleepBetween = 3 * time.Second
+	var uploaded *ResourcePackage
+	for i := 1; i <= maxAttempts; i++ {
+
+		_, refreshErr := s.cloudDistributionPoint.RefreshInventoryV1(ctx, updateReq.FileName)
+		if refreshErr != nil {
+			return nil, resp, fmt.Errorf("refresh cloud distribution point inventory: %w", refreshErr)
+		}
+
+		uploaded, resp, err = s.GetByIDV1(ctx, id)
+		if err != nil {
+			return nil, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
+		}
+		if uploaded.HashType == "SHA3_512" && uploaded.HashValue != "" {
+			break
+		}
+		if i < maxAttempts {
+			time.Sleep(sleepBetween)
+		}
+	}
+
+	if uploaded.HashType != "SHA3_512" || uploaded.HashValue == "" {
+		return nil, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
+	}
+	if uploaded.HashValue != initialHash {
+		return nil, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.HashValue)
+	}
+
+	return updated, resp, nil
+}

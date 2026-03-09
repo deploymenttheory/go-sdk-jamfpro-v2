@@ -39,7 +39,7 @@ import (
 func TestAcceptance_MDM_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MDM
+	svc := acc.Client.JamfProAPI.Mdm
 
 	t.Run("BlankPush_EmptyClientManagementIDs", func(t *testing.T) {
 		_, _, err := svc.BlankPush(context.Background(), []string{})
@@ -83,7 +83,7 @@ func TestAcceptance_MDM_validation_errors(t *testing.T) {
 // 	if deviceID == "" {
 // 		t.Skip("JAMF_MDM_TEST_DEVICE_ID not set, skipping blank push test")
 // 	}
-// 	svc := acc.Client.MDM
+// 	svc := acc.Client.JamfProAPI.Mdm
 // 	result, resp, err := svc.BlankPush(context.Background(), []string{deviceID})
 // 	require.NoError(t, err)
 // 	require.NotNil(t, result)

@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
@@ -16,7 +15,7 @@ func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
 	// Initialize the Jamf Pro client with the HTTP client configuration
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -27,7 +26,7 @@ func main() {
 
 	// Example usage of GetNetworkSegmentByID
 	segmentID := 1 // Replace with the desired network segment ID
-	segment, _, err := jamfClient.ClassicNetworkSegments.GetByID(context.Background(), segmentID)
+	segment, _, err := jamfClient.ClassicAPI.NetworkSegments.GetByID(context.Background(), segmentID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

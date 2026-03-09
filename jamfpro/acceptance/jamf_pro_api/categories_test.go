@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/categories"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -79,7 +79,7 @@ import (
 func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Categories
+	svc := acc.Client.JamfProAPI.Categories
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -95,7 +95,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	require.NoError(t, err, "CreateCategoryV1 should not return an error")
 	require.NotNil(t, created, "CreateCategoryV1 result should not be nil")
 	require.NotNil(t, createResp, "CreateCategoryV1 response should not be nil")
-	assert.Equal(t, 201, createResp.StatusCode, "expected 201 Created")
+	assert.Equal(t, 201, createResp.StatusCode(), "expected 201 Created")
 	assert.NotEmpty(t, created.ID, "created category ID should not be empty")
 	assert.NotEmpty(t, created.Href, "created category Href should not be empty")
 
@@ -121,7 +121,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err, "ListCategoriesV1 should not return an error")
 	require.NotNil(t, list, "ListCategoriesV1 result should not be nil")
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.TotalCount, "total count should be positive")
 
 	found := false
@@ -153,7 +153,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err, "GetCategoryByIDV1 should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, categoryID, fetched.ID)
 	assert.Equal(t, createReq.Name, fetched.Name)
 	assert.Equal(t, createReq.Priority, fetched.Priority)
@@ -176,7 +176,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV1(ctx4, categoryID, updateReq)
 	require.NoError(t, err, "UpdateCategoryByIDV1 should not return an error")
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	assert.Equal(t, categoryID, updated.ID)
 	acc.LogTestSuccess(t, "Category updated: ID=%s", updated.ID)
 
@@ -191,7 +191,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByIDV1(ctx5, categoryID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, updatedName, verified.Name, "name should reflect the update")
 	assert.Equal(t, 2, verified.Priority, "priority should reflect the update")
 	acc.LogTestSuccess(t, "Update verified: name=%q priority=%d", verified.Name, verified.Priority)
@@ -211,7 +211,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	require.NoError(t, err, "AddCategoryHistoryNotesV1 should not return an error")
 	require.NotNil(t, noteResp)
 	// Jamf returns 201 for POST to history
-	assert.Contains(t, []int{200, 201}, noteResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, noteResp.StatusCode())
 	acc.LogTestSuccess(t, "History note added")
 
 	// ------------------------------------------------------------------
@@ -225,7 +225,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	history, historyResp, err := svc.GetCategoryHistoryV1(ctx7, categoryID, nil)
 	require.NoError(t, err, "GetCategoryHistoryV1 should not return an error")
 	require.NotNil(t, history)
-	assert.Equal(t, 200, historyResp.StatusCode)
+	assert.Equal(t, 200, historyResp.StatusCode())
 	assert.Positive(t, history.TotalCount, "history should have at least one entry")
 
 	noteFound := false
@@ -251,7 +251,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx8, categoryID)
 	require.NoError(t, err, "DeleteCategoryByIDV1 should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Category ID=%s deleted", categoryID)
 }
 
@@ -264,7 +264,7 @@ func TestAcceptance_Categories_lifecycle(t *testing.T) {
 func TestAcceptance_Categories_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Categories
+	svc := acc.Client.JamfProAPI.Categories
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -307,7 +307,7 @@ func TestAcceptance_Categories_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx2, rsqlQuery)
 	require.NoError(t, err, "ListCategoriesV1 with RSQL filter should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, c := range list.Results {
@@ -330,7 +330,7 @@ func TestAcceptance_Categories_list_with_rsql_filter(t *testing.T) {
 func TestAcceptance_Categories_bulk_delete(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Categories
+	svc := acc.Client.JamfProAPI.Categories
 	ctx := context.Background()
 
 	// Create two categories
@@ -370,7 +370,7 @@ func TestAcceptance_Categories_bulk_delete(t *testing.T) {
 	bulkResp, err := svc.DeleteCategoriesByIDV1(ctx2, &categories.DeleteCategoriesByIDRequest{IDs: ids})
 	require.NoError(t, err, "DeleteCategoriesByIDV1 should not return an error")
 	require.NotNil(t, bulkResp)
-	assert.Equal(t, 204, bulkResp.StatusCode)
+	assert.Equal(t, 204, bulkResp.StatusCode())
 	acc.LogTestSuccess(t, "Bulk delete of %d categories succeeded", len(ids))
 
 	// Verify both are gone
@@ -390,7 +390,7 @@ func TestAcceptance_Categories_bulk_delete(t *testing.T) {
 func TestAcceptance_Categories_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Categories
+	svc := acc.Client.JamfProAPI.Categories
 
 	t.Run("GetCategoryByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")

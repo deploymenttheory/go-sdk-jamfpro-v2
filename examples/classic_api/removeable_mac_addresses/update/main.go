@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/removeable_mac_addresses"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/removeable_mac_addresses"
 )
 
 func main() {
@@ -39,12 +39,12 @@ func main() {
 		Name: fmt.Sprintf("Updated-MAC-%d", time.Now().UnixMilli()%1000),
 	}
 
-	updated, resp, err := client.ClassicRemoveableMacAddresses.UpdateByID(ctx, id, req)
+	updated, resp, err := client.ClassicAPI.RemoveableMacAddresses.UpdateByID(ctx, id, req)
 	if err != nil {
 		log.Fatalf("UpdateByID failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Updated removeable MAC address ID: %d\n", updated.ID)
 	fmt.Printf("New name: %s\n", updated.Name)
 }

@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/local_admin_password"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/local_admin_password"
 )
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 	ctx := context.Background()
 
 	// Get current settings first
-	currentSettings, _, err := client.LocalAdminPassword.GetSettingsV2(ctx)
+	currentSettings, _, err := client.JamfProAPI.LocalAdminPassword.GetSettingsV2(ctx)
 	if err != nil {
 		log.Fatalf("Failed to get current LAPS settings: %v", err)
 	}
@@ -38,15 +38,15 @@ func main() {
 		AutoRotateExpirationTime: 7,
 	}
 
-	resp, err := client.LocalAdminPassword.UpdateSettingsV2(ctx, updatedSettings)
+	resp, err := client.JamfProAPI.LocalAdminPassword.UpdateSettingsV2(ctx, updatedSettings)
 	if err != nil {
-		log.Fatalf("Failed to update LAPS settings: %v (HTTP %d)", err, resp.StatusCode)
+		log.Fatalf("Failed to update LAPS settings: %v (HTTP %d)", err, resp.StatusCode())
 	}
 
-	fmt.Printf("\nLAPS settings updated successfully (HTTP %d)\n", resp.StatusCode)
+	fmt.Printf("\nLAPS settings updated successfully (HTTP %d)\n", resp.StatusCode())
 
 	// Verify the update
-	verifySettings, _, err := client.LocalAdminPassword.GetSettingsV2(ctx)
+	verifySettings, _, err := client.JamfProAPI.LocalAdminPassword.GetSettingsV2(ctx)
 	if err != nil {
 		log.Fatalf("Failed to verify updated LAPS settings: %v", err)
 	}

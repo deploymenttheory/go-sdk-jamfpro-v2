@@ -14,12 +14,12 @@ func main() {
 		log.Fatalf("Failed to create client: %v", err)
 	}
 
-	result, resp, err := client.ImpactAlertNotificationSettings.GetV1(context.Background())
+	result, resp, err := client.JamfProAPI.ImpactAlertNotificationSettings.GetV1(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to get impact alert notification settings: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Scopeable Objects Alert Enabled: %t\n", result.ScopeableObjectsAlertEnabled)
 	fmt.Printf("Scopeable Objects Confirmation Code Enabled: %t\n", result.ScopeableObjectsConfirmationCodeEnabled)
 	fmt.Printf("Deployable Objects Alert Enabled: %t\n", result.DeployableObjectsAlertEnabled)

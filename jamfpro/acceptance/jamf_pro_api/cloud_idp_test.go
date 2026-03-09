@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/cloud_idp"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_idp"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -13,7 +13,7 @@ import (
 func TestCloudIdp_List(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.CloudIdp
+	svc := acc.Client.JamfProAPI.CloudIdp
 	ctx := context.Background()
 
 	result, _, err := svc.ListV1(ctx, nil)
@@ -29,7 +29,7 @@ func TestCloudIdp_List(t *testing.T) {
 func TestCloudIdp_GetByID(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.CloudIdp
+	svc := acc.Client.JamfProAPI.CloudIdp
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)
@@ -50,7 +50,7 @@ func TestCloudIdp_GetByID(t *testing.T) {
 func TestCloudIdp_GetByName(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.CloudIdp
+	svc := acc.Client.JamfProAPI.CloudIdp
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)
@@ -69,7 +69,7 @@ func TestCloudIdp_GetByName(t *testing.T) {
 func TestCloudIdp_Export(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.CloudIdp
+	svc := acc.Client.JamfProAPI.CloudIdp
 	ctx := context.Background()
 
 	request := &cloud_idp.ExportRequest{
@@ -91,7 +91,7 @@ func TestCloudIdp_Export(t *testing.T) {
 func TestCloudIdp_HistoryOperations(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.CloudIdp
+	svc := acc.Client.JamfProAPI.CloudIdp
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)
@@ -123,7 +123,7 @@ func TestCloudIdp_HistoryOperations(t *testing.T) {
 func TestCloudIdp_TestSearches(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.CloudIdp
+	svc := acc.Client.JamfProAPI.CloudIdp
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, nil)

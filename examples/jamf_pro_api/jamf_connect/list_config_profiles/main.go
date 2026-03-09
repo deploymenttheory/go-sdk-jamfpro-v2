@@ -14,12 +14,12 @@ func main() {
 		log.Fatalf("Failed to create client: %v", err)
 	}
 
-	result, resp, err := client.JamfConnect.ListConfigProfilesV1(context.Background(), nil)
+	result, resp, err := client.JamfProAPI.JamfConnect.ListConfigProfilesV1(context.Background(), nil)
 	if err != nil {
 		log.Fatalf("Failed to list Jamf Connect config profiles: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Total Count: %d\n", result.TotalCount)
 
 	for i, profile := range result.Results {

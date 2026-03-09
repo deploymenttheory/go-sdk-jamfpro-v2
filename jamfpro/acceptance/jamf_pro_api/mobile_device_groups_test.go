@@ -12,7 +12,7 @@ import (
 func TestAcceptance_MobileDeviceGroups_smart_list(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceGroups
+	svc := acc.Client.JamfProAPI.MobileDeviceGroups
 	ctx := context.Background()
 
 	list, resp, err := svc.ListSmartV1(ctx, map[string]string{"page": "0", "page-size": "100"})
@@ -27,7 +27,7 @@ func TestAcceptance_MobileDeviceGroups_smart_list(t *testing.T) {
 func TestAcceptance_MobileDeviceGroups_smart_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceGroups
+	svc := acc.Client.JamfProAPI.MobileDeviceGroups
 	ctx := context.Background()
 
 	list, _, err := svc.ListSmartV1(ctx, map[string]string{"page": "0", "page-size": "1"})
@@ -50,7 +50,7 @@ func TestAcceptance_MobileDeviceGroups_smart_get_by_id(t *testing.T) {
 func TestAcceptance_MobileDeviceGroups_static_list(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceGroups
+	svc := acc.Client.JamfProAPI.MobileDeviceGroups
 	ctx := context.Background()
 
 	list, resp, err := svc.ListStaticV1(ctx, map[string]string{"page": "0", "page-size": "100"})
@@ -65,7 +65,7 @@ func TestAcceptance_MobileDeviceGroups_static_list(t *testing.T) {
 func TestAcceptance_MobileDeviceGroups_static_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceGroups
+	svc := acc.Client.JamfProAPI.MobileDeviceGroups
 	ctx := context.Background()
 
 	list, _, err := svc.ListStaticV1(ctx, map[string]string{"page": "0", "page-size": "1"})

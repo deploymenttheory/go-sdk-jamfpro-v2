@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	accountID := 1
-	_, err = jamfClient.ClassicAccounts.DeleteByID(context.Background(), accountID)
+	_, err = jamfClient.ClassicAPI.Accounts.DeleteByID(context.Background(), accountID)
 	if err != nil {
 		fmt.Printf("Error deleting account by ID: %v\n", err)
 		return

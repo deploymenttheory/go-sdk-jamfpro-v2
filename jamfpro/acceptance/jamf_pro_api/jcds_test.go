@@ -46,7 +46,7 @@ import (
 func TestAcceptance_JCDS_get_packages_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JCDS
+	svc := acc.Client.JamfProAPI.Jcds
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "GetPackagesV1", "Listing JCDS packages")
@@ -73,7 +73,7 @@ func TestAcceptance_JCDS_get_packages_v1(t *testing.T) {
 	uri, uriResp, err := svc.GetPackageURIByNameV1(ctx, firstPkg.FileName)
 	require.NoError(t, err)
 	require.NotNil(t, uri)
-	assert.Equal(t, 200, uriResp.StatusCode)
+	assert.Equal(t, 200, uriResp.StatusCode())
 	assert.NotEmpty(t, uri.URI, "URI should not be empty")
 	acc.LogTestSuccess(t, "GetPackageURIByNameV1: fileName=%s uri=%s", firstPkg.FileName, uri.URI)
 }
@@ -82,7 +82,7 @@ func TestAcceptance_JCDS_get_packages_v1(t *testing.T) {
 func TestAcceptance_JCDS_renew_credentials_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JCDS
+	svc := acc.Client.JamfProAPI.Jcds
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "RenewCredentialsV1", "Renewing JCDS AWS credentials")
@@ -105,7 +105,7 @@ func TestAcceptance_JCDS_renew_credentials_v1(t *testing.T) {
 func TestAcceptance_JCDS_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JCDS
+	svc := acc.Client.JamfProAPI.Jcds
 
 	t.Run("GetPackageURIByNameV1_EmptyName", func(t *testing.T) {
 		_, _, err := svc.GetPackageURIByNameV1(context.Background(), "")

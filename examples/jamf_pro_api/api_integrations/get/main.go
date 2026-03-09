@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -24,7 +23,7 @@ func main() {
 	// Replace "1" with the actual API integration ID
 	integrationID := "1"
 
-	result, _, err := jamfClient.ApiIntegrations.GetByIDV1(context.Background(), integrationID)
+	result, _, err := jamfClient.JamfProAPI.ApiIntegrations.GetByIDV1(context.Background(), integrationID)
 	if err != nil {
 		fmt.Printf("Error retrieving API integration: %v\n", err)
 		return

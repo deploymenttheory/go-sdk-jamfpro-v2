@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_PolicyProperties_get(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.PolicyProperties
+	svc := acc.Client.JamfProAPI.PolicyProperties
 	ctx := context.Background()
 	result, resp, err := svc.Get(ctx)
 	require.NoError(t, err)
@@ -22,7 +22,7 @@ func TestAcceptance_PolicyProperties_get(t *testing.T) {
 
 func TestAcceptance_PolicyProperties_update(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.PolicyProperties
+	svc := acc.Client.JamfProAPI.PolicyProperties
 	ctx := context.Background()
 	current, _, err := svc.Get(ctx)
 	require.NoError(t, err)

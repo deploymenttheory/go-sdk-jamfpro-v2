@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_extension_attributes"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/computer_extension_attributes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -75,7 +75,7 @@ import (
 func TestAcceptance_ComputerExtensionAttributes_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ComputerExtensionAttributes
+	svc := acc.Client.JamfProAPI.ComputerExtensionAttributes
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")
@@ -132,7 +132,7 @@ func TestAcceptance_ComputerExtensionAttributes_validation_errors(t *testing.T) 
 func TestAcceptance_ComputerExtensionAttributes_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ComputerExtensionAttributes
+	svc := acc.Client.JamfProAPI.ComputerExtensionAttributes
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating test computer extension attribute")
@@ -150,7 +150,7 @@ func TestAcceptance_ComputerExtensionAttributes_lifecycle(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	eaID := created.ID
@@ -168,7 +168,7 @@ func TestAcceptance_ComputerExtensionAttributes_lifecycle(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx2, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, r := range list.Results {
@@ -190,7 +190,7 @@ func TestAcceptance_ComputerExtensionAttributes_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, eaID, fetched.ID)
 	assert.Equal(t, createReq.Name, fetched.Name)
 
@@ -207,7 +207,7 @@ func TestAcceptance_ComputerExtensionAttributes_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, eaID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 202}, updateResp.StatusCode)
+	assert.Contains(t, []int{200, 202}, updateResp.StatusCode())
 	assert.Equal(t, eaID, updated.ID)
 
 	verified, _, err := svc.GetByIDV1(ctx, eaID)
@@ -219,13 +219,13 @@ func TestAcceptance_ComputerExtensionAttributes_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx, eaID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 }
 
 func TestAcceptance_ComputerExtensionAttributes_delete_multiple(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ComputerExtensionAttributes
+	svc := acc.Client.JamfProAPI.ComputerExtensionAttributes
 	ctx := context.Background()
 
 	enabled := true
@@ -273,7 +273,7 @@ func TestAcceptance_ComputerExtensionAttributes_delete_multiple(t *testing.T) {
 func TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ComputerExtensionAttributes
+	svc := acc.Client.JamfProAPI.ComputerExtensionAttributes
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_acc-rsql-ea")
@@ -307,7 +307,7 @@ func TestAcceptance_ComputerExtensionAttributes_list_with_rsql_filter(t *testing
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, ea := range list.Results {

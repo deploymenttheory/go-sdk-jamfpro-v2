@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/gsx_connection"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/gsx_connection"
 )
 
 func main() {
@@ -28,12 +28,12 @@ func main() {
 		},
 	}
 
-	result, resp, err := client.GSXConnection.UpdateV1(context.Background(), request)
+	result, resp, err := client.JamfProAPI.GsxConnection.UpdateV1(context.Background(), request)
 	if err != nil {
 		log.Fatalf("Failed to update GSX connection settings: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Updated GSX Connection Enabled: %t\n", result.Enabled)
 	fmt.Printf("Updated Username: %s\n", result.Username)
 	fmt.Printf("Updated Service Account No: %s\n", result.ServiceAccountNo)

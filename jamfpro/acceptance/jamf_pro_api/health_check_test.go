@@ -35,7 +35,7 @@ import (
 func TestAcceptance_HealthCheck_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.HealthCheck
+	svc := acc.Client.JamfProAPI.HealthCheck
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Checking Jamf Pro API health")
@@ -56,7 +56,7 @@ func TestAcceptance_HealthCheck_get_v1(t *testing.T) {
 func TestAcceptance_HealthCheck_get_health_status_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.HealthCheck
+	svc := acc.Client.JamfProAPI.HealthCheck
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "GetHealthStatus", "Getting Jamf Pro API health status metrics")

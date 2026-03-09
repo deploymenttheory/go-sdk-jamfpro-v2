@@ -8,7 +8,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customizations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment_customizations"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -76,7 +76,7 @@ import (
 func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.EnrollmentCustomizations
+	svc := acc.Client.JamfProAPI.EnrollmentCustomizations
 	ctx := context.Background()
 
 	// Create
@@ -97,7 +97,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	created, createResp, err := svc.CreateV2(ctx, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 	acc.LogTestSuccess(t, "Created enrollment customization with ID: %s", created.ID)
 
@@ -108,7 +108,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 		acc.LogTestStage(t, "Cleanup", "Deleting enrollment customization")
 		deleteResp, err := svc.DeleteByIDV2(ctx, customizationID)
 		if err == nil {
-			assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+			assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 			acc.LogTestSuccess(t, "Deleted enrollment customization: %s", customizationID)
 		}
 	}()
@@ -124,7 +124,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, retrieved)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	assert.Equal(t, customizationID, retrieved.ID)
 	assert.Equal(t, createReq.DisplayName, retrieved.DisplayName)
 	acc.LogTestSuccess(t, "Retrieved enrollment customization: %s", retrieved.DisplayName)
@@ -134,7 +134,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	byName, byNameResp, err := svc.GetByNameV2(ctx, createReq.DisplayName)
 	require.NoError(t, err)
 	require.NotNil(t, byName)
-	assert.Equal(t, 200, byNameResp.StatusCode)
+	assert.Equal(t, 200, byNameResp.StatusCode())
 	assert.Equal(t, customizationID, byName.ID)
 	acc.LogTestSuccess(t, "Retrieved by name: %s", byName.DisplayName)
 
@@ -156,7 +156,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV2(ctx, customizationID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 202}, updateResp.StatusCode)
+	assert.Contains(t, []int{200, 202}, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Updated enrollment customization")
 
 	// Verify Update
@@ -164,7 +164,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	verifyUpdated, verifyResp, err := svc.GetByIDV2(ctx, customizationID)
 	require.NoError(t, err)
 	require.NotNil(t, verifyUpdated)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Contains(t, verifyUpdated.DisplayName, "Updated")
 	assert.Equal(t, "FF0000", verifyUpdated.BrandingSettings.ButtonColor)
 	acc.LogTestSuccess(t, "Verified updated customization - ButtonColor: %s", verifyUpdated.BrandingSettings.ButtonColor)
@@ -173,7 +173,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	acc.LogTestStage(t, "Delete", "Deleting enrollment customization")
 	deleteResp, err := svc.DeleteByIDV2(ctx, customizationID)
 	require.NoError(t, err)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Deleted enrollment customization: %s", customizationID)
 
 	// Verify Deletion
@@ -181,7 +181,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 	_, getAfterDeleteResp, err := svc.GetByIDV2(ctx, customizationID)
 	assert.Error(t, err)
 	if getAfterDeleteResp != nil {
-		assert.Equal(t, 404, getAfterDeleteResp.StatusCode)
+		assert.Equal(t, 404, getAfterDeleteResp.StatusCode())
 	}
 	acc.LogTestSuccess(t, "Verified deletion - customization no longer exists")
 }
@@ -189,7 +189,7 @@ func TestAcceptance_EnrollmentCustomizations_full_crud_lifecycle(t *testing.T) {
 func TestAcceptance_EnrollmentCustomizations_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.EnrollmentCustomizations
+	svc := acc.Client.JamfProAPI.EnrollmentCustomizations
 	ctx := context.Background()
 
 	// Create a test customization for filtering
@@ -210,7 +210,7 @@ func TestAcceptance_EnrollmentCustomizations_list_with_rsql_filter(t *testing.T)
 	created, createResp, err := svc.CreateV2(ctx, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode())
 	acc.LogTestSuccess(t, "Created test customization: %s", uniqueName)
 
 	customizationID := created.ID
@@ -219,7 +219,7 @@ func TestAcceptance_EnrollmentCustomizations_list_with_rsql_filter(t *testing.T)
 		acc.LogTestStage(t, "Cleanup", "Deleting test customization")
 		deleteResp, err := svc.DeleteByIDV2(ctx, customizationID)
 		if err == nil {
-			assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+			assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 			acc.LogTestSuccess(t, "Cleaned up test customization")
 		}
 	}()
@@ -233,7 +233,7 @@ func TestAcceptance_EnrollmentCustomizations_list_with_rsql_filter(t *testing.T)
 	filteredList, filteredResp, err := svc.ListV2(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, filteredList)
-	assert.Equal(t, 200, filteredResp.StatusCode)
+	assert.Equal(t, 200, filteredResp.StatusCode())
 	acc.LogTestSuccess(t, "RSQL filter returned %d result(s)", filteredList.TotalCount)
 
 	// Verify the filtered result
@@ -254,7 +254,7 @@ func TestAcceptance_EnrollmentCustomizations_list_with_rsql_filter(t *testing.T)
 func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.EnrollmentCustomizations
+	svc := acc.Client.JamfProAPI.EnrollmentCustomizations
 	ctx := context.Background()
 
 	// Create a customization to generate history
@@ -274,7 +274,7 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 	created, createResp, err := svc.CreateV2(ctx, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode())
 	acc.LogTestSuccess(t, "Created test customization with ID: %s", created.ID)
 
 	customizationID := created.ID
@@ -283,7 +283,7 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 		acc.LogTestStage(t, "Cleanup", "Deleting test customization")
 		deleteResp, err := svc.DeleteByIDV2(ctx, customizationID)
 		if err == nil {
-			assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+			assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 			acc.LogTestSuccess(t, "Cleaned up test customization")
 		}
 	}()
@@ -300,7 +300,7 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 		return
 	}
 	require.NotNil(t, result)
-	assert.Equal(t, 201, noteResp.StatusCode)
+	assert.Equal(t, 201, noteResp.StatusCode())
 	assert.NotZero(t, result.ID)
 	acc.LogTestSuccess(t, "History note added - ID: %d, Username: %s", result.ID, result.Username)
 
@@ -314,7 +314,7 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, history)
-	assert.Equal(t, 200, histResp.StatusCode)
+	assert.Equal(t, 200, histResp.StatusCode())
 	assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 	acc.LogTestSuccess(t, "Found %d history entries", history.TotalCount)
 
@@ -328,7 +328,7 @@ func TestAcceptance_EnrollmentCustomizations_history(t *testing.T) {
 func TestAcceptance_EnrollmentCustomizations_history_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.EnrollmentCustomizations
+	svc := acc.Client.JamfProAPI.EnrollmentCustomizations
 	ctx := context.Background()
 
 	// Create a customization
@@ -348,14 +348,14 @@ func TestAcceptance_EnrollmentCustomizations_history_with_rsql_filter(t *testing
 	created, createResp, err := svc.CreateV2(ctx, createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode())
 
 	customizationID := created.ID
 
 	defer func() {
 		deleteResp, err := svc.DeleteByIDV2(ctx, customizationID)
 		if err == nil {
-			assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+			assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 		}
 	}()
 
@@ -367,7 +367,7 @@ func TestAcceptance_EnrollmentCustomizations_history_with_rsql_filter(t *testing
 		return
 	}
 
-	assert.Equal(t, 200, allResp.StatusCode)
+	assert.Equal(t, 200, allResp.StatusCode())
 	acc.LogTestSuccess(t, "Found %d total history entries", allHistory.TotalCount)
 
 	// Test RSQL filtering by username (exclude nonexistent username to get results)
@@ -379,7 +379,7 @@ func TestAcceptance_EnrollmentCustomizations_history_with_rsql_filter(t *testing
 	filteredHistory, filteredResp, err := svc.GetHistoryV2(ctx, customizationID, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, filteredHistory)
-	assert.Equal(t, 200, filteredResp.StatusCode)
+	assert.Equal(t, 200, filteredResp.StatusCode())
 	acc.LogTestSuccess(t, "RSQL filter returned %d result(s)", filteredHistory.TotalCount)
 
 	// Verify filtering worked
@@ -390,7 +390,7 @@ func TestAcceptance_EnrollmentCustomizations_history_with_rsql_filter(t *testing
 func TestAcceptance_EnrollmentCustomizations_get_prestages(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.EnrollmentCustomizations
+	svc := acc.Client.JamfProAPI.EnrollmentCustomizations
 	ctx := context.Background()
 
 	// List customizations to find one to test
@@ -406,7 +406,7 @@ func TestAcceptance_EnrollmentCustomizations_get_prestages(t *testing.T) {
 	}
 
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	acc.LogTestSuccess(t, "Found %d customizations", list.TotalCount)
 
 	// Get prestages for the first customization
@@ -420,7 +420,7 @@ func TestAcceptance_EnrollmentCustomizations_get_prestages(t *testing.T) {
 	}
 
 	require.NotNil(t, prestages)
-	assert.Equal(t, 200, prestagesResp.StatusCode)
+	assert.Equal(t, 200, prestagesResp.StatusCode())
 	acc.LogTestSuccess(t, "Found %d prestages using this customization", len(prestages.Dependencies))
 
 	if len(prestages.Dependencies) > 0 {
@@ -432,7 +432,7 @@ func TestAcceptance_EnrollmentCustomizations_get_prestages(t *testing.T) {
 func TestAcceptance_EnrollmentCustomizations_image_upload_download(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.EnrollmentCustomizations
+	svc := acc.Client.JamfProAPI.EnrollmentCustomizations
 	ctx := context.Background()
 
 	// Create a minimal PNG image for testing
@@ -473,7 +473,7 @@ func TestAcceptance_EnrollmentCustomizations_image_upload_download(t *testing.T)
 	}
 
 	require.NotNil(t, uploaded)
-	assert.Contains(t, []int{200, 201}, uploadResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, uploadResp.StatusCode())
 	assert.NotEmpty(t, uploaded.ID)
 	acc.LogTestSuccess(t, "Uploaded image - ID: %s, URL: %s", uploaded.ID, uploaded.URL)
 
@@ -488,7 +488,7 @@ func TestAcceptance_EnrollmentCustomizations_image_upload_download(t *testing.T)
 	}
 
 	require.NotNil(t, downloadedData)
-	assert.Equal(t, 200, downloadResp.StatusCode)
+	assert.Equal(t, 200, downloadResp.StatusCode())
 	assert.Greater(t, len(downloadedData), 0, "Downloaded image should have data")
 
 	// Verify it's a PNG by checking the header

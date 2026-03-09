@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/sites"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/sites"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 	createReq := &sites.RequestSite{
 		Name: fmt.Sprintf("example-update-%d", time.Now().UnixMilli()),
 	}
-	created, _, err := client.ClassicSites.Create(ctx, createReq)
+	created, _, err := client.ClassicAPI.Sites.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -36,16 +36,16 @@ func main() {
 	updateReq := &sites.RequestSite{
 		Name: fmt.Sprintf("example-updated-%d", time.Now().UnixMilli()),
 	}
-	updated, resp, err := client.ClassicSites.UpdateByID(ctx, created.ID, updateReq)
+	updated, resp, err := client.ClassicAPI.Sites.UpdateByID(ctx, created.ID, updateReq)
 	if err != nil {
-		_, _ = client.ClassicSites.DeleteByID(ctx, created.ID)
+		_, _ = client.ClassicAPI.Sites.DeleteByID(ctx, created.ID)
 		log.Fatalf("UpdateByID failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Updated site ID: %d\n", updated.ID)
 	fmt.Printf("New name: %s\n", updated.Name)
 
-	_, _ = client.ClassicSites.DeleteByID(ctx, created.ID)
+	_, _ = client.ClassicAPI.Sites.DeleteByID(ctx, created.ID)
 	fmt.Println("Cleanup: site deleted")
 }

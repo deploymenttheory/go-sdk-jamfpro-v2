@@ -40,7 +40,7 @@ import (
 func TestAcceptance_JamfPackage_list_and_get(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfPackage
+	svc := acc.Client.JamfProAPI.JamfPackage
 	ctx := context.Background()
 
 	// ListV1 with "protect" application
@@ -49,7 +49,7 @@ func TestAcceptance_JamfPackage_list_and_get(t *testing.T) {
 	packages, listResp, err := svc.ListV1(ctx, "protect")
 	require.NoError(t, err, "ListV1 should not error for valid application")
 	require.NotNil(t, listResp)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	acc.LogTestSuccess(t, "ListV1 (protect): %d package(s) returned", len(packages))
 
 	// GetV2 with "protect" application
@@ -58,7 +58,7 @@ func TestAcceptance_JamfPackage_list_and_get(t *testing.T) {
 	pkg, getResp, err := svc.GetV2(ctx, "protect")
 	require.NoError(t, err, "GetV2 should not error for valid application")
 	require.NotNil(t, pkg)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	acc.LogTestSuccess(t, "GetV2 (protect): displayName=%q artifacts=%d", pkg.DisplayName, len(pkg.Artifacts))
 
 	// Also test "connect" application returns without error
@@ -67,7 +67,7 @@ func TestAcceptance_JamfPackage_list_and_get(t *testing.T) {
 	connectPackages, connectResp, err := svc.ListV1(ctx, "connect")
 	require.NoError(t, err, "ListV1 should not error for 'connect' application")
 	require.NotNil(t, connectResp)
-	assert.Equal(t, 200, connectResp.StatusCode)
+	assert.Equal(t, 200, connectResp.StatusCode())
 	acc.LogTestSuccess(t, "ListV1 (connect): %d package(s) returned", len(connectPackages))
 }
 
@@ -75,7 +75,7 @@ func TestAcceptance_JamfPackage_list_and_get(t *testing.T) {
 func TestAcceptance_JamfPackage_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfPackage
+	svc := acc.Client.JamfProAPI.JamfPackage
 
 	t.Run("ListV1_InvalidApplication", func(t *testing.T) {
 		_, _, err := svc.ListV1(context.Background(), "invalid")

@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_SelfServicePlusSettings_get(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SelfServicePlusSettings
+	svc := acc.Client.JamfProAPI.SelfServicePlusSettings
 	ctx := context.Background()
 	result, resp, err := svc.GetV1(ctx)
 	require.NoError(t, err)
@@ -22,7 +22,7 @@ func TestAcceptance_SelfServicePlusSettings_get(t *testing.T) {
 
 func TestAcceptance_SelfServicePlusSettings_update(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SelfServicePlusSettings
+	svc := acc.Client.JamfProAPI.SelfServicePlusSettings
 	ctx := context.Background()
 	current, _, err := svc.GetV1(ctx)
 	require.NoError(t, err)

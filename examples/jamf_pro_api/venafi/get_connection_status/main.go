@@ -6,12 +6,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -21,7 +20,7 @@ func main() {
 	}
 
 	venafiID := "1" // Replace with actual Venafi configuration ID
-	status, _, err := jamfClient.Venafi.GetConnectionStatus(context.Background(), venafiID)
+	status, _, err := jamfClient.JamfProAPI.Venafi.GetConnectionStatus(context.Background(), venafiID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/groups"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	platformID := "platform-id-here"
 
 	// First, get the existing group
-	existing, _, err := client.Groups.GetByIDV1(ctx, platformID)
+	existing, _, err := client.JamfProAPI.Groups.GetByIDV1(ctx, platformID)
 	if err != nil {
 		log.Fatalf("Error getting existing group: %v", err)
 	}
@@ -35,12 +35,12 @@ func main() {
 		GroupDescription: "Updated description via Go SDK",
 	}
 
-	updated, resp, err := client.Groups.UpdateByIDV1(ctx, platformID, updateReq)
+	updated, resp, err := client.JamfProAPI.Groups.UpdateByIDV1(ctx, platformID, updateReq)
 	if err != nil {
 		log.Fatalf("Error updating group: %v", err)
 	}
 
-	fmt.Printf("\nStatus: %d\n", resp.StatusCode)
+	fmt.Printf("\nStatus: %d\n", resp.StatusCode())
 	fmt.Printf("Updated group name: %s\n", updated.GroupName)
 	fmt.Printf("Updated description: %s\n", updated.GroupDescription)
 }

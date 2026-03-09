@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/static_computer_groups"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -28,7 +27,7 @@ func main() {
 		Assignments: []string{},
 	}
 
-	result, _, err := jamfClient.StaticComputerGroups.UpdateByIDV2(context.Background(), groupID, req)
+	result, _, err := jamfClient.JamfProAPI.StaticComputerGroups.UpdateByIDV2(context.Background(), groupID, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

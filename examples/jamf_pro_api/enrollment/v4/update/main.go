@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 	}
 
 	// Get current settings first
-	current, _, err := client.Enrollment.GetV4(context.Background())
+	current, _, err := client.JamfProAPI.Enrollment.GetV4(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to get current enrollment settings: %v", err)
 	}
@@ -41,12 +41,12 @@ func main() {
 		IosPersonalEnrollmentEnabled:     false,
 	}
 
-	result, resp, err := client.Enrollment.UpdateV4(context.Background(), request)
+	result, resp, err := client.JamfProAPI.Enrollment.UpdateV4(context.Background(), request)
 	if err != nil {
 		log.Fatalf("Failed to update enrollment settings: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Updated - Restrict Re-enrollment: %t\n", result.RestrictReenrollment)
 	fmt.Println("Enrollment settings updated successfully")
 }

@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	// Example 1: Get all history (nil query)
-	result, _, err := jamfClient.ClientCheckin.GetHistoryV3(context.Background(), nil)
+	result, _, err := jamfClient.JamfProAPI.ClientCheckin.GetHistoryV3(context.Background(), nil)
 	if err != nil {
 		fmt.Printf("Error getting client check-in history: %v\n", err)
 		return
@@ -37,7 +36,7 @@ func main() {
 		"page":   "0",
 		"page-size": "10",
 	}
-	result, _, err = jamfClient.ClientCheckin.GetHistoryV3(context.Background(), rsqlQuery)
+	result, _, err = jamfClient.JamfProAPI.ClientCheckin.GetHistoryV3(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error getting filtered history: %v\n", err)
 		return

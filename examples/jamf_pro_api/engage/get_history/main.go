@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -27,7 +26,7 @@ func main() {
 		"sort":      "date:desc",
 	}
 
-	history, _, err := jamfClient.Engage.GetHistoryV2(context.Background(), rsqlQuery)
+	history, _, err := jamfClient.JamfProAPI.Engage.GetHistoryV2(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

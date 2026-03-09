@@ -6,14 +6,13 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/mobile_devices"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_devices"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -25,7 +24,7 @@ func main() {
 	deviceID := "1" // Replace with the desired mobile device ID
 
 	// Fetch existing device first
-	existing, _, err := jamfClient.ClassicMobileDevices.GetByID(context.Background(), deviceID)
+	existing, _, err := jamfClient.ClassicAPI.MobileDevices.GetByID(context.Background(), deviceID)
 	if err != nil {
 		fmt.Printf("Error fetching device: %v\n", err)
 		return
@@ -48,7 +47,7 @@ func main() {
 	updateReq.Location.Department = "IT"
 	updateReq.Location.Username = "jdoe"
 
-	updated, _, err := jamfClient.ClassicMobileDevices.UpdateByID(context.Background(), deviceID, updateReq)
+	updated, _, err := jamfClient.ClassicAPI.MobileDevices.UpdateByID(context.Background(), deviceID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

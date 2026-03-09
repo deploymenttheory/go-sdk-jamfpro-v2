@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	buildingID := "1" // Replace with the desired building ID
-	history, _, err := jamfClient.Buildings.GetBuildingHistoryV1(context.Background(), buildingID, nil)
+	history, _, err := jamfClient.JamfProAPI.Buildings.GetBuildingHistoryV1(context.Background(), buildingID, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

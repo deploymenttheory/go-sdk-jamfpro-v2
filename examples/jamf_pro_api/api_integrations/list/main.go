@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	// Example 1: List all API integrations
-	result, _, err := jamfClient.ApiIntegrations.ListV1(context.Background(), nil)
+	result, _, err := jamfClient.JamfProAPI.ApiIntegrations.ListV1(context.Background(), nil)
 	if err != nil {
 		fmt.Printf("Error listing API integrations: %v\n", err)
 		return
@@ -35,7 +34,7 @@ func main() {
 		"filter": `displayName=="MyIntegration"`,
 		"sort":   "displayName:asc",
 	}
-	result, _, err = jamfClient.ApiIntegrations.ListV1(context.Background(), rsqlQuery)
+	result, _, err = jamfClient.JamfProAPI.ApiIntegrations.ListV1(context.Background(), rsqlQuery)
 	if err != nil {
 		fmt.Printf("Error listing filtered integrations: %v\n", err)
 		return

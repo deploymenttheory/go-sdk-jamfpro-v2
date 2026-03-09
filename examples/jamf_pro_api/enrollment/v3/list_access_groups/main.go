@@ -14,12 +14,12 @@ func main() {
 		log.Fatalf("Failed to create client: %v", err)
 	}
 
-	result, resp, err := client.Enrollment.ListAccessGroupsV3(context.Background(), nil)
+	result, resp, err := client.JamfProAPI.Enrollment.ListAccessGroupsV3(context.Background(), nil)
 	if err != nil {
 		log.Fatalf("Failed to list ADUE access groups: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Total Count: %d\n", result.TotalCount)
 
 	for i, group := range result.Results {

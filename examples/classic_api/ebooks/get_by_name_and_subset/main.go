@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -24,7 +23,7 @@ func main() {
 
 	ebookName := "Sample Ebook" // Replace with the desired ebook name
 	subset := "General"        // Replace with desired subset: General, Scope, SelfService
-	ebook, _, err := jamfClient.ClassicEbooks.GetByNameAndSubset(context.Background(), ebookName, subset)
+	ebook, _, err := jamfClient.ClassicAPI.Ebooks.GetByNameAndSubset(context.Background(), ebookName, subset)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

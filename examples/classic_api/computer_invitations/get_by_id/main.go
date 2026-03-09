@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -23,7 +22,7 @@ func main() {
 	}
 
 	invitationID := "1" // Replace with the desired computer invitation ID
-	invitation, _, err := jamfClient.ClassicComputerInvitations.GetByID(context.Background(), invitationID)
+	invitation, _, err := jamfClient.ClassicAPI.ComputerInvitations.GetByID(context.Background(), invitationID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

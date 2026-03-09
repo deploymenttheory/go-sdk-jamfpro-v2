@@ -49,7 +49,7 @@ import (
 func TestAcceptance_ImpactAlertNotificationSettings_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ImpactAlertNotificationSettings
+	svc := acc.Client.JamfProAPI.ImpactAlertNotificationSettings
 	ctx := context.Background()
 
 	// Get current settings to preserve them
@@ -78,7 +78,7 @@ func TestAcceptance_ImpactAlertNotificationSettings_get_and_update(t *testing.T)
 	require.NotNil(t, updateResp)
 
 	// Update returns 204 No Content
-	assert.Equal(t, 204, updateResp.StatusCode)
+	assert.Equal(t, 204, updateResp.StatusCode())
 
 	// Get again to verify persistence
 	current, resp, err := svc.GetV1(ctx)
@@ -93,7 +93,7 @@ func TestAcceptance_ImpactAlertNotificationSettings_get_and_update(t *testing.T)
 func TestAcceptance_ImpactAlertNotificationSettings_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ImpactAlertNotificationSettings
+	svc := acc.Client.JamfProAPI.ImpactAlertNotificationSettings
 	ctx := context.Background()
 
 	// Test nil request validation

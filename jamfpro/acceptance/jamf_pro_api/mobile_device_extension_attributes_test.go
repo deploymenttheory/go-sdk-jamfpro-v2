@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_extension_attributes"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mobile_device_extension_attributes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -24,7 +24,7 @@ func uniqueNameMDEA(base string) string {
 func TestAcceptance_MobileDeviceExtensionAttributes_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceExtensionAttributes
+	svc := acc.Client.JamfProAPI.MobileDeviceExtensionAttributes
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_rsql-mdea")
@@ -77,7 +77,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_list_with_rsql_filter(t *tes
 func TestAcceptance_MobileDeviceExtensionAttributes_delete_multiple(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceExtensionAttributes
+	svc := acc.Client.JamfProAPI.MobileDeviceExtensionAttributes
 	ctx := context.Background()
 
 	c1, _, err := svc.CreateV1(ctx, &mobile_device_extension_attributes.RequestMobileDeviceExtensionAttribute{
@@ -126,7 +126,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_delete_multiple(t *testing.T
 func TestAcceptance_MobileDeviceExtensionAttributes_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceExtensionAttributes
+	svc := acc.Client.JamfProAPI.MobileDeviceExtensionAttributes
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")
@@ -181,7 +181,7 @@ func TestAcceptance_MobileDeviceExtensionAttributes_validation_errors(t *testing
 func TestAcceptance_MobileDeviceExtensionAttributes_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceExtensionAttributes
+	svc := acc.Client.JamfProAPI.MobileDeviceExtensionAttributes
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Create", "Creating test mobile device extension attribute")

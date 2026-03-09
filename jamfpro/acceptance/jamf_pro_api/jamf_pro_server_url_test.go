@@ -48,7 +48,7 @@ import (
 func TestAcceptance_JamfProServerURL_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProServerURL
+	svc := acc.Client.JamfProAPI.JamfProServerUrl
 	ctx := context.Background()
 
 	// Get current settings to preserve them
@@ -96,7 +96,7 @@ func TestAcceptance_JamfProServerURL_get_and_update(t *testing.T) {
 func TestAcceptance_JamfProServerURL_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProServerURL
+	svc := acc.Client.JamfProAPI.JamfProServerUrl
 	ctx := context.Background()
 
 	// Test nil request validation

@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_inventory_collection_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/computer_inventory_collection_settings"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -29,7 +28,7 @@ func main() {
 		},
 	}
 
-	_, err = jamfClient.ComputerInventoryCollectionSettings.UpdateV2(context.Background(), updateReq)
+	_, err = jamfClient.JamfProAPI.ComputerInventoryCollectionSettings.UpdateV2(context.Background(), updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -8,8 +8,8 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_integrations"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/api_integrations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/api_roles"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -79,7 +79,7 @@ import (
 func TestAcceptance_ApiIntegrations_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ApiIntegrations
+	svc := acc.Client.JamfProAPI.ApiIntegrations
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")
@@ -116,7 +116,7 @@ func TestAcceptance_ApiIntegrations_validation_errors(t *testing.T) {
 
 func TestAcceptance_ApiIntegrations_list_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ApiIntegrations
+	svc := acc.Client.JamfProAPI.ApiIntegrations
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx, nil)
@@ -129,8 +129,8 @@ func TestAcceptance_ApiIntegrations_list_v1(t *testing.T) {
 
 func TestAcceptance_ApiIntegrations_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ApiIntegrations
-	roleSvc := acc.Client.APIRoles
+	svc := acc.Client.JamfProAPI.ApiIntegrations
+	roleSvc := acc.Client.JamfProAPI.ApiRoles
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_acc-rsql-integration")
@@ -181,7 +181,7 @@ func TestAcceptance_ApiIntegrations_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, integration := range list.Results {
@@ -197,8 +197,8 @@ func TestAcceptance_ApiIntegrations_list_with_rsql_filter(t *testing.T) {
 
 func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ApiIntegrations
-	roleSvc := acc.Client.APIRoles
+	svc := acc.Client.JamfProAPI.ApiIntegrations
+	roleSvc := acc.Client.JamfProAPI.ApiRoles
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-api-integration")
 
@@ -212,7 +212,7 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, createdRole)
 	require.NotNil(t, roleResp)
-	assert.Contains(t, []int{200, 201}, roleResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, roleResp.StatusCode())
 
 	roleID := createdRole.ID
 	acc.Cleanup(t, func() {
@@ -246,7 +246,7 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, getByID)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	assert.Equal(t, name, getByID.DisplayName)
 
 	byName, resp, err := svc.GetByNameV1(ctx, name)
@@ -273,5 +273,5 @@ func TestAcceptance_ApiIntegrations_lifecycle(t *testing.T) {
 
 	delResp, err := svc.DeleteByIDV1(ctx, idStr)
 	require.NoError(t, err)
-	assert.Equal(t, 204, delResp.StatusCode)
+	assert.Equal(t, 204, delResp.StatusCode())
 }

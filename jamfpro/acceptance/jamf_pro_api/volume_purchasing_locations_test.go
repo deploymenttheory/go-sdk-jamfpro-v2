@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/volume_purchasing_locations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/volume_purchasing_locations"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,7 +15,7 @@ import (
 func TestAcceptance_VolumePurchasingLocations_list_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.VolumePurchasingLocations
+	svc := acc.Client.JamfProAPI.VolumePurchasingLocations
 	ctx := context.Background()
 
 	list, resp, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "100"})
@@ -30,7 +30,7 @@ func TestAcceptance_VolumePurchasingLocations_list_v1(t *testing.T) {
 func TestAcceptance_VolumePurchasingLocations_get_by_idv1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.VolumePurchasingLocations
+	svc := acc.Client.JamfProAPI.VolumePurchasingLocations
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "1"})
@@ -53,7 +53,7 @@ func TestAcceptance_VolumePurchasingLocations_get_by_idv1(t *testing.T) {
 func TestAcceptance_VolumePurchasingLocations_get_history_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.VolumePurchasingLocations
+	svc := acc.Client.JamfProAPI.VolumePurchasingLocations
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "1"})
@@ -73,7 +73,7 @@ func TestAcceptance_VolumePurchasingLocations_get_history_v1(t *testing.T) {
 	addResp, err := svc.AddHistoryNotesV1(ctx, locationID, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, addResp)
-	require.Contains(t, []int{200, 201, 204}, addResp.StatusCode)
+	require.Contains(t, []int{200, 201, 204}, addResp.StatusCode())
 	t.Logf("Added history note successfully")
 
 	history, resp, err := svc.GetHistoryV1(ctx, locationID, nil)
@@ -88,7 +88,7 @@ func TestAcceptance_VolumePurchasingLocations_get_history_v1(t *testing.T) {
 func TestAcceptance_VolumePurchasingLocations_add_history_notes_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.VolumePurchasingLocations
+	svc := acc.Client.JamfProAPI.VolumePurchasingLocations
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "1"})
@@ -114,7 +114,7 @@ func TestAcceptance_VolumePurchasingLocations_add_history_notes_v1(t *testing.T)
 func TestAcceptance_VolumePurchasingLocations_revoke_volume_purchasing_location_licenses_by_idv1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.VolumePurchasingLocations
+	svc := acc.Client.JamfProAPI.VolumePurchasingLocations
 	ctx := context.Background()
 
 	list, _, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "1"})

@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_ReturnToService_list_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ReturnToService
+	svc := acc.Client.JamfProAPI.ReturnToService
 	ctx := context.Background()
 	result, resp, err := svc.ListV1(ctx)
 	require.NoError(t, err)

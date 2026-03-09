@@ -7,12 +7,11 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -29,11 +28,11 @@ func main() {
 		log.Fatalf("Failed to read attachment file: %v", err)
 	}
 
-	resp, err := jamfClient.ComputerInventory.UploadAttachmentByIDV3(context.Background(), computerID, attachmentData)
+	resp, err := jamfClient.JamfProAPI.ComputerInventory.UploadAttachmentByIDV3(context.Background(), computerID, attachmentData)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("Attachment uploaded successfully (Status: %d)\n", resp.StatusCode)
+	fmt.Printf("Attachment uploaded successfully (Status: %d)\n", resp.StatusCode())
 }

@@ -6,11 +6,10 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	authConfig := client.AuthConfigFromEnv()
+	authConfig := jamfpro.AuthConfigFromEnv()
 	if err := authConfig.Validate(); err != nil {
 		log.Fatalf("Invalid auth config: %v", err)
 	}
@@ -23,12 +22,12 @@ func main() {
 	ctx := context.Background()
 	enrollmentName := "Example Device Enrollment Instance"
 
-	enrollment, resp, err := jamfClient.DeviceEnrollments.GetByNameV1(ctx, enrollmentName)
+	enrollment, resp, err := jamfClient.JamfProAPI.DeviceEnrollments.GetByNameV1(ctx, enrollmentName)
 	if err != nil {
 		log.Fatalf("Failed to get device enrollment by name: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Device Enrollment:\n")
 	fmt.Printf("  ID: %s\n", enrollment.ID)
 	fmt.Printf("  Name: %s\n", enrollment.Name)

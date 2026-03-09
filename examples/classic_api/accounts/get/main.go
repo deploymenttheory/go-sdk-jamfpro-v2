@@ -8,13 +8,12 @@ import (
 	"strconv"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -24,7 +23,7 @@ func main() {
 	}
 
 	accountID := 1
-	account, _, err := jamfClient.ClassicAccounts.GetByID(context.Background(), accountID)
+	account, _, err := jamfClient.ClassicAPI.Accounts.GetByID(context.Background(), accountID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

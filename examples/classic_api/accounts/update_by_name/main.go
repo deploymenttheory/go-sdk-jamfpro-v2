@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/accounts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/accounts"
 )
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 		PrivilegeSet: "Administrator",
 		Enabled:      "Enabled",
 	}
-	created, _, err := client.ClassicAccounts.Create(ctx, createReq)
+	created, _, err := client.ClassicAPI.Accounts.Create(ctx, createReq)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
@@ -45,16 +45,16 @@ func main() {
 		PrivilegeSet: "Administrator",
 		Enabled:      "Enabled",
 	}
-	updated, resp, err := client.ClassicAccounts.UpdateByName(ctx, originalName, updateReq)
+	updated, resp, err := client.ClassicAPI.Accounts.UpdateByName(ctx, originalName, updateReq)
 	if err != nil {
-		_, _ = client.ClassicAccounts.DeleteByID(ctx, created.ID)
+		_, _ = client.ClassicAPI.Accounts.DeleteByID(ctx, created.ID)
 		log.Fatalf("UpdateByName failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Updated account ID: %d\n", updated.ID)
 	fmt.Printf("New name: %s\n", updated.Name)
 
-	_, _ = client.ClassicAccounts.DeleteByID(ctx, created.ID)
+	_, _ = client.ClassicAPI.Accounts.DeleteByID(ctx, created.ID)
 	fmt.Println("Cleanup: account deleted")
 }

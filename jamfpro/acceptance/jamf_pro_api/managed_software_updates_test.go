@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/managed_software_updates"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/managed_software_updates"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -63,7 +63,7 @@ import (
 
 func TestAcceptance_ManagedSoftwareUpdates_get_available_updates(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ManagedSoftwareUpdates
+	svc := acc.Client.JamfProAPI.ManagedSoftwareUpdates
 	ctx := context.Background()
 
 	result, resp, err := svc.GetAvailableUpdates(ctx)
@@ -93,7 +93,7 @@ func TestAcceptance_ManagedSoftwareUpdates_get_available_updates(t *testing.T) {
 
 func TestAcceptance_ManagedSoftwareUpdates_get_plans(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ManagedSoftwareUpdates
+	svc := acc.Client.JamfProAPI.ManagedSoftwareUpdates
 	ctx := context.Background()
 
 	params := url.Values{}
@@ -151,7 +151,7 @@ func TestAcceptance_ManagedSoftwareUpdates_get_plans(t *testing.T) {
 
 func TestAcceptance_ManagedSoftwareUpdates_feature_toggle(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ManagedSoftwareUpdates
+	svc := acc.Client.JamfProAPI.ManagedSoftwareUpdates
 	ctx := context.Background()
 
 	// Get current feature toggle state
@@ -190,7 +190,7 @@ func TestAcceptance_ManagedSoftwareUpdates_create_plan_by_device_id(t *testing.T
 	t.Skip("Skipping create plan test - requires specific device setup")
 
 	acc.RequireClient(t)
-	svc := acc.Client.ManagedSoftwareUpdates
+	svc := acc.Client.JamfProAPI.ManagedSoftwareUpdates
 	ctx := context.Background()
 
 	// This is an example of how to create a plan - adapt to your environment
@@ -221,7 +221,7 @@ func TestAcceptance_ManagedSoftwareUpdates_get_plans_by_group_id(t *testing.T) {
 	t.Skip("Skipping get plans by group ID test - requires specific group setup")
 
 	acc.RequireClient(t)
-	svc := acc.Client.ManagedSoftwareUpdates
+	svc := acc.Client.JamfProAPI.ManagedSoftwareUpdates
 	ctx := context.Background()
 
 	groupID := "TEST_GROUP_ID" // Replace with actual group ID

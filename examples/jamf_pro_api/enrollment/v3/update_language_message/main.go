@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment"
 )
 
 func main() {
@@ -28,12 +28,12 @@ func main() {
 		LoginButton:       "Sign In",
 	}
 
-	result, resp, err := client.Enrollment.UpdateLanguageMessageV3(context.Background(), languageCode, request)
+	result, resp, err := client.JamfProAPI.Enrollment.UpdateLanguageMessageV3(context.Background(), languageCode, request)
 	if err != nil {
 		log.Fatalf("Failed to update language message: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Updated Language Code: %s\n", result.LanguageCode)
 	fmt.Printf("Updated Title: %s\n", result.Title)
 	fmt.Println("Language message updated successfully")

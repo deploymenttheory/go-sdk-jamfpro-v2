@@ -40,7 +40,7 @@ import (
 
 func TestAcceptance_EnrollmentSettings_get_v4(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.EnrollmentSettings
+	svc := acc.Client.JamfProAPI.EnrollmentSettings
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV4(ctx)

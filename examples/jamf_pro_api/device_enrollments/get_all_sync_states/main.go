@@ -6,11 +6,10 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	authConfig := client.AuthConfigFromEnv()
+	authConfig := jamfpro.AuthConfigFromEnv()
 	if err := authConfig.Validate(); err != nil {
 		log.Fatalf("Invalid auth config: %v", err)
 	}
@@ -22,12 +21,12 @@ func main() {
 
 	ctx := context.Background()
 
-	syncStates, resp, err := jamfClient.DeviceEnrollments.GetAllSyncStatesV1(ctx)
+	syncStates, resp, err := jamfClient.JamfProAPI.DeviceEnrollments.GetAllSyncStatesV1(ctx)
 	if err != nil {
 		log.Fatalf("Failed to get all device enrollment sync states: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Total Sync States: %d\n", len(syncStates))
 	fmt.Printf("\nAll Sync States:\n")
 	for i, state := range syncStates {

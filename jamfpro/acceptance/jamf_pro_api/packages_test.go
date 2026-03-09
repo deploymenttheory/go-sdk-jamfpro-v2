@@ -11,7 +11,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/packages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/packages"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -115,7 +115,7 @@ func uniquePackageName(base string) string {
 func TestAcceptance_Packages_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Packages
+	svc := acc.Client.JamfProAPI.Packages
 	ctx := context.Background()
 
 	// Clean up any existing packages with the same filename from previous failed runs
@@ -290,7 +290,7 @@ func TestAcceptance_Packages_lifecycle(t *testing.T) {
 func TestAcceptance_Packages_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Packages
+	svc := acc.Client.JamfProAPI.Packages
 	ctx := context.Background()
 
 	name := uniquePackageName("acc-rsql-package")
@@ -351,7 +351,7 @@ func TestAcceptance_Packages_list_with_rsql_filter(t *testing.T) {
 func TestAcceptance_Packages_delete_multiple(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Packages
+	svc := acc.Client.JamfProAPI.Packages
 	ctx := context.Background()
 
 	ids := make([]string, 0, 2)
@@ -410,7 +410,7 @@ func TestAcceptance_Packages_delete_multiple(t *testing.T) {
 func TestAcceptance_Packages_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Packages
+	svc := acc.Client.JamfProAPI.Packages
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")
@@ -490,7 +490,7 @@ func TestAcceptance_Packages_validation_errors(t *testing.T) {
 func TestAcceptance_Packages_update_and_upload(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Packages
+	svc := acc.Client.JamfProAPI.Packages
 	ctx := context.Background()
 
 	// Clean up any existing packages with the same filename from previous failed runs
@@ -617,6 +617,6 @@ func TestAcceptance_Packages_update_and_upload(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx, packageID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Package ID=%s deleted", packageID)
 }

@@ -6,8 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ibeacons"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ibeacons"
 )
 
 func main() {
@@ -15,7 +14,7 @@ func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
 	// Initialize the Jamf Pro client with the HTTP client configuration
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -32,7 +31,7 @@ func main() {
 		Minor: 1,
 	}
 
-	createdIBeacon, _, err := jamfClient.ClassicIBeacons.Create(context.Background(), newIBeacon)
+	createdIBeacon, _, err := jamfClient.ClassicAPI.IBeacons.Create(context.Background(), newIBeacon)
 	if err != nil {
 		fmt.Printf("Error creating iBeacon: %v\n", err)
 		return

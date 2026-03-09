@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/vpp_assignments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/vpp_assignments"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -22,8 +22,8 @@ import (
 func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicVPPAssignments
-	vppSvc := acc.Client.ClassicVPPAccounts
+	svc := acc.Client.ClassicAPI.VppAssignments
+	vppSvc := acc.Client.ClassicAPI.VppAccounts
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -71,7 +71,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	// Create may return ID 0 if API does not return it; we use List to find the created assignment
 	acc.LogTestSuccess(t, "VPP assignment create response status=%d", createResp.StatusCode())
 
@@ -86,7 +86,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	var assignmentID int
 	found := false
@@ -119,7 +119,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, assignmentID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, assignmentID, fetched.General.ID)
 	assert.Equal(t, assignmentName, fetched.General.Name)
 	assert.Equal(t, vppAccountID, fetched.General.VPPAdminAccountID)
@@ -146,7 +146,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	}
 	_, updateResp, err := svc.UpdateByID(ctx4, assignmentID, updateReq)
 	require.NoError(t, err, "UpdateByID should not return an error")
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -160,7 +160,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx5, assignmentID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, updatedName, verified.General.Name, "name should reflect the update")
 	acc.LogTestSuccess(t, "Name update verified: %q", verified.General.Name)
 
@@ -175,7 +175,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx6, assignmentID)
 	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "VPP assignment ID=%d deleted", assignmentID)
 }
 
@@ -186,7 +186,7 @@ func TestAcceptance_VPPAssignments_lifecycle(t *testing.T) {
 func TestAcceptance_VPPAssignments_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicVPPAssignments
+	svc := acc.Client.ClassicAPI.VppAssignments
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

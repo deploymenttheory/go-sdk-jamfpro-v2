@@ -19,12 +19,12 @@ func main() {
 		"sort": "date:desc",
 	}
 
-	result, resp, err := client.GSXConnection.GetHistoryV1(context.Background(), rsqlQuery)
+	result, resp, err := client.JamfProAPI.GsxConnection.GetHistoryV1(context.Background(), rsqlQuery)
 	if err != nil {
 		log.Fatalf("Failed to get GSX connection history: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Total History Entries: %d\n", result.TotalCount)
 
 	for i, entry := range result.Results {

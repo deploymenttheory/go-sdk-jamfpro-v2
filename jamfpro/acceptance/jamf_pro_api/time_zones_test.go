@@ -45,7 +45,7 @@ import (
 
 func TestAcceptance_TimeZones_list_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.TimeZones
+	svc := acc.Client.JamfProAPI.TimeZones
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx)

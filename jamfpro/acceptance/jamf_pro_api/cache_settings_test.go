@@ -14,7 +14,7 @@ import (
 
 func TestAcceptance_CacheSettings_get_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.CacheSettings
+	svc := acc.Client.JamfProAPI.CacheSettings
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV1(ctx)
@@ -27,7 +27,7 @@ func TestAcceptance_CacheSettings_get_v1(t *testing.T) {
 
 func TestAcceptance_CacheSettings_update_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.CacheSettings
+	svc := acc.Client.JamfProAPI.CacheSettings
 	ctx := context.Background()
 
 	current, _, err := svc.GetV1(ctx)

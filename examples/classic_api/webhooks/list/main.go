@@ -7,7 +7,6 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
@@ -15,7 +14,7 @@ func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
 	// Initialize the Jamf Pro client with the HTTP client configuration
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -25,7 +24,7 @@ func main() {
 	}
 
 	// Call the List function to retrieve the list of webhooks
-	webhooks, _, err := jamfClient.ClassicWebhooks.List(context.Background())
+	webhooks, _, err := jamfClient.ClassicAPI.Webhooks.List(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

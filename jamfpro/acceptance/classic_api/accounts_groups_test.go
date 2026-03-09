@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/accounts_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/accounts_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ import (
 func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicAccountGroups
+	svc := acc.Client.ClassicAPI.AccountGroups
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -43,7 +43,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created account group ID should be a positive integer")
 
 	groupID := created.ID
@@ -67,7 +67,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx2, groupID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, groupID, fetched.ID)
 	assert.Equal(t, groupName, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.ID, fetched.Name)
@@ -83,7 +83,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx3, groupName)
 	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
+	assert.Equal(t, 200, fetchByNameResp.StatusCode())
 	assert.Equal(t, groupID, fetchedByName.ID)
 	assert.Equal(t, groupName, fetchedByName.Name)
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.ID, fetchedByName.Name)
@@ -105,7 +105,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx4, groupID, updateReq)
 	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -124,7 +124,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	reverted, revertResp, err := svc.UpdateByName(ctx5, updatedName, revertReq)
 	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
-	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, revertResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -138,7 +138,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx6, groupID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, groupName, verified.Name, "name should reflect the revert")
 	acc.LogTestSuccess(t, "Name revert verified: %q", verified.Name)
 
@@ -153,7 +153,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx7, groupID)
 	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Account group ID=%d deleted", groupID)
 }
 
@@ -165,7 +165,7 @@ func TestAcceptance_AccountGroups_lifecycle(t *testing.T) {
 func TestAcceptance_AccountGroups_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicAccountGroups
+	svc := acc.Client.ClassicAPI.AccountGroups
 	ctx := context.Background()
 
 	groupName := acc.UniqueName("sdkv2_acc_test-account-group-dbn")
@@ -198,7 +198,7 @@ func TestAcceptance_AccountGroups_delete_by_name(t *testing.T) {
 	deleteResp, err := svc.DeleteByName(ctx2, groupName)
 	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Account group %q deleted by name", groupName)
 }
 
@@ -209,7 +209,7 @@ func TestAcceptance_AccountGroups_delete_by_name(t *testing.T) {
 func TestAcceptance_AccountGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicAccountGroups
+	svc := acc.Client.ClassicAPI.AccountGroups
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

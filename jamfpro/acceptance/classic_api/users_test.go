@@ -7,8 +7,8 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/users"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/users"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -22,7 +22,7 @@ import (
 func TestAcceptance_Users_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicUsers
+	svc := acc.Client.ClassicAPI.Users
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -47,7 +47,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created user ID should be a positive integer")
 
 	userID := created.ID
@@ -71,7 +71,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -96,7 +96,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, userID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, userID, fetched.ID)
 	assert.Equal(t, userName, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.ID, fetched.Name)
@@ -112,7 +112,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, userName)
 	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
+	assert.Equal(t, 200, fetchByNameResp.StatusCode())
 	assert.Equal(t, userID, fetchedByName.ID)
 	assert.Equal(t, userName, fetchedByName.Name)
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.ID, fetchedByName.Name)
@@ -128,7 +128,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	fetchedByEmail, fetchByEmailResp, err := svc.GetByEmail(ctx5, createReq.Email)
 	require.NoError(t, err, "GetByEmail should not return an error")
 	require.NotNil(t, fetchedByEmail)
-	assert.Equal(t, 200, fetchByEmailResp.StatusCode)
+	assert.Equal(t, 200, fetchByEmailResp.StatusCode())
 	assert.Equal(t, userID, fetchedByEmail.Results[0].ID)
 	assert.Equal(t, userName, fetchedByEmail.Results[0].Name)
 	acc.LogTestSuccess(t, "GetByEmail: ID=%d email=%q", fetchedByEmail.Results[0].ID, createReq.Email)
@@ -153,7 +153,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx6, userID, updateReq)
 	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -167,7 +167,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx7, userID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, updatedFullName, verified.FullName, "full_name should reflect the update")
 	acc.LogTestSuccess(t, "Update verified: full_name=%q", verified.FullName)
 
@@ -182,7 +182,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx8, userID)
 	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "User ID=%d deleted", userID)
 }
 
@@ -193,7 +193,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 func TestAcceptance_Users_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicUsers
+	svc := acc.Client.ClassicAPI.Users
 	ctx := context.Background()
 
 	userName := acc.UniqueName("sdkv2_acc_acc-test-user-dbn")
@@ -229,7 +229,7 @@ func TestAcceptance_Users_delete_by_name(t *testing.T) {
 	deleteResp, err := svc.DeleteByName(ctx2, userName)
 	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "User %q deleted by name", userName)
 }
 
@@ -240,7 +240,7 @@ func TestAcceptance_Users_delete_by_name(t *testing.T) {
 func TestAcceptance_Users_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicUsers
+	svc := acc.Client.ClassicAPI.Users
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

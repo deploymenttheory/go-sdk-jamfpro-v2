@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -24,7 +23,7 @@ func main() {
 	// Replace "1" with the actual account ID you want to retrieve
 	accountID := "1"
 
-	result, _, err := jamfClient.Accounts.GetByIDV1(context.Background(), accountID)
+	result, _, err := jamfClient.JamfProAPI.Accounts.GetByIDV1(context.Background(), accountID)
 	if err != nil {
 		fmt.Printf("Error retrieving account: %v\n", err)
 		return

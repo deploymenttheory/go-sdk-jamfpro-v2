@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/buildings"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -23,7 +22,7 @@ func main() {
 
 	ids := []string{"1", "2"} // Replace with the desired building IDs to delete
 	bulkReq := &buildings.DeleteBuildingsByIDRequest{IDs: ids}
-	_, err = jamfClient.Buildings.DeleteBuildingsByIDV1(context.Background(), bulkReq)
+	_, err = jamfClient.JamfProAPI.Buildings.DeleteBuildingsByIDV1(context.Background(), bulkReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

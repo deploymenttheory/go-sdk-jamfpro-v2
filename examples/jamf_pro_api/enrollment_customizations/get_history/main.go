@@ -26,12 +26,12 @@ func main() {
 		"sort":      "date:desc",
 	}
 
-	history, resp, err := client.EnrollmentCustomizations.GetHistoryV2(ctx, customizationID, rsqlQuery)
+	history, resp, err := client.JamfProAPI.EnrollmentCustomizations.GetHistoryV2(ctx, customizationID, rsqlQuery)
 	if err != nil {
 		log.Fatalf("Error getting enrollment customization history: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Total history entries: %d\n", history.TotalCount)
 
 	for _, entry := range history.Results {

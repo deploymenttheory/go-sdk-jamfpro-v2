@@ -10,12 +10,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -27,10 +26,10 @@ func main() {
 	// Replace "1" with an actual patch software title configuration ID to delete
 	configID := "1"
 
-	resp, err := jamfClient.PatchSoftwareTitleConfigurations.DeleteByIDV2(context.Background(), configID)
+	resp, err := jamfClient.JamfProAPI.PatchSoftwareTitleConfigurations.DeleteByIDV2(context.Background(), configID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("Successfully deleted Patch Software Title Configuration (ID: %s). Status code: %d\n", configID, resp.StatusCode)
+	fmt.Printf("Successfully deleted Patch Software Title Configuration (ID: %s). Status code: %d\n", configID, resp.StatusCode())
 }

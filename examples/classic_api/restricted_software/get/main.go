@@ -29,7 +29,7 @@ func main() {
 			log.Fatalf("invalid RESTRICTED_SOFTWARE_ID %q: %v", raw, err)
 		}
 	} else {
-		list, _, err := client.ClassicRestrictedSoftware.List(ctx)
+		list, _, err := client.ClassicAPI.RestrictedSoftware.List(ctx)
 		if err != nil || len(list.Results) == 0 {
 			log.Fatal("Set RESTRICTED_SOFTWARE_ID or ensure at least one restricted software item exists")
 		}
@@ -37,12 +37,12 @@ func main() {
 		fmt.Printf("Using first restricted software ID: %d\n", id)
 	}
 
-	software, resp, err := client.ClassicRestrictedSoftware.GetByID(ctx, id)
+	software, resp, err := client.ClassicAPI.RestrictedSoftware.GetByID(ctx, id)
 	if err != nil {
 		log.Fatalf("GetByID failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("ID:              %d\n", software.General.ID)
 	fmt.Printf("Name:            %s\n", software.General.Name)
 	fmt.Printf("Process Name:    %s\n", software.General.ProcessName)

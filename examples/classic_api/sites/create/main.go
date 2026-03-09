@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/sites"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/sites"
 )
 
 func main() {
@@ -26,17 +26,17 @@ func main() {
 		Name: fmt.Sprintf("example-site-%d", time.Now().UnixMilli()),
 	}
 
-	created, resp, err := client.ClassicSites.Create(ctx, req)
+	created, resp, err := client.ClassicAPI.Sites.Create(ctx, req)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Created site ID: %d\n", created.ID)
 	fmt.Printf("Name: %s\n", created.Name)
 
 	// Cleanup: delete the created site
-	if _, err := client.ClassicSites.DeleteByID(ctx, created.ID); err != nil {
+	if _, err := client.ClassicAPI.Sites.DeleteByID(ctx, created.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: site deleted")

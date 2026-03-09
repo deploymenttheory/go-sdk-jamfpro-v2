@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -26,11 +25,11 @@ func main() {
 	id := "1"
 	status := "Pending+Failed"
 
-	resp, err := jamfClient.ClassicCommandFlush.FlushByIDAndStatus(context.Background(), idType, id, status)
+	resp, err := jamfClient.ClassicAPI.CommandFlush.FlushByIDAndStatus(context.Background(), idType, id, status)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("Successfully cleared %s MDM commands for %s %s (Status: %d)\n", status, idType, id, resp.StatusCode)
+	fmt.Printf("Successfully cleared %s MDM commands for %s %s (Status: %d)\n", status, idType, id, resp.StatusCode())
 }

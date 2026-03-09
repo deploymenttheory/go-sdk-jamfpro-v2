@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/onboarding"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/onboarding"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -54,7 +54,7 @@ import (
 
 func TestAcceptance_Onboarding_get_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Onboarding
+	svc := acc.Client.JamfProAPI.Onboarding
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV1(ctx)
@@ -66,7 +66,7 @@ func TestAcceptance_Onboarding_get_v1(t *testing.T) {
 
 func TestAcceptance_Onboarding_update_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Onboarding
+	svc := acc.Client.JamfProAPI.Onboarding
 	ctx := context.Background()
 
 	current, _, err := svc.GetV1(ctx)
@@ -105,7 +105,7 @@ func convertToUpdateItems(items []onboarding.OnboardingItemResponse) []onboardin
 
 func TestAcceptance_Onboarding_get_eligible_apps_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Onboarding
+	svc := acc.Client.JamfProAPI.Onboarding
 	ctx := context.Background()
 
 	result, resp, err := svc.GetEligibleAppsV1(ctx, nil)
@@ -118,7 +118,7 @@ func TestAcceptance_Onboarding_get_eligible_apps_v1(t *testing.T) {
 
 func TestAcceptance_Onboarding_get_eligible_configuration_profiles_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Onboarding
+	svc := acc.Client.JamfProAPI.Onboarding
 	ctx := context.Background()
 
 	result, resp, err := svc.GetEligibleConfigurationProfilesV1(ctx, nil)
@@ -131,7 +131,7 @@ func TestAcceptance_Onboarding_get_eligible_configuration_profiles_v1(t *testing
 
 func TestAcceptance_Onboarding_get_eligible_policies_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Onboarding
+	svc := acc.Client.JamfProAPI.Onboarding
 	ctx := context.Background()
 
 	result, resp, err := svc.GetEligiblePoliciesV1(ctx, nil)
@@ -144,7 +144,7 @@ func TestAcceptance_Onboarding_get_eligible_policies_v1(t *testing.T) {
 
 func TestAcceptance_Onboarding_get_history_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Onboarding
+	svc := acc.Client.JamfProAPI.Onboarding
 	ctx := context.Background()
 
 	// Add history note first
@@ -167,7 +167,7 @@ func TestAcceptance_Onboarding_get_history_v1(t *testing.T) {
 
 func TestAcceptance_Onboarding_add_history_notes_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Onboarding
+	svc := acc.Client.JamfProAPI.Onboarding
 	ctx := context.Background()
 
 	noteReq := &onboarding.RequestAddHistoryNotes{

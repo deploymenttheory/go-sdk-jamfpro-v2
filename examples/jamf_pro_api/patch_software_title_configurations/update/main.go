@@ -11,12 +11,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -29,7 +28,7 @@ func main() {
 	configID := "1"
 
 	// First, get the existing configuration
-	existing, _, err := jamfClient.PatchSoftwareTitleConfigurations.GetByIDV2(context.Background(), configID)
+	existing, _, err := jamfClient.JamfProAPI.PatchSoftwareTitleConfigurations.GetByIDV2(context.Background(), configID)
 	if err != nil {
 		fmt.Printf("Error getting existing config: %v\n", err)
 		return
@@ -39,7 +38,7 @@ func main() {
 	existing.UINotifications = false
 	existing.EmailNotifications = true
 
-	result, _, err := jamfClient.PatchSoftwareTitleConfigurations.UpdateByIDV2(context.Background(), configID, existing)
+	result, _, err := jamfClient.JamfProAPI.PatchSoftwareTitleConfigurations.UpdateByIDV2(context.Background(), configID, existing)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

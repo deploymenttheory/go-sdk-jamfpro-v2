@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	appName := "go-sdk-v2-mobile-app" // Replace with the desired mobile device application name
-	_, err = jamfClient.ClassicMobileDeviceApplications.DeleteByName(context.Background(), appName)
+	_, err = jamfClient.ClassicAPI.MobileDeviceApplications.DeleteByName(context.Background(), appName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

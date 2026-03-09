@@ -172,7 +172,7 @@ func GreaterThanJamfProVersion(t *testing.T, major, minor, patch int) {
 		return
 	}
 	ctx := context.Background()
-	result, _, err := Client.JamfProVersion.GetV1(ctx)
+	result, _, err := Client.JamfProAPI.JamfProVersion.GetV1(ctx)
 	if err != nil {
 		t.Skipf("Could not get Jamf Pro version: %v", err)
 		return

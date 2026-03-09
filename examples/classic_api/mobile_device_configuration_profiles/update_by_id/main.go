@@ -6,15 +6,14 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/mobile_device_configuration_profiles"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_configuration_profiles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -40,7 +39,7 @@ func main() {
 		},
 	}
 
-	updated, _, err := jamfClient.ClassicMobileDeviceConfigurationProfiles.UpdateByID(context.Background(), profileID, updateReq)
+	updated, _, err := jamfClient.ClassicAPI.MobileDeviceConfigurationProfiles.UpdateByID(context.Background(), profileID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

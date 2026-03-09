@@ -1,0 +1,78 @@
+package csa
+
+import (
+	"context"
+	"testing"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/csa/mocks"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
+
+func TestUnit_Csa_GetTokenExchangeDetailsV1_Success(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	mock.RegisterGetTokenExchangeDetailsMock()
+
+	svc := NewCsa(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetTokenExchangeDetailsV1(ctx)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	assert.NotEmpty(t, result.TenantID)
+	assert.NotEmpty(t, result.Subject)
+	assert.Greater(t, result.RefreshExpiration, 0)
+	assert.NotEmpty(t, result.Scopes)
+}
+
+func TestUnit_Csa_GetTenantIDV1_Success(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	mock.RegisterGetTenantIDMock()
+
+	svc := NewCsa(mock)
+	ctx := context.Background()
+
+	result, resp, err := svc.GetTenantIDV1(ctx)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	assert.NotEmpty(t, result.TenantID)
+}
+
+func TestUnit_Csa_DeleteTokenExchangeV1_Success(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	mock.RegisterDeleteTokenExchangeMock()
+
+	svc := NewCsa(mock)
+	ctx := context.Background()
+
+	resp, err := svc.DeleteTokenExchangeV1(ctx)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 204, resp.StatusCode())
+}
+
+func TestUnit_Csa_GetTokenExchangeDetailsV1_Error(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	svc := NewCsa(mock)
+	_, _, err := svc.GetTokenExchangeDetailsV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_Csa_GetTenantIDV1_Error(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	svc := NewCsa(mock)
+	_, _, err := svc.GetTenantIDV1(context.Background())
+	require.Error(t, err)
+}
+
+func TestUnit_Csa_DeleteTokenExchangeV1_Error(t *testing.T) {
+	mock := mocks.NewCSAMock()
+	svc := NewCsa(mock)
+	_, err := svc.DeleteTokenExchangeV1(context.Background())
+	require.Error(t, err)
+}

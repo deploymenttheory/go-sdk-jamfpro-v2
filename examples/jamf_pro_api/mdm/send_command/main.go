@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mdm"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mdm"
 )
 
 func main() {
@@ -35,12 +35,12 @@ func main() {
 		},
 	}
 
-	result, resp, err := client.MDM.SendCommand(ctx, req)
+	result, resp, err := client.JamfProAPI.Mdm.SendCommand(ctx, req)
 	if err != nil {
-		log.Fatalf("Failed to send MDM command: %v (HTTP %d)", err, resp.StatusCode)
+		log.Fatalf("Failed to send MDM command: %v (HTTP %d)", err, resp.StatusCode())
 	}
 
-	fmt.Printf("MDM command sent successfully (HTTP %d)\n", resp.StatusCode)
+	fmt.Printf("MDM command sent successfully (HTTP %d)\n", resp.StatusCode())
 	fmt.Printf("Command ID: %s\n", result.ID)
 	fmt.Printf("Command href: %s\n", result.Href)
 }

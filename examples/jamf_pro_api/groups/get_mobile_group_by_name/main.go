@@ -19,12 +19,12 @@ func main() {
 	// Replace with actual mobile device group name
 	groupName := "All Mobile Devices"
 
-	group, resp, err := client.Groups.GetMobileGroupByNameV1(ctx, groupName)
+	group, resp, err := client.JamfProAPI.Groups.GetMobileGroupByNameV1(ctx, groupName)
 	if err != nil {
 		log.Fatalf("Error getting mobile group by name: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Group Platform ID: %s\n", group.GroupPlatformId)
 	fmt.Printf("Group Jamf Pro ID: %s\n", group.GroupJamfProId)
 	fmt.Printf("Group Name: %s\n", group.GroupName)

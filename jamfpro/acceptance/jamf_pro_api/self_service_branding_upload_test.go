@@ -41,7 +41,7 @@ import (
 
 func TestAcceptance_SelfServiceBrandingUpload_upload(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SelfServiceBrandingUpload
+	svc := acc.Client.JamfProAPI.SelfServiceBrandingUpload
 	ctx := context.Background()
 
 	// Create a temporary PNG file for upload

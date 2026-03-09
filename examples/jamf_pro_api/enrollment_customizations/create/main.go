@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment_customizations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment_customizations"
 )
 
 func main() {
@@ -30,12 +30,12 @@ func main() {
 		},
 	}
 
-	created, resp, err := client.EnrollmentCustomizations.CreateV2(ctx, customization)
+	created, resp, err := client.JamfProAPI.EnrollmentCustomizations.CreateV2(ctx, customization)
 	if err != nil {
 		log.Fatalf("Error creating enrollment customization: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Created Enrollment Customization ID: %s\n", created.ID)
 	fmt.Printf("Href: %s\n", created.Href)
 }

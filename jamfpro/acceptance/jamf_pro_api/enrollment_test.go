@@ -6,8 +6,8 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/enrollment"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -89,7 +89,7 @@ import (
 func TestAcceptance_Enrollment_get_and_update_v4(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Enrollment
+	svc := acc.Client.JamfProAPI.Enrollment
 	ctx := context.Background()
 
 	// Get current enrollment settings
@@ -176,7 +176,7 @@ func TestAcceptance_Enrollment_get_and_update_v4(t *testing.T) {
 func TestAcceptance_Enrollment_access_group_lifecycle_v3(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Enrollment
+	svc := acc.Client.JamfProAPI.Enrollment
 	ctx := context.Background()
 
 	// Create access group
@@ -216,7 +216,7 @@ func TestAcceptance_Enrollment_access_group_lifecycle_v3(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	assert.Equal(t, createdID, fetched.ID)
 	assert.Equal(t, "Test ADUE Access Group", fetched.Name)
 
@@ -254,7 +254,7 @@ func TestAcceptance_Enrollment_access_group_lifecycle_v3(t *testing.T) {
 func TestAcceptance_Enrollment_list_access_groups_v3(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Enrollment
+	svc := acc.Client.JamfProAPI.Enrollment
 	ctx := context.Background()
 
 	// List all access groups
@@ -268,7 +268,7 @@ func TestAcceptance_Enrollment_list_access_groups_v3(t *testing.T) {
 func TestAcceptance_Enrollment_language_messages_v3(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Enrollment
+	svc := acc.Client.JamfProAPI.Enrollment
 	ctx := context.Background()
 
 	// List available language codes
@@ -299,7 +299,7 @@ func TestAcceptance_Enrollment_language_messages_v3(t *testing.T) {
 func TestAcceptance_Enrollment_history_v2(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Enrollment
+	svc := acc.Client.JamfProAPI.Enrollment
 	ctx := context.Background()
 
 	// Add history note first
@@ -309,7 +309,7 @@ func TestAcceptance_Enrollment_history_v2(t *testing.T) {
 	addResult, addResp, err := svc.AddHistoryNotesV2(ctx, noteReq)
 	require.NoError(t, err)
 	require.NotNil(t, addResult)
-	assert.Equal(t, 201, addResp.StatusCode)
+	assert.Equal(t, 201, addResp.StatusCode())
 	t.Logf("Added history note with ID: %s", addResult.ID)
 
 	// Get enrollment history
@@ -323,7 +323,7 @@ func TestAcceptance_Enrollment_history_v2(t *testing.T) {
 func TestAcceptance_Enrollment_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Enrollment
+	svc := acc.Client.JamfProAPI.Enrollment
 	ctx := context.Background()
 
 	// Test nil request validation (UpdateV4)

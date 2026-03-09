@@ -19,11 +19,11 @@ func main() {
 	// Replace with actual enrollment customization ID
 	customizationID := "1"
 
-	resp, err := client.EnrollmentCustomizations.DeleteByIDV2(ctx, customizationID)
+	resp, err := client.JamfProAPI.EnrollmentCustomizations.DeleteByIDV2(ctx, customizationID)
 	if err != nil {
 		log.Fatalf("Error deleting enrollment customization: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Enrollment Customization %s deleted successfully\n", customizationID)
 }

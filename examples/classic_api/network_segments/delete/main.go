@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
@@ -14,7 +13,7 @@ func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
 	// Initialize the Jamf Pro client with the HTTP client configuration
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -25,7 +24,7 @@ func main() {
 
 	// Example usage of DeleteByID
 	segmentID := 1 // Replace with the desired network segment ID to delete
-	_, err = jamfClient.ClassicNetworkSegments.DeleteByID(context.Background(), segmentID)
+	_, err = jamfClient.ClassicAPI.NetworkSegments.DeleteByID(context.Background(), segmentID)
 	if err != nil {
 		fmt.Printf("Error deleting network segment by ID: %v\n", err)
 		return

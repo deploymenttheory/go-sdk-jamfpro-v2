@@ -6,15 +6,14 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computers"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computers"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -26,7 +25,7 @@ func main() {
 	computerName := "MacBook-Pro-01" // Replace with the desired computer name
 
 	// Fetch existing computer first to get full structure
-	existing, _, err := jamfClient.ClassicComputers.GetByName(context.Background(), computerName)
+	existing, _, err := jamfClient.ClassicAPI.Computers.GetByName(context.Background(), computerName)
 	if err != nil {
 		fmt.Printf("Error fetching computer: %v\n", err)
 		return
@@ -50,7 +49,7 @@ func main() {
 		GroupsAccounts: existing.GroupsAccounts,
 	}
 
-	updated, _, err := jamfClient.ClassicComputers.UpdateByName(context.Background(), computerName, updateReq)
+	updated, _, err := jamfClient.ClassicAPI.Computers.UpdateByName(context.Background(), computerName, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

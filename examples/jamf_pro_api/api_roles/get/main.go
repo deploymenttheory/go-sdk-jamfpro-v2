@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -24,7 +23,7 @@ func main() {
 	// Replace "1" with the actual API role ID
 	roleID := "1"
 
-	result, _, err := jamfClient.APIRoles.GetByIDV1(context.Background(), roleID)
+	result, _, err := jamfClient.JamfProAPI.ApiRoles.GetByIDV1(context.Background(), roleID)
 	if err != nil {
 		fmt.Printf("Error retrieving API role: %v\n", err)
 		return

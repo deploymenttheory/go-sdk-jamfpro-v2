@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/self_service_branding_macos"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/self_service_branding_macos"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -41,7 +41,7 @@ import (
 func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SelfServiceBrandingMacOS
+	svc := acc.Client.JamfProAPI.SelfServiceBrandingMacos
 	ctx := context.Background()
 
 	// 1. Create
@@ -136,7 +136,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_lifecycle(t *testing.T) {
 func TestAcceptance_SelfServiceBrandingMacOS_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SelfServiceBrandingMacOS
+	svc := acc.Client.JamfProAPI.SelfServiceBrandingMacos
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_rsql-ssb-macos")
@@ -186,7 +186,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_list_with_rsql_filter(t *testing.T)
 func TestAcceptance_SelfServiceBrandingMacOS_list(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SelfServiceBrandingMacOS
+	svc := acc.Client.JamfProAPI.SelfServiceBrandingMacos
 
 	result, resp, err := svc.List(context.Background(), nil)
 	require.NoError(t, err)
@@ -202,7 +202,7 @@ func TestAcceptance_SelfServiceBrandingMacOS_list(t *testing.T) {
 func TestAcceptance_SelfServiceBrandingMacOS_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.SelfServiceBrandingMacOS
+	svc := acc.Client.JamfProAPI.SelfServiceBrandingMacos
 
 	t.Run("GetByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), "")

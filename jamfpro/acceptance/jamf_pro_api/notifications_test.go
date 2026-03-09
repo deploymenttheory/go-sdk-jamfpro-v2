@@ -10,7 +10,7 @@ import (
 
 func TestAcceptance_Notifications_list(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Notifications
+	svc := acc.Client.JamfProAPI.Notifications
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx)

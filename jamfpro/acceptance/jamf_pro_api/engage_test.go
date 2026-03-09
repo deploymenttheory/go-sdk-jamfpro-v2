@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/engage"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/engage"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -59,7 +59,7 @@ import (
 func TestAcceptance_Engage_settings_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Engage
+	svc := acc.Client.JamfProAPI.Engage
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Getting current Engage settings")
@@ -70,7 +70,7 @@ func TestAcceptance_Engage_settings_lifecycle(t *testing.T) {
 	}
 
 	require.NotNil(t, originalSettings)
-	assert.Equal(t, 200, getResp.StatusCode)
+	assert.Equal(t, 200, getResp.StatusCode())
 	originalEnabled := originalSettings.IsEnabled
 	acc.LogTestSuccess(t, "Current Engage settings - IsEnabled: %v", originalEnabled)
 
@@ -84,14 +84,14 @@ func TestAcceptance_Engage_settings_lifecycle(t *testing.T) {
 	}
 	require.NoError(t, err)
 	require.NotNil(t, updatedSettings)
-	assert.Contains(t, []int{200, 202}, updateResp.StatusCode)
+	assert.Contains(t, []int{200, 202}, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Updated Engage settings - IsEnabled toggled to: %v", !originalEnabled)
 
 	acc.LogTestStage(t, "Verify", "Verifying updated settings")
 	verifyUpdated, verifyResp, err := svc.GetV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, verifyUpdated)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, !originalEnabled, verifyUpdated.IsEnabled, "Updated setting should be persisted")
 	acc.LogTestSuccess(t, "Verified updated settings - IsEnabled: %v", verifyUpdated.IsEnabled)
 
@@ -102,14 +102,14 @@ func TestAcceptance_Engage_settings_lifecycle(t *testing.T) {
 	restoredSettings, restoreResp, err := svc.UpdateV2(ctx, restoreReq)
 	require.NoError(t, err)
 	require.NotNil(t, restoredSettings)
-	assert.Contains(t, []int{200, 202}, restoreResp.StatusCode)
+	assert.Contains(t, []int{200, 202}, restoreResp.StatusCode())
 	acc.LogTestSuccess(t, "Restored Engage settings - IsEnabled: %v", originalEnabled)
 
 	acc.LogTestStage(t, "Verify Restoration", "Verifying restored settings")
 	verifyRestored, verifyRestoreResp, err := svc.GetV2(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, verifyRestored)
-	assert.Equal(t, 200, verifyRestoreResp.StatusCode)
+	assert.Equal(t, 200, verifyRestoreResp.StatusCode())
 	assert.Equal(t, originalEnabled, verifyRestored.IsEnabled, "Original setting should be restored")
 	acc.LogTestSuccess(t, "Verified restoration - IsEnabled: %v (matches original)", verifyRestored.IsEnabled)
 }
@@ -117,7 +117,7 @@ func TestAcceptance_Engage_settings_lifecycle(t *testing.T) {
 func TestAcceptance_Engage_history(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Engage
+	svc := acc.Client.JamfProAPI.Engage
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "AddHistoryNote", "Adding history note for Engage settings")
@@ -130,7 +130,7 @@ func TestAcceptance_Engage_history(t *testing.T) {
 		return
 	}
 	require.NotNil(t, addResult)
-	assert.Equal(t, 201, addResp.StatusCode)
+	assert.Equal(t, 201, addResp.StatusCode())
 	acc.LogTestSuccess(t, "Added history note with ID: %d", addResult.ID)
 
 	acc.LogTestStage(t, "GetHistory", "Getting Engage settings history")
@@ -142,7 +142,7 @@ func TestAcceptance_Engage_history(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, history)
-	assert.Equal(t, 200, histResp.StatusCode)
+	assert.Equal(t, 200, histResp.StatusCode())
 	assert.GreaterOrEqual(t, history.TotalCount, 1, "Should have at least the note we just added")
 	acc.LogTestSuccess(t, "Found %d history entries", history.TotalCount)
 
@@ -156,7 +156,7 @@ func TestAcceptance_Engage_history(t *testing.T) {
 func TestAcceptance_Engage_history_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Engage
+	svc := acc.Client.JamfProAPI.Engage
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "GetHistory", "Getting history to test RSQL filtering")
@@ -166,7 +166,7 @@ func TestAcceptance_Engage_history_with_rsql_filter(t *testing.T) {
 		return
 	}
 
-	assert.Equal(t, 200, allResp.StatusCode)
+	assert.Equal(t, 200, allResp.StatusCode())
 	acc.LogTestSuccess(t, "Found %d total history entries", allHistory.TotalCount)
 
 	// Test RSQL filtering by username (exclude nonexistent username to get results)
@@ -178,7 +178,7 @@ func TestAcceptance_Engage_history_with_rsql_filter(t *testing.T) {
 	filteredHistory, filteredResp, err := svc.GetHistoryV2(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, filteredHistory)
-	assert.Equal(t, 200, filteredResp.StatusCode)
+	assert.Equal(t, 200, filteredResp.StatusCode())
 	acc.LogTestSuccess(t, "RSQL filter returned %d result(s)", filteredHistory.TotalCount)
 
 	// Verify filtering worked

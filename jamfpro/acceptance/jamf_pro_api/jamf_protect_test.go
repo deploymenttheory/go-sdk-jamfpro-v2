@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/jamf_protect"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_protect"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -57,7 +57,7 @@ import (
 func TestAcceptance_JamfProtect_get_settings_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProtect
+	svc := acc.Client.JamfProAPI.JamfProtect
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "GetSettings", "Getting Jamf Protect integration settings")
@@ -82,7 +82,7 @@ func TestAcceptance_JamfProtect_get_settings_v1(t *testing.T) {
 func TestAcceptance_JamfProtect_list_history_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProtect
+	svc := acc.Client.JamfProAPI.JamfProtect
 	ctx := context.Background()
 
 	// Add history note first
@@ -99,7 +99,7 @@ func TestAcceptance_JamfProtect_list_history_v1(t *testing.T) {
 		require.NoError(t, err)
 	}
 	require.NotNil(t, addResult)
-	assert.Equal(t, 201, addResp.StatusCode)
+	assert.Equal(t, 201, addResp.StatusCode())
 	acc.LogTestSuccess(t, "Added history note with ID: %s", addResult.ID)
 
 	acc.LogTestStage(t, "ListHistory", "Listing Jamf Protect history")
@@ -118,7 +118,7 @@ func TestAcceptance_JamfProtect_list_history_v1(t *testing.T) {
 func TestAcceptance_JamfProtect_list_plans_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProtect
+	svc := acc.Client.JamfProAPI.JamfProtect
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "ListPlans", "Listing Jamf Protect plans")
@@ -143,7 +143,7 @@ func TestAcceptance_JamfProtect_list_plans_v1(t *testing.T) {
 func TestAcceptance_JamfProtect_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfProtect
+	svc := acc.Client.JamfProAPI.JamfProtect
 
 	t.Run("UpdateSettingsV1_NilRequest", func(t *testing.T) {
 		_, _, err := svc.UpdateSettingsV1(context.Background(), nil)

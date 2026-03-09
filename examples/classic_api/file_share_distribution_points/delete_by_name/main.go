@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	dpName := "Main File Share DP" // Replace with the desired distribution point name to delete
-	_, err = jamfClient.ClassicFileShareDistributionPoints.DeleteByName(context.Background(), dpName)
+	_, err = jamfClient.ClassicAPI.FileShareDistributionPoints.DeleteByName(context.Background(), dpName)
 	if err != nil {
 		fmt.Printf("Error deleting file share distribution point by name: %v\n", err)
 		return

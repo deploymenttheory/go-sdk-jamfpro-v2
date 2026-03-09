@@ -7,12 +7,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -24,7 +23,7 @@ func main() {
 	// Replace "1" with the actual AD CS Settings ID
 	adcsID := "1"
 
-	result, _, err := jamfClient.AdcsSettings.GetByIDV1(context.Background(), adcsID)
+	result, _, err := jamfClient.JamfProAPI.AdcsSettings.GetByIDV1(context.Background(), adcsID)
 	if err != nil {
 		fmt.Printf("Error retrieving AD CS Settings: %v\n", err)
 		return

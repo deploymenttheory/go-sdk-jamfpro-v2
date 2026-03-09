@@ -29,7 +29,7 @@ func main() {
 	if raw := os.Getenv("COMPUTER_ID"); raw != "" {
 		computerID = raw
 	} else {
-		list, _, err := client.ComputerInventory.ListV3(ctx, nil)
+		list, _, err := client.JamfProAPI.ComputerInventory.ListV3(ctx, nil)
 		if err != nil || list == nil || len(list.Results) == 0 {
 			log.Fatal("Set COMPUTER_ID or ensure at least one computer exists in inventory")
 		}
@@ -37,12 +37,12 @@ func main() {
 		fmt.Printf("Using first computer ID: %s\n", computerID)
 	}
 
-	history, resp, err := client.ClassicComputerHistory.GetByID(ctx, computerID)
+	history, resp, err := client.ClassicAPI.ComputerHistory.GetByID(ctx, computerID)
 	if err != nil {
 		log.Fatalf("GetByID failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	xmlOut, err := xml.MarshalIndent(history, "", "  ")
 	if err != nil {
 		log.Fatalf("Error marshaling computer history: %v", err)

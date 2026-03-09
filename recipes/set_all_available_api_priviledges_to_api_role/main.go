@@ -26,7 +26,7 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/api_roles"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 
 	ctx := context.Background()
 
-	versionInfo, _, err := jamfClient.JamfProVersion.GetV1(ctx)
+	versionInfo, _, err := jamfClient.JamfProAPI.JamfProVersion.GetV1(ctx)
 	if err != nil {
 		log.Fatalf("Failed to get Jamf Pro version: %v", err)
 	}
@@ -49,7 +49,7 @@ func main() {
 	version := strings.TrimSpace(*versionInfo.Version)
 	fmt.Printf("Found Jamf Pro version: %s\n", version)
 
-	privileges, _, err := jamfClient.APIRolePrivileges.ListV1(ctx)
+	privileges, _, err := jamfClient.JamfProAPI.ApiRolePrivileges.ListV1(ctx)
 	if err != nil {
 		log.Fatalf("Failed to get API privileges: %v", err)
 	}
@@ -67,7 +67,7 @@ func main() {
 		Privileges:  privileges.Privileges,
 	}
 
-	createdRole, _, err := jamfClient.APIRoles.CreateV1(ctx, newRole)
+	createdRole, _, err := jamfClient.JamfProAPI.ApiRoles.CreateV1(ctx, newRole)
 	if err != nil {
 		log.Fatalf("Failed to create API role: %v", err)
 	}

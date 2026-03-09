@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -24,7 +23,7 @@ func main() {
 
 	appName := "Sample Mac App"     // Replace with the desired Mac application name
 	subset := "General"            // Subset values: General, Scope, SelfService, VPPCodes, VPP
-	app, _, err := jamfClient.ClassicMacApplications.GetByNameAndSubset(context.Background(), appName, subset)
+	app, _, err := jamfClient.ClassicAPI.MacApplications.GetByNameAndSubset(context.Background(), appName, subset)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

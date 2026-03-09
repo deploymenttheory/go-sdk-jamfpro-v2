@@ -7,7 +7,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/sso_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/sso_settings"
 )
 
 func main() {
@@ -25,12 +25,12 @@ func main() {
 	}
 
 	// Add the history note
-	result, resp, err := client.SsoSettings.AddHistoryNoteV3(ctx, noteReq)
+	result, resp, err := client.JamfProAPI.SsoSettings.AddHistoryNoteV3(ctx, noteReq)
 	if err != nil {
 		log.Fatalf("Error adding SSO history note: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("History Note Added:\n")
 	fmt.Printf("  ID: %s\n", result.ID)
 	fmt.Printf("  Href: %s\n", result.Href)
@@ -44,7 +44,7 @@ func main() {
 
 	// Optional: Verify by fetching the history
 	fmt.Println("\nVerifying by fetching SSO history...")
-	history, _, err := client.SsoSettings.GetHistoryV3(ctx, nil)
+	history, _, err := client.JamfProAPI.SsoSettings.GetHistoryV3(ctx, nil)
 	if err != nil {
 		log.Fatalf("Error getting SSO history: %v", err)
 	}

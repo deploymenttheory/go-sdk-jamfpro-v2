@@ -7,8 +7,8 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/mac_applications"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mac_applications"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -25,7 +25,7 @@ import (
 func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMacApplications
+	svc := acc.Client.ClassicAPI.MacApplications
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -63,7 +63,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created Mac application ID should be a positive integer")
 
 	appID := created.ID
@@ -87,7 +87,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -112,7 +112,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, appID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, appID, fetched.General.ID)
 	assert.Equal(t, appName, fetched.General.Name)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.General.ID, fetched.General.Name)
@@ -128,7 +128,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	fetchedByName, fetchByNameResp, err := svc.GetByName(ctx4, appName)
 	require.NoError(t, err, "GetByName should not return an error")
 	require.NotNil(t, fetchedByName)
-	assert.Equal(t, 200, fetchByNameResp.StatusCode)
+	assert.Equal(t, 200, fetchByNameResp.StatusCode())
 	assert.Equal(t, appID, fetchedByName.General.ID)
 	assert.Equal(t, appName, fetchedByName.General.Name)
 	acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.General.ID, fetchedByName.General.Name)
@@ -144,7 +144,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	fetchedSubset, subsetResp, err := svc.GetByIDAndSubset(ctx5a, appID, "General")
 	require.NoError(t, err, "GetByIDAndSubset should not return an error")
 	require.NotNil(t, fetchedSubset)
-	assert.Equal(t, 200, subsetResp.StatusCode)
+	assert.Equal(t, 200, subsetResp.StatusCode())
 	assert.Equal(t, appName, fetchedSubset.General.Name)
 	acc.LogTestSuccess(t, "GetByIDAndSubset: name=%q", fetchedSubset.General.Name)
 
@@ -181,7 +181,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx5, appID, updateReq)
 	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -216,7 +216,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
-	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, revertResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -230,7 +230,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx7, appID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, appName, verified.General.Name, "name should reflect the revert")
 	acc.LogTestSuccess(t, "Name revert verified: %q", verified.General.Name)
 
@@ -245,7 +245,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx8, appID)
 	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Mac application ID=%d deleted", appID)
 }
 
@@ -256,7 +256,7 @@ func TestAcceptance_MacApplications_lifecycle(t *testing.T) {
 func TestAcceptance_MacApplications_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMacApplications
+	svc := acc.Client.ClassicAPI.MacApplications
 	ctx := context.Background()
 
 	appName := acc.UniqueName("sdkv2_acc_acc-test-macapp-dbn")
@@ -304,7 +304,7 @@ func TestAcceptance_MacApplications_delete_by_name(t *testing.T) {
 	deleteResp, err := svc.DeleteByName(ctx2, appName)
 	require.NoError(t, err, "DeleteByName should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Mac application %q deleted by name", appName)
 }
 
@@ -315,7 +315,7 @@ func TestAcceptance_MacApplications_delete_by_name(t *testing.T) {
 func TestAcceptance_MacApplications_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicMacApplications
+	svc := acc.Client.ClassicAPI.MacApplications
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

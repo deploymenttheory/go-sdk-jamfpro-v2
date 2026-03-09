@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_OAuth2SessionTokens_get_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.OAuth2SessionTokens
+	svc := acc.Client.JamfProAPI.Oauth2SessionTokens
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV1(ctx)

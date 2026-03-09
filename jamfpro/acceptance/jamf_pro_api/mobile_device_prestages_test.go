@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mobile_device_prestages"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -77,7 +77,7 @@ import (
 
 func TestAcceptance_MobileDevicePrestages_list_v3(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.MobileDevicePrestages
+	svc := acc.Client.JamfProAPI.MobileDevicePrestages
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV3(ctx)
@@ -93,7 +93,7 @@ func TestAcceptance_MobileDevicePrestages_list_v3(t *testing.T) {
 
 func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.MobileDevicePrestages
+	svc := acc.Client.JamfProAPI.MobileDevicePrestages
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-mobile-prestage")
 
@@ -287,7 +287,7 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 	acc.LogTestStage(t, "Delete", "Deleting mobile device prestage")
 	delResp, err := svc.DeleteByIDV3(ctx, id)
 	require.NoError(t, err)
-	assert.Contains(t, []int{200, 204}, delResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, delResp.StatusCode())
 	acc.LogTestSuccess(t, "Deleted mobile device prestage: %s", id)
 
 	// Verify Deletion
@@ -295,7 +295,7 @@ func TestAcceptance_MobileDevicePrestages_lifecycle_with_scope(t *testing.T) {
 	_, getAfterDeleteResp, err := svc.GetByIDV3(ctx, id)
 	assert.Error(t, err)
 	if getAfterDeleteResp != nil {
-		assert.Equal(t, 404, getAfterDeleteResp.StatusCode)
+		assert.Equal(t, 404, getAfterDeleteResp.StatusCode())
 	}
 	acc.LogTestSuccess(t, "Verified deletion - prestage no longer exists")
 }

@@ -33,11 +33,11 @@ func main() {
 
 	ctx := context.Background()
 
-	resp, err := client.ClassicRemoveableMacAddresses.DeleteByID(ctx, id)
+	resp, err := client.ClassicAPI.RemoveableMacAddresses.DeleteByID(ctx, id)
 	if err != nil {
 		log.Fatalf("DeleteByID failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Successfully deleted removeable MAC address ID: %d\n", id)
 }

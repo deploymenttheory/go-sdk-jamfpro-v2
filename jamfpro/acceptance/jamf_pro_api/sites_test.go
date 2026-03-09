@@ -57,7 +57,7 @@ import (
 func TestAcceptance_Sites_list_and_get_objects(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Sites
+	svc := acc.Client.JamfProAPI.Sites
 	ctx := context.Background()
 
 	// 1. List all sites
@@ -66,7 +66,7 @@ func TestAcceptance_Sites_list_and_get_objects(t *testing.T) {
 	sites, listResp, err := svc.ListV1(ctx)
 	require.NoError(t, err, "ListV1 should not return an error")
 	require.NotNil(t, sites)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	if len(sites) == 0 {
 		t.Skip("No sites found in Jamf Pro instance")
@@ -86,7 +86,7 @@ func TestAcceptance_Sites_list_and_get_objects(t *testing.T) {
 	objects, objResp, err := svc.GetObjectsByIDV1(ctx, firstSiteID, rsqlQuery)
 	require.NoError(t, err, "GetObjectsByIDV1 should not return an error")
 	require.NotNil(t, objects)
-	assert.Equal(t, 200, objResp.StatusCode)
+	assert.Equal(t, 200, objResp.StatusCode())
 
 	acc.LogTestSuccess(t, "Site ID=%s has %d object(s)", firstSiteID, objects.TotalCount)
 
@@ -109,7 +109,7 @@ func TestAcceptance_Sites_list_and_get_objects(t *testing.T) {
 func TestAcceptance_Sites_get_objects_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Sites
+	svc := acc.Client.JamfProAPI.Sites
 	ctx := context.Background()
 
 	// Get first site
@@ -132,7 +132,7 @@ func TestAcceptance_Sites_get_objects_with_rsql_filter(t *testing.T) {
 	objects, objResp, err := svc.GetObjectsByIDV1(ctx, siteID, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, objects)
-	assert.Equal(t, 200, objResp.StatusCode)
+	assert.Equal(t, 200, objResp.StatusCode())
 
 	// Verify all returned objects match the filter
 	for _, obj := range objects.Results {
@@ -150,7 +150,7 @@ func TestAcceptance_Sites_get_objects_with_rsql_filter(t *testing.T) {
 func TestAcceptance_Sites_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Sites
+	svc := acc.Client.JamfProAPI.Sites
 
 	t.Run("GetObjectsByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetObjectsByIDV1(context.Background(), "", nil)

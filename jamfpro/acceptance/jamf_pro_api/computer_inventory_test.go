@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_inventory"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/computer_inventory"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -14,7 +14,7 @@ func TestAcceptance_ComputerInventory_list(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventory
+	svc := acc.Client.JamfProAPI.ComputerInventory
 
 	result, _, err := svc.ListV3(ctx, nil)
 	if err != nil {
@@ -30,7 +30,7 @@ func TestAcceptance_ComputerInventory_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventory
+	svc := acc.Client.JamfProAPI.ComputerInventory
 
 	list, _, err := svc.ListV3(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
@@ -50,7 +50,7 @@ func TestAcceptance_ComputerInventory_update(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventory
+	svc := acc.Client.JamfProAPI.ComputerInventory
 
 	list, _, err := svc.ListV3(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
@@ -87,7 +87,7 @@ func TestAcceptance_ComputerInventory_file_vault(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventory
+	svc := acc.Client.JamfProAPI.ComputerInventory
 
 	result, _, err := svc.ListFileVaultV3(ctx)
 	if err != nil {
@@ -116,7 +116,7 @@ func TestAcceptance_ComputerInventory_recovery_lock_password(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventory
+	svc := acc.Client.JamfProAPI.ComputerInventory
 
 	list, _, err := svc.ListV3(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
@@ -139,7 +139,7 @@ func TestAcceptance_ComputerInventory_get_detail_by_id(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventory
+	svc := acc.Client.JamfProAPI.ComputerInventory
 
 	list, _, err := svc.ListV3(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
@@ -159,7 +159,7 @@ func TestAcceptance_ComputerInventory_device_lock_pin(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventory
+	svc := acc.Client.JamfProAPI.ComputerInventory
 
 	list, _, err := svc.ListV3(ctx, nil)
 	if err != nil || len(list.Results) == 0 {
@@ -183,7 +183,7 @@ func TestAcceptance_ComputerInventory_attachments(t *testing.T) {
 	acc.RequireClient(t)
 	ctx := context.Background()
 
-	svc := acc.Client.ComputerInventory
+	svc := acc.Client.JamfProAPI.ComputerInventory
 
 	list, _, err := svc.ListV3(ctx, nil)
 	if err != nil || len(list.Results) == 0 {

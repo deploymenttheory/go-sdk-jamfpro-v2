@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/login_customization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/login_customization"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -30,7 +29,7 @@ func main() {
 		ActionText:              "Accept",
 	}
 
-	updated, _, err := jamfClient.LoginCustomization.UpdateV1(context.Background(), newLoginCustomization)
+	updated, _, err := jamfClient.JamfProAPI.LoginCustomization.UpdateV1(context.Background(), newLoginCustomization)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

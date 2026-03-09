@@ -6,8 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/printers"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/printers"
 )
 
 func main() {
@@ -15,7 +14,7 @@ func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
 	// Initialize the Jamf Pro client with the HTTP client configuration
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -33,7 +32,7 @@ func main() {
 		Model:    "Example Printer Model",
 	}
 
-	createdPrinter, _, err := jamfClient.ClassicPrinters.Create(context.Background(), newPrinter)
+	createdPrinter, _, err := jamfClient.ClassicAPI.Printers.Create(context.Background(), newPrinter)
 	if err != nil {
 		fmt.Printf("Error creating printer: %v\n", err)
 		return

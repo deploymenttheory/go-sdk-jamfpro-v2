@@ -6,12 +6,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/device_enrollments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/device_enrollments"
 )
 
 func main() {
-	authConfig := client.AuthConfigFromEnv()
+	authConfig := jamfpro.AuthConfigFromEnv()
 	if err := authConfig.Validate(); err != nil {
 		log.Fatalf("Invalid auth config: %v", err)
 	}
@@ -32,12 +31,12 @@ func main() {
 		},
 	}
 
-	result, resp, err := jamfClient.DeviceEnrollments.DisownDevicesByIDV1(ctx, enrollmentID, request)
+	result, resp, err := jamfClient.JamfProAPI.DeviceEnrollments.DisownDevicesByIDV1(ctx, enrollmentID, request)
 	if err != nil {
 		log.Fatalf("Failed to disown devices: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Disown Results:\n")
 	for serial, status := range result.Devices {
 		fmt.Printf("  Device %s: %s\n", serial, status)

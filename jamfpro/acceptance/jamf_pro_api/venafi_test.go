@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/venafi"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/venafi"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -15,7 +15,7 @@ import (
 func TestVenafi_Lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Venafi
+	svc := acc.Client.JamfProAPI.Venafi
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_Test Venafi CA")

@@ -26,12 +26,12 @@ func main() {
 	//     "filter": "username=='admin'",
 	// }
 	// For this example, we'll retrieve all history entries
-	history, resp, err := client.SsoSettings.GetHistoryV3(ctx, nil)
+	history, resp, err := client.JamfProAPI.SsoSettings.GetHistoryV3(ctx, nil)
 	if err != nil {
 		log.Fatalf("Error getting SSO settings history: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Total History Entries: %d\n", history.TotalCount)
 
 	if len(history.Results) > 0 {

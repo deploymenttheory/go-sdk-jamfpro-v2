@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/advanced_user_content_searches"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/advanced_user_content_searches"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -20,7 +20,7 @@ import (
 func TestAcceptance_AdvancedUserContentSearches_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdvancedUserContentSearches
+	svc := acc.Client.JamfProAPI.AdvancedUserContentSearches
 	ctx := context.Background()
 
 	// 1. Create
@@ -37,7 +37,7 @@ func TestAcceptance_AdvancedUserContentSearches_lifecycle(t *testing.T) {
 	created, createResp, err := svc.CreateV1(ctx, createReq)
 	require.NoError(t, err, "CreateV1 should not return an error")
 	require.NotNil(t, created)
-	assert.Equal(t, 201, createResp.StatusCode)
+	assert.Equal(t, 201, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	searchID := created.ID
@@ -62,7 +62,7 @@ func TestAcceptance_AdvancedUserContentSearches_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, searchID, fetched.ID)
 	assert.Equal(t, searchName, fetched.Name)
 	acc.LogTestSuccess(t, "GetByIDV1: ID=%s name=%q", fetched.ID, fetched.Name)
@@ -80,7 +80,7 @@ func TestAcceptance_AdvancedUserContentSearches_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByIDV1(ctx, searchID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Advanced user content search updated: ID=%s", searchID)
 
 	// 4. Re-fetch to verify
@@ -95,7 +95,7 @@ func TestAcceptance_AdvancedUserContentSearches_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByIDV1(ctx, searchID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Advanced user content search ID=%s deleted", searchID)
 }
 
@@ -106,7 +106,7 @@ func TestAcceptance_AdvancedUserContentSearches_lifecycle(t *testing.T) {
 func TestAcceptance_AdvancedUserContentSearches_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdvancedUserContentSearches
+	svc := acc.Client.JamfProAPI.AdvancedUserContentSearches
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_rsql-adv-user-search")
@@ -138,7 +138,7 @@ func TestAcceptance_AdvancedUserContentSearches_list_with_rsql_filter(t *testing
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, s := range list.Results {
@@ -159,7 +159,7 @@ func TestAcceptance_AdvancedUserContentSearches_list_with_rsql_filter(t *testing
 func TestAcceptance_AdvancedUserContentSearches_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.AdvancedUserContentSearches
+	svc := acc.Client.JamfProAPI.AdvancedUserContentSearches
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")

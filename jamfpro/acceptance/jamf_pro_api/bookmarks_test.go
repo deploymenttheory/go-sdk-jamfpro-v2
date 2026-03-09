@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/bookmarks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/bookmarks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -58,7 +58,7 @@ import (
 
 func TestAcceptance_Bookmarks_list_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Bookmarks
+	svc := acc.Client.JamfProAPI.Bookmarks
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "100"})
@@ -71,7 +71,7 @@ func TestAcceptance_Bookmarks_list_v1(t *testing.T) {
 
 func TestAcceptance_Bookmarks_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Bookmarks
+	svc := acc.Client.JamfProAPI.Bookmarks
 	ctx := context.Background()
 
 	name := fmt.Sprintf("acc-rsql-bookmark-%d", time.Now().UnixMilli())
@@ -109,7 +109,7 @@ func TestAcceptance_Bookmarks_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, b := range list.Results {
@@ -130,7 +130,7 @@ func TestAcceptance_Bookmarks_list_with_rsql_filter(t *testing.T) {
 func TestAcceptance_Bookmarks_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.Bookmarks
+	svc := acc.Client.JamfProAPI.Bookmarks
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")
@@ -171,7 +171,7 @@ func TestAcceptance_Bookmarks_validation_errors(t *testing.T) {
 
 func TestAcceptance_Bookmarks_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.Bookmarks
+	svc := acc.Client.JamfProAPI.Bookmarks
 	ctx := context.Background()
 
 	name := fmt.Sprintf("acc-bookmark-%d", time.Now().UnixMilli())
@@ -191,7 +191,7 @@ func TestAcceptance_Bookmarks_lifecycle(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	id := created.ID
@@ -214,5 +214,5 @@ func TestAcceptance_Bookmarks_lifecycle(t *testing.T) {
 	delResp, err := svc.DeleteByIDV1(ctx, id)
 	require.NoError(t, err)
 	require.NotNil(t, delResp)
-	assert.Equal(t, 204, delResp.StatusCode)
+	assert.Equal(t, 204, delResp.StatusCode())
 }

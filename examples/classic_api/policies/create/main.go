@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/policies"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/policies"
 )
 
 func main() {
@@ -37,16 +37,16 @@ func main() {
 		},
 	}
 
-	created, resp, err := client.ClassicPolicies.Create(ctx, req)
+	created, resp, err := client.ClassicAPI.Policies.Create(ctx, req)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("Created policy ID: %d\n", created.ID)
 
 	// Cleanup: delete the created policy
-	if _, err := client.ClassicPolicies.DeleteByID(ctx, created.ID); err != nil {
+	if _, err := client.ClassicAPI.Policies.DeleteByID(ctx, created.ID); err != nil {
 		fmt.Printf("Note: cleanup delete failed: %v\n", err)
 	} else {
 		fmt.Println("Cleanup: policy deleted")

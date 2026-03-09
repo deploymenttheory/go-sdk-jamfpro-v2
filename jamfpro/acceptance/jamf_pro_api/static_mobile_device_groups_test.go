@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/static_mobile_device_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/static_mobile_device_groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -38,7 +38,7 @@ import (
 func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.StaticMobileDeviceGroups
+	svc := acc.Client.JamfProAPI.StaticMobileDeviceGroups
 	ctx := context.Background()
 
 	// 1. Create
@@ -78,7 +78,7 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2, map[string]string{"page": "0", "page-size": "200"})
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, g := range list.Results {
@@ -103,7 +103,7 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, groupID, fetched.ID)
 	assert.Equal(t, createReq.Name, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: name=%q", fetched.Name)
@@ -120,7 +120,7 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx, groupID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updated)
-	assert.Equal(t, 200, updateResp.StatusCode)
+	assert.Equal(t, 200, updateResp.StatusCode())
 	acc.LogTestSuccess(t, "Static mobile device group updated: ID=%s", groupID)
 
 	// 5. Re-fetch to verify
@@ -136,7 +136,7 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx, groupID)
 	require.NoError(t, err)
 	require.NotNil(t, deleteResp)
-	assert.Equal(t, 204, deleteResp.StatusCode)
+	assert.Equal(t, 204, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Static mobile device group ID=%s deleted", groupID)
 }
 
@@ -147,7 +147,7 @@ func TestAcceptance_StaticMobileDeviceGroups_lifecycle(t *testing.T) {
 func TestAcceptance_StaticMobileDeviceGroups_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.StaticMobileDeviceGroups
+	svc := acc.Client.JamfProAPI.StaticMobileDeviceGroups
 	ctx := context.Background()
 
 	name := acc.UniqueName("sdkv2_acc_rsql-static-md")
@@ -182,7 +182,7 @@ func TestAcceptance_StaticMobileDeviceGroups_list_with_rsql_filter(t *testing.T)
 	list, listResp, err := svc.List(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, g := range list.Results {
@@ -203,7 +203,7 @@ func TestAcceptance_StaticMobileDeviceGroups_list_with_rsql_filter(t *testing.T)
 func TestAcceptance_StaticMobileDeviceGroups_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.StaticMobileDeviceGroups
+	svc := acc.Client.JamfProAPI.StaticMobileDeviceGroups
 
 	t.Run("GetByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), "")

@@ -9,12 +9,11 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/path/to/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -25,7 +24,7 @@ func main() {
 
 	payloadUUID := "your-payload-uuid-here"
 
-	result, _, err := jamfClient.MacOSConfigProfileCustomSettings.GetByPayloadUUID(context.Background(), payloadUUID)
+	result, _, err := jamfClient.JamfProAPI.MacosConfigProfileCustomSettings.GetByPayloadUUID(context.Background(), payloadUUID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/user"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/user"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -43,7 +43,7 @@ import (
 func TestAcceptance_User_get(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.User
+	svc := acc.Client.JamfProAPI.User
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Getting current authenticated user")
@@ -68,7 +68,7 @@ func TestAcceptance_User_get(t *testing.T) {
 func TestAcceptance_User_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.User
+	svc := acc.Client.JamfProAPI.User
 
 	t.Run("ChangePassword_NilRequest", func(t *testing.T) {
 		_, err := svc.ChangePassword(context.Background(), nil)

@@ -40,11 +40,11 @@ import (
 func TestAcceptance_MobileDeviceEnrollmentProfile_download_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceEnrollmentProfile
+	svc := acc.Client.JamfProAPI.MobileDeviceEnrollmentProfile
 	ctx := context.Background()
 
 	// Get a list of classic mobile device enrollment profiles to find an ID
-	profileList, _, err := acc.Client.ClassicMobileDeviceEnrollmentProfiles.List(ctx)
+	profileList, _, err := acc.Client.ClassicAPI.MobileDeviceEnrollmentProfiles.List(ctx)
 	require.NoError(t, err, "failed to list classic mobile device enrollment profiles")
 
 	if profileList == nil || len(profileList.Results) == 0 {
@@ -67,7 +67,7 @@ func TestAcceptance_MobileDeviceEnrollmentProfile_download_v1(t *testing.T) {
 func TestAcceptance_MobileDeviceEnrollmentProfile_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.MobileDeviceEnrollmentProfile
+	svc := acc.Client.JamfProAPI.MobileDeviceEnrollmentProfile
 
 	t.Run("GetDownloadProfileV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetDownloadProfileV1(context.Background(), "")

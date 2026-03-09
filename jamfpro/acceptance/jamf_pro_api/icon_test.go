@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	icons "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/icon"
+	icons "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/icon"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -61,7 +61,7 @@ import (
 func findValidIconID(t *testing.T) (int, *icons.ResourceIcon, bool) {
 	t.Helper()
 	acc.RequireClient(t)
-	svc := acc.Client.Icon
+	svc := acc.Client.JamfProAPI.Icon
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Icons", "Finding icon: trying IDs 1–100 until GetByID returns 200")
@@ -93,7 +93,7 @@ func TestAcceptance_Icons_get_by_id(t *testing.T) {
 
 // func TestAcceptance_Icons_download(t *testing.T) {
 // 	acc.RequireClient(t)
-// 	svc := acc.Client.Icons
+// 	svc := acc.Client.JamfProAPI.Icons
 // 	ctx := context.Background()
 
 // 	// Try multiple icons since some may have corrupted/missing files on server (500 errors)

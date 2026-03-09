@@ -13,32 +13,31 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/accounts_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/advanced_computer_searches"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/advanced_user_searches"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/allowed_file_extensions"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/byoprofiles"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/classes"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/computer_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/directory_bindings"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/disk_encryption_configurations"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/dock_items"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ebooks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/ibeacons"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/licensed_software"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/mobile_device_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/network_segments"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/policies"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/printers"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/removeable_mac_addresses"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/restricted_software"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/sites"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/smart_user_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/static_user_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/users"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/webhooks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/accounts_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/advanced_computer_searches"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/advanced_user_searches"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/allowed_file_extensions"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/byoprofiles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/classes"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/directory_bindings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/disk_encryption_configurations"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/dock_items"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ebooks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ibeacons"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/licensed_software"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/network_segments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/policies"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/printers"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/removeable_mac_addresses"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/restricted_software"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/sites"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/smart_user_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/static_user_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/users"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/webhooks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 )
 
@@ -48,7 +47,7 @@ const (
 )
 
 func main() {
-	authConfig := client.AuthConfigFromEnv()
+	authConfig := jamfpro.AuthConfigFromEnv()
 	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
@@ -127,7 +126,7 @@ func exportClassicAccountGroups(ctx context.Context, c *jamfpro.Client) {
 		PrivilegeSet: "Administrator",
 	}
 
-	created, resp, err := c.ClassicAccountGroups.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.AccountGroups.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -138,7 +137,7 @@ func exportClassicAccountGroups(ctx context.Context, c *jamfpro.Client) {
 
 	// Ensure cleanup
 	defer func() {
-		_, err := c.ClassicAccountGroups.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.AccountGroups.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -147,11 +146,11 @@ func exportClassicAccountGroups(ctx context.Context, c *jamfpro.Client) {
 	}()
 
 	// Get by ID
-	_, resp, err = c.ClassicAccountGroups.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.AccountGroups.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
 	// Get by Name
-	_, resp, err = c.ClassicAccountGroups.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.AccountGroups.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 }
 
@@ -178,7 +177,7 @@ func exportClassicAdvancedComputerSearches(ctx context.Context, c *jamfpro.Clien
 		},
 	}
 
-	created, resp, err := c.ClassicAdvancedComputerSearches.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.AdvancedComputerSearches.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -188,7 +187,7 @@ func exportClassicAdvancedComputerSearches(ctx context.Context, c *jamfpro.Clien
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicAdvancedComputerSearches.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.AdvancedComputerSearches.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -196,13 +195,13 @@ func exportClassicAdvancedComputerSearches(ctx context.Context, c *jamfpro.Clien
 		}
 	}()
 
-	_, resp, err = c.ClassicAdvancedComputerSearches.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.AdvancedComputerSearches.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicAdvancedComputerSearches.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.AdvancedComputerSearches.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicAdvancedComputerSearches.List(ctx)
+	listResp, resp, err := c.ClassicAPI.AdvancedComputerSearches.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -232,7 +231,7 @@ func exportClassicAdvancedUserSearches(ctx context.Context, c *jamfpro.Client) {
 		},
 	}
 
-	created, resp, err := c.ClassicAdvancedUserSearches.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.AdvancedUserSearches.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -242,7 +241,7 @@ func exportClassicAdvancedUserSearches(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicAdvancedUserSearches.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.AdvancedUserSearches.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -250,13 +249,13 @@ func exportClassicAdvancedUserSearches(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicAdvancedUserSearches.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.AdvancedUserSearches.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicAdvancedUserSearches.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.AdvancedUserSearches.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicAdvancedUserSearches.List(ctx)
+	listResp, resp, err := c.ClassicAPI.AdvancedUserSearches.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -272,7 +271,7 @@ func exportClassicAllowedFileExtensions(ctx context.Context, c *jamfpro.Client) 
 		Extension: testExt,
 	}
 
-	created, resp, err := c.ClassicAllowedFileExtensions.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.AllowedFileExtensions.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -282,7 +281,7 @@ func exportClassicAllowedFileExtensions(ctx context.Context, c *jamfpro.Client) 
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicAllowedFileExtensions.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.AllowedFileExtensions.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -290,13 +289,13 @@ func exportClassicAllowedFileExtensions(ctx context.Context, c *jamfpro.Client) 
 		}
 	}()
 
-	_, resp, err = c.ClassicAllowedFileExtensions.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.AllowedFileExtensions.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicAllowedFileExtensions.GetByExtension(ctx, testExt)
+	_, resp, err = c.ClassicAPI.AllowedFileExtensions.GetByExtension(ctx, testExt)
 	exportResponse(serviceName, fmt.Sprintf("GetByExtension_%s", testExt), resp, err)
 
-	listResp, resp, err := c.ClassicAllowedFileExtensions.List(ctx)
+	listResp, resp, err := c.ClassicAPI.AllowedFileExtensions.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -316,7 +315,7 @@ func exportClassicBYOProfiles(ctx context.Context, c *jamfpro.Client) {
 		},
 	}
 
-	created, resp, err := c.ClassicBYOProfiles.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.BYOProfiles.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource (may not be licensed): %v", err)
 		return
@@ -326,7 +325,7 @@ func exportClassicBYOProfiles(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicBYOProfiles.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.BYOProfiles.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -334,13 +333,13 @@ func exportClassicBYOProfiles(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicBYOProfiles.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.BYOProfiles.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicBYOProfiles.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.BYOProfiles.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicBYOProfiles.List(ctx)
+	listResp, resp, err := c.ClassicAPI.BYOProfiles.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -357,7 +356,7 @@ func exportClassicClasses(ctx context.Context, c *jamfpro.Client) {
 		Description: "SDK validation test",
 	}
 
-	created, resp, err := c.ClassicClasses.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.Classes.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -367,7 +366,7 @@ func exportClassicClasses(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicClasses.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.Classes.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -375,13 +374,13 @@ func exportClassicClasses(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicClasses.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.Classes.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicClasses.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.Classes.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicClasses.List(ctx)
+	listResp, resp, err := c.ClassicAPI.Classes.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -398,7 +397,7 @@ func exportClassicComputerGroups(ctx context.Context, c *jamfpro.Client) {
 		IsSmart: false,
 	}
 
-	created, resp, err := c.ClassicComputerGroups.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.ComputerGroups.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -408,7 +407,7 @@ func exportClassicComputerGroups(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicComputerGroups.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.ComputerGroups.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -416,13 +415,13 @@ func exportClassicComputerGroups(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicComputerGroups.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.ComputerGroups.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicComputerGroups.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.ComputerGroups.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicComputerGroups.List(ctx)
+	listResp, resp, err := c.ClassicAPI.ComputerGroups.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -443,7 +442,7 @@ func exportClassicDirectoryBindings(ctx context.Context, c *jamfpro.Client) {
 		Type:     "Open Directory",
 	}
 
-	created, resp, err := c.ClassicDirectoryBindings.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.DirectoryBindings.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -453,7 +452,7 @@ func exportClassicDirectoryBindings(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicDirectoryBindings.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.DirectoryBindings.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -461,13 +460,13 @@ func exportClassicDirectoryBindings(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicDirectoryBindings.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.DirectoryBindings.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicDirectoryBindings.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.DirectoryBindings.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicDirectoryBindings.List(ctx)
+	listResp, resp, err := c.ClassicAPI.DirectoryBindings.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -486,7 +485,7 @@ func exportClassicDiskEncryptionConfigurations(ctx context.Context, c *jamfpro.C
 		InstitutionalRecoveryKey: &disk_encryption_configurations.InstitutionalRecoveryKey{},
 	}
 
-	created, resp, err := c.ClassicDiskEncryptionConfigurations.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.DiskEncryptionConfigurations.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -496,7 +495,7 @@ func exportClassicDiskEncryptionConfigurations(ctx context.Context, c *jamfpro.C
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicDiskEncryptionConfigurations.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.DiskEncryptionConfigurations.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -504,13 +503,13 @@ func exportClassicDiskEncryptionConfigurations(ctx context.Context, c *jamfpro.C
 		}
 	}()
 
-	_, resp, err = c.ClassicDiskEncryptionConfigurations.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.DiskEncryptionConfigurations.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicDiskEncryptionConfigurations.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.DiskEncryptionConfigurations.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicDiskEncryptionConfigurations.List(ctx)
+	listResp, resp, err := c.ClassicAPI.DiskEncryptionConfigurations.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -529,7 +528,7 @@ func exportClassicDockItems(ctx context.Context, c *jamfpro.Client) {
 		Contents: "",
 	}
 
-	created, resp, err := c.ClassicDockItems.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.DockItems.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -539,7 +538,7 @@ func exportClassicDockItems(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicDockItems.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.DockItems.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -547,13 +546,13 @@ func exportClassicDockItems(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicDockItems.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.DockItems.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicDockItems.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.DockItems.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicDockItems.List(ctx)
+	listResp, resp, err := c.ClassicAPI.DockItems.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.DockItems))
@@ -573,7 +572,7 @@ func exportClassicEbooks(ctx context.Context, c *jamfpro.Client) {
 		SelfService: ebooks.SubsetSelfService{},
 	}
 
-	created, resp, err := c.ClassicEbooks.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.Ebooks.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -583,7 +582,7 @@ func exportClassicEbooks(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicEbooks.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.Ebooks.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -591,13 +590,13 @@ func exportClassicEbooks(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicEbooks.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.Ebooks.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicEbooks.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.Ebooks.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicEbooks.List(ctx)
+	listResp, resp, err := c.ClassicAPI.Ebooks.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -624,7 +623,7 @@ func exportClassicIBeacons(ctx context.Context, c *jamfpro.Client) {
 		Minor: 1,
 	}
 
-	created, resp, err := c.ClassicIBeacons.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.IBeacons.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -634,7 +633,7 @@ func exportClassicIBeacons(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicIBeacons.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.IBeacons.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -642,13 +641,13 @@ func exportClassicIBeacons(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicIBeacons.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.IBeacons.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicIBeacons.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.IBeacons.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicIBeacons.List(ctx)
+	listResp, resp, err := c.ClassicAPI.IBeacons.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -671,7 +670,7 @@ func exportClassicLicensedSoftware(ctx context.Context, c *jamfpro.Client) {
 		},
 	}
 
-	created, resp, err := c.ClassicLicensedSoftware.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.LicensedSoftware.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -681,7 +680,7 @@ func exportClassicLicensedSoftware(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicLicensedSoftware.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.LicensedSoftware.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -689,13 +688,13 @@ func exportClassicLicensedSoftware(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicLicensedSoftware.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.LicensedSoftware.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicLicensedSoftware.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.LicensedSoftware.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicLicensedSoftware.List(ctx)
+	listResp, resp, err := c.ClassicAPI.LicensedSoftware.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -738,7 +737,7 @@ func exportClassicMobileDeviceGroups(ctx context.Context, c *jamfpro.Client) {
 		IsSmart: false,
 	}
 
-	created, resp, err := c.ClassicMobileDeviceGroups.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.MobileDeviceGroups.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -748,7 +747,7 @@ func exportClassicMobileDeviceGroups(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicMobileDeviceGroups.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.MobileDeviceGroups.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -756,13 +755,13 @@ func exportClassicMobileDeviceGroups(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicMobileDeviceGroups.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.MobileDeviceGroups.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicMobileDeviceGroups.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.MobileDeviceGroups.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicMobileDeviceGroups.List(ctx)
+	listResp, resp, err := c.ClassicAPI.MobileDeviceGroups.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -781,7 +780,7 @@ func exportClassicNetworkSegments(ctx context.Context, c *jamfpro.Client) {
 		DistributionPoint: "default",
 	}
 
-	created, resp, err := c.ClassicNetworkSegments.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.NetworkSegments.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -791,7 +790,7 @@ func exportClassicNetworkSegments(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicNetworkSegments.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.NetworkSegments.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -799,13 +798,13 @@ func exportClassicNetworkSegments(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicNetworkSegments.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.NetworkSegments.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicNetworkSegments.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.NetworkSegments.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicNetworkSegments.List(ctx)
+	listResp, resp, err := c.ClassicAPI.NetworkSegments.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -816,7 +815,7 @@ func exportClassicPatchExternalSources(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("\n=== Exporting Classic Patch External Sources (Skipped - Read-Only) ===")
 	log.Printf("  ⚠ Skipping - external sources are managed outside Jamf Pro")
 
-	listResp, resp, err := c.ClassicPatchExternalSources.List(ctx)
+	listResp, resp, err := c.ClassicAPI.PatchExternalSources.List(ctx)
 	exportResponse("patch_external_sources", "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -835,7 +834,7 @@ func exportClassicPolicies(ctx context.Context, c *jamfpro.Client) {
 		},
 	}
 
-	created, resp, err := c.ClassicPolicies.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.Policies.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -845,7 +844,7 @@ func exportClassicPolicies(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicPolicies.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.Policies.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -853,13 +852,13 @@ func exportClassicPolicies(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicPolicies.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.Policies.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicPolicies.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.Policies.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicPolicies.List(ctx)
+	listResp, resp, err := c.ClassicAPI.Policies.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -878,7 +877,7 @@ func exportClassicPrinters(ctx context.Context, c *jamfpro.Client) {
 		Location: "Test Location",
 	}
 
-	created, resp, err := c.ClassicPrinters.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.Printers.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -888,7 +887,7 @@ func exportClassicPrinters(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicPrinters.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.Printers.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -896,13 +895,13 @@ func exportClassicPrinters(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicPrinters.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.Printers.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicPrinters.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.Printers.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicPrinters.List(ctx)
+	listResp, resp, err := c.ClassicAPI.Printers.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -918,7 +917,7 @@ func exportClassicRemoveableMacAddresses(ctx context.Context, c *jamfpro.Client)
 		Name: testName,
 	}
 
-	created, resp, err := c.ClassicRemoveableMacAddresses.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.RemoveableMacAddresses.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -928,7 +927,7 @@ func exportClassicRemoveableMacAddresses(ctx context.Context, c *jamfpro.Client)
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicRemoveableMacAddresses.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.RemoveableMacAddresses.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -936,13 +935,13 @@ func exportClassicRemoveableMacAddresses(ctx context.Context, c *jamfpro.Client)
 		}
 	}()
 
-	_, resp, err = c.ClassicRemoveableMacAddresses.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.RemoveableMacAddresses.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicRemoveableMacAddresses.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.RemoveableMacAddresses.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicRemoveableMacAddresses.List(ctx)
+	listResp, resp, err := c.ClassicAPI.RemoveableMacAddresses.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -961,7 +960,7 @@ func exportClassicRestrictedSoftware(ctx context.Context, c *jamfpro.Client) {
 		},
 	}
 
-	created, resp, err := c.ClassicRestrictedSoftware.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.RestrictedSoftware.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -971,7 +970,7 @@ func exportClassicRestrictedSoftware(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicRestrictedSoftware.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.RestrictedSoftware.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -979,13 +978,13 @@ func exportClassicRestrictedSoftware(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicRestrictedSoftware.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.RestrictedSoftware.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicRestrictedSoftware.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.RestrictedSoftware.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicRestrictedSoftware.List(ctx)
+	listResp, resp, err := c.ClassicAPI.RestrictedSoftware.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -1001,7 +1000,7 @@ func exportClassicSites(ctx context.Context, c *jamfpro.Client) {
 		Name: testName,
 	}
 
-	created, resp, err := c.ClassicSites.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.Sites.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -1011,7 +1010,7 @@ func exportClassicSites(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicSites.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.Sites.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -1019,13 +1018,13 @@ func exportClassicSites(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicSites.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.Sites.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicSites.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.Sites.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicSites.List(ctx)
+	listResp, resp, err := c.ClassicAPI.Sites.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -1048,7 +1047,7 @@ func exportClassicUsers(ctx context.Context, c *jamfpro.Client) {
 		Email:    "sdkv2test@example.com",
 	}
 
-	created, resp, err := c.ClassicUsers.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.Users.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -1058,7 +1057,7 @@ func exportClassicUsers(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicUsers.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.Users.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -1066,13 +1065,13 @@ func exportClassicUsers(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicUsers.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.Users.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicUsers.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.Users.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicUsers.List(ctx)
+	listResp, resp, err := c.ClassicAPI.Users.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -1101,7 +1100,7 @@ func exportClassicSmartUserGroups(ctx context.Context, c *jamfpro.Client) {
 		},
 	}
 
-	created, resp, err := c.ClassicSmartUserGroups.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.SmartUserGroups.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -1111,7 +1110,7 @@ func exportClassicSmartUserGroups(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicSmartUserGroups.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.SmartUserGroups.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -1119,13 +1118,13 @@ func exportClassicSmartUserGroups(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicSmartUserGroups.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.SmartUserGroups.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicSmartUserGroups.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.SmartUserGroups.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicSmartUserGroups.List(ctx)
+	listResp, resp, err := c.ClassicAPI.SmartUserGroups.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -1141,7 +1140,7 @@ func exportClassicStaticUserGroups(ctx context.Context, c *jamfpro.Client) {
 		Name: testName,
 	}
 
-	created, resp, err := c.ClassicStaticUserGroups.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.StaticUserGroups.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -1151,7 +1150,7 @@ func exportClassicStaticUserGroups(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicStaticUserGroups.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.StaticUserGroups.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -1159,13 +1158,13 @@ func exportClassicStaticUserGroups(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicStaticUserGroups.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.StaticUserGroups.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicStaticUserGroups.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.StaticUserGroups.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicStaticUserGroups.List(ctx)
+	listResp, resp, err := c.ClassicAPI.StaticUserGroups.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -1184,7 +1183,7 @@ func exportClassicWebhooks(ctx context.Context, c *jamfpro.Client) {
 		Event:   "ComputerAdded",
 	}
 
-	created, resp, err := c.ClassicWebhooks.Create(ctx, createReq)
+	created, resp, err := c.ClassicAPI.Webhooks.Create(ctx, createReq)
 	if err != nil {
 		log.Printf("  ✗ Failed to create test resource: %v", err)
 		return
@@ -1194,7 +1193,7 @@ func exportClassicWebhooks(ctx context.Context, c *jamfpro.Client) {
 	log.Printf("  ✓ Created test resource with ID: %d", createdID)
 
 	defer func() {
-		_, err := c.ClassicWebhooks.DeleteByID(ctx, createdID)
+		_, err := c.ClassicAPI.Webhooks.DeleteByID(ctx, createdID)
 		if err != nil {
 			log.Printf("  ✗ Failed to delete test resource ID %d: %v", createdID, err)
 		} else {
@@ -1202,13 +1201,13 @@ func exportClassicWebhooks(ctx context.Context, c *jamfpro.Client) {
 		}
 	}()
 
-	_, resp, err = c.ClassicWebhooks.GetByID(ctx, createdID)
+	_, resp, err = c.ClassicAPI.Webhooks.GetByID(ctx, createdID)
 	exportResponse(serviceName, fmt.Sprintf("GetByID_%d", createdID), resp, err)
 
-	_, resp, err = c.ClassicWebhooks.GetByName(ctx, testName)
+	_, resp, err = c.ClassicAPI.Webhooks.GetByName(ctx, testName)
 	exportResponse(serviceName, fmt.Sprintf("GetByName_%s", testName), resp, err)
 
-	listResp, resp, err := c.ClassicWebhooks.List(ctx)
+	listResp, resp, err := c.ClassicAPI.Webhooks.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 	if err == nil && listResp != nil {
 		log.Printf("  ℹ List returned %d items", len(listResp.Results))
@@ -1223,16 +1222,16 @@ func exportClassicAccounts(ctx context.Context, c *jamfpro.Client) {
 	serviceName := "accounts"
 	log.Printf("\n=== Exporting Classic Accounts (Read-Only) ===")
 
-	listResp, resp, err := c.ClassicAccounts.List(ctx)
+	listResp, resp, err := c.ClassicAPI.Accounts.List(ctx)
 	exportResponse(serviceName, "List", resp, err)
 
 	if err == nil && listResp != nil && len(listResp.Users) > 0 {
 		id := listResp.Users[0].ID
-		_, resp, err := c.ClassicAccounts.GetByID(ctx, id)
+		_, resp, err := c.ClassicAPI.Accounts.GetByID(ctx, id)
 		exportResponse(serviceName, fmt.Sprintf("GetByID_%d", id), resp, err)
 
 		name := listResp.Users[0].Name
-		_, resp, err = c.ClassicAccounts.GetByName(ctx, name)
+		_, resp, err = c.ClassicAPI.Accounts.GetByName(ctx, name)
 		exportResponse(serviceName, fmt.Sprintf("GetByName_%s", name), resp, err)
 	}
 }
@@ -1241,7 +1240,7 @@ func exportClassicActivationCode(ctx context.Context, c *jamfpro.Client) {
 	serviceName := "activation_code"
 	log.Printf("\n=== Exporting Classic Activation Code (Read-Only) ===")
 
-	_, resp, err := c.ClassicActivationCode.GetActivationCode(ctx)
+	_, resp, err := c.ClassicAPI.ActivationCode.GetActivationCode(ctx)
 	exportResponse(serviceName, "GetActivationCode", resp, err)
 }
 
@@ -1249,7 +1248,7 @@ func exportClassicComputerInventoryCollection(ctx context.Context, c *jamfpro.Cl
 	serviceName := "computer_inventory_collection"
 	log.Printf("\n=== Exporting Classic Computer Inventory Collection (Read-Only) ===")
 
-	_, resp, err := c.ClassicComputerInventoryCollection.Get(ctx)
+	_, resp, err := c.ClassicAPI.ComputerInventoryCollection.Get(ctx)
 	exportResponse(serviceName, "Get", resp, err)
 }
 
@@ -1263,30 +1262,30 @@ func exportResponse(service, operation string, resp *resty.Response, err error) 
 		return
 	}
 
-	if resp == nil || len(resp.Body) == 0 {
+	if resp == nil || len(resp.Bytes()) == 0 {
 		log.Printf("  ✗ %s.%s: no response body", service, operation)
 		return
 	}
 
 	log.Printf("  ✓ %s.%s (status: %d, size: %d bytes)",
-		service, operation, resp.StatusCode, len(resp.Body))
+		service, operation, resp.StatusCode(), len(resp.Bytes()))
 
 	var prettyBody []byte
 	var ext string
 
-	if len(resp.Body) > 0 && resp.Body[0] == '{' {
+	if len(resp.Bytes()) > 0 && resp.Bytes()[0] == '{' {
 		ext = ".json"
-		var jsonData interface{}
-		if err := json.Unmarshal(resp.Body, &jsonData); err != nil {
+		var jsonData any
+		if err := json.Unmarshal(resp.Bytes(), &jsonData); err != nil {
 			log.Printf("  ⚠ Failed to parse JSON, saving raw: %v", err)
-			prettyBody = resp.Body
+			prettyBody = resp.Bytes()
 		} else {
 			prettyBody, _ = json.MarshalIndent(jsonData, "", "  ")
 		}
 	} else {
 		ext = ".xml"
 		var buf bytes.Buffer
-		decoder := xml.NewDecoder(bytes.NewReader(resp.Body))
+		decoder := xml.NewDecoder(bytes.NewReader(resp.Bytes()))
 		encoder := xml.NewEncoder(&buf)
 		encoder.Indent("", "  ")
 
@@ -1303,7 +1302,7 @@ func exportResponse(service, operation string, resp *resty.Response, err error) 
 		prettyBody = buf.Bytes()
 
 		if len(prettyBody) == 0 {
-			prettyBody = resp.Body
+			prettyBody = resp.Bytes()
 		}
 	}
 

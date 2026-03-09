@@ -6,7 +6,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/computer_prestages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/computer_prestages"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -14,7 +14,7 @@ import (
 // TestAcceptance_ComputerPrestages_minimal_config tests creating a prestage with minimal required configuration.
 func TestAcceptance_ComputerPrestages_minimal_config(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ComputerPrestages
+	svc := acc.Client.JamfProAPI.ComputerPrestages
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-prestage-minimal")
 
@@ -109,7 +109,7 @@ func TestAcceptance_ComputerPrestages_minimal_config(t *testing.T) {
 // TestAcceptance_ComputerPrestages_recovery_lock_scenario tests prestage with recovery lock enabled.
 func TestAcceptance_ComputerPrestages_recovery_lock_scenario(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ComputerPrestages
+	svc := acc.Client.JamfProAPI.ComputerPrestages
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-prestage-recovery")
 
@@ -201,7 +201,7 @@ func TestAcceptance_ComputerPrestages_recovery_lock_scenario(t *testing.T) {
 // TestAcceptance_ComputerPrestages_account_settings_scenario tests prestage with admin account enabled.
 func TestAcceptance_ComputerPrestages_account_settings_scenario(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ComputerPrestages
+	svc := acc.Client.JamfProAPI.ComputerPrestages
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-prestage-account")
 
@@ -298,7 +298,7 @@ func TestAcceptance_ComputerPrestages_account_settings_scenario(t *testing.T) {
 // TestAcceptance_ComputerPrestages_maximal_config tests creating a prestage with maximal configuration.
 func TestAcceptance_ComputerPrestages_maximal_config(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ComputerPrestages
+	svc := acc.Client.JamfProAPI.ComputerPrestages
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-prestage-maximal")
 
@@ -426,7 +426,7 @@ func TestAcceptance_ComputerPrestages_maximal_config(t *testing.T) {
 // TestAcceptance_ComputerPrestages_validation_errors tests validation of enum fields.
 func TestAcceptance_ComputerPrestages_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.ComputerPrestages
+	svc := acc.Client.JamfProAPI.ComputerPrestages
 	ctx := context.Background()
 
 	t.Run("InvalidRecoveryLockPasswordType", func(t *testing.T) {

@@ -12,7 +12,7 @@ import (
 func TestAcceptance_ServiceDiscoveryEnrollment_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 	acc.GreaterThanJamfProVersion(t, 11, 25, 0)
-	svc := acc.Client.ServiceDiscoveryEnrollment
+	svc := acc.Client.JamfProAPI.ServiceDiscoveryEnrollment
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV1(ctx)
@@ -25,7 +25,7 @@ func TestAcceptance_ServiceDiscoveryEnrollment_get_v1(t *testing.T) {
 func TestAcceptance_ServiceDiscoveryEnrollment_update_v1(t *testing.T) {
 	acc.RequireClient(t)
 	acc.GreaterThanJamfProVersion(t, 11, 25, 0)
-	svc := acc.Client.ServiceDiscoveryEnrollment
+	svc := acc.Client.JamfProAPI.ServiceDiscoveryEnrollment
 	ctx := context.Background()
 
 	current, _, err := svc.GetV1(ctx)

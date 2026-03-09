@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mobile_device_prestages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mobile_device_prestages"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -25,7 +24,7 @@ func main() {
 	prestageID := "1" // Replace with the desired prestage ID
 
 	// First, get the current prestage to retrieve the versionLock
-	current, _, err := jamfClient.MobileDevicePrestages.GetByIDV3(context.Background(), prestageID)
+	current, _, err := jamfClient.JamfProAPI.MobileDevicePrestages.GetByIDV3(context.Background(), prestageID)
 	if err != nil {
 		fmt.Printf("Error getting prestage: %v\n", err)
 		return
@@ -86,7 +85,7 @@ func main() {
 		VersionLock:           current.VersionLock, // Important: include versionLock for optimistic locking
 	}
 
-	result, _, err := jamfClient.MobileDevicePrestages.UpdateByIDV3(context.Background(), prestageID, updateReq)
+	result, _, err := jamfClient.JamfProAPI.MobileDevicePrestages.UpdateByIDV3(context.Background(), prestageID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

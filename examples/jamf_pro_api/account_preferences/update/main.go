@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/account_preferences"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/account_preferences"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -52,7 +51,7 @@ func main() {
 		UserEbookSearchMethod:                "CONTAINS",
 	}
 
-	updated, _, err := jamfClient.AccountPreferences.UpdateV3(context.Background(), &newSettings)
+	updated, _, err := jamfClient.JamfProAPI.AccountPreferences.UpdateV3(context.Background(), &newSettings)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -6,8 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/network_segments"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/network_segments"
 )
 
 func main() {
@@ -15,7 +14,7 @@ func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
 	// Initialize the Jamf Pro client with the HTTP client configuration
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -31,7 +30,7 @@ func main() {
 		EndingAddress:   "10.10.10.255",
 	}
 
-	createdSegment, _, err := jamfClient.ClassicNetworkSegments.Create(context.Background(), newSegment)
+	createdSegment, _, err := jamfClient.ClassicAPI.NetworkSegments.Create(context.Background(), newSegment)
 	if err != nil {
 		fmt.Printf("Error creating network segment: %v\n", err)
 		return

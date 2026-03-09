@@ -18,9 +18,9 @@ func main() {
 	ctx := context.Background()
 
 	// Get current LAPS settings
-	settings, resp, err := client.LocalAdminPassword.GetSettingsV2(ctx)
+	settings, resp, err := client.JamfProAPI.LocalAdminPassword.GetSettingsV2(ctx)
 	if err != nil {
-		log.Fatalf("Failed to get LAPS settings: %v (HTTP %d)", err, resp.StatusCode)
+		log.Fatalf("Failed to get LAPS settings: %v (HTTP %d)", err, resp.StatusCode())
 	}
 
 	fmt.Printf("LAPS Settings:\n")

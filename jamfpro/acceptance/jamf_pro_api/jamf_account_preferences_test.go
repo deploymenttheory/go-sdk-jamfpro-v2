@@ -36,7 +36,7 @@ import (
 func TestAcceptance_JamfAccountPreferences_get_v3(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfAccountPreferences
+	svc := acc.Client.JamfProAPI.JamfAccountPreferences
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Getting Jamf account preferences")
@@ -56,7 +56,7 @@ func TestAcceptance_JamfAccountPreferences_get_v3(t *testing.T) {
 func TestAcceptance_JamfAccountPreferences_get_and_update_v3(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.JamfAccountPreferences
+	svc := acc.Client.JamfProAPI.JamfAccountPreferences
 	ctx := context.Background()
 
 	// 1. Get current

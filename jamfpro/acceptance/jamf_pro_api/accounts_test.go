@@ -16,7 +16,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 
 	// Test 1: List all accounts (no filter)
 	t.Run("ListAll", func(t *testing.T) {
-		result, resp, err := client.Accounts.ListV1(context.Background(), nil)
+		result, resp, err := client.JamfProAPI.Accounts.ListV1(context.Background(), nil)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
@@ -31,7 +31,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 			"filter": `accountStatus==Enabled`,
 		}
 
-		result, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.Accounts.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
@@ -50,7 +50,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 			"filter": `privilegeLevel==ADMINISTRATOR`,
 		}
 
-		result, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.Accounts.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -69,7 +69,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 			"sort":   "username:asc",
 		}
 
-		result, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.Accounts.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -91,7 +91,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 			"sort":      "username:asc",
 		}
 
-		result, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.Accounts.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -105,7 +105,7 @@ func TestAcceptance_Accounts_list_v1(t *testing.T) {
 			"sort": "realname:desc",
 		}
 
-		result, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.Accounts.ListV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -133,7 +133,7 @@ func TestAcceptance_Accounts_crud(t *testing.T) {
 		AccountType:    "DEFAULT",
 	}
 
-	created, resp, err := client.Accounts.CreateV1(context.Background(), createReq)
+	created, resp, err := client.JamfProAPI.Accounts.CreateV1(context.Background(), createReq)
 	require.NoError(t, err)
 	require.NotNil(t, created)
 	assert.Equal(t, 201, resp.StatusCode())
@@ -142,14 +142,14 @@ func TestAcceptance_Accounts_crud(t *testing.T) {
 
 	// Clean up
 	defer func() {
-		_, err := client.Accounts.DeleteByIDV1(context.Background(), created.ID)
+		_, err := client.JamfProAPI.Accounts.DeleteByIDV1(context.Background(), created.ID)
 		if err != nil {
 			t.Logf("Warning: Failed to delete test account: %v", err)
 		}
 	}()
 
 	// Get by ID
-	retrieved, resp, err := client.Accounts.GetByIDV1(context.Background(), created.ID)
+	retrieved, resp, err := client.JamfProAPI.Accounts.GetByIDV1(context.Background(), created.ID)
 	require.NoError(t, err)
 	require.NotNil(t, retrieved)
 	assert.Equal(t, 200, resp.StatusCode())
@@ -160,7 +160,7 @@ func TestAcceptance_Accounts_crud(t *testing.T) {
 	rsqlQuery := map[string]string{
 		"filter": `username=="testuser_acceptance"`,
 	}
-	listResult, resp, err := client.Accounts.ListV1(context.Background(), rsqlQuery)
+	listResult, resp, err := client.JamfProAPI.Accounts.ListV1(context.Background(), rsqlQuery)
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 	assert.GreaterOrEqual(t, len(listResult.Results), 1, "Created account should appear in filtered list")

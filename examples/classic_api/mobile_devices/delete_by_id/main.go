@@ -6,13 +6,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -23,11 +22,11 @@ func main() {
 
 	deviceID := "1" // Replace with the desired mobile device ID to delete
 
-	resp, err := jamfClient.ClassicMobileDevices.DeleteByID(context.Background(), deviceID)
+	resp, err := jamfClient.ClassicAPI.MobileDevices.DeleteByID(context.Background(), deviceID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("Mobile device ID %s deleted. Status: %d\n", deviceID, resp.StatusCode)
+	fmt.Printf("Mobile device ID %s deleted. Status: %d\n", deviceID, resp.StatusCode())
 }

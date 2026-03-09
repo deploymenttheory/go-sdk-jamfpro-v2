@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/directory_bindings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/directory_bindings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -22,7 +22,7 @@ import (
 func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicDirectoryBindings
+	svc := acc.Client.ClassicAPI.DirectoryBindings
 	ctx := context.Background()
 
 	// ------------------------------------------------------------------
@@ -48,7 +48,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	require.NoError(t, err, "CreateDirectoryBinding should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created directory binding ID should be a positive integer")
 
 	bindingID := created.ID
@@ -72,7 +72,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "ListDirectoryBindings should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -97,7 +97,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, bindingID)
 	require.NoError(t, err, "GetDirectoryBindingByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, bindingID, fetched.ID)
 	assert.Equal(t, bindingName, fetched.Name)
 	acc.LogTestSuccess(t, "GetByID: ID=%d name=%q", fetched.ID, fetched.Name)
@@ -116,7 +116,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	} else {
 		require.NoError(t, err, "GetDirectoryBindingByName should not return an error")
 		require.NotNil(t, fetchedByName)
-		assert.Equal(t, 200, fetchByNameResp.StatusCode)
+		assert.Equal(t, 200, fetchByNameResp.StatusCode())
 		assert.Equal(t, bindingID, fetchedByName.ID)
 		assert.Equal(t, bindingName, fetchedByName.Name)
 		acc.LogTestSuccess(t, "GetByName: ID=%d name=%q", fetchedByName.ID, fetchedByName.Name)
@@ -143,7 +143,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	updated, updateResp, err := svc.UpdateByID(ctx5, bindingID, updateReq)
 	require.NoError(t, err, "UpdateByID should not return an error")
 	require.NotNil(t, updated)
-	assert.Contains(t, []int{200, 201}, updateResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, updateResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByID: status=%d", updateResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -166,7 +166,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
 	require.NoError(t, err, "UpdateByName should not return an error")
 	require.NotNil(t, reverted)
-	assert.Contains(t, []int{200, 201}, revertResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, revertResp.StatusCode(), "expected 200 or 201")
 	acc.LogTestSuccess(t, "UpdateByName: status=%d", revertResp.StatusCode())
 
 	// ------------------------------------------------------------------
@@ -180,7 +180,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	verified, verifyResp, err := svc.GetByID(ctx7, bindingID)
 	require.NoError(t, err)
 	require.NotNil(t, verified)
-	assert.Equal(t, 200, verifyResp.StatusCode)
+	assert.Equal(t, 200, verifyResp.StatusCode())
 	assert.Equal(t, bindingName, verified.Name, "name should reflect the revert")
 	acc.LogTestSuccess(t, "Name revert verified: %q", verified.Name)
 
@@ -195,7 +195,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx8, bindingID)
 	require.NoError(t, err, "DeleteDirectoryBindingByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Directory binding ID=%d deleted", bindingID)
 }
 
@@ -206,7 +206,7 @@ func TestAcceptance_DirectoryBindings_lifecycle(t *testing.T) {
 func TestAcceptance_DirectoryBindings_delete_by_name(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicDirectoryBindings
+	svc := acc.Client.ClassicAPI.DirectoryBindings
 	ctx := context.Background()
 
 	bindingName := acc.UniqueName("sdkv2_acc_acc-test-dirbinding-dbn")
@@ -246,7 +246,7 @@ func TestAcceptance_DirectoryBindings_delete_by_name(t *testing.T) {
 	} else {
 		require.NoError(t, err, "DeleteByName should not return an error")
 		require.NotNil(t, deleteResp)
-		assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+		assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 		acc.LogTestSuccess(t, "Directory binding %q deleted by name", bindingName)
 	}
 }
@@ -258,7 +258,7 @@ func TestAcceptance_DirectoryBindings_delete_by_name(t *testing.T) {
 func TestAcceptance_DirectoryBindings_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicDirectoryBindings
+	svc := acc.Client.ClassicAPI.DirectoryBindings
 
 	t.Run("GetDirectoryBindingByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

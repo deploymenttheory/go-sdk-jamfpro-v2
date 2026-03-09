@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/api_roles"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/api_roles"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -70,7 +70,7 @@ import (
 func TestAcceptance_APIRoles_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.APIRoles
+	svc := acc.Client.JamfProAPI.ApiRoles
 
 	t.Run("GetByIDV1_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetByIDV1(context.Background(), "")
@@ -108,7 +108,7 @@ func TestAcceptance_APIRoles_validation_errors(t *testing.T) {
 
 func TestAcceptance_APIRoles_list_v1(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.APIRoles
+	svc := acc.Client.JamfProAPI.ApiRoles
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx, map[string]string{"page": "0", "page-size": "100"})
@@ -121,7 +121,7 @@ func TestAcceptance_APIRoles_list_v1(t *testing.T) {
 
 func TestAcceptance_APIRoles_list_with_rsql_filter(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.APIRoles
+	svc := acc.Client.JamfProAPI.ApiRoles
 	ctx := context.Background()
 
 	name := fmt.Sprintf("acc-rsql-role-%d", time.Now().UnixMilli())
@@ -152,7 +152,7 @@ func TestAcceptance_APIRoles_list_with_rsql_filter(t *testing.T) {
 	list, listResp, err := svc.ListV1(ctx, rsqlQuery)
 	require.NoError(t, err)
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 
 	found := false
 	for _, role := range list.Results {
@@ -168,7 +168,7 @@ func TestAcceptance_APIRoles_list_with_rsql_filter(t *testing.T) {
 
 func TestAcceptance_APIRoles_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.APIRoles
+	svc := acc.Client.JamfProAPI.ApiRoles
 	ctx := context.Background()
 
 	name := fmt.Sprintf("acc-api-role-%d", time.Now().UnixMilli())
@@ -180,7 +180,7 @@ func TestAcceptance_APIRoles_lifecycle(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode)
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode())
 	assert.NotEmpty(t, created.ID)
 
 	roleID := created.ID
@@ -205,10 +205,10 @@ func TestAcceptance_APIRoles_lifecycle(t *testing.T) {
 	_, updateResp, err := svc.UpdateByIDV1(ctx, roleID, updateReq)
 	require.NoError(t, err)
 	require.NotNil(t, updateResp)
-	assert.Contains(t, []int{200, 202}, updateResp.StatusCode)
+	assert.Contains(t, []int{200, 202}, updateResp.StatusCode())
 
 	delResp, err := svc.DeleteByIDV1(ctx, roleID)
 	require.NoError(t, err)
 	require.NotNil(t, delResp)
-	assert.Equal(t, 204, delResp.StatusCode)
+	assert.Equal(t, 204, delResp.StatusCode())
 }

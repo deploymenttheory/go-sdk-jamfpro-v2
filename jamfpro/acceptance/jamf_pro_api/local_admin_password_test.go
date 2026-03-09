@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/local_admin_password"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/local_admin_password"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -65,7 +65,7 @@ import (
 func TestAcceptance_LocalAdminPassword_settings_get_and_update(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.LocalAdminPassword
+	svc := acc.Client.JamfProAPI.LocalAdminPassword
 	ctx := context.Background()
 
 	// 1. Get current settings
@@ -121,7 +121,7 @@ func TestAcceptance_LocalAdminPassword_settings_get_and_update(t *testing.T) {
 func TestAcceptance_LocalAdminPassword_pending_rotations(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.LocalAdminPassword
+	svc := acc.Client.JamfProAPI.LocalAdminPassword
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "List", "Getting pending LAPS rotations")
@@ -148,7 +148,7 @@ func TestAcceptance_LocalAdminPassword_pending_rotations(t *testing.T) {
 func TestAcceptance_LocalAdminPassword_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.LocalAdminPassword
+	svc := acc.Client.JamfProAPI.LocalAdminPassword
 
 	t.Run("UpdateSettingsV2_NilRequest", func(t *testing.T) {
 		_, err := svc.UpdateSettingsV2(context.Background(), nil)

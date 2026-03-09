@@ -7,13 +7,12 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
 	configFilePath := "/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json"
 
-	authConfig, err := client.LoadAuthConfigFromFile(configFilePath)
+	authConfig, err := jamfpro.LoadAuthConfigFromFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -23,7 +22,7 @@ func main() {
 	}
 
 	licensedSoftwareName := "Sample Licensed Software" // Replace with the desired licensed software name
-	ls, _, err := jamfClient.ClassicLicensedSoftware.GetByName(context.Background(), licensedSoftwareName)
+	ls, _, err := jamfClient.ClassicAPI.LicensedSoftware.GetByName(context.Background(), licensedSoftwareName)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

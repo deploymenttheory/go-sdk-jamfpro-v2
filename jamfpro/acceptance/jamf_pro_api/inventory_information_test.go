@@ -42,7 +42,7 @@ import (
 func TestAcceptance_InventoryInformation_get_v1(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.InventoryInformation
+	svc := acc.Client.JamfProAPI.InventoryInformation
 	ctx := context.Background()
 
 	acc.LogTestStage(t, "Get", "Getting inventory information")

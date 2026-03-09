@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/activation_code"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/activation_code"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -23,7 +23,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 		noteReq := &activation_code.HistoryNoteRequest{
 			Note: "Acceptance test history note for activation code",
 		}
-		result, resp, err := client.ActivationCode.AddHistoryNoteV1(context.Background(), noteReq)
+		result, resp, err := client.JamfProAPI.ActivationCode.AddHistoryNoteV1(context.Background(), noteReq)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
@@ -34,7 +34,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 
 	// Test 1: Get all history (no filter)
 	t.Run("GetAll", func(t *testing.T) {
-		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), nil)
+		result, resp, err := client.JamfProAPI.ActivationCode.GetHistoryV1(context.Background(), nil)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
@@ -49,7 +49,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 			"filter": `username==admin`,
 		}
 
-		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		require.NotNil(t, resp)
@@ -68,7 +68,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 			"filter": `details==enabled`,
 		}
 
-		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -87,7 +87,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 			"sort":   "date:desc",
 		}
 
-		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -108,7 +108,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 			"sort":      "date:desc",
 		}
 
-		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -122,7 +122,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 			"sort": "date:asc",
 		}
 
-		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())
@@ -135,7 +135,7 @@ func TestAcceptance_ActivationCode_get_history_v1(t *testing.T) {
 			"sort": "username:asc,date:desc",
 		}
 
-		result, resp, err := client.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
+		result, resp, err := client.JamfProAPI.ActivationCode.GetHistoryV1(context.Background(), rsqlQuery)
 		require.NoError(t, err)
 		require.NotNil(t, result)
 		assert.Equal(t, 200, resp.StatusCode())

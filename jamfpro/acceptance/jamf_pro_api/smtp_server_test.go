@@ -11,7 +11,7 @@ import (
 
 func TestAcceptance_SMTPServer_get_v2(t *testing.T) {
 	acc.RequireClient(t)
-	svc := acc.Client.SMTPServer
+	svc := acc.Client.JamfProAPI.SmtpServer
 	ctx := context.Background()
 
 	result, resp, err := svc.GetV2(ctx)

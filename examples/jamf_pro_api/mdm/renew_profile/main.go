@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/mdm"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mdm"
 )
 
 func main() {
@@ -36,12 +36,12 @@ func main() {
 		UDIDs: udids,
 	}
 
-	result, resp, err := client.MDM.RenewProfile(ctx, req)
+	result, resp, err := client.JamfProAPI.Mdm.RenewProfile(ctx, req)
 	if err != nil {
-		log.Fatalf("Failed to renew MDM profile: %v (HTTP %d)", err, resp.StatusCode)
+		log.Fatalf("Failed to renew MDM profile: %v (HTTP %d)", err, resp.StatusCode())
 	}
 
-	fmt.Printf("MDM profile renewal completed (HTTP %d)\n", resp.StatusCode)
+	fmt.Printf("MDM profile renewal completed (HTTP %d)\n", resp.StatusCode())
 	if len(result.UDIDsNotProcessed.UDIDs) > 0 {
 		fmt.Printf("UDIDs not processed: %v\n", result.UDIDsNotProcessed.UDIDs)
 	} else {

@@ -19,12 +19,12 @@ func main() {
 	// Replace with actual enrollment customization ID
 	customizationID := "1"
 
-	customization, resp, err := client.EnrollmentCustomizations.GetByIDV2(ctx, customizationID)
+	customization, resp, err := client.JamfProAPI.EnrollmentCustomizations.GetByIDV2(ctx, customizationID)
 	if err != nil {
 		log.Fatalf("Error getting enrollment customization: %v", err)
 	}
 
-	fmt.Printf("Status: %d\n", resp.StatusCode)
+	fmt.Printf("Status: %d\n", resp.StatusCode())
 	fmt.Printf("ID: %s\n", customization.ID)
 	fmt.Printf("Display Name: %s\n", customization.DisplayName)
 	fmt.Printf("Description: %s\n", customization.Description)

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/classic_api/allowed_file_extensions"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/allowed_file_extensions"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -22,7 +22,7 @@ import (
 func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicAllowedFileExtensions
+	svc := acc.Client.ClassicAPI.AllowedFileExtensions
 	ctx := context.Background()
 
 	// Use a unique extension suffix so we don't conflict with existing entries.
@@ -45,7 +45,7 @@ func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 	require.NoError(t, err, "Create should not return an error")
 	require.NotNil(t, created)
 	require.NotNil(t, createResp)
-	assert.Contains(t, []int{200, 201}, createResp.StatusCode, "expected 200 or 201")
+	assert.Contains(t, []int{200, 201}, createResp.StatusCode(), "expected 200 or 201")
 	assert.Positive(t, created.ID, "created ID should be a positive integer")
 	// Classic API create response may not include extension in body; we verify extension via GetByID below
 	if created.Extension != "" {
@@ -73,7 +73,7 @@ func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 	list, listResp, err := svc.List(ctx2)
 	require.NoError(t, err, "List should not return an error")
 	require.NotNil(t, list)
-	assert.Equal(t, 200, listResp.StatusCode)
+	assert.Equal(t, 200, listResp.StatusCode())
 	assert.Positive(t, list.Size, "size should be positive")
 
 	found := false
@@ -98,7 +98,7 @@ func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 	fetched, fetchResp, err := svc.GetByID(ctx3, extID)
 	require.NoError(t, err, "GetByID should not return an error")
 	require.NotNil(t, fetched)
-	assert.Equal(t, 200, fetchResp.StatusCode)
+	assert.Equal(t, 200, fetchResp.StatusCode())
 	assert.Equal(t, extID, fetched.ID)
 	assert.Equal(t, extension, fetched.Extension)
 	acc.LogTestSuccess(t, "GetByID: ID=%d extension=%q", fetched.ID, fetched.Extension)
@@ -114,7 +114,7 @@ func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 	fetchedByExt, fetchByExtResp, err := svc.GetByExtension(ctx4, extension)
 	require.NoError(t, err, "GetByExtension should not return an error")
 	require.NotNil(t, fetchedByExt)
-	assert.Equal(t, 200, fetchByExtResp.StatusCode)
+	assert.Equal(t, 200, fetchByExtResp.StatusCode())
 	assert.Equal(t, extID, fetchedByExt.ID)
 	assert.Equal(t, extension, fetchedByExt.Extension)
 	acc.LogTestSuccess(t, "GetByExtension: ID=%d extension=%q", fetchedByExt.ID, fetchedByExt.Extension)
@@ -130,7 +130,7 @@ func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 	deleteResp, err := svc.DeleteByID(ctx5, extID)
 	require.NoError(t, err, "DeleteByID should not return an error")
 	require.NotNil(t, deleteResp)
-	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode)
+	assert.Contains(t, []int{200, 204}, deleteResp.StatusCode())
 	acc.LogTestSuccess(t, "Allowed file extension ID=%d deleted", extID)
 }
 
@@ -142,7 +142,7 @@ func TestAcceptance_AllowedFileExtensions_lifecycle(t *testing.T) {
 func TestAcceptance_AllowedFileExtensions_validation_errors(t *testing.T) {
 	acc.RequireClient(t)
 
-	svc := acc.Client.ClassicAllowedFileExtensions
+	svc := acc.Client.ClassicAPI.AllowedFileExtensions
 
 	t.Run("GetByID_ZeroID", func(t *testing.T) {
 		_, _, err := svc.GetByID(context.Background(), 0)

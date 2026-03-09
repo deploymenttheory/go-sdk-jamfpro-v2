@@ -6,11 +6,10 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	authConfig := client.AuthConfigFromEnv()
+	authConfig := jamfpro.AuthConfigFromEnv()
 	if err := authConfig.Validate(); err != nil {
 		log.Fatalf("Invalid auth config: %v", err)
 	}
@@ -29,12 +28,12 @@ func main() {
 		"sort":      "date:desc",
 	}
 
-	history, resp, err := jamfClient.DeviceEnrollments.GetHistoryV1(ctx, enrollmentID, rsqlQuery)
+	history, resp, err := jamfClient.JamfProAPI.DeviceEnrollments.GetHistoryV1(ctx, enrollmentID, rsqlQuery)
 	if err != nil {
 		log.Fatalf("Failed to get device enrollment history: %v", err)
 	}
 
-	fmt.Printf("Status Code: %d\n", resp.StatusCode)
+	fmt.Printf("Status Code: %d\n", resp.StatusCode())
 	fmt.Printf("Total Count: %d\n", history.TotalCount)
 	fmt.Printf("History Entries:\n")
 	for _, entry := range history.Results {
