@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -18,7 +19,7 @@ import (
 type Transport struct {
 	client        *resty.Client
 	logger        *zap.Logger
-	authConfig    *AuthConfig
+	authConfig    *config.AuthConfig
 	holder        *tokenHolder
 	BaseURL       string
 	globalHeaders map[string]string
@@ -45,7 +46,7 @@ type Transport struct {
 //
 // Jamf Pro does not emit rate-limit HTTP headers. Throttling is inferred
 // from observed response times per Jamf scalability best practices.
-func NewTransport(authConfig *AuthConfig, options ...ClientOption) (*Transport, error) {
+func NewTransport(authConfig *config.AuthConfig, options ...ClientOption) (*Transport, error) {
 	logger, err := zap.NewProduction()
 	if err != nil {
 		return nil, fmt.Errorf("failed to create logger: %w", err)

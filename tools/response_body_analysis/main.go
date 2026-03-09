@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/accounts_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/advanced_computer_searches"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/advanced_user_searches"
@@ -48,7 +47,7 @@ const (
 )
 
 func main() {
-	authConfig := client.AuthConfigFromEnv()
+	authConfig := jamfpro.AuthConfigFromEnv()
 	jamfClient, err := jamfpro.NewClient(authConfig)
 	if err != nil {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)

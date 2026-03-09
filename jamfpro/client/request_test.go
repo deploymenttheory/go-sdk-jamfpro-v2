@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	"context"
 	"testing"
 
@@ -11,7 +12,7 @@ import (
 func TestTransport_Get_NilQuery_NilHeaders(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -25,7 +26,7 @@ func TestTransport_Get_NilQuery_NilHeaders(t *testing.T) {
 func TestTransport_Get_EmptyQueryValuesSkipped(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -39,7 +40,7 @@ func TestTransport_Get_EmptyQueryValuesSkipped(t *testing.T) {
 func TestTransport_Post_NilBody(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -53,7 +54,7 @@ func TestTransport_Post_NilBody(t *testing.T) {
 func TestTransport_PostForm_NilFormData(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -67,7 +68,7 @@ func TestTransport_PostForm_NilFormData(t *testing.T) {
 func TestTransport_PostMultipart_NoFile(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -81,7 +82,7 @@ func TestTransport_PostMultipart_NoFile(t *testing.T) {
 func TestTransport_Delete_NilrsqlQuery(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -94,7 +95,7 @@ func TestTransport_Delete_NilrsqlQuery(t *testing.T) {
 func TestTransport_GetBytes_WithRsqlQuery(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -108,7 +109,7 @@ func TestTransport_GetBytes_WithRsqlQuery(t *testing.T) {
 func TestTransport_Put_NilBody(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -122,7 +123,7 @@ func TestTransport_Put_NilBody(t *testing.T) {
 func TestTransport_Patch_NilBody(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -136,7 +137,7 @@ func TestTransport_Patch_NilBody(t *testing.T) {
 func TestTransport_DeleteWithBody_NilBody(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()

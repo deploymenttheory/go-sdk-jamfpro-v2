@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,7 +19,7 @@ func TestDefaultOTelConfig(t *testing.T) {
 func TestTransport_EnableTracing(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 

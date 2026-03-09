@@ -7,11 +7,10 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-	authConfig, err := client.LoadAuthConfigFromFile("/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json")
+	authConfig, err := jamfpro.LoadAuthConfigFromFile("/Users/dafyddwatkins/localtesting/jamfpro/clientconfig.json")
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}

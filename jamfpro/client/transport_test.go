@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -59,9 +60,9 @@ func TestNewTransport(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 
-	cfg := &AuthConfig{
+	cfg := &config.AuthConfig{
 		InstanceDomain: srv.URL,
-		AuthMethod:     AuthMethodOAuth2,
+		AuthMethod:     config.AuthMethodOAuth2,
 		ClientID:       "cid",
 		ClientSecret:   "secret",
 	}
@@ -81,7 +82,7 @@ func TestNewTransport_NilConfig(t *testing.T) {
 }
 
 func TestNewTransport_EmptyInstanceDomain(t *testing.T) {
-	cfg := &AuthConfig{InstanceDomain: "", AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: "", AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	_, err := NewTransport(cfg)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "instance domain")
@@ -90,7 +91,7 @@ func TestNewTransport_EmptyInstanceDomain(t *testing.T) {
 func TestNewTransport_TrimTrailingSlash(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL + "/", AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL + "/", AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	assert.Equal(t, srv.URL, tr.BaseURL)
@@ -99,7 +100,7 @@ func TestNewTransport_TrimTrailingSlash(t *testing.T) {
 func TestTransport_Get_Post_Put_Delete(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -137,7 +138,7 @@ func TestTransport_Get_Post_Put_Delete(t *testing.T) {
 func TestTransport_PostWithQuery_PostForm_GetBytes(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -160,7 +161,7 @@ func TestTransport_PostWithQuery_PostForm_GetBytes(t *testing.T) {
 func TestTransport_PostMultipart(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -193,7 +194,7 @@ func TestTransport_GetBytes_ErrorResponse(t *testing.T) {
 		_, _ = w.Write([]byte(`{}`))
 	}))
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -226,7 +227,7 @@ func TestTransport_ExecuteRequest_ConcurrencyLimit(t *testing.T) {
 	}))
 	defer srv.Close()
 	close(block)
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg, WithMaxConcurrentRequests(1))
 	require.NoError(t, err)
 
@@ -259,7 +260,7 @@ func TestTransport_ValidateResponse_EmptyBody(t *testing.T) {
 		w.WriteHeader(http.StatusNotFound)
 	}))
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -286,7 +287,7 @@ func TestTransport_ValidateResponse_NonJSONWarn(t *testing.T) {
 		w.WriteHeader(http.StatusNotFound)
 	}))
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -300,7 +301,7 @@ func TestTransport_ValidateResponse_NonJSONWarn(t *testing.T) {
 func TestTransport_WithTotalRetryDuration_Request(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg, WithTotalRetryDuration(30*time.Second))
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -313,7 +314,7 @@ func TestTransport_WithTotalRetryDuration_Request(t *testing.T) {
 func TestTransport_RequestWithMandatoryDelay(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg, WithMandatoryRequestDelay(time.Millisecond))
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -326,7 +327,7 @@ func TestTransport_RequestWithMandatoryDelay(t *testing.T) {
 func TestTransport_ExecuteRequest_ContextCanceled(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx, cancel := context.WithCancel(context.Background())
@@ -361,7 +362,7 @@ func TestTransport_AdaptiveDelay(t *testing.T) {
 		_, _ = w.Write([]byte(`{}`))
 	}))
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -384,7 +385,7 @@ func TestTransport_ExecuteRequest_ServerError(t *testing.T) {
 		_, _ = w.Write([]byte(`{"message":"internal"}`))
 	}))
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -409,7 +410,7 @@ func TestTransport_DeprecationHeader(t *testing.T) {
 		_, _ = w.Write([]byte(`{}`))
 	}))
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	ctx := context.Background()
@@ -423,7 +424,7 @@ func TestTransport_DeprecationHeader(t *testing.T) {
 func TestTransport_InvalidateToken(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	err = tr.InvalidateToken()
@@ -433,7 +434,7 @@ func TestTransport_InvalidateToken(t *testing.T) {
 func TestTransport_KeepAliveToken(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg)
 	require.NoError(t, err)
 	err = tr.KeepAliveToken()
@@ -443,7 +444,7 @@ func TestTransport_KeepAliveToken(t *testing.T) {
 func TestTransport_ApplyHeaders(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
-	cfg := &AuthConfig{InstanceDomain: srv.URL, AuthMethod: AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: config.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
 	tr, err := NewTransport(cfg, WithGlobalHeader("X-Global", "global-val"))
 	require.NoError(t, err)
 	ctx := context.Background()
