@@ -116,7 +116,7 @@ func (s *InventoryPreload) CreateFromCSV(ctx context.Context, fileReader io.Read
 	}
 	headers := map[string]string{
 		"Accept":       constants.ApplicationJSON,
-		"Content-Type": "multipart/form-data",
+		"Content-Type": constants.MultipartFormData,
 	}
 	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/csv"
 	var result CreateFromCSVResponse
@@ -165,7 +165,7 @@ func (s *InventoryPreload) ValidateCSV(ctx context.Context, fileReader io.Reader
 	}
 	headers := map[string]string{
 		"Accept":       constants.ApplicationJSON,
-		"Content-Type": "multipart/form-data",
+		"Content-Type": constants.MultipartFormData,
 	}
 	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/csv-validate"
 	var result CSVValidationSuccess

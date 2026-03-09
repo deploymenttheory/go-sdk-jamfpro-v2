@@ -46,7 +46,10 @@ func (s *SelfServiceBrandingUpload) Upload(ctx context.Context, fileReader io.Re
 	if fileName == "" {
 		fileName = "branding.png"
 	}
-	headers := map[string]string{"Content-Type": "multipart/form-data"}
+	headers := map[string]string{
+		"Content-Type": constants.MultipartFormData,
+	}
+
 	var result ResourceBrandingImage
 	resp, err := s.client.PostMultipart(ctx, constants.EndpointJamfProBrandingImages, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
 	if err != nil {

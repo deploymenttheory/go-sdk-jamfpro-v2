@@ -76,7 +76,7 @@ func (s *Icon) UploadV1(ctx context.Context, fileReader io.Reader, fileSize int6
 	endpoint := constants.EndpointJamfProIconV1
 
 	headers := map[string]string{
-		"Content-Type": "multipart/form-data",
+		"Content-Type": constants.MultipartFormData,
 	}
 
 	var result ResourceIcon
@@ -123,7 +123,7 @@ func (s *Icon) DownloadV1(ctx context.Context, id int, res, scale string) ([]byt
 	rsqlQuery := map[string]string{"res": res, "scale": scale}
 
 	headers := map[string]string{
-		"Accept": "image/*",
+		"Accept": constants.ImageAny,
 	}
 
 	resp, body, err := s.client.GetBytes(ctx, endpoint, rsqlQuery, headers)

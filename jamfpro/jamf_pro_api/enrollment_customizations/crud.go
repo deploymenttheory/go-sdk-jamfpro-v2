@@ -388,7 +388,7 @@ func (s *EnrollmentCustomizations) GetImageByIdV2(ctx context.Context, id string
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProEnrollmentCustomizationsImagesV2, id)
 
 	headers := map[string]string{
-		"Accept": "image/*",
+		"Accept": constants.ImageAny,
 	}
 
 	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)

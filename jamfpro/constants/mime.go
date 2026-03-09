@@ -7,6 +7,7 @@ const (
 	ApplicationJSON                = "application/json"
 	ApplicationMergePatchJSON      = "application/merge-patch+json"
 	TextCSV                        = "text/csv"
+	TextCSVApplicationJSON         = "text/csv,application/json"
 	ApplicationXML                 = "application/xml"
 	TextXML                        = "text/xml"
 	ApplicationPKIXCert            = "application/pkix-cert"
@@ -14,4 +15,8 @@ const (
 	ApplicationXPEMFile            = "application/x-pem-file"
 	ApplicationOctetStream         = "application/octet-stream"
 	ApplicationXAppleAspenConfig   = "application/x-apple-aspen-config"
+	MultipartFormData              = "multipart/form-data"
+	TextPlain                      = "text/plain"
+	ImageAny                       = "image/*"
+	AcceptAny                      = "*/*"
 )

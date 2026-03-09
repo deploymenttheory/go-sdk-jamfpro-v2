@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"resty.dev/v3"
 )
 
@@ -147,7 +147,10 @@ func (s *Reenrollment) AddHistoryNotes(ctx context.Context, request *AddReenroll
 // URL: POST /api/v1/reenrollment/history/export
 func (s *Reenrollment) ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*resty.Response, []byte, error) {
 	endpoint := constants.EndpointJamfProReenrollmentHistoryExport
-	headers := map[string]string{"Accept": "text/csv,application/json"}
+	headers := map[string]string{
+		"Accept": constants.TextCSVApplicationJSON,
+	}
+
 	var sendBody any
 	if body != nil {
 		sendBody = body

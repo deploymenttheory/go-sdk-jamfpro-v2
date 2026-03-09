@@ -91,7 +91,7 @@ func (s *AdcsSettings) CreateV1(ctx context.Context, request *ResourceAdcsSettin
 	var result ResponseAdcsSettingsCreated
 
 	headers := map[string]string{
-		"Accept":       "*/*",
+		"Accept": constants.AcceptAny,
 		"Content-Type": constants.ApplicationJSON,
 	}
 

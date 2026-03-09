@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"resty.dev/v3"
 )
 
@@ -225,7 +225,11 @@ func (s *Scripts) DownloadScriptByIDV1(ctx context.Context, id string) ([]byte, 
 
 	endpoint := fmt.Sprintf("%s/%s/download", constants.EndpointJamfProScriptsV1, id)
 
-	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, map[string]string{"Accept": "text/plain"})
+	headers := map[string]string{
+		"Accept": constants.TextPlain,
+	}
+
+	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
 	if err != nil {
 		return nil, resp, err
 	}

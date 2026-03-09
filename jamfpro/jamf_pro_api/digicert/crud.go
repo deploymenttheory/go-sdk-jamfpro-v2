@@ -78,7 +78,7 @@ func (s *Digicert) Create(ctx context.Context, request *ResourceDigicertTrustLif
 	var result ResponseDigicertTrustLifecycleManagerCreated
 
 	headers := map[string]string{
-		"Accept":       "*/*",
+		"Accept": constants.AcceptAny,
 		"Content-Type": constants.ApplicationJSON,
 	}
 
