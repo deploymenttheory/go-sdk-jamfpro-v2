@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -131,13 +131,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v4-enrollment
 	Enrollment struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ EnrollmentServiceInterface = (*Enrollment)(nil)
 
-func NewEnrollment(client interfaces.HTTPClient) *Enrollment {
+func NewEnrollment(client transport.HTTPClient) *Enrollment {
 	return &Enrollment{client: client}
 }
 

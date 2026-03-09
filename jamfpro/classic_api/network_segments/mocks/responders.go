@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// NetworkSegmentsMock is a test double implementing interfaces.HTTPClient for Classic API network segments.
+// NetworkSegmentsMock is a test double implementing transport.HTTPClient for Classic API network segments.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -116,7 +116,7 @@ func (m *NetworkSegmentsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/networksegments/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A network segment with that name already exists")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *NetworkSegmentsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -135,7 +135,7 @@ func (m *NetworkSegmentsMock) PostForm(ctx context.Context, path string, _ map[s
 	return m.dispatch("POST", path, result)
 }
 
-func (m *NetworkSegmentsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *NetworkSegmentsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -177,7 +177,7 @@ func (m *NetworkSegmentsMock) GetPaginated(ctx context.Context, path string, rsq
 	return resp, nil
 }
 
-func (m *NetworkSegmentsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *NetworkSegmentsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *NetworkSegmentsMock) InvalidateToken() error                    { return nil }
 func (m *NetworkSegmentsMock) KeepAliveToken() error                     { return nil }
 func (m *NetworkSegmentsMock) GetLogger() *zap.Logger                    { return m.logger }

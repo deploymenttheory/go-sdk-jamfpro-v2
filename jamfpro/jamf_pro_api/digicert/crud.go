@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -55,13 +55,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-digicert-trust-lifecycle-manager
 	Digicert struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ DigicertServiceInterface = (*Digicert)(nil)
 
-func NewDigicert(client interfaces.HTTPClient) *Digicert {
+func NewDigicert(client transport.HTTPClient) *Digicert {
 	return &Digicert{client: client}
 }
 

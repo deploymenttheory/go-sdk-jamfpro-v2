@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -29,13 +29,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment-access-management
 	AccessManagementSettings struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ AccessManagementSettingsServiceInterface = (*AccessManagementSettings)(nil)
 
-func NewAccessManagementSettings(client interfaces.HTTPClient) *AccessManagementSettings {
+func NewAccessManagementSettings(client transport.HTTPClient) *AccessManagementSettings {
 	return &AccessManagementSettings{client: client}
 }
 

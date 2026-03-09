@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -166,7 +166,7 @@ func (m *GroupsMock) GetPaginated(ctx context.Context, endpoint string, params m
 	return shared.NewMockResponse(status, http.Header{}, nil), nil
 }
 
-func (m *GroupsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out any) (*resty.Response, error) {
+func (m *GroupsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostMultipart not implemented in mock")
 }
 
@@ -182,7 +182,7 @@ func (m *GroupsMock) GetLogger() *zap.Logger {
 	return nil
 }
 
-func (m *GroupsMock) RSQLBuilder() interfaces.RSQLFilterBuilder {
+func (m *GroupsMock) RSQLBuilder() transport.RSQLFilterBuilder {
 	return nil
 }
 

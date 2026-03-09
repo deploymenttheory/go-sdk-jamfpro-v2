@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -61,14 +61,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/webhooks
 	Webhooks struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ WebhooksServiceInterface = (*Webhooks)(nil)
 
 // NewService returns a new webhooks Service backed by the provided HTTP client.
-func NewWebhooks(client interfaces.HTTPClient) *Webhooks {
+func NewWebhooks(client transport.HTTPClient) *Webhooks {
 	return &Webhooks{client: client}
 }
 

@@ -3,7 +3,7 @@ package locales
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -23,13 +23,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-locales
 	Locales struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ LocalesServiceInterface = (*Locales)(nil)
 
-func NewLocales(client interfaces.HTTPClient) *Locales {
+func NewLocales(client transport.HTTPClient) *Locales {
 	return &Locales{client: client}
 }
 

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -40,13 +40,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-user-preferences-settings-keyid
 	JamfProUserAccountSettings struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ JamfProUserAccountSettingsServiceInterface = (*JamfProUserAccountSettings)(nil)
 
-func NewJamfProUserAccountSettings(client interfaces.HTTPClient) *JamfProUserAccountSettings {
+func NewJamfProUserAccountSettings(client transport.HTTPClient) *JamfProUserAccountSettings {
 	return &JamfProUserAccountSettings{client: client}
 }
 

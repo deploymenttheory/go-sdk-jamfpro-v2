@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// MDMMock is a test double implementing interfaces.HTTPClient.
+// MDMMock is a test double implementing transport.HTTPClient.
 type MDMMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -171,7 +171,7 @@ func (m *MDMMock) PostForm(ctx context.Context, path string, _ map[string]string
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MDMMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MDMMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -219,7 +219,7 @@ func (m *MDMMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[s
 	return resp, nil
 }
 
-func (m *MDMMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *MDMMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *MDMMock) InvalidateToken() error                    { return nil }
 func (m *MDMMock) KeepAliveToken() error                     { return nil }
 func (m *MDMMock) GetLogger() *zap.Logger                    { return m.logger }

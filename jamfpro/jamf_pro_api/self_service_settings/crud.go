@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -42,13 +42,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-settings
 	SelfServiceSettings struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ SelfServiceSettingsServiceInterface = (*SelfServiceSettings)(nil)
 
-func NewSelfServiceSettings(client interfaces.HTTPClient) *SelfServiceSettings {
+func NewSelfServiceSettings(client transport.HTTPClient) *SelfServiceSettings {
 	return &SelfServiceSettings{client: client}
 }
 

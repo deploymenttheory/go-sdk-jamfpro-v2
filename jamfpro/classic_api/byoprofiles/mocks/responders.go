@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// BYOProfilesMock is a test double implementing interfaces.HTTPClient for Classic API BYO profiles.
+// BYOProfilesMock is a test double implementing transport.HTTPClient for Classic API BYO profiles.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -117,7 +117,7 @@ func (m *BYOProfilesMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/byoprofiles/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A BYO profile with that name already exists")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *BYOProfilesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -136,7 +136,7 @@ func (m *BYOProfilesMock) PostForm(ctx context.Context, path string, _ map[strin
 	return m.dispatch("POST", path, result)
 }
 
-func (m *BYOProfilesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *BYOProfilesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -178,7 +178,7 @@ func (m *BYOProfilesMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	return resp, nil
 }
 
-func (m *BYOProfilesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *BYOProfilesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *BYOProfilesMock) InvalidateToken() error                    { return nil }
 func (m *BYOProfilesMock) KeepAliveToken() error                     { return nil }
 func (m *BYOProfilesMock) GetLogger() *zap.Logger                    { return m.logger }

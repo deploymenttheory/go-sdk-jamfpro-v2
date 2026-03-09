@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -80,7 +80,7 @@ func (m *TimeZonesMock) PostWithQuery(ctx context.Context, path string, _ map[st
 func (m *TimeZonesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *TimeZonesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *TimeZonesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *TimeZonesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -115,7 +115,7 @@ func (m *TimeZonesMock) GetPaginated(ctx context.Context, path string, q map[str
 	}
 	return resp, nil
 }
-func (m *TimeZonesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *TimeZonesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *TimeZonesMock) InvalidateToken() error                    { return nil }
 func (m *TimeZonesMock) KeepAliveToken() error                     { return nil }
 func (m *TimeZonesMock) GetLogger() *zap.Logger                    { return m.logger }

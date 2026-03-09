@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -61,14 +61,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findremovablemacaddresses
 	RemoveableMacAddresses struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ RemoveableMacAddressesServiceInterface = (*RemoveableMacAddresses)(nil)
 
 // NewService returns a new removeable MAC addresses Service backed by the provided HTTP client.
-func NewRemoveableMacAddresses(client interfaces.HTTPClient) *RemoveableMacAddresses {
+func NewRemoveableMacAddresses(client transport.HTTPClient) *RemoveableMacAddresses {
 	return &RemoveableMacAddresses{client: client}
 }
 

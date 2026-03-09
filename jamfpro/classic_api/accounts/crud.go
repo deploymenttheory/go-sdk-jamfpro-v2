@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -61,14 +61,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/accounts
 	Accounts struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ AccountsServiceInterface = (*Accounts)(nil)
 
 // NewService returns a new accounts Service backed by the provided HTTP client.
-func NewAccounts(client interfaces.HTTPClient) *Accounts {
+func NewAccounts(client transport.HTTPClient) *Accounts {
 	return &Accounts{client: client}
 }
 

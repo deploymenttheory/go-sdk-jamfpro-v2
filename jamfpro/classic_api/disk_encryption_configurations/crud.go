@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -61,14 +61,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/diskencryptionconfigurations
 	DiskEncryptionConfigurations struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ DiskEncryptionConfigurationsServiceInterface = (*DiskEncryptionConfigurations)(nil)
 
 // NewService returns a new disk encryption configurations Service backed by the provided HTTP client.
-func NewDiskEncryptionConfigurations(client interfaces.HTTPClient) *DiskEncryptionConfigurations {
+func NewDiskEncryptionConfigurations(client transport.HTTPClient) *DiskEncryptionConfigurations {
 	return &DiskEncryptionConfigurations{client: client}
 }
 

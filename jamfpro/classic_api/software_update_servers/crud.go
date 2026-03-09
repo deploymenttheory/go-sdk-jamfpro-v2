@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -61,14 +61,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/softwareupdateservers
 	SoftwareUpdateServers struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ SoftwareUpdateServersServiceInterface = (*SoftwareUpdateServers)(nil)
 
 // NewService returns a new software update servers Service backed by the provided HTTP client.
-func NewSoftwareUpdateServers(client interfaces.HTTPClient) *SoftwareUpdateServers {
+func NewSoftwareUpdateServers(client transport.HTTPClient) *SoftwareUpdateServers {
 	return &SoftwareUpdateServers{client: client}
 }
 

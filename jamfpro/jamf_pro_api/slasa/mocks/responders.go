@@ -11,7 +11,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// SLASAMock is a test double implementing interfaces.HTTPClient for SLASA operations.
+// SLASAMock is a test double implementing transport.HTTPClient for SLASA operations.
 // Responses are keyed by "METHOD path". Use RegisterGetStatusAcceptedMock, RegisterGetStatusNotAcceptedMock,
 // and RegisterAcceptMock to set up responses.
 type SLASAMock struct {
@@ -122,7 +122,7 @@ func (m *SLASAMock) PostForm(ctx context.Context, path string, formData map[stri
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-func (m *SLASAMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SLASAMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
@@ -197,7 +197,7 @@ func (m *SLASAMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 	return nil, fmt.Errorf("GetPaginated not implemented in SLASAMock")
 }
 
-func (m *SLASAMock) RSQLBuilder() interfaces.RSQLFilterBuilder {
+func (m *SLASAMock) RSQLBuilder() transport.RSQLFilterBuilder {
 	return nil
 }
 

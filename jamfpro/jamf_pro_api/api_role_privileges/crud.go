@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -30,13 +30,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/api-role-privileges
 	ApiRolePrivileges struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ APIRolePrivilegesServiceInterface = (*ApiRolePrivileges)(nil)
 
-func NewApiRolePrivileges(client interfaces.HTTPClient) *ApiRolePrivileges {
+func NewApiRolePrivileges(client transport.HTTPClient) *ApiRolePrivileges {
 	return &ApiRolePrivileges{client: client}
 }
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -65,14 +65,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findclasses
 	Classes struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ClassesServiceInterface = (*Classes)(nil)
 
 // NewService returns a new classes Service backed by the provided HTTP client.
-func NewClasses(client interfaces.HTTPClient) *Classes {
+func NewClasses(client transport.HTTPClient) *Classes {
 	return &Classes{client: client}
 }
 

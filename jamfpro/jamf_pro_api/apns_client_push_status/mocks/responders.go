@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// APNSClientPushStatusMock is a test double implementing interfaces.HTTPClient.
+// APNSClientPushStatusMock is a test double implementing transport.HTTPClient.
 type APNSClientPushStatusMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -84,7 +84,7 @@ func loadMockResponse(filename string) ([]byte, error) {
 	return os.ReadFile(filepath.Join(wd, "mocks", filename))
 }
 
-// Get implements interfaces.HTTPClient.Get.
+// Get implements transport.HTTPClient.Get.
 func (m *APNSClientPushStatusMock) Get(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	m.LastRSQLQuery = query
 	key := "GET:" + path
@@ -106,7 +106,7 @@ func (m *APNSClientPushStatusMock) Get(ctx context.Context, path string, query m
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// GetPaginated implements interfaces.HTTPClient.GetPaginated.
+// GetPaginated implements transport.HTTPClient.GetPaginated.
 func (m *APNSClientPushStatusMock) GetPaginated(ctx context.Context, path string, query map[string]string, headers map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	m.LastRSQLQuery = query
 	key := "GET:" + path
@@ -135,7 +135,7 @@ func (m *APNSClientPushStatusMock) GetPaginated(ctx context.Context, path string
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// Post implements interfaces.HTTPClient.Post.
+// Post implements transport.HTTPClient.Post.
 func (m *APNSClientPushStatusMock) Post(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	key := "POST:" + path
 	resp, ok := m.responses[key]
@@ -156,72 +156,72 @@ func (m *APNSClientPushStatusMock) Post(ctx context.Context, path string, body a
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// Delete implements interfaces.HTTPClient.Delete.
+// Delete implements transport.HTTPClient.Delete.
 func (m *APNSClientPushStatusMock) Delete(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("Delete not implemented in APNSClientPushStatusMock")
 }
 
-// Put implements interfaces.HTTPClient.Put.
+// Put implements transport.HTTPClient.Put.
 func (m *APNSClientPushStatusMock) Put(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("Put not implemented in APNSClientPushStatusMock")
 }
 
-// Patch implements interfaces.HTTPClient.Patch.
+// Patch implements transport.HTTPClient.Patch.
 func (m *APNSClientPushStatusMock) Patch(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("Patch not implemented in APNSClientPushStatusMock")
 }
 
-// DownloadFile implements interfaces.HTTPClient.DownloadFile.
+// DownloadFile implements transport.HTTPClient.DownloadFile.
 func (m *APNSClientPushStatusMock) DownloadFile(ctx context.Context, url string) (io.ReadCloser, *http.Response, error) {
 	return nil, nil, fmt.Errorf("DownloadFile not implemented in APNSClientPushStatusMock")
 }
 
-// SetLogger implements interfaces.HTTPClient.SetLogger.
+// SetLogger implements transport.HTTPClient.SetLogger.
 func (m *APNSClientPushStatusMock) SetLogger(logger *zap.Logger) {
 	m.logger = logger
 }
 
-// GetLogger implements interfaces.HTTPClient.GetLogger.
+// GetLogger implements transport.HTTPClient.GetLogger.
 func (m *APNSClientPushStatusMock) GetLogger() *zap.Logger {
 	return m.logger
 }
 
-// DeleteWithBody implements interfaces.HTTPClient.DeleteWithBody.
+// DeleteWithBody implements transport.HTTPClient.DeleteWithBody.
 func (m *APNSClientPushStatusMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("DeleteWithBody not implemented in APNSClientPushStatusMock")
 }
 
-// PostWithQuery implements interfaces.HTTPClient.PostWithQuery.
+// PostWithQuery implements transport.HTTPClient.PostWithQuery.
 func (m *APNSClientPushStatusMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostWithQuery not implemented in APNSClientPushStatusMock")
 }
 
-// PostForm implements interfaces.HTTPClient.PostForm.
+// PostForm implements transport.HTTPClient.PostForm.
 func (m *APNSClientPushStatusMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostForm not implemented in APNSClientPushStatusMock")
 }
 
-// PostMultipart implements interfaces.HTTPClient.PostMultipart.
-func (m *APNSClientPushStatusMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out any) (*resty.Response, error) {
+// PostMultipart implements transport.HTTPClient.PostMultipart.
+func (m *APNSClientPushStatusMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostMultipart not implemented in APNSClientPushStatusMock")
 }
 
-// GetBytes implements interfaces.HTTPClient.GetBytes.
+// GetBytes implements transport.HTTPClient.GetBytes.
 func (m *APNSClientPushStatusMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	return nil, nil, fmt.Errorf("GetBytes not implemented in APNSClientPushStatusMock")
 }
 
-// RSQLBuilder implements interfaces.HTTPClient.RSQLBuilder.
-func (m *APNSClientPushStatusMock) RSQLBuilder() interfaces.RSQLFilterBuilder {
+// RSQLBuilder implements transport.HTTPClient.RSQLBuilder.
+func (m *APNSClientPushStatusMock) RSQLBuilder() transport.RSQLFilterBuilder {
 	return nil
 }
 
-// InvalidateToken implements interfaces.HTTPClient.InvalidateToken.
+// InvalidateToken implements transport.HTTPClient.InvalidateToken.
 func (m *APNSClientPushStatusMock) InvalidateToken() error {
 	return nil
 }
 
-// KeepAliveToken implements interfaces.HTTPClient.KeepAliveToken.
+// KeepAliveToken implements transport.HTTPClient.KeepAliveToken.
 func (m *APNSClientPushStatusMock) KeepAliveToken() error {
 	return nil
 }

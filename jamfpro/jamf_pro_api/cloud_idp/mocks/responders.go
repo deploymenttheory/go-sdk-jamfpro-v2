@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -99,7 +99,7 @@ func (m *CloudIdpMock) PostWithQuery(ctx context.Context, path string, _ map[str
 func (m *CloudIdpMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *CloudIdpMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CloudIdpMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *CloudIdpMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -144,7 +144,7 @@ func (m *CloudIdpMock) GetPaginated(ctx context.Context, path string, _ map[stri
 	}
 	return resp, nil
 }
-func (m *CloudIdpMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *CloudIdpMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *CloudIdpMock) InvalidateToken() error                    { return nil }
 func (m *CloudIdpMock) KeepAliveToken() error                     { return nil }
 func (m *CloudIdpMock) GetLogger() *zap.Logger                    { return m.logger }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -61,14 +61,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/ldapservers
 	LdapServers struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ LDAPServersServiceInterface = (*LdapServers)(nil)
 
 // NewService returns a new LDAP servers Service backed by the provided HTTP client.
-func NewLdapServers(client interfaces.HTTPClient) *LdapServers {
+func NewLdapServers(client transport.HTTPClient) *LdapServers {
 	return &LdapServers{client: client}
 }
 

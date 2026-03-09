@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -20,7 +20,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// StartupStatusMock is a test double implementing interfaces.HTTPClient.
+// StartupStatusMock is a test double implementing transport.HTTPClient.
 type StartupStatusMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -71,7 +71,7 @@ func (m *StartupStatusMock) PostWithQuery(ctx context.Context, path string, _ ma
 func (m *StartupStatusMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *StartupStatusMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *StartupStatusMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *StartupStatusMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -106,7 +106,7 @@ func (m *StartupStatusMock) GetPaginated(ctx context.Context, path string, _ map
 	}
 	return resp, nil
 }
-func (m *StartupStatusMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *StartupStatusMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *StartupStatusMock) InvalidateToken() error                    { return nil }
 func (m *StartupStatusMock) KeepAliveToken() error                     { return nil }
 func (m *StartupStatusMock) GetLogger() *zap.Logger                    { return m.logger }

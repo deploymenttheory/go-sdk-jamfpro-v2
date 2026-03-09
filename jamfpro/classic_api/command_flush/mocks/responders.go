@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// CommandFlushMock is a test double implementing interfaces.HTTPClient for command flush operations.
+// CommandFlushMock is a test double implementing transport.HTTPClient for command flush operations.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files (if any) in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -142,7 +142,7 @@ func (m *CommandFlushMock) RegisterFlushWithXMLMock() {
 	m.register("DELETE", "/JSSResource/commandflush", 204, "")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *CommandFlushMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
@@ -160,7 +160,7 @@ func (m *CommandFlushMock) PostForm(ctx context.Context, path string, _ map[stri
 	return m.dispatch("POST", path, result)
 }
 
-func (m *CommandFlushMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CommandFlushMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -202,7 +202,7 @@ func (m *CommandFlushMock) GetPaginated(ctx context.Context, path string, rsqlQu
 	return resp, nil
 }
 
-func (m *CommandFlushMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *CommandFlushMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *CommandFlushMock) InvalidateToken() error                    { return nil }
 func (m *CommandFlushMock) KeepAliveToken() error                     { return nil }
 func (m *CommandFlushMock) GetLogger() *zap.Logger                    { return m.logger }

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -29,13 +29,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-jamf-management-framework-redeploy-id
 	JamfManagementFramework struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ JamfManagementFrameworkServiceInterface = (*JamfManagementFramework)(nil)
 
-func NewJamfManagementFramework(client interfaces.HTTPClient) *JamfManagementFramework {
+func NewJamfManagementFramework(client transport.HTTPClient) *JamfManagementFramework {
 	return &JamfManagementFramework{client: client}
 }
 

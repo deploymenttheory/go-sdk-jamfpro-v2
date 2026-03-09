@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -164,7 +164,7 @@ func (m *ManagedSoftwareUpdatesMock) PostWithQuery(ctx context.Context, path str
 func (m *ManagedSoftwareUpdatesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ManagedSoftwareUpdatesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ManagedSoftwareUpdatesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ManagedSoftwareUpdatesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -205,7 +205,7 @@ func (m *ManagedSoftwareUpdatesMock) GetPaginated(ctx context.Context, path stri
 	}
 	return resp, nil
 }
-func (m *ManagedSoftwareUpdatesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *ManagedSoftwareUpdatesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *ManagedSoftwareUpdatesMock) InvalidateToken() error                    { return nil }
 func (m *ManagedSoftwareUpdatesMock) KeepAliveToken() error                     { return nil }
 func (m *ManagedSoftwareUpdatesMock) GetLogger() *zap.Logger                    { return m.logger }

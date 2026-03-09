@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -46,14 +46,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findallowedfileextension
 	AllowedFileExtensions struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ AllowedFileExtensionsServiceInterface = (*AllowedFileExtensions)(nil)
 
 // NewService returns a new allowed file extensions Service backed by the provided HTTP client.
-func NewAllowedFileExtensions(client interfaces.HTTPClient) *AllowedFileExtensions {
+func NewAllowedFileExtensions(client transport.HTTPClient) *AllowedFileExtensions {
 	return &AllowedFileExtensions{client: client}
 }
 

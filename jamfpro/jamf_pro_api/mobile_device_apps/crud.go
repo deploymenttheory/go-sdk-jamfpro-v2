@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -26,14 +26,14 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-apps-reinstall-app-config
 	MobileDeviceApps struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ MobileDeviceAppsServiceInterface = (*MobileDeviceApps)(nil)
 
 // NewService returns a new mobile device apps Service backed by the provided HTTP client.
-func NewMobileDeviceApps(client interfaces.HTTPClient) *MobileDeviceApps {
+func NewMobileDeviceApps(client transport.HTTPClient) *MobileDeviceApps {
 	return &MobileDeviceApps{client: client}
 }
 

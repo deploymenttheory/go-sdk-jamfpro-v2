@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -61,14 +61,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/networksegments
 	NetworkSegments struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ NetworkSegmentsServiceInterface = (*NetworkSegments)(nil)
 
 // NewService returns a new network segments Service backed by the provided HTTP client.
-func NewNetworkSegments(client interfaces.HTTPClient) *NetworkSegments {
+func NewNetworkSegments(client transport.HTTPClient) *NetworkSegments {
 	return &NetworkSegments{client: client}
 }
 

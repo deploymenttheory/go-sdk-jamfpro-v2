@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// VolumePurchasingSubscriptionsMock is a test double implementing interfaces.HTTPClient.
+// VolumePurchasingSubscriptionsMock is a test double implementing transport.HTTPClient.
 type VolumePurchasingSubscriptionsMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -132,7 +132,7 @@ func (m *VolumePurchasingSubscriptionsMock) PostForm(ctx context.Context, path s
 	return m.dispatch("POST", path, result)
 }
 
-func (m *VolumePurchasingSubscriptionsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *VolumePurchasingSubscriptionsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -174,7 +174,7 @@ func (m *VolumePurchasingSubscriptionsMock) GetPaginated(ctx context.Context, pa
 	return resp, nil
 }
 
-func (m *VolumePurchasingSubscriptionsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *VolumePurchasingSubscriptionsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *VolumePurchasingSubscriptionsMock) InvalidateToken() error                    { return nil }
 func (m *VolumePurchasingSubscriptionsMock) KeepAliveToken() error                     { return nil }
 func (m *VolumePurchasingSubscriptionsMock) GetLogger() *zap.Logger                    { return m.logger }

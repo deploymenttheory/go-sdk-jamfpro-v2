@@ -3,7 +3,7 @@ package sso_certificate
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -48,13 +48,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert
 	SsoCertificate struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ SsoCertificateServiceInterface = (*SsoCertificate)(nil)
 
-func NewSsoCertificate(client interfaces.HTTPClient) *SsoCertificate {
+func NewSsoCertificate(client transport.HTTPClient) *SsoCertificate {
 	return &SsoCertificate{client: client}
 }
 

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -48,13 +48,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-server-url
 	JamfProServerUrl struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ JamfProServerURLServiceInterface = (*JamfProServerUrl)(nil)
 
-func NewJamfProServerUrl(client interfaces.HTTPClient) *JamfProServerUrl {
+func NewJamfProServerUrl(client transport.HTTPClient) *JamfProServerUrl {
 	return &JamfProServerUrl{client: client}
 }
 

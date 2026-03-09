@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// SelfServiceBrandingMobileMock is a test double implementing interfaces.HTTPClient.
+// SelfServiceBrandingMobileMock is a test double implementing transport.HTTPClient.
 type SelfServiceBrandingMobileMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -154,7 +154,7 @@ func (m *SelfServiceBrandingMobileMock) PostForm(ctx context.Context, path strin
 	return m.dispatch("POST", path, result)
 }
 
-func (m *SelfServiceBrandingMobileMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SelfServiceBrandingMobileMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -202,7 +202,7 @@ func (m *SelfServiceBrandingMobileMock) GetPaginated(ctx context.Context, path s
 	return resp, nil
 }
 
-func (m *SelfServiceBrandingMobileMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *SelfServiceBrandingMobileMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *SelfServiceBrandingMobileMock) InvalidateToken() error                    { return nil }
 func (m *SelfServiceBrandingMobileMock) KeepAliveToken() error                     { return nil }
 func (m *SelfServiceBrandingMobileMock) GetLogger() *zap.Logger                    { return m.logger }

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -45,13 +45,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-advanced-user-content-searches
 	AdvancedUserContentSearches struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ AdvancedUserContentSearchesServiceInterface = (*AdvancedUserContentSearches)(nil)
 
-func NewAdvancedUserContentSearches(client interfaces.HTTPClient) *AdvancedUserContentSearches {
+func NewAdvancedUserContentSearches(client transport.HTTPClient) *AdvancedUserContentSearches {
 	return &AdvancedUserContentSearches{client: client}
 }
 

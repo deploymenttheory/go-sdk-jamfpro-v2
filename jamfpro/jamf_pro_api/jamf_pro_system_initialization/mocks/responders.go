@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// JamfProSystemInitializationMock is a test double implementing interfaces.HTTPClient.
+// JamfProSystemInitializationMock is a test double implementing transport.HTTPClient.
 type JamfProSystemInitializationMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -85,7 +85,7 @@ func (m *JamfProSystemInitializationMock) PostWithQuery(ctx context.Context, pat
 func (m *JamfProSystemInitializationMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *JamfProSystemInitializationMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *JamfProSystemInitializationMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *JamfProSystemInitializationMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -120,7 +120,7 @@ func (m *JamfProSystemInitializationMock) GetPaginated(ctx context.Context, path
 	}
 	return resp, nil
 }
-func (m *JamfProSystemInitializationMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *JamfProSystemInitializationMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *JamfProSystemInitializationMock) InvalidateToken() error                    { return nil }
 func (m *JamfProSystemInitializationMock) KeepAliveToken() error                     { return nil }
 func (m *JamfProSystemInitializationMock) GetLogger() *zap.Logger                    { return m.logger }

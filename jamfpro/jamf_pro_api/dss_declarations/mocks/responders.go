@@ -11,7 +11,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -71,7 +71,7 @@ func (m *DSSDeclarationsMock) PostForm(ctx context.Context, endpoint string, for
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-func (m *DSSDeclarationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, out any) (*resty.Response, error) {
+func (m *DSSDeclarationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
@@ -108,7 +108,7 @@ func (m *DSSDeclarationsMock) GetLogger() *zap.Logger {
 	return nil
 }
 
-func (m *DSSDeclarationsMock) RSQLBuilder() interfaces.RSQLFilterBuilder {
+func (m *DSSDeclarationsMock) RSQLBuilder() transport.RSQLFilterBuilder {
 	return nil
 }
 

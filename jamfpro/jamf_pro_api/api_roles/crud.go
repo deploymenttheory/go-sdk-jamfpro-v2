@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -45,13 +45,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/getallapiroles
 	ApiRoles struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ APIRolesServiceInterface = (*ApiRoles)(nil)
 
-func NewApiRoles(client interfaces.HTTPClient) *ApiRoles {
+func NewApiRoles(client transport.HTTPClient) *ApiRoles {
 	return &ApiRoles{client: client}
 }
 

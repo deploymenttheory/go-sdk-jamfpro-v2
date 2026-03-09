@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -79,7 +79,7 @@ func (m *CSAMock) PostWithQuery(ctx context.Context, path string, _ map[string]s
 func (m *CSAMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *CSAMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CSAMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *CSAMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -114,7 +114,7 @@ func (m *CSAMock) GetPaginated(ctx context.Context, path string, _ map[string]st
 	}
 	return resp, nil
 }
-func (m *CSAMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *CSAMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *CSAMock) InvalidateToken() error                     { return nil }
 func (m *CSAMock) KeepAliveToken() error                      { return nil }
 func (m *CSAMock) GetLogger() *zap.Logger                     { return m.logger }

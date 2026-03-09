@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -28,7 +28,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// ComputerHistoryMock is a test double implementing interfaces.HTTPClient for Classic API computer history.
+// ComputerHistoryMock is a test double implementing transport.HTTPClient for Classic API computer history.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -119,7 +119,7 @@ func (m *ComputerHistoryMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/JSSResource/computerhistory/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *ComputerHistoryMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
@@ -137,7 +137,7 @@ func (m *ComputerHistoryMock) PostForm(ctx context.Context, path string, _ map[s
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerHistoryMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ComputerHistoryMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -179,7 +179,7 @@ func (m *ComputerHistoryMock) GetPaginated(ctx context.Context, path string, rsq
 	return resp, nil
 }
 
-func (m *ComputerHistoryMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *ComputerHistoryMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *ComputerHistoryMock) InvalidateToken() error                    { return nil }
 func (m *ComputerHistoryMock) KeepAliveToken() error                     { return nil }
 func (m *ComputerHistoryMock) GetLogger() *zap.Logger                    { return m.logger }

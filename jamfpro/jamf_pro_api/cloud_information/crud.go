@@ -3,7 +3,7 @@ package cloud_information
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -23,13 +23,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-information
 	CloudInformation struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ CloudInformationServiceInterface = (*CloudInformation)(nil)
 
-func NewCloudInformation(client interfaces.HTTPClient) *CloudInformation {
+func NewCloudInformation(client transport.HTTPClient) *CloudInformation {
 	return &CloudInformation{client: client}
 }
 

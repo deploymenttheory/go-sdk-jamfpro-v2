@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// MobileDeviceGroupsMock is a test double implementing interfaces.HTTPClient.
+// MobileDeviceGroupsMock is a test double implementing transport.HTTPClient.
 type MobileDeviceGroupsMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -191,7 +191,7 @@ func (m *MobileDeviceGroupsMock) PostForm(ctx context.Context, path string, _ ma
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MobileDeviceGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MobileDeviceGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -239,7 +239,7 @@ func (m *MobileDeviceGroupsMock) GetPaginated(ctx context.Context, path string, 
 	return resp, nil
 }
 
-func (m *MobileDeviceGroupsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *MobileDeviceGroupsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *MobileDeviceGroupsMock) InvalidateToken() error                    { return nil }
 func (m *MobileDeviceGroupsMock) KeepAliveToken() error                     { return nil }
 func (m *MobileDeviceGroupsMock) GetLogger() *zap.Logger                    { return m.logger }

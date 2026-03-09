@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -60,13 +60,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos
 	SelfServiceBrandingMacos struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ SelfServiceBrandingMacOSServiceInterface = (*SelfServiceBrandingMacos)(nil)
 
-func NewSelfServiceBrandingMacos(client interfaces.HTTPClient) *SelfServiceBrandingMacos {
+func NewSelfServiceBrandingMacos(client transport.HTTPClient) *SelfServiceBrandingMacos {
 	return &SelfServiceBrandingMacos{client: client}
 }
 

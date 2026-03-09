@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -77,14 +77,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/users
 	Users struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ UsersServiceInterface = (*Users)(nil)
 
 // NewService returns a new users Service backed by the provided HTTP client.
-func NewUsers(client interfaces.HTTPClient) *Users {
+func NewUsers(client transport.HTTPClient) *Users {
 	return &Users{client: client}
 }
 

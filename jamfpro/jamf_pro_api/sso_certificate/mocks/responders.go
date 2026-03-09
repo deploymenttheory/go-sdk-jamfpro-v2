@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// SsoCertificateMock is a test double implementing interfaces.HTTPClient.
+// SsoCertificateMock is a test double implementing transport.HTTPClient.
 type SsoCertificateMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -93,7 +93,7 @@ func (m *SsoCertificateMock) PostWithQuery(ctx context.Context, path string, _ m
 func (m *SsoCertificateMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *SsoCertificateMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SsoCertificateMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *SsoCertificateMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -128,7 +128,7 @@ func (m *SsoCertificateMock) GetPaginated(ctx context.Context, path string, _ ma
 	}
 	return resp, nil
 }
-func (m *SsoCertificateMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *SsoCertificateMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *SsoCertificateMock) InvalidateToken() error                    { return nil }
 func (m *SsoCertificateMock) KeepAliveToken() error                      { return nil }
 func (m *SsoCertificateMock) GetLogger() *zap.Logger                      { return m.logger }

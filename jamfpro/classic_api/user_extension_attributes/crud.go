@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -65,14 +65,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/userextensionattributes
 	UserExtensionAttributes struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ UserExtensionAttributesServiceInterface = (*UserExtensionAttributes)(nil)
 
 // NewService returns a new user extension attributes Service backed by the provided HTTP client.
-func NewUserExtensionAttributes(client interfaces.HTTPClient) *UserExtensionAttributes {
+func NewUserExtensionAttributes(client transport.HTTPClient) *UserExtensionAttributes {
 	return &UserExtensionAttributes{client: client}
 }
 

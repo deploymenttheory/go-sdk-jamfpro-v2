@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -163,7 +163,7 @@ func (m *InventoryPreloadMock) PostForm(ctx context.Context, path string, _ map[
 	return m.dispatch("POST", path, result)
 }
 
-func (m *InventoryPreloadMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *InventoryPreloadMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -212,7 +212,7 @@ func (m *InventoryPreloadMock) GetPaginated(ctx context.Context, path string, rs
 	return resp, nil
 }
 
-func (m *InventoryPreloadMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *InventoryPreloadMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *InventoryPreloadMock) InvalidateToken() error                    { return nil }
 func (m *InventoryPreloadMock) KeepAliveToken() error                     { return nil }
 func (m *InventoryPreloadMock) GetLogger() *zap.Logger                    { return m.logger }

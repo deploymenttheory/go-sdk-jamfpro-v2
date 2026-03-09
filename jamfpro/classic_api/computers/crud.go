@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -61,14 +61,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computers
 	Computers struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ComputersServiceInterface = (*Computers)(nil)
 
 // NewService returns a new computers Service backed by the provided HTTP client.
-func NewComputers(client interfaces.HTTPClient) *Computers {
+func NewComputers(client transport.HTTPClient) *Computers {
 	return &Computers{client: client}
 }
 

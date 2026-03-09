@@ -11,7 +11,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// SitesMock is a test double implementing interfaces.HTTPClient for sites operations.
+// SitesMock is a test double implementing transport.HTTPClient for sites operations.
 type SitesMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -71,7 +71,7 @@ func (m *SitesMock) RegisterGetObjectsByIDV1Mock() {
 	m.register("GET", "/api/v1/sites/1/objects", 200, "validate_objects.json")
 }
 
-// Get implements interfaces.HTTPClient.
+// Get implements transport.HTTPClient.
 func (m *SitesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
@@ -90,7 +90,7 @@ func (m *SitesMock) Get(ctx context.Context, path string, rsqlQuery map[string]s
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// GetPaginated implements interfaces.HTTPClient for paginated endpoints.
+// GetPaginated implements transport.HTTPClient for paginated endpoints.
 func (m *SitesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
@@ -115,67 +115,67 @@ func (m *SitesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// Post implements interfaces.HTTPClient.
+// Post implements transport.HTTPClient.
 func (m *SitesMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-// PostWithQuery implements interfaces.HTTPClient.
+// PostWithQuery implements transport.HTTPClient.
 func (m *SitesMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-// PostForm implements interfaces.HTTPClient.
+// PostForm implements transport.HTTPClient.
 func (m *SitesMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-// PostMultipart implements interfaces.HTTPClient.
-func (m *SitesMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+// PostMultipart implements transport.HTTPClient.
+func (m *SitesMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-// Put implements interfaces.HTTPClient.
+// Put implements transport.HTTPClient.
 func (m *SitesMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-// Patch implements interfaces.HTTPClient.
+// Patch implements transport.HTTPClient.
 func (m *SitesMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-// Delete implements interfaces.HTTPClient.
+// Delete implements transport.HTTPClient.
 func (m *SitesMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-// DeleteWithBody implements interfaces.HTTPClient.
+// DeleteWithBody implements transport.HTTPClient.
 func (m *SitesMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-// GetBytes implements interfaces.HTTPClient.
+// GetBytes implements transport.HTTPClient.
 func (m *SitesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil, nil
 }
 
-// RSQLBuilder implements interfaces.HTTPClient.
-func (m *SitesMock) RSQLBuilder() interfaces.RSQLFilterBuilder {
+// RSQLBuilder implements transport.HTTPClient.
+func (m *SitesMock) RSQLBuilder() transport.RSQLFilterBuilder {
 	return nil
 }
 
-// InvalidateToken implements interfaces.HTTPClient.
+// InvalidateToken implements transport.HTTPClient.
 func (m *SitesMock) InvalidateToken() error {
 	return nil
 }
 
-// KeepAliveToken implements interfaces.HTTPClient.
+// KeepAliveToken implements transport.HTTPClient.
 func (m *SitesMock) KeepAliveToken() error {
 	return nil
 }
 
-// GetLogger implements interfaces.HTTPClient.
+// GetLogger implements transport.HTTPClient.
 func (m *SitesMock) GetLogger() *zap.Logger {
 	return m.logger
 }

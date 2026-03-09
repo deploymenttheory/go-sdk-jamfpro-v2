@@ -11,7 +11,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// PatchManagementMock is a test double implementing interfaces.HTTPClient for Patch Management operations.
+// PatchManagementMock is a test double implementing transport.HTTPClient for Patch Management operations.
 // Responses are keyed by "METHOD path". Use RegisterAcceptDisclaimerMock to set up responses.
 type PatchManagementMock struct {
 	responses map[string]registeredResponse
@@ -111,7 +111,7 @@ func (m *PatchManagementMock) PostForm(ctx context.Context, path string, formDat
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-func (m *PatchManagementMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *PatchManagementMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
@@ -186,7 +186,7 @@ func (m *PatchManagementMock) GetPaginated(ctx context.Context, path string, rsq
 	return nil, fmt.Errorf("GetPaginated not implemented in PatchManagementMock")
 }
 
-func (m *PatchManagementMock) RSQLBuilder() interfaces.RSQLFilterBuilder {
+func (m *PatchManagementMock) RSQLBuilder() transport.RSQLFilterBuilder {
 	return nil
 }
 

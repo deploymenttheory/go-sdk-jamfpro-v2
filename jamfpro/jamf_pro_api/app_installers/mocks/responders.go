@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// AppInstallersMock is a test double implementing interfaces.HTTPClient.
+// AppInstallersMock is a test double implementing transport.HTTPClient.
 type AppInstallersMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -70,7 +70,7 @@ func (m *AppInstallersMock) PostWithQuery(ctx context.Context, path string, _ ma
 func (m *AppInstallersMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AppInstallersMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AppInstallersMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *AppInstallersMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -105,7 +105,7 @@ func (m *AppInstallersMock) GetPaginated(ctx context.Context, path string, q map
 	}
 	return resp, nil
 }
-func (m *AppInstallersMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *AppInstallersMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *AppInstallersMock) InvalidateToken() error                    { return nil }
 func (m *AppInstallersMock) KeepAliveToken() error                     { return nil }
 func (m *AppInstallersMock) GetLogger() *zap.Logger                    { return m.logger }

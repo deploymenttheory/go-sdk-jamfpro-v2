@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// APIRolePrivilegesMock implements interfaces.HTTPClient for tests.
+// APIRolePrivilegesMock implements transport.HTTPClient for tests.
 type APIRolePrivilegesMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -73,7 +73,7 @@ func (m *APIRolePrivilegesMock) PostWithQuery(ctx context.Context, path string, 
 func (m *APIRolePrivilegesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *APIRolePrivilegesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *APIRolePrivilegesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *APIRolePrivilegesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -108,7 +108,7 @@ func (m *APIRolePrivilegesMock) GetPaginated(ctx context.Context, path string, q
 	}
 	return resp, nil
 }
-func (m *APIRolePrivilegesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *APIRolePrivilegesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *APIRolePrivilegesMock) InvalidateToken() error                    { return nil }
 func (m *APIRolePrivilegesMock) KeepAliveToken() error                     { return nil }
 func (m *APIRolePrivilegesMock) GetLogger() *zap.Logger                    { return m.logger }

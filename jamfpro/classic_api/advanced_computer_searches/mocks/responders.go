@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// AdvancedComputerSearchesMock is a test double implementing interfaces.HTTPClient for Classic API advanced computer searches.
+// AdvancedComputerSearchesMock is a test double implementing transport.HTTPClient for Classic API advanced computer searches.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -117,7 +117,7 @@ func (m *AdvancedComputerSearchesMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/advancedcomputersearches/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): An advanced computer search with that name already exists")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *AdvancedComputerSearchesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -136,7 +136,7 @@ func (m *AdvancedComputerSearchesMock) PostForm(ctx context.Context, path string
 	return m.dispatch("POST", path, result)
 }
 
-func (m *AdvancedComputerSearchesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AdvancedComputerSearchesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -178,7 +178,7 @@ func (m *AdvancedComputerSearchesMock) GetPaginated(ctx context.Context, path st
 	return resp, nil
 }
 
-func (m *AdvancedComputerSearchesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *AdvancedComputerSearchesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *AdvancedComputerSearchesMock) InvalidateToken() error                    { return nil }
 func (m *AdvancedComputerSearchesMock) KeepAliveToken() error                     { return nil }
 func (m *AdvancedComputerSearchesMock) GetLogger() *zap.Logger                    { return m.logger }

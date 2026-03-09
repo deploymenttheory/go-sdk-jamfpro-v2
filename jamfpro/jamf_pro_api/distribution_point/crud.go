@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -72,13 +72,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-distribution-points
 	DistributionPoint struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ DistributionPointServiceInterface = (*DistributionPoint)(nil)
 
-func NewDistributionPoint(client interfaces.HTTPClient) *DistributionPoint {
+func NewDistributionPoint(client transport.HTTPClient) *DistributionPoint {
 	return &DistributionPoint{client: client}
 }
 

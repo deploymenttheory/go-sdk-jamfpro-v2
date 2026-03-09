@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -54,13 +54,13 @@ type (
 	//
 	// Jamf Pro API docs: Undocumented
 	AppInstallers struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ AppInstallersServiceInterface = (*AppInstallers)(nil)
 
-func NewAppInstallers(client interfaces.HTTPClient) *AppInstallers {
+func NewAppInstallers(client transport.HTTPClient) *AppInstallers {
 	return &AppInstallers{client: client}
 }
 

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -70,13 +70,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations
 	VolumePurchasingLocations struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ VolumePurchasingLocationsServiceInterface = (*VolumePurchasingLocations)(nil)
 
-func NewVolumePurchasingLocations(client interfaces.HTTPClient) *VolumePurchasingLocations {
+func NewVolumePurchasingLocations(client transport.HTTPClient) *VolumePurchasingLocations {
 	return &VolumePurchasingLocations{client: client}
 }
 

@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// WebhooksMock is a test double implementing interfaces.HTTPClient for Classic API webhooks.
+// WebhooksMock is a test double implementing transport.HTTPClient for Classic API webhooks.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -116,7 +116,7 @@ func (m *WebhooksMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/webhooks/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A webhook with that name already exists")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *WebhooksMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -135,7 +135,7 @@ func (m *WebhooksMock) PostForm(ctx context.Context, path string, _ map[string]s
 	return m.dispatch("POST", path, result)
 }
 
-func (m *WebhooksMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *WebhooksMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -177,7 +177,7 @@ func (m *WebhooksMock) GetPaginated(ctx context.Context, path string, rsqlQuery 
 	return resp, nil
 }
 
-func (m *WebhooksMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *WebhooksMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *WebhooksMock) InvalidateToken() error                    { return nil }
 func (m *WebhooksMock) KeepAliveToken() error                     { return nil }
 func (m *WebhooksMock) GetLogger() *zap.Logger                    { return m.logger }

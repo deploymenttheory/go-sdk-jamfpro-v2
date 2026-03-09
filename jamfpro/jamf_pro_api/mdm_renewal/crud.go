@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -42,13 +42,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-renewal-device-common-details-clientmanagementid
 	MdmRenewal struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ MDMRenewalServiceInterface = (*MdmRenewal)(nil)
 
-func NewMdmRenewal(client interfaces.HTTPClient) *MdmRenewal {
+func NewMdmRenewal(client transport.HTTPClient) *MdmRenewal {
 	return &MdmRenewal{client: client}
 }
 

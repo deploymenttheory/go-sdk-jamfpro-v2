@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -109,7 +109,7 @@ func (m *SmartUserGroupsMock) PostForm(ctx context.Context, path string, _ map[s
 	return m.dispatch("POST", path, result)
 }
 
-func (m *SmartUserGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SmartUserGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -151,7 +151,7 @@ func (m *SmartUserGroupsMock) GetPaginated(ctx context.Context, path string, rsq
 	return resp, nil
 }
 
-func (m *SmartUserGroupsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *SmartUserGroupsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *SmartUserGroupsMock) InvalidateToken() error                    { return nil }
 func (m *SmartUserGroupsMock) KeepAliveToken() error                     { return nil }
 func (m *SmartUserGroupsMock) GetLogger() *zap.Logger                    { return m.logger }

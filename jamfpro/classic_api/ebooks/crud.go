@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -64,14 +64,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/ebooks
 	Ebooks struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ServiceInterface = (*Ebooks)(nil)
 
 // NewService returns a new ebooks Service backed by the provided HTTP client.
-func NewEbooks(client interfaces.HTTPClient) *Ebooks {
+func NewEbooks(client transport.HTTPClient) *Ebooks {
 	return &Ebooks{client: client}
 }
 

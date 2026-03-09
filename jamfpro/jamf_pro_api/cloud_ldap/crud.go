@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -79,13 +79,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-cloud-ldaps
 	CloudLdap struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ CloudLdapServiceInterface = (*CloudLdap)(nil)
 
-func NewCloudLdap(client interfaces.HTTPClient) *CloudLdap {
+func NewCloudLdap(client transport.HTTPClient) *CloudLdap {
 	return &CloudLdap{client: client}
 }
 

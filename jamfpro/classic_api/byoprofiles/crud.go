@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -65,14 +65,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/byoprofiles
 	Byoprofiles struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ BYOProfilesServiceInterface = (*Byoprofiles)(nil)
 
 // NewService returns a new BYO profiles Service backed by the provided HTTP client.
-func NewByoprofiles(client interfaces.HTTPClient) *Byoprofiles {
+func NewByoprofiles(client transport.HTTPClient) *Byoprofiles {
 	return &Byoprofiles{client: client}
 }
 

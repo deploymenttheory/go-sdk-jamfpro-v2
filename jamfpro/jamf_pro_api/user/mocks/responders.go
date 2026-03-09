@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -133,7 +133,7 @@ func (m *UserMock) PostForm(ctx context.Context, path string, _ map[string]strin
 	return m.dispatch("POST", path, result)
 }
 
-func (m *UserMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *UserMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -175,7 +175,7 @@ func (m *UserMock) GetPaginated(ctx context.Context, path string, _ map[string]s
 	return resp, nil
 }
 
-func (m *UserMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *UserMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *UserMock) InvalidateToken() error                    { return nil }
 func (m *UserMock) KeepAliveToken() error                     { return nil }
 func (m *UserMock) GetLogger() *zap.Logger                    { return m.logger }

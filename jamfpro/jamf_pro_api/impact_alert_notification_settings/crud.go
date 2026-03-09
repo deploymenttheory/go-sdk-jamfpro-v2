@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -35,13 +35,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-impact-alert-notification-settings
 	ImpactAlertNotificationSettings struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ImpactAlertNotificationSettingsServiceInterface = (*ImpactAlertNotificationSettings)(nil)
 
-func NewImpactAlertNotificationSettings(client interfaces.HTTPClient) *ImpactAlertNotificationSettings {
+func NewImpactAlertNotificationSettings(client transport.HTTPClient) *ImpactAlertNotificationSettings {
 	return &ImpactAlertNotificationSettings{client: client}
 }
 

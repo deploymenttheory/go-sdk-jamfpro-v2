@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -52,14 +52,14 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-groups-smart-groups
 	SmartMobileDeviceGroups struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ServiceInterface = (*SmartMobileDeviceGroups)(nil)
 
 // NewService returns a new smart mobile device groups service.
-func NewSmartMobileDeviceGroups(client interfaces.HTTPClient) *SmartMobileDeviceGroups {
+func NewSmartMobileDeviceGroups(client transport.HTTPClient) *SmartMobileDeviceGroups {
 	return &SmartMobileDeviceGroups{client: client}
 }
 

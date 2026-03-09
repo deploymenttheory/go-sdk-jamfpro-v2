@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// DistributionPointMock implements interfaces.HTTPClient.
+// DistributionPointMock implements transport.HTTPClient.
 type DistributionPointMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -123,7 +123,7 @@ func (m *DistributionPointMock) PostWithQuery(ctx context.Context, path string, 
 func (m *DistributionPointMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *DistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *DistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *DistributionPointMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -165,7 +165,7 @@ func (m *DistributionPointMock) GetPaginated(ctx context.Context, path string, q
 	}
 	return resp, nil
 }
-func (m *DistributionPointMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *DistributionPointMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *DistributionPointMock) InvalidateToken() error                    { return nil }
 func (m *DistributionPointMock) KeepAliveToken() error                     { return nil }
 func (m *DistributionPointMock) GetLogger() *zap.Logger                    { return m.logger }

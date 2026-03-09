@@ -567,17 +567,12 @@ func (c *Client) GetTransport() *client.Transport {
 	return c.transport
 }
 
-// EnableTracing enables OpenTelemetry HTTP tracing on the client's transport.
-// Pass nil to use default OTel config (global tracer, "jamfpro-client" service name).
-func (c *Client) EnableTracing(config *client.OTelConfig) error {
-	return c.transport.EnableTracing(config)
-}
-
 // Re-export configuration types and functions for convenience.
 // Users should only need to import the jamfpro package.
 type (
-	AuthConfig   = config.AuthConfig
-	ClientOption = client.ClientOption
+	AuthConfig      = config.AuthConfig
+	ClientOption    = client.ClientOption
+	PaginationLinks = client.PaginationLinks
 )
 
 // Re-export auth method constants.
@@ -595,3 +590,30 @@ func LoadAuthConfigFromFile(path string) (*AuthConfig, error) {
 func AuthConfigFromEnv() *AuthConfig {
 	return config.AuthConfigFromEnv()
 }
+
+// Re-export client configuration options.
+var (
+	WithBaseURL               = client.WithBaseURL
+	WithTimeout               = client.WithTimeout
+	WithRetryCount            = client.WithRetryCount
+	WithRetryWaitTime         = client.WithRetryWaitTime
+	WithRetryMaxWaitTime      = client.WithRetryMaxWaitTime
+	WithLogger                = client.WithLogger
+	WithDebug                 = client.WithDebug
+	WithUserAgent             = client.WithUserAgent
+	WithGlobalHeader          = client.WithGlobalHeader
+	WithGlobalHeaders         = client.WithGlobalHeaders
+	WithProxy                 = client.WithProxy
+	WithTLSClientConfig       = client.WithTLSClientConfig
+	WithTransport             = client.WithTransport
+	WithInsecureSkipVerify    = client.WithInsecureSkipVerify
+	WithMaxConcurrentRequests = client.WithMaxConcurrentRequests
+	WithMandatoryRequestDelay = client.WithMandatoryRequestDelay
+	WithTotalRetryDuration    = client.WithTotalRetryDuration
+)
+
+// Re-export pagination helper functions.
+var (
+	HasNextPage         = client.HasNextPage
+	ExtractParamsFromURL = client.ExtractParamsFromURL
+)

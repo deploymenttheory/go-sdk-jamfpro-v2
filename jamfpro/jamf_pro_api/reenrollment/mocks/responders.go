@@ -13,7 +13,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// ReenrollmentMock is a test double implementing interfaces.HTTPClient.
+// ReenrollmentMock is a test double implementing transport.HTTPClient.
 type ReenrollmentMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -90,7 +90,7 @@ func (m *ReenrollmentMock) PostWithQuery(ctx context.Context, path string, _ map
 func (m *ReenrollmentMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ReenrollmentMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ReenrollmentMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ReenrollmentMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -131,7 +131,7 @@ func (m *ReenrollmentMock) GetPaginated(ctx context.Context, path string, _ map[
 	}
 	return resp, nil
 }
-func (m *ReenrollmentMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *ReenrollmentMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *ReenrollmentMock) InvalidateToken() error                    { return nil }
 func (m *ReenrollmentMock) KeepAliveToken() error                     { return nil }
 func (m *ReenrollmentMock) GetLogger() *zap.Logger                    { return m.logger }

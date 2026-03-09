@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// CloudDistributionPointMock implements interfaces.HTTPClient.
+// CloudDistributionPointMock implements transport.HTTPClient.
 type CloudDistributionPointMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -82,7 +82,7 @@ func (m *CloudDistributionPointMock) PostWithQuery(ctx context.Context, path str
 func (m *CloudDistributionPointMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *CloudDistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CloudDistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *CloudDistributionPointMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -123,7 +123,7 @@ func (m *CloudDistributionPointMock) GetPaginated(ctx context.Context, path stri
 	}
 	return resp, nil
 }
-func (m *CloudDistributionPointMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *CloudDistributionPointMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *CloudDistributionPointMock) InvalidateToken() error                    { return nil }
 func (m *CloudDistributionPointMock) KeepAliveToken() error                     { return nil }
 func (m *CloudDistributionPointMock) GetLogger() *zap.Logger                    { return m.logger }

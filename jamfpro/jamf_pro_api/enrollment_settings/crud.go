@@ -3,7 +3,7 @@ package enrollment_settings
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -23,13 +23,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment
 	EnrollmentSettings struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ EnrollmentSettingsServiceInterface = (*EnrollmentSettings)(nil)
 
-func NewEnrollmentSettings(client interfaces.HTTPClient) *EnrollmentSettings {
+func NewEnrollmentSettings(client transport.HTTPClient) *EnrollmentSettings {
 	return &EnrollmentSettings{client: client}
 }
 

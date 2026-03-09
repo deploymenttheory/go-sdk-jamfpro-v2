@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/crypto"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_distribution_point"
 	"resty.dev/v3"
@@ -126,14 +126,14 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages
 	Packages struct {
-		client                 interfaces.HTTPClient
+		client                 transport.HTTPClient
 		cloudDistributionPoint cloud_distribution_point.CloudDistributionPointServiceInterface
 	}
 )
 
 var _ PackagesServiceInterface = (*Packages)(nil)
 
-func NewPackages(client interfaces.HTTPClient) *Packages {
+func NewPackages(client transport.HTTPClient) *Packages {
 	return &Packages{
 		client:                 client,
 		cloudDistributionPoint: cloud_distribution_point.NewCloudDistributionPoint(client),

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -89,13 +89,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-local-admin-password-pending-rotations
 	LocalAdminPassword struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ LocalAdminPasswordServiceInterface = (*LocalAdminPassword)(nil)
 
-func NewLocalAdminPassword(client interfaces.HTTPClient) *LocalAdminPassword {
+func NewLocalAdminPassword(client transport.HTTPClient) *LocalAdminPassword {
 	return &LocalAdminPassword{client: client}
 }
 

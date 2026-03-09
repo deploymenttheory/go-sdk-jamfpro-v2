@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// CategoriesMock is a test double implementing interfaces.HTTPClient.
+// CategoriesMock is a test double implementing transport.HTTPClient.
 // Responses are keyed by "METHOD:path" and loaded from JSON fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 type CategoriesMock struct {
@@ -149,7 +149,7 @@ func (m *CategoriesMock) RegisterAddCategoryHistoryNotesErrorMock() {
 	m.registerError("POST", "/api/v1/categories/1/history", 500, "error_not_found.json")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *CategoriesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -168,7 +168,7 @@ func (m *CategoriesMock) PostForm(ctx context.Context, path string, _ map[string
 	return m.dispatch("POST", path, result)
 }
 
-func (m *CategoriesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CategoriesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -217,7 +217,7 @@ func (m *CategoriesMock) GetPaginated(ctx context.Context, path string, rsqlQuer
 	return resp, nil
 }
 
-func (m *CategoriesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *CategoriesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *CategoriesMock) InvalidateToken() error                    { return nil }
 func (m *CategoriesMock) KeepAliveToken() error                     { return nil }
 func (m *CategoriesMock) GetLogger() *zap.Logger                    { return m.logger }

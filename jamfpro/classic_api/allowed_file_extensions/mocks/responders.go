@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// AllowedFileExtensionsMock is a test double implementing interfaces.HTTPClient for Classic API allowed file extensions.
+// AllowedFileExtensionsMock is a test double implementing transport.HTTPClient for Classic API allowed file extensions.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -98,7 +98,7 @@ func (m *AllowedFileExtensionsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/allowedfileextensions/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): An allowed file extension with that name already exists")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *AllowedFileExtensionsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -117,7 +117,7 @@ func (m *AllowedFileExtensionsMock) PostForm(ctx context.Context, path string, _
 	return m.dispatch("POST", path, result)
 }
 
-func (m *AllowedFileExtensionsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AllowedFileExtensionsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -159,7 +159,7 @@ func (m *AllowedFileExtensionsMock) GetPaginated(ctx context.Context, path strin
 	return resp, nil
 }
 
-func (m *AllowedFileExtensionsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *AllowedFileExtensionsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *AllowedFileExtensionsMock) InvalidateToken() error                    { return nil }
 func (m *AllowedFileExtensionsMock) KeepAliveToken() error                     { return nil }
 func (m *AllowedFileExtensionsMock) GetLogger() *zap.Logger                    { return m.logger }

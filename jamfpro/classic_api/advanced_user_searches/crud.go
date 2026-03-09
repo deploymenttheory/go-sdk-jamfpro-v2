@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -65,14 +65,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedusersearches
 	AdvancedUserSearches struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ AdvancedUserSearchesServiceInterface = (*AdvancedUserSearches)(nil)
 
 // NewService returns a new advanced user searches Service backed by the provided HTTP client.
-func NewAdvancedUserSearches(client interfaces.HTTPClient) *AdvancedUserSearches {
+func NewAdvancedUserSearches(client transport.HTTPClient) *AdvancedUserSearches {
 	return &AdvancedUserSearches{client: client}
 }
 

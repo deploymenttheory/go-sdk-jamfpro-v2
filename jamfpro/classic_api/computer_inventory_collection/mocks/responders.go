@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// ComputerInventoryCollectionMock is a test double implementing interfaces.HTTPClient for Classic API computer inventory collection.
+// ComputerInventoryCollectionMock is a test double implementing transport.HTTPClient for Classic API computer inventory collection.
 type ComputerInventoryCollectionMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -63,7 +63,7 @@ func (m *ComputerInventoryCollectionMock) PostWithQuery(ctx context.Context, pat
 func (m *ComputerInventoryCollectionMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ComputerInventoryCollectionMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ComputerInventoryCollectionMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ComputerInventoryCollectionMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -98,7 +98,7 @@ func (m *ComputerInventoryCollectionMock) GetPaginated(ctx context.Context, path
 	}
 	return resp, nil
 }
-func (m *ComputerInventoryCollectionMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *ComputerInventoryCollectionMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *ComputerInventoryCollectionMock) InvalidateToken() error                    { return nil }
 func (m *ComputerInventoryCollectionMock) KeepAliveToken() error                     { return nil }
 func (m *ComputerInventoryCollectionMock) GetLogger() *zap.Logger                    { return m.logger }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -44,14 +44,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/vppassignments
 	VppAssignments struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ VPPAssignmentsServiceInterface = (*VppAssignments)(nil)
 
 // NewService returns a new VPP assignments Service backed by the provided HTTP client.
-func NewVppAssignments(client interfaces.HTTPClient) *VppAssignments {
+func NewVppAssignments(client transport.HTTPClient) *VppAssignments {
 	return &VppAssignments{client: client}
 }
 

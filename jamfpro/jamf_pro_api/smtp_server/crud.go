@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -47,13 +47,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
 	SmtpServer struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ SMTPServerServiceInterface = (*SmtpServer)(nil)
 
-func NewSmtpServer(client interfaces.HTTPClient) *SmtpServer {
+func NewSmtpServer(client transport.HTTPClient) *SmtpServer {
 	return &SmtpServer{client: client}
 }
 

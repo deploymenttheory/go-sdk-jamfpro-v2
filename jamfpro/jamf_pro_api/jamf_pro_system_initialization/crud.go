@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -35,13 +35,13 @@ type (
 
 	// Service handles communication with the Jamf Pro system initialization API.
 	JamfProSystemInitialization struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ServiceInterface = (*JamfProSystemInitialization)(nil)
 
-func NewJamfProSystemInitialization(client interfaces.HTTPClient) *JamfProSystemInitialization {
+func NewJamfProSystemInitialization(client transport.HTTPClient) *JamfProSystemInitialization {
 	return &JamfProSystemInitialization{client: client}
 }
 

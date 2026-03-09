@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// NotificationsMock implements interfaces.HTTPClient.
+// NotificationsMock implements transport.HTTPClient.
 type NotificationsMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -75,7 +75,7 @@ func (m *NotificationsMock) PostWithQuery(ctx context.Context, path string, _ ma
 func (m *NotificationsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *NotificationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *NotificationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *NotificationsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -100,7 +100,7 @@ func (m *NotificationsMock) GetBytes(ctx context.Context, path string, q map[str
 func (m *NotificationsMock) GetPaginated(ctx context.Context, path string, q map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	return m.dispatch("GET", path, nil)
 }
-func (m *NotificationsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *NotificationsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *NotificationsMock) InvalidateToken() error                    { return nil }
 func (m *NotificationsMock) KeepAliveToken() error                     { return nil }
 func (m *NotificationsMock) GetLogger() *zap.Logger                    { return m.logger }

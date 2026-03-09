@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -109,14 +109,14 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-enrollments
 	DeviceEnrollments struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ DeviceEnrollmentsServiceInterface = (*DeviceEnrollments)(nil)
 
 // NewService returns a new device enrollments Service backed by the provided HTTP client.
-func NewDeviceEnrollments(client interfaces.HTTPClient) *DeviceEnrollments {
+func NewDeviceEnrollments(client transport.HTTPClient) *DeviceEnrollments {
 	return &DeviceEnrollments{client: client}
 }
 

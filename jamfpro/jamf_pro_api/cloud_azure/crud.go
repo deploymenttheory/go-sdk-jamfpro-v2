@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -59,13 +59,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-azure
 	CloudAzure struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ CloudAzureServiceInterface = (*CloudAzure)(nil)
 
-func NewCloudAzure(client interfaces.HTTPClient) *CloudAzure {
+func NewCloudAzure(client transport.HTTPClient) *CloudAzure {
 	return &CloudAzure{client: client}
 }
 

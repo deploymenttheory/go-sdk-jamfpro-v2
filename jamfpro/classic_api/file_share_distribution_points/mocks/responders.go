@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// FileShareDistributionPointsMock is a test double implementing interfaces.HTTPClient for Classic API file share distribution points.
+// FileShareDistributionPointsMock is a test double implementing transport.HTTPClient for Classic API file share distribution points.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -114,7 +114,7 @@ func (m *FileShareDistributionPointsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/distributionpoints/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A distribution point with that name already exists")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *FileShareDistributionPointsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -133,7 +133,7 @@ func (m *FileShareDistributionPointsMock) PostForm(ctx context.Context, path str
 	return m.dispatch("POST", path, result)
 }
 
-func (m *FileShareDistributionPointsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *FileShareDistributionPointsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -175,7 +175,7 @@ func (m *FileShareDistributionPointsMock) GetPaginated(ctx context.Context, path
 	return resp, nil
 }
 
-func (m *FileShareDistributionPointsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *FileShareDistributionPointsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *FileShareDistributionPointsMock) InvalidateToken() error                    { return nil }
 func (m *FileShareDistributionPointsMock) KeepAliveToken() error                     { return nil }
 func (m *FileShareDistributionPointsMock) GetLogger() *zap.Logger                    { return m.logger }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -75,14 +75,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/macapplications
 	MacApplications struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ServiceInterface = (*MacApplications)(nil)
 
 // NewService returns a new Mac applications Service backed by the provided HTTP client.
-func NewMacApplications(client interfaces.HTTPClient) *MacApplications {
+func NewMacApplications(client transport.HTTPClient) *MacApplications {
 	return &MacApplications{client: client}
 }
 

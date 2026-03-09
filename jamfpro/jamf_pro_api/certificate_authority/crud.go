@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -44,13 +44,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-certificate-authority-active
 	CertificateAuthority struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ CertificateAuthorityServiceInterface = (*CertificateAuthority)(nil)
 
-func NewCertificateAuthority(client interfaces.HTTPClient) *CertificateAuthority {
+func NewCertificateAuthority(client transport.HTTPClient) *CertificateAuthority {
 	return &CertificateAuthority{client: client}
 }
 

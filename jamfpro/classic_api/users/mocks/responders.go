@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// UsersMock is a test double implementing interfaces.HTTPClient for Classic API users.
+// UsersMock is a test double implementing transport.HTTPClient for Classic API users.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -136,7 +136,7 @@ func (m *UsersMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/users/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A user with that name already exists")
 }
 
-// ---- interfaces.HTTPClient implementation ----
+// ---- transport.HTTPClient implementation ----
 
 func (m *UsersMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -155,7 +155,7 @@ func (m *UsersMock) PostForm(ctx context.Context, path string, _ map[string]stri
 	return m.dispatch("POST", path, result)
 }
 
-func (m *UsersMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *UsersMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -197,7 +197,7 @@ func (m *UsersMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 	return resp, nil
 }
 
-func (m *UsersMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *UsersMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *UsersMock) InvalidateToken() error                    { return nil }
 func (m *UsersMock) KeepAliveToken() error                     { return nil }
 func (m *UsersMock) GetLogger() *zap.Logger                    { return m.logger }

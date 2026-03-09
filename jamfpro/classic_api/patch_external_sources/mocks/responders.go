@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// PatchExternalSourcesMock is a test double implementing interfaces.HTTPClient for Classic API patch external sources.
+// PatchExternalSourcesMock is a test double implementing transport.HTTPClient for Classic API patch external sources.
 type PatchExternalSourcesMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -92,7 +92,7 @@ func (m *PatchExternalSourcesMock) PostWithQuery(ctx context.Context, path strin
 func (m *PatchExternalSourcesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *PatchExternalSourcesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *PatchExternalSourcesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *PatchExternalSourcesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -127,7 +127,7 @@ func (m *PatchExternalSourcesMock) GetPaginated(ctx context.Context, path string
 	}
 	return resp, nil
 }
-func (m *PatchExternalSourcesMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *PatchExternalSourcesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *PatchExternalSourcesMock) InvalidateToken() error                    { return nil }
 func (m *PatchExternalSourcesMock) KeepAliveToken() error                     { return nil }
 func (m *PatchExternalSourcesMock) GetLogger() *zap.Logger                    { return m.logger }

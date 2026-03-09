@@ -3,10 +3,11 @@ package client
 import (
 	"context"
 	"fmt"
+	"io"
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -33,6 +34,34 @@ type Transport struct {
 	// responseTracker measures per-request latency and derives an adaptive
 	// inter-request delay when the server begins responding slowly.
 	responseTracker *responseTimeTracker
+}
+
+// GetHTTPClient returns the underlying resty client for advanced use.
+func (t *Transport) GetHTTPClient() *resty.Client {
+	return t.client
+}
+
+// GetLogger returns the configured logger.
+func (t *Transport) GetLogger() *zap.Logger {
+	return t.logger
+}
+
+// RSQLBuilder returns a new RSQL filter expression builder.
+// Pass the Build() result as rsqlQuery["filter"] to filter endpoint results.
+func (t *Transport) RSQLBuilder() transport.RSQLFilterBuilder {
+	return NewRSQLFilterBuilder()
+}
+
+// InvalidateToken revokes the current bearer token at the Jamf Pro API and
+// clears the local cache. The next request triggers a full re-authentication.
+func (t *Transport) InvalidateToken() error {
+	return t.holder.invalidate()
+}
+
+// KeepAliveToken extends the current bearer token lifetime without re-auth.
+// Use before long-running operations to prevent mid-operation token expiry.
+func (t *Transport) KeepAliveToken() error {
+	return t.holder.keepAlive()
 }
 
 // NewTransport creates and fully configures a Jamf Pro API transport.
@@ -129,6 +158,11 @@ func NewTransport(authConfig *config.AuthConfig, options ...ClientOption) (*Tran
 	}
 	transport.holder = holder
 
+	// Apply OpenTelemetry instrumentation (always enabled, uses global providers).
+	// If no global providers are configured, this is a no-op.
+	// This must happen AFTER all other options are applied.
+	transport.applyOpenTelemetry()
+
 	transport.logger.Info("Jamf Pro API transport created",
 		zap.String("base_url", transport.BaseURL),
 		zap.String("auth_method", authConfig.AuthMethod),
@@ -143,32 +177,154 @@ func trimTrailingSlash(s string) string {
 	return s
 }
 
-// GetHTTPClient returns the underlying resty client for advanced use.
-func (t *Transport) GetHTTPClient() *resty.Client {
-	return t.client
+// Get executes a GET request.
+func (t *Transport) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
+	req := t.client.R().SetContext(ctx).SetResult(result).SetResponseBodyUnlimitedReads(true)
+	for k, v := range rsqlQuery {
+		if v != "" {
+			req.SetQueryParam(k, v)
+		}
+	}
+	t.applyHeaders(req, headers)
+	return t.executeRequest(req, "GET", path)
 }
 
-// GetLogger returns the configured logger.
-func (t *Transport) GetLogger() *zap.Logger {
-	return t.logger
+// Post executes a POST request with JSON body.
+func (t *Transport) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
+	req := t.client.R().SetContext(ctx).SetResult(result).SetResponseBodyUnlimitedReads(true)
+	if body != nil {
+		req.SetBody(body)
+	}
+	t.applyHeaders(req, headers)
+	return t.executeRequest(req, "POST", path)
 }
 
-// RSQLBuilder returns a new RSQL filter expression builder.
-// Pass the Build() result as rsqlQuery["filter"] to filter endpoint results.
-func (t *Transport) RSQLBuilder() interfaces.RSQLFilterBuilder {
-	return NewRSQLFilterBuilder()
+// PostWithQuery executes a POST request with both body and query parameters.
+func (t *Transport) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
+	req := t.client.R().SetContext(ctx).SetResult(result)
+	for k, v := range rsqlQuery {
+		if v != "" {
+			req.SetQueryParam(k, v)
+		}
+	}
+	if body != nil {
+		req.SetBody(body)
+	}
+	t.applyHeaders(req, headers)
+	return t.executeRequest(req, "POST", path)
 }
 
-// InvalidateToken revokes the current bearer token at the Jamf Pro API and
-// clears the local cache. The next request triggers a full re-authentication.
-func (t *Transport) InvalidateToken() error {
-	return t.holder.invalidate()
+// PostForm executes a POST request with form-urlencoded data.
+func (t *Transport) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
+	req := t.client.R().SetContext(ctx).SetResult(result)
+	if formData != nil {
+		req.SetFormData(formData)
+	}
+	for k, v := range headers {
+		if v != "" && k != "Content-Type" {
+			req.SetHeader(k, v)
+		}
+	}
+	return t.executeRequest(req, "POST", path)
 }
 
-// KeepAliveToken extends the current bearer token lifetime without re-auth.
-// Use before long-running operations to prevent mid-operation token expiry.
-func (t *Transport) KeepAliveToken() error {
-	return t.holder.keepAlive()
+// PostMultipart executes a POST request with multipart/form-data.
+func (t *Transport) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+	req := t.client.R().SetContext(ctx).SetResult(result)
+	if fileReader != nil && fileName != "" && fileField != "" {
+		field := &resty.MultipartField{
+			Name:        fileField,
+			FileName:    fileName,
+			ContentType: "application/octet-stream",
+			Reader:      fileReader,
+			FileSize:    fileSize,
+		}
+		if progressCallback != nil {
+			field.ProgressCallback = func(p resty.MultipartFieldProgress) {
+				progressCallback(p.Name, p.FileName, p.Written, p.FileSize)
+			}
+		}
+		req.SetMultipartFields(field)
+	}
+	if len(formFields) > 0 {
+		req.SetMultipartFormData(formFields)
+	}
+	for k, v := range headers {
+		if v != "" && k != "Content-Type" {
+			req.SetHeader(k, v)
+		}
+	}
+	return t.executeRequest(req, "POST", path)
+}
+
+// Put executes a PUT request.
+func (t *Transport) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
+	req := t.client.R().SetContext(ctx).SetResult(result).SetResponseBodyUnlimitedReads(true)
+	if body != nil {
+		req.SetBody(body)
+	}
+	t.applyHeaders(req, headers)
+	return t.executeRequest(req, "PUT", path)
+}
+
+// Patch executes a PATCH request.
+func (t *Transport) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
+	req := t.client.R().SetContext(ctx).SetResult(result)
+	if body != nil {
+		req.SetBody(body)
+	}
+	t.applyHeaders(req, headers)
+	return t.executeRequest(req, "PATCH", path)
+}
+
+// Delete executes a DELETE request.
+func (t *Transport) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
+	req := t.client.R().SetContext(ctx).SetResult(result)
+	for k, v := range rsqlQuery {
+		if v != "" {
+			req.SetQueryParam(k, v)
+		}
+	}
+	t.applyHeaders(req, headers)
+	return t.executeRequest(req, "DELETE", path)
+}
+
+// DeleteWithBody executes a DELETE request with a JSON body.
+func (t *Transport) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
+	req := t.client.R().SetContext(ctx).SetResult(result)
+	if body != nil {
+		req.SetBody(body)
+	}
+	t.applyHeaders(req, headers)
+	return t.executeRequest(req, "DELETE", path)
+}
+
+// GetBytes performs a GET request and returns raw bytes without unmarshaling.
+func (t *Transport) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
+	req := t.client.R().SetContext(ctx)
+	for k, v := range rsqlQuery {
+		if v != "" {
+			req.SetQueryParam(k, v)
+		}
+	}
+	t.applyHeaders(req, headers)
+	t.logger.Debug("Executing bytes request", zap.String("method", "GET"), zap.String("path", path))
+	resp, err := req.Get(path)
+	if err != nil {
+		t.logger.Error("Bytes request failed", zap.String("path", path), zap.Error(err))
+		return resp, nil, fmt.Errorf("bytes request failed: %w", err)
+	}
+	if resp.IsError() {
+		return resp, nil, ParseErrorResponse(
+			[]byte(resp.String()),
+			resp.StatusCode(),
+			resp.Status(),
+			"GET",
+			path,
+			t.logger,
+		)
+	}
+	return resp, resp.Bytes(), nil
 }
 
 // executeRequest is the central request executor used by all HTTP verb methods.

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -56,14 +56,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/patchexternalsources
 	PatchExternalSources struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ PatchExternalSourcesServiceInterface = (*PatchExternalSources)(nil)
 
 // NewService returns a new patch external sources Service backed by the provided HTTP client.
-func NewPatchExternalSources(client interfaces.HTTPClient) *PatchExternalSources {
+func NewPatchExternalSources(client transport.HTTPClient) *PatchExternalSources {
 	return &PatchExternalSources{client: client}
 }
 

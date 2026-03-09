@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -20,7 +20,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// ClassicLdapMock is a test double implementing interfaces.HTTPClient.
+// ClassicLdapMock is a test double implementing transport.HTTPClient.
 type ClassicLdapMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -70,7 +70,7 @@ func (m *ClassicLdapMock) PostWithQuery(ctx context.Context, path string, _ map[
 func (m *ClassicLdapMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ClassicLdapMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ClassicLdapMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ClassicLdapMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -105,7 +105,7 @@ func (m *ClassicLdapMock) GetPaginated(ctx context.Context, path string, _ map[s
 	}
 	return resp, nil
 }
-func (m *ClassicLdapMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *ClassicLdapMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *ClassicLdapMock) InvalidateToken() error                    { return nil }
 func (m *ClassicLdapMock) KeepAliveToken() error                       { return nil }
 func (m *ClassicLdapMock) GetLogger() *zap.Logger                     { return m.logger }

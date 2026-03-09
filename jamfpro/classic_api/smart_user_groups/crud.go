@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -65,14 +65,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/usergroups
 	SmartUserGroups struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ SmartUserGroupsServiceInterface = (*SmartUserGroups)(nil)
 
 // NewService returns a new smart user groups Service backed by the provided HTTP client.
-func NewSmartUserGroups(client interfaces.HTTPClient) *SmartUserGroups {
+func NewSmartUserGroups(client transport.HTTPClient) *SmartUserGroups {
 	return &SmartUserGroups{client: client}
 }
 

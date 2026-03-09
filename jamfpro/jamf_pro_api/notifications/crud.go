@@ -3,7 +3,7 @@ package notifications
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -23,13 +23,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-notifications
 	Notifications struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ NotificationsServiceInterface = (*Notifications)(nil)
 
-func NewNotifications(client interfaces.HTTPClient) *Notifications {
+func NewNotifications(client transport.HTTPClient) *Notifications {
 	return &Notifications{client: client}
 }
 

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -48,14 +48,14 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
 	Mdm struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ MDMServiceInterface = (*Mdm)(nil)
 
 // NewService returns a new MDM service.
-func NewMdm(client interfaces.HTTPClient) *Mdm {
+func NewMdm(client transport.HTTPClient) *Mdm {
 	return &Mdm{client: client}
 }
 

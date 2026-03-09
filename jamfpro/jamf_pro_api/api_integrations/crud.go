@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -65,13 +65,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-api-integrations
 	ApiIntegrations struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ApiIntegrationsServiceInterface = (*ApiIntegrations)(nil)
 
-func NewApiIntegrations(client interfaces.HTTPClient) *ApiIntegrations {
+func NewApiIntegrations(client transport.HTTPClient) *ApiIntegrations {
 	return &ApiIntegrations{client: client}
 }
 

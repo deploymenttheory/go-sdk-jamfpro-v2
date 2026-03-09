@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -20,7 +20,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// JamfConnectMock is a test double implementing interfaces.HTTPClient.
+// JamfConnectMock is a test double implementing transport.HTTPClient.
 type JamfConnectMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -218,7 +218,7 @@ func (m *JamfConnectMock) PostForm(ctx context.Context, path string, _ map[strin
 	return m.dispatch("POST", path, result)
 }
 
-func (m *JamfConnectMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *JamfConnectMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -266,7 +266,7 @@ func (m *JamfConnectMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	return resp, nil
 }
 
-func (m *JamfConnectMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *JamfConnectMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *JamfConnectMock) InvalidateToken() error                    { return nil }
 func (m *JamfConnectMock) KeepAliveToken() error                     { return nil }
 func (m *JamfConnectMock) GetLogger() *zap.Logger                    { return m.logger }

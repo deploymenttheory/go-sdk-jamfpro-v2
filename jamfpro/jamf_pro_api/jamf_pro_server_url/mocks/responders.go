@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -95,7 +95,7 @@ func (m *JamfProServerURLMock) PostForm(ctx context.Context, path string, _ map[
 	return m.dispatch("POST", path, result)
 }
 
-func (m *JamfProServerURLMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *JamfProServerURLMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -143,7 +143,7 @@ func (m *JamfProServerURLMock) GetPaginated(ctx context.Context, path string, _ 
 	return resp, nil
 }
 
-func (m *JamfProServerURLMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *JamfProServerURLMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *JamfProServerURLMock) InvalidateToken() error                    { return nil }
 func (m *JamfProServerURLMock) KeepAliveToken() error                     { return nil }
 func (m *JamfProServerURLMock) GetLogger() *zap.Logger                    { return m.logger }

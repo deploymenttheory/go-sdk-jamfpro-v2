@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// OAuth2SessionTokensMock implements interfaces.HTTPClient for tests.
+// OAuth2SessionTokensMock implements transport.HTTPClient for tests.
 type OAuth2SessionTokensMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -68,7 +68,7 @@ func (m *OAuth2SessionTokensMock) PostWithQuery(ctx context.Context, path string
 func (m *OAuth2SessionTokensMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *OAuth2SessionTokensMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *OAuth2SessionTokensMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *OAuth2SessionTokensMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -103,7 +103,7 @@ func (m *OAuth2SessionTokensMock) GetPaginated(ctx context.Context, path string,
 	}
 	return resp, nil
 }
-func (m *OAuth2SessionTokensMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *OAuth2SessionTokensMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *OAuth2SessionTokensMock) InvalidateToken() error                    { return nil }
 func (m *OAuth2SessionTokensMock) KeepAliveToken() error                     { return nil }
 func (m *OAuth2SessionTokensMock) GetLogger() *zap.Logger                    { return m.logger }

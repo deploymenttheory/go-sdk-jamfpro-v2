@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// DirectoryBindingsMock is a test double implementing interfaces.HTTPClient for Classic API directory bindings.
+// DirectoryBindingsMock is a test double implementing transport.HTTPClient for Classic API directory bindings.
 type DirectoryBindingsMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -109,7 +109,7 @@ func (m *DirectoryBindingsMock) PostWithQuery(ctx context.Context, path string, 
 func (m *DirectoryBindingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *DirectoryBindingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *DirectoryBindingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *DirectoryBindingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -144,7 +144,7 @@ func (m *DirectoryBindingsMock) GetPaginated(ctx context.Context, path string, r
 	}
 	return resp, nil
 }
-func (m *DirectoryBindingsMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *DirectoryBindingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *DirectoryBindingsMock) InvalidateToken() error                    { return nil }
 func (m *DirectoryBindingsMock) KeepAliveToken() error                     { return nil }
 func (m *DirectoryBindingsMock) GetLogger() *zap.Logger                    { return m.logger }

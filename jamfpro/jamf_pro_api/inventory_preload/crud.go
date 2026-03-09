@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -94,13 +94,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-inventory-preload-records
 	InventoryPreload struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ InventoryPreloadServiceInterface = (*InventoryPreload)(nil)
 
-func NewInventoryPreload(client interfaces.HTTPClient) *InventoryPreload {
+func NewInventoryPreload(client transport.HTTPClient) *InventoryPreload {
 	return &InventoryPreload{client: client}
 }
 

@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -164,7 +164,7 @@ func (m *ComputerInventoryMock) PostWithQuery(ctx context.Context, path string, 
 func (m *ComputerInventoryMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ComputerInventoryMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ComputerInventoryMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ComputerInventoryMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -207,7 +207,7 @@ func (m *ComputerInventoryMock) GetPaginated(ctx context.Context, path string, _
 	return resp, nil
 }
 
-func (m *ComputerInventoryMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *ComputerInventoryMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *ComputerInventoryMock) InvalidateToken() error                    { return nil }
 func (m *ComputerInventoryMock) KeepAliveToken() error                     { return nil }
 func (m *ComputerInventoryMock) GetLogger() *zap.Logger                    { return m.logger }

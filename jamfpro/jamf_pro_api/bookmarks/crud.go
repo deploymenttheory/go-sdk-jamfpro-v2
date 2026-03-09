@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -44,13 +44,13 @@ type (
 	//
 	// Jamf Pro API docs: Undocumented
 	Bookmarks struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ BookmarksServiceInterface = (*Bookmarks)(nil)
 
-func NewBookmarks(client interfaces.HTTPClient) *Bookmarks {
+func NewBookmarks(client transport.HTTPClient) *Bookmarks {
 	return &Bookmarks{client: client}
 }
 

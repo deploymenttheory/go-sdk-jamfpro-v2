@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"resty.dev/v3"
 )
 
@@ -28,13 +28,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_self-service-branding-images
 	SelfServiceBrandingUpload struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ SelfServiceBrandingUploadServiceInterface = (*SelfServiceBrandingUpload)(nil)
 
-func NewSelfServiceBrandingUpload(client interfaces.HTTPClient) *SelfServiceBrandingUpload {
+func NewSelfServiceBrandingUpload(client transport.HTTPClient) *SelfServiceBrandingUpload {
 	return &SelfServiceBrandingUpload{client: client}
 }
 

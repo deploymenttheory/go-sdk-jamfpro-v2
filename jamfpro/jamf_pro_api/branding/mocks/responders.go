@@ -13,7 +13,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -57,7 +57,7 @@ func (m *BrandingMock) PostWithQuery(ctx context.Context, path string, _ map[str
 func (m *BrandingMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *BrandingMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *BrandingMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *BrandingMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -73,7 +73,7 @@ func (m *BrandingMock) DeleteWithBody(ctx context.Context, path string, _ any, _
 	return m.dispatch("DELETE", path, result)
 }
 
-// GetBytes implements interfaces.HTTPClient.GetBytes.
+// GetBytes implements transport.HTTPClient.GetBytes.
 func (m *BrandingMock) GetBytes(ctx context.Context, path string, _ map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
@@ -94,7 +94,7 @@ func (m *BrandingMock) GetPaginated(ctx context.Context, path string, _ map[stri
 	}
 	return resp, nil
 }
-func (m *BrandingMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *BrandingMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *BrandingMock) InvalidateToken() error                    { return nil }
 func (m *BrandingMock) KeepAliveToken() error                     { return nil }
 func (m *BrandingMock) GetLogger() *zap.Logger                    { return m.logger }

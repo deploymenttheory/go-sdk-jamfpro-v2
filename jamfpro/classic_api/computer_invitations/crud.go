@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -44,14 +44,14 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
 	ComputerInvitations struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ComputerInvitationsServiceInterface = (*ComputerInvitations)(nil)
 
 // NewService returns a new computer invitations Service backed by the provided HTTP client.
-func NewComputerInvitations(client interfaces.HTTPClient) *ComputerInvitations {
+func NewComputerInvitations(client transport.HTTPClient) *ComputerInvitations {
 	return &ComputerInvitations{client: client}
 }
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mime"
 	"resty.dev/v3"
 )
@@ -36,14 +36,14 @@ type (
 	//
 	// API reference: Undocumented
 	MacosConfigurationProfileCustomSettings struct {
-		client interfaces.HTTPClient
+		client transport.HTTPClient
 	}
 )
 
 var _ ServiceInterface = (*MacosConfigurationProfileCustomSettings)(nil)
 
 // NewService creates a new macOS configuration profile custom settings service.
-func NewMacosConfigurationProfileCustomSettings(client interfaces.HTTPClient) *MacosConfigurationProfileCustomSettings {
+func NewMacosConfigurationProfileCustomSettings(client transport.HTTPClient) *MacosConfigurationProfileCustomSettings {
 	return &MacosConfigurationProfileCustomSettings{client: client}
 }
 

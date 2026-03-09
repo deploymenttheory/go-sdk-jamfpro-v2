@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/interfaces"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// SSOFailoverMock implements interfaces.HTTPClient for tests.
+// SSOFailoverMock implements transport.HTTPClient for tests.
 type SSOFailoverMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -69,7 +69,7 @@ func (m *SSOFailoverMock) PostWithQuery(ctx context.Context, path string, _ map[
 func (m *SSOFailoverMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *SSOFailoverMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ interfaces.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SSOFailoverMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *SSOFailoverMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -104,7 +104,7 @@ func (m *SSOFailoverMock) GetPaginated(ctx context.Context, path string, q map[s
 	}
 	return resp, nil
 }
-func (m *SSOFailoverMock) RSQLBuilder() interfaces.RSQLFilterBuilder { return nil }
+func (m *SSOFailoverMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
 func (m *SSOFailoverMock) InvalidateToken() error                    { return nil }
 func (m *SSOFailoverMock) KeepAliveToken() error                     { return nil }
 func (m *SSOFailoverMock) GetLogger() *zap.Logger                    { return m.logger }
