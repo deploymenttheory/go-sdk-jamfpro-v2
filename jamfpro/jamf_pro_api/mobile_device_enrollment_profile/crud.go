@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,12 +14,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-enrollment-profile-id-download-profile
 	MobileDeviceEnrollmentProfile struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new mobile device enrollment profile Service backed by the provided HTTP client.
-func NewMobileDeviceEnrollmentProfile(client transport.HTTPClient) *MobileDeviceEnrollmentProfile {
+func NewMobileDeviceEnrollmentProfile(client client.Client) *MobileDeviceEnrollmentProfile {
 	return &MobileDeviceEnrollmentProfile{client: client}
 }
 

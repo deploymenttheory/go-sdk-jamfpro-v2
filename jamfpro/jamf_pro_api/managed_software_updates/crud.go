@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -16,12 +16,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-available-updates
 	ManagedSoftwareUpdates struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new managed software updates Service backed by the provided HTTP client.
-func NewManagedSoftwareUpdates(client transport.HTTPClient) *ManagedSoftwareUpdates {
+func NewManagedSoftwareUpdates(client client.Client) *ManagedSoftwareUpdates {
 	return &ManagedSoftwareUpdates{client: client}
 }
 

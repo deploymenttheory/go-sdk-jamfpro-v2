@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -114,7 +114,7 @@ func (m *InventoryInformationMock) PostForm(ctx context.Context, path string, _ 
 	return m.dispatch("POST", path, result)
 }
 
-func (m *InventoryInformationMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *InventoryInformationMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -156,7 +156,7 @@ func (m *InventoryInformationMock) GetPaginated(ctx context.Context, path string
 	return resp, nil
 }
 
-func (m *InventoryInformationMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *InventoryInformationMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *InventoryInformationMock) InvalidateToken() error                    { return nil }
 func (m *InventoryInformationMock) KeepAliveToken() error                     { return nil }
 func (m *InventoryInformationMock) GetLogger() *zap.Logger                    { return m.logger }

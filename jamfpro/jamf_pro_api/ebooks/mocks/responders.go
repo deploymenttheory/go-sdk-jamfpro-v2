@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// EbooksMock is a test double implementing transport.HTTPClient.
+// EbooksMock is a test double implementing client.Client.
 type EbooksMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -130,7 +130,7 @@ func (m *EbooksMock) PostForm(ctx context.Context, path string, _ map[string]str
 	return m.dispatch("POST", path, result)
 }
 
-func (m *EbooksMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *EbooksMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -179,7 +179,7 @@ func (m *EbooksMock) GetPaginated(ctx context.Context, path string, rsqlQuery ma
 	return resp, nil
 }
 
-func (m *EbooksMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *EbooksMock) InvalidateToken() error                    { return nil }
-func (m *EbooksMock) KeepAliveToken() error                     { return nil }
-func (m *EbooksMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *EbooksMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *EbooksMock) InvalidateToken() error                { return nil }
+func (m *EbooksMock) KeepAliveToken() error                 { return nil }
+func (m *EbooksMock) GetLogger() *zap.Logger                { return m.logger }

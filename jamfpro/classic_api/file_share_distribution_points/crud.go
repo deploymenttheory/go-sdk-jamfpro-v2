@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,12 +14,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/distributionpoints
 	FileShareDistributionPoints struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new file share distribution points Service backed by the provided HTTP client.
-func NewFileShareDistributionPoints(client transport.HTTPClient) *FileShareDistributionPoints {
+func NewFileShareDistributionPoints(client client.Client) *FileShareDistributionPoints {
 	return &FileShareDistributionPoints{client: client}
 }
 

@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// ComputerGroupsMock is a test double implementing transport.HTTPClient for Classic API computer groups.
+// ComputerGroupsMock is a test double implementing client.Client for Classic API computer groups.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -114,7 +114,7 @@ func (m *ComputerGroupsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/computergroups/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A computer group with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *ComputerGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -133,7 +133,7 @@ func (m *ComputerGroupsMock) PostForm(ctx context.Context, path string, _ map[st
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ComputerGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -175,10 +175,10 @@ func (m *ComputerGroupsMock) GetPaginated(ctx context.Context, path string, rsql
 	return resp, nil
 }
 
-func (m *ComputerGroupsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ComputerGroupsMock) InvalidateToken() error                    { return nil }
-func (m *ComputerGroupsMock) KeepAliveToken() error                     { return nil }
-func (m *ComputerGroupsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *ComputerGroupsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ComputerGroupsMock) InvalidateToken() error                { return nil }
+func (m *ComputerGroupsMock) KeepAliveToken() error                 { return nil }
+func (m *ComputerGroupsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

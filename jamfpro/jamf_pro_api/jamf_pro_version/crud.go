@@ -3,7 +3,7 @@ package jamf_pro_version
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -13,11 +13,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-pro-version
 	JamfProVersion struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewJamfProVersion(client transport.HTTPClient) *JamfProVersion {
+func NewJamfProVersion(client client.Client) *JamfProVersion {
 	return &JamfProVersion{client: client}
 }
 

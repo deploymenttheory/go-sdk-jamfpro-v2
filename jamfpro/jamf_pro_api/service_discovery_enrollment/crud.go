@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,11 +15,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
 	ServiceDiscoveryEnrollment struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewServiceDiscoveryEnrollment(client transport.HTTPClient) *ServiceDiscoveryEnrollment {
+func NewServiceDiscoveryEnrollment(client client.Client) *ServiceDiscoveryEnrollment {
 	return &ServiceDiscoveryEnrollment{client: client}
 }
 

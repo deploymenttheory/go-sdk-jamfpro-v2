@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// VPPAssignmentsMock is a test double implementing transport.HTTPClient for Classic API VPP assignments.
+// VPPAssignmentsMock is a test double implementing client.Client for Classic API VPP assignments.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -96,7 +96,7 @@ func (m *VPPAssignmentsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/vppassignments/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A VPP assignment with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *VPPAssignmentsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
@@ -114,7 +114,7 @@ func (m *VPPAssignmentsMock) PostForm(ctx context.Context, path string, _ map[st
 	return m.dispatch("POST", path, result)
 }
 
-func (m *VPPAssignmentsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *VPPAssignmentsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -156,10 +156,10 @@ func (m *VPPAssignmentsMock) GetPaginated(ctx context.Context, path string, rsql
 	return resp, nil
 }
 
-func (m *VPPAssignmentsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *VPPAssignmentsMock) InvalidateToken() error                    { return nil }
-func (m *VPPAssignmentsMock) KeepAliveToken() error                     { return nil }
-func (m *VPPAssignmentsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *VPPAssignmentsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *VPPAssignmentsMock) InvalidateToken() error                { return nil }
+func (m *VPPAssignmentsMock) KeepAliveToken() error                 { return nil }
+func (m *VPPAssignmentsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

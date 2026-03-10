@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -12,11 +12,11 @@ import (
 type (
 	// Service handles communication with the Jamf Pro system initialization API.
 	JamfProSystemInitialization struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewJamfProSystemInitialization(client transport.HTTPClient) *JamfProSystemInitialization {
+func NewJamfProSystemInitialization(client client.Client) *JamfProSystemInitialization {
 	return &JamfProSystemInitialization{client: client}
 }
 

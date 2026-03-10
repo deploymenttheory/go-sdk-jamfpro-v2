@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
 	"resty.dev/v3"
@@ -18,11 +18,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-mobile-device-prestages
 	MobileDevicePrestages struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewMobileDevicePrestages(client transport.HTTPClient) *MobileDevicePrestages {
+func NewMobileDevicePrestages(client client.Client) *MobileDevicePrestages {
 	return &MobileDevicePrestages{client: client}
 }
 

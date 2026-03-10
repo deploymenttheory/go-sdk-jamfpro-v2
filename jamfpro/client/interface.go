@@ -1,4 +1,4 @@
-package transport
+package client
 
 import (
 	"context"
@@ -11,9 +11,9 @@ import (
 // MultipartProgressCallback is called during multipart uploads to report progress.
 type MultipartProgressCallback func(fieldName string, fileName string, bytesWritten int64, totalBytes int64)
 
-// HTTPClient is the interface service implementations depend on.
-// The Transport struct in the client package satisfies this interface.
-type HTTPClient interface {
+// Client is the interface service implementations depend on.
+// The Transport struct in this package satisfies this interface.
+type Client interface {
 	// Get executes a GET request and unmarshals the JSON response into the result parameter.
 	// rsqlQuery is optional; pass nil or an empty map when no filtering or pagination is needed.
 	// Supported keys: "filter" (RSQL expression), "sort", "page", "page-size".

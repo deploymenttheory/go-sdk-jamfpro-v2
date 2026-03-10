@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// JCDSMock is a test double implementing transport.HTTPClient.
+// JCDSMock is a test double implementing client.Client.
 type JCDSMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -104,7 +104,7 @@ func loadMockResponse(filename string) ([]byte, error) {
 	return os.ReadFile(filepath.Join(dir, filename))
 }
 
-// Get implements transport.HTTPClient.
+// Get implements client.Client.
 func (m *JCDSMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
@@ -123,7 +123,7 @@ func (m *JCDSMock) Get(ctx context.Context, path string, rsqlQuery map[string]st
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// Post implements transport.HTTPClient.
+// Post implements client.Client.
 func (m *JCDSMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "POST " + path
 	resp, ok := m.responses[key]
@@ -141,22 +141,22 @@ func (m *JCDSMock) Post(ctx context.Context, path string, body any, headers map[
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// PostWithQuery implements transport.HTTPClient.
+// PostWithQuery implements client.Client.
 func (m *JCDSMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, body, headers, result)
 }
 
-// PostForm implements transport.HTTPClient.
+// PostForm implements client.Client.
 func (m *JCDSMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-// PostMultipart implements transport.HTTPClient.
-func (m *JCDSMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+// PostMultipart implements client.Client.
+func (m *JCDSMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
-// Put implements transport.HTTPClient.
+// Put implements client.Client.
 func (m *JCDSMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PUT " + path
 	resp, ok := m.responses[key]
@@ -174,7 +174,7 @@ func (m *JCDSMock) Put(ctx context.Context, path string, body any, headers map[s
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// Patch implements transport.HTTPClient.
+// Patch implements client.Client.
 func (m *JCDSMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PATCH " + path
 	resp, ok := m.responses[key]
@@ -192,7 +192,7 @@ func (m *JCDSMock) Patch(ctx context.Context, path string, body any, headers map
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// Delete implements transport.HTTPClient.
+// Delete implements client.Client.
 func (m *JCDSMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "DELETE " + path
 	resp, ok := m.responses[key]
@@ -210,12 +210,12 @@ func (m *JCDSMock) Delete(ctx context.Context, path string, rsqlQuery map[string
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// DeleteWithBody implements transport.HTTPClient.
+// DeleteWithBody implements client.Client.
 func (m *JCDSMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Delete(ctx, path, nil, headers, result)
 }
 
-// GetBytes implements transport.HTTPClient.
+// GetBytes implements client.Client.
 func (m *JCDSMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
@@ -229,27 +229,27 @@ func (m *JCDSMock) GetBytes(ctx context.Context, path string, rsqlQuery map[stri
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
-// GetPaginated implements transport.HTTPClient.
+// GetPaginated implements client.Client.
 func (m *JCDSMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in JCDSMock")
 }
 
-// RSQLBuilder implements transport.HTTPClient.
-func (m *JCDSMock) RSQLBuilder() transport.RSQLFilterBuilder {
+// RSQLBuilder implements client.Client.
+func (m *JCDSMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 
-// InvalidateToken implements transport.HTTPClient.
+// InvalidateToken implements client.Client.
 func (m *JCDSMock) InvalidateToken() error {
 	return nil
 }
 
-// KeepAliveToken implements transport.HTTPClient.
+// KeepAliveToken implements client.Client.
 func (m *JCDSMock) KeepAliveToken() error {
 	return nil
 }
 
-// GetLogger implements transport.HTTPClient.
+// GetLogger implements client.Client.
 func (m *JCDSMock) GetLogger() *zap.Logger {
 	return m.logger
 }

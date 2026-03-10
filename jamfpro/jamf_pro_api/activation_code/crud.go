@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,12 +15,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-activation-code-history
 	ActivationCode struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService creates a new activation_code service.
-func NewActivationCode(client transport.HTTPClient) *ActivationCode {
+func NewActivationCode(client client.Client) *ActivationCode {
 	return &ActivationCode{client: client}
 }
 

@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// ComputerExtensionAttributesMock is a test double implementing transport.HTTPClient.
+// ComputerExtensionAttributesMock is a test double implementing client.Client.
 type ComputerExtensionAttributesMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -162,7 +162,7 @@ func (m *ComputerExtensionAttributesMock) PostForm(ctx context.Context, path str
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerExtensionAttributesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ComputerExtensionAttributesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -211,10 +211,10 @@ func (m *ComputerExtensionAttributesMock) GetPaginated(ctx context.Context, path
 	return resp, nil
 }
 
-func (m *ComputerExtensionAttributesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ComputerExtensionAttributesMock) InvalidateToken() error                    { return nil }
-func (m *ComputerExtensionAttributesMock) KeepAliveToken() error                     { return nil }
-func (m *ComputerExtensionAttributesMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *ComputerExtensionAttributesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ComputerExtensionAttributesMock) InvalidateToken() error                { return nil }
+func (m *ComputerExtensionAttributesMock) KeepAliveToken() error                 { return nil }
+func (m *ComputerExtensionAttributesMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *ComputerExtensionAttributesMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]

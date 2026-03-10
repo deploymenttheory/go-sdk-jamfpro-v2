@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -56,7 +56,7 @@ func (m *IconsMock) PostWithQuery(ctx context.Context, path string, _ map[string
 func (m *IconsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *IconsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *IconsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", "/api/v1/icon", result)
 }
 func (m *IconsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -91,7 +91,7 @@ func (m *IconsMock) GetPaginated(ctx context.Context, path string, _ map[string]
 	}
 	return resp, nil
 }
-func (m *IconsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *IconsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *IconsMock) InvalidateToken() error                    { return nil }
 func (m *IconsMock) KeepAliveToken() error                     { return nil }
 func (m *IconsMock) GetLogger() *zap.Logger                    { return m.logger }

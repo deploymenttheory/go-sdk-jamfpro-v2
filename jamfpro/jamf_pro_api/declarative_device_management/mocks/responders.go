@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -80,7 +80,7 @@ func (m *DeclarativeDeviceManagementMock) PostWithQuery(ctx context.Context, pat
 func (m *DeclarativeDeviceManagementMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *DeclarativeDeviceManagementMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *DeclarativeDeviceManagementMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *DeclarativeDeviceManagementMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -115,7 +115,7 @@ func (m *DeclarativeDeviceManagementMock) GetPaginated(ctx context.Context, path
 	}
 	return resp, nil
 }
-func (m *DeclarativeDeviceManagementMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *DeclarativeDeviceManagementMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *DeclarativeDeviceManagementMock) InvalidateToken() error                    { return nil }
 func (m *DeclarativeDeviceManagementMock) KeepAliveToken() error                     { return nil }
 func (m *DeclarativeDeviceManagementMock) GetLogger() *zap.Logger                    { return m.logger }

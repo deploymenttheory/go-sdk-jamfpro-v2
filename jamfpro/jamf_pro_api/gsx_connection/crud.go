@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,11 +15,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-gsx-connection
 	GsxConnection struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewGsxConnection(client transport.HTTPClient) *GsxConnection {
+func NewGsxConnection(client client.Client) *GsxConnection {
 	return &GsxConnection{client: client}
 }
 

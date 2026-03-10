@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// ActivationCodeMock is a test double implementing transport.HTTPClient.
+// ActivationCodeMock is a test double implementing client.Client.
 type ActivationCodeMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -94,7 +94,7 @@ func loadMockResponse(filename string) ([]byte, error) {
 	return os.ReadFile(filepath.Join(wd, "mocks", filename))
 }
 
-// Get implements transport.HTTPClient.Get.
+// Get implements client.Client.Get.
 func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	m.LastRSQLQuery = query
 	key := "GET:" + path
@@ -116,7 +116,7 @@ func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[str
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// GetPaginated implements transport.HTTPClient.GetPaginated.
+// GetPaginated implements client.Client.GetPaginated.
 func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, query map[string]string, headers map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	m.LastRSQLQuery = query
 	key := "GET:" + path
@@ -144,7 +144,7 @@ func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, quer
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// Post implements transport.HTTPClient.Post.
+// Post implements client.Client.Post.
 func (m *ActivationCodeMock) Post(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	key := "POST:" + path
 	resp, ok := m.responses[key]
@@ -165,12 +165,12 @@ func (m *ActivationCodeMock) Post(ctx context.Context, path string, body any, he
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// Delete implements transport.HTTPClient.Delete.
+// Delete implements client.Client.Delete.
 func (m *ActivationCodeMock) Delete(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("Delete not implemented in ActivationCodeMock")
 }
 
-// Put implements transport.HTTPClient.Put.
+// Put implements client.Client.Put.
 func (m *ActivationCodeMock) Put(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	key := "PUT:" + path
 	resp, ok := m.responses[key]
@@ -185,7 +185,7 @@ func (m *ActivationCodeMock) Put(ctx context.Context, path string, body any, hea
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// Patch implements transport.HTTPClient.Patch.
+// Patch implements client.Client.Patch.
 func (m *ActivationCodeMock) Patch(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	key := "PATCH:" + path
 	resp, ok := m.responses[key]
@@ -200,27 +200,27 @@ func (m *ActivationCodeMock) Patch(ctx context.Context, path string, body any, h
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// DownloadFile implements transport.HTTPClient.DownloadFile.
+// DownloadFile implements client.Client.DownloadFile.
 func (m *ActivationCodeMock) DownloadFile(ctx context.Context, url string) (io.ReadCloser, *http.Response, error) {
 	return nil, nil, fmt.Errorf("DownloadFile not implemented in ActivationCodeMock")
 }
 
-// SetLogger implements transport.HTTPClient.SetLogger.
+// SetLogger implements client.Client.SetLogger.
 func (m *ActivationCodeMock) SetLogger(logger *zap.Logger) {
 	m.logger = logger
 }
 
-// GetLogger implements transport.HTTPClient.GetLogger.
+// GetLogger implements client.Client.GetLogger.
 func (m *ActivationCodeMock) GetLogger() *zap.Logger {
 	return m.logger
 }
 
-// DeleteWithBody implements transport.HTTPClient.DeleteWithBody.
+// DeleteWithBody implements client.Client.DeleteWithBody.
 func (m *ActivationCodeMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("DeleteWithBody not implemented in ActivationCodeMock")
 }
 
-// PostWithQuery implements transport.HTTPClient.PostWithQuery.
+// PostWithQuery implements client.Client.PostWithQuery.
 func (m *ActivationCodeMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "POST:" + path
@@ -236,32 +236,32 @@ func (m *ActivationCodeMock) PostWithQuery(ctx context.Context, path string, rsq
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// PostForm implements transport.HTTPClient.PostForm.
+// PostForm implements client.Client.PostForm.
 func (m *ActivationCodeMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostForm not implemented in ActivationCodeMock")
 }
 
-// PostMultipart implements transport.HTTPClient.PostMultipart.
-func (m *ActivationCodeMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
+// PostMultipart implements client.Client.PostMultipart.
+func (m *ActivationCodeMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostMultipart not implemented in ActivationCodeMock")
 }
 
-// GetBytes implements transport.HTTPClient.GetBytes.
+// GetBytes implements client.Client.GetBytes.
 func (m *ActivationCodeMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	return nil, nil, fmt.Errorf("GetBytes not implemented in ActivationCodeMock")
 }
 
-// RSQLBuilder implements transport.HTTPClient.RSQLBuilder.
-func (m *ActivationCodeMock) RSQLBuilder() transport.RSQLFilterBuilder {
+// RSQLBuilder implements client.Client.RSQLBuilder.
+func (m *ActivationCodeMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 
-// InvalidateToken implements transport.HTTPClient.InvalidateToken.
+// InvalidateToken implements client.Client.InvalidateToken.
 func (m *ActivationCodeMock) InvalidateToken() error {
 	return nil
 }
 
-// KeepAliveToken implements transport.HTTPClient.KeepAliveToken.
+// KeepAliveToken implements client.Client.KeepAliveToken.
 func (m *ActivationCodeMock) KeepAliveToken() error {
 	return nil
 }

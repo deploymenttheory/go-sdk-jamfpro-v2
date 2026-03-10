@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,12 +14,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputergroups
 	ComputerGroups struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new computer groups Service backed by the provided HTTP client.
-func NewComputerGroups(client transport.HTTPClient) *ComputerGroups {
+func NewComputerGroups(client client.Client) *ComputerGroups {
 	return &ComputerGroups{client: client}
 }
 

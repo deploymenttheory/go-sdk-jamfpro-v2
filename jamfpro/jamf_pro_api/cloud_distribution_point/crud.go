@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,11 +15,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-cloud-distribution-point
 	CloudDistributionPoint struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewCloudDistributionPoint(client transport.HTTPClient) *CloudDistributionPoint {
+func NewCloudDistributionPoint(client client.Client) *CloudDistributionPoint {
 	return &CloudDistributionPoint{client: client}
 }
 

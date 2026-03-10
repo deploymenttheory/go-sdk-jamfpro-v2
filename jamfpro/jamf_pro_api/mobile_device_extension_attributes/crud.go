@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,11 +15,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-extension-attributes
 	MobileDeviceExtensionAttributes struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewMobileDeviceExtensionAttributes(client transport.HTTPClient) *MobileDeviceExtensionAttributes {
+func NewMobileDeviceExtensionAttributes(client client.Client) *MobileDeviceExtensionAttributes {
 	return &MobileDeviceExtensionAttributes{client: client}
 }
 

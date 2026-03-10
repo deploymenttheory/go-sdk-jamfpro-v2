@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -123,7 +123,7 @@ func (m *EnrollmentCustomizationsMock) PostForm(ctx context.Context, endpoint st
 	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-func (m *EnrollmentCustomizationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
+func (m *EnrollmentCustomizationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
 	respBody, status, found := m.dispatch("POST_MULTIPART", endpoint)
 	if !found {
 		return nil, errNoMockRegistered
@@ -211,7 +211,7 @@ func (m *EnrollmentCustomizationsMock) GetLogger() *zap.Logger {
 	return nil
 }
 
-func (m *EnrollmentCustomizationsMock) RSQLBuilder() transport.RSQLFilterBuilder {
+func (m *EnrollmentCustomizationsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 

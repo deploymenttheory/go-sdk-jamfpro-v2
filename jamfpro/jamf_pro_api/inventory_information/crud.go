@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,12 +14,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-information
 	InventoryInformation struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new inventory information Service backed by the provided HTTP client.
-func NewInventoryInformation(client transport.HTTPClient) *InventoryInformation {
+func NewInventoryInformation(client client.Client) *InventoryInformation {
 	return &InventoryInformation{client: client}
 }
 

@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -75,7 +75,7 @@ func (m *LocalesMock) PostWithQuery(ctx context.Context, path string, _ map[stri
 func (m *LocalesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *LocalesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *LocalesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *LocalesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -110,7 +110,7 @@ func (m *LocalesMock) GetPaginated(ctx context.Context, path string, q map[strin
 	}
 	return resp, nil
 }
-func (m *LocalesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *LocalesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *LocalesMock) InvalidateToken() error                    { return nil }
 func (m *LocalesMock) KeepAliveToken() error                     { return nil }
 func (m *LocalesMock) GetLogger() *zap.Logger                    { return m.logger }

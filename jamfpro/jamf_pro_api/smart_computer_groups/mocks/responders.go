@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// SmartComputerGroupsMock is a test double implementing transport.HTTPClient.
+// SmartComputerGroupsMock is a test double implementing client.Client.
 type SmartComputerGroupsMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -175,7 +175,7 @@ func (m *SmartComputerGroupsMock) PostForm(ctx context.Context, path string, _ m
 	return m.dispatch("POST", path, result)
 }
 
-func (m *SmartComputerGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SmartComputerGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -223,7 +223,7 @@ func (m *SmartComputerGroupsMock) GetPaginated(ctx context.Context, path string,
 	return resp, nil
 }
 
-func (m *SmartComputerGroupsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *SmartComputerGroupsMock) InvalidateToken() error                    { return nil }
-func (m *SmartComputerGroupsMock) KeepAliveToken() error                     { return nil }
-func (m *SmartComputerGroupsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *SmartComputerGroupsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *SmartComputerGroupsMock) InvalidateToken() error                { return nil }
+func (m *SmartComputerGroupsMock) KeepAliveToken() error                 { return nil }
+func (m *SmartComputerGroupsMock) GetLogger() *zap.Logger                { return m.logger }

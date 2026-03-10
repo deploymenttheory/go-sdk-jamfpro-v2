@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,12 +14,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/accounts
 	AccountsGroups struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new account groups Service backed by the provided HTTP client.
-func NewAccountsGroups(client transport.HTTPClient) *AccountsGroups {
+func NewAccountsGroups(client client.Client) *AccountsGroups {
 	return &AccountsGroups{client: client}
 }
 

@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -85,7 +85,7 @@ func (m *SelfServicePlusSettingsMock) PostWithQuery(ctx context.Context, path st
 func (m *SelfServicePlusSettingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *SelfServicePlusSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SelfServicePlusSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *SelfServicePlusSettingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -120,7 +120,7 @@ func (m *SelfServicePlusSettingsMock) GetPaginated(ctx context.Context, path str
 	}
 	return resp, nil
 }
-func (m *SelfServicePlusSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *SelfServicePlusSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *SelfServicePlusSettingsMock) InvalidateToken() error                    { return nil }
 func (m *SelfServicePlusSettingsMock) KeepAliveToken() error                      { return nil }
 func (m *SelfServicePlusSettingsMock) GetLogger() *zap.Logger                      { return m.logger }

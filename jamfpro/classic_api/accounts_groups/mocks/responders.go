@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// AccountGroupsMock is a test double implementing transport.HTTPClient for Classic API account groups.
+// AccountGroupsMock is a test double implementing client.Client for Classic API account groups.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -111,7 +111,7 @@ func (m *AccountGroupsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/accounts/groupid/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): An account group with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *AccountGroupsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -130,7 +130,7 @@ func (m *AccountGroupsMock) PostForm(ctx context.Context, path string, _ map[str
 	return m.dispatch("POST", path, result)
 }
 
-func (m *AccountGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AccountGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -172,10 +172,10 @@ func (m *AccountGroupsMock) GetPaginated(ctx context.Context, path string, rsqlQ
 	return resp, nil
 }
 
-func (m *AccountGroupsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *AccountGroupsMock) InvalidateToken() error                    { return nil }
-func (m *AccountGroupsMock) KeepAliveToken() error                     { return nil }
-func (m *AccountGroupsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *AccountGroupsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *AccountGroupsMock) InvalidateToken() error                { return nil }
+func (m *AccountGroupsMock) KeepAliveToken() error                 { return nil }
+func (m *AccountGroupsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

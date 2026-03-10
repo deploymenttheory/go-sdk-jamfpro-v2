@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -57,7 +57,7 @@ func (m *BookmarksMock) PostWithQuery(ctx context.Context, path string, _ map[st
 func (m *BookmarksMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *BookmarksMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *BookmarksMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *BookmarksMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -92,7 +92,7 @@ func (m *BookmarksMock) GetPaginated(ctx context.Context, path string, _ map[str
 	}
 	return resp, nil
 }
-func (m *BookmarksMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *BookmarksMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *BookmarksMock) InvalidateToken() error                    { return nil }
 func (m *BookmarksMock) KeepAliveToken() error                     { return nil }
 func (m *BookmarksMock) GetLogger() *zap.Logger                     { return m.logger }

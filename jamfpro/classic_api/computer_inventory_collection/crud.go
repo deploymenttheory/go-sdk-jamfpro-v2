@@ -5,7 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,12 +15,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinventorycollection
 	ComputerInventoryCollection struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new computer inventory collection Service backed by the provided HTTP client.
-func NewComputerInventoryCollection(client transport.HTTPClient) *ComputerInventoryCollection {
+func NewComputerInventoryCollection(client client.Client) *ComputerInventoryCollection {
 	return &ComputerInventoryCollection{client: client}
 }
 

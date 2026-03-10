@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -16,11 +16,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-computer-extension-attributes
 	ComputerExtensionAttributes struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewComputerExtensionAttributes(client transport.HTTPClient) *ComputerExtensionAttributes {
+func NewComputerExtensionAttributes(client client.Client) *ComputerExtensionAttributes {
 	return &ComputerExtensionAttributes{client: client}
 }
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -16,12 +16,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/v11.20.0/reference/get_v2-engage
 	Engage struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new Engage Service backed by the provided HTTP client.
-func NewEngage(client transport.HTTPClient) *Engage {
+func NewEngage(client client.Client) *Engage {
 	return &Engage{client: client}
 }
 

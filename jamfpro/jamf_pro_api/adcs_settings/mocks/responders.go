@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -103,7 +103,7 @@ func (m *AdcsSettingsMock) PostWithQuery(ctx context.Context, path string, _ map
 func (m *AdcsSettingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AdcsSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AdcsSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *AdcsSettingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -145,7 +145,7 @@ func (m *AdcsSettingsMock) GetPaginated(ctx context.Context, path string, _ map[
 	return resp, nil
 }
 
-func (m *AdcsSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *AdcsSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *AdcsSettingsMock) InvalidateToken() error                     { return nil }
 func (m *AdcsSettingsMock) KeepAliveToken() error                      { return nil }
 func (m *AdcsSettingsMock) GetLogger() *zap.Logger                     { return m.logger }

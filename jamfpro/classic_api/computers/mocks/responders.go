@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// ComputersMock is a test double implementing transport.HTTPClient for Classic API computers.
+// ComputersMock is a test double implementing client.Client for Classic API computers.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -108,7 +108,7 @@ func (m *ComputersMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/JSSResource/computers/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *ComputersMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -127,7 +127,7 @@ func (m *ComputersMock) PostForm(ctx context.Context, path string, _ map[string]
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputersMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ComputersMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -169,10 +169,10 @@ func (m *ComputersMock) GetPaginated(ctx context.Context, path string, rsqlQuery
 	return resp, nil
 }
 
-func (m *ComputersMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ComputersMock) InvalidateToken() error                    { return nil }
-func (m *ComputersMock) KeepAliveToken() error                     { return nil }
-func (m *ComputersMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *ComputersMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ComputersMock) InvalidateToken() error                { return nil }
+func (m *ComputersMock) KeepAliveToken() error                 { return nil }
+func (m *ComputersMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

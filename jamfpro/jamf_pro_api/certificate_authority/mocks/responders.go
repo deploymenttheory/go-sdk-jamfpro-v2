@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// CertificateAuthorityMock is a test double implementing transport.HTTPClient.
+// CertificateAuthorityMock is a test double implementing client.Client.
 type CertificateAuthorityMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -90,7 +90,7 @@ func (m *CertificateAuthorityMock) PostWithQuery(ctx context.Context, path strin
 func (m *CertificateAuthorityMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *CertificateAuthorityMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CertificateAuthorityMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *CertificateAuthorityMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -125,7 +125,7 @@ func (m *CertificateAuthorityMock) GetPaginated(ctx context.Context, path string
 	}
 	return resp, nil
 }
-func (m *CertificateAuthorityMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *CertificateAuthorityMock) InvalidateToken() error                    { return nil }
-func (m *CertificateAuthorityMock) KeepAliveToken() error                     { return nil }
-func (m *CertificateAuthorityMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *CertificateAuthorityMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *CertificateAuthorityMock) InvalidateToken() error                { return nil }
+func (m *CertificateAuthorityMock) KeepAliveToken() error                 { return nil }
+func (m *CertificateAuthorityMock) GetLogger() *zap.Logger                { return m.logger }

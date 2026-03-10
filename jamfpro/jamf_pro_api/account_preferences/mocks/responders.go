@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// AccountPreferencesMock is a test double implementing transport.HTTPClient.
+// AccountPreferencesMock is a test double implementing client.Client.
 type AccountPreferencesMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -77,7 +77,7 @@ func (m *AccountPreferencesMock) PostWithQuery(ctx context.Context, path string,
 func (m *AccountPreferencesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AccountPreferencesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AccountPreferencesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *AccountPreferencesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -112,7 +112,7 @@ func (m *AccountPreferencesMock) GetPaginated(ctx context.Context, path string, 
 	}
 	return resp, nil
 }
-func (m *AccountPreferencesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *AccountPreferencesMock) InvalidateToken() error                    { return nil }
-func (m *AccountPreferencesMock) KeepAliveToken() error                     { return nil }
-func (m *AccountPreferencesMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *AccountPreferencesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *AccountPreferencesMock) InvalidateToken() error                { return nil }
+func (m *AccountPreferencesMock) KeepAliveToken() error                 { return nil }
+func (m *AccountPreferencesMock) GetLogger() *zap.Logger                { return m.logger }

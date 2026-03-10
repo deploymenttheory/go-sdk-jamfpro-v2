@@ -8,7 +8,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -36,7 +36,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// OIDCMock is a test double implementing transport.HTTPClient.
+// OIDCMock is a test double implementing client.Client.
 type OIDCMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -107,7 +107,7 @@ func (m *OIDCMock) RegisterGetRedirectURLMock() {
 	m.register("POST", "/api/v2/oidc/dispatch", 200, validateRedirectURLJSON)
 }
 
-// Get implements transport.HTTPClient.
+// Get implements client.Client.
 func (m *OIDCMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
@@ -126,7 +126,7 @@ func (m *OIDCMock) Get(ctx context.Context, path string, rsqlQuery map[string]st
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// Post implements transport.HTTPClient.
+// Post implements client.Client.
 func (m *OIDCMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "POST " + path
 	resp, ok := m.responses[key]
@@ -144,22 +144,22 @@ func (m *OIDCMock) Post(ctx context.Context, path string, body any, headers map[
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// PostWithQuery implements transport.HTTPClient.
+// PostWithQuery implements client.Client.
 func (m *OIDCMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, body, headers, result)
 }
 
-// PostForm implements transport.HTTPClient.
+// PostForm implements client.Client.
 func (m *OIDCMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-// PostMultipart implements transport.HTTPClient.
-func (m *OIDCMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+// PostMultipart implements client.Client.
+func (m *OIDCMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
-// Put implements transport.HTTPClient.
+// Put implements client.Client.
 func (m *OIDCMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	rawBody, statusCode, found := m.dispatch("PUT", path)
 	if !found {
@@ -173,7 +173,7 @@ func (m *OIDCMock) Put(ctx context.Context, path string, body any, headers map[s
 	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), nil
 }
 
-// Patch implements transport.HTTPClient.
+// Patch implements client.Client.
 func (m *OIDCMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	rawBody, statusCode, found := m.dispatch("PATCH", path)
 	if !found {
@@ -187,7 +187,7 @@ func (m *OIDCMock) Patch(ctx context.Context, path string, body any, headers map
 	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), nil
 }
 
-// Delete implements transport.HTTPClient.
+// Delete implements client.Client.
 func (m *OIDCMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	rawBody, statusCode, found := m.dispatch("DELETE", path)
 	if !found {
@@ -201,12 +201,12 @@ func (m *OIDCMock) Delete(ctx context.Context, path string, rsqlQuery map[string
 	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), nil
 }
 
-// DeleteWithBody implements transport.HTTPClient.
+// DeleteWithBody implements client.Client.
 func (m *OIDCMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Delete(ctx, path, nil, headers, result)
 }
 
-// GetBytes implements transport.HTTPClient.
+// GetBytes implements client.Client.
 func (m *OIDCMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	rawBody, statusCode, found := m.dispatch("GET", path)
@@ -216,27 +216,27 @@ func (m *OIDCMock) GetBytes(ctx context.Context, path string, rsqlQuery map[stri
 	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), rawBody, nil
 }
 
-// GetPaginated implements transport.HTTPClient.
+// GetPaginated implements client.Client.
 func (m *OIDCMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in OIDCMock")
 }
 
-// RSQLBuilder implements transport.HTTPClient.
-func (m *OIDCMock) RSQLBuilder() transport.RSQLFilterBuilder {
+// RSQLBuilder implements client.Client.
+func (m *OIDCMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 
-// InvalidateToken implements transport.HTTPClient.
+// InvalidateToken implements client.Client.
 func (m *OIDCMock) InvalidateToken() error {
 	return nil
 }
 
-// KeepAliveToken implements transport.HTTPClient.
+// KeepAliveToken implements client.Client.
 func (m *OIDCMock) KeepAliveToken() error {
 	return nil
 }
 
-// GetLogger implements transport.HTTPClient.
+// GetLogger implements client.Client.
 func (m *OIDCMock) GetLogger() *zap.Logger {
 	return m.logger
 }

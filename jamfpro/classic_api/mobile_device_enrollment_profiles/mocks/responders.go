@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// MobileDeviceEnrollmentProfilesMock is a test double implementing transport.HTTPClient for Classic API mobile device enrollment profiles.
+// MobileDeviceEnrollmentProfilesMock is a test double implementing client.Client for Classic API mobile device enrollment profiles.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -137,7 +137,7 @@ func (m *MobileDeviceEnrollmentProfilesMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/JSSResource/mobiledeviceenrollmentprofiles/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *MobileDeviceEnrollmentProfilesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
@@ -155,7 +155,7 @@ func (m *MobileDeviceEnrollmentProfilesMock) PostForm(ctx context.Context, path 
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MobileDeviceEnrollmentProfilesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MobileDeviceEnrollmentProfilesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -197,10 +197,10 @@ func (m *MobileDeviceEnrollmentProfilesMock) GetPaginated(ctx context.Context, p
 	return resp, nil
 }
 
-func (m *MobileDeviceEnrollmentProfilesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *MobileDeviceEnrollmentProfilesMock) InvalidateToken() error                    { return nil }
-func (m *MobileDeviceEnrollmentProfilesMock) KeepAliveToken() error                     { return nil }
-func (m *MobileDeviceEnrollmentProfilesMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *MobileDeviceEnrollmentProfilesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *MobileDeviceEnrollmentProfilesMock) InvalidateToken() error                { return nil }
+func (m *MobileDeviceEnrollmentProfilesMock) KeepAliveToken() error                 { return nil }
+func (m *MobileDeviceEnrollmentProfilesMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

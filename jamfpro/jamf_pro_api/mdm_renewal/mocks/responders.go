@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -150,7 +150,7 @@ func (m *MDMRenewalMock) PostForm(ctx context.Context, path string, _ map[string
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MDMRenewalMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MDMRenewalMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -166,7 +166,7 @@ func (m *MDMRenewalMock) GetBytes(ctx context.Context, path string, _ map[string
 	return resp, resp.Bytes(), nil
 }
 
-func (m *MDMRenewalMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *MDMRenewalMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *MDMRenewalMock) InvalidateToken() error                    { return nil }
 func (m *MDMRenewalMock) KeepAliveToken() error                     { return nil }
 func (m *MDMRenewalMock) GetLogger() *zap.Logger                    { return m.logger }

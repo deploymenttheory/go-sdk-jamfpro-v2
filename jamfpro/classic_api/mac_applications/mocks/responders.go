@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// MacApplicationsMock is a test double implementing transport.HTTPClient for Classic API Mac applications.
+// MacApplicationsMock is a test double implementing client.Client for Classic API Mac applications.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -126,7 +126,7 @@ func (m *MacApplicationsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/macapplications/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A Mac application with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *MacApplicationsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	_ = rsqlQuery
@@ -145,7 +145,7 @@ func (m *MacApplicationsMock) PostForm(ctx context.Context, path string, _ map[s
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MacApplicationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MacApplicationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -189,10 +189,10 @@ func (m *MacApplicationsMock) GetPaginated(ctx context.Context, path string, rsq
 	return resp, nil
 }
 
-func (m *MacApplicationsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *MacApplicationsMock) InvalidateToken() error                    { return nil }
-func (m *MacApplicationsMock) KeepAliveToken() error                     { return nil }
-func (m *MacApplicationsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *MacApplicationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *MacApplicationsMock) InvalidateToken() error                { return nil }
+func (m *MacApplicationsMock) KeepAliveToken() error                 { return nil }
+func (m *MacApplicationsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

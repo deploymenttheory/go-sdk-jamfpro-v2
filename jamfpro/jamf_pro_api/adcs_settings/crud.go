@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,11 +15,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-adcs-settings
 	AdcsSettings struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewAdcsSettings(client transport.HTTPClient) *AdcsSettings {
+func NewAdcsSettings(client client.Client) *AdcsSettings {
 	return &AdcsSettings{client: client}
 }
 
@@ -36,7 +36,7 @@ func (s *AdcsSettings) CreateV1(ctx context.Context, request *ResourceAdcsSettin
 	var result ResponseAdcsSettingsCreated
 
 	headers := map[string]string{
-		"Accept": constants.AcceptAny,
+		"Accept":       constants.AcceptAny,
 		"Content-Type": constants.ApplicationJSON,
 	}
 

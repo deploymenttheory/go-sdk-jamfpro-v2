@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// ScriptsMock is a test double implementing transport.HTTPClient.
+// ScriptsMock is a test double implementing client.Client.
 // Responses are keyed by "METHOD:path" and loaded from JSON fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 type ScriptsMock struct {
@@ -119,7 +119,7 @@ func (m *ScriptsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/api/v1/scripts", 409, "error_conflict.json")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *ScriptsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -138,7 +138,7 @@ func (m *ScriptsMock) PostForm(ctx context.Context, path string, _ map[string]st
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ScriptsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ScriptsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -187,10 +187,10 @@ func (m *ScriptsMock) GetPaginated(ctx context.Context, path string, rsqlQuery m
 	return resp, nil
 }
 
-func (m *ScriptsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ScriptsMock) InvalidateToken() error                    { return nil }
-func (m *ScriptsMock) KeepAliveToken() error                     { return nil }
-func (m *ScriptsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *ScriptsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ScriptsMock) InvalidateToken() error                { return nil }
+func (m *ScriptsMock) KeepAliveToken() error                 { return nil }
+func (m *ScriptsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

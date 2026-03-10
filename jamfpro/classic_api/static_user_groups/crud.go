@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,12 +14,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/usergroups
 	StaticUserGroups struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new static user groups Service backed by the provided HTTP client.
-func NewStaticUserGroups(client transport.HTTPClient) *StaticUserGroups {
+func NewStaticUserGroups(client client.Client) *StaticUserGroups {
 	return &StaticUserGroups{client: client}
 }
 

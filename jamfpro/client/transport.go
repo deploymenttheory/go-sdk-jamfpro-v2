@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -48,7 +47,7 @@ func (t *Transport) GetLogger() *zap.Logger {
 
 // RSQLBuilder returns a new RSQL filter expression builder.
 // Pass the Build() result as rsqlQuery["filter"] to filter endpoint results.
-func (t *Transport) RSQLBuilder() transport.RSQLFilterBuilder {
+func (t *Transport) RSQLBuilder() RSQLFilterBuilder {
 	return NewRSQLFilterBuilder()
 }
 
@@ -229,7 +228,7 @@ func (t *Transport) PostForm(ctx context.Context, path string, formData map[stri
 }
 
 // PostMultipart executes a POST request with multipart/form-data.
-func (t *Transport) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (t *Transport) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback MultipartProgressCallback, result any) (*resty.Response, error) {
 	req := t.client.R().SetContext(ctx).SetResult(result)
 	if fileReader != nil && fileName != "" && fileField != "" {
 		field := &resty.MultipartField{

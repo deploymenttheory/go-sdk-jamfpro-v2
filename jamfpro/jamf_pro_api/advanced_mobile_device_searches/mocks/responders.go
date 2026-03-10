@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -83,7 +83,7 @@ func (m *AdvancedMobileDeviceSearchesMock) PostWithQuery(ctx context.Context, pa
 func (m *AdvancedMobileDeviceSearchesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AdvancedMobileDeviceSearchesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AdvancedMobileDeviceSearchesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *AdvancedMobileDeviceSearchesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -118,7 +118,7 @@ func (m *AdvancedMobileDeviceSearchesMock) GetPaginated(ctx context.Context, pat
 	}
 	return resp, nil
 }
-func (m *AdvancedMobileDeviceSearchesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *AdvancedMobileDeviceSearchesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *AdvancedMobileDeviceSearchesMock) InvalidateToken() error                    { return nil }
 func (m *AdvancedMobileDeviceSearchesMock) KeepAliveToken() error                     { return nil }
 func (m *AdvancedMobileDeviceSearchesMock) GetLogger() *zap.Logger                    { return m.logger }

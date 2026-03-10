@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -16,12 +16,12 @@ type (
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcommandflushwithidandstatus
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/commandflush-1
 	CommandFlush struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new command flush Service backed by the provided HTTP client.
-func NewCommandFlush(client transport.HTTPClient) *CommandFlush {
+func NewCommandFlush(client client.Client) *CommandFlush {
 	return &CommandFlush{client: client}
 }
 

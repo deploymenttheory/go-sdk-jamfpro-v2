@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,12 +14,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearches
 	AdvancedComputerSearches struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new advanced computer searches Service backed by the provided HTTP client.
-func NewAdvancedComputerSearches(client transport.HTTPClient) *AdvancedComputerSearches {
+func NewAdvancedComputerSearches(client client.Client) *AdvancedComputerSearches {
 	return &AdvancedComputerSearches{client: client}
 }
 

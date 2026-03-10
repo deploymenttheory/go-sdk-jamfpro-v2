@@ -11,7 +11,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -105,7 +105,7 @@ func (m *OnboardingMock) PostWithQuery(ctx context.Context, path string, _ map[s
 func (m *OnboardingMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *OnboardingMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *OnboardingMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *OnboardingMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -146,7 +146,7 @@ func (m *OnboardingMock) GetPaginated(ctx context.Context, path string, _ map[st
 	}
 	return resp, nil
 }
-func (m *OnboardingMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *OnboardingMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *OnboardingMock) InvalidateToken() error                    { return nil }
 func (m *OnboardingMock) KeepAliveToken() error                     { return nil }
 func (m *OnboardingMock) GetLogger() *zap.Logger                    { return m.logger }

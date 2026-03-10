@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// MobileDeviceApplicationsMock is a test double implementing transport.HTTPClient for Classic API mobile device applications.
+// MobileDeviceApplicationsMock is a test double implementing client.Client for Classic API mobile device applications.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -162,7 +162,7 @@ func (m *MobileDeviceApplicationsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/mobiledeviceapplications/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A mobile device application with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *MobileDeviceApplicationsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	_ = rsqlQuery
@@ -181,7 +181,7 @@ func (m *MobileDeviceApplicationsMock) PostForm(ctx context.Context, path string
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MobileDeviceApplicationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MobileDeviceApplicationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -225,10 +225,10 @@ func (m *MobileDeviceApplicationsMock) GetPaginated(ctx context.Context, path st
 	return resp, nil
 }
 
-func (m *MobileDeviceApplicationsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *MobileDeviceApplicationsMock) InvalidateToken() error                    { return nil }
-func (m *MobileDeviceApplicationsMock) KeepAliveToken() error                     { return nil }
-func (m *MobileDeviceApplicationsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *MobileDeviceApplicationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *MobileDeviceApplicationsMock) InvalidateToken() error                { return nil }
+func (m *MobileDeviceApplicationsMock) KeepAliveToken() error                 { return nil }
+func (m *MobileDeviceApplicationsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// SitesMock is a test double implementing transport.HTTPClient for Classic API sites.
+// SitesMock is a test double implementing client.Client for Classic API sites.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -117,7 +117,7 @@ func (m *SitesMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/sites/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A site with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *SitesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -136,7 +136,7 @@ func (m *SitesMock) PostForm(ctx context.Context, path string, _ map[string]stri
 	return m.dispatch("POST", path, result)
 }
 
-func (m *SitesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SitesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -178,10 +178,10 @@ func (m *SitesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 	return resp, nil
 }
 
-func (m *SitesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *SitesMock) InvalidateToken() error                    { return nil }
-func (m *SitesMock) KeepAliveToken() error                     { return nil }
-func (m *SitesMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *SitesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *SitesMock) InvalidateToken() error                { return nil }
+func (m *SitesMock) KeepAliveToken() error                 { return nil }
+func (m *SitesMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

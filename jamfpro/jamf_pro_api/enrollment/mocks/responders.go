@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -20,7 +20,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// EnrollmentMock is a test double implementing transport.HTTPClient.
+// EnrollmentMock is a test double implementing client.Client.
 type EnrollmentMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -333,7 +333,7 @@ func (m *EnrollmentMock) PostForm(ctx context.Context, path string, _ map[string
 	return m.dispatch("POST", path, result)
 }
 
-func (m *EnrollmentMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *EnrollmentMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -381,7 +381,7 @@ func (m *EnrollmentMock) GetPaginated(ctx context.Context, path string, rsqlQuer
 	return resp, nil
 }
 
-func (m *EnrollmentMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *EnrollmentMock) InvalidateToken() error                    { return nil }
-func (m *EnrollmentMock) KeepAliveToken() error                     { return nil }
-func (m *EnrollmentMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *EnrollmentMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *EnrollmentMock) InvalidateToken() error                { return nil }
+func (m *EnrollmentMock) KeepAliveToken() error                 { return nil }
+func (m *EnrollmentMock) GetLogger() *zap.Logger                { return m.logger }

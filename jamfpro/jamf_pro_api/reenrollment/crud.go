@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"resty.dev/v3"
 )
 
@@ -15,11 +15,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-reenrollment
 	Reenrollment struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewReenrollment(client transport.HTTPClient) *Reenrollment {
+func NewReenrollment(client client.Client) *Reenrollment {
 	return &Reenrollment{client: client}
 }
 

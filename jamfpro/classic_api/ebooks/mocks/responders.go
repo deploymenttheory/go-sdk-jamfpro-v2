@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// EbooksMock is a test double implementing transport.HTTPClient for Classic API ebooks.
+// EbooksMock is a test double implementing client.Client for Classic API ebooks.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -120,7 +120,7 @@ func (m *EbooksMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/ebooks/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): An ebook with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *EbooksMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	_ = rsqlQuery
@@ -139,7 +139,7 @@ func (m *EbooksMock) PostForm(ctx context.Context, path string, _ map[string]str
 	return m.dispatch("POST", path, result)
 }
 
-func (m *EbooksMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *EbooksMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -183,10 +183,10 @@ func (m *EbooksMock) GetPaginated(ctx context.Context, path string, rsqlQuery ma
 	return resp, nil
 }
 
-func (m *EbooksMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *EbooksMock) InvalidateToken() error                    { return nil }
-func (m *EbooksMock) KeepAliveToken() error                     { return nil }
-func (m *EbooksMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *EbooksMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *EbooksMock) InvalidateToken() error                { return nil }
+func (m *EbooksMock) KeepAliveToken() error                 { return nil }
+func (m *EbooksMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 

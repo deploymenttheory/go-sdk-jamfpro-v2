@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -23,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// AccountsMock is a test double implementing transport.HTTPClient.
+// AccountsMock is a test double implementing client.Client.
 type AccountsMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -84,7 +84,7 @@ func loadMockResponse(filename string) ([]byte, error) {
 	return os.ReadFile(filepath.Join(wd, "mocks", filename))
 }
 
-// Get implements transport.HTTPClient.Get.
+// Get implements client.Client.Get.
 func (m *AccountsMock) Get(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	m.LastRSQLQuery = query
 	key := "GET:" + path
@@ -106,7 +106,7 @@ func (m *AccountsMock) Get(ctx context.Context, path string, query map[string]st
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// GetPaginated implements transport.HTTPClient.GetPaginated.
+// GetPaginated implements client.Client.GetPaginated.
 func (m *AccountsMock) GetPaginated(ctx context.Context, path string, query map[string]string, headers map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	m.LastRSQLQuery = query
 	key := "GET:" + path
@@ -134,7 +134,7 @@ func (m *AccountsMock) GetPaginated(ctx context.Context, path string, query map[
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// Post implements transport.HTTPClient.Post.
+// Post implements client.Client.Post.
 func (m *AccountsMock) Post(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	key := "POST:" + path
 	resp, ok := m.responses[key]
@@ -155,7 +155,7 @@ func (m *AccountsMock) Post(ctx context.Context, path string, body any, headers 
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// Delete implements transport.HTTPClient.Delete.
+// Delete implements client.Client.Delete.
 func (m *AccountsMock) Delete(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	key := "DELETE:" + path
 	resp, ok := m.responses[key]
@@ -170,32 +170,32 @@ func (m *AccountsMock) Delete(ctx context.Context, path string, query map[string
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// Put implements transport.HTTPClient.Put (unused in accounts).
+// Put implements client.Client.Put (unused in accounts).
 func (m *AccountsMock) Put(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("Put not implemented in AccountsMock")
 }
 
-// Patch implements transport.HTTPClient.Patch (unused in accounts).
+// Patch implements client.Client.Patch (unused in accounts).
 func (m *AccountsMock) Patch(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("Patch not implemented in AccountsMock")
 }
 
-// DownloadFile implements transport.HTTPClient.DownloadFile (unused in accounts).
+// DownloadFile implements client.Client.DownloadFile (unused in accounts).
 func (m *AccountsMock) DownloadFile(ctx context.Context, url string) (io.ReadCloser, *http.Response, error) {
 	return nil, nil, fmt.Errorf("DownloadFile not implemented in AccountsMock")
 }
 
-// SetLogger implements transport.HTTPClient.SetLogger.
+// SetLogger implements client.Client.SetLogger.
 func (m *AccountsMock) SetLogger(logger *zap.Logger) {
 	m.logger = logger
 }
 
-// GetLogger implements transport.HTTPClient.GetLogger.
+// GetLogger implements client.Client.GetLogger.
 func (m *AccountsMock) GetLogger() *zap.Logger {
 	return m.logger
 }
 
-// DeleteWithBody implements transport.HTTPClient.DeleteWithBody.
+// DeleteWithBody implements client.Client.DeleteWithBody.
 func (m *AccountsMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	key := "DELETE:" + path
 	resp, ok := m.responses[key]
@@ -210,37 +210,37 @@ func (m *AccountsMock) DeleteWithBody(ctx context.Context, path string, body any
 	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
-// PostWithQuery implements transport.HTTPClient.PostWithQuery.
+// PostWithQuery implements client.Client.PostWithQuery.
 func (m *AccountsMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostWithQuery not implemented in AccountsMock")
 }
 
-// PostForm implements transport.HTTPClient.PostForm.
+// PostForm implements client.Client.PostForm.
 func (m *AccountsMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostForm not implemented in AccountsMock")
 }
 
-// PostMultipart implements transport.HTTPClient.PostMultipart.
-func (m *AccountsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
+// PostMultipart implements client.Client.PostMultipart.
+func (m *AccountsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
 	return nil, fmt.Errorf("PostMultipart not implemented in AccountsMock")
 }
 
-// GetBytes implements transport.HTTPClient.GetBytes.
+// GetBytes implements client.Client.GetBytes.
 func (m *AccountsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	return nil, nil, fmt.Errorf("GetBytes not implemented in AccountsMock")
 }
 
-// RSQLBuilder implements transport.HTTPClient.RSQLBuilder.
-func (m *AccountsMock) RSQLBuilder() transport.RSQLFilterBuilder {
+// RSQLBuilder implements client.Client.RSQLBuilder.
+func (m *AccountsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 
-// InvalidateToken implements transport.HTTPClient.InvalidateToken.
+// InvalidateToken implements client.Client.InvalidateToken.
 func (m *AccountsMock) InvalidateToken() error {
 	return nil
 }
 
-// KeepAliveToken implements transport.HTTPClient.KeepAliveToken.
+// KeepAliveToken implements client.Client.KeepAliveToken.
 func (m *AccountsMock) KeepAliveToken() error {
 	return nil
 }

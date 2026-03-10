@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -16,12 +16,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-enrollment-customizations
 	EnrollmentCustomizations struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new enrollment customizations Service backed by the provided HTTP client.
-func NewEnrollmentCustomizations(client transport.HTTPClient) *EnrollmentCustomizations {
+func NewEnrollmentCustomizations(client client.Client) *EnrollmentCustomizations {
 	return &EnrollmentCustomizations{client: client}
 }
 

@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -21,7 +21,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// MobileDeviceExtensionAttributesMock is a test double implementing transport.HTTPClient.
+// MobileDeviceExtensionAttributesMock is a test double implementing client.Client.
 type MobileDeviceExtensionAttributesMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -130,7 +130,7 @@ func (m *MobileDeviceExtensionAttributesMock) PostForm(ctx context.Context, path
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MobileDeviceExtensionAttributesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MobileDeviceExtensionAttributesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -178,10 +178,10 @@ func (m *MobileDeviceExtensionAttributesMock) GetPaginated(ctx context.Context, 
 	return resp, nil
 }
 
-func (m *MobileDeviceExtensionAttributesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *MobileDeviceExtensionAttributesMock) InvalidateToken() error                    { return nil }
-func (m *MobileDeviceExtensionAttributesMock) KeepAliveToken() error                     { return nil }
-func (m *MobileDeviceExtensionAttributesMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *MobileDeviceExtensionAttributesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *MobileDeviceExtensionAttributesMock) InvalidateToken() error                { return nil }
+func (m *MobileDeviceExtensionAttributesMock) KeepAliveToken() error                 { return nil }
+func (m *MobileDeviceExtensionAttributesMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *MobileDeviceExtensionAttributesMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]

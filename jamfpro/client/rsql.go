@@ -3,11 +3,9 @@ package client
 import (
 	"fmt"
 	"strings"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 )
 
-// rsqlFilterBuilder implements transport.RSQLFilterBuilder.
+// rsqlFilterBuilder implements RSQLFilterBuilder.
 // It accumulates RSQL tokens into a strings.Builder and is not thread-safe;
 // create a new instance per expression.
 //
@@ -17,49 +15,49 @@ type rsqlFilterBuilder struct {
 }
 
 // NewRSQLFilterBuilder returns a new, empty RSQL filter expression builder.
-func NewRSQLFilterBuilder() transport.RSQLFilterBuilder {
+func NewRSQLFilterBuilder() RSQLFilterBuilder {
 	return &rsqlFilterBuilder{}
 }
 
 // EqualTo produces: field=="value"
 // Wildcards (*) already present in value are preserved as RSQL wildcards.
-func (b *rsqlFilterBuilder) EqualTo(field, value string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) EqualTo(field, value string) RSQLFilterBuilder {
 	fmt.Fprintf(&b.buf, `%s==%s`, field, rsqlQuote(value))
 	return b
 }
 
 // NotEqualTo produces: field!="value"
-func (b *rsqlFilterBuilder) NotEqualTo(field, value string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) NotEqualTo(field, value string) RSQLFilterBuilder {
 	fmt.Fprintf(&b.buf, `%s!=%s`, field, rsqlQuote(value))
 	return b
 }
 
 // LessThan produces: field<"value"
-func (b *rsqlFilterBuilder) LessThan(field, value string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) LessThan(field, value string) RSQLFilterBuilder {
 	fmt.Fprintf(&b.buf, `%s<%s`, field, rsqlQuote(value))
 	return b
 }
 
 // LessOrEqual produces: field<="value"
-func (b *rsqlFilterBuilder) LessOrEqual(field, value string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) LessOrEqual(field, value string) RSQLFilterBuilder {
 	fmt.Fprintf(&b.buf, `%s<=%s`, field, rsqlQuote(value))
 	return b
 }
 
 // GreaterThan produces: field>"value"
-func (b *rsqlFilterBuilder) GreaterThan(field, value string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) GreaterThan(field, value string) RSQLFilterBuilder {
 	fmt.Fprintf(&b.buf, `%s>%s`, field, rsqlQuote(value))
 	return b
 }
 
 // GreaterOrEqual produces: field>="value"
-func (b *rsqlFilterBuilder) GreaterOrEqual(field, value string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) GreaterOrEqual(field, value string) RSQLFilterBuilder {
 	fmt.Fprintf(&b.buf, `%s>=%s`, field, rsqlQuote(value))
 	return b
 }
 
 // In produces: field=in=(v1,v2,...)
-func (b *rsqlFilterBuilder) In(field string, values ...string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) In(field string, values ...string) RSQLFilterBuilder {
 	quoted := make([]string, len(values))
 	for i, v := range values {
 		quoted[i] = rsqlQuote(v)
@@ -69,7 +67,7 @@ func (b *rsqlFilterBuilder) In(field string, values ...string) transport.RSQLFil
 }
 
 // NotIn produces: field=out=(v1,v2,...)
-func (b *rsqlFilterBuilder) NotIn(field string, values ...string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) NotIn(field string, values ...string) RSQLFilterBuilder {
 	quoted := make([]string, len(values))
 	for i, v := range values {
 		quoted[i] = rsqlQuote(v)
@@ -80,43 +78,43 @@ func (b *rsqlFilterBuilder) NotIn(field string, values ...string) transport.RSQL
 
 // Contains produces: field=="*value*"
 // Literal asterisks in value are escaped so they are not treated as wildcards.
-func (b *rsqlFilterBuilder) Contains(field, value string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) Contains(field, value string) RSQLFilterBuilder {
 	fmt.Fprintf(&b.buf, `%s=="*%s*"`, field, rsqlEscapeLiteralWildcard(value))
 	return b
 }
 
 // StartsWith produces: field=="value*"
-func (b *rsqlFilterBuilder) StartsWith(field, value string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) StartsWith(field, value string) RSQLFilterBuilder {
 	fmt.Fprintf(&b.buf, `%s=="%s*"`, field, rsqlEscapeLiteralWildcard(value))
 	return b
 }
 
 // EndsWith produces: field=="*value"
-func (b *rsqlFilterBuilder) EndsWith(field, value string) transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) EndsWith(field, value string) RSQLFilterBuilder {
 	fmt.Fprintf(&b.buf, `%s=="*%s"`, field, rsqlEscapeLiteralWildcard(value))
 	return b
 }
 
 // And appends a semicolon — logical AND in RSQL.
-func (b *rsqlFilterBuilder) And() transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) And() RSQLFilterBuilder {
 	b.buf.WriteByte(';')
 	return b
 }
 
 // Or appends a comma — logical OR in RSQL.
-func (b *rsqlFilterBuilder) Or() transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) Or() RSQLFilterBuilder {
 	b.buf.WriteByte(',')
 	return b
 }
 
 // OpenGroup appends a left parenthesis.
-func (b *rsqlFilterBuilder) OpenGroup() transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) OpenGroup() RSQLFilterBuilder {
 	b.buf.WriteByte('(')
 	return b
 }
 
 // CloseGroup appends a right parenthesis.
-func (b *rsqlFilterBuilder) CloseGroup() transport.RSQLFilterBuilder {
+func (b *rsqlFilterBuilder) CloseGroup() RSQLFilterBuilder {
 	b.buf.WriteByte(')')
 	return b
 }

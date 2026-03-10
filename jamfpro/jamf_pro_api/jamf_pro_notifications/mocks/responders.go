@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -24,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// NotificationsMock is a test double implementing transport.HTTPClient.
+// NotificationsMock is a test double implementing client.Client.
 type NotificationsMock struct {
 	responses       map[string]registeredResponse
 	prefixResponses []struct {
@@ -156,53 +156,53 @@ func (m *NotificationsMock) RegisterDeleteNotificationMock() {
 	m.registerPrefix("DELETE", "/api/v1/notifications/", 204, "")
 }
 
-// Get implements transport.HTTPClient.
+// Get implements client.Client.
 func (m *NotificationsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	return m.dispatch("GET", path, result)
 }
 
-// Post implements transport.HTTPClient.
+// Post implements client.Client.
 func (m *NotificationsMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-// PostWithQuery implements transport.HTTPClient.
+// PostWithQuery implements client.Client.
 func (m *NotificationsMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-// PostForm implements transport.HTTPClient.
+// PostForm implements client.Client.
 func (m *NotificationsMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-// PostMultipart implements transport.HTTPClient.
-func (m *NotificationsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+// PostMultipart implements client.Client.
+func (m *NotificationsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
-// Put implements transport.HTTPClient.
+// Put implements client.Client.
 func (m *NotificationsMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PUT", path, result)
 }
 
-// Patch implements transport.HTTPClient.
+// Patch implements client.Client.
 func (m *NotificationsMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("PATCH", path, result)
 }
 
-// Delete implements transport.HTTPClient.
+// Delete implements client.Client.
 func (m *NotificationsMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-// DeleteWithBody implements transport.HTTPClient.
+// DeleteWithBody implements client.Client.
 func (m *NotificationsMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("DELETE", path, result)
 }
 
-// GetBytes implements transport.HTTPClient.
+// GetBytes implements client.Client.
 func (m *NotificationsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	resp, err := m.dispatch("GET", path, nil)
@@ -212,27 +212,27 @@ func (m *NotificationsMock) GetBytes(ctx context.Context, path string, rsqlQuery
 	return resp, resp.Bytes(), nil
 }
 
-// GetPaginated implements transport.HTTPClient.
+// GetPaginated implements client.Client.
 func (m *NotificationsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in NotificationsMock")
 }
 
-// RSQLBuilder implements transport.HTTPClient.
-func (m *NotificationsMock) RSQLBuilder() transport.RSQLFilterBuilder {
+// RSQLBuilder implements client.Client.
+func (m *NotificationsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 
-// InvalidateToken implements transport.HTTPClient.
+// InvalidateToken implements client.Client.
 func (m *NotificationsMock) InvalidateToken() error {
 	return nil
 }
 
-// KeepAliveToken implements transport.HTTPClient.
+// KeepAliveToken implements client.Client.
 func (m *NotificationsMock) KeepAliveToken() error {
 	return nil
 }
 
-// GetLogger implements transport.HTTPClient.
+// GetLogger implements client.Client.
 func (m *NotificationsMock) GetLogger() *zap.Logger {
 	return m.logger
 }

@@ -13,7 +13,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +22,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// AdueSessionTokenSettingsMock is a test double implementing transport.HTTPClient.
+// AdueSessionTokenSettingsMock is a test double implementing client.Client.
 type AdueSessionTokenSettingsMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -78,7 +78,7 @@ func (m *AdueSessionTokenSettingsMock) PostWithQuery(ctx context.Context, path s
 func (m *AdueSessionTokenSettingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AdueSessionTokenSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AdueSessionTokenSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *AdueSessionTokenSettingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -113,7 +113,7 @@ func (m *AdueSessionTokenSettingsMock) GetPaginated(ctx context.Context, path st
 	}
 	return resp, nil
 }
-func (m *AdueSessionTokenSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *AdueSessionTokenSettingsMock) InvalidateToken() error                    { return nil }
-func (m *AdueSessionTokenSettingsMock) KeepAliveToken() error                     { return nil }
-func (m *AdueSessionTokenSettingsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *AdueSessionTokenSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *AdueSessionTokenSettingsMock) InvalidateToken() error                { return nil }
+func (m *AdueSessionTokenSettingsMock) KeepAliveToken() error                 { return nil }
+func (m *AdueSessionTokenSettingsMock) GetLogger() *zap.Logger                { return m.logger }

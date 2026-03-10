@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -142,7 +142,7 @@ func (m *PatchPoliciesMock) PostWithQuery(ctx context.Context, path string, _ ma
 func (m *PatchPoliciesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *PatchPoliciesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *PatchPoliciesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *PatchPoliciesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -183,7 +183,7 @@ func (m *PatchPoliciesMock) GetPaginated(ctx context.Context, path string, _ map
 	}
 	return resp, nil
 }
-func (m *PatchPoliciesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *PatchPoliciesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *PatchPoliciesMock) InvalidateToken() error                     { return nil }
 func (m *PatchPoliciesMock) KeepAliveToken() error                      { return nil }
 func (m *PatchPoliciesMock) GetLogger() *zap.Logger                     { return m.logger }

@@ -11,7 +11,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -146,7 +146,7 @@ func (m *LogFlushingMock) PostForm(ctx context.Context, path string, formData ma
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-func (m *LogFlushingMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *LogFlushingMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
@@ -222,7 +222,7 @@ func (m *LogFlushingMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	return nil, fmt.Errorf("GetPaginated not implemented in LogFlushingMock")
 }
 
-func (m *LogFlushingMock) RSQLBuilder() transport.RSQLFilterBuilder {
+func (m *LogFlushingMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 

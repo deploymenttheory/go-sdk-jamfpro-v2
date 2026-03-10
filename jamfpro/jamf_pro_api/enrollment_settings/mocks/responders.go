@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
@@ -95,7 +95,7 @@ func (m *EnrollmentSettingsMock) PostWithQuery(ctx context.Context, path string,
 func (m *EnrollmentSettingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *EnrollmentSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *EnrollmentSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *EnrollmentSettingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -130,7 +130,7 @@ func (m *EnrollmentSettingsMock) GetPaginated(ctx context.Context, path string, 
 	}
 	return resp, nil
 }
-func (m *EnrollmentSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *EnrollmentSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *EnrollmentSettingsMock) InvalidateToken() error                    { return nil }
 func (m *EnrollmentSettingsMock) KeepAliveToken() error                     { return nil }
 func (m *EnrollmentSettingsMock) GetLogger() *zap.Logger                    { return m.logger }

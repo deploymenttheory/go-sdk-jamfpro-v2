@@ -12,7 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -139,7 +139,7 @@ func (m *ComputerInventoryCollectionSettingsMock) GetPaginated(ctx context.Conte
 	return shared.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("GetPaginated not implemented in mock")
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
+func (m *ComputerInventoryCollectionSettingsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
 	return shared.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostMultipart not implemented in mock")
 }
 
@@ -155,7 +155,7 @@ func (m *ComputerInventoryCollectionSettingsMock) GetLogger() *zap.Logger {
 	return nil
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder {
+func (m *ComputerInventoryCollectionSettingsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 
