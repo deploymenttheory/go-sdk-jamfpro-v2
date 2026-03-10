@@ -27,6 +27,7 @@ func TestUnit_Sites_ListV1_Success(t *testing.T) {
 
 func TestUnit_Sites_ListV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewSitesMock()
+	mock.RegisterListV1ErrorMock()
 	svc := NewSites(mock)
 
 	result, resp, err := svc.ListV1(context.Background())
@@ -75,6 +76,7 @@ func TestUnit_Sites_GetObjectsByIDV1_EmptyID(t *testing.T) {
 
 func TestUnit_Sites_GetObjectsByIDV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewSitesMock()
+	mock.RegisterGetObjectsByIDV1ErrorMock()
 	svc := NewSites(mock)
 
 	result, resp, err := svc.GetObjectsByIDV1(context.Background(), "999", nil)

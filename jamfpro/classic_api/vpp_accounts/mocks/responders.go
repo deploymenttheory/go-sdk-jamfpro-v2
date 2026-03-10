@@ -1,39 +1,16 @@
 package mocks
 
 import (
-	"context"
-	"encoding/xml"
-	"fmt"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"go.uber.org/zap"
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-	errMsg     string
-}
-
-// VPPAccountsMock is a test double implementing client.Client for Classic API VPP accounts.
 type VPPAccountsMock struct {
-	responses     map[string]registeredResponse
-	logger        *zap.Logger
-	LastRSQLQuery map[string]string
+	*mocks.GenericMock
 }
 
 func NewVPPAccountsMock() *VPPAccountsMock {
 	return &VPPAccountsMock{
-		responses: make(map[string]registeredResponse),
-		logger:    zap.NewNop(),
+		GenericMock: mocks.NewXMLMock("VPPAccountsMock"),
 	}
 }
 
@@ -51,139 +28,30 @@ func (m *VPPAccountsMock) RegisterErrorMocks() {
 }
 
 func (m *VPPAccountsMock) RegisterListVPPAccountsMock() {
-	m.register("GET", "/JSSResource/vppaccounts", 200, "validate_list_vpp_accounts.xml")
+	m.Register("GET", "/JSSResource/vppaccounts", 200, "validate_list_vpp_accounts.xml")
 }
+
 func (m *VPPAccountsMock) RegisterGetVPPAccountByIDMock() {
-	m.register("GET", "/JSSResource/vppaccounts/id/1", 200, "validate_get_vpp_account.xml")
+	m.Register("GET", "/JSSResource/vppaccounts/id/1", 200, "validate_get_vpp_account.xml")
 }
+
 func (m *VPPAccountsMock) RegisterCreateVPPAccountMock() {
-	m.register("POST", "/JSSResource/vppaccounts/id/0", 201, "validate_create_vpp_account.xml")
+	m.Register("POST", "/JSSResource/vppaccounts/id/0", 201, "validate_create_vpp_account.xml")
 }
+
 func (m *VPPAccountsMock) RegisterUpdateVPPAccountByIDMock() {
-	m.register("PUT", "/JSSResource/vppaccounts/id/1", 200, "validate_update_vpp_account.xml")
+	m.Register("PUT", "/JSSResource/vppaccounts/id/1", 200, "validate_update_vpp_account.xml")
 }
+
 func (m *VPPAccountsMock) RegisterDeleteVPPAccountByIDMock() {
-	m.register("DELETE", "/JSSResource/vppaccounts/id/1", 200, "")
+	m.Register("DELETE", "/JSSResource/vppaccounts/id/1", 200, "")
 }
+
 func (m *VPPAccountsMock) RegisterNotFoundErrorMock() {
-	m.registerError("GET", "/JSSResource/vppaccounts/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
+	m.RegisterError("GET", "/JSSResource/vppaccounts/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
+
 func (m *VPPAccountsMock) RegisterConflictErrorMock() {
-	m.registerError("POST", "/JSSResource/vppaccounts/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A VPP account with that name already exists")
+	m.RegisterError("POST", "/JSSResource/vppaccounts/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A VPP account with that name already exists")
 }
 
-func (m *VPPAccountsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	m.LastRSQLQuery = rsqlQuery
-	return m.dispatch("GET", path, result)
-}
-func (m *VPPAccountsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *VPPAccountsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *VPPAccountsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *VPPAccountsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *VPPAccountsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PUT", path, result)
-}
-func (m *VPPAccountsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PATCH", path, result)
-}
-func (m *VPPAccountsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *VPPAccountsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *VPPAccountsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, nil, err
-	}
-	return resp, resp.Bytes(), nil
-}
-func (m *VPPAccountsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, err
-	}
-	if mergePage != nil {
-		body := resp.Bytes()
-		if err := mergePage(body); err != nil {
-			return resp, err
-		}
-	}
-	return resp, nil
-}
-func (m *VPPAccountsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		return m.dispatch(method, path, result)
-	})
-}
-func (m *VPPAccountsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
-func (m *VPPAccountsMock) InvalidateToken() error                { return nil }
-func (m *VPPAccountsMock) KeepAliveToken() error                 { return nil }
-func (m *VPPAccountsMock) GetLogger() *zap.Logger                { return m.logger }
-
-func (m *VPPAccountsMock) register(method, path string, statusCode int, fixture string) {
-	var body []byte
-	if fixture != "" {
-		data, err := loadMockResponse(fixture)
-		if err != nil {
-			panic(fmt.Sprintf("VPPAccountsMock: failed to load fixture %q: %v", fixture, err))
-		}
-		body = data
-	}
-	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
-}
-
-func (m *VPPAccountsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
-	body, err := loadMockResponse(fixture)
-	if err != nil {
-		panic(fmt.Sprintf("VPPAccountsMock: failed to load error fixture %q: %v", fixture, err))
-	}
-	m.responses[method+":"+path] = registeredResponse{
-		statusCode: statusCode,
-		rawBody:    body,
-		errMsg:     errMsg,
-	}
-}
-
-func (m *VPPAccountsMock) dispatch(method, path string, result any) (*resty.Response, error) {
-	r, ok := m.responses[method+":"+path]
-	if !ok {
-		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("VPPAccountsMock: no response registered for %s %s", method, path)
-	}
-
-	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
-
-	if r.errMsg != "" {
-		return resp, fmt.Errorf("%s", r.errMsg)
-	}
-
-	if result != nil && len(r.rawBody) > 0 {
-		if err := xml.Unmarshal(r.rawBody, result); err != nil {
-			return resp, fmt.Errorf("VPPAccountsMock: unmarshal into result: %w", err)
-		}
-	}
-	return resp, nil
-}
-
-func loadMockResponse(filename string) ([]byte, error) {
-	dir, err := os.Getwd()
-	if err != nil {
-		return nil, fmt.Errorf("get working directory: %w", err)
-	}
-	data, err := os.ReadFile(filepath.Join(dir, "mocks", filename))
-	if err != nil {
-		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
-	}
-	return data, nil
-}

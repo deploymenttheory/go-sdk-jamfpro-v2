@@ -1,144 +1,51 @@
 package mocks
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-	"runtime"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-}
-
-// SelfServiceSettingsMock is a test double implementing client.Client.
 type SelfServiceSettingsMock struct {
-	responses map[string]registeredResponse
-	logger    *zap.Logger
+	*mocks.GenericMock
 }
 
 func NewSelfServiceSettingsMock() *SelfServiceSettingsMock {
-	return &SelfServiceSettingsMock{responses: make(map[string]registeredResponse), logger: zap.NewNop()}
-}
-
-func (m *SelfServiceSettingsMock) register(method, path string, statusCode int, fixture string) {
-	var body []byte
-	if fixture != "" {
-		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+	return &SelfServiceSettingsMock{
+		GenericMock: mocks.NewJSONMock("SelfServiceSettingsMock"),
 	}
-	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
 func (m *SelfServiceSettingsMock) RegisterGetMock() {
-	m.register("GET", "/api/v1/self-service/settings", 200, "validate_get.json")
+	m.Register("GET", "/api/v1/self-service/settings", 200, "validate_get.json")
 }
 
 func (m *SelfServiceSettingsMock) RegisterUpdateMock() {
-	m.register("PUT", "/api/v1/self-service/settings", 200, "validate_get.json")
+	m.Register("PUT", "/api/v1/self-service/settings", 200, "validate_get.json")
 }
 
 func (m *SelfServiceSettingsMock) RegisterGetHistoryMock() {
-	m.register("GET", "/api/v1/self-service/settings/history", 200, "validate_history.json")
+	m.Register("GET", "/api/v1/self-service/settings/history", 200, "validate_history.json")
 }
 
 func (m *SelfServiceSettingsMock) RegisterGetHistoryInvalidMock() {
-	m.register("GET", "/api/v1/self-service/settings/history", 200, "validate_history_invalid.json")
+	m.Register("GET", "/api/v1/self-service/settings/history", 200, "validate_history_invalid.json")
 }
 
 func (m *SelfServiceSettingsMock) RegisterAddHistoryNotesMock() {
-	m.register("POST", "/api/v1/self-service/settings/history", 201, "validate_add_history_notes.json")
+	m.Register("POST", "/api/v1/self-service/settings/history", 201, "validate_add_history_notes.json")
 }
 
-var errNoMockRegistered = fmt.Errorf("no mock registered")
-
-func (m *SelfServiceSettingsMock) dispatch(method, path string, result any) (*resty.Response, error) {
-	r, ok := m.responses[method+":"+path]
-	if !ok {
-		return nil, errNoMockRegistered
-	}
-	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
-	if result != nil && len(r.rawBody) > 0 {
-		_ = json.Unmarshal(r.rawBody, result)
-	}
-	return resp, nil
+func (m *SelfServiceSettingsMock) RegisterGetErrorMock() {
+	m.RegisterError("GET", "/api/v1/self-service/settings", 500, "error_internal.json", "")
 }
 
-func mustMocksDir() string {
-	_, filename, _, _ := runtime.Caller(0)
-	return filepath.Dir(filename)
+func (m *SelfServiceSettingsMock) RegisterUpdateErrorMock() {
+	m.RegisterError("PUT", "/api/v1/self-service/settings", 500, "error_internal.json", "")
 }
 
-func (m *SelfServiceSettingsMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("GET", path, result)
+func (m *SelfServiceSettingsMock) RegisterGetHistoryErrorMock() {
+	m.RegisterError("GET", "/api/v1/self-service/settings/history", 500, "error_internal.json", "")
 }
-func (m *SelfServiceSettingsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
+
+func (m *SelfServiceSettingsMock) RegisterAddHistoryNotesErrorMock() {
+	m.RegisterError("POST", "/api/v1/self-service/settings/history", 500, "error_internal.json", "")
 }
-func (m *SelfServiceSettingsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *SelfServiceSettingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *SelfServiceSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *SelfServiceSettingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PUT", path, result)
-}
-func (m *SelfServiceSettingsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PATCH", path, result)
-}
-func (m *SelfServiceSettingsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *SelfServiceSettingsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *SelfServiceSettingsMock) GetBytes(ctx context.Context, path string, _ map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, nil, err
-	}
-	return resp, resp.Bytes(), nil
-}
-func (m *SelfServiceSettingsMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, err
-	}
-	bodyBytes := resp.Bytes()
-	if mergePage != nil && len(bodyBytes) > 0 {
-		var page struct {
-			Results json.RawMessage `json:"results"`
-		}
-		if err := json.Unmarshal(bodyBytes, &page); err != nil {
-			return resp, fmt.Errorf("mergePage failed: %w", err)
-		}
-		if err := mergePage(page.Results); err != nil {
-			return resp, fmt.Errorf("mergePage failed: %w", err)
-		}
-	}
-	return resp, nil
-}
-func (m *SelfServiceSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		return m.dispatch(method, path, result)
-	})
-}
-func (m *SelfServiceSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
-func (m *SelfServiceSettingsMock) InvalidateToken() error                { return nil }
-func (m *SelfServiceSettingsMock) KeepAliveToken() error                 { return nil }
-func (m *SelfServiceSettingsMock) GetLogger() *zap.Logger                { return m.logger }

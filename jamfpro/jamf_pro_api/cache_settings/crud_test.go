@@ -34,14 +34,13 @@ func TestUnit_CacheSettings_GetV1_Success(t *testing.T) {
 }
 
 func TestUnit_CacheSettings_GetV1_NoMock(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered
+	svc, mock := setupMockService(t)
+	mock.RegisterGetErrorMock()
 
 	result, resp, err := svc.GetV1(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_CacheSettings_UpdateV1_NilRequest(t *testing.T) {
@@ -69,8 +68,8 @@ func TestUnit_CacheSettings_UpdateV1_Success(t *testing.T) {
 }
 
 func TestUnit_CacheSettings_UpdateV1_NoMock(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered
+	svc, mock := setupMockService(t)
+	mock.RegisterPutErrorMock()
 
 	request := &ResourceCacheSettings{
 		CacheType:         "ehcache",
@@ -79,6 +78,5 @@ func TestUnit_CacheSettings_UpdateV1_NoMock(t *testing.T) {
 	result, resp, err := svc.UpdateV1(context.Background(), request)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response")
+	assert.NotNil(t, resp)
 }

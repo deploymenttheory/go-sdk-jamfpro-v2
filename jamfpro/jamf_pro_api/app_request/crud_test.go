@@ -259,7 +259,8 @@ func TestUnit_AppRequest_UpdateSettings_NilRequest(t *testing.T) {
 // =============================================================================
 
 func TestUnit_AppRequest_ListFormInputFields_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 	result, resp, err := svc.ListFormInputFieldsV1(context.Background(), nil)
 	require.Error(t, err)
 	require.Nil(t, result)
@@ -267,7 +268,8 @@ func TestUnit_AppRequest_ListFormInputFields_Error(t *testing.T) {
 }
 
 func TestUnit_AppRequest_ReplaceFormInputFields_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 	desc := "Some description"
 	req := []RequestFormInputField{{Title: "Field", Description: &desc, Priority: 1}}
 	result, resp, err := svc.ReplaceFormInputFieldsV1(context.Background(), req)
@@ -277,7 +279,8 @@ func TestUnit_AppRequest_ReplaceFormInputFields_Error(t *testing.T) {
 }
 
 func TestUnit_AppRequest_CreateFormInputField_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 	desc := "Some description"
 	req := &RequestFormInputField{Title: "Field", Description: &desc, Priority: 1}
 	result, resp, err := svc.CreateFormInputFieldV1(context.Background(), req)
@@ -287,7 +290,8 @@ func TestUnit_AppRequest_CreateFormInputField_Error(t *testing.T) {
 }
 
 func TestUnit_AppRequest_GetFormInputFieldByID_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 	result, resp, err := svc.GetFormInputFieldByIDV1(context.Background(), 1)
 	require.Error(t, err)
 	require.Nil(t, result)
@@ -295,7 +299,8 @@ func TestUnit_AppRequest_GetFormInputFieldByID_Error(t *testing.T) {
 }
 
 func TestUnit_AppRequest_UpdateFormInputFieldByID_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 	desc := "Some description"
 	req := &RequestFormInputField{Title: "Field", Description: &desc, Priority: 1}
 	result, resp, err := svc.UpdateFormInputFieldByIDV1(context.Background(), 1, req)
@@ -305,14 +310,16 @@ func TestUnit_AppRequest_UpdateFormInputFieldByID_Error(t *testing.T) {
 }
 
 func TestUnit_AppRequest_DeleteFormInputFieldByID_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 	resp, err := svc.DeleteFormInputFieldByIDV1(context.Background(), 1)
 	require.Error(t, err)
 	require.NotNil(t, resp)
 }
 
 func TestUnit_AppRequest_GetSettings_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 	result, resp, err := svc.GetSettingsV1(context.Background())
 	require.Error(t, err)
 	require.Nil(t, result)
@@ -320,7 +327,8 @@ func TestUnit_AppRequest_GetSettings_Error(t *testing.T) {
 }
 
 func TestUnit_AppRequest_UpdateSettings_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 	req := &ResourceAppRequestSettings{
 		IsEnabled:      true,
 		AppStoreLocale: "deviceLocale",

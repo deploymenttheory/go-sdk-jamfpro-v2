@@ -1,219 +1,47 @@
 package mocks
 
 import (
-	"context"
-	_ "embed"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"strings"
-
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-//go:embed validate_get.json
-var validateGetJSON []byte
-
-//go:embed validate_create_custom_path.json
-var validateCreateCustomPathJSON []byte
-
-type registeredResponse struct {
-	method   string
-	path     string
-	response []byte
-	status   int
-}
-
 type ComputerInventoryCollectionSettingsMock struct {
-	responses []registeredResponse
+	*mocks.GenericMock
 }
 
 func NewComputerInventoryCollectionSettingsMock() *ComputerInventoryCollectionSettingsMock {
 	return &ComputerInventoryCollectionSettingsMock{
-		responses: make([]registeredResponse, 0),
+		GenericMock: mocks.NewJSONMock("ComputerInventoryCollectionSettingsMock"),
 	}
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) dispatch(method, path string) ([]byte, int, bool) {
-	var bestMatch *registeredResponse
-	longestMatch := 0
-
-	for i := range m.responses {
-		r := &m.responses[i]
-		if r.method == method && strings.HasPrefix(path, r.path) {
-			if len(r.path) > longestMatch {
-				longestMatch = len(r.path)
-				bestMatch = r
-			}
-		}
-	}
-
-	if bestMatch != nil {
-		return bestMatch.response, bestMatch.status, true
-	}
-	return nil, 0, false
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) Get(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	data, status, ok := m.dispatch("GET", endpoint)
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for GET %s", endpoint)
-	}
-
-	if result != nil && data != nil {
-		if err := json.Unmarshal(data, result); err != nil {
-			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
-		}
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	data, status, ok := m.dispatch("POST", endpoint)
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for POST %s", endpoint)
-	}
-
-	if result != nil && data != nil {
-		if err := json.Unmarshal(data, result); err != nil {
-			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
-		}
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	data, status, ok := m.dispatch("PUT", endpoint)
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for PUT %s", endpoint)
-	}
-
-	if result != nil && data != nil {
-		if err := json.Unmarshal(data, result); err != nil {
-			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
-		}
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	_, status, ok := m.dispatch("PATCH", endpoint)
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for PATCH %s", endpoint)
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) Delete(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	_, status, ok := m.dispatch("DELETE", endpoint)
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for DELETE %s", endpoint)
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("DeleteWithBody not implemented in mock")
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) GetBytes(ctx context.Context, endpoint string, params map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
-	data, status, ok := m.dispatch("GET", endpoint)
-	if !ok {
-		return nil, nil, fmt.Errorf("no mock registered for GET %s", endpoint)
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), data, nil
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) GetPaginated(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, mergePage func(page []byte) error) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("GetPaginated not implemented in mock")
-}
-func (m *ComputerInventoryCollectionSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		data, status, ok := m.dispatch(method, path)
-		if !ok {
-			return nil, fmt.Errorf("no mock registered for %s %s", method, path)
-		}
-		if result != nil && data != nil {
-			if err := json.Unmarshal(data, result); err != nil {
-				return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
-			}
-		}
-		return mockhelpers.NewMockResponse(status, http.Header{}, data), nil
-	})
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostMultipart not implemented in mock")
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostWithQuery not implemented in mock")
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostForm not implemented in mock")
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) GetLogger() *zap.Logger {
-	return nil
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) RSQLBuilder() client.RSQLFilterBuilder {
-	return nil
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) InvalidateToken() error {
-	return nil
-}
-
-func (m *ComputerInventoryCollectionSettingsMock) KeepAliveToken() error {
-	return nil
 }
 
 func (m *ComputerInventoryCollectionSettingsMock) RegisterGetMock() {
-	m.responses = append(m.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v2/computer-inventory-collection-settings",
-		response: validateGetJSON,
-		status:   http.StatusOK,
-	})
+	m.Register("GET", "/api/v2/computer-inventory-collection-settings", 200, "validate_get.json")
 }
 
 func (m *ComputerInventoryCollectionSettingsMock) RegisterUpdateMock() {
-	m.responses = append(m.responses, registeredResponse{
-		method:   "PATCH",
-		path:     "/api/v2/computer-inventory-collection-settings",
-		response: nil,
-		status:   http.StatusNoContent,
-	})
+	m.Register("PATCH", "/api/v2/computer-inventory-collection-settings", 204, "")
 }
 
 func (m *ComputerInventoryCollectionSettingsMock) RegisterCreateCustomPathMock() {
-	m.responses = append(m.responses, registeredResponse{
-		method:   "POST",
-		path:     "/api/v2/computer-inventory-collection-settings/custom-path",
-		response: validateCreateCustomPathJSON,
-		status:   http.StatusCreated,
-	})
+	m.Register("POST", "/api/v2/computer-inventory-collection-settings/custom-path", 201, "validate_create_custom_path.json")
 }
 
-func (m *ComputerInventoryCollectionSettingsMock) RegisterDeleteCustomPathMock() {
-	m.responses = append(m.responses, registeredResponse{
-		method:   "DELETE",
-		path:     "/api/v2/computer-inventory-collection-settings/custom-path/",
-		response: nil,
-		status:   http.StatusNoContent,
-	})
+func (m *ComputerInventoryCollectionSettingsMock) RegisterDeleteCustomPathMock(id string) {
+	m.Register("DELETE", "/api/v2/computer-inventory-collection-settings/custom-path/"+id, 204, "")
+}
+
+func (m *ComputerInventoryCollectionSettingsMock) RegisterGetErrorMock() {
+	m.RegisterError("GET", "/api/v2/computer-inventory-collection-settings", 500, "error_internal.json", "no mock registered")
+}
+
+func (m *ComputerInventoryCollectionSettingsMock) RegisterUpdateErrorMock() {
+	m.RegisterError("PATCH", "/api/v2/computer-inventory-collection-settings", 500, "error_internal.json", "no mock registered")
+}
+
+func (m *ComputerInventoryCollectionSettingsMock) RegisterCreateCustomPathErrorMock() {
+	m.RegisterError("POST", "/api/v2/computer-inventory-collection-settings/custom-path", 500, "error_internal.json", "no mock registered")
+}
+
+func (m *ComputerInventoryCollectionSettingsMock) RegisterDeleteCustomPathErrorMock(id string) {
+	m.RegisterError("DELETE", "/api/v2/computer-inventory-collection-settings/custom-path/"+id, 500, "error_internal.json", "no mock registered")
 }

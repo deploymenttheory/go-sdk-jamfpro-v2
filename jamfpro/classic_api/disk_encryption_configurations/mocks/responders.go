@@ -1,39 +1,16 @@
 package mocks
 
 import (
-	"context"
-	"encoding/xml"
-	"fmt"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"go.uber.org/zap"
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-	errMsg     string
-}
-
-// DiskEncryptionConfigurationsMock is a test double implementing client.Client for Classic API disk encryption configurations.
 type DiskEncryptionConfigurationsMock struct {
-	responses     map[string]registeredResponse
-	logger        *zap.Logger
-	LastRSQLQuery map[string]string
+	*mocks.GenericMock
 }
 
 func NewDiskEncryptionConfigurationsMock() *DiskEncryptionConfigurationsMock {
 	return &DiskEncryptionConfigurationsMock{
-		responses: make(map[string]registeredResponse),
-		logger:    zap.NewNop(),
+		GenericMock: mocks.NewXMLMock("DiskEncryptionConfigurationsMock"),
 	}
 }
 
@@ -54,149 +31,42 @@ func (m *DiskEncryptionConfigurationsMock) RegisterErrorMocks() {
 }
 
 func (m *DiskEncryptionConfigurationsMock) RegisterListMock() {
-	m.register("GET", "/JSSResource/diskencryptionconfigurations", 200, "validate_list_disk_encryption_configurations.xml")
+	m.Register("GET", "/JSSResource/diskencryptionconfigurations", 200, "validate_list_disk_encryption_configurations.xml")
 }
+
 func (m *DiskEncryptionConfigurationsMock) RegisterGetByIDMock() {
-	m.register("GET", "/JSSResource/diskencryptionconfigurations/id/1", 200, "validate_get_disk_encryption_configuration.xml")
+	m.Register("GET", "/JSSResource/diskencryptionconfigurations/id/1", 200, "validate_get_disk_encryption_configuration.xml")
 }
+
 func (m *DiskEncryptionConfigurationsMock) RegisterGetByNameMock() {
-	m.register("GET", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "validate_get_disk_encryption_configuration.xml")
+	m.Register("GET", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "validate_get_disk_encryption_configuration.xml")
 }
+
 func (m *DiskEncryptionConfigurationsMock) RegisterCreateMock() {
-	m.register("POST", "/JSSResource/diskencryptionconfigurations/id/0", 201, "validate_create_disk_encryption_configuration.xml")
+	m.Register("POST", "/JSSResource/diskencryptionconfigurations/id/0", 201, "validate_create_disk_encryption_configuration.xml")
 }
+
 func (m *DiskEncryptionConfigurationsMock) RegisterUpdateByIDMock() {
-	m.register("PUT", "/JSSResource/diskencryptionconfigurations/id/1", 200, "validate_update_disk_encryption_configuration.xml")
+	m.Register("PUT", "/JSSResource/diskencryptionconfigurations/id/1", 200, "validate_update_disk_encryption_configuration.xml")
 }
+
 func (m *DiskEncryptionConfigurationsMock) RegisterUpdateByNameMock() {
-	m.register("PUT", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "validate_update_disk_encryption_configuration.xml")
+	m.Register("PUT", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "validate_update_disk_encryption_configuration.xml")
 }
+
 func (m *DiskEncryptionConfigurationsMock) RegisterDeleteByIDMock() {
-	m.register("DELETE", "/JSSResource/diskencryptionconfigurations/id/1", 200, "")
+	m.Register("DELETE", "/JSSResource/diskencryptionconfigurations/id/1", 200, "")
 }
+
 func (m *DiskEncryptionConfigurationsMock) RegisterDeleteByNameMock() {
-	m.register("DELETE", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "")
+	m.Register("DELETE", "/JSSResource/diskencryptionconfigurations/name/FileVault Config", 200, "")
 }
+
 func (m *DiskEncryptionConfigurationsMock) RegisterNotFoundErrorMock() {
-	m.registerError("GET", "/JSSResource/diskencryptionconfigurations/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
+	m.RegisterError("GET", "/JSSResource/diskencryptionconfigurations/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
+
 func (m *DiskEncryptionConfigurationsMock) RegisterConflictErrorMock() {
-	m.registerError("POST", "/JSSResource/diskencryptionconfigurations/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A disk encryption configuration with that name already exists")
+	m.RegisterError("POST", "/JSSResource/diskencryptionconfigurations/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A disk encryption configuration with that name already exists")
 }
 
-func (m *DiskEncryptionConfigurationsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	m.LastRSQLQuery = rsqlQuery
-	return m.dispatch("GET", path, result)
-}
-func (m *DiskEncryptionConfigurationsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *DiskEncryptionConfigurationsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *DiskEncryptionConfigurationsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *DiskEncryptionConfigurationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *DiskEncryptionConfigurationsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PUT", path, result)
-}
-func (m *DiskEncryptionConfigurationsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PATCH", path, result)
-}
-func (m *DiskEncryptionConfigurationsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *DiskEncryptionConfigurationsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *DiskEncryptionConfigurationsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, nil, err
-	}
-	return resp, resp.Bytes(), nil
-}
-func (m *DiskEncryptionConfigurationsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, err
-	}
-	if mergePage != nil {
-		body := resp.Bytes()
-		if err := mergePage(body); err != nil {
-			return resp, err
-		}
-	}
-	return resp, nil
-}
-func (m *DiskEncryptionConfigurationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		return m.dispatch(method, path, result)
-	})
-}
-func (m *DiskEncryptionConfigurationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
-func (m *DiskEncryptionConfigurationsMock) InvalidateToken() error                { return nil }
-func (m *DiskEncryptionConfigurationsMock) KeepAliveToken() error                 { return nil }
-func (m *DiskEncryptionConfigurationsMock) GetLogger() *zap.Logger                { return m.logger }
-
-// registerError stores an error response with externalized XML body.
-func (m *DiskEncryptionConfigurationsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
-	body, err := loadMockResponse(fixture)
-	if err != nil {
-		panic(fmt.Sprintf("DiskEncryptionConfigurationsMock: failed to load error fixture %q: %v", fixture, err))
-	}
-	m.responses[method+":"+path] = registeredResponse{
-		statusCode: statusCode,
-		rawBody:    body,
-		errMsg:     errMsg,
-	}
-}
-
-func (m *DiskEncryptionConfigurationsMock) register(method, path string, statusCode int, fixture string) {
-	var body []byte
-	if fixture != "" {
-		data, err := loadMockResponse(fixture)
-		if err != nil {
-			panic(fmt.Sprintf("DiskEncryptionConfigurationsMock: failed to load fixture %q: %v", fixture, err))
-		}
-		body = data
-	}
-	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
-}
-
-func (m *DiskEncryptionConfigurationsMock) dispatch(method, path string, result any) (*resty.Response, error) {
-	r, ok := m.responses[method+":"+path]
-	if !ok {
-		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("DiskEncryptionConfigurationsMock: no response registered for %s %s", method, path)
-	}
-
-	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
-
-	if r.errMsg != "" {
-		return resp, fmt.Errorf("%s", r.errMsg)
-	}
-
-	if result != nil && len(r.rawBody) > 0 {
-		if err := xml.Unmarshal(r.rawBody, result); err != nil {
-			return resp, fmt.Errorf("DiskEncryptionConfigurationsMock: unmarshal into result: %w", err)
-		}
-	}
-	return resp, nil
-}
-
-func loadMockResponse(filename string) ([]byte, error) {
-	dir, err := os.Getwd()
-	if err != nil {
-		return nil, fmt.Errorf("get working directory: %w", err)
-	}
-	data, err := os.ReadFile(filepath.Join(dir, "mocks", filename))
-	if err != nil {
-		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
-	}
-	return data, nil
-}

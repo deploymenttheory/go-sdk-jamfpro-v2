@@ -1,45 +1,19 @@
 package mocks
 
 import (
-	"context"
-	"encoding/xml"
-	"fmt"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"go.uber.org/zap"
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-// registeredResponse holds a pre-canned response for a single endpoint.
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-	errMsg     string
-}
-
-// DirectoryBindingsMock is a test double implementing client.Client for Classic API directory bindings.
 type DirectoryBindingsMock struct {
-	responses     map[string]registeredResponse
-	logger        *zap.Logger
-	LastRSQLQuery map[string]string
+	*mocks.GenericMock
 }
 
-// NewDirectoryBindingsMock returns an empty mock ready for response registration.
 func NewDirectoryBindingsMock() *DirectoryBindingsMock {
 	return &DirectoryBindingsMock{
-		responses: make(map[string]registeredResponse),
-		logger:    zap.NewNop(),
+		GenericMock: mocks.NewXMLMock("DirectoryBindingsMock"),
 	}
 }
 
-// RegisterMocks registers all standard success responses in one call.
 func (m *DirectoryBindingsMock) RegisterMocks() {
 	m.RegisterListDirectoryBindingsMock()
 	m.RegisterGetDirectoryBindingByIDMock()
@@ -51,165 +25,48 @@ func (m *DirectoryBindingsMock) RegisterMocks() {
 	m.RegisterDeleteDirectoryBindingByNameMock()
 }
 
-// RegisterErrorMocks registers all error responses in one call.
 func (m *DirectoryBindingsMock) RegisterErrorMocks() {
 	m.RegisterNotFoundErrorMock()
 	m.RegisterConflictErrorMock()
 }
 
 func (m *DirectoryBindingsMock) RegisterListDirectoryBindingsMock() {
-	m.register("GET", "/JSSResource/directorybindings", 200, "validate_list_directory_bindings.xml")
+	m.Register("GET", "/JSSResource/directorybindings", 200, "validate_list_directory_bindings.xml")
 }
 
 func (m *DirectoryBindingsMock) RegisterGetDirectoryBindingByIDMock() {
-	m.register("GET", "/JSSResource/directorybindings/id/1", 200, "validate_get_directory_binding.xml")
+	m.Register("GET", "/JSSResource/directorybindings/id/1", 200, "validate_get_directory_binding.xml")
 }
 
 func (m *DirectoryBindingsMock) RegisterGetDirectoryBindingByNameMock() {
-	m.register("GET", "/JSSResource/directorybindings/name/AD%20Binding", 200, "validate_get_directory_binding.xml")
+	m.Register("GET", "/JSSResource/directorybindings/name/AD%20Binding", 200, "validate_get_directory_binding.xml")
 }
 
 func (m *DirectoryBindingsMock) RegisterCreateDirectoryBindingMock() {
-	m.register("POST", "/JSSResource/directorybindings/id/0", 201, "validate_create_directory_binding.xml")
+	m.Register("POST", "/JSSResource/directorybindings/id/0", 201, "validate_create_directory_binding.xml")
 }
 
 func (m *DirectoryBindingsMock) RegisterUpdateDirectoryBindingByIDMock() {
-	m.register("PUT", "/JSSResource/directorybindings/id/1", 200, "validate_update_directory_binding.xml")
+	m.Register("PUT", "/JSSResource/directorybindings/id/1", 200, "validate_update_directory_binding.xml")
 }
 
 func (m *DirectoryBindingsMock) RegisterUpdateDirectoryBindingByNameMock() {
-	m.register("PUT", "/JSSResource/directorybindings/name/AD%20Binding", 200, "validate_update_directory_binding.xml")
+	m.Register("PUT", "/JSSResource/directorybindings/name/AD%20Binding", 200, "validate_update_directory_binding.xml")
 }
 
 func (m *DirectoryBindingsMock) RegisterDeleteDirectoryBindingByIDMock() {
-	m.register("DELETE", "/JSSResource/directorybindings/id/1", 200, "")
+	m.Register("DELETE", "/JSSResource/directorybindings/id/1", 200, "")
 }
 
 func (m *DirectoryBindingsMock) RegisterDeleteDirectoryBindingByNameMock() {
-	m.register("DELETE", "/JSSResource/directorybindings/name/AD%20Binding", 200, "")
+	m.Register("DELETE", "/JSSResource/directorybindings/name/AD%20Binding", 200, "")
 }
 
 func (m *DirectoryBindingsMock) RegisterNotFoundErrorMock() {
-	m.registerError("GET", "/JSSResource/directorybindings/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
+	m.RegisterError("GET", "/JSSResource/directorybindings/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
 func (m *DirectoryBindingsMock) RegisterConflictErrorMock() {
-	m.registerError("POST", "/JSSResource/directorybindings/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A directory binding with that name already exists")
+	m.RegisterError("POST", "/JSSResource/directorybindings/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A directory binding with that name already exists")
 }
 
-func (m *DirectoryBindingsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	m.LastRSQLQuery = rsqlQuery
-	return m.dispatch("GET", path, result)
-}
-func (m *DirectoryBindingsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *DirectoryBindingsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *DirectoryBindingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *DirectoryBindingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *DirectoryBindingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PUT", path, result)
-}
-func (m *DirectoryBindingsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PATCH", path, result)
-}
-func (m *DirectoryBindingsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *DirectoryBindingsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *DirectoryBindingsMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, nil, err
-	}
-	return resp, resp.Bytes(), nil
-}
-func (m *DirectoryBindingsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, err
-	}
-	if mergePage != nil {
-		body := resp.Bytes()
-		if err := mergePage(body); err != nil {
-			return resp, err
-		}
-	}
-	return resp, nil
-}
-func (m *DirectoryBindingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		return m.dispatch(method, path, result)
-	})
-}
-func (m *DirectoryBindingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
-func (m *DirectoryBindingsMock) InvalidateToken() error                { return nil }
-func (m *DirectoryBindingsMock) KeepAliveToken() error                 { return nil }
-func (m *DirectoryBindingsMock) GetLogger() *zap.Logger                { return m.logger }
-
-// registerError stores an error response with externalized XML body.
-func (m *DirectoryBindingsMock) registerError(method, path string, statusCode int, fixture, errMsg string) {
-	body, err := loadMockResponse(fixture)
-	if err != nil {
-		panic(fmt.Sprintf("DirectoryBindingsMock: failed to load error fixture %q: %v", fixture, err))
-	}
-	m.responses[method+":"+path] = registeredResponse{
-		statusCode: statusCode,
-		rawBody:    body,
-		errMsg:     errMsg,
-	}
-}
-
-func (m *DirectoryBindingsMock) register(method, path string, statusCode int, fixture string) {
-	var body []byte
-	if fixture != "" {
-		data, err := loadMockResponse(fixture)
-		if err != nil {
-			panic(fmt.Sprintf("DirectoryBindingsMock: failed to load fixture %q: %v", fixture, err))
-		}
-		body = data
-	}
-	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
-}
-
-func (m *DirectoryBindingsMock) dispatch(method, path string, result any) (*resty.Response, error) {
-	r, ok := m.responses[method+":"+path]
-	if !ok {
-		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("DirectoryBindingsMock: no response registered for %s %s", method, path)
-	}
-
-	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
-
-	if r.errMsg != "" {
-		return resp, fmt.Errorf("%s", r.errMsg)
-	}
-
-	if result != nil && len(r.rawBody) > 0 {
-		if err := xml.Unmarshal(r.rawBody, result); err != nil {
-			return resp, fmt.Errorf("DirectoryBindingsMock: unmarshal into result: %w", err)
-		}
-	}
-	return resp, nil
-}
-
-func loadMockResponse(filename string) ([]byte, error) {
-	dir, err := os.Getwd()
-	if err != nil {
-		return nil, fmt.Errorf("get working directory: %w", err)
-	}
-	data, err := os.ReadFile(filepath.Join(dir, "mocks", filename))
-	if err != nil {
-		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
-	}
-	return data, nil
-}

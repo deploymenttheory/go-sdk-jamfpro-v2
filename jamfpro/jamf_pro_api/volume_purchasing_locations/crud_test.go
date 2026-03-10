@@ -274,12 +274,13 @@ func TestUnit_VolumePurchasingLocations_GetContentV1_WithResults(t *testing.T) {
 }
 
 func TestUnit_VolumePurchasingLocations_ListV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterListNoResponseErrorMock()
 
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_VolumePurchasingLocations_ListV1_InvalidJSON(t *testing.T) {
@@ -305,57 +306,63 @@ func TestUnit_VolumePurchasingLocations_GetByIDV1_NotFound(t *testing.T) {
 }
 
 func TestUnit_VolumePurchasingLocations_GetByIDV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetByIDNoResponseErrorMock()
 
 	result, resp, err := svc.GetByIDV1(context.Background(), "1")
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_VolumePurchasingLocations_CreateV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterCreateNoResponseErrorMock()
 
 	req := &RequestVolumePurchasingLocation{Name: "New", ServiceToken: "token"}
 	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_VolumePurchasingLocations_UpdateByIDV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateNoResponseErrorMock()
 
 	req := &RequestVolumePurchasingLocation{Name: "Updated", ServiceToken: "token"}
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_VolumePurchasingLocations_DeleteByIDV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteNoResponseErrorMock()
 
 	resp, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_VolumePurchasingLocations_ReclaimByIDV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterReclaimNoResponseErrorMock()
 
 	resp, err := svc.ReclaimVolumePurchasingLocationByIDV1(context.Background(), "1")
 	require.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_VolumePurchasingLocations_GetContentV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetContentNoResponseErrorMock()
 
 	result, resp, err := svc.GetContentV1(context.Background(), "1", nil)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_VolumePurchasingLocations_GetContentV1_InvalidJSON(t *testing.T) {
@@ -370,12 +377,13 @@ func TestUnit_VolumePurchasingLocations_GetContentV1_InvalidJSON(t *testing.T) {
 }
 
 func TestUnit_VolumePurchasingLocations_GetHistoryV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryNoResponseErrorMock()
 
 	result, resp, err := svc.GetHistoryV1(context.Background(), "1", nil)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_VolumePurchasingLocations_GetHistoryV1_InvalidJSON(t *testing.T) {
@@ -390,18 +398,20 @@ func TestUnit_VolumePurchasingLocations_GetHistoryV1_InvalidJSON(t *testing.T) {
 }
 
 func TestUnit_VolumePurchasingLocations_AddHistoryNotesV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNotesNoResponseErrorMock()
 
 	req := &AddHistoryNotesRequest{ObjectHistoryNote: "Note"}
 	resp, err := svc.AddHistoryNotesV1(context.Background(), "1", req)
 	require.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_VolumePurchasingLocations_RevokeLicensesV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterRevokeLicensesNoResponseErrorMock()
 
 	resp, err := svc.RevokeVolumePurchasingLocationLicensesByIDV1(context.Background(), "1")
 	require.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }

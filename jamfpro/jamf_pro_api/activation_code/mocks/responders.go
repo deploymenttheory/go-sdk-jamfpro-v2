@@ -1,45 +1,19 @@
 package mocks
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-// registeredResponse holds a pre-canned response for a single endpoint.
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-	errMsg     string
-}
-
-// ActivationCodeMock is a test double implementing client.Client.
 type ActivationCodeMock struct {
-	responses     map[string]registeredResponse
-	logger        *zap.Logger
-	LastRSQLQuery map[string]string
+	*mocks.GenericMock
 }
 
-// NewActivationCodeMock returns an empty mock ready for response registration.
 func NewActivationCodeMock() *ActivationCodeMock {
 	return &ActivationCodeMock{
-		responses: make(map[string]registeredResponse),
-		logger:    zap.NewNop(),
+		GenericMock: mocks.NewJSONMock("ActivationCodeMock"),
 	}
 }
 
-// RegisterMocks registers all standard success responses in one call.
 func (m *ActivationCodeMock) RegisterMocks() {
 	m.RegisterGetHistoryMock()
 	m.RegisterUpdateActivationCodeMock()
@@ -48,247 +22,22 @@ func (m *ActivationCodeMock) RegisterMocks() {
 	m.RegisterExportHistoryMock()
 }
 
-func (m *ActivationCodeMock) register(method, path string, statusCode int, fixture string) {
-	var body []byte
-	if fixture != "" {
-		data, err := loadMockResponse(fixture)
-		if err != nil {
-			panic(fmt.Sprintf("ActivationCodeMock: failed to load fixture %q: %v", fixture, err))
-		}
-		body = data
-	}
-	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
-}
-
-// RegisterGetHistoryMock registers the get activation code history response.
 func (m *ActivationCodeMock) RegisterGetHistoryMock() {
-	m.register("GET", "/api/v1/activation-code/history", 200, "validate_history.json")
+	m.Register("GET", "/api/v1/activation-code/history", 200, "validate_history.json")
 }
 
-// RegisterUpdateActivationCodeMock registers the update activation code response.
 func (m *ActivationCodeMock) RegisterUpdateActivationCodeMock() {
-	m.register("PUT", "/api/v1/activation-code", 202, "")
+	m.Register("PUT", "/api/v1/activation-code", 202, "")
 }
 
-// RegisterUpdateOrganizationNameMock registers the update organization name response.
 func (m *ActivationCodeMock) RegisterUpdateOrganizationNameMock() {
-	m.register("PATCH", "/api/v1/activation-code/organization-name", 202, "")
+	m.Register("PATCH", "/api/v1/activation-code/organization-name", 202, "")
 }
 
-// RegisterAddHistoryNoteMock registers the add history note response.
 func (m *ActivationCodeMock) RegisterAddHistoryNoteMock() {
-	m.register("POST", "/api/v1/activation-code/history", 201, "validate_add_history_note.json")
+	m.Register("POST", "/api/v1/activation-code/history", 201, "validate_add_history_note.json")
 }
 
-// RegisterExportHistoryMock registers the export history response.
 func (m *ActivationCodeMock) RegisterExportHistoryMock() {
-	csvData := "id,username,date,note,details\n1,admin,2019-02-04 21:09:31,Buildings update,Some details\n"
-	m.responses["POST:"+"/api/v1/activation-code/history/export"] = registeredResponse{
-		statusCode: 200,
-		rawBody:    []byte(csvData),
-	}
-}
-
-// loadMockResponse loads a JSON fixture from the mocks directory.
-func loadMockResponse(filename string) ([]byte, error) {
-	wd, _ := os.Getwd()
-	return os.ReadFile(filepath.Join(wd, "mocks", filename))
-}
-
-
-func (m *ActivationCodeMock) dispatch(method, path string, result any) (*resty.Response, error) {
-	key := method + ":" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for %s %s", method, path)
-	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
-	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if path == "/api/v1/activation-code/history/export" {
-			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
-		}
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
-			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("unmarshal: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
-}
-
-// Get implements client.Client.Get.
-func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	m.LastRSQLQuery = query
-	key := "GET:" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for GET %s", path)
-	}
-
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
-	}
-
-	if out != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, out); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal mock response: %w", err)
-		}
-	}
-
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
-}
-
-// GetPaginated implements client.Client.GetPaginated.
-func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, query map[string]string, headers map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
-	m.LastRSQLQuery = query
-	key := "GET:" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for GET %s", path)
-	}
-
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
-	}
-
-	if mergePage != nil && len(resp.rawBody) > 0 {
-		var page struct {
-			Results json.RawMessage `json:"results"`
-		}
-		if err := json.Unmarshal(resp.rawBody, &page); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal paginated response: %w", err)
-		}
-		if err := mergePage(page.Results); err != nil {
-			return nil, fmt.Errorf("mergePage failed: %w", err)
-		}
-	}
-
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
-}
-func (m *ActivationCodeMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
-		return m.dispatch(method, path, result)
-	}, &m.LastRSQLQuery)
-}
-
-// Post implements client.Client.Post.
-func (m *ActivationCodeMock) Post(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	key := "POST:" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for POST %s", path)
-	}
-
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
-	}
-
-	if out != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, out); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal mock response: %w", err)
-		}
-	}
-
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
-}
-
-// Delete implements client.Client.Delete.
-func (m *ActivationCodeMock) Delete(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("Delete not implemented in ActivationCodeMock")
-}
-
-// Put implements client.Client.Put.
-func (m *ActivationCodeMock) Put(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	key := "PUT:" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for PUT %s", path)
-	}
-
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
-	}
-
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
-}
-
-// Patch implements client.Client.Patch.
-func (m *ActivationCodeMock) Patch(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	key := "PATCH:" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for PATCH %s", path)
-	}
-
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
-	}
-
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
-}
-
-// DownloadFile implements client.Client.DownloadFile.
-func (m *ActivationCodeMock) DownloadFile(ctx context.Context, url string) (io.ReadCloser, *http.Response, error) {
-	return nil, nil, fmt.Errorf("DownloadFile not implemented in ActivationCodeMock")
-}
-
-// SetLogger implements client.Client.SetLogger.
-func (m *ActivationCodeMock) SetLogger(logger *zap.Logger) {
-	m.logger = logger
-}
-
-// GetLogger implements client.Client.GetLogger.
-func (m *ActivationCodeMock) GetLogger() *zap.Logger {
-	return m.logger
-}
-
-// DeleteWithBody implements client.Client.DeleteWithBody.
-func (m *ActivationCodeMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("DeleteWithBody not implemented in ActivationCodeMock")
-}
-
-// PostWithQuery implements client.Client.PostWithQuery.
-func (m *ActivationCodeMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	m.LastRSQLQuery = rsqlQuery
-	key := "POST:" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for POST %s", path)
-	}
-
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, []byte(resp.errMsg)), fmt.Errorf("%s", resp.errMsg)
-	}
-
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
-}
-
-// PostForm implements client.Client.PostForm.
-func (m *ActivationCodeMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("PostForm not implemented in ActivationCodeMock")
-}
-
-// PostMultipart implements client.Client.PostMultipart.
-func (m *ActivationCodeMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("PostMultipart not implemented in ActivationCodeMock")
-}
-
-// GetBytes implements client.Client.GetBytes.
-func (m *ActivationCodeMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
-	return nil, nil, fmt.Errorf("GetBytes not implemented in ActivationCodeMock")
-}
-
-// RSQLBuilder implements client.Client.RSQLBuilder.
-func (m *ActivationCodeMock) RSQLBuilder() client.RSQLFilterBuilder {
-	return nil
-}
-
-// InvalidateToken implements client.Client.InvalidateToken.
-func (m *ActivationCodeMock) InvalidateToken() error {
-	return nil
-}
-
-// KeepAliveToken implements client.Client.KeepAliveToken.
-func (m *ActivationCodeMock) KeepAliveToken() error {
-	return nil
+	m.Register("POST", "/api/v1/activation-code/history/export", 200, "export_history.json")
 }

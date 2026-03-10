@@ -286,40 +286,48 @@ func TestUnit_CloudAzure_GetDefaultMappingsV1_Success(t *testing.T) {
 }
 
 func TestUnit_CloudAzure_GetDefaultServerConfigurationV1_Error(t *testing.T) {
-	svc := NewCloudAzure(mocks.NewCloudAzureMock())
+	mock := mocks.NewCloudAzureMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudAzure(mock)
 	ctx := context.Background()
 
 	result, resp, err := svc.GetDefaultServerConfigurationV1(ctx)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudAzure_GetByIDV1_Error(t *testing.T) {
-	svc := NewCloudAzure(mocks.NewCloudAzureMock())
+	mock := mocks.NewCloudAzureMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudAzure(mock)
 	ctx := context.Background()
 
 	result, resp, err := svc.GetByIDV1(ctx, "1")
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudAzure_GetByNameV1_Error(t *testing.T) {
-	svc := NewCloudAzure(mocks.NewCloudAzureMock())
+	mock := mocks.NewCloudAzureMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudAzure(mock)
 	ctx := context.Background()
 
 	result, resp, err := svc.GetByNameV1(ctx, "Test Azure IDP")
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudAzure_CreateV1_Error(t *testing.T) {
-	svc := NewCloudAzure(mocks.NewCloudAzureMock())
+	mock := mocks.NewCloudAzureMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudAzure(mock)
 	ctx := context.Background()
 
 	request := &ResourceCloudAzure{
@@ -332,12 +340,14 @@ func TestUnit_CloudAzure_CreateV1_Error(t *testing.T) {
 	result, resp, err := svc.CreateV1(ctx, request)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudAzure_UpdateByIDV1_Error(t *testing.T) {
-	svc := NewCloudAzure(mocks.NewCloudAzureMock())
+	mock := mocks.NewCloudAzureMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudAzure(mock)
 	ctx := context.Background()
 
 	request := &ResourceCloudAzure{
@@ -350,12 +360,14 @@ func TestUnit_CloudAzure_UpdateByIDV1_Error(t *testing.T) {
 	result, resp, err := svc.UpdateByIDV1(ctx, "1", request)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudAzure_UpdateByNameV1_Error(t *testing.T) {
-	svc := NewCloudAzure(mocks.NewCloudAzureMock())
+	mock := mocks.NewCloudAzureMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudAzure(mock)
 	ctx := context.Background()
 
 	request := &ResourceCloudAzure{
@@ -368,37 +380,43 @@ func TestUnit_CloudAzure_UpdateByNameV1_Error(t *testing.T) {
 	result, resp, err := svc.UpdateByNameV1(ctx, "Test Azure IDP", request)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudAzure_DeleteByIDV1_Error(t *testing.T) {
-	svc := NewCloudAzure(mocks.NewCloudAzureMock())
+	mock := mocks.NewCloudAzureMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudAzure(mock)
 	ctx := context.Background()
 
 	resp, err := svc.DeleteByIDV1(ctx, "1")
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_CloudAzure_DeleteByNameV1_Error(t *testing.T) {
-	svc := NewCloudAzure(mocks.NewCloudAzureMock())
+	mock := mocks.NewCloudAzureMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudAzure(mock)
 	ctx := context.Background()
 
 	resp, err := svc.DeleteByNameV1(ctx, "Test Azure IDP")
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_CloudAzure_GetDefaultMappingsV1_Error(t *testing.T) {
-	svc := NewCloudAzure(mocks.NewCloudAzureMock())
+	mock := mocks.NewCloudAzureMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudAzure(mock)
 	ctx := context.Background()
 
 	result, resp, err := svc.GetDefaultMappingsV1(ctx)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }

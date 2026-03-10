@@ -29,7 +29,8 @@ func TestUnit_LoginCustomization_GetV1_Success(t *testing.T) {
 }
 
 func TestUnit_LoginCustomization_GetV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetLoginCustomizationErrorMock()
 	result, resp, err := svc.GetV1(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)

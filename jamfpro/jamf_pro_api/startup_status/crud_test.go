@@ -30,12 +30,11 @@ func TestUnit_StartupStatus_GetV1_Success(t *testing.T) {
 }
 
 func TestUnit_StartupStatus_GetV1_Error_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// Do not register any mock - client will return error
+	svc, mock := setupMockService(t)
+	mock.RegisterGetStartupStatusErrorMock()
 
 	result, resp, err := svc.GetV1(context.Background())
 	require.Error(t, err)
 	require.Nil(t, result)
-	require.Nil(t, resp)
-	assert.Contains(t, err.Error(), "StartupStatusMock: no response")
+	require.NotNil(t, resp)
 }

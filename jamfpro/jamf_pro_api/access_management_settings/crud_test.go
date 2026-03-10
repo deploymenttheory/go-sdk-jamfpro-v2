@@ -46,20 +46,22 @@ func TestUnit_AccessManagementSettings_CreateV4_Success(t *testing.T) {
 }
 
 func TestUnit_AccessManagementSettings_GetV4_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetErrorMock()
 
 	result, resp, err := svc.GetV4(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_AccessManagementSettings_CreateV4_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterPostErrorMock()
 
 	request := &ResourceAccessManagementSettings{AutomatedDeviceEnrollmentServerUuid: "test-uuid"}
 	result, resp, err := svc.CreateV4(context.Background(), request)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }

@@ -64,11 +64,11 @@ func TestUnit_MobileDeviceApps_ReinstallAppConfigV1_NotFound(t *testing.T) {
 }
 
 func TestUnit_MobileDeviceApps_ReinstallAppConfigV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterReinstallAppConfigErrorMock()
 
 	req := &RequestReinstallAppConfig{ReinstallCode: "valid-code"}
 	resp, err := svc.ReinstallAppConfigV1(context.Background(), req)
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to reinstall app config")
+	assert.NotNil(t, resp)
 }

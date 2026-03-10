@@ -477,7 +477,7 @@ func TestUnit_MobileDevicePrestages_UpdateByIDV3_FetchVersionLockError(t *testin
 // version lock retrieval) fails.
 func TestUnit_MobileDevicePrestages_UpdateByNameV3_FetchVersionLockError(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
-	// No list mock registered – GetByNameV3 will fail.
+	mock.RegisterListNoResponseErrorMock()
 
 	svc := NewMobileDevicePrestages(mock)
 	prestage := &ResourceMobileDevicePrestage{DisplayName: "Updated Prestage"}
@@ -485,7 +485,7 @@ func TestUnit_MobileDevicePrestages_UpdateByNameV3_FetchVersionLockError(t *test
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "failed to get mobile device prestage by name")
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 // --- Scope operations ---
@@ -930,51 +930,47 @@ func TestUnit_MobileDevicePrestages_ReplaceScopeByIDV2_ScopeFetchError(t *testin
 
 func TestUnit_MobileDevicePrestages_DeleteByNameV3_GetByNameFails(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
-	// No list mock - GetByNameV3 will fail when resolving name to ID
+	mock.RegisterListNoResponseErrorMock()
 
 	svc := NewMobileDevicePrestages(mock)
 	resp, err := svc.DeleteByNameV3(context.Background(), "Nonexistent")
 
 	require.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to get mobile device prestage by name")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_MobileDevicePrestages_CreateV3_APIFails(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
-	// No create mock registered - Post will fail
+	mock.RegisterCreateNoResponseErrorMock()
 
 	svc := NewMobileDevicePrestages(mock)
 	prestage := &ResourceMobileDevicePrestage{DisplayName: "Valid Name"}
 	result, resp, err := svc.CreateV3(context.Background(), prestage)
 
 	require.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "no response")
 }
 
 func TestUnit_MobileDevicePrestages_ListV3_APIFails(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
-	// No list mock - GetPaginated will fail
+	mock.RegisterListNoResponseErrorMock()
 
 	svc := NewMobileDevicePrestages(mock)
 	result, resp, err := svc.ListV3(context.Background())
 
 	require.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "no response")
 }
 
 func TestUnit_MobileDevicePrestages_DeleteByIDV3_APIFails(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
-	// No delete mock for this ID
+	mock.RegisterDeleteByIDNoResponseErrorMock("1")
 
 	svc := NewMobileDevicePrestages(mock)
 	resp, err := svc.DeleteByIDV3(context.Background(), "1")
 
 	require.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response")
+	assert.NotNil(t, resp)
 }

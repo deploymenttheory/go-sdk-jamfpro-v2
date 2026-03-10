@@ -192,14 +192,13 @@ func TestUnit_Mdm_ListCommandsV2_Error(t *testing.T) {
 }
 
 func TestUnit_Mdm_ListCommandsV2_NoMock(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered - dispatch returns (nil, err)
+	svc, mock := setupMockService(t)
+	mock.RegisterListCommandsNoResponseErrorMock()
 
 	result, resp, err := svc.ListCommandsV2(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to list MDM commands")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Mdm_ListCommandsV2_InvalidJSON(t *testing.T) {

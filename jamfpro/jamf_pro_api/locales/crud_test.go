@@ -41,14 +41,13 @@ func TestUnit_Locales_ListV1_Error(t *testing.T) {
 
 func TestUnit_Locales_ListV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewLocalesMock()
-	// Do not call RegisterMocks - no mock registered for GET /api/v1/locales
+	mock.RegisterListV1NoResponseErrorMock()
 	svc := NewLocales(mock)
 
 	result, resp, err := svc.ListV1(context.Background())
 	require.Error(t, err)
 	require.Nil(t, result)
-	require.Nil(t, resp)
-	require.Contains(t, err.Error(), "no response for")
+	require.NotNil(t, resp)
 }
 
 func TestUnit_Locales_ListV1_InvalidJSON(t *testing.T) {

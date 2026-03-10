@@ -308,25 +308,24 @@ func TestUnit_Buildings_AddHistoryNotesV1_NilRequest(t *testing.T) {
 
 // TestUnit_Buildings_List_NoMockRegistered verifies error handling when no mock is registered.
 func TestUnit_Buildings_List_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// Do not register any mock
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to list buildings")
+	assert.NotNil(t, resp)
 }
 
 // TestUnit_Buildings_DeleteMultipleByID_NoMockRegistered verifies error when no mock is registered.
 func TestUnit_Buildings_DeleteMultipleByID_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// Do not register DeleteBuildingsByIDMock
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 
 	req := &DeleteBuildingsByIDRequest{IDs: []string{"1", "2"}}
 	resp, err := svc.DeleteBuildingsByIDV1(context.Background(), req)
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 // TestUnit_Buildings_ExportV1_Success tests successful buildings export.
@@ -370,13 +369,13 @@ func TestUnit_Buildings_ExportV1_WithQueryAndBody(t *testing.T) {
 
 // TestUnit_Buildings_ExportV1_NoMockRegistered verifies error when no mock is registered.
 func TestUnit_Buildings_ExportV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 
 	data, resp, err := svc.ExportV1(context.Background(), nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, data)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to export buildings")
+	assert.NotNil(t, resp)
 }
 
 // TestUnit_Buildings_ExportHistoryV1_Success tests successful building history export.
@@ -417,13 +416,13 @@ func TestUnit_Buildings_ExportHistoryV1_EmptyID(t *testing.T) {
 
 // TestUnit_Buildings_ExportHistoryV1_NoMockRegistered verifies error when no mock is registered.
 func TestUnit_Buildings_ExportHistoryV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterErrorMocks()
 
 	data, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, data)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to export building history")
+	assert.NotNil(t, resp)
 }
 
 func intPtr(i int) *int { return &i }

@@ -427,12 +427,13 @@ func TestUnit_Packages_ExportV1_EmptyAcceptDefaultsToJSON(t *testing.T) {
 }
 
 func TestUnit_Packages_ExportV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterExportPackagesErrorMock()
 
 	body, resp, err := svc.ExportV1(context.Background(), nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, body)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 // -----------------------------------------------------------------------------
@@ -476,12 +477,13 @@ func TestUnit_Packages_ExportHistoryV1_EmptyID(t *testing.T) {
 }
 
 func TestUnit_Packages_ExportHistoryV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterExportHistoryErrorMock()
 
 	body, resp, err := svc.ExportHistoryV1(context.Background(), "1", nil, nil, constants.ApplicationJSON)
 	assert.Error(t, err)
 	assert.Nil(t, body)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 // -----------------------------------------------------------------------------

@@ -73,14 +73,13 @@ func TestUnit_Categories_List_WithRSQLFilter(t *testing.T) {
 }
 
 func TestUnit_Categories_List_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// Do not register any mock
+	svc, mock := setupMockService(t)
+	mock.RegisterListErrorMock()
 
 	result, resp, err := svc.ListV1(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to list categories")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Categories_List_APIFailure(t *testing.T) {

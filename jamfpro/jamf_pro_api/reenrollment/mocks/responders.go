@@ -1,143 +1,43 @@
 package mocks
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-	"runtime"
-
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-}
-
-// ReenrollmentMock is a test double implementing client.Client.
 type ReenrollmentMock struct {
-	responses map[string]registeredResponse
-	logger    *zap.Logger
+	*mocks.GenericMock
 }
 
 func NewReenrollmentMock() *ReenrollmentMock {
-	return &ReenrollmentMock{responses: make(map[string]registeredResponse), logger: zap.NewNop()}
-}
-
-func (m *ReenrollmentMock) register(method, path string, statusCode int, fixture string) {
-	var body []byte
-	if fixture != "" {
-		body, _ = os.ReadFile(filepath.Join(mustMocksDir(), fixture))
+	return &ReenrollmentMock{
+		GenericMock: mocks.NewJSONMock("ReenrollmentMock"),
 	}
-	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
 func (m *ReenrollmentMock) RegisterGetMock() {
-	m.register("GET", "/api/v1/reenrollment", 200, "validate_get.json")
+	m.Register("GET", "/api/v1/reenrollment", 200, "validate_get.json")
 }
 
 func (m *ReenrollmentMock) RegisterUpdateMock() {
-	m.register("PUT", "/api/v1/reenrollment", 200, "validate_get.json")
+	m.Register("PUT", "/api/v1/reenrollment", 200, "validate_get.json")
 }
 
 func (m *ReenrollmentMock) RegisterGetHistoryMock() {
-	m.register("GET", "/api/v1/reenrollment/history", 200, "validate_history.json")
+	m.Register("GET", "/api/v1/reenrollment/history", 200, "validate_history.json")
 }
 
 func (m *ReenrollmentMock) RegisterAddHistoryNotesMock() {
-	m.register("POST", "/api/v1/reenrollment/history", 201, "validate_add_history_note.json")
+	m.Register("POST", "/api/v1/reenrollment/history", 201, "validate_add_history_note.json")
 }
 
 func (m *ReenrollmentMock) RegisterExportHistoryMock() {
-	m.register("POST", "/api/v1/reenrollment/history/export", 200, "validate_export.json")
+	m.Register("POST", "/api/v1/reenrollment/history/export", 200, "validate_export.json")
 }
 
-func (m *ReenrollmentMock) dispatch(method, path string, result any) (*resty.Response, error) {
-	r, ok := m.responses[method+":"+path]
-	if !ok {
-		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("ReenrollmentMock: no response for %s %s", method, path)
-	}
-	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
-	if result != nil && len(r.rawBody) > 0 {
-		_ = json.Unmarshal(r.rawBody, result)
-	}
-	return resp, nil
+func (m *ReenrollmentMock) RegisterGetErrorMock() {
+	m.RegisterError("GET", "/api/v1/reenrollment", 500, "error_internal.json", "")
 }
 
-func mustMocksDir() string {
-	_, filename, _, _ := runtime.Caller(0)
-	return filepath.Dir(filename)
+func (m *ReenrollmentMock) RegisterGetHistoryErrorMock() {
+	m.RegisterError("GET", "/api/v1/reenrollment/history", 500, "error_internal.json", "")
 }
-
-func (m *ReenrollmentMock) Get(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("GET", path, result)
-}
-func (m *ReenrollmentMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *ReenrollmentMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *ReenrollmentMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *ReenrollmentMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *ReenrollmentMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PUT", path, result)
-}
-func (m *ReenrollmentMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PATCH", path, result)
-}
-func (m *ReenrollmentMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *ReenrollmentMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *ReenrollmentMock) GetBytes(ctx context.Context, path string, _ map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, nil, err
-	}
-	return resp, resp.Bytes(), nil
-}
-func (m *ReenrollmentMock) GetPaginated(ctx context.Context, path string, _ map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, err
-	}
-	bodyBytes := resp.Bytes()
-	if mergePage != nil && len(bodyBytes) > 0 {
-		var page struct {
-			Results json.RawMessage `json:"results"`
-		}
-		if err := json.Unmarshal(bodyBytes, &page); err != nil {
-			return resp, fmt.Errorf("mergePage failed: %w", err)
-		}
-		if err := mergePage(page.Results); err != nil {
-			return resp, fmt.Errorf("mergePage failed: %w", err)
-		}
-	}
-	return resp, nil
-}
-func (m *ReenrollmentMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		return m.dispatch(method, path, result)
-	})
-}
-func (m *ReenrollmentMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
-func (m *ReenrollmentMock) InvalidateToken() error                { return nil }
-func (m *ReenrollmentMock) KeepAliveToken() error                 { return nil }
-func (m *ReenrollmentMock) GetLogger() *zap.Logger                { return m.logger }

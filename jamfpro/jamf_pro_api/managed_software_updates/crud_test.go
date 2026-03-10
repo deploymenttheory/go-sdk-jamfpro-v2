@@ -19,7 +19,7 @@ func TestUnit_ManagedSoftwareUpdates_GetAvailableUpdates_Error(t *testing.T) {
 	result, resp, err := svc.GetAvailableUpdates(context.Background())
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "api error")
 }
@@ -91,7 +91,7 @@ func TestUnit_ManagedSoftwareUpdates_GetPlans_Error(t *testing.T) {
 	result, resp, err := svc.GetPlans(context.Background(), params)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "api error")
 }
@@ -160,7 +160,7 @@ func TestUnit_ManagedSoftwareUpdates_GetPlanByUUID_Error(t *testing.T) {
 	result, resp, err := svc.GetPlanByUUID(context.Background(), uuid)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "not found")
 }
@@ -216,7 +216,7 @@ func TestUnit_ManagedSoftwareUpdates_GetDeclarationsByPlanUUID_Error(t *testing.
 	result, resp, err := svc.GetDeclarationsByPlanUUID(context.Background(), uuid)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -280,7 +280,7 @@ func TestUnit_ManagedSoftwareUpdates_CreatePlanByDeviceID_Error(t *testing.T) {
 	result, resp, err := svc.CreatePlanByDeviceID(context.Background(), plan)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "conflict")
 }
@@ -340,7 +340,7 @@ func TestUnit_ManagedSoftwareUpdates_CreatePlanByGroupID_Error(t *testing.T) {
 	result, resp, err := svc.CreatePlanByGroupID(context.Background(), plan)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -384,7 +384,7 @@ func TestUnit_ManagedSoftwareUpdates_GetPlansByGroupID_Error(t *testing.T) {
 	result, resp, err := svc.GetPlansByGroupID(context.Background(), groupID, "COMPUTER")
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -423,7 +423,7 @@ func TestUnit_ManagedSoftwareUpdates_GetFeatureToggle_Error(t *testing.T) {
 	result, resp, err := svc.GetFeatureToggle(context.Background())
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -476,7 +476,7 @@ func TestUnit_ManagedSoftwareUpdates_UpdateFeatureToggle_Error(t *testing.T) {
 	result, resp, err := svc.UpdateFeatureToggle(context.Background(), toggle)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -502,7 +502,7 @@ func TestUnit_ManagedSoftwareUpdates_GetFeatureToggleStatus_Error(t *testing.T) 
 	result, resp, err := svc.GetFeatureToggleStatus(context.Background())
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -536,7 +536,7 @@ func TestUnit_ManagedSoftwareUpdates_ForceStopFeatureToggleProcess_Error(t *test
 	result, resp, err := svc.ForceStopFeatureToggleProcess(context.Background())
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -585,7 +585,7 @@ func TestUnit_ManagedSoftwareUpdates_GetPlanEventsByUUID_Error(t *testing.T) {
 	result, resp, err := svc.GetPlanEventsByUUID(context.Background(), uuid)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -612,7 +612,7 @@ func TestUnit_ManagedSoftwareUpdates_GetUpdateStatuses_Error(t *testing.T) {
 	result, resp, err := svc.GetUpdateStatuses(context.Background(), params)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -700,7 +700,7 @@ func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputerGroup_Error(t *t
 	result, resp, err := svc.GetUpdateStatusesByComputerGroup(context.Background(), groupID)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -743,7 +743,7 @@ func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByComputer_Error(t *testin
 	result, resp, err := svc.GetUpdateStatusesByComputer(context.Background(), computerID)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -786,7 +786,7 @@ func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDeviceGroup_Error(
 	result, resp, err := svc.GetUpdateStatusesByMobileDeviceGroup(context.Background(), groupID)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
@@ -829,7 +829,7 @@ func TestUnit_ManagedSoftwareUpdates_GetUpdateStatusesByMobileDevice_Error(t *te
 	result, resp, err := svc.GetUpdateStatusesByMobileDevice(context.Background(), deviceID)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 

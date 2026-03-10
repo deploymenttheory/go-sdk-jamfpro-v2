@@ -44,6 +44,7 @@ func (s *CloudLdapKeystore) ValidateV1(ctx context.Context, request *ValidateKey
 		SetBody(request).
 		SetResult(&result).
 		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}

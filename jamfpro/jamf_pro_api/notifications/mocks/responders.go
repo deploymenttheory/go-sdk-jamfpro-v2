@@ -1,128 +1,23 @@
 package mocks
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-	errMsg     string
-}
-
-// NotificationsMock implements client.Client.
 type NotificationsMock struct {
-	responses map[string]registeredResponse
-	logger    *zap.Logger
+	*mocks.GenericMock
 }
 
 func NewNotificationsMock() *NotificationsMock {
 	return &NotificationsMock{
-		responses: make(map[string]registeredResponse),
-		logger:    zap.NewNop(),
+		GenericMock: mocks.NewJSONMock("NotificationsMock"),
 	}
-}
-
-func (m *NotificationsMock) register(method, path string, statusCode int, fixture string) {
-	var body []byte
-	if fixture != "" {
-		dir, err := os.Getwd()
-		if err != nil {
-			panic(err)
-		}
-		data, err := os.ReadFile(filepath.Join(dir, "mocks", fixture))
-		if err != nil {
-			panic(err)
-		}
-		body = data
-	}
-	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
 }
 
 func (m *NotificationsMock) RegisterMocks() {
-	m.register("GET", "/api/v1/notifications", 200, "validate_list.json")
+	m.Register("GET", "/api/v1/notifications", 200, "validate_list.json")
 }
 
 func (m *NotificationsMock) RegisterListErrorMock() {
-	m.responses["GET:/api/v1/notifications"] = registeredResponse{
-		statusCode: 500,
-		rawBody:    []byte(`{"code":"INTERNAL","message":"server error"}`),
-		errMsg:     "Jamf Pro API error (500) [INTERNAL]: server error",
-	}
-}
-
-func (m *NotificationsMock) Get(ctx context.Context, path string, q map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("GET", path, result)
-}
-func (m *NotificationsMock) Post(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *NotificationsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *NotificationsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *NotificationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
-	return m.dispatch("POST", path, result)
-}
-func (m *NotificationsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PUT", path, result)
-}
-func (m *NotificationsMock) Patch(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("PATCH", path, result)
-}
-func (m *NotificationsMock) Delete(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *NotificationsMock) DeleteWithBody(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
-	return m.dispatch("DELETE", path, result)
-}
-func (m *NotificationsMock) GetBytes(ctx context.Context, path string, q map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
-	resp, err := m.dispatch("GET", path, nil)
-	if err != nil {
-		return resp, nil, err
-	}
-	return resp, resp.Bytes(), nil
-}
-func (m *NotificationsMock) GetPaginated(ctx context.Context, path string, q map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
-	return m.dispatch("GET", path, nil)
-}
-func (m *NotificationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		return m.dispatch(method, path, result)
-	})
-}
-func (m *NotificationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
-func (m *NotificationsMock) InvalidateToken() error                { return nil }
-func (m *NotificationsMock) KeepAliveToken() error                 { return nil }
-func (m *NotificationsMock) GetLogger() *zap.Logger                { return m.logger }
-
-func (m *NotificationsMock) dispatch(method, path string, result any) (*resty.Response, error) {
-	r, ok := m.responses[method+":"+path]
-	if !ok {
-		return nil, fmt.Errorf("no mock for %s %s", method, path)
-	}
-	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
-	if r.errMsg != "" {
-		return resp, fmt.Errorf("%s", r.errMsg)
-	}
-	if result != nil && len(r.rawBody) > 0 {
-		_ = json.Unmarshal(r.rawBody, result)
-	}
-	return resp, nil
+	m.RegisterError("GET", "/api/v1/notifications", 500, "", "Jamf Pro API error (500) [INTERNAL]: server error")
 }

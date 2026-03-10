@@ -44,13 +44,12 @@ func TestUnit_CloudInformation_GetV1_ClientError(t *testing.T) {
 }
 
 func TestUnit_CloudInformation_GetV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered - dispatch returns (nil, err)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetCloudInformationErrorMock()
 
 	result, resp, err := svc.GetV1(context.Background())
 
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "no response for")
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }

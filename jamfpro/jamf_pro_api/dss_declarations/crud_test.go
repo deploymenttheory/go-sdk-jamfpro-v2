@@ -11,7 +11,7 @@ import (
 
 func TestUnit_DssDeclarations_GetByUUIDV1_Success(t *testing.T) {
 	mock := mocks.NewDSSDeclarationsMock()
-	mocks.RegisterGetByUUIDMock(mock)
+	mock.RegisterGetByUUIDMock("550e8400-e29b-41d4-a716-446655440000")
 
 	svc := NewDssDeclarations(mock)
 	ctx := context.Background()

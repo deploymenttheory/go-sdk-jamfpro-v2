@@ -53,13 +53,13 @@ func TestUnit_Ldap_GetLdapGroupsV1_Error(t *testing.T) {
 }
 
 func TestUnit_Ldap_GetLdapGroupsV1_NoMock(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered
+	svc, mock := setupMockService(t)
+	mock.RegisterGetLdapGroupsNoResponseErrorMock()
 
 	result, resp, err := svc.GetLdapGroupsV1(context.Background(), nil)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Ldap_GetLdapServersV1_Success(t *testing.T) {
@@ -90,13 +90,13 @@ func TestUnit_Ldap_GetLdapServersV1_Error(t *testing.T) {
 }
 
 func TestUnit_Ldap_GetLdapServersV1_NoMock(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered
+	svc, mock := setupMockService(t)
+	mock.RegisterGetLdapServersNoResponseErrorMock()
 
 	result, resp, err := svc.GetLdapServersV1(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Ldap_GetLdapServersOnlyV1_Success(t *testing.T) {
@@ -127,13 +127,13 @@ func TestUnit_Ldap_GetLdapServersOnlyV1_Error(t *testing.T) {
 }
 
 func TestUnit_Ldap_GetLdapServersOnlyV1_NoMock(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered
+	svc, mock := setupMockService(t)
+	mock.RegisterGetLdapServersOnlyNoResponseErrorMock()
 
 	result, resp, err := svc.GetLdapServersOnlyV1(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Ldap_NewService(t *testing.T) {

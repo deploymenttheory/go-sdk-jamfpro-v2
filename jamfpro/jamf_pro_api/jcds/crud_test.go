@@ -27,13 +27,13 @@ func TestUnit_Jcds_GetPackagesV1_Success(t *testing.T) {
 
 func TestUnit_Jcds_GetPackagesV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewJCDSMock()
+	mock.RegisterErrorMock("GET", "/api/v1/jcds/files", "no response for")
 	service := NewJcds(mock)
 
 	result, resp, err := service.GetPackagesV1(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to get JCDS packages")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Jcds_GetPackagesV1_APICError(t *testing.T) {
@@ -44,7 +44,7 @@ func TestUnit_Jcds_GetPackagesV1_APICError(t *testing.T) {
 	result, resp, err := service.GetPackagesV1(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "failed to get JCDS packages")
 }
 
@@ -79,7 +79,7 @@ func TestUnit_Jcds_GetPackageURIByNameV1_APICError(t *testing.T) {
 	result, resp, err := service.GetPackageURIByNameV1(context.Background(), "some.pkg")
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "failed to get JCDS package URI")
 }
 
@@ -105,7 +105,7 @@ func TestUnit_Jcds_RenewCredentialsV1_APICError(t *testing.T) {
 	result, resp, err := service.RenewCredentialsV1(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "failed to renew JCDS credentials")
 }
 
@@ -126,7 +126,7 @@ func TestUnit_Jcds_RefreshInventoryV1_APICError(t *testing.T) {
 
 	resp, err := service.RefreshInventoryV1(context.Background())
 	require.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "failed to refresh JCDS inventory")
 }
 
@@ -153,7 +153,7 @@ func TestUnit_Jcds_CreatePackageV1_CredentialError(t *testing.T) {
 	result, resp, err := service.CreatePackageV1(context.Background(), pkgPath)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "failed to obtain upload credentials")
 }
 
@@ -218,7 +218,7 @@ func TestUnit_Jcds_DeletePackageV1_CredentialError(t *testing.T) {
 
 	resp, err := service.DeletePackageV1(context.Background(), "/path/to/test.pkg")
 	require.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "failed to obtain deletion credentials")
 }
 

@@ -58,11 +58,11 @@ func TestUnit_MobileDeviceEnrollmentProfile_GetDownloadProfileV1_NotFound(t *tes
 }
 
 func TestUnit_MobileDeviceEnrollmentProfile_GetDownloadProfileV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetDownloadProfileErrorMock("1")
 
 	data, resp, err := svc.GetDownloadProfileV1(context.Background(), "1")
 	assert.Error(t, err)
 	assert.Nil(t, data)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to download profile")
+	assert.NotNil(t, resp)
 }

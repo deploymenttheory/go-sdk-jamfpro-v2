@@ -56,7 +56,8 @@ func TestUnit_Icon_DownloadV1_Defaults(t *testing.T) {
 }
 
 func TestUnit_Icons_GetByIDV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetByIDErrorMock(999)
 	result, resp, err := svc.GetByIDV1(context.Background(), 999)
 	require.Error(t, err)
 	require.Nil(t, result)
@@ -65,6 +66,7 @@ func TestUnit_Icons_GetByIDV1_Error(t *testing.T) {
 
 func TestUnit_Icons_UploadV1_Error(t *testing.T) {
 	mock := mocks.NewIconsMock()
+	mock.RegisterUploadErrorMock()
 	svc := NewIcon(mock)
 	r := strings.NewReader("fake png bytes")
 	result, resp, err := svc.UploadV1(context.Background(), r, 14, "test.png")

@@ -1,205 +1,31 @@
 package mocks
 
 import (
-	"context"
-	"embed"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-//go:embed *.json
-var fixtureFS embed.FS
-
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-	errMsg     string
-}
-
-// SitesMock is a test double implementing client.Client for sites operations.
 type SitesMock struct {
-	responses     map[string]registeredResponse
-	logger        *zap.Logger
-	LastRSQLQuery map[string]string
+	*mocks.GenericMock
 }
 
-// NewSitesMock returns an empty mock ready for response registration.
 func NewSitesMock() *SitesMock {
 	return &SitesMock{
-		responses: make(map[string]registeredResponse),
-		logger:    zap.NewNop(),
+		GenericMock: mocks.NewJSONMock("SitesMock"),
 	}
 }
 
-// RegisterMocks registers all standard success responses.
-func (m *SitesMock) RegisterMocks() {
-	m.RegisterListV1Mock()
-	m.RegisterGetObjectsByIDV1Mock()
-}
-
-func (m *SitesMock) register(method, path string, statusCode int, fixtureFile string) {
-	key := method + " " + path
-	var body []byte
-	if fixtureFile != "" {
-		data, err := fixtureFS.ReadFile(fixtureFile)
-		if err != nil {
-			panic(fmt.Sprintf("SitesMock: failed to load fixture %q: %v", fixtureFile, err))
-		}
-		body = data
-	}
-	m.responses[key] = registeredResponse{
-		statusCode: statusCode,
-		rawBody:    body,
-	}
-}
-
-// RegisterListV1Mock registers a successful response for ListV1.
 func (m *SitesMock) RegisterListV1Mock() {
-	m.register("GET", "/api/v1/sites", 200, "validate_list.json")
+	m.Register("GET", "/api/v1/sites", 200, "validate_list.json")
 }
 
-// RegisterGetObjectsByIDV1Mock registers a successful response for GetObjectsByIDV1.
 func (m *SitesMock) RegisterGetObjectsByIDV1Mock() {
-	m.register("GET", "/api/v1/sites/1/objects", 200, "validate_objects.json")
+	m.Register("GET", "/api/v1/sites/1/objects", 200, "validate_objects.json")
 }
 
-
-func (m *SitesMock) dispatch(method, path string, result any) (*resty.Response, error) {
-	key := method + " " + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for %s %s", method, path)
-	}
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("%s", resp.errMsg)
-	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
-			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("unmarshal: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+func (m *SitesMock) RegisterListV1ErrorMock() {
+	m.RegisterError("GET", "/api/v1/sites", 404, "error_not_found.json", "")
 }
 
-// Get implements client.Client.
-func (m *SitesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	m.LastRSQLQuery = rsqlQuery
-	key := "GET " + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for GET %s", path)
-	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
-	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
-			return nil, fmt.Errorf("unmarshal mock response: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
-}
-
-// GetPaginated implements client.Client for paginated endpoints.
-func (m *SitesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
-	m.LastRSQLQuery = rsqlQuery
-	key := "GET " + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for GET %s", path)
-	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
-	}
-	if mergePage != nil && len(resp.rawBody) > 0 {
-		var page struct {
-			Results json.RawMessage `json:"results"`
-		}
-		if err := json.Unmarshal(resp.rawBody, &page); err != nil {
-			return nil, fmt.Errorf("merge page failed: %w", err)
-		}
-		if err := mergePage(page.Results); err != nil {
-			return nil, fmt.Errorf("merge page failed: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
-}
-func (m *SitesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
-		return m.dispatch(method, path, result)
-	}, &m.LastRSQLQuery)
-}
-
-// Post implements client.Client.
-func (m *SitesMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-// PostWithQuery implements client.Client.
-func (m *SitesMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-// PostForm implements client.Client.
-func (m *SitesMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-// PostMultipart implements client.Client.
-func (m *SitesMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-// Put implements client.Client.
-func (m *SitesMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-// Patch implements client.Client.
-func (m *SitesMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-// Delete implements client.Client.
-func (m *SitesMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-// DeleteWithBody implements client.Client.
-func (m *SitesMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-// GetBytes implements client.Client.
-func (m *SitesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil, nil
-}
-
-// RSQLBuilder implements client.Client.
-func (m *SitesMock) RSQLBuilder() client.RSQLFilterBuilder {
-	return nil
-}
-
-// InvalidateToken implements client.Client.
-func (m *SitesMock) InvalidateToken() error {
-	return nil
-}
-
-// KeepAliveToken implements client.Client.
-func (m *SitesMock) KeepAliveToken() error {
-	return nil
-}
-
-// GetLogger implements client.Client.
-func (m *SitesMock) GetLogger() *zap.Logger {
-	return m.logger
+func (m *SitesMock) RegisterGetObjectsByIDV1ErrorMock() {
+	m.RegisterError("GET", "/api/v1/sites/999/objects", 404, "error_not_found.json", "")
 }

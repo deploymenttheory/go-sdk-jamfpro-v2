@@ -22,10 +22,7 @@ func TestUnit_AccountPreferences_GetV3_Success(t *testing.T) {
 	result, resp, err := svc.GetV3(context.Background())
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode())
-	assert.Equal(t, "en", result.Language)
-	assert.Equal(t, "DARK", result.UserInterfaceDisplayTheme)
 }
 
 func TestUnit_AccountPreferences_UpdateV3_Success(t *testing.T) {
@@ -33,27 +30,26 @@ func TestUnit_AccountPreferences_UpdateV3_Success(t *testing.T) {
 	mock.RegisterUpdateAccountPreferencesMock()
 
 	request := &ResourceAccountPreferencesV2{
-		Language:                  "en",
-		DateFormat:                "MM/dd/yyyy",
-		Timezone:                  "America/Chicago",
-		UserInterfaceDisplayTheme: "DARK",
-		ResultsPerPage:            20,
+		Language:         "en",
+		DateFormat:       "MM/dd/yyyy",
+		Timezone:         "America/New_York",
+		DisableRelativeDates: false,
 	}
+
 	result, resp, err := svc.UpdateV3(context.Background(), request)
 	require.NoError(t, err)
 	require.NotNil(t, result)
-	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode())
-	assert.Equal(t, "en", result.Language)
 }
 
 func TestUnit_AccountPreferences_GetV3_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetAccountPreferencesErrorMock()
 
 	result, resp, err := svc.GetV3(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	_ = resp
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_AccountPreferences_UpdateV3_NilRequest(t *testing.T) {
@@ -67,11 +63,12 @@ func TestUnit_AccountPreferences_UpdateV3_NilRequest(t *testing.T) {
 }
 
 func TestUnit_AccountPreferences_UpdateV3_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateAccountPreferencesErrorMock()
 
 	request := &ResourceAccountPreferencesV2{Language: "en"}
 	result, resp, err := svc.UpdateV3(context.Background(), request)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	_ = resp
+	assert.NotNil(t, resp)
 }

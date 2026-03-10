@@ -92,7 +92,8 @@ func TestUnit_Reenrollment_AddHistoryNotes_NilRequest(t *testing.T) {
 }
 
 func TestUnit_Reenrollment_Get_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetErrorMock()
 	result, resp, err := svc.Get(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
@@ -100,7 +101,8 @@ func TestUnit_Reenrollment_Get_Error(t *testing.T) {
 }
 
 func TestUnit_Reenrollment_GetHistory_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryErrorMock()
 	result, resp, err := svc.GetHistory(context.Background(), nil)
 	require.Error(t, err)
 	assert.Nil(t, result)
