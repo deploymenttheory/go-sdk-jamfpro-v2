@@ -34,19 +34,20 @@ func NewMacosConfigurationProfiles(client client.Client) *MacosConfigurationProf
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofiles
 func (s *MacosConfigurationProfiles) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := constants.EndpointClassicMacOSConfigurationProfiles
-
 	var out ListResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := constants.EndpointClassicMacOSConfigurationProfiles
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -60,19 +61,20 @@ func (s *MacosConfigurationProfiles) GetByID(ctx context.Context, id int) (*Reso
 		return nil, nil, fmt.Errorf("macOS configuration profile ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
-
 	var out Resource
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -86,19 +88,20 @@ func (s *MacosConfigurationProfiles) GetByName(ctx context.Context, name string)
 		return nil, nil, fmt.Errorf("macOS configuration profile name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
-
 	var out Resource
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -115,19 +118,21 @@ func (s *MacosConfigurationProfiles) Create(ctx context.Context, req *RequestRes
 		return nil, nil, fmt.Errorf("macOS configuration profile name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicMacOSConfigurationProfiles)
-
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicMacOSConfigurationProfiles)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -172,19 +177,21 @@ func (s *MacosConfigurationProfiles) UpdateByID(ctx context.Context, id int, req
 		}
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
-
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -229,19 +236,21 @@ func (s *MacosConfigurationProfiles) UpdateByName(ctx context.Context, name stri
 		}
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
-
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -257,15 +266,14 @@ func (s *MacosConfigurationProfiles) DeleteByID(ctx context.Context, id int) (*r
 
 	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicMacOSConfigurationProfiles, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }
 
@@ -281,14 +289,13 @@ func (s *MacosConfigurationProfiles) DeleteByName(ctx context.Context, name stri
 
 	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicMacOSConfigurationProfiles, name)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }

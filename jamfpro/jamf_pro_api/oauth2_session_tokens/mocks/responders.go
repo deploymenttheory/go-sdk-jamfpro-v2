@@ -104,6 +104,11 @@ func (m *OAuth2SessionTokensMock) GetPaginated(ctx context.Context, path string,
 	}
 	return resp, nil
 }
+func (m *OAuth2SessionTokensMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *OAuth2SessionTokensMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *OAuth2SessionTokensMock) InvalidateToken() error                { return nil }
 func (m *OAuth2SessionTokensMock) KeepAliveToken() error                 { return nil }

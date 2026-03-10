@@ -33,11 +33,10 @@ func (s *TimeZones) ListV1(ctx context.Context) ([]ResourceTimeZone, *resty.Resp
 
 	endpoint := constants.EndpointJamfProTimeZonesV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

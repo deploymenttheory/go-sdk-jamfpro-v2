@@ -35,12 +35,12 @@ func (s *AllowedFileExtensions) List(ctx context.Context) (*ListResponse, *resty
 
 	endpoint := constants.EndpointClassicAllowedFileExtensions
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -56,16 +56,16 @@ func (s *AllowedFileExtensions) GetByID(ctx context.Context, id int) (*ResourceA
 		return nil, nil, fmt.Errorf("allowed file extension ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAllowedFileExtensions, id)
-
 	var result ResourceAllowedFileExtension
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAllowedFileExtensions, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -81,16 +81,16 @@ func (s *AllowedFileExtensions) GetByExtension(ctx context.Context, extension st
 		return nil, nil, fmt.Errorf("extension is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/extension/%s", constants.EndpointClassicAllowedFileExtensions, extension)
-
 	var result ResourceAllowedFileExtension
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/extension/%s", constants.EndpointClassicAllowedFileExtensions, extension)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -107,16 +107,17 @@ func (s *AllowedFileExtensions) Create(ctx context.Context, req *RequestAllowedF
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicAllowedFileExtensions)
-
 	var result ResourceAllowedFileExtension
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicAllowedFileExtensions)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -134,12 +135,10 @@ func (s *AllowedFileExtensions) DeleteByID(ctx context.Context, id int) (*resty.
 
 	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicAllowedFileExtensions, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

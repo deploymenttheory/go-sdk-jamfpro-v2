@@ -47,11 +47,14 @@ func (s *EnrollmentCustomizations) ListV2(ctx context.Context, rsqlQuery map[str
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
+	req := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON)
+
+	if rsqlQuery != nil {
+		req.SetQueryParams(rsqlQuery)
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := req.GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -71,11 +74,10 @@ func (s *EnrollmentCustomizations) GetByIDV2(ctx context.Context, id string) (*R
 
 	var result ResourceEnrollmentCustomization
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -119,12 +121,12 @@ func (s *EnrollmentCustomizations) CreateV2(ctx context.Context, request *Resour
 
 	endpoint := constants.EndpointJamfProEnrollmentCustomizationsV2
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -153,12 +155,12 @@ func (s *EnrollmentCustomizations) UpdateByIDV2(ctx context.Context, id string, 
 
 	var result ResourceEnrollmentCustomization
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -176,11 +178,9 @@ func (s *EnrollmentCustomizations) DeleteByIDV2(ctx context.Context, id string) 
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProEnrollmentCustomizationsV2, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -210,11 +210,14 @@ func (s *EnrollmentCustomizations) GetHistoryV2(ctx context.Context, id string, 
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
+	req := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON)
+
+	if rsqlQuery != nil {
+		req.SetQueryParams(rsqlQuery)
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := req.GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -240,12 +243,12 @@ func (s *EnrollmentCustomizations) AddHistoryNotesV2(ctx context.Context, id str
 
 	var result ResponseAddHistoryNotes
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -265,11 +268,10 @@ func (s *EnrollmentCustomizations) GetPrestagesV2(ctx context.Context, id string
 
 	var result PrestagesResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -288,13 +290,15 @@ func (s *EnrollmentCustomizations) UploadImageV2(ctx context.Context, fileReader
 		return nil, nil, fmt.Errorf("file name is required")
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	endpoint := constants.EndpointJamfProEnrollmentCustomizationsImagesV2
 
 	var result ImageUploadResponse
 
-	resp, err := s.client.PostMultipart(ctx, constants.EndpointJamfProEnrollmentCustomizationsImagesV2, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetMultipartFile("file", fileName, fileReader, fileSize, nil).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -313,11 +317,9 @@ func (s *EnrollmentCustomizations) GetImageByIdV2(ctx context.Context, id string
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProEnrollmentCustomizationsImagesV2, id)
 
-	headers := map[string]string{
-		"Accept": constants.ImageAny,
-	}
-
-	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
+	resp, data, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ImageAny).
+		GetBytes(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

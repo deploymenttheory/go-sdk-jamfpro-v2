@@ -34,11 +34,10 @@ func (s *Onboarding) GetV1(ctx context.Context) (*ResponseOnboardingSettings, *r
 	var result ResponseOnboardingSettings
 	endpoint := constants.EndpointJamfProOnboardingV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -54,8 +53,13 @@ func (s *Onboarding) UpdateV1(ctx context.Context, request *ResourceUpdateOnboar
 	}
 	var result ResponseOnboardingSettings
 	endpoint := constants.EndpointJamfProOnboardingV1
-	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -78,8 +82,11 @@ func (s *Onboarding) GetEligibleAppsV1(ctx context.Context, query map[string]str
 	}
 
 	endpoint := constants.EndpointJamfProEligibleApps
-	headers := map[string]string{"Accept": constants.ApplicationJSON}
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -103,8 +110,11 @@ func (s *Onboarding) GetEligibleConfigurationProfilesV1(ctx context.Context, que
 	}
 
 	endpoint := constants.EndpointJamfProEligibleConfigurationProfiles
-	headers := map[string]string{"Accept": constants.ApplicationJSON}
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -128,8 +138,11 @@ func (s *Onboarding) GetEligiblePoliciesV1(ctx context.Context, query map[string
 	}
 
 	endpoint := constants.EndpointJamfProEligiblePolicies
-	headers := map[string]string{"Accept": constants.ApplicationJSON}
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -155,11 +168,10 @@ func (s *Onboarding) GetHistoryV1(ctx context.Context, rsqlQuery map[string]stri
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -183,12 +195,12 @@ func (s *Onboarding) AddHistoryNotesV1(ctx context.Context, req *RequestAddHisto
 
 	var result ResponseAddHistoryNotes
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -208,11 +220,10 @@ func (s *Onboarding) ExportHistoryV1(ctx context.Context, acceptHeader string, r
 		acceptHeader = constants.ApplicationJSON
 	}
 
-	headers := map[string]string{
-		"Accept": acceptHeader,
-	}
-
-	resp, data, err := s.client.GetBytes(ctx, endpoint, rsqlQuery, headers)
+	resp, data, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", acceptHeader).
+		SetQueryParams(rsqlQuery).
+		GetBytes(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

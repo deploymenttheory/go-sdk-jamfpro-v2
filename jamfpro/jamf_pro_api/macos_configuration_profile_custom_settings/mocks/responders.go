@@ -104,6 +104,24 @@ func (m *MacOSConfigProfileCustomSettingsMock) RegisterCreateErrorMock() {
 	}
 }
 
+
+func (m *MacOSConfigProfileCustomSettingsMock) dispatch(method, path string, result any) (*resty.Response, error) {
+	key := method + " " + path
+	resp, ok := m.responses[key]
+	if !ok {
+		return nil, fmt.Errorf("no mock registered for %s %s", method, path)
+	}
+	if resp.errMsg != "" {
+		return nil, fmt.Errorf("%s", resp.errMsg)
+	}
+	if result != nil && len(resp.rawBody) > 0 {
+		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("unmarshal: %w", err)
+		}
+	}
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+}
+
 func (m *MacOSConfigProfileCustomSettingsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "GET " + path
 	resp, ok := m.responses[key]
@@ -219,6 +237,11 @@ func (m *MacOSConfigProfileCustomSettingsMock) GetBytes(ctx context.Context, pat
 
 func (m *MacOSConfigProfileCustomSettingsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in MacOSConfigProfileCustomSettingsMock")
+}
+func (m *MacOSConfigProfileCustomSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
 }
 
 func (m *MacOSConfigProfileCustomSettingsMock) RSQLBuilder() client.RSQLFilterBuilder {

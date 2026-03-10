@@ -145,6 +145,11 @@ func (m *AdcsSettingsMock) GetPaginated(ctx context.Context, path string, _ map[
 	}
 	return resp, nil
 }
+func (m *AdcsSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *AdcsSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *AdcsSettingsMock) InvalidateToken() error                     { return nil }

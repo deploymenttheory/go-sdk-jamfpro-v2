@@ -124,6 +124,11 @@ func (m *CloudDistributionPointMock) GetPaginated(ctx context.Context, path stri
 	}
 	return resp, nil
 }
+func (m *CloudDistributionPointMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *CloudDistributionPointMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *CloudDistributionPointMock) InvalidateToken() error                { return nil }
 func (m *CloudDistributionPointMock) KeepAliveToken() error                 { return nil }

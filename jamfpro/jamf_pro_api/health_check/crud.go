@@ -31,11 +31,9 @@ func NewHealthCheck(client client.Client) *HealthCheck {
 func (s *HealthCheck) GetV1(ctx context.Context) (bool, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProHealthCheckV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Get(endpoint)
 	if err != nil {
 		return false, resp, err
 	}
@@ -51,11 +49,10 @@ func (s *HealthCheck) GetHealthStatusV1(ctx context.Context) (*ResourceHealthSta
 
 	var result ResourceHealthStatus
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

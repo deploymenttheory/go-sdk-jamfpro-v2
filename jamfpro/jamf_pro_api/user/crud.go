@@ -28,12 +28,11 @@ func NewUser(client client.Client) *User {
 func (s *User) Get(ctx context.Context) (*ResourceUser, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProUser
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResourceUser
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get current user: %w", err)
 	}
@@ -57,12 +56,11 @@ func (s *User) ChangePassword(ctx context.Context, request *RequestChangePasswor
 
 	endpoint := constants.EndpointJamfProChangePasswordV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to change password: %w", err)
 	}
@@ -80,12 +78,11 @@ func (s *User) UpdateSession(ctx context.Context, request *RequestUpdateSession)
 
 	endpoint := constants.EndpointJamfProUpdateSession
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to update session: %w", err)
 	}

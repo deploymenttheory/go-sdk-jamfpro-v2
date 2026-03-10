@@ -36,11 +36,6 @@ func (s *PatchPolicies) ListV2(ctx context.Context) (*ListResponse, *resty.Respo
 
 	endpoint := constants.EndpointJamfProPatchPoliciesPolicyDetails
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var pageItems []ResourcePatchPolicy
 		if err := json.Unmarshal(pageData, &pageItems); err != nil {
@@ -50,7 +45,10 @@ func (s *PatchPolicies) ListV2(ctx context.Context) (*ListResponse, *resty.Respo
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, nil, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -64,12 +62,13 @@ func (s *PatchPolicies) ListV2(ctx context.Context) (*ListResponse, *resty.Respo
 func (s *PatchPolicies) ListSummaryV2(ctx context.Context, rsqlQuery map[string]string) (*ListSummaryResponse, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProPatchPoliciesV2
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ListSummaryResponse
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list patch policy summaries: %w", err)
 	}
@@ -133,11 +132,10 @@ func (s *PatchPolicies) GetDashboardStatusV2(ctx context.Context, id string) (*D
 
 	var result DashboardStatusResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -155,12 +153,10 @@ func (s *PatchPolicies) AddToDashboardV2(ctx context.Context, id string) (*resty
 
 	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchPoliciesV2, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -178,11 +174,9 @@ func (s *PatchPolicies) RemoveFromDashboardV2(ctx context.Context, id string) (*
 
 	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchPoliciesV2, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

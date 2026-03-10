@@ -29,11 +29,11 @@ func (s *StaticMobileDeviceGroups) List(ctx context.Context, rsqlQuery map[strin
 
 	endpoint := constants.EndpointJamfProStaticMobileDeviceGroups2V2
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -52,11 +52,10 @@ func (s *StaticMobileDeviceGroups) GetByID(ctx context.Context, id string) (*Res
 
 	var result ResourceStaticMobileDeviceGroup
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -79,12 +78,12 @@ func (s *StaticMobileDeviceGroups) Create(ctx context.Context, request *RequestS
 
 	endpoint := constants.EndpointJamfProStaticMobileDeviceGroups2V2
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -111,12 +110,12 @@ func (s *StaticMobileDeviceGroups) UpdateByID(ctx context.Context, id string, re
 
 	var result ResourceStaticMobileDeviceGroup
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Patch(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -133,11 +132,9 @@ func (s *StaticMobileDeviceGroups) DeleteByID(ctx context.Context, id string) (*
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticMobileDeviceGroups2V2, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

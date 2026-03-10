@@ -34,12 +34,12 @@ func (s *Venafi) Create(ctx context.Context, request *ResourceVenafi) (*Response
 
 	var result ResponseVenafiCreated
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -58,11 +58,10 @@ func (s *Venafi) GetByID(ctx context.Context, id string) (*ResponseVenafi, *rest
 
 	var result ResponseVenafi
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -84,12 +83,12 @@ func (s *Venafi) UpdateByID(ctx context.Context, id string, request *ResourceVen
 
 	var result ResponseVenafi
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Patch(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -106,11 +105,9 @@ func (s *Venafi) DeleteByID(ctx context.Context, id string) (*resty.Response, er
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVenafiV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -129,11 +126,10 @@ func (s *Venafi) GetConnectionStatus(ctx context.Context, id string) (*ResponseC
 
 	var result ResponseConnectionStatus
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -152,11 +148,10 @@ func (s *Venafi) GetDependentProfiles(ctx context.Context, id string) (*Response
 
 	var result ResponseDependentProfiles
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -184,11 +179,14 @@ func (s *Venafi) GetHistory(ctx context.Context, id string, query map[string]str
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
+	req := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON)
+
+	if query != nil {
+		req = req.SetQueryParams(query)
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+	resp, err := req.GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -211,12 +209,12 @@ func (s *Venafi) AddHistoryNote(ctx context.Context, id string, request *History
 
 	var result ResponseVenafiCreated
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -233,11 +231,9 @@ func (s *Venafi) GetJamfPublicKey(ctx context.Context, id string) (*resty.Respon
 
 	endpoint := fmt.Sprintf("%s/%s/jamf-public-key", constants.EndpointJamfProVenafiV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationPEMCertificateChain,
-	}
-
-	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
+	resp, data, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationPEMCertificateChain).
+		GetBytes(endpoint)
 	if err != nil {
 		return resp, nil, err
 	}
@@ -254,11 +250,9 @@ func (s *Venafi) GetProxyTrustStore(ctx context.Context, id string) (*resty.Resp
 
 	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", constants.EndpointJamfProVenafiV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationPEMCertificateChain,
-	}
-
-	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
+	resp, data, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationPEMCertificateChain).
+		GetBytes(endpoint)
 	if err != nil {
 		return resp, nil, err
 	}
@@ -275,11 +269,9 @@ func (s *Venafi) RegenerateJamfPublicKeyByIDV1(ctx context.Context, id string) (
 
 	endpoint := fmt.Sprintf("%s/%s/jamf-public-key/regenerate", constants.EndpointJamfProVenafiV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -299,12 +291,11 @@ func (s *Venafi) UploadProxyTrustStoreByIDV1(ctx context.Context, id string, pem
 
 	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", constants.EndpointJamfProVenafiV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationPEMCertificateChain,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, pemCertificate, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationPEMCertificateChain).
+		SetBody(pemCertificate).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -321,11 +312,9 @@ func (s *Venafi) DeleteProxyTrustStoreByIDV1(ctx context.Context, id string) (*r
 
 	endpoint := fmt.Sprintf("%s/%s/proxy-trust-store", constants.EndpointJamfProVenafiV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

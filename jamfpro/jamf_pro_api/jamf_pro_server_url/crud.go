@@ -30,11 +30,11 @@ func (s *JamfProServerUrl) GetV1(ctx context.Context) (*ResourceJamfProServerURL
 	var result ResourceJamfProServerURL
 
 	endpoint := constants.EndpointJamfProJamfProServerURLV1
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get Jamf Pro server URL settings: %w", err)
 	}
@@ -53,12 +53,13 @@ func (s *JamfProServerUrl) UpdateV1(ctx context.Context, request *ResourceJamfPr
 	var result ResourceJamfProServerURL
 
 	endpoint := constants.EndpointJamfProJamfProServerURLV1
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to update Jamf Pro server URL settings: %w", err)
 	}
@@ -84,11 +85,10 @@ func (s *JamfProServerUrl) GetHistoryV1(ctx context.Context, rsqlQuery map[strin
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get Jamf Pro server URL history: %w", err)
 	}
@@ -112,12 +112,13 @@ func (s *JamfProServerUrl) CreateHistoryNoteV1(ctx context.Context, req *CreateH
 	endpoint := constants.EndpointJamfProJamfProServerURLV1 + "/history"
 
 	var result HistoryObject
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to create Jamf Pro server URL history note: %w", err)
 	}

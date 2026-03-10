@@ -33,11 +33,10 @@ func (s *Oauth2SessionTokens) GetV1(ctx context.Context) (*SessionTokenResponse,
 
 	endpoint := constants.EndpointJamfProOAuth2SessionTokensV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

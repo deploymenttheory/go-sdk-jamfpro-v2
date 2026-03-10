@@ -151,6 +151,11 @@ func (m *ComputerInvitationsMock) GetPaginated(ctx context.Context, path string,
 	}
 	return resp, nil
 }
+func (m *ComputerInvitationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *ComputerInvitationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ComputerInvitationsMock) InvalidateToken() error                { return nil }

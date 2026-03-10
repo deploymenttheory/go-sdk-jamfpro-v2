@@ -266,6 +266,11 @@ func (m *JamfConnectMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	}
 	return resp, nil
 }
+func (m *JamfConnectMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *JamfConnectMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *JamfConnectMock) InvalidateToken() error                { return nil }

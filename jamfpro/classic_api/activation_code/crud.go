@@ -35,12 +35,12 @@ func (s *ActivationCode) GetActivationCode(ctx context.Context) (*ResourceActiva
 
 	endpoint := constants.EndpointClassicActivationCode
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -58,12 +58,12 @@ func (s *ActivationCode) UpdateActivationCode(ctx context.Context, request *Requ
 
 	endpoint := constants.EndpointClassicActivationCode
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(request).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, nil)
 	if err != nil {
 		return resp, err
 	}

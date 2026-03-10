@@ -29,11 +29,11 @@ func (s *ApiAuthorization) GetV1(ctx context.Context) (*ResourceAuthV1, *resty.R
 
 	endpoint := constants.EndpointJamfProAuthV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

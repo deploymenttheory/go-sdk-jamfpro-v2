@@ -33,19 +33,20 @@ func NewLicensedSoftware(client client.Client) *LicensedSoftware {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findlicensedsoftware
 func (s *LicensedSoftware) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := constants.EndpointClassicLicensedSoftware
-
 	var out ListResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := constants.EndpointClassicLicensedSoftware
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -59,19 +60,20 @@ func (s *LicensedSoftware) GetByID(ctx context.Context, id int) (*Resource, *res
 		return nil, nil, fmt.Errorf("licensed software ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLicensedSoftware, id)
-
 	var out Resource
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLicensedSoftware, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -85,19 +87,20 @@ func (s *LicensedSoftware) GetByName(ctx context.Context, name string) (*Resourc
 		return nil, nil, fmt.Errorf("licensed software name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLicensedSoftware, name)
-
 	var out Resource
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLicensedSoftware, name)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -112,19 +115,21 @@ func (s *LicensedSoftware) Create(ctx context.Context, req *Resource) (*CreateUp
 		return nil, nil, fmt.Errorf("licensed software name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicLicensedSoftware)
-
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicLicensedSoftware)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -144,19 +149,21 @@ func (s *LicensedSoftware) UpdateByID(ctx context.Context, id int, req *Resource
 		return nil, nil, fmt.Errorf("licensed software name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLicensedSoftware, id)
-
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLicensedSoftware, id)
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -174,19 +181,21 @@ func (s *LicensedSoftware) UpdateByName(ctx context.Context, name string, req *R
 		return nil, nil, fmt.Errorf("licensed software name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLicensedSoftware, name)
-
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLicensedSoftware, name)
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -202,15 +211,14 @@ func (s *LicensedSoftware) DeleteByID(ctx context.Context, id int) (*resty.Respo
 
 	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLicensedSoftware, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }
 
@@ -226,14 +234,13 @@ func (s *LicensedSoftware) DeleteByName(ctx context.Context, name string) (*rest
 
 	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLicensedSoftware, name)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }

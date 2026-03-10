@@ -32,12 +32,10 @@ func (s *DeclarativeDeviceManagement) ForceSyncV1(ctx context.Context, clientMan
 
 	endpoint := fmt.Sprintf("%s/%s/sync", constants.EndpointJamfProDeclarativeDeviceManagementV1, clientManagementID)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -57,11 +55,10 @@ func (s *DeclarativeDeviceManagement) GetStatusItemsV1(ctx context.Context, clie
 
 	var result ResourceStatusItems
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -84,11 +81,10 @@ func (s *DeclarativeDeviceManagement) GetStatusItemByKeyV1(ctx context.Context, 
 
 	var result StatusItem
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

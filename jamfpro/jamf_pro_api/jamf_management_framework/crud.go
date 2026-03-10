@@ -41,11 +41,10 @@ func (s *JamfManagementFramework) RedeployV1(ctx context.Context, computerID str
 
 	var result RedeployResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to redeploy jamf management framework: %w", err)
 	}

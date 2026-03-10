@@ -45,11 +45,10 @@ func (s *SelfServiceBrandingIos) ListV1(ctx context.Context, rsqlQuery map[strin
 
 	endpoint := constants.EndpointJamfProSelfServiceBrandingMobileV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -69,11 +68,10 @@ func (s *SelfServiceBrandingIos) GetByIDV1(ctx context.Context, id string) (*Res
 
 	var result ResourceSelfServiceBrandingMobile
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -113,12 +111,12 @@ func (s *SelfServiceBrandingIos) CreateV1(ctx context.Context, request *Resource
 
 	endpoint := constants.EndpointJamfProSelfServiceBrandingMobileV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -142,12 +140,12 @@ func (s *SelfServiceBrandingIos) UpdateByIDV1(ctx context.Context, id string, re
 
 	var result ResourceSelfServiceBrandingMobile
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -175,11 +173,9 @@ func (s *SelfServiceBrandingIos) DeleteByIDV1(ctx context.Context, id string) (*
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSelfServiceBrandingMobileV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

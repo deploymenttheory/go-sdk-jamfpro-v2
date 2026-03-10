@@ -100,6 +100,11 @@ func (m *JamfProVersionMock) GetPaginated(ctx context.Context, path string, _ ma
 	}
 	return resp, nil
 }
+func (m *JamfProVersionMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *JamfProVersionMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *JamfProVersionMock) InvalidateToken() error                    { return nil }
 func (m *JamfProVersionMock) KeepAliveToken() error                     { return nil }

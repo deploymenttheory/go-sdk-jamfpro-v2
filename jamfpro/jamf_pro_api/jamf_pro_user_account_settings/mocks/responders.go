@@ -175,6 +175,11 @@ func (m *UserAccountSettingsMock) GetPaginated(ctx context.Context, path string,
 	}
 	return resp, nil
 }
+func (m *UserAccountSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *UserAccountSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *UserAccountSettingsMock) InvalidateToken() error                { return nil }

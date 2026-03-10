@@ -44,13 +44,15 @@ func (s *AppRequest) ListFormInputFieldsV1(ctx context.Context, rsqlQuery map[st
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list form input fields: %w", err)
 	}
+
 	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
@@ -67,12 +69,13 @@ func (s *AppRequest) ReplaceFormInputFieldsV1(ctx context.Context, request []Req
 
 	var result []ResourceFormInputField
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -92,12 +95,13 @@ func (s *AppRequest) CreateFormInputFieldV1(ctx context.Context, request *Reques
 
 	var result ResourceFormInputField
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -113,11 +117,11 @@ func (s *AppRequest) GetFormInputFieldByIDV1(ctx context.Context, id int) (*Reso
 
 	var result ResourceFormInputField
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -137,12 +141,13 @@ func (s *AppRequest) UpdateFormInputFieldByIDV1(ctx context.Context, id int, req
 
 	var result ResourceFormInputField
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -156,11 +161,10 @@ func (s *AppRequest) UpdateFormInputFieldByIDV1(ctx context.Context, id int, req
 func (s *AppRequest) DeleteFormInputFieldByIDV1(ctx context.Context, id int) (*resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/%d", constants.EndpointJamfProFormInputFieldsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -180,11 +184,11 @@ func (s *AppRequest) GetSettingsV1(ctx context.Context) (*ResourceAppRequestSett
 
 	endpoint := constants.EndpointJamfProAppRequestSettingsV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -204,12 +208,13 @@ func (s *AppRequest) UpdateSettingsV1(ctx context.Context, request *ResourceAppR
 
 	endpoint := constants.EndpointJamfProAppRequestSettingsV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

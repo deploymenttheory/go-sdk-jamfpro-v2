@@ -107,6 +107,11 @@ func (m *StartupStatusMock) GetPaginated(ctx context.Context, path string, _ map
 	}
 	return resp, nil
 }
+func (m *StartupStatusMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *StartupStatusMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *StartupStatusMock) InvalidateToken() error                { return nil }
 func (m *StartupStatusMock) KeepAliveToken() error                 { return nil }

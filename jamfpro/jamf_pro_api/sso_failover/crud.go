@@ -32,11 +32,11 @@ func (s *SsoFailover) GetV1(ctx context.Context) (*FailoverSettings, *resty.Resp
 	var result FailoverSettings
 
 	endpoint := constants.EndpointJamfProSSOFailoverV1
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -51,12 +51,12 @@ func (s *SsoFailover) RegenerateV1(ctx context.Context) (*FailoverSettings, *res
 	var result FailoverSettings
 
 	endpoint := constants.EndpointJamfProSSOFailoverGenerateV1
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

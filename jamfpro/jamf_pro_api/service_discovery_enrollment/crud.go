@@ -35,11 +35,10 @@ func (s *ServiceDiscoveryEnrollment) GetV1(ctx context.Context) (*WellKnownSetti
 
 	endpoint := constants.EndpointJamfProWellKnownSettingsV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -57,12 +56,11 @@ func (s *ServiceDiscoveryEnrollment) UpdateV1(ctx context.Context, request *Well
 
 	endpoint := constants.EndpointJamfProWellKnownSettingsV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

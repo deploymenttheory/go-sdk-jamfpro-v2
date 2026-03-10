@@ -207,6 +207,20 @@ func (m *EnrollmentCustomizationsMock) GetPaginated(ctx context.Context, endpoin
 	}
 	return resp, nil
 }
+func (m *EnrollmentCustomizationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		data, status, ok := m.dispatch(method, path)
+		if !ok {
+			return nil, fmt.Errorf("no mock registered for %s %s", method, path)
+		}
+		if result != nil && data != nil {
+			if err := json.Unmarshal(data, result); err != nil {
+				return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			}
+		}
+		return mockhelpers.NewMockResponse(status, http.Header{}, data), nil
+	})
+}
 
 func (m *EnrollmentCustomizationsMock) GetLogger() *zap.Logger {
 	return nil
@@ -298,7 +312,7 @@ func (m *EnrollmentCustomizationsMock) RegisterGetPrestagesMock() {
 
 func (m *EnrollmentCustomizationsMock) RegisterUploadImageMock() {
 	m.responses = append(m.responses, registeredResponse{
-		method:   "POST_MULTIPART",
+		method:   "POST",
 		path:     "/api/v2/enrollment-customizations/images",
 		response: validateUploadImageJSON,
 		status:   http.StatusCreated,

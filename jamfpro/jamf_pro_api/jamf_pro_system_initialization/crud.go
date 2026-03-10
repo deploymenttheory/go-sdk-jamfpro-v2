@@ -34,12 +34,11 @@ func (s *JamfProSystemInitialization) Initialize(ctx context.Context, request *R
 
 	endpoint := constants.EndpointJamfProSystemInitialize
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to initialize Jamf Pro system: %w", err)
 	}
@@ -57,12 +56,11 @@ func (s *JamfProSystemInitialization) InitializeDatabaseConnection(ctx context.C
 		Password: password,
 	}
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to initialize database connection: %w", err)
 	}
@@ -80,12 +78,11 @@ func (s *JamfProSystemInitialization) PlatformInitialize(ctx context.Context, re
 
 	endpoint := constants.EndpointJamfProSystemPlatformInitializeV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to platform initialize Jamf Pro system: %w", err)
 	}

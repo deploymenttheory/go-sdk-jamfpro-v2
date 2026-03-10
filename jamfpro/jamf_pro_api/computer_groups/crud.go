@@ -45,16 +45,14 @@ func (s *ComputerGroups) ListSmartV2(ctx context.Context, rsqlQuery map[string]s
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	// Extract totalCount from response body if available
 	bodyBytes := resp.Bytes()
 	if resp != nil && len(bodyBytes) > 0 {
 		var pageResp struct {
@@ -65,7 +63,6 @@ func (s *ComputerGroups) ListSmartV2(ctx context.Context, rsqlQuery map[string]s
 		}
 	}
 
-	// Fallback: if totalCount wasn't extracted, use length of results
 	if result.TotalCount == 0 {
 		result.TotalCount = len(result.Results)
 	}
@@ -84,11 +81,10 @@ func (s *ComputerGroups) GetSmartByIDV2(ctx context.Context, id string) (*Resour
 
 	var result ResourceSmartGroup
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -107,12 +103,12 @@ func (s *ComputerGroups) CreateSmartV2(ctx context.Context, request *RequestSmar
 
 	endpoint := constants.EndpointJamfProSmartComputerGroupsV2
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -135,12 +131,12 @@ func (s *ComputerGroups) UpdateSmartV2(ctx context.Context, id string, request *
 
 	var result ResourceSmartGroup
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -157,11 +153,9 @@ func (s *ComputerGroups) DeleteSmartV2(ctx context.Context, id string) (*resty.R
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProSmartComputerGroupsV2, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -191,16 +185,14 @@ func (s *ComputerGroups) ListStaticV2(ctx context.Context, rsqlQuery map[string]
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	// Extract totalCount from response body if available
 	bodyBytes := resp.Bytes()
 	if resp != nil && len(bodyBytes) > 0 {
 		var pageResp struct {
@@ -211,7 +203,6 @@ func (s *ComputerGroups) ListStaticV2(ctx context.Context, rsqlQuery map[string]
 		}
 	}
 
-	// Fallback: if totalCount wasn't extracted, use length of results
 	if result.TotalCount == 0 {
 		result.TotalCount = len(result.Results)
 	}
@@ -230,11 +221,10 @@ func (s *ComputerGroups) GetStaticByIDV2(ctx context.Context, id string) (*Resou
 
 	var result ResourceStaticGroup
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -253,12 +243,12 @@ func (s *ComputerGroups) CreateStaticV2(ctx context.Context, request *RequestSta
 
 	endpoint := constants.EndpointJamfProStaticComputerGroupsV2
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -281,12 +271,12 @@ func (s *ComputerGroups) UpdateStaticByIDV2(ctx context.Context, id string, requ
 
 	var result ResourceStaticGroup
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -303,11 +293,9 @@ func (s *ComputerGroups) DeleteStaticByIDV2(ctx context.Context, id string) (*re
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProStaticComputerGroupsV2, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -326,11 +314,10 @@ func (s *ComputerGroups) ListAllV1(ctx context.Context) ([]ResourceGroupV1, *res
 
 	endpoint := constants.EndpointJamfProComputerGroupsV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -349,11 +336,10 @@ func (s *ComputerGroups) GetSmartGroupMembershipByIDV2(ctx context.Context, id s
 
 	var result SmartGroupMembershipResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

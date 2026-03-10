@@ -33,11 +33,10 @@ func (s *Locales) ListV1(ctx context.Context) ([]ResourceLocale, *resty.Response
 
 	endpoint := constants.EndpointJamfProLocalesV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

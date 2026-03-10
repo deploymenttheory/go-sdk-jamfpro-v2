@@ -111,6 +111,11 @@ func (m *LocalesMock) GetPaginated(ctx context.Context, path string, q map[strin
 	}
 	return resp, nil
 }
+func (m *LocalesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *LocalesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *LocalesMock) InvalidateToken() error                    { return nil }
 func (m *LocalesMock) KeepAliveToken() error                     { return nil }

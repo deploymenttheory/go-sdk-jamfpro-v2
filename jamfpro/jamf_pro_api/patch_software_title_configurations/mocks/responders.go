@@ -180,6 +180,11 @@ func (m *PatchSoftwareTitleConfigurationsMock) GetPaginated(ctx context.Context,
 	}
 	return resp, nil
 }
+func (m *PatchSoftwareTitleConfigurationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *PatchSoftwareTitleConfigurationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *PatchSoftwareTitleConfigurationsMock) InvalidateToken() error                    { return nil }
 func (m *PatchSoftwareTitleConfigurationsMock) KeepAliveToken() error                     { return nil }

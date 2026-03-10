@@ -35,12 +35,12 @@ func (s *NetworkSegments) List(ctx context.Context) (*ListResponse, *resty.Respo
 
 	endpoint := constants.EndpointClassicNetworkSegments
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -56,16 +56,16 @@ func (s *NetworkSegments) GetByID(ctx context.Context, id int) (*ResourceNetwork
 		return nil, nil, fmt.Errorf("network segment ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicNetworkSegments, id)
-
 	var result ResourceNetworkSegment
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicNetworkSegments, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -81,16 +81,16 @@ func (s *NetworkSegments) GetByName(ctx context.Context, name string) (*Resource
 		return nil, nil, fmt.Errorf("network segment name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicNetworkSegments, name)
-
 	var result ResourceNetworkSegment
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicNetworkSegments, name)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -107,16 +107,17 @@ func (s *NetworkSegments) Create(ctx context.Context, req *RequestNetworkSegment
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicNetworkSegments)
-
 	var result CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicNetworkSegments)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -135,16 +136,17 @@ func (s *NetworkSegments) UpdateByID(ctx context.Context, id int, req *RequestNe
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicNetworkSegments, id)
-
 	var result CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicNetworkSegments, id)
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&result).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -163,16 +165,17 @@ func (s *NetworkSegments) UpdateByName(ctx context.Context, name string, req *Re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicNetworkSegments, name)
-
 	var result CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicNetworkSegments, name)
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&result).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -190,12 +193,10 @@ func (s *NetworkSegments) DeleteByID(ctx context.Context, id int) (*resty.Respon
 
 	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicNetworkSegments, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -213,12 +214,10 @@ func (s *NetworkSegments) DeleteByName(ctx context.Context, name string) (*resty
 
 	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicNetworkSegments, name)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

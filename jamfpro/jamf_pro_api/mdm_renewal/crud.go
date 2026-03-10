@@ -40,12 +40,11 @@ func (s *MdmRenewal) UpdateDeviceCommonDetailsV1(ctx context.Context, request *R
 
 	endpoint := constants.EndpointJamfProDeviceCommonDetailsV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Patch(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -64,11 +63,10 @@ func (s *MdmRenewal) GetDeviceCommonDetailsV1(ctx context.Context, clientManagem
 
 	var result DeviceCommonDetails
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -87,11 +85,10 @@ func (s *MdmRenewal) GetRenewalStrategiesV1(ctx context.Context, clientManagemen
 
 	var result []RenewalErrorWithStrategies
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -109,11 +106,9 @@ func (s *MdmRenewal) DeleteRenewalStrategiesV1(ctx context.Context, clientManage
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProRenewalStrategiesV1, clientManagementID)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

@@ -38,11 +38,11 @@ func (s *ActivationCode) UpdateV1(ctx context.Context, req *ActivationCodeReques
 
 	endpoint := constants.EndpointJamfProActivationCodeV1
 
-	headers := map[string]string{
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -60,11 +60,10 @@ func (s *ActivationCode) UpdateOrganizationNameV1(ctx context.Context, req *Orga
 
 	endpoint := constants.EndpointJamfProActivationCodeOrganizationNameV1
 
-	headers := map[string]string{
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Patch(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -82,10 +81,6 @@ func (s *ActivationCode) GetHistoryV1(ctx context.Context, rsqlQuery map[string]
 
 	var result HistoryResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var items []HistoryEntry
 		if err := json.Unmarshal(pageData, &items); err != nil {
@@ -95,12 +90,15 @@ func (s *ActivationCode) GetHistoryV1(ctx context.Context, rsqlQuery map[string]
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, err
 	}
 
-	// Set TotalCount to the number of results we collected
 	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
@@ -118,12 +116,13 @@ func (s *ActivationCode) AddHistoryNoteV1(ctx context.Context, req *HistoryNoteR
 
 	var result HistoryEntry
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -141,17 +140,25 @@ func (s *ActivationCode) ExportHistoryV1(ctx context.Context, queryParams map[st
 
 	var result HistoryExportResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var body any
 	if req != nil {
 		body = req
 	}
 
-	resp, err := s.client.PostWithQuery(ctx, endpoint, queryParams, body, headers, &result)
+	reqBuilder := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result)
+
+	if queryParams != nil {
+		reqBuilder = reqBuilder.SetQueryParams(queryParams)
+	}
+
+	if body != nil {
+		reqBuilder = reqBuilder.SetBody(body)
+	}
+
+	resp, err := reqBuilder.Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

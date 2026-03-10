@@ -95,6 +95,27 @@ func loadMockResponse(filename string) ([]byte, error) {
 	return os.ReadFile(filepath.Join(wd, "mocks", filename))
 }
 
+
+func (m *ActivationCodeMock) dispatch(method, path string, result any) (*resty.Response, error) {
+	key := method + ":" + path
+	resp, ok := m.responses[key]
+	if !ok {
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for %s %s", method, path)
+	}
+	if resp.errMsg != "" {
+		return nil, fmt.Errorf("%s", resp.errMsg)
+	}
+	if result != nil && len(resp.rawBody) > 0 {
+		if path == "/api/v1/activation-code/history/export" {
+			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+		}
+		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("unmarshal: %w", err)
+		}
+	}
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+}
+
 // Get implements client.Client.Get.
 func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	m.LastRSQLQuery = query
@@ -143,6 +164,11 @@ func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, quer
 	}
 
 	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+}
+func (m *ActivationCodeMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	}, &m.LastRSQLQuery)
 }
 
 // Post implements client.Client.Post.

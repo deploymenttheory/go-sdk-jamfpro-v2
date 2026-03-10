@@ -30,11 +30,10 @@ func (s *Csa) GetTokenExchangeDetailsV1(ctx context.Context) (*ResourceTokenExch
 
 	var result ResourceTokenExchangeDetails
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -50,11 +49,10 @@ func (s *Csa) GetTenantIDV1(ctx context.Context) (*ResourceTenantID, *resty.Resp
 
 	var result ResourceTenantID
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -68,11 +66,9 @@ func (s *Csa) GetTenantIDV1(ctx context.Context) (*ResourceTenantID, *resty.Resp
 func (s *Csa) DeleteTokenExchangeV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProCSAV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

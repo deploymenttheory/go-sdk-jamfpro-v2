@@ -115,6 +115,11 @@ func (m *ConditionalAccessMock) GetPaginated(ctx context.Context, path string, _
 	}
 	return resp, nil
 }
+func (m *ConditionalAccessMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *ConditionalAccessMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ConditionalAccessMock) InvalidateToken() error                     { return nil }
 func (m *ConditionalAccessMock) KeepAliveToken() error                      { return nil }

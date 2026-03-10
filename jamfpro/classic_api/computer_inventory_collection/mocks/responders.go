@@ -99,6 +99,11 @@ func (m *ComputerInventoryCollectionMock) GetPaginated(ctx context.Context, path
 	}
 	return resp, nil
 }
+func (m *ComputerInventoryCollectionMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *ComputerInventoryCollectionMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ComputerInventoryCollectionMock) InvalidateToken() error                { return nil }
 func (m *ComputerInventoryCollectionMock) KeepAliveToken() error                 { return nil }

@@ -34,10 +34,6 @@ func (s *ApiIntegrations) ListV1(ctx context.Context, rsqlQuery map[string]strin
 
 	endpoint := constants.EndpointJamfProApiIntegrationsV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var pageResults []ResourceApiIntegration
 		if err := json.Unmarshal(pageData, &pageResults); err != nil {
@@ -47,7 +43,11 @@ func (s *ApiIntegrations) ListV1(ctx context.Context, rsqlQuery map[string]strin
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -69,11 +69,10 @@ func (s *ApiIntegrations) GetByIDV1(ctx context.Context, id string) (*ResourceAp
 
 	var result ResourceApiIntegration
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -105,12 +104,12 @@ func (s *ApiIntegrations) CreateV1(ctx context.Context, request *RequestApiInteg
 
 	endpoint := constants.EndpointJamfProApiIntegrationsV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -132,12 +131,12 @@ func (s *ApiIntegrations) UpdateByIDV1(ctx context.Context, id string, request *
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProApiIntegrationsV1, id)
 	var result ResourceApiIntegration
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -163,11 +162,9 @@ func (s *ApiIntegrations) DeleteByIDV1(ctx context.Context, id string) (*resty.R
 	}
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProApiIntegrationsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -196,11 +193,10 @@ func (s *ApiIntegrations) RefreshClientCredentialsByIDV1(ctx context.Context, id
 
 	var result ResourceClientCredentials
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

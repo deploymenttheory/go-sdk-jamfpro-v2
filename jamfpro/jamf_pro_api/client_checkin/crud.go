@@ -35,11 +35,11 @@ func (s *ClientCheckin) GetV3(ctx context.Context) (*ResourceClientCheckinSettin
 
 	endpoint := constants.EndpointJamfProClientCheckinV3
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -65,10 +65,11 @@ func (s *ClientCheckin) GetHistoryV3(ctx context.Context, rsqlQuery map[string]s
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get client check-in history: %w", err)
 	}
@@ -88,11 +89,17 @@ func (s *ClientCheckin) AddHistoryNoteV3(ctx context.Context, request *RequestCl
 	var result CreateHistoryResponse
 	endpoint := constants.EndpointJamfProClientCheckinHistoryV3
 
-	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -108,12 +115,13 @@ func (s *ClientCheckin) UpdateV3(ctx context.Context, request *ResourceClientChe
 
 	endpoint := constants.EndpointJamfProClientCheckinV3
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

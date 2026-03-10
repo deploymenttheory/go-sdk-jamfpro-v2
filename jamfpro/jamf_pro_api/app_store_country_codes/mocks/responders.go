@@ -99,6 +99,11 @@ func (m *AppStoreCountryCodesMock) GetPaginated(ctx context.Context, path string
 	}
 	return resp, nil
 }
+func (m *AppStoreCountryCodesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *AppStoreCountryCodesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *AppStoreCountryCodesMock) InvalidateToken() error                { return nil }
 func (m *AppStoreCountryCodesMock) KeepAliveToken() error                 { return nil }

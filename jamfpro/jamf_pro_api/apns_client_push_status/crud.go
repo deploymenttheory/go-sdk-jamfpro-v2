@@ -37,10 +37,11 @@ func (s *ApnsClientPushStatus) ListV1(ctx context.Context, rsqlQuery map[string]
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get APNS client push status: %w", err)
 	}
@@ -54,11 +55,10 @@ func (s *ApnsClientPushStatus) ListV1(ctx context.Context, rsqlQuery map[string]
 func (s *ApnsClientPushStatus) EnableAllClientsV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProEnableAllClientsV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, fmt.Errorf("failed to enable all APNS clients: %w", err)
 	}
@@ -72,12 +72,13 @@ func (s *ApnsClientPushStatus) EnableAllClientsV1(ctx context.Context) (*resty.R
 func (s *ApnsClientPushStatus) GetEnableAllClientsStatusV1(ctx context.Context) (*EnableAllClientsStatusResponse, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProEnableAllClientsStatusV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result EnableAllClientsStatusResponse
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get enable-all-clients status: %w", err)
 	}
@@ -98,12 +99,12 @@ func (s *ApnsClientPushStatus) EnableClientV1(ctx context.Context, req *EnableCl
 
 	endpoint := constants.EndpointJamfProEnableClientV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, fmt.Errorf("failed to enable APNS client: %w", err)
 	}

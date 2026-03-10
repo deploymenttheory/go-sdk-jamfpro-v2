@@ -226,6 +226,11 @@ func (m *LocalAdminPasswordMock) GetPaginated(ctx context.Context, path string, 
 	}
 	return resp, nil
 }
+func (m *LocalAdminPasswordMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *LocalAdminPasswordMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *LocalAdminPasswordMock) InvalidateToken() error                { return nil }

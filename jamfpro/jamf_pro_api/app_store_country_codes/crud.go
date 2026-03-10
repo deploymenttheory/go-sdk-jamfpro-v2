@@ -29,11 +29,11 @@ func (s *AppStoreCountryCodes) ListV1(ctx context.Context) (*ListResponse, *rest
 
 	endpoint := constants.EndpointJamfProAppStoreCountryCodesV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

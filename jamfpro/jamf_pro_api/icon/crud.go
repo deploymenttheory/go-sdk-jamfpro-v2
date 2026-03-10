@@ -31,11 +31,10 @@ func (s *Icon) GetByIDV1(ctx context.Context, id int) (*ResourceIcon, *resty.Res
 	endpoint := fmt.Sprintf("%s/%d", constants.EndpointJamfProIconV1, id)
 	var result ResourceIcon
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -52,13 +51,13 @@ func (s *Icon) UploadV1(ctx context.Context, fileReader io.Reader, fileSize int6
 	}
 	endpoint := constants.EndpointJamfProIconV1
 
-	headers := map[string]string{
-		"Content-Type": constants.MultipartFormData,
-	}
-
 	var result ResourceIcon
 
-	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, fileReader, fileSize, nil, headers, nil, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Content-Type", constants.MultipartFormData).
+		SetMultipartFile("file", fileName, fileReader, fileSize, nil).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -99,11 +98,10 @@ func (s *Icon) DownloadV1(ctx context.Context, id int, res, scale string) ([]byt
 
 	rsqlQuery := map[string]string{"res": res, "scale": scale}
 
-	headers := map[string]string{
-		"Accept": constants.ImageAny,
-	}
-
-	resp, body, err := s.client.GetBytes(ctx, endpoint, rsqlQuery, headers)
+	resp, body, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ImageAny).
+		SetQueryParams(rsqlQuery).
+		GetBytes(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

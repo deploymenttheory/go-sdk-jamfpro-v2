@@ -178,6 +178,11 @@ func (m *AdvancedUserSearchesMock) GetPaginated(ctx context.Context, path string
 	}
 	return resp, nil
 }
+func (m *AdvancedUserSearchesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *AdvancedUserSearchesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *AdvancedUserSearchesMock) InvalidateToken() error                { return nil }

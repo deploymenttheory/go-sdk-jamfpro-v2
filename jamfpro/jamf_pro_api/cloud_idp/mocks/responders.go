@@ -145,6 +145,11 @@ func (m *CloudIdpMock) GetPaginated(ctx context.Context, path string, _ map[stri
 	}
 	return resp, nil
 }
+func (m *CloudIdpMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *CloudIdpMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *CloudIdpMock) InvalidateToken() error                    { return nil }
 func (m *CloudIdpMock) KeepAliveToken() error                     { return nil }

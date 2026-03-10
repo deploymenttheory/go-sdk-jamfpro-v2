@@ -106,7 +106,7 @@ func TestUnit_ManagedSoftwareUpdates_GetPlans_InvalidJSON(t *testing.T) {
 	result, resp, err := svc.GetPlans(context.Background(), params)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	require.NotNil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "mergePage failed")
 }
@@ -646,7 +646,7 @@ func TestUnit_ManagedSoftwareUpdates_GetUpdateStatuses_InvalidJSON(t *testing.T)
 	result, resp, err := svc.GetUpdateStatuses(context.Background(), params)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	require.NotNil(t, resp)
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "mergePage failed")
 }

@@ -31,11 +31,10 @@ func (s *Enrollment) GetADUESessionTokenSettingsV1(ctx context.Context) (*Resour
 
 	var result ResourceADUESessionTokenSettings
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -55,12 +54,12 @@ func (s *Enrollment) UpdateADUESessionTokenSettingsV1(ctx context.Context, reque
 
 	var result ResourceADUESessionTokenSettings
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -85,11 +84,10 @@ func (s *Enrollment) GetHistoryV2(ctx context.Context, rsqlQuery map[string]stri
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -112,12 +110,12 @@ func (s *Enrollment) AddHistoryNotesV2(ctx context.Context, request *RequestAddH
 
 	var result CreateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -137,17 +135,19 @@ func (s *Enrollment) ExportHistoryV2(ctx context.Context, acceptHeader string, r
 		acceptHeader = constants.ApplicationJSON
 	}
 
-	headers := map[string]string{
-		"Accept":       acceptHeader,
-		"Content-Type": constants.ApplicationJSON,
+	req := s.client.NewRequest(ctx).
+		SetHeader("Accept", acceptHeader).
+		SetHeader("Content-Type", constants.ApplicationJSON)
+
+	if rsqlQuery != nil {
+		req = req.SetQueryParams(rsqlQuery)
 	}
 
-	var body any
 	if request != nil {
-		body = request
+		req = req.SetBody(request)
 	}
 
-	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, body, headers, nil)
+	resp, err := req.Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -172,11 +172,10 @@ func (s *Enrollment) ListAccessGroupsV3(ctx context.Context, rsqlQuery map[strin
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -196,11 +195,10 @@ func (s *Enrollment) GetAccessGroupByIDV3(ctx context.Context, id string) (*Reso
 
 	var result ResourceAccountDrivenUserEnrollmentAccessGroup
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -220,12 +218,12 @@ func (s *Enrollment) CreateAccessGroupV3(ctx context.Context, request *ResourceA
 
 	var result CreateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -249,12 +247,12 @@ func (s *Enrollment) UpdateAccessGroupByIDV3(ctx context.Context, id string, req
 
 	var result ResourceAccountDrivenUserEnrollmentAccessGroup
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -272,11 +270,9 @@ func (s *Enrollment) DeleteAccessGroupByIDV3(ctx context.Context, id string) (*r
 
 	endpoint := fmt.Sprintf("%s/access-groups/%s", constants.EndpointJamfProEnrollmentV3, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -301,11 +297,9 @@ func (s *Enrollment) ListLanguageMessagesV3(ctx context.Context) (*ListResponseL
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, nil, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list enrollment language messages: %w", err)
 	}
@@ -332,11 +326,10 @@ func (s *Enrollment) GetLanguageMessageV3(ctx context.Context, languageCode stri
 
 	var result ResourceEnrollmentLanguage
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err = s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err = s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -367,12 +360,12 @@ func (s *Enrollment) UpdateLanguageMessageV3(ctx context.Context, languageCode s
 
 	var result ResourceEnrollmentLanguage
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err = s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err = s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -397,11 +390,9 @@ func (s *Enrollment) DeleteLanguageMessageV3(ctx context.Context, languageCode s
 
 	endpoint := fmt.Sprintf("%s/languages/%s", constants.EndpointJamfProEnrollmentV3, languageCode)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err = s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err = s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -432,12 +423,11 @@ func (s *Enrollment) DeleteMultipleLanguageMessagesV3(ctx context.Context, reque
 
 	endpoint := fmt.Sprintf("%s/languages/delete-multiple", constants.EndpointJamfProEnrollmentV3)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err = s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err = s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -453,11 +443,10 @@ func (s *Enrollment) ListLanguageCodesV3(ctx context.Context) ([]ResourceLanguag
 
 	var result []ResourceLanguageCode
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -473,11 +462,10 @@ func (s *Enrollment) ListFilteredLanguageCodesV3(ctx context.Context) ([]Resourc
 
 	var result []ResourceLanguageCode
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -493,11 +481,10 @@ func (s *Enrollment) GetV4(ctx context.Context) (*ResourceEnrollment, *resty.Res
 
 	var result ResourceEnrollment
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -517,12 +504,12 @@ func (s *Enrollment) UpdateV4(ctx context.Context, request *ResourceEnrollment) 
 
 	var result ResourceEnrollment
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

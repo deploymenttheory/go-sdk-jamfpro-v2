@@ -31,11 +31,11 @@ func (s *CloudDistributionPoint) GetV1(ctx context.Context) (*ResourceCloudDistr
 
 	endpoint := constants.EndpointJamfProCloudDistributionPointV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -55,12 +55,13 @@ func (s *CloudDistributionPoint) CreateV1(ctx context.Context, request *RequestC
 
 	endpoint := constants.EndpointJamfProCloudDistributionPointV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -80,12 +81,13 @@ func (s *CloudDistributionPoint) UpdateV1(ctx context.Context, request *RequestC
 
 	endpoint := constants.EndpointJamfProCloudDistributionPointV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Patch(endpoint)
 
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -99,11 +101,10 @@ func (s *CloudDistributionPoint) UpdateV1(ctx context.Context, request *RequestC
 func (s *CloudDistributionPoint) DeleteV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProCloudDistributionPointV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -118,11 +119,11 @@ func (s *CloudDistributionPoint) GetUploadCapabilityV1(ctx context.Context) (*Up
 	endpoint := constants.EndpointJamfProCloudDistributionPointV1 + "/upload-capability"
 	var result UploadCapabilityV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -137,11 +138,11 @@ func (s *CloudDistributionPoint) GetTestConnectionV1(ctx context.Context) (*Test
 	endpoint := constants.EndpointJamfProCloudDistributionPointV1 + "/test-connection"
 	var result TestConnectionV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -165,13 +166,17 @@ func (s *CloudDistributionPoint) GetHistoryV1(ctx context.Context, rsqlQuery map
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, constants.EndpointJamfProCloudDistributionPointHistoryV1, rsqlQuery, headers, mergePage)
+	endpoint := constants.EndpointJamfProCloudDistributionPointHistoryV1
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get cloud distribution point history: %w", err)
 	}
+
 	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
@@ -192,13 +197,17 @@ func (s *CloudDistributionPoint) GetFilesV1(ctx context.Context, rsqlQuery map[s
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, constants.EndpointJamfProCloudDistributionPointFilesV1, rsqlQuery, headers, mergePage)
+	endpoint := constants.EndpointJamfProCloudDistributionPointFilesV1
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get cloud distribution point files: %w", err)
 	}
+
 	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
@@ -215,12 +224,12 @@ func (s *CloudDistributionPoint) AddHistoryNoteV1(ctx context.Context, request *
 
 	endpoint := constants.EndpointJamfProCloudDistributionPointHistoryV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -250,12 +259,11 @@ func (s *CloudDistributionPoint) FailUploadV1(ctx context.Context, id string, fi
 		"type":      fileType,
 	}
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.PostWithQuery(ctx, endpoint, queryParams, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(queryParams).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -275,12 +283,15 @@ func (s *CloudDistributionPoint) RefreshInventoryV1(ctx context.Context, fileNam
 		queryParams = map[string]string{"file-name": fileName}
 	}
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
+	reqBuilder := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON)
+
+	if queryParams != nil {
+		reqBuilder = reqBuilder.SetQueryParams(queryParams)
 	}
 
-	resp, err := s.client.PostWithQuery(ctx, endpoint, queryParams, nil, headers, nil)
+	resp, err := reqBuilder.Post(endpoint)
 	if err != nil {
 		return resp, err
 	}

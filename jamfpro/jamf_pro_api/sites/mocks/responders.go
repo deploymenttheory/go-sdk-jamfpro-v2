@@ -72,6 +72,24 @@ func (m *SitesMock) RegisterGetObjectsByIDV1Mock() {
 	m.register("GET", "/api/v1/sites/1/objects", 200, "validate_objects.json")
 }
 
+
+func (m *SitesMock) dispatch(method, path string, result any) (*resty.Response, error) {
+	key := method + " " + path
+	resp, ok := m.responses[key]
+	if !ok {
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for %s %s", method, path)
+	}
+	if resp.errMsg != "" {
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("%s", resp.errMsg)
+	}
+	if result != nil && len(resp.rawBody) > 0 {
+		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("unmarshal: %w", err)
+		}
+	}
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+}
+
 // Get implements client.Client.
 func (m *SitesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -114,6 +132,11 @@ func (m *SitesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 		}
 	}
 	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+}
+func (m *SitesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	}, &m.LastRSQLQuery)
 }
 
 // Post implements client.Client.

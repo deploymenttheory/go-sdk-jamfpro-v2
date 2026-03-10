@@ -37,11 +37,10 @@ func (s *ManagedSoftwareUpdates) GetAvailableUpdates(ctx context.Context) (*Resp
 
 	var result ResponseAvailableUpdates
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -54,11 +53,6 @@ func (s *ManagedSoftwareUpdates) GetAvailableUpdates(ctx context.Context) (*Resp
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-plans
 func (s *ManagedSoftwareUpdates) GetPlans(ctx context.Context, params url.Values) (*ResponsePlanList, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/plans"
-
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
 	queryParams := make(map[string]string)
 	for key, values := range params {
@@ -78,7 +72,11 @@ func (s *ManagedSoftwareUpdates) GetPlans(ctx context.Context, params url.Values
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, queryParams, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(queryParams).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -98,11 +96,10 @@ func (s *ManagedSoftwareUpdates) GetPlanByUUID(ctx context.Context, uuid string)
 
 	var result ResourcePlan
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -122,11 +119,10 @@ func (s *ManagedSoftwareUpdates) GetDeclarationsByPlanUUID(ctx context.Context, 
 
 	var result ResponseDeclarationsList
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -146,12 +142,12 @@ func (s *ManagedSoftwareUpdates) CreatePlanByDeviceID(ctx context.Context, plan 
 
 	var result ResponsePlanCreate
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, plan, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(plan).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -171,12 +167,12 @@ func (s *ManagedSoftwareUpdates) CreatePlanByGroupID(ctx context.Context, plan *
 
 	var result ResponsePlanCreate
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, plan, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(plan).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -199,11 +195,10 @@ func (s *ManagedSoftwareUpdates) GetPlansByGroupID(ctx context.Context, groupID 
 
 	var result ResponsePlanList
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -219,11 +214,10 @@ func (s *ManagedSoftwareUpdates) GetFeatureToggle(ctx context.Context) (*Request
 
 	var result RequestFeatureToggle
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -243,12 +237,12 @@ func (s *ManagedSoftwareUpdates) UpdateFeatureToggle(ctx context.Context, toggle
 
 	var result ResponseFeatureToggle
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, toggle, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(toggle).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -264,11 +258,10 @@ func (s *ManagedSoftwareUpdates) GetFeatureToggleStatus(ctx context.Context) (*R
 
 	var result ResponseFeatureToggleStatus
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -285,12 +278,11 @@ func (s *ManagedSoftwareUpdates) ForceStopFeatureToggleProcess(ctx context.Conte
 
 	var result ResponseError
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -310,11 +302,10 @@ func (s *ManagedSoftwareUpdates) GetPlanEventsByUUID(ctx context.Context, uuid s
 
 	var result ResponsePlanEvents
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -327,11 +318,6 @@ func (s *ManagedSoftwareUpdates) GetPlanEventsByUUID(ctx context.Context, uuid s
 // https://developer.jamf.com/jamf-pro/reference/get_v1-managed-software-updates-update-statuses
 func (s *ManagedSoftwareUpdates) GetUpdateStatuses(ctx context.Context, params url.Values) (*ResponseUpdateStatusList, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProManagedSoftwareUpdates + "/update-statuses"
-
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
 	queryParams := make(map[string]string)
 	for key, values := range params {
@@ -351,7 +337,11 @@ func (s *ManagedSoftwareUpdates) GetUpdateStatuses(ctx context.Context, params u
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, queryParams, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(queryParams).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -371,11 +361,10 @@ func (s *ManagedSoftwareUpdates) GetUpdateStatusesByComputerGroup(ctx context.Co
 
 	var result ResponseUpdateStatusList
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -395,11 +384,10 @@ func (s *ManagedSoftwareUpdates) GetUpdateStatusesByComputer(ctx context.Context
 
 	var result ResponseUpdateStatusList
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -419,11 +407,10 @@ func (s *ManagedSoftwareUpdates) GetUpdateStatusesByMobileDeviceGroup(ctx contex
 
 	var result ResponseUpdateStatusList
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -443,11 +430,10 @@ func (s *ManagedSoftwareUpdates) GetUpdateStatusesByMobileDevice(ctx context.Con
 
 	var result ResponseUpdateStatusList
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

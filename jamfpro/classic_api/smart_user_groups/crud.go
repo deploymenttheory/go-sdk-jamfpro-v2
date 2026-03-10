@@ -33,16 +33,16 @@ func NewSmartUserGroups(client client.Client) *SmartUserGroups {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusergroups
 func (s *SmartUserGroups) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := constants.EndpointClassicSmartUserGroups
-
 	var out ListResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := constants.EndpointClassicSmartUserGroups
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -59,16 +59,16 @@ func (s *SmartUserGroups) GetByID(ctx context.Context, id int) (*ResourceSmartUs
 		return nil, nil, fmt.Errorf("user group ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSmartUserGroups, id)
-
 	var out ResourceSmartUserGroup
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSmartUserGroups, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -85,16 +85,16 @@ func (s *SmartUserGroups) GetByName(ctx context.Context, name string) (*Resource
 		return nil, nil, fmt.Errorf("user group name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSmartUserGroups, name)
-
 	var out ResourceSmartUserGroup
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSmartUserGroups, name)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -113,16 +113,17 @@ func (s *SmartUserGroups) Create(ctx context.Context, req *RequestSmartUserGroup
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicSmartUserGroups)
-
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicSmartUserGroups)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -144,16 +145,17 @@ func (s *SmartUserGroups) UpdateByID(ctx context.Context, id int, req *RequestSm
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSmartUserGroups, id)
-
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSmartUserGroups, id)
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -175,16 +177,17 @@ func (s *SmartUserGroups) UpdateByName(ctx context.Context, name string, req *Re
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSmartUserGroups, name)
-
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSmartUserGroups, name)
 
-	resp, err := s.client.Put(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -203,12 +206,10 @@ func (s *SmartUserGroups) DeleteByID(ctx context.Context, id int) (*resty.Respon
 
 	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicSmartUserGroups, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -227,12 +228,10 @@ func (s *SmartUserGroups) DeleteByName(ctx context.Context, name string) (*resty
 
 	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicSmartUserGroups, name)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

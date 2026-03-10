@@ -35,12 +35,12 @@ func (s *LdapServers) List(ctx context.Context) (*ListResponse, *resty.Response,
 
 	endpoint := constants.EndpointClassicLDAPServers
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -56,16 +56,16 @@ func (s *LdapServers) GetByID(ctx context.Context, id int) (*ResourceLDAPServer,
 		return nil, nil, fmt.Errorf("LDAP server ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLDAPServers, id)
-
 	var result ResourceLDAPServer
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLDAPServers, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -81,16 +81,16 @@ func (s *LdapServers) GetByName(ctx context.Context, name string) (*ResourceLDAP
 		return nil, nil, fmt.Errorf("LDAP server name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLDAPServers, name)
-
 	var result ResourceLDAPServer
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLDAPServers, name)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -107,22 +107,21 @@ func (s *LdapServers) Create(ctx context.Context, request *RequestLDAPServer) (*
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicLDAPServers)
-
 	var createResp CreateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicLDAPServers)
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &createResp)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(request).
+		SetResult(&createResp).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
 
-	// Convert CreateResponse to ListItem
-	// Note: Classic API only returns ID in create response, name comes from request
 	result := &ListItem{
 		ID:   createResp.ID,
 		Name: request.Connection.Name,
@@ -143,16 +142,17 @@ func (s *LdapServers) UpdateByID(ctx context.Context, id int, request *RequestLD
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLDAPServers, id)
-
 	var result ResourceLDAPServer
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLDAPServers, id)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -172,16 +172,17 @@ func (s *LdapServers) UpdateByName(ctx context.Context, name string, request *Re
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLDAPServers, name)
-
 	var result ResourceLDAPServer
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLDAPServers, name)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -199,12 +200,10 @@ func (s *LdapServers) DeleteByID(ctx context.Context, id int) (*resty.Response, 
 
 	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicLDAPServers, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -222,12 +221,10 @@ func (s *LdapServers) DeleteByName(ctx context.Context, name string) (*resty.Res
 
 	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicLDAPServers, name)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

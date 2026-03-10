@@ -159,6 +159,11 @@ func (m *AllowedFileExtensionsMock) GetPaginated(ctx context.Context, path strin
 	}
 	return resp, nil
 }
+func (m *AllowedFileExtensionsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *AllowedFileExtensionsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *AllowedFileExtensionsMock) InvalidateToken() error                { return nil }

@@ -108,6 +108,11 @@ func (m *CloudLdapKeystoreMock) GetPaginated(ctx context.Context, path string, _
 	}
 	return resp, nil
 }
+func (m *CloudLdapKeystoreMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *CloudLdapKeystoreMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *CloudLdapKeystoreMock) InvalidateToken() error                    { return nil }
 func (m *CloudLdapKeystoreMock) KeepAliveToken() error                     { return nil }

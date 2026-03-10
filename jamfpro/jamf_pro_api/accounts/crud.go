@@ -38,10 +38,6 @@ func (s *Accounts) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Li
 
 	var result ListResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var items []ResourceAccount
 		if err := json.Unmarshal(pageData, &items); err != nil {
@@ -51,10 +47,15 @@ func (s *Accounts) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Li
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
@@ -71,11 +72,11 @@ func (s *Accounts) GetByIDV1(ctx context.Context, id string) (*ResourceAccount, 
 
 	var result ResourceAccount
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -95,12 +96,13 @@ func (s *Accounts) CreateV1(ctx context.Context, req *RequestAccount) (*CreateRe
 
 	var result CreateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -118,7 +120,9 @@ func (s *Accounts) DeleteByIDV1(ctx context.Context, id string) (*resty.Response
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAccountsV1, id)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, nil, nil)
+	resp, err := s.client.NewRequest(ctx).
+		Delete(endpoint)
+
 	if err != nil {
 		return resp, err
 	}

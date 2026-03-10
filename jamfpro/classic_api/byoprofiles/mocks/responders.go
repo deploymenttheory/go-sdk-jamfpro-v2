@@ -178,6 +178,11 @@ func (m *BYOProfilesMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	}
 	return resp, nil
 }
+func (m *BYOProfilesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *BYOProfilesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *BYOProfilesMock) InvalidateToken() error                { return nil }

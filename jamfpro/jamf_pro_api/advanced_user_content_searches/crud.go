@@ -33,10 +33,6 @@ func (s *AdvancedUserContentSearches) ListV1(ctx context.Context, rsqlQuery map[
 
 	endpoint := constants.EndpointJamfProAdvancedUserContentSearchesV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var items []ResourceAdvancedUserContentSearch
 		if err := json.Unmarshal(pageData, &items); err != nil {
@@ -46,7 +42,11 @@ func (s *AdvancedUserContentSearches) ListV1(ctx context.Context, rsqlQuery map[
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -65,11 +65,10 @@ func (s *AdvancedUserContentSearches) GetByIDV1(ctx context.Context, id string) 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedUserContentSearchesV1, id)
 	var result ResourceAdvancedUserContentSearch
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -89,12 +88,12 @@ func (s *AdvancedUserContentSearches) CreateV1(ctx context.Context, request *Res
 
 	endpoint := constants.EndpointJamfProAdvancedUserContentSearchesV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -117,12 +116,12 @@ func (s *AdvancedUserContentSearches) UpdateByIDV1(ctx context.Context, id strin
 
 	var result ResourceAdvancedUserContentSearch
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -139,11 +138,9 @@ func (s *AdvancedUserContentSearches) DeleteByIDV1(ctx context.Context, id strin
 	}
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedUserContentSearchesV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

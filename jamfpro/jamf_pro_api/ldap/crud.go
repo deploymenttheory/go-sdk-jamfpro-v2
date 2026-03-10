@@ -34,11 +34,11 @@ func (s *Ldap) GetLdapGroupsV1(ctx context.Context, rsqlQuery map[string]string)
 
 	endpoint := constants.EndpointJamfProLdapGroupsV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -54,11 +54,10 @@ func (s *Ldap) GetLdapServersV1(ctx context.Context) ([]ResourceLdapServerV1, *r
 
 	endpoint := constants.EndpointJamfProLdapServersV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -74,11 +73,10 @@ func (s *Ldap) GetLdapServersOnlyV1(ctx context.Context) ([]ResourceLdapServerV1
 
 	endpoint := constants.EndpointJamfProLdapServersOnlyV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

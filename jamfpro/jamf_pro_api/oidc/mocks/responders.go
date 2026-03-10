@@ -221,6 +221,20 @@ func (m *OIDCMock) GetBytes(ctx context.Context, path string, rsqlQuery map[stri
 func (m *OIDCMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in OIDCMock")
 }
+func (m *OIDCMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		data, status, ok := m.dispatch(method, path)
+		if !ok {
+			return nil, fmt.Errorf("no mock registered for %s %s", method, path)
+		}
+		if result != nil && data != nil {
+			if err := json.Unmarshal(data, result); err != nil {
+				return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			}
+		}
+		return mockhelpers.NewMockResponse(status, http.Header{}, data), nil
+	})
+}
 
 // RSQLBuilder implements client.Client.
 func (m *OIDCMock) RSQLBuilder() client.RSQLFilterBuilder {

@@ -231,6 +231,24 @@ func (m *JamfProtectMock) RegisterListPlansBadResultsMock() {
 	m.register("GET", "/api/v1/jamf-protect/plans", 200, `{"totalCount": 1, "results": [{"profileId": "not-a-number"}]}`)
 }
 
+
+func (m *JamfProtectMock) dispatch(method, path string, result any) (*resty.Response, error) {
+	key := method + " " + path
+	resp, ok := m.responses[key]
+	if !ok {
+		return nil, fmt.Errorf("no mock registered for %s %s", method, path)
+	}
+	if resp.errMsg != "" {
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("%s", resp.errMsg)
+	}
+	if result != nil && len(resp.rawBody) > 0 {
+		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("unmarshal: %w", err)
+		}
+	}
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+}
+
 // Get implements client.Client.
 func (m *JamfProtectMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -379,6 +397,11 @@ func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQue
 		}
 	}
 	return ifaceResp, nil
+}
+func (m *JamfProtectMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
 }
 
 // RSQLBuilder implements client.Client.

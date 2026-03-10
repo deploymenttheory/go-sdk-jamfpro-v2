@@ -113,6 +113,11 @@ func (m *LoginCustomizationMock) GetPaginated(ctx context.Context, path string, 
 	}
 	return resp, nil
 }
+func (m *LoginCustomizationMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *LoginCustomizationMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *LoginCustomizationMock) InvalidateToken() error                { return nil }
 func (m *LoginCustomizationMock) KeepAliveToken() error                 { return nil }

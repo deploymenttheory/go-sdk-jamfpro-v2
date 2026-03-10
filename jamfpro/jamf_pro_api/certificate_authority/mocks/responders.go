@@ -126,6 +126,11 @@ func (m *CertificateAuthorityMock) GetPaginated(ctx context.Context, path string
 	}
 	return resp, nil
 }
+func (m *CertificateAuthorityMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *CertificateAuthorityMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *CertificateAuthorityMock) InvalidateToken() error                { return nil }
 func (m *CertificateAuthorityMock) KeepAliveToken() error                 { return nil }

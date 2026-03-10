@@ -35,11 +35,10 @@ func (s *JamfAccountPreferences) GetV3(ctx context.Context) (*ResourceAccountPre
 
 	endpoint := constants.EndpointJamfProAccountPreferencesV3
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -61,17 +60,16 @@ func (s *JamfAccountPreferences) UpdateV3(ctx context.Context, request *Resource
 
 	endpoint := constants.EndpointJamfProAccountPreferencesV3
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Patch(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	// PATCH returns 204 No Content; if no body, return the request as the "updated" value
 	bodyBytes := resp.Bytes()
 	if resp != nil && resp.StatusCode() == 204 && len(bodyBytes) == 0 {
 		return request, resp, nil

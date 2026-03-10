@@ -162,6 +162,11 @@ func (m *ReturnToServiceMock) GetPaginated(ctx context.Context, path string, _ m
 	}
 	return resp, nil
 }
+func (m *ReturnToServiceMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *ReturnToServiceMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ReturnToServiceMock) InvalidateToken() error                    { return nil }
 func (m *ReturnToServiceMock) KeepAliveToken() error                     { return nil }

@@ -172,6 +172,11 @@ func (m *DigicertMock) GetPaginated(ctx context.Context, path string, _ map[stri
 	}
 	return resp, nil
 }
+func (m *DigicertMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *DigicertMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *DigicertMock) InvalidateToken() error                    { return nil }

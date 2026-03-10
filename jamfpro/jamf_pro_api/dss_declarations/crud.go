@@ -39,11 +39,10 @@ func (s *DssDeclarations) GetByUUIDV1(ctx context.Context, uuid string) (*Respon
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDSSDeclarationsV1, uuid)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get DSS declaration by UUID %s: %w", uuid, err)
 	}

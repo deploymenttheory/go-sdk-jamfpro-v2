@@ -30,11 +30,15 @@ func (s *AppInstallers) ListTitlesV1(ctx context.Context, rsqlQuery map[string]s
 
 	endpoint := constants.EndpointJamfProAppInstallersTitlesV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
+	reqBuilder := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result)
+
+	if rsqlQuery != nil {
+		reqBuilder = reqBuilder.SetQueryParams(rsqlQuery)
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := reqBuilder.Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -52,11 +56,10 @@ func (s *AppInstallers) GetTitleByIDV1(ctx context.Context, id string) (*Resourc
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAppInstallersTitlesV1, id)
 	var result ResourceJamfAppCatalogAppInstaller
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -72,11 +75,15 @@ func (s *AppInstallers) ListDeploymentsV1(ctx context.Context, rsqlQuery map[str
 
 	endpoint := constants.EndpointJamfProAppInstallersDeploymentsV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
+	reqBuilder := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result)
+
+	if rsqlQuery != nil {
+		reqBuilder = reqBuilder.SetQueryParams(rsqlQuery)
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := reqBuilder.Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -94,11 +101,10 @@ func (s *AppInstallers) GetDeploymentByIDV1(ctx context.Context, id string) (*Re
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAppInstallersDeploymentsV1, id)
 	var result ResourceJamfAppCatalogDeployment
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -118,12 +124,12 @@ func (s *AppInstallers) CreateDeploymentV1(ctx context.Context, request *Request
 
 	endpoint := constants.EndpointJamfProAppInstallersDeploymentsV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -147,12 +153,12 @@ func (s *AppInstallers) UpdateDeploymentByIDV1(ctx context.Context, id string, r
 
 	var result ResourceJamfAppCatalogDeployment
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -169,11 +175,9 @@ func (s *AppInstallers) DeleteDeploymentByIDV1(ctx context.Context, id string) (
 	}
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAppInstallersDeploymentsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

@@ -115,6 +115,11 @@ func (m *CSAMock) GetPaginated(ctx context.Context, path string, _ map[string]st
 	}
 	return resp, nil
 }
+func (m *CSAMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *CSAMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *CSAMock) InvalidateToken() error                     { return nil }
 func (m *CSAMock) KeepAliveToken() error                      { return nil }

@@ -4,6 +4,7 @@ import (
 	"context"
 	_ "embed"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -103,6 +104,20 @@ func (m *DSSDeclarationsMock) GetBytes(ctx context.Context, endpoint string, que
 
 func (m *DSSDeclarationsMock) GetPaginated(ctx context.Context, endpoint string, rsqlQuery map[string]string, headers map[string]string, mergePage func(page []byte) error) (*resty.Response, error) {
 	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+}
+func (m *DSSDeclarationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		data, status, ok := m.dispatch(method, path)
+		if !ok {
+			return nil, fmt.Errorf("no mock registered for %s %s", method, path)
+		}
+		if result != nil && data != nil {
+			if err := json.Unmarshal(data, result); err != nil {
+				return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			}
+		}
+		return mockhelpers.NewMockResponse(status, http.Header{}, data), nil
+	})
 }
 
 func (m *DSSDeclarationsMock) GetLogger() *zap.Logger {

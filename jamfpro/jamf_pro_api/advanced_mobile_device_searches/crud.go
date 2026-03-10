@@ -31,11 +31,15 @@ func (s *AdvancedMobileDeviceSearches) ListV1(ctx context.Context, rsqlQuery map
 
 	endpoint := constants.EndpointJamfProAdvancedMobileDeviceSearchesV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
+	reqBuilder := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result)
+
+	if rsqlQuery != nil {
+		reqBuilder = reqBuilder.SetQueryParams(rsqlQuery)
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := reqBuilder.Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -52,11 +56,10 @@ func (s *AdvancedMobileDeviceSearches) GetByIDV1(ctx context.Context, id string)
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedMobileDeviceSearchesV1, id)
 	var result ResourceAdvancedMobileDeviceSearch
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -76,12 +79,12 @@ func (s *AdvancedMobileDeviceSearches) CreateV1(ctx context.Context, request *Re
 
 	endpoint := constants.EndpointJamfProAdvancedMobileDeviceSearchesV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -104,12 +107,12 @@ func (s *AdvancedMobileDeviceSearches) UpdateByIDV1(ctx context.Context, id stri
 
 	var result ResourceAdvancedMobileDeviceSearch
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -126,11 +129,9 @@ func (s *AdvancedMobileDeviceSearches) DeleteByIDV1(ctx context.Context, id stri
 	}
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdvancedMobileDeviceSearchesV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -149,12 +150,11 @@ func (s *AdvancedMobileDeviceSearches) DeleteMultipleV1(ctx context.Context, req
 
 	endpoint := constants.EndpointJamfProAdvancedMobileDeviceSearchesV1 + "/delete-multiple"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -173,11 +173,10 @@ func (s *AdvancedMobileDeviceSearches) GetChoicesV1(ctx context.Context, criteri
 		url.QueryEscape(contains))
 	var result ChoicesResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

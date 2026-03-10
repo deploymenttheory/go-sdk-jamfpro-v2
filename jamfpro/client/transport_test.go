@@ -98,7 +98,7 @@ func TestNewTransport_TrimTrailingSlash(t *testing.T) {
 	assert.Equal(t, srv.URL, tr.BaseURL)
 }
 
-func TestTransport_Get_Post_Put_Delete(t *testing.T) {
+func TestTransport_NewRequest_Methods(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
@@ -107,36 +107,37 @@ func TestTransport_Get_Post_Put_Delete(t *testing.T) {
 	ctx := context.Background()
 
 	var getResult map[string]string
-	resp, err := tr.Get(ctx, "/api/test", nil, nil, &getResult)
+	resp, err := tr.NewRequest(ctx).SetResult(&getResult).Get("/api/test")
 	require.NoError(t, err)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", getResult["id"])
 
 	var postResult map[string]string
-	resp, err = tr.Post(ctx, "/api/test", map[string]string{"k": "v"}, nil, &postResult)
+	resp, err = tr.NewRequest(ctx).SetBody(map[string]string{"k": "v"}).SetResult(&postResult).Post("/api/test")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 
-	resp, err = tr.Put(ctx, "/api/test", map[string]string{"k": "v"}, nil, &postResult)
+	resp, err = tr.NewRequest(ctx).SetBody(map[string]string{"k": "v"}).SetResult(&postResult).Put("/api/test")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 
-	resp, err = tr.Delete(ctx, "/api/test", nil, nil, nil)
+	resp, err = tr.NewRequest(ctx).Delete("/api/test")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 
 	var patchResult map[string]string
-	resp, err = tr.Patch(ctx, "/api/test", map[string]string{"k": "v"}, nil, &patchResult)
+	resp, err = tr.NewRequest(ctx).SetBody(map[string]string{"k": "v"}).SetResult(&patchResult).Patch("/api/test")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 
-	resp, err = tr.DeleteWithBody(ctx, "/api/test", map[string]string{"id": "1"}, nil, nil)
+	// DeleteWithBody equivalent: SetBody + Delete
+	resp, err = tr.NewRequest(ctx).SetBody(map[string]string{"id": "1"}).Delete("/api/test")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 }
 
-func TestTransport_PostWithQuery_PostForm_GetBytes(t *testing.T) {
+func TestTransport_NewRequest_PostWithQueryAndGetBytes(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
@@ -144,22 +145,20 @@ func TestTransport_PostWithQuery_PostForm_GetBytes(t *testing.T) {
 	require.NoError(t, err)
 	ctx := context.Background()
 
+	// PostWithQuery equivalent: SetQueryParam + SetBody + Post
 	var result map[string]string
-	resp, err := tr.PostWithQuery(ctx, "/api/test", map[string]string{"q": "v"}, nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).SetQueryParam("q", "v").SetResult(&result).Post("/api/test")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 
-	resp, err = tr.PostForm(ctx, "/api/test", map[string]string{"form": "data"}, nil, &result)
-	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode())
-
-	resp, body, err := tr.GetBytes(ctx, "/api/test", nil, nil)
+	// GetBytes
+	resp, body, err := tr.NewRequest(ctx).GetBytes("/api/test")
 	require.NoError(t, err)
 	require.NotNil(t, body)
 	assert.Equal(t, 200, resp.StatusCode())
 }
 
-func TestTransport_PostMultipart(t *testing.T) {
+func TestTransport_NewRequest_PostMultipart(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
@@ -168,12 +167,19 @@ func TestTransport_PostMultipart(t *testing.T) {
 	ctx := context.Background()
 
 	var result map[string]string
-	resp, err := tr.PostMultipart(ctx, "/api/upload", "file", "test.txt", bytes.NewReader([]byte("content")), 7, map[string]string{"key": "val"}, nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).
+		SetMultipartFile("file", "test.txt", bytes.NewReader([]byte("content")), 7, nil).
+		SetMultipartFormData(map[string]string{"key": "val"}).
+		SetResult(&result).
+		Post("/api/upload")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 
 	called := false
-	resp, err = tr.PostMultipart(ctx, "/api/upload", "file", "a.txt", bytes.NewReader([]byte("x")), 1, nil, nil, func(_, _ string, written, total int64) { called = true }, &result)
+	resp, err = tr.NewRequest(ctx).
+		SetMultipartFile("file", "a.txt", bytes.NewReader([]byte("x")), 1, func(_, _ string, written, total int64) { called = true }).
+		SetResult(&result).
+		Post("/api/upload")
 	require.NoError(t, err)
 	assert.True(t, called)
 }
@@ -200,7 +206,7 @@ func TestTransport_GetBytes_ErrorResponse(t *testing.T) {
 	require.NoError(t, err)
 	ctx := context.Background()
 
-	resp, body, err := tr.GetBytes(ctx, "/api/notfound", nil, nil)
+	resp, body, err := tr.NewRequest(ctx).GetBytes("/api/notfound")
 	require.Error(t, err)
 	assert.Nil(t, body)
 	assert.NotNil(t, resp)
@@ -235,11 +241,11 @@ func TestTransport_ExecuteRequest_ConcurrencyLimit(t *testing.T) {
 	block = make(chan struct{})
 	ctx := context.Background()
 	var result map[string]string
-	go func() { _, _ = tr.Get(ctx, "/api/block", nil, nil, &result) }()
+	go func() { _, _ = tr.NewRequest(ctx).SetResult(&result).Get("/api/block") }()
 	time.Sleep(50 * time.Millisecond)
 	ctx2, cancel2 := context.WithCancel(context.Background())
 	cancel2()
-	_, err = tr.Get(ctx2, "/api/test", nil, nil, &result)
+	_, err = tr.NewRequest(ctx2).SetResult(&result).Get("/api/test")
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "concurrency limit")
 	close(block)
@@ -266,7 +272,7 @@ func TestTransport_ValidateResponse_EmptyBody(t *testing.T) {
 	require.NoError(t, err)
 	ctx := context.Background()
 	var result map[string]any
-	resp, err := tr.Get(ctx, "/api/empty", nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).SetResult(&result).Get("/api/empty")
 	require.NoError(t, err)
 	assert.Equal(t, 204, resp.StatusCode())
 }
@@ -294,7 +300,7 @@ func TestTransport_ValidateResponse_NonJSONWarn(t *testing.T) {
 	ctx := context.Background()
 
 	var result []byte
-	resp, err := tr.Get(ctx, "/api/plain", nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).SetResult(&result).Get("/api/plain")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 }
@@ -307,7 +313,7 @@ func TestTransport_WithTotalRetryDuration_Request(t *testing.T) {
 	require.NoError(t, err)
 	ctx := context.Background()
 	var result map[string]string
-	resp, err := tr.Get(ctx, "/api/test", nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).SetResult(&result).Get("/api/test")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 }
@@ -320,7 +326,7 @@ func TestTransport_RequestWithMandatoryDelay(t *testing.T) {
 	require.NoError(t, err)
 	ctx := context.Background()
 	var result map[string]string
-	resp, err := tr.Get(ctx, "/api/test", nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).SetResult(&result).Get("/api/test")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 }
@@ -334,7 +340,7 @@ func TestTransport_ExecuteRequest_ContextCanceled(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 	var result map[string]string
-	resp, err := tr.Get(ctx, "/api/test", nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).SetResult(&result).Get("/api/test")
 	require.Error(t, err)
 	assert.NotNil(t, resp)
 }
@@ -368,9 +374,9 @@ func TestTransport_AdaptiveDelay(t *testing.T) {
 	require.NoError(t, err)
 	ctx := context.Background()
 	var result map[string]any
-	_, err = tr.Get(ctx, "/api/slow", nil, nil, &result)
+	_, err = tr.NewRequest(ctx).SetResult(&result).Get("/api/slow")
 	require.NoError(t, err)
-	_, err = tr.Get(ctx, "/api/slow", nil, nil, &result)
+	_, err = tr.NewRequest(ctx).SetResult(&result).Get("/api/slow")
 	require.NoError(t, err)
 }
 
@@ -391,7 +397,7 @@ func TestTransport_ExecuteRequest_ServerError(t *testing.T) {
 	require.NoError(t, err)
 	ctx := context.Background()
 	var result map[string]string
-	resp, err := tr.Get(ctx, "/api/err", nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).SetResult(&result).Get("/api/err")
 	require.Error(t, err)
 	assert.Equal(t, 500, resp.StatusCode())
 }
@@ -417,7 +423,7 @@ func TestTransport_DeprecationHeader(t *testing.T) {
 	ctx := context.Background()
 
 	var result map[string]any
-	resp, err := tr.Get(ctx, "/api/deprecated", nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).SetResult(&result).Get("/api/deprecated")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 }
@@ -442,7 +448,7 @@ func TestTransport_KeepAliveToken(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestTransport_ApplyHeaders(t *testing.T) {
+func TestTransport_GlobalHeaders(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
@@ -450,13 +456,15 @@ func TestTransport_ApplyHeaders(t *testing.T) {
 	require.NoError(t, err)
 	ctx := context.Background()
 
+	// Global header from TransportSettings is applied automatically;
+	// per-request header is set on the builder.
 	var result map[string]string
-	resp, err := tr.Get(ctx, "/api/test", nil, map[string]string{"X-Request": "request-val"}, &result)
+	resp, err := tr.NewRequest(ctx).SetHeader("X-Request", "request-val").SetResult(&result).Get("/api/test")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 }
 
-func TestTransport_Get_NilQuery_NilHeaders(t *testing.T) {
+func TestTransport_SetQueryParams_EmptyValuesSkipped(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
@@ -465,12 +473,15 @@ func TestTransport_Get_NilQuery_NilHeaders(t *testing.T) {
 	ctx := context.Background()
 
 	var result map[string]string
-	resp, err := tr.Get(ctx, "/api/x", nil, nil, &result)
+	resp, err := tr.NewRequest(ctx).
+		SetQueryParams(map[string]string{"a": "", "b": "val"}).
+		SetResult(&result).
+		Get("/api/x")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 }
 
-func TestTransport_Get_EmptyQueryValuesSkipped(t *testing.T) {
+func TestTransport_NilBody_NilQuery(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
@@ -479,12 +490,24 @@ func TestTransport_Get_EmptyQueryValuesSkipped(t *testing.T) {
 	ctx := context.Background()
 
 	var result map[string]string
-	resp, err := tr.Get(ctx, "/api/x", map[string]string{"a": "", "b": "val"}, nil, &result)
+	resp, err := tr.NewRequest(ctx).SetBody(nil).SetResult(&result).Post("/api/x")
+	require.NoError(t, err)
+	assert.Equal(t, 200, resp.StatusCode())
+
+	resp, err = tr.NewRequest(ctx).SetBody(nil).SetResult(&result).Put("/api/x")
+	require.NoError(t, err)
+	assert.Equal(t, 200, resp.StatusCode())
+
+	resp, err = tr.NewRequest(ctx).SetBody(nil).SetResult(&result).Patch("/api/x")
+	require.NoError(t, err)
+	assert.Equal(t, 200, resp.StatusCode())
+
+	resp, err = tr.NewRequest(ctx).Delete("/api/x")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 }
 
-func TestTransport_Post_NilBody(t *testing.T) {
+func TestTransport_GetBytes_WithQueryParams(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
@@ -492,23 +515,9 @@ func TestTransport_Post_NilBody(t *testing.T) {
 	require.NoError(t, err)
 	ctx := context.Background()
 
-	var result map[string]string
-	resp, err := tr.Post(ctx, "/api/x", nil, nil, &result)
+	resp, body, err := tr.NewRequest(ctx).SetQueryParam("filter", `name=="test"`).GetBytes("/api/x")
 	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode())
-}
-
-func TestTransport_PostForm_NilFormData(t *testing.T) {
-	srv := newMockAuthServer(t)
-	defer srv.Close()
-	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg)
-	require.NoError(t, err)
-	ctx := context.Background()
-
-	var result map[string]string
-	resp, err := tr.PostForm(ctx, "/api/x", nil, nil, &result)
-	require.NoError(t, err)
+	require.NotNil(t, body)
 	assert.Equal(t, 200, resp.StatusCode())
 }
 
@@ -521,75 +530,12 @@ func TestTransport_PostMultipart_NoFile(t *testing.T) {
 	ctx := context.Background()
 
 	var result map[string]string
-	resp, err := tr.PostMultipart(ctx, "/api/x", "", "", nil, 0, map[string]string{"k": "v"}, nil, nil, &result)
-	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode())
-}
-
-func TestTransport_Delete_NilrsqlQuery(t *testing.T) {
-	srv := newMockAuthServer(t)
-	defer srv.Close()
-	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg)
-	require.NoError(t, err)
-	ctx := context.Background()
-
-	resp, err := tr.Delete(ctx, "/api/x", nil, nil, nil)
-	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode())
-}
-
-func TestTransport_GetBytes_WithRsqlQuery(t *testing.T) {
-	srv := newMockAuthServer(t)
-	defer srv.Close()
-	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg)
-	require.NoError(t, err)
-	ctx := context.Background()
-
-	resp, body, err := tr.GetBytes(ctx, "/api/x", map[string]string{"filter": "name==\"test\""}, nil)
-	require.NoError(t, err)
-	require.NotNil(t, body)
-	assert.Equal(t, 200, resp.StatusCode())
-}
-
-func TestTransport_Put_NilBody(t *testing.T) {
-	srv := newMockAuthServer(t)
-	defer srv.Close()
-	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg)
-	require.NoError(t, err)
-	ctx := context.Background()
-
-	var result map[string]string
-	resp, err := tr.Put(ctx, "/api/x", nil, nil, &result)
-	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode())
-}
-
-func TestTransport_Patch_NilBody(t *testing.T) {
-	srv := newMockAuthServer(t)
-	defer srv.Close()
-	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg)
-	require.NoError(t, err)
-	ctx := context.Background()
-
-	var result map[string]string
-	resp, err := tr.Patch(ctx, "/api/x", nil, nil, &result)
-	require.NoError(t, err)
-	assert.Equal(t, 200, resp.StatusCode())
-}
-
-func TestTransport_DeleteWithBody_NilBody(t *testing.T) {
-	srv := newMockAuthServer(t)
-	defer srv.Close()
-	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg)
-	require.NoError(t, err)
-	ctx := context.Background()
-
-	resp, err := tr.DeleteWithBody(ctx, "/api/x", nil, nil, nil)
+	// SetMultipartFile with nil reader is a no-op; only form data is sent
+	resp, err := tr.NewRequest(ctx).
+		SetMultipartFile("", "", nil, 0, nil).
+		SetMultipartFormData(map[string]string{"k": "v"}).
+		SetResult(&result).
+		Post("/api/x")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
 }

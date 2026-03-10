@@ -106,6 +106,11 @@ func (m *ClassicLdapMock) GetPaginated(ctx context.Context, path string, _ map[s
 	}
 	return resp, nil
 }
+func (m *ClassicLdapMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *ClassicLdapMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ClassicLdapMock) InvalidateToken() error                { return nil }
 func (m *ClassicLdapMock) KeepAliveToken() error                 { return nil }

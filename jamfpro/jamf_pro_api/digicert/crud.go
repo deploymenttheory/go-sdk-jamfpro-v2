@@ -34,12 +34,12 @@ func (s *Digicert) Create(ctx context.Context, request *ResourceDigicertTrustLif
 
 	var result ResponseDigicertTrustLifecycleManagerCreated
 
-	headers := map[string]string{
-		"Accept":       constants.AcceptAny,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.AcceptAny).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -59,11 +59,10 @@ func (s *Digicert) GetByID(ctx context.Context, id string) (*ResponseDigicertTru
 
 	var result ResponseDigicertTrustLifecycleManager
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -84,12 +83,11 @@ func (s *Digicert) UpdateByID(ctx context.Context, id string, request *ResourceD
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProTrustLifecycleManagerV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationMergePatchJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationMergePatchJSON).
+		SetBody(request).
+		Patch(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -107,11 +105,9 @@ func (s *Digicert) DeleteByID(ctx context.Context, id string) (*resty.Response, 
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProTrustLifecycleManagerV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -129,11 +125,10 @@ func (s *Digicert) ValidateClientCertificate(ctx context.Context, request *Valid
 
 	endpoint := fmt.Sprintf("%s/validate-client-certificate", constants.EndpointJamfProTrustLifecycleManagerV1)
 
-	headers := map[string]string{
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -153,11 +148,10 @@ func (s *Digicert) GetConnectionStatusByID(ctx context.Context, id string) (*Con
 
 	var result ConnectionStatusResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -177,11 +171,10 @@ func (s *Digicert) GetDependenciesByID(ctx context.Context, id string) (*Depende
 
 	var result DependenciesResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

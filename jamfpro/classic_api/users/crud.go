@@ -2,7 +2,6 @@ package users
 
 import (
 	"context"
-	"encoding/xml"
 	"fmt"
 	"net/url"
 
@@ -35,16 +34,16 @@ func NewUsers(client client.Client) *Users {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findusers
 func (s *Users) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := constants.EndpointClassicUsers
-
 	var out ListResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := constants.EndpointClassicUsers
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -61,16 +60,16 @@ func (s *Users) GetByID(ctx context.Context, id int) (*ResourceUser, *resty.Resp
 		return nil, nil, fmt.Errorf("user ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicUsers, id)
-
 	var out ResourceUser
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicUsers, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -87,16 +86,16 @@ func (s *Users) GetByName(ctx context.Context, name string) (*ResourceUser, *res
 		return nil, nil, fmt.Errorf("user name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicUsers, url.PathEscape(name))
-
 	var out ResourceUser
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicUsers, url.PathEscape(name))
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -115,16 +114,16 @@ func (s *Users) GetByEmail(ctx context.Context, email string) (*ListResponse, *r
 		return nil, nil, fmt.Errorf("user email cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/email/%s", constants.EndpointClassicUsers, url.PathEscape(email))
-
 	var out ListResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/email/%s", constants.EndpointClassicUsers, url.PathEscape(email))
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -144,23 +143,17 @@ func (s *Users) Create(ctx context.Context, req *RequestUser) (*ResourceUser, *r
 		return nil, nil, fmt.Errorf("user name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicUsers)
-
-	requestBody := struct {
-		XMLName xml.Name `xml:"user"`
-		*RequestUser
-	}{
-		RequestUser: req,
-	}
-
 	var out ResourceUser
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicUsers)
 
-	resp, err := s.client.Post(ctx, endpoint, &requestBody, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -183,23 +176,17 @@ func (s *Users) UpdateByID(ctx context.Context, id int, req *RequestUser) (*Reso
 		return nil, nil, fmt.Errorf("user name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicUsers, id)
-
-	requestBody := struct {
-		XMLName xml.Name `xml:"user"`
-		*RequestUser
-	}{
-		RequestUser: req,
-	}
-
 	var out ResourceUser
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicUsers, id)
 
-	resp, err := s.client.Put(ctx, endpoint, &requestBody, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -222,23 +209,17 @@ func (s *Users) UpdateByName(ctx context.Context, name string, req *RequestUser)
 		return nil, nil, fmt.Errorf("user name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicUsers, url.PathEscape(name))
-
-	requestBody := struct {
-		XMLName xml.Name `xml:"user"`
-		*RequestUser
-	}{
-		RequestUser: req,
-	}
-
 	var out ResourceUser
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicUsers, url.PathEscape(name))
 
-	resp, err := s.client.Put(ctx, endpoint, &requestBody, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -261,23 +242,17 @@ func (s *Users) UpdateByEmail(ctx context.Context, email string, req *RequestUse
 		return nil, nil, fmt.Errorf("user name is required in request")
 	}
 
-	endpoint := fmt.Sprintf("%s/email/%s", constants.EndpointClassicUsers, url.PathEscape(email))
-
-	requestBody := struct {
-		XMLName xml.Name `xml:"user"`
-		*RequestUser
-	}{
-		RequestUser: req,
-	}
-
 	var out ResourceUser
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/email/%s", constants.EndpointClassicUsers, url.PathEscape(email))
 
-	resp, err := s.client.Put(ctx, endpoint, &requestBody, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -296,12 +271,10 @@ func (s *Users) DeleteByID(ctx context.Context, id int) (*resty.Response, error)
 
 	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicUsers, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -320,12 +293,10 @@ func (s *Users) DeleteByName(ctx context.Context, name string) (*resty.Response,
 
 	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicUsers, url.PathEscape(name))
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -344,12 +315,10 @@ func (s *Users) DeleteByEmail(ctx context.Context, email string) (*resty.Respons
 
 	endpoint := fmt.Sprintf("%s/email/%s", constants.EndpointClassicUsers, url.PathEscape(email))
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

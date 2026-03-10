@@ -45,17 +45,14 @@ func (s *CommandFlush) FlushByIDAndStatus(ctx context.Context, idType string, id
 		return nil, err
 	}
 
-	// URL encode status if it contains +
 	encodedStatus := strings.ReplaceAll(status, "+", "%2B")
 
 	endpoint := fmt.Sprintf("%s/%s/id/%s/status/%s", constants.EndpointClassicCommandFlush, idType, id, encodedStatus)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to clear %s MDM commands for %s %s: %w", status, idType, id, err)
 	}
@@ -74,12 +71,12 @@ func (s *CommandFlush) FlushWithXML(ctx context.Context, req *RequestCommandFlus
 
 	endpoint := constants.EndpointClassicCommandFlush
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		Delete(endpoint)
 
-	resp, err := s.client.DeleteWithBody(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to flush commands with XML request: %w", err)
 	}

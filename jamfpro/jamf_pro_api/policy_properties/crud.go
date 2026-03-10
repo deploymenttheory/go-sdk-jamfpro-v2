@@ -32,8 +32,12 @@ func NewPolicyProperties(client client.Client) *PolicyProperties {
 func (s *PolicyProperties) Get(ctx context.Context) (*ResourcePolicyProperties, *resty.Response, error) {
 	var result ResourcePolicyProperties
 	endpoint := constants.EndpointJamfProPolicyPropertiesV1
-	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -49,8 +53,13 @@ func (s *PolicyProperties) Update(ctx context.Context, request *ResourcePolicyPr
 	}
 	var result ResourcePolicyProperties
 	endpoint := constants.EndpointJamfProPolicyPropertiesV1
-	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

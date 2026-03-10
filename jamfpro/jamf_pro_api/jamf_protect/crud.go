@@ -30,12 +30,12 @@ func NewJamfProtect(client client.Client) *JamfProtect {
 func (s *JamfProtect) GetSettingsV1(ctx context.Context) (*ResourceJamfProtectSettings, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProJamfProtectV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResourceJamfProtectSettings
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get Jamf Protect settings: %w", err)
 	}
@@ -53,13 +53,14 @@ func (s *JamfProtect) UpdateSettingsV1(ctx context.Context, request *RequestJamf
 
 	endpoint := constants.EndpointJamfProJamfProtectV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var result ResourceJamfProtectSettings
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to update Jamf Protect settings: %w", err)
 	}
@@ -77,13 +78,14 @@ func (s *JamfProtect) RegisterV1(ctx context.Context, request *RequestJamfProtec
 
 	endpoint := constants.EndpointJamfProJamfProtectRegisterV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var result ResourceJamfProtectSettings
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to register Jamf Protect: %w", err)
 	}
@@ -97,12 +99,10 @@ func (s *JamfProtect) RegisterV1(ctx context.Context, request *RequestJamfProtec
 func (s *JamfProtect) SyncPlansV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProJamfProtectPlansV1 + "/sync"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to sync Jamf Protect plans: %w", err)
 	}
@@ -163,10 +163,10 @@ func (s *JamfProtect) ListDeploymentTasksV1(ctx context.Context, deploymentID st
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect deployment tasks: %w", err)
 	}
@@ -184,12 +184,10 @@ func (s *JamfProtect) RetryDeploymentTasksV1(ctx context.Context, deploymentID s
 
 	endpoint := fmt.Sprintf("%s/%s/tasks/retry", constants.EndpointJamfProJamfProtectDeploymentsV1, deploymentID)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to retry Jamf Protect deployment tasks: %w", err)
 	}
@@ -214,11 +212,10 @@ func (s *JamfProtect) ListHistoryV1(ctx context.Context, rsqlQuery map[string]st
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect history: %w", err)
 	}
@@ -236,13 +233,14 @@ func (s *JamfProtect) CreateHistoryNoteV1(ctx context.Context, request *RequestJ
 
 	endpoint := constants.EndpointJamfProJamfProtectHistoryV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var result ResourceJamfProtectHistoryCreate
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to create Jamf Protect history note: %w", err)
 	}
@@ -267,10 +265,10 @@ func (s *JamfProtect) ListPlansV1(ctx context.Context, rsqlQuery map[string]stri
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list Jamf Protect plans: %w", err)
 	}
@@ -284,11 +282,9 @@ func (s *JamfProtect) ListPlansV1(ctx context.Context, rsqlQuery map[string]stri
 func (s *JamfProtect) DeleteIntegrationV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProJamfProtectV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to delete Jamf Protect integration: %w", err)
 	}

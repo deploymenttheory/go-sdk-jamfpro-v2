@@ -35,12 +35,12 @@ func (s *ComputerInventory) CreateV3(ctx context.Context, request *ResourceCompu
 
 	var result CreateComputerResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -58,11 +58,6 @@ func (s *ComputerInventory) ListV3(ctx context.Context, rsqlQuery map[string]str
 
 	var result ResponseComputerInventoryList
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var pageResults []ResourceComputerInventory
 		if err := json.Unmarshal(pageData, &pageResults); err != nil {
@@ -72,7 +67,11 @@ func (s *ComputerInventory) ListV3(ctx context.Context, rsqlQuery map[string]str
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -92,11 +91,10 @@ func (s *ComputerInventory) GetByIDV3(ctx context.Context, id string) (*Resource
 
 	var result ResourceComputerInventory
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -116,11 +114,10 @@ func (s *ComputerInventory) GetDetailByIDV3(ctx context.Context, id string) (*Re
 
 	var result ResourceComputerInventory
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -143,12 +140,12 @@ func (s *ComputerInventory) UpdateByIDV3(ctx context.Context, id string, request
 
 	var result ResourceComputerInventory
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Patch(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -166,11 +163,9 @@ func (s *ComputerInventory) DeleteByIDV3(ctx context.Context, id string) (*resty
 		return nil, fmt.Errorf("id is required")
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -188,11 +183,6 @@ func (s *ComputerInventory) ListFileVaultV3(ctx context.Context) (*FileVaultInve
 
 	var result FileVaultInventoryList
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var pageResults []FileVaultInventory
 		if err := json.Unmarshal(pageData, &pageResults); err != nil {
@@ -202,7 +192,10 @@ func (s *ComputerInventory) ListFileVaultV3(ctx context.Context) (*FileVaultInve
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, nil, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -222,11 +215,10 @@ func (s *ComputerInventory) GetFileVaultByIDV3(ctx context.Context, id string) (
 
 	var result FileVaultInventory
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -246,11 +238,10 @@ func (s *ComputerInventory) GetDeviceLockPinByIDV3(ctx context.Context, id strin
 
 	var result ResponseDeviceLockPin
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -270,11 +261,10 @@ func (s *ComputerInventory) GetRecoveryLockPasswordByIDV3(ctx context.Context, i
 
 	var result ResponseRecoveryLockPassword
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -295,12 +285,11 @@ func (s *ComputerInventory) UploadAttachmentByIDV3(ctx context.Context, computer
 		return nil, fmt.Errorf("attachment data is required")
 	}
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationOctetStream,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, attachment, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationOctetStream).
+		SetBody(attachment).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -323,11 +312,10 @@ func (s *ComputerInventory) GetAttachmentByIDV3(ctx context.Context, computerID,
 
 	var result []byte
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationOctetStream,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationOctetStream).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -348,11 +336,9 @@ func (s *ComputerInventory) DeleteAttachmentByIDV3(ctx context.Context, computer
 		return nil, fmt.Errorf("attachmentID is required")
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -372,12 +358,11 @@ func (s *ComputerInventory) RemoveMDMProfileByIDV1(ctx context.Context, id strin
 
 	var result ResponseRemoveMDMProfile
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -398,12 +383,11 @@ func (s *ComputerInventory) EraseByIDV1(ctx context.Context, id string, request 
 		return nil, fmt.Errorf("request is required")
 	}
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}

@@ -133,6 +133,11 @@ func (m *SelfServiceSettingsMock) GetPaginated(ctx context.Context, path string,
 	}
 	return resp, nil
 }
+func (m *SelfServiceSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *SelfServiceSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *SelfServiceSettingsMock) InvalidateToken() error                { return nil }
 func (m *SelfServiceSettingsMock) KeepAliveToken() error                 { return nil }

@@ -175,6 +175,11 @@ func (m *ComputerGroupsMock) GetPaginated(ctx context.Context, path string, rsql
 	}
 	return resp, nil
 }
+func (m *ComputerGroupsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *ComputerGroupsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ComputerGroupsMock) InvalidateToken() error                { return nil }

@@ -159,6 +159,11 @@ func (m *DeviceCommunicationSettingsMock) GetPaginated(ctx context.Context, path
 	}
 	return resp, nil
 }
+func (m *DeviceCommunicationSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *DeviceCommunicationSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *DeviceCommunicationSettingsMock) InvalidateToken() error                    { return nil }
 func (m *DeviceCommunicationSettingsMock) KeepAliveToken() error                     { return nil }

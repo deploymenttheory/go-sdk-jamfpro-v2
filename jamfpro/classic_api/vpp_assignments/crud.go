@@ -33,16 +33,16 @@ func NewVppAssignments(client client.Client) *VppAssignments {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findvppassignments
 func (s *VppAssignments) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := constants.EndpointClassicVPPAssignments
-
 	var out ListResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := constants.EndpointClassicVPPAssignments
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -59,16 +59,16 @@ func (s *VppAssignments) GetByID(ctx context.Context, id int) (*Resource, *resty
 		return nil, nil, fmt.Errorf("VPP assignment ID must be a positive integer")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAssignments, id)
-
 	var out Resource
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAssignments, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -88,18 +88,19 @@ func (s *VppAssignments) Create(ctx context.Context, req *Resource) (*CreateUpda
 		return nil, nil, fmt.Errorf("VPP assignment name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicVPPAssignments)
-
 	requestBody := &RequestVPPAssignment{Resource: req}
 
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicVPPAssignments)
 
-	resp, err := s.client.Post(ctx, endpoint, requestBody, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(requestBody).
+		SetResult(&out).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -122,18 +123,19 @@ func (s *VppAssignments) UpdateByID(ctx context.Context, id int, req *Resource) 
 		return nil, nil, fmt.Errorf("VPP assignment name is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAssignments, id)
-
 	requestBody := &RequestVPPAssignment{Resource: req}
 
 	var out CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAssignments, id)
 
-	resp, err := s.client.Put(ctx, endpoint, requestBody, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(requestBody).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -152,12 +154,10 @@ func (s *VppAssignments) DeleteByID(ctx context.Context, id int) (*resty.Respons
 
 	endpoint := fmt.Sprintf("%s/id/%d", constants.EndpointClassicVPPAssignments, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

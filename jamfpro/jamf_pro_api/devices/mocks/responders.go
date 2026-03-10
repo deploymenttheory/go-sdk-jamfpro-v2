@@ -155,6 +155,11 @@ func (m *DevicesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[s
 func (m *DevicesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	return m.dispatch("GET", path, nil)
 }
+func (m *DevicesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *DevicesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *DevicesMock) InvalidateToken() error                { return nil }

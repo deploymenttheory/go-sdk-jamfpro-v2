@@ -105,6 +105,24 @@ func loadMockResponse(filename string) ([]byte, error) {
 	return os.ReadFile(filepath.Join(dir, filename))
 }
 
+
+func (m *JCDSMock) dispatch(method, path string, result any) (*resty.Response, error) {
+	key := method + " " + path
+	resp, ok := m.responses[key]
+	if !ok {
+		return nil, fmt.Errorf("no mock registered for %s %s", method, path)
+	}
+	if resp.errMsg != "" {
+		return nil, fmt.Errorf("%s", resp.errMsg)
+	}
+	if result != nil && len(resp.rawBody) > 0 {
+		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("unmarshal: %w", err)
+		}
+	}
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+}
+
 // Get implements client.Client.
 func (m *JCDSMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -233,6 +251,11 @@ func (m *JCDSMock) GetBytes(ctx context.Context, path string, rsqlQuery map[stri
 // GetPaginated implements client.Client.
 func (m *JCDSMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in JCDSMock")
+}
+func (m *JCDSMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
 }
 
 // RSQLBuilder implements client.Client.
