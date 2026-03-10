@@ -36,7 +36,6 @@ import (
     "log"
 
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
     "go.opentelemetry.io/otel"
     "go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
     "go.opentelemetry.io/otel/sdk/trace"
@@ -59,7 +58,7 @@ func main() {
     otel.SetTracerProvider(tp)
 
     // Step 4: Create Jamf Pro client
-    authConfig := client.AuthConfigFromEnv()
+    authConfig := jamfpro.AuthConfigFromEnv()
     jamfClient, err := jamfpro.NewClient(authConfig)
     if err != nil {
         log.Fatal(err)
@@ -71,7 +70,7 @@ func main() {
     }
 
     // Step 6: Use the client normally - tracing happens automatically!
-    result, _, err := jamfClient.Buildings.ListV1(context.Background(), nil)
+    result, _, err := jamfClient.JamfProAPI.Buildings.ListV1(context.Background(), nil)
     if err != nil {
         log.Printf("Error: %v", err)
         return
@@ -97,7 +96,7 @@ func main() {
 The simplest approach uses the global OpenTelemetry tracer provider:
 
 ```go
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(authConfig)
 if err != nil {
     log.Fatal(err)
@@ -125,12 +124,12 @@ myTracerProvider := trace.NewTracerProvider(
 )
 
 // Configure the client to use it
-otelConfig := &client.OTelConfig{
+otelConfig := &jamfpro.OTelConfig{
     TracerProvider: myTracerProvider,
     ServiceName:    "my-jamf-integration",
 }
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(authConfig)
 if err != nil {
     log.Fatal(err)
@@ -150,14 +149,14 @@ if err := jamfClient.EnableTracing(otelConfig); err != nil {
 Customize how spans are named for better organization in your tracing UI:
 
 ```go
-otelConfig := &client.OTelConfig{
+otelConfig := &jamfpro.OTelConfig{
     SpanNameFormatter: func(operation string, req *http.Request) string {
         // Custom format: "Jamf Pro: GET /api/v1/buildings"
         return fmt.Sprintf("Jamf Pro: %s %s", req.Method, req.URL.Path)
     },
 }
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(authConfig)
 if err != nil {
     log.Fatal(err)
@@ -179,14 +178,14 @@ Control how trace context is propagated across service boundaries:
 ```go
 import "go.opentelemetry.io/otel/propagation"
 
-otelConfig := &client.OTelConfig{
+otelConfig := &jamfpro.OTelConfig{
     Propagators: propagation.NewCompositeTextMapPropagator(
         propagation.TraceContext{},
         propagation.Baggage{},
     ),
 }
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(authConfig)
 if err != nil {
     log.Fatal(err)
@@ -218,7 +217,7 @@ exporter, _ := jaeger.New(jaeger.WithCollectorEndpoint(
 tp := trace.NewTracerProvider(trace.WithBatcher(exporter))
 otel.SetTracerProvider(tp)
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, _ := jamfpro.NewClient(authConfig)
 jamfClient.EnableTracing(nil)
 ```
@@ -236,7 +235,7 @@ exporter, _ := otlptracegrpc.New(context.Background(),
 tp := trace.NewTracerProvider(trace.WithBatcher(exporter))
 otel.SetTracerProvider(tp)
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, _ := jamfpro.NewClient(authConfig)
 jamfClient.EnableTracing(nil)
 ```
@@ -263,7 +262,7 @@ To disable tracing, simply don't call `EnableTracing()`:
 
 ```go
 // No tracing - client works normally without instrumentation
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(authConfig)
 ```
 
@@ -288,7 +287,6 @@ import (
     "time"
 
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
     "go.opentelemetry.io/otel"
     "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
     "go.opentelemetry.io/otel/sdk/trace"
@@ -313,18 +311,18 @@ func main() {
     otel.SetTracerProvider(tp)
 
     // Create Jamf Pro client with logging and tracing
-    authConfig := client.AuthConfigFromEnv()
+    authConfig := jamfpro.AuthConfigFromEnv()
     jamfClient, err := jamfpro.NewClient(
         authConfig,
-        client.WithLogger(logger),
-        client.WithTimeout(30*time.Second),
+        jamfpro.WithLogger(logger),
+        jamfpro.WithTimeout(30*time.Second),
     )
     if err != nil {
         log.Fatal(err)
     }
 
     // Enable tracing
-    if err := jamfClient.EnableTracing(&client.OTelConfig{
+    if err := jamfClient.EnableTracing(&jamfpro.OTelConfig{
         ServiceName: "jamf-integration",
     }); err != nil {
         log.Fatal(err)
@@ -332,7 +330,7 @@ func main() {
 
     // Use client normally
     ctx := context.Background()
-    result, _, err := jamfClient.Buildings.ListV1(ctx, nil)
+    result, _, err := jamfClient.JamfProAPI.Buildings.ListV1(ctx, nil)
     if err != nil {
         logger.Error("Failed to list buildings", zap.Error(err))
         return

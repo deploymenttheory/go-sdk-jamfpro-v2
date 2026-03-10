@@ -36,24 +36,23 @@ import (
     "log"
 
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-    authConfig := client.AuthConfigFromEnv()
+    authConfig := jamfpro.AuthConfigFromEnv()
 
     // Add a global header to all requests
     jamfClient, err := jamfpro.NewClient(
         authConfig,
-        client.WithGlobalHeader("X-Application-Name", "MyJamfIntegration"),
-        client.WithGlobalHeader("X-Application-Version", "1.0.0"),
+        jamfpro.WithGlobalHeader("X-Application-Name", "MyJamfIntegration"),
+        jamfpro.WithGlobalHeader("X-Application-Version", "1.0.0"),
     )
     if err != nil {
         log.Fatal(err)
     }
 
     // All requests now include these headers
-    result, _, err := jamfClient.Buildings.ListV1(context.Background(), nil)
+    result, _, err := jamfClient.JamfProAPI.Buildings.ListV1(context.Background(), nil)
     if err != nil {
         log.Fatal(err)
     }
@@ -71,7 +70,7 @@ Add one header that applies to all requests:
 ```go
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeader("X-Request-ID", requestID),
+    jamfpro.WithGlobalHeader("X-Request-ID", requestID),
 )
 ```
 
@@ -93,7 +92,7 @@ headers := map[string]string{
 
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeaders(headers),
+    jamfpro.WithGlobalHeaders(headers),
 )
 ```
 
@@ -108,9 +107,9 @@ Add headers one at a time with multiple options:
 ```go
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeader("X-App-Name", "MyJamfApp"),
-    client.WithGlobalHeader("X-App-Version", "1.0.0"),
-    client.WithGlobalHeader("X-User-ID", userID),
+    jamfpro.WithGlobalHeader("X-App-Name", "MyJamfApp"),
+    jamfpro.WithGlobalHeader("X-App-Version", "1.0.0"),
+    jamfpro.WithGlobalHeader("X-User-ID", userID),
 )
 ```
 
@@ -130,8 +129,8 @@ requestID := uuid.New().String()
 
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeader("X-Request-ID", requestID),
-    client.WithGlobalHeader("X-Timestamp", time.Now().Format(time.RFC3339)),
+    jamfpro.WithGlobalHeader("X-Request-ID", requestID),
+    jamfpro.WithGlobalHeader("X-Timestamp", time.Now().Format(time.RFC3339)),
 )
 ```
 
@@ -148,8 +147,8 @@ import "github.com/google/uuid"
 
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeader("X-Request-ID", uuid.New().String()),
-    client.WithGlobalHeader("X-Correlation-ID", correlationID),
+    jamfpro.WithGlobalHeader("X-Request-ID", uuid.New().String()),
+    jamfpro.WithGlobalHeader("X-Correlation-ID", correlationID),
 )
 ```
 
@@ -158,7 +157,7 @@ jamfClient, err := jamfpro.NewClient(
 ```go
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeaders(map[string]string{
+    jamfpro.WithGlobalHeaders(map[string]string{
         "X-Application-Name":    "JamfDeviceManager",
         "X-Application-Version": version,
         "X-Build-Number":        buildNumber,
@@ -172,7 +171,7 @@ jamfClient, err := jamfpro.NewClient(
 ```go
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeaders(map[string]string{
+    jamfpro.WithGlobalHeaders(map[string]string{
         "X-User-ID":      userID,
         "X-Organization": orgID,
         "X-Department":   department,
@@ -186,7 +185,7 @@ jamfClient, err := jamfpro.NewClient(
 // Headers required by API gateway
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeaders(map[string]string{
+    jamfpro.WithGlobalHeaders(map[string]string{
         "X-Gateway-Key":  gatewayKey,
         "X-API-Version":  "v3",
         "X-Client-Type":  "sdk-go",
@@ -235,8 +234,8 @@ Some headers are automatically set by the SDK:
 // Verify headers are set
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeader("X-Test", "value"),
-    client.WithDebug(), // Enable debug mode to see headers
+    jamfpro.WithGlobalHeader("X-Test", "value"),
+    jamfpro.WithDebug(), // Enable debug mode to see headers
 )
 
 // Check logs for header values
@@ -253,7 +252,7 @@ import "net/url"
 encodedValue := url.QueryEscape("value with spaces")
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeader("X-Custom", encodedValue),
+    jamfpro.WithGlobalHeader("X-Custom", encodedValue),
 )
 ```
 
@@ -276,10 +275,12 @@ jamfClient, err := jamfpro.NewClient(
 ## Testing with Custom Headers
 
 ```go
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+
 func TestCustomHeaders(t *testing.T) {
-    authConfig := &client.AuthConfig{
+    authConfig := &jamfpro.AuthConfig{
         InstanceDomain: "https://test.jamfcloud.com",
-        AuthMethod:     client.AuthMethodOAuth2,
+        AuthMethod:     constants.AuthMethodOAuth2,
         ClientID:       "test-id",
         ClientSecret:   "test-secret",
     }
@@ -287,7 +288,7 @@ func TestCustomHeaders(t *testing.T) {
     // Test single header
     jamfClient, err := jamfpro.NewClient(
         authConfig,
-        client.WithGlobalHeader("X-Test", "value"),
+        jamfpro.WithGlobalHeader("X-Test", "value"),
     )
     assert.NoError(t, err)
 
@@ -298,7 +299,7 @@ func TestCustomHeaders(t *testing.T) {
     }
     jamfClient, err = jamfpro.NewClient(
         authConfig,
-        client.WithGlobalHeaders(headers),
+        jamfpro.WithGlobalHeaders(headers),
     )
     assert.NoError(t, err)
 }
@@ -310,8 +311,8 @@ func TestCustomHeaders(t *testing.T) {
 // Use debug mode to see actual headers sent
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeader("X-Test", "value"),
-    client.WithDebug(),
+    jamfpro.WithGlobalHeader("X-Test", "value"),
+    jamfpro.WithDebug(),
 )
 
 // Or inspect via HTTP mock
@@ -328,8 +329,8 @@ import "go.opentelemetry.io/otel/trace"
 spanCtx := trace.SpanContextFromContext(ctx)
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithGlobalHeader("X-Trace-ID", spanCtx.TraceID().String()),
-    client.WithGlobalHeader("X-Span-ID", spanCtx.SpanID().String()),
+    jamfpro.WithGlobalHeader("X-Trace-ID", spanCtx.TraceID().String()),
+    jamfpro.WithGlobalHeader("X-Span-ID", spanCtx.SpanID().String()),
 )
 ```
 
@@ -343,10 +344,10 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
         requestID = uuid.New().String()
     }
 
-    authConfig := client.AuthConfigFromEnv()
+    authConfig := jamfpro.AuthConfigFromEnv()
     jamfClient, _ := jamfpro.NewClient(
         authConfig,
-        client.WithGlobalHeader("X-Request-ID", requestID),
+        jamfpro.WithGlobalHeader("X-Request-ID", requestID),
     )
 
     // Use client...

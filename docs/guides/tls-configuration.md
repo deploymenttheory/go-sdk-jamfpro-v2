@@ -37,11 +37,10 @@ import (
     "log"
 
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-    authConfig := client.AuthConfigFromEnv()
+    authConfig := jamfpro.AuthConfigFromEnv()
 
     // Create client with minimum TLS 1.2
     tlsConfig := &tls.Config{
@@ -50,7 +49,7 @@ func main() {
 
     jamfClient, err := jamfpro.NewClient(
         authConfig,
-        client.WithTLSClientConfig(tlsConfig),
+        jamfpro.WithTLSClientConfig(tlsConfig),
     )
     if err != nil {
         log.Fatal(err)
@@ -75,10 +74,10 @@ tlsConfig := &tls.Config{
     MinVersion: tls.VersionTLS12,
 }
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithTLSClientConfig(tlsConfig),
+    jamfpro.WithTLSClientConfig(tlsConfig),
 )
 
 // Require TLS 1.3 (most secure)
@@ -88,7 +87,7 @@ tlsConfig := &tls.Config{
 
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithTLSClientConfig(tlsConfig),
+    jamfpro.WithTLSClientConfig(tlsConfig),
 )
 ```
 
@@ -117,10 +116,10 @@ tlsConfig := &tls.Config{
     },
 }
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithTLSClientConfig(tlsConfig),
+    jamfpro.WithTLSClientConfig(tlsConfig),
 )
 ```
 
@@ -137,10 +136,10 @@ jamfClient, err := jamfpro.NewClient(
 
 ```go
 // NEVER use this in production!
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithInsecureSkipVerify(),
+    jamfpro.WithInsecureSkipVerify(),
 )
 ```
 
@@ -162,11 +161,11 @@ tlsConfig := &tls.Config{
     MinVersion: tls.VersionTLS12,
 }
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithTLSClientConfig(tlsConfig),
-    client.WithProxy("http://proxy.company.com:8080"),
+    jamfpro.WithTLSClientConfig(tlsConfig),
+    jamfpro.WithProxy("http://proxy.company.com:8080"),
 )
 ```
 
@@ -184,10 +183,10 @@ tlsConfig := &tls.Config{
     },
 }
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithTLSClientConfig(tlsConfig),
+    jamfpro.WithTLSClientConfig(tlsConfig),
 )
 ```
 
@@ -195,10 +194,10 @@ jamfClient, err := jamfpro.NewClient(
 
 ```go
 // Temporarily skip verification (NOT for production)
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithInsecureSkipVerify(),
+    jamfpro.WithInsecureSkipVerify(),
 )
 ```
 

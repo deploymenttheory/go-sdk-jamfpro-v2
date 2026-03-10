@@ -33,7 +33,6 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
@@ -48,7 +47,7 @@ func main() {
 	}
 
 	// Use the client — authentication is automatic
-	result, _, err := jamfClient.Reenrollment.Get(context.Background())
+	result, _, err := jamfClient.JamfProAPI.Reenrollment.Get(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -132,7 +131,7 @@ kubectl create secret generic jamf-credentials \
 Load credentials from a JSON file (do not commit this file):
 
 ```go
-authConfig, err := client.LoadAuthConfigFromFile("clientconfig.json")
+authConfig, err := jamfpro.LoadAuthConfigFromFile("clientconfig.json")
 if err != nil {
 	log.Fatal(err)
 }
@@ -170,15 +169,17 @@ clientconfig.json
 Build `AuthConfig` programmatically (e.g. from a secret manager):
 
 ```go
-authConfig := &client.AuthConfig{
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+
+authConfig := &jamfpro.AuthConfig{
 	InstanceDomain:           "https://your-instance.jamfcloud.com",
-	AuthMethod:               client.AuthMethodOAuth2,
+	AuthMethod:               constants.AuthMethodOAuth2,
 	ClientID:                 secretClientID,
 	ClientSecret:             secretClientSecret,
 	TokenRefreshBufferPeriod: 5 * time.Minute,
 	HideSensitiveData:        true,
 }
-jamfClient, err := jamfpro.NewClient(authConfig, client.WithLogger(logger))
+jamfClient, err := jamfpro.NewClient(authConfig, jamfpro.WithLogger(logger))
 ```
 
 **When to use:** When credentials come from a vault or another runtime source.
@@ -190,11 +191,11 @@ jamfClient, err := jamfpro.NewClient(authConfig, client.WithLogger(logger))
 Use the same env vars as `NewClientFromEnv` but get an `AuthConfig` for validation or custom client setup:
 
 ```go
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 if err := authConfig.Validate(); err != nil {
 	log.Fatal(err)
 }
-jamfClient, err := jamfpro.NewClient(authConfig, client.WithLogger(zapLogger))
+jamfClient, err := jamfpro.NewClient(authConfig, jamfpro.WithLogger(zapLogger))
 ```
 
 ## Security Best Practices

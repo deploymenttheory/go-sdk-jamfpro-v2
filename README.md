@@ -52,23 +52,24 @@ The SDK includes a powerful HTTP client with production-ready configuration opti
 ```go
 import (
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 // From environment (INSTANCE_DOMAIN, AUTH_METHOD, CLIENT_ID, CLIENT_SECRET or BASIC_AUTH_*)
 jamfClient, err := jamfpro.NewClientFromEnv()
 
 // From AuthConfig (e.g. from file or secret manager)
-authConfig := client.AuthConfigFromEnv() // or LoadAuthConfigFromFile(path)
-jamfClient, err := jamfpro.NewClient(authConfig, client.WithLogger(logger))
+authConfig := jamfpro.AuthConfigFromEnv() // or jamfpro.LoadAuthConfigFromFile(path)
+jamfClient, err := jamfpro.NewClient(authConfig, jamfpro.WithLogger(logger))
 ```
 
 ### AuthConfig fields
 
 ```go
-&client.AuthConfig{
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+
+&jamfpro.AuthConfig{
     InstanceDomain:           "https://your-instance.jamfcloud.com",
-    AuthMethod:               client.AuthMethodOAuth2, // or client.AuthMethodBasic
+    AuthMethod:               constants.AuthMethodOAuth2, // or constants.AuthMethodBasic
     ClientID:                 "your-client-id",
     ClientSecret:             "your-client-secret",
     TokenRefreshBufferPeriod: 5 * time.Minute,  // refresh before expiry
@@ -83,49 +84,49 @@ The SDK client supports extensive configuration through functional options. Belo
 #### Basic Configuration
 
 ```go
-client.WithBaseURL("https://...")                    // Custom base URL
-client.WithTimeout(30*time.Second)                   // Request timeout
-client.WithRetryCount(3)                             // Number of retry attempts
-client.WithRetryWaitTime(2*time.Second)              // Initial retry wait time
-client.WithRetryMaxWaitTime(10*time.Second)          // Maximum retry wait time
-client.WithTotalRetryDuration(2*time.Minute)         // Total retry budget
+jamfpro.WithBaseURL("https://...")                    // Custom base URL
+jamfpro.WithTimeout(30*time.Second)                   // Request timeout
+jamfpro.WithRetryCount(3)                             // Number of retry attempts
+jamfpro.WithRetryWaitTime(2*time.Second)              // Initial retry wait time
+jamfpro.WithRetryMaxWaitTime(10*time.Second)          // Maximum retry wait time
+jamfpro.WithTotalRetryDuration(2*time.Minute)         // Total retry budget
 ```
 
 #### TLS/Security
 
 ```go
-client.WithTLSClientConfig(tlsConfig)                // Custom TLS configuration
-client.WithInsecureSkipVerify()                      // Skip cert verification (dev only!)
+jamfpro.WithTLSClientConfig(tlsConfig)                // Custom TLS configuration
+jamfpro.WithInsecureSkipVerify()                      // Skip cert verification (dev only!)
 ```
 
 #### Network
 
 ```go
-client.WithProxy("http://proxy:8080")                // HTTP/HTTPS/SOCKS5 proxy
-client.WithTransport(customTransport)                // Custom HTTP transport
+jamfpro.WithProxy("http://proxy:8080")                // HTTP/HTTPS/SOCKS5 proxy
+jamfpro.WithTransport(customTransport)                // Custom HTTP transport
 ```
 
 #### Headers
 
 ```go
-client.WithUserAgent("MyApp/1.0")                    // Set User-Agent header
-client.WithGlobalHeader("X-Custom-Header", "value")  // Add single global header
-client.WithGlobalHeaders(map[string]string{...})     // Add multiple global headers
+jamfpro.WithUserAgent("MyApp/1.0")                    // Set User-Agent header
+jamfpro.WithGlobalHeader("X-Custom-Header", "value")  // Add single global header
+jamfpro.WithGlobalHeaders(map[string]string{...})     // Add multiple global headers
 ```
 
 #### Observability
 
 ```go
-client.WithLogger(zapLogger)                         // Structured logging with zap
+jamfpro.WithLogger(zapLogger)                         // Structured logging with zap
 jamfClient.EnableTracing(otelConfig)                 // OpenTelemetry distributed tracing (call after NewClient)
-client.WithDebug()                                   // Enable debug mode (dev only!)
+jamfpro.WithDebug()                                   // Enable debug mode (dev only!)
 ```
 
 #### Concurrency & Rate Limiting
 
 ```go
-client.WithMaxConcurrentRequests(5)                  // Limit concurrent requests (Jamf Pro recommendation: ≤5)
-client.WithMandatoryRequestDelay(100*time.Millisecond) // Add delay between requests
+jamfpro.WithMaxConcurrentRequests(5)                  // Limit concurrent requests (Jamf Pro recommendation: ≤5)
+jamfpro.WithMandatoryRequestDelay(100*time.Millisecond) // Add delay between requests
 ```
 
 #### Example: Production Configuration
@@ -135,23 +136,22 @@ import (
     "time"
     "go.uber.org/zap"
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 logger, _ := zap.NewProduction()
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithTimeout(30*time.Second),
-    client.WithRetryCount(3),
-    client.WithLogger(logger),
-    client.WithMaxConcurrentRequests(5),
-    client.WithGlobalHeader("X-Application-Name", "MyJamfIntegration"),
+    jamfpro.WithTimeout(30*time.Second),
+    jamfpro.WithRetryCount(3),
+    jamfpro.WithLogger(logger),
+    jamfpro.WithMaxConcurrentRequests(5),
+    jamfpro.WithGlobalHeader("X-Application-Name", "MyJamfIntegration"),
 )
 
 // Enable OpenTelemetry tracing (optional)
-jamfClient.EnableTracing(&client.OTelConfig{
+jamfClient.EnableTracing(&jamfpro.OTelConfig{
     ServiceName: "my-jamf-integration",
 })
 ```

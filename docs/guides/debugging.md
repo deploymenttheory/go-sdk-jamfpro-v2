@@ -37,23 +37,22 @@ import (
     "log"
 
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-    authConfig := client.AuthConfigFromEnv()
+    authConfig := jamfpro.AuthConfigFromEnv()
 
     // Enable debug mode
     jamfClient, err := jamfpro.NewClient(
         authConfig,
-        client.WithDebug(),
+        jamfpro.WithDebug(),
     )
     if err != nil {
         log.Fatal(err)
     }
 
     // Make a request - detailed output will be printed
-    result, _, err := jamfClient.Buildings.ListV1(context.Background(), nil)
+    result, _, err := jamfClient.JamfProAPI.Buildings.ListV1(context.Background(), nil)
     if err != nil {
         log.Fatal(err)
     }
@@ -99,7 +98,7 @@ Enable standard debug output:
 ```go
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithDebug(),
+    jamfpro.WithDebug(),
 )
 ```
 
@@ -125,8 +124,8 @@ logger, _ := zap.NewDevelopment()
 
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithLogger(logger),
-    client.WithDebug(),
+    jamfpro.WithLogger(logger),
+    jamfpro.WithDebug(),
 )
 ```
 
@@ -139,13 +138,13 @@ jamfClient, err := jamfpro.NewClient(
 Enable debug mode based on environment:
 
 ```go
-var options []client.ClientOption
+var options []jamfpro.ClientOption
 
 if os.Getenv("DEBUG") == "true" {
-    options = append(options, client.WithDebug())
+    options = append(options, jamfpro.WithDebug())
 }
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(authConfig, options...)
 ```
 
@@ -211,14 +210,14 @@ RESPONSE BODY:
 
 ```go
 // Enable debug to see authentication process
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithDebug(),
+    jamfpro.WithDebug(),
 )
 
 // Check if bearer token is being obtained and used correctly
-_, _, err := jamfClient.Buildings.ListV1(ctx, nil)
+_, _, err := jamfClient.JamfProAPI.Buildings.ListV1(ctx, nil)
 // Look for "Authorization" header in debug output
 ```
 
@@ -228,13 +227,13 @@ _, _, err := jamfClient.Buildings.ListV1(ctx, nil)
 // Verify POST request body format
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithDebug(),
+    jamfpro.WithDebug(),
 )
 
 // Debug shows actual JSON being sent
 import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/buildings"
 
-_, _, err := jamfClient.Buildings.CreateV1(ctx, &buildings.RequestBuilding{
+_, _, err := jamfClient.JamfProAPI.Buildings.CreateV1(ctx, &buildings.RequestBuilding{
     Name: "New Building",
 })
 ```
@@ -245,12 +244,12 @@ _, _, err := jamfClient.Buildings.CreateV1(ctx, &buildings.RequestBuilding{
 // Debug proxy connections
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithProxy("http://proxy:8080"),
-    client.WithDebug(),
+    jamfpro.WithProxy("http://proxy:8080"),
+    jamfpro.WithDebug(),
 )
 
 // See if requests are going through proxy
-_, _, err := jamfClient.Buildings.ListV1(ctx, nil)
+_, _, err := jamfClient.JamfProAPI.Buildings.ListV1(ctx, nil)
 ```
 
 ### Scenario 4: TLS Certificate Issues
@@ -259,11 +258,11 @@ _, _, err := jamfClient.Buildings.ListV1(ctx, nil)
 // Debug TLS handshake
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithDebug(),
+    jamfpro.WithDebug(),
 )
 
 // See TLS-related errors in debug output
-_, _, err := jamfClient.Buildings.ListV1(ctx, nil)
+_, _, err := jamfClient.JamfProAPI.Buildings.ListV1(ctx, nil)
 ```
 
 ### Scenario 5: Pagination Issues
@@ -272,11 +271,11 @@ _, _, err := jamfClient.Buildings.ListV1(ctx, nil)
 // Debug pagination parameters
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithDebug(),
+    jamfpro.WithDebug(),
 )
 
 // See query parameters in URL
-result, _, _ := jamfClient.Buildings.ListV1(ctx, map[string]string{
+result, _, _ := jamfClient.JamfProAPI.Buildings.ListV1(ctx, map[string]string{
     "page":      "0",
     "page-size": "50",
 })
@@ -312,13 +311,13 @@ Debug mode logs sensitive information:
 
 ```go
 // Simply omit WithDebug() option
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(authConfig)
 
 // Or conditionally disable
-var options []client.ClientOption
+var options []jamfpro.ClientOption
 if os.Getenv("ENVIRONMENT") != "production" {
-    options = append(options, client.WithDebug())
+    options = append(options, jamfpro.WithDebug())
 }
 jamfClient, err := jamfpro.NewClient(authConfig, options...)
 ```
@@ -337,8 +336,8 @@ mitmproxy -p 8080
 ```go
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithProxy("http://127.0.0.1:8080"),
-    client.WithInsecureSkipVerify(), // For proxy SSL inspection
+    jamfpro.WithProxy("http://127.0.0.1:8080"),
+    jamfpro.WithInsecureSkipVerify(), // For proxy SSL inspection
 )
 ```
 
@@ -364,7 +363,7 @@ import "go.uber.org/zap"
 logger, _ := zap.NewProduction()
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithLogger(logger),
+    jamfpro.WithLogger(logger),
 )
 
 // Log specific operations
@@ -377,18 +376,20 @@ logger.Info("Making API call",
 ## Testing with Debug Mode
 
 ```go
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+
 func TestWithDebug(t *testing.T) {
     // Enable debug for specific test
-    authConfig := &client.AuthConfig{
+    authConfig := &jamfpro.AuthConfig{
         InstanceDomain: "https://test.jamfcloud.com",
-        AuthMethod:     client.AuthMethodOAuth2,
+        AuthMethod:     constants.AuthMethodOAuth2,
         ClientID:       "test-id",
         ClientSecret:   "test-secret",
     }
 
     jamfClient, err := jamfpro.NewClient(
         authConfig,
-        client.WithDebug(),
+        jamfpro.WithDebug(),
     )
     require.NoError(t, err)
 
@@ -403,6 +404,7 @@ func TestWithDebug(t *testing.T) {
 import (
     "bytes"
     "log"
+    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 )
 
 func TestDebugOutput(t *testing.T) {
@@ -411,16 +413,16 @@ func TestDebugOutput(t *testing.T) {
     log.SetOutput(&buf)
     defer log.SetOutput(os.Stderr)
 
-    authConfig := &client.AuthConfig{
+    authConfig := &jamfpro.AuthConfig{
         InstanceDomain: "https://test.jamfcloud.com",
-        AuthMethod:     client.AuthMethodOAuth2,
+        AuthMethod:     constants.AuthMethodOAuth2,
         ClientID:       "test-id",
         ClientSecret:   "test-secret",
     }
 
     jamfClient, _ := jamfpro.NewClient(
         authConfig,
-        client.WithDebug(),
+        jamfpro.WithDebug(),
     )
 
     // Make request...
