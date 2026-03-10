@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,12 +15,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-patch-policies
 	PatchPolicies struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new patch policies Service backed by the provided HTTP client.
-func NewPatchPolicies(client transport.HTTPClient) *PatchPolicies {
+func NewPatchPolicies(client client.Client) *PatchPolicies {
 	return &PatchPolicies{client: client}
 }
 

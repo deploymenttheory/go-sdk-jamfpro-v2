@@ -3,7 +3,7 @@ package computer_groups
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceComputerGroup represents a Jamf Pro Classic API computer group resource.
@@ -12,7 +12,7 @@ type ResourceComputerGroup struct {
 	ID        int                      `xml:"id,omitempty"`
 	Name      string                   `xml:"name"`
 	IsSmart   bool                     `xml:"is_smart"`
-	Site      *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site      *models.SharedResourceSite `xml:"site,omitempty"`
 	Criteria  *CriteriaContainer       `xml:"criteria,omitempty"`
 	Computers []Computer               `xml:"computers>computer,omitempty"`
 }
@@ -37,7 +37,7 @@ type RequestComputerGroup struct {
 	XMLName   xml.Name                 `xml:"computer_group"`
 	Name      string                   `xml:"name"`
 	IsSmart   bool                     `xml:"is_smart"`
-	Site      *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site      *models.SharedResourceSite `xml:"site,omitempty"`
 	Criteria  *CriteriaContainer       `xml:"criteria,omitempty"`
 	Computers []Computer               `xml:"computers>computer,omitempty"`
 }
@@ -52,7 +52,7 @@ type CreateUpdateResponse struct {
 // CriteriaContainer wraps the criteria for smart computer groups.
 type CriteriaContainer struct {
 	Size      int                            `xml:"size,omitempty"`
-	Criterion []shared.SharedSubsetCriteria  `xml:"criterion,omitempty"`
+	Criterion []models.SharedSubsetCriteria  `xml:"criterion,omitempty"`
 }
 
 // Computer represents a computer in a computer group.

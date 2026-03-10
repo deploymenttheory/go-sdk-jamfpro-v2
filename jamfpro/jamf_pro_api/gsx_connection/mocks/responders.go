@@ -8,10 +8,11 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 //go:embed validate_get.json
@@ -36,7 +37,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// GSXConnectionMock is a test double implementing transport.HTTPClient.
+// GSXConnectionMock is a test double implementing client.Client.
 type GSXConnectionMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -84,7 +85,7 @@ func (m *GSXConnectionMock) dispatch(method, path string, result any) (*resty.Re
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
@@ -136,7 +137,7 @@ func (m *GSXConnectionMock) PostForm(ctx context.Context, path string, _ map[str
 	return m.dispatch("POST", path, result)
 }
 
-func (m *GSXConnectionMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *GSXConnectionMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -185,7 +186,7 @@ func (m *GSXConnectionMock) GetPaginated(ctx context.Context, path string, rsqlQ
 	return resp, nil
 }
 
-func (m *GSXConnectionMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *GSXConnectionMock) InvalidateToken() error                    { return nil }
-func (m *GSXConnectionMock) KeepAliveToken() error                     { return nil }
-func (m *GSXConnectionMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *GSXConnectionMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *GSXConnectionMock) InvalidateToken() error                { return nil }
+func (m *GSXConnectionMock) KeepAliveToken() error                 { return nil }
+func (m *GSXConnectionMock) GetLogger() *zap.Logger                { return m.logger }

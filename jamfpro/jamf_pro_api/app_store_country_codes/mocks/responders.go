@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -21,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// AppStoreCountryCodesMock implements transport.HTTPClient for tests.
+// AppStoreCountryCodesMock implements client.Client for tests.
 type AppStoreCountryCodesMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -63,7 +64,7 @@ func (m *AppStoreCountryCodesMock) PostWithQuery(ctx context.Context, path strin
 func (m *AppStoreCountryCodesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AppStoreCountryCodesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AppStoreCountryCodesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *AppStoreCountryCodesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -98,10 +99,10 @@ func (m *AppStoreCountryCodesMock) GetPaginated(ctx context.Context, path string
 	}
 	return resp, nil
 }
-func (m *AppStoreCountryCodesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *AppStoreCountryCodesMock) InvalidateToken() error                    { return nil }
-func (m *AppStoreCountryCodesMock) KeepAliveToken() error                     { return nil }
-func (m *AppStoreCountryCodesMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *AppStoreCountryCodesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *AppStoreCountryCodesMock) InvalidateToken() error                { return nil }
+func (m *AppStoreCountryCodesMock) KeepAliveToken() error                 { return nil }
+func (m *AppStoreCountryCodesMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *AppStoreCountryCodesMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
@@ -109,7 +110,7 @@ func (m *AppStoreCountryCodesMock) dispatch(method, path string, result any) (*r
 		return nil, fmt.Errorf("AppStoreCountryCodesMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}

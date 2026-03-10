@@ -1,6 +1,8 @@
 package cloud_idp
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // ListResponse represents the paginated response for Cloud Identity Providers.
 type ListResponse struct {
@@ -10,11 +12,11 @@ type ListResponse struct {
 
 // ResourceCloudIdProvider represents a Cloud Identity Provider.
 type ResourceCloudIdProvider struct {
-	ID                   string `json:"id"`
-	DisplayName          string `json:"displayName"`
-	Enabled              bool   `json:"enabled"`
-	ProviderName         string `json:"providerName"`
-	ProviderDescription  string `json:"providerDescription"`
+	ID                  string `json:"id"`
+	DisplayName         string `json:"displayName"`
+	Enabled             bool   `json:"enabled"`
+	ProviderName        string `json:"providerName"`
+	ProviderDescription string `json:"providerDescription"`
 }
 
 // ResourceCloudIdProviderDetails represents detailed Cloud Identity Provider configuration.
@@ -26,10 +28,10 @@ type ResourceCloudIdProviderDetails struct {
 
 // ExportRequest represents the request body for exporting Cloud Identity Providers.
 type ExportRequest struct {
-	Page     *int      `json:"page,omitempty"`
-	PageSize *int      `json:"pageSize,omitempty"`
-	Sort     []string  `json:"sort,omitempty"`
-	Filter   *string   `json:"filter,omitempty"`
+	Page     *int          `json:"page,omitempty"`
+	PageSize *int          `json:"pageSize,omitempty"`
+	Sort     []string      `json:"sort,omitempty"`
+	Filter   *string       `json:"filter,omitempty"`
 	Fields   []ExportField `json:"fields,omitempty"`
 }
 
@@ -39,13 +41,13 @@ type ExportField struct {
 }
 
 // HistoryResponse represents the paginated history for a Cloud Identity Provider.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // HistoryItem represents a single history entry.
-type HistoryItem = shared.SharedHistoryItem
+type HistoryItem = models.SharedHistoryItem
 
 // HistoryNoteRequest represents the request for adding a history note.
-type HistoryNoteRequest = shared.SharedHistoryNoteRequest
+type HistoryNoteRequest = models.SharedHistoryNoteRequest
 
 // TestGroupSearchRequest represents the request for testing group search.
 type TestGroupSearchRequest struct {
@@ -54,7 +56,7 @@ type TestGroupSearchRequest struct {
 
 // TestGroupSearchResponse represents the response from testing group search.
 type TestGroupSearchResponse struct {
-	TotalCount int              `json:"totalCount"`
+	TotalCount int               `json:"totalCount"`
 	Results    []TestGroupResult `json:"results"`
 }
 
@@ -74,17 +76,17 @@ type TestUserSearchRequest struct {
 
 // TestUserSearchResponse represents the response from testing user search.
 type TestUserSearchResponse struct {
-	TotalCount int             `json:"totalCount"`
+	TotalCount int              `json:"totalCount"`
 	Results    []TestUserResult `json:"results"`
 }
 
 // TestUserResult represents a single user search result.
 type TestUserResult struct {
-	DistinguishedName string           `json:"distinguishedName"`
-	ID                string           `json:"id"`
-	UUID              string           `json:"uuid"`
-	ServerID          string           `json:"serverId"`
-	Name              string           `json:"name"`
+	DistinguishedName string             `json:"distinguishedName"`
+	ID                string             `json:"id"`
+	UUID              string             `json:"uuid"`
+	ServerID          string             `json:"serverId"`
+	Name              string             `json:"name"`
 	Attributes        TestUserAttributes `json:"attributes"`
 }
 
@@ -107,6 +109,6 @@ type TestUserMembershipRequest struct {
 
 // TestUserMembershipResponse represents the response from testing user membership.
 type TestUserMembershipResponse struct {
-	Username  string `json:"username"`
-	IsMember  bool   `json:"isMember"`
+	Username string `json:"username"`
+	IsMember bool   `json:"isMember"`
 }

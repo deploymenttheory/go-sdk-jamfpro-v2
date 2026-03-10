@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,12 +14,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-log-flushing
 	LogFlushing struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService creates a new log flushing service.
-func NewLogFlushing(client transport.HTTPClient) *LogFlushing {
+func NewLogFlushing(client client.Client) *LogFlushing {
 	return &LogFlushing{client: client}
 }
 

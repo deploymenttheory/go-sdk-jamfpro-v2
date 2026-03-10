@@ -10,11 +10,12 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -109,7 +110,7 @@ func (m *SmartUserGroupsMock) PostForm(ctx context.Context, path string, _ map[s
 	return m.dispatch("POST", path, result)
 }
 
-func (m *SmartUserGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SmartUserGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -151,7 +152,7 @@ func (m *SmartUserGroupsMock) GetPaginated(ctx context.Context, path string, rsq
 	return resp, nil
 }
 
-func (m *SmartUserGroupsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *SmartUserGroupsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *SmartUserGroupsMock) InvalidateToken() error                    { return nil }
 func (m *SmartUserGroupsMock) KeepAliveToken() error                     { return nil }
 func (m *SmartUserGroupsMock) GetLogger() *zap.Logger                    { return m.logger }
@@ -184,11 +185,11 @@ func (m *SmartUserGroupsMock) dispatch(method, path string, result any) (*resty.
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("SmartUserGroupsMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("SmartUserGroupsMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -24,7 +25,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// IBeaconsMock is a test double implementing transport.HTTPClient for Classic API iBeacons.
+// IBeaconsMock is a test double implementing client.Client for Classic API iBeacons.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -116,7 +117,7 @@ func (m *IBeaconsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/ibeacons/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): An iBeacon with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *IBeaconsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -135,7 +136,7 @@ func (m *IBeaconsMock) PostForm(ctx context.Context, path string, _ map[string]s
 	return m.dispatch("POST", path, result)
 }
 
-func (m *IBeaconsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *IBeaconsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -177,10 +178,10 @@ func (m *IBeaconsMock) GetPaginated(ctx context.Context, path string, rsqlQuery 
 	return resp, nil
 }
 
-func (m *IBeaconsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *IBeaconsMock) InvalidateToken() error                    { return nil }
-func (m *IBeaconsMock) KeepAliveToken() error                     { return nil }
-func (m *IBeaconsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *IBeaconsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *IBeaconsMock) InvalidateToken() error                { return nil }
+func (m *IBeaconsMock) KeepAliveToken() error                 { return nil }
+func (m *IBeaconsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -213,11 +214,11 @@ func (m *IBeaconsMock) dispatch(method, path string, result any) (*resty.Respons
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("IBeaconsMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("IBeaconsMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

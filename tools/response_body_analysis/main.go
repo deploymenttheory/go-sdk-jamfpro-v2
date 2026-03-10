@@ -37,7 +37,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/static_user_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/users"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/webhooks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"resty.dev/v3"
 )
 
@@ -1088,7 +1088,7 @@ func exportClassicSmartUserGroups(ctx context.Context, c *jamfpro.Client) {
 		IsSmart: true,
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Username",
 					Priority:   0,

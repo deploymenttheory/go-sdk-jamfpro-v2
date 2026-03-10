@@ -3,7 +3,7 @@ package startup_status
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -13,11 +13,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_startup-status
 	StartupStatus struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewStartupStatus(client transport.HTTPClient) *StartupStatus {
+func NewStartupStatus(client client.Client) *StartupStatus {
 	return &StartupStatus{client: client}
 }
 

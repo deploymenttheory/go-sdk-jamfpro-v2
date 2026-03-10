@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -140,7 +141,7 @@ func (m *ManagedSoftwareUpdatesMock) dispatch(method, path string, result any) (
 		return nil, fmt.Errorf("%s", r.errMsg)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -164,7 +165,7 @@ func (m *ManagedSoftwareUpdatesMock) PostWithQuery(ctx context.Context, path str
 func (m *ManagedSoftwareUpdatesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ManagedSoftwareUpdatesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ManagedSoftwareUpdatesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ManagedSoftwareUpdatesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -205,7 +206,7 @@ func (m *ManagedSoftwareUpdatesMock) GetPaginated(ctx context.Context, path stri
 	}
 	return resp, nil
 }
-func (m *ManagedSoftwareUpdatesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *ManagedSoftwareUpdatesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ManagedSoftwareUpdatesMock) InvalidateToken() error                    { return nil }
 func (m *ManagedSoftwareUpdatesMock) KeepAliveToken() error                     { return nil }
 func (m *ManagedSoftwareUpdatesMock) GetLogger() *zap.Logger                    { return m.logger }

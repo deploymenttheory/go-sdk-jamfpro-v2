@@ -8,10 +8,11 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -24,7 +25,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// PatchManagementMock is a test double implementing transport.HTTPClient for Patch Management operations.
+// PatchManagementMock is a test double implementing client.Client for Patch Management operations.
 // Responses are keyed by "METHOD path". Use RegisterAcceptDisclaimerMock to set up responses.
 type PatchManagementMock struct {
 	responses map[string]registeredResponse
@@ -83,7 +84,7 @@ func (m *PatchManagementMock) Get(ctx context.Context, path string, rsqlQuery ma
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *PatchManagementMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -100,7 +101,7 @@ func (m *PatchManagementMock) Post(ctx context.Context, path string, body any, h
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *PatchManagementMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -111,7 +112,7 @@ func (m *PatchManagementMock) PostForm(ctx context.Context, path string, formDat
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-func (m *PatchManagementMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *PatchManagementMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
@@ -129,7 +130,7 @@ func (m *PatchManagementMock) Put(ctx context.Context, path string, body any, he
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *PatchManagementMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -146,7 +147,7 @@ func (m *PatchManagementMock) Patch(ctx context.Context, path string, body any, 
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *PatchManagementMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
@@ -163,7 +164,7 @@ func (m *PatchManagementMock) Delete(ctx context.Context, path string, rsqlQuery
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *PatchManagementMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -179,14 +180,14 @@ func (m *PatchManagementMock) GetBytes(ctx context.Context, path string, rsqlQue
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
 func (m *PatchManagementMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in PatchManagementMock")
 }
 
-func (m *PatchManagementMock) RSQLBuilder() transport.RSQLFilterBuilder {
+func (m *PatchManagementMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 

@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ebooks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 			DeploymentType:  "Install Automatically/Prompt Users to Install",
 			FileType:        "PDF",
 			DeployAsManaged: false,
-			Site:            shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:            models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope: ebooks.SubsetScope{
 			AllComputers:     true,

@@ -3,7 +3,7 @@ package app_store_country_codes
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -13,11 +13,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/app-store-country-codes
 	AppStoreCountryCodes struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewAppStoreCountryCodes(client transport.HTTPClient) *AppStoreCountryCodes {
+func NewAppStoreCountryCodes(client client.Client) *AppStoreCountryCodes {
 	return &AppStoreCountryCodes{client: client}
 }
 

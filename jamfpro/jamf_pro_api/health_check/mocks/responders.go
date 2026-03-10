@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// HealthCheckMock implements transport.HTTPClient for tests.
+// HealthCheckMock implements client.Client for tests.
 type HealthCheckMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -69,7 +70,7 @@ func (m *HealthCheckMock) PostWithQuery(ctx context.Context, path string, _ map[
 func (m *HealthCheckMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *HealthCheckMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *HealthCheckMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *HealthCheckMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -104,18 +105,18 @@ func (m *HealthCheckMock) GetPaginated(ctx context.Context, path string, q map[s
 	}
 	return resp, nil
 }
-func (m *HealthCheckMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *HealthCheckMock) InvalidateToken() error                    { return nil }
-func (m *HealthCheckMock) KeepAliveToken() error                     { return nil }
-func (m *HealthCheckMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *HealthCheckMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *HealthCheckMock) InvalidateToken() error                { return nil }
+func (m *HealthCheckMock) KeepAliveToken() error                 { return nil }
+func (m *HealthCheckMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *HealthCheckMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("HealthCheckMock: no response for %s %s", method, path)
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("HealthCheckMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}

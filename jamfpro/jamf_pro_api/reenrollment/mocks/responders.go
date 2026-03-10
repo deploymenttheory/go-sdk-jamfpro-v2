@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// ReenrollmentMock is a test double implementing transport.HTTPClient.
+// ReenrollmentMock is a test double implementing client.Client.
 type ReenrollmentMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -63,10 +64,10 @@ func (m *ReenrollmentMock) RegisterExportHistoryMock() {
 func (m *ReenrollmentMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("ReenrollmentMock: no response for %s %s", method, path)
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("ReenrollmentMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -90,7 +91,7 @@ func (m *ReenrollmentMock) PostWithQuery(ctx context.Context, path string, _ map
 func (m *ReenrollmentMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ReenrollmentMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ReenrollmentMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ReenrollmentMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -131,7 +132,7 @@ func (m *ReenrollmentMock) GetPaginated(ctx context.Context, path string, _ map[
 	}
 	return resp, nil
 }
-func (m *ReenrollmentMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ReenrollmentMock) InvalidateToken() error                    { return nil }
-func (m *ReenrollmentMock) KeepAliveToken() error                     { return nil }
-func (m *ReenrollmentMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *ReenrollmentMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ReenrollmentMock) InvalidateToken() error                { return nil }
+func (m *ReenrollmentMock) KeepAliveToken() error                 { return nil }
+func (m *ReenrollmentMock) GetLogger() *zap.Logger                { return m.logger }

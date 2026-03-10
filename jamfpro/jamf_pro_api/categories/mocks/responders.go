@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -23,7 +24,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// CategoriesMock is a test double implementing transport.HTTPClient.
+// CategoriesMock is a test double implementing client.Client.
 // Responses are keyed by "METHOD:path" and loaded from JSON fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 type CategoriesMock struct {
@@ -149,7 +150,7 @@ func (m *CategoriesMock) RegisterAddCategoryHistoryNotesErrorMock() {
 	m.registerError("POST", "/api/v1/categories/1/history", 500, "error_not_found.json")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *CategoriesMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -168,7 +169,7 @@ func (m *CategoriesMock) PostForm(ctx context.Context, path string, _ map[string
 	return m.dispatch("POST", path, result)
 }
 
-func (m *CategoriesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CategoriesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -217,10 +218,10 @@ func (m *CategoriesMock) GetPaginated(ctx context.Context, path string, rsqlQuer
 	return resp, nil
 }
 
-func (m *CategoriesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *CategoriesMock) InvalidateToken() error                    { return nil }
-func (m *CategoriesMock) KeepAliveToken() error                     { return nil }
-func (m *CategoriesMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *CategoriesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *CategoriesMock) InvalidateToken() error                { return nil }
+func (m *CategoriesMock) KeepAliveToken() error                 { return nil }
+func (m *CategoriesMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -263,7 +264,7 @@ func (m *CategoriesMock) dispatch(method, path string, result any) (*resty.Respo
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

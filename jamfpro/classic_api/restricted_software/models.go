@@ -3,7 +3,7 @@ package restricted_software
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceRestrictedSoftware represents a Jamf Pro Classic API restricted software resource.
@@ -51,7 +51,7 @@ type General struct {
 	KillProcess           bool                       `xml:"kill_process"`
 	DeleteExecutable      bool                       `xml:"delete_executable"`
 	DisplayMessage        string                     `xml:"display_message"`
-	Site                  *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site                  *models.SharedResourceSite `xml:"site,omitempty"`
 }
 
 // RequestGeneral is the general section for create/update requests (excludes ID).
@@ -63,7 +63,7 @@ type RequestGeneral struct {
 	KillProcess           bool                       `xml:"kill_process"`
 	DeleteExecutable      bool                       `xml:"delete_executable"`
 	DisplayMessage        string                     `xml:"display_message"`
-	Site                  *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site                  *models.SharedResourceSite `xml:"site,omitempty"`
 }
 
 // Scope defines the targeting and exclusions for restricted software.

@@ -9,10 +9,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -73,11 +74,11 @@ func (m *GroupsMock) Get(ctx context.Context, endpoint string, params map[string
 
 	if result != nil && data != nil {
 		if err := json.Unmarshal(data, result); err != nil {
-			return shared.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *GroupsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -88,11 +89,11 @@ func (m *GroupsMock) Post(ctx context.Context, endpoint string, body any, header
 
 	if result != nil && data != nil {
 		if err := json.Unmarshal(data, result); err != nil {
-			return shared.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *GroupsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -103,11 +104,11 @@ func (m *GroupsMock) Put(ctx context.Context, endpoint string, body any, headers
 
 	if result != nil && data != nil {
 		if err := json.Unmarshal(data, result); err != nil {
-			return shared.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *GroupsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -118,11 +119,11 @@ func (m *GroupsMock) Patch(ctx context.Context, endpoint string, body any, heade
 
 	if result != nil && data != nil {
 		if err := json.Unmarshal(data, result); err != nil {
-			return shared.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *GroupsMock) Delete(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, result any) (*resty.Response, error) {
@@ -131,11 +132,11 @@ func (m *GroupsMock) Delete(ctx context.Context, endpoint string, params map[str
 		return nil, fmt.Errorf("no mock registered for DELETE %s", endpoint)
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *GroupsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("DeleteWithBody not implemented in mock")
+	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("DeleteWithBody not implemented in mock")
 }
 
 func (m *GroupsMock) GetBytes(ctx context.Context, endpoint string, params map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
@@ -144,7 +145,7 @@ func (m *GroupsMock) GetBytes(ctx context.Context, endpoint string, params map[s
 		return nil, nil, fmt.Errorf("no mock registered for GET %s", endpoint)
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), data, nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), data, nil
 }
 
 func (m *GroupsMock) GetPaginated(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, mergePage func(page []byte) error) (*resty.Response, error) {
@@ -157,32 +158,32 @@ func (m *GroupsMock) GetPaginated(ctx context.Context, endpoint string, params m
 			Results json.RawMessage `json:"results"`
 		}
 		if err := json.Unmarshal(data, &page); err != nil {
-			return shared.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
 		}
 		if err := mergePage(page.Results); err != nil {
-			return shared.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
 		}
 	}
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
-func (m *GroupsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostMultipart not implemented in mock")
+func (m *GroupsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
+	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostMultipart not implemented in mock")
 }
 
 func (m *GroupsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostWithQuery not implemented in mock")
+	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostWithQuery not implemented in mock")
 }
 
 func (m *GroupsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostForm not implemented in mock")
+	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostForm not implemented in mock")
 }
 
 func (m *GroupsMock) GetLogger() *zap.Logger {
 	return nil
 }
 
-func (m *GroupsMock) RSQLBuilder() transport.RSQLFilterBuilder {
+func (m *GroupsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 

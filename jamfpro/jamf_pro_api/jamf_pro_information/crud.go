@@ -3,7 +3,7 @@ package jamf_pro_information
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -13,11 +13,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-pro-information
 	JamfProInformation struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewJamfProInformation(client transport.HTTPClient) *JamfProInformation {
+func NewJamfProInformation(client client.Client) *JamfProInformation {
 	return &JamfProInformation{client: client}
 }
 

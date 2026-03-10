@@ -1,6 +1,6 @@
 package gsx_connection
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 
 // ResourceGSXConnection represents the GSX connection settings.
 type ResourceGSXConnection struct {
@@ -22,13 +22,13 @@ type GsxKeystore struct {
 }
 
 // HistoryObject is an alias to the shared history item struct with string IDs.
-type HistoryObject = shared.SharedHistoryItemString
+type HistoryObject = models.SharedHistoryItemString
 
 // HistoryResponse is an alias to the shared history response struct with string IDs.
-type HistoryResponse = shared.SharedHistoryResponseString
+type HistoryResponse = models.SharedHistoryResponseString
 
 // AddHistoryNoteRequest is an alias to the shared history note request struct.
-type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
+type AddHistoryNoteRequest = models.SharedHistoryNoteRequest
 
 // AddHistoryNoteResponse represents the response after adding a history note.
-type AddHistoryNoteResponse = shared.SharedHistoryNoteResponse
+type AddHistoryNoteResponse = models.SharedHistoryNoteResponse

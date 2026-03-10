@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -23,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// ComputerInventoryCollectionMock is a test double implementing transport.HTTPClient for Classic API computer inventory collection.
+// ComputerInventoryCollectionMock is a test double implementing client.Client for Classic API computer inventory collection.
 type ComputerInventoryCollectionMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -63,7 +64,7 @@ func (m *ComputerInventoryCollectionMock) PostWithQuery(ctx context.Context, pat
 func (m *ComputerInventoryCollectionMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ComputerInventoryCollectionMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ComputerInventoryCollectionMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ComputerInventoryCollectionMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -98,10 +99,10 @@ func (m *ComputerInventoryCollectionMock) GetPaginated(ctx context.Context, path
 	}
 	return resp, nil
 }
-func (m *ComputerInventoryCollectionMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ComputerInventoryCollectionMock) InvalidateToken() error                    { return nil }
-func (m *ComputerInventoryCollectionMock) KeepAliveToken() error                     { return nil }
-func (m *ComputerInventoryCollectionMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *ComputerInventoryCollectionMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ComputerInventoryCollectionMock) InvalidateToken() error                { return nil }
+func (m *ComputerInventoryCollectionMock) KeepAliveToken() error                 { return nil }
+func (m *ComputerInventoryCollectionMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *ComputerInventoryCollectionMock) register(method, path string, statusCode int, fixture string) {
 	var body []byte
@@ -119,11 +120,11 @@ func (m *ComputerInventoryCollectionMock) dispatch(method, path string, result a
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("ComputerInventoryCollectionMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("ComputerInventoryCollectionMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

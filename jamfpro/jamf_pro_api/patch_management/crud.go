@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"resty.dev/v3"
 )
 
@@ -14,12 +14,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-patch-management-accept-disclaimer
 	PatchManagement struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService creates a new Patch Management service.
-func NewPatchManagement(client transport.HTTPClient) *PatchManagement {
+func NewPatchManagement(client client.Client) *PatchManagement {
 	return &PatchManagement{client: client}
 }
 

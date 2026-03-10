@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -56,7 +57,7 @@ func (m *DeclarativeDeviceManagementMock) dispatch(method, path string, result a
 		return nil, fmt.Errorf("DeclarativeDeviceManagementMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -80,7 +81,7 @@ func (m *DeclarativeDeviceManagementMock) PostWithQuery(ctx context.Context, pat
 func (m *DeclarativeDeviceManagementMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *DeclarativeDeviceManagementMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *DeclarativeDeviceManagementMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *DeclarativeDeviceManagementMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -115,7 +116,7 @@ func (m *DeclarativeDeviceManagementMock) GetPaginated(ctx context.Context, path
 	}
 	return resp, nil
 }
-func (m *DeclarativeDeviceManagementMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *DeclarativeDeviceManagementMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *DeclarativeDeviceManagementMock) InvalidateToken() error                    { return nil }
 func (m *DeclarativeDeviceManagementMock) KeepAliveToken() error                     { return nil }
 func (m *DeclarativeDeviceManagementMock) GetLogger() *zap.Logger                    { return m.logger }

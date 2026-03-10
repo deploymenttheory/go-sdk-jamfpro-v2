@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// SoftwareUpdateServersMock is a test double implementing transport.HTTPClient for Classic API software update servers.
+// SoftwareUpdateServersMock is a test double implementing client.Client for Classic API software update servers.
 type SoftwareUpdateServersMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -96,7 +97,7 @@ func (m *SoftwareUpdateServersMock) PostWithQuery(ctx context.Context, path stri
 func (m *SoftwareUpdateServersMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *SoftwareUpdateServersMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SoftwareUpdateServersMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *SoftwareUpdateServersMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -131,10 +132,10 @@ func (m *SoftwareUpdateServersMock) GetPaginated(ctx context.Context, path strin
 	}
 	return resp, nil
 }
-func (m *SoftwareUpdateServersMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *SoftwareUpdateServersMock) InvalidateToken() error                    { return nil }
-func (m *SoftwareUpdateServersMock) KeepAliveToken() error                     { return nil }
-func (m *SoftwareUpdateServersMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *SoftwareUpdateServersMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *SoftwareUpdateServersMock) InvalidateToken() error                { return nil }
+func (m *SoftwareUpdateServersMock) KeepAliveToken() error                 { return nil }
+func (m *SoftwareUpdateServersMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *SoftwareUpdateServersMock) register(method, path string, statusCode int, fixture string) {
 	var body []byte
@@ -164,11 +165,11 @@ func (m *SoftwareUpdateServersMock) dispatch(method, path string, result any) (*
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("SoftwareUpdateServersMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("SoftwareUpdateServersMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

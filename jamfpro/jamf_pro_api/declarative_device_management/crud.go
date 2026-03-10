@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,11 +14,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-ddm-clientmanagementid-sync
 	DeclarativeDeviceManagement struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewDeclarativeDeviceManagement(client transport.HTTPClient) *DeclarativeDeviceManagement {
+func NewDeclarativeDeviceManagement(client client.Client) *DeclarativeDeviceManagement {
 	return &DeclarativeDeviceManagement{client: client}
 }
 

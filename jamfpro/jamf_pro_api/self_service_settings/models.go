@@ -1,6 +1,6 @@
 package self_service_settings
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 
 // ResourceSelfServiceSettings is the self-service settings resource (get/update).
 type ResourceSelfServiceSettings struct {
@@ -33,13 +33,13 @@ type ConfigurationSettings struct {
 }
 
 // HistoryObject is an alias to the shared history item struct with string IDs.
-type HistoryObject = shared.SharedHistoryItemString
+type HistoryObject = models.SharedHistoryItemString
 
 // HistoryResponse is an alias to the shared history response struct with string IDs.
-type HistoryResponse = shared.SharedHistoryResponseString
+type HistoryResponse = models.SharedHistoryResponseString
 
 // AddHistoryNotesRequest is an alias to the shared history note request struct.
-type AddHistoryNotesRequest = shared.SharedHistoryNoteRequest
+type AddHistoryNotesRequest = models.SharedHistoryNoteRequest
 
 // AddHistoryNotesResponse is the response for AddHistoryNotesV1 (201 Created).
 type AddHistoryNotesResponse struct {

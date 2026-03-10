@@ -6,7 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_groups/mocks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -91,13 +91,13 @@ func TestUnit_MobileDeviceGroups_Create(t *testing.T) {
 	req := &mobile_device_groups.RequestMobileDeviceGroup{
 		Name:    "Test Group",
 		IsSmart: true,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &mobile_device_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Model",
 					Priority:   0,

@@ -1,11 +1,13 @@
 package onboarding
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // ResponseOnboardingSettings is the response for Get (onboarding configuration).
 type ResponseOnboardingSettings struct {
-	ID              string                 `json:"id"`
-	Enabled         bool                   `json:"enabled"`
+	ID              string                   `json:"id"`
+	Enabled         bool                     `json:"enabled"`
 	OnboardingItems []OnboardingItemResponse `json:"onboardingItems"`
 }
 
@@ -13,11 +15,11 @@ type ResponseOnboardingSettings struct {
 type OnboardingItemResponse struct {
 	ID                    string `json:"id,omitempty"`
 	EntityID              string `json:"entityId"`
-	EntityName             string `json:"entityName,omitempty"`
-	ScopeDescription       string `json:"scopeDescription,omitempty"`
-	SiteDescription        string `json:"siteDescription,omitempty"`
-	SelfServiceEntityType  string `json:"selfServiceEntityType"`
-	Priority               int    `json:"priority"`
+	EntityName            string `json:"entityName,omitempty"`
+	ScopeDescription      string `json:"scopeDescription,omitempty"`
+	SiteDescription       string `json:"siteDescription,omitempty"`
+	SelfServiceEntityType string `json:"selfServiceEntityType"`
+	Priority              int    `json:"priority"`
 }
 
 // ResourceUpdateOnboardingSettings is the request body for Update.
@@ -49,13 +51,13 @@ type ResourceEligibilityListItem struct {
 }
 
 // ResourceHistoryEntry is an alias to the shared history item struct.
-type ResourceHistoryEntry = shared.SharedHistoryItem
+type ResourceHistoryEntry = models.SharedHistoryItem
 
 // HistoryResponse is an alias to the shared history response struct.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // RequestAddHistoryNotes is an alias to the shared history note request struct.
-type RequestAddHistoryNotes = shared.SharedHistoryNoteRequest
+type RequestAddHistoryNotes = models.SharedHistoryNoteRequest
 
 type ResponseAddHistoryNotes struct {
 	ID   string `json:"id"`

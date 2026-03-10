@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// APIRolesMock is a test double implementing transport.HTTPClient.
+// APIRolesMock is a test double implementing client.Client.
 type APIRolesMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -87,7 +88,7 @@ func (m *APIRolesMock) PostWithQuery(ctx context.Context, path string, _ map[str
 func (m *APIRolesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *APIRolesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *APIRolesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *APIRolesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -128,18 +129,18 @@ func (m *APIRolesMock) GetPaginated(ctx context.Context, path string, q map[stri
 	}
 	return resp, nil
 }
-func (m *APIRolesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *APIRolesMock) InvalidateToken() error                    { return nil }
-func (m *APIRolesMock) KeepAliveToken() error                     { return nil }
-func (m *APIRolesMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *APIRolesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *APIRolesMock) InvalidateToken() error                { return nil }
+func (m *APIRolesMock) KeepAliveToken() error                 { return nil }
+func (m *APIRolesMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *APIRolesMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("APIRolesMock: no response for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("APIRolesMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}

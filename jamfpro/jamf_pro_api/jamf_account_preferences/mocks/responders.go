@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -71,7 +72,7 @@ func (m *JamfAccountPreferencesMock) dispatch(method, path string, result any) (
 		return nil, fmt.Errorf("JamfAccountPreferencesMock: no response registered for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
@@ -125,7 +126,7 @@ func (m *JamfAccountPreferencesMock) PostForm(ctx context.Context, path string, 
 	return m.dispatch("POST", path, result)
 }
 
-func (m *JamfAccountPreferencesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *JamfAccountPreferencesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -167,7 +168,7 @@ func (m *JamfAccountPreferencesMock) GetPaginated(ctx context.Context, path stri
 	return resp, nil
 }
 
-func (m *JamfAccountPreferencesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *JamfAccountPreferencesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *JamfAccountPreferencesMock) InvalidateToken() error                    { return nil }
 func (m *JamfAccountPreferencesMock) KeepAliveToken() error                     { return nil }
 func (m *JamfAccountPreferencesMock) GetLogger() *zap.Logger                    { return m.logger }

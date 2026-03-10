@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/version_locking"
 	"resty.dev/v3"
 )
 
@@ -16,11 +16,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-computer-prestages
 	ComputerPrestages struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewComputerPrestages(client transport.HTTPClient) *ComputerPrestages {
+func NewComputerPrestages(client client.Client) *ComputerPrestages {
 	return &ComputerPrestages{client: client}
 }
 

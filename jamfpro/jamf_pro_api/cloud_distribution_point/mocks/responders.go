@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -21,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// CloudDistributionPointMock implements transport.HTTPClient.
+// CloudDistributionPointMock implements client.Client.
 type CloudDistributionPointMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -82,7 +83,7 @@ func (m *CloudDistributionPointMock) PostWithQuery(ctx context.Context, path str
 func (m *CloudDistributionPointMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *CloudDistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CloudDistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *CloudDistributionPointMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -123,10 +124,10 @@ func (m *CloudDistributionPointMock) GetPaginated(ctx context.Context, path stri
 	}
 	return resp, nil
 }
-func (m *CloudDistributionPointMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *CloudDistributionPointMock) InvalidateToken() error                    { return nil }
-func (m *CloudDistributionPointMock) KeepAliveToken() error                     { return nil }
-func (m *CloudDistributionPointMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *CloudDistributionPointMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *CloudDistributionPointMock) InvalidateToken() error                { return nil }
+func (m *CloudDistributionPointMock) KeepAliveToken() error                 { return nil }
+func (m *CloudDistributionPointMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *CloudDistributionPointMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
@@ -134,7 +135,7 @@ func (m *CloudDistributionPointMock) dispatch(method, path string, result any) (
 		return nil, fmt.Errorf("no mock for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}

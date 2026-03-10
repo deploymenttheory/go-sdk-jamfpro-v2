@@ -3,7 +3,7 @@ package static_user_groups
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceStaticUserGroup represents a Jamf Pro Classic API static user group resource.
@@ -15,7 +15,7 @@ type ResourceStaticUserGroup struct {
 	Name             string                     `xml:"name,omitempty"`
 	IsSmart          bool                       `xml:"is_smart"`
 	IsNotifyOnChange bool                       `xml:"is_notify_on_change"`
-	Site             *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site             *models.SharedResourceSite `xml:"site,omitempty"`
 	Users            []UserItem                 `xml:"users>user,omitempty"`
 	UserAdditions    []UserItem                 `xml:"user_additions>user,omitempty"`
 	UserDeletions    []UserItem                 `xml:"user_deletions>user,omitempty"`
@@ -42,7 +42,7 @@ type RequestStaticUserGroup struct {
 	Name             string                     `xml:"name"`
 	IsSmart          bool                       `xml:"is_smart"`
 	IsNotifyOnChange bool                       `xml:"is_notify_on_change"`
-	Site             *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site             *models.SharedResourceSite `xml:"site,omitempty"`
 	Users            []UserItem                 `xml:"users>user,omitempty"`
 	UserAdditions    []UserItem                 `xml:"user_additions>user,omitempty"`
 	UserDeletions    []UserItem                 `xml:"user_deletions>user,omitempty"`

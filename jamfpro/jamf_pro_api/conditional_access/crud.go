@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -12,11 +12,11 @@ import (
 type (
 	// Service handles communication with the Conditional Access-related methods of the Jamf Pro API.
 	ConditionalAccess struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewConditionalAccess(client transport.HTTPClient) *ConditionalAccess {
+func NewConditionalAccess(client client.Client) *ConditionalAccess {
 	return &ConditionalAccess{client: client}
 }
 

@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -24,7 +25,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// RestrictedSoftwareMock is a test double implementing transport.HTTPClient for Classic API restricted software.
+// RestrictedSoftwareMock is a test double implementing client.Client for Classic API restricted software.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -127,7 +128,7 @@ func (m *RestrictedSoftwareMock) RegisterConflictErrorMock() {
 	}
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *RestrictedSoftwareMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -146,7 +147,7 @@ func (m *RestrictedSoftwareMock) PostForm(ctx context.Context, path string, _ ma
 	return m.dispatch("POST", path, result)
 }
 
-func (m *RestrictedSoftwareMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *RestrictedSoftwareMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -188,10 +189,10 @@ func (m *RestrictedSoftwareMock) GetPaginated(ctx context.Context, path string, 
 	return resp, nil
 }
 
-func (m *RestrictedSoftwareMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *RestrictedSoftwareMock) InvalidateToken() error                    { return nil }
-func (m *RestrictedSoftwareMock) KeepAliveToken() error                     { return nil }
-func (m *RestrictedSoftwareMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *RestrictedSoftwareMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *RestrictedSoftwareMock) InvalidateToken() error                { return nil }
+func (m *RestrictedSoftwareMock) KeepAliveToken() error                 { return nil }
+func (m *RestrictedSoftwareMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -215,11 +216,11 @@ func (m *RestrictedSoftwareMock) dispatch(method, path string, result any) (*res
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("RestrictedSoftwareMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("RestrictedSoftwareMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

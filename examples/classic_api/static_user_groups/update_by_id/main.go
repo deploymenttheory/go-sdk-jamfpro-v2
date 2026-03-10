@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/static_user_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 		Name:             "go-sdk-v2-static-user-group-updated",
 		IsSmart:          false,
 		IsNotifyOnChange: true,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},

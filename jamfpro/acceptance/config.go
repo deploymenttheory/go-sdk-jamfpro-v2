@@ -3,11 +3,10 @@ package acceptance
 import (
 	"fmt"
 	"log"
-	"os"
-	"strconv"
 	"time"
 
 	jamfpro "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/environment"
 )
 
 // TestConfig holds configuration for acceptance tests driven by environment variables.
@@ -40,15 +39,15 @@ var (
 
 func init() {
 	Config = &TestConfig{
-		InstanceDomain: getEnv("INSTANCE_DOMAIN", ""),
-		AuthMethod:     getEnv("AUTH_METHOD", ""),
-		ClientID:       getEnv("CLIENT_ID", ""),
-		ClientSecret:   getEnv("CLIENT_SECRET", ""),
-		Username:       getEnv("BASIC_AUTH_USERNAME", ""),
-		Password:       getEnv("BASIC_AUTH_PASSWORD", ""),
-		RequestTimeout: getDurationEnv("JAMF_REQUEST_TIMEOUT", 30*time.Second),
-		SkipCleanup:    getBoolEnv("JAMF_SKIP_CLEANUP", false),
-		Verbose:        getBoolEnv("JAMF_VERBOSE", false),
+		InstanceDomain: environment.GetEnv("INSTANCE_DOMAIN", ""),
+		AuthMethod:     environment.GetEnv("AUTH_METHOD", ""),
+		ClientID:       environment.GetEnv("CLIENT_ID", ""),
+		ClientSecret:   environment.GetEnv("CLIENT_SECRET", ""),
+		Username:       environment.GetEnv("BASIC_AUTH_USERNAME", ""),
+		Password:       environment.GetEnv("BASIC_AUTH_PASSWORD", ""),
+		RequestTimeout: environment.GetDurationEnv("JAMF_REQUEST_TIMEOUT", 30*time.Second),
+		SkipCleanup:    environment.GetEnvAsBool("JAMF_SKIP_CLEANUP", false),
+		Verbose:        environment.GetEnvAsBool("JAMF_VERBOSE", false),
 	}
 }
 
@@ -75,42 +74,4 @@ func InitClient() error {
 // IsConfigured returns true if the minimum required credentials are set.
 func IsConfigured() bool {
 	return Config.InstanceDomain != "" && Config.AuthMethod != ""
-}
-
-// Helper functions to get environment variables.
-
-// getEnv retrieves an environment variable or returns a default value.
-func getEnv(key, def string) string {
-	if v := os.Getenv(key); v != "" {
-		return v
-	}
-	return def
-}
-
-// getBoolEnv retrieves a boolean environment variable or returns a default value.
-func getBoolEnv(key string, def bool) bool {
-	v := os.Getenv(key)
-	if v == "" {
-		return def
-	}
-	b, err := strconv.ParseBool(v)
-	if err != nil {
-		log.Printf("Warning: invalid bool for %s=%q, using default %v", key, v, def)
-		return def
-	}
-	return b
-}
-
-// getDurationEnv retrieves a duration environment variable or returns a default value.
-func getDurationEnv(key string, def time.Duration) time.Duration {
-	v := os.Getenv(key)
-	if v == "" {
-		return def
-	}
-	d, err := time.ParseDuration(v)
-	if err != nil {
-		log.Printf("Warning: invalid duration for %s=%q, using default %v", key, v, def)
-		return def
-	}
-	return d
 }

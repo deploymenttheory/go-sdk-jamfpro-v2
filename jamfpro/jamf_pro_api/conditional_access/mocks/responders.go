@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -53,9 +54,9 @@ func (m *ConditionalAccessMock) RegisterGetDeviceComplianceInformationMobileMock
 func (m *ConditionalAccessMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("ConditionalAccessMock: no response for %s %s", method, path)
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("ConditionalAccessMock: no response for %s %s", method, path)
 	}
-	resp := shared.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -79,7 +80,7 @@ func (m *ConditionalAccessMock) PostWithQuery(ctx context.Context, path string, 
 func (m *ConditionalAccessMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ConditionalAccessMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ConditionalAccessMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ConditionalAccessMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -114,7 +115,7 @@ func (m *ConditionalAccessMock) GetPaginated(ctx context.Context, path string, _
 	}
 	return resp, nil
 }
-func (m *ConditionalAccessMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *ConditionalAccessMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ConditionalAccessMock) InvalidateToken() error                     { return nil }
 func (m *ConditionalAccessMock) KeepAliveToken() error                      { return nil }
 func (m *ConditionalAccessMock) GetLogger() *zap.Logger                     { return m.logger }

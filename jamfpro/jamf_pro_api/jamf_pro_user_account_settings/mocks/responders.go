@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// UserAccountSettingsMock is a test double implementing transport.HTTPClient.
+// UserAccountSettingsMock is a test double implementing client.Client.
 type UserAccountSettingsMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -73,7 +74,7 @@ func (m *UserAccountSettingsMock) dispatch(method, path string, result any) (*re
 		return nil, fmt.Errorf("UserAccountSettingsMock: no response registered for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
@@ -133,7 +134,7 @@ func (m *UserAccountSettingsMock) PostForm(ctx context.Context, path string, _ m
 	return m.dispatch("POST", path, result)
 }
 
-func (m *UserAccountSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *UserAccountSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -175,7 +176,7 @@ func (m *UserAccountSettingsMock) GetPaginated(ctx context.Context, path string,
 	return resp, nil
 }
 
-func (m *UserAccountSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *UserAccountSettingsMock) InvalidateToken() error                    { return nil }
-func (m *UserAccountSettingsMock) KeepAliveToken() error                     { return nil }
-func (m *UserAccountSettingsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *UserAccountSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *UserAccountSettingsMock) InvalidateToken() error                { return nil }
+func (m *UserAccountSettingsMock) KeepAliveToken() error                 { return nil }
+func (m *UserAccountSettingsMock) GetLogger() *zap.Logger                { return m.logger }

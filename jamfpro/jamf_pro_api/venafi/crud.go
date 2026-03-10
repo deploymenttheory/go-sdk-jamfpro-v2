@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,11 +15,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi
 	Venafi struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewVenafi(client transport.HTTPClient) *Venafi {
+func NewVenafi(client client.Client) *Venafi {
 	return &Venafi{client: client}
 }
 

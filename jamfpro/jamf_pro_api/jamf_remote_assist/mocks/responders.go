@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// JamfRemoteAssistMock implements transport.HTTPClient for tests.
+// JamfRemoteAssistMock implements client.Client for tests.
 type JamfRemoteAssistMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -103,7 +104,7 @@ func (m *JamfRemoteAssistMock) PostWithQuery(ctx context.Context, path string, _
 func (m *JamfRemoteAssistMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *JamfRemoteAssistMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *JamfRemoteAssistMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *JamfRemoteAssistMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -144,10 +145,10 @@ func (m *JamfRemoteAssistMock) GetPaginated(ctx context.Context, path string, q 
 	}
 	return resp, nil
 }
-func (m *JamfRemoteAssistMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *JamfRemoteAssistMock) InvalidateToken() error                    { return nil }
-func (m *JamfRemoteAssistMock) KeepAliveToken() error                     { return nil }
-func (m *JamfRemoteAssistMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *JamfRemoteAssistMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *JamfRemoteAssistMock) InvalidateToken() error                { return nil }
+func (m *JamfRemoteAssistMock) KeepAliveToken() error                 { return nil }
+func (m *JamfRemoteAssistMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *JamfRemoteAssistMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
@@ -155,7 +156,7 @@ func (m *JamfRemoteAssistMock) dispatch(method, path string, result any) (*resty
 		return nil, fmt.Errorf("JamfRemoteAssistMock: no response registered for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}

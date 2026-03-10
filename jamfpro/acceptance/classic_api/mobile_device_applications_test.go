@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_applications"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -43,7 +43,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 			Version:     "1.0",
 			InternalApp: &internalApp,
 			OsType:      "iOS",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},
@@ -166,7 +166,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 			Version:     "1.1",
 			InternalApp: &internalApp,
 			OsType:      "iOS",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},
@@ -201,7 +201,7 @@ func TestAcceptance_MobileDeviceApplications_lifecycle(t *testing.T) {
 			Version:     "1.0",
 			InternalApp: &internalApp,
 			OsType:      "iOS",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},
@@ -278,7 +278,7 @@ func TestAcceptance_MobileDeviceApplications_delete_by_name(t *testing.T) {
 			Version:     "1.0",
 			InternalApp: &internalApp,
 			OsType:      "iOS",
-			Site:        &shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:        &models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope: mobile_device_applications.SubsetScope{
 			AllMobileDevices: boolPtr(true),

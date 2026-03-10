@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -21,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// DistributionPointMock implements transport.HTTPClient.
+// DistributionPointMock implements client.Client.
 type DistributionPointMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -91,7 +92,7 @@ func (m *DistributionPointMock) dispatch(method, path string, result any) (*rest
 		return nil, fmt.Errorf("DistributionPointMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
@@ -123,7 +124,7 @@ func (m *DistributionPointMock) PostWithQuery(ctx context.Context, path string, 
 func (m *DistributionPointMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *DistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *DistributionPointMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *DistributionPointMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -165,7 +166,7 @@ func (m *DistributionPointMock) GetPaginated(ctx context.Context, path string, q
 	}
 	return resp, nil
 }
-func (m *DistributionPointMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *DistributionPointMock) InvalidateToken() error                    { return nil }
-func (m *DistributionPointMock) KeepAliveToken() error                     { return nil }
-func (m *DistributionPointMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *DistributionPointMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *DistributionPointMock) InvalidateToken() error                { return nil }
+func (m *DistributionPointMock) KeepAliveToken() error                 { return nil }
+func (m *DistributionPointMock) GetLogger() *zap.Logger                { return m.logger }

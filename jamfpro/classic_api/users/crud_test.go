@@ -6,7 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/users"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/users/mocks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -113,7 +113,7 @@ func TestUnit_Users_Create(t *testing.T) {
 		Name:     "newuser",
 		FullName: "New User",
 		Email:    "newuser@example.com",
-		Sites: []shared.SharedResourceSite{
+		Sites: []models.SharedResourceSite{
 			{ID: -1, Name: "None"},
 		},
 	}

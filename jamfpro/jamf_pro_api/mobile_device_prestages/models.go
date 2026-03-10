@@ -1,6 +1,8 @@
 package mobile_device_prestages
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // ListResponse represents the paginated response for mobile device prestages.
 type ListResponse struct {
@@ -10,55 +12,55 @@ type ListResponse struct {
 
 // ResourceMobileDevicePrestage represents a mobile device prestage configuration.
 type ResourceMobileDevicePrestage struct {
-	DisplayName                            string                                          `json:"displayName"`
-	Mandatory                              *bool                                           `json:"mandatory"`
-	MdmRemovable                           *bool                                           `json:"mdmRemovable"`
-	SupportPhoneNumber                     string                                          `json:"supportPhoneNumber"`
-	SupportEmailAddress                    string                                          `json:"supportEmailAddress"`
-	Department                             string                                          `json:"department"`
-	DefaultPrestage                        *bool                                           `json:"defaultPrestage"`
-	EnrollmentSiteID                       string                                          `json:"enrollmentSiteId"`
-	KeepExistingSiteMembership             *bool                                           `json:"keepExistingSiteMembership"`
-	KeepExistingLocationInformation        *bool                                           `json:"keepExistingLocationInformation"`
-	RequireAuthentication                  *bool                                           `json:"requireAuthentication"`
-	AuthenticationPrompt                   string                                          `json:"authenticationPrompt"`
-	PreventActivationLock                  *bool                                           `json:"preventActivationLock"`
-	EnableDeviceBasedActivationLock        *bool                                           `json:"enableDeviceBasedActivationLock"`
-	DeviceEnrollmentProgramInstanceID      string                                          `json:"deviceEnrollmentProgramInstanceId"`
-	SkipSetupItems                         SubsetSkipSetupItems                            `json:"skipSetupItems,omitempty"`
-	LocationInformation                    SubsetLocationInformation                       `json:"locationInformation"`
-	PurchasingInformation                  SubsetPurchasingInformation                     `json:"purchasingInformation"`
-	AnchorCertificates                     []string                                        `json:"anchorCertificates,omitempty"`
-	EnrollmentCustomizationID              string                                          `json:"enrollmentCustomizationId,omitempty"`
-	Language                               string                                          `json:"language,omitempty"`
-	Region                                 string                                          `json:"region,omitempty"`
-	AutoAdvanceSetup                       *bool                                           `json:"autoAdvanceSetup"`
-	AllowPairing                           *bool                                           `json:"allowPairing"`
-	MultiUser                              *bool                                           `json:"multiUser"`
-	Supervised                             *bool                                           `json:"supervised"`
-	MaximumSharedAccounts                  int                                             `json:"maximumSharedAccounts"`
-	ConfigureDeviceBeforeSetupAssistant    *bool                                           `json:"configureDeviceBeforeSetupAssistant"`
-	Names                                  SubsetNames                                     `json:"names"`
-	SendTimezone                           *bool                                           `json:"sendTimezone"`
-	Timezone                               string                                          `json:"timezone"`
-	StorageQuotaSizeMegabytes              int                                             `json:"storageQuotaSizeMegabytes"`
-	UseStorageQuotaSize                    *bool                                           `json:"useStorageQuotaSize"`
-	TemporarySessionOnly                   *bool                                           `json:"temporarySessionOnly"`
-	EnforceTemporarySessionTimeout         *bool                                           `json:"enforceTemporarySessionTimeout"`
-	TemporarySessionTimeout                *int                                            `json:"temporarySessionTimeout,omitempty"`
-	EnforceUserSessionTimeout              *bool                                           `json:"enforceUserSessionTimeout"`
-	UserSessionTimeout                     *int                                            `json:"userSessionTimeout,omitempty"`
-	ID                                     string                                          `json:"id"`
-	ProfileUuid                            string                                          `json:"profileUuid,omitempty"`
-	SiteId                                 string                                          `json:"siteId,omitempty"`
-	VersionLock                            int                                             `json:"versionLock"`
-	PrestageMinimumOsTargetVersionTypeIos  string                                          `json:"prestageMinimumOsTargetVersionTypeIos,omitempty"`
-	MinimumOsSpecificVersionIos            string                                          `json:"minimumOsSpecificVersionIos,omitempty"`
-	PrestageMinimumOsTargetVersionTypeIpad string                                          `json:"prestageMinimumOsTargetVersionTypeIpad,omitempty"`
-	MinimumOsSpecificVersionIpad           string                                          `json:"minimumOsSpecificVersionIpad,omitempty"`
-	RTSEnabled                             *bool                                           `json:"rtsEnabled,omitempty"`
-	RTSConfigProfileId                     string                                          `json:"rtsConfigProfileId,omitempty"`
-	PreserveManagedApps                    *bool                                           `json:"preserveManagedApps,omitempty"`
+	DisplayName                            string                      `json:"displayName"`
+	Mandatory                              *bool                       `json:"mandatory"`
+	MdmRemovable                           *bool                       `json:"mdmRemovable"`
+	SupportPhoneNumber                     string                      `json:"supportPhoneNumber"`
+	SupportEmailAddress                    string                      `json:"supportEmailAddress"`
+	Department                             string                      `json:"department"`
+	DefaultPrestage                        *bool                       `json:"defaultPrestage"`
+	EnrollmentSiteID                       string                      `json:"enrollmentSiteId"`
+	KeepExistingSiteMembership             *bool                       `json:"keepExistingSiteMembership"`
+	KeepExistingLocationInformation        *bool                       `json:"keepExistingLocationInformation"`
+	RequireAuthentication                  *bool                       `json:"requireAuthentication"`
+	AuthenticationPrompt                   string                      `json:"authenticationPrompt"`
+	PreventActivationLock                  *bool                       `json:"preventActivationLock"`
+	EnableDeviceBasedActivationLock        *bool                       `json:"enableDeviceBasedActivationLock"`
+	DeviceEnrollmentProgramInstanceID      string                      `json:"deviceEnrollmentProgramInstanceId"`
+	SkipSetupItems                         SubsetSkipSetupItems        `json:"skipSetupItems,omitempty"`
+	LocationInformation                    SubsetLocationInformation   `json:"locationInformation"`
+	PurchasingInformation                  SubsetPurchasingInformation `json:"purchasingInformation"`
+	AnchorCertificates                     []string                    `json:"anchorCertificates,omitempty"`
+	EnrollmentCustomizationID              string                      `json:"enrollmentCustomizationId,omitempty"`
+	Language                               string                      `json:"language,omitempty"`
+	Region                                 string                      `json:"region,omitempty"`
+	AutoAdvanceSetup                       *bool                       `json:"autoAdvanceSetup"`
+	AllowPairing                           *bool                       `json:"allowPairing"`
+	MultiUser                              *bool                       `json:"multiUser"`
+	Supervised                             *bool                       `json:"supervised"`
+	MaximumSharedAccounts                  int                         `json:"maximumSharedAccounts"`
+	ConfigureDeviceBeforeSetupAssistant    *bool                       `json:"configureDeviceBeforeSetupAssistant"`
+	Names                                  SubsetNames                 `json:"names"`
+	SendTimezone                           *bool                       `json:"sendTimezone"`
+	Timezone                               string                      `json:"timezone"`
+	StorageQuotaSizeMegabytes              int                         `json:"storageQuotaSizeMegabytes"`
+	UseStorageQuotaSize                    *bool                       `json:"useStorageQuotaSize"`
+	TemporarySessionOnly                   *bool                       `json:"temporarySessionOnly"`
+	EnforceTemporarySessionTimeout         *bool                       `json:"enforceTemporarySessionTimeout"`
+	TemporarySessionTimeout                *int                        `json:"temporarySessionTimeout,omitempty"`
+	EnforceUserSessionTimeout              *bool                       `json:"enforceUserSessionTimeout"`
+	UserSessionTimeout                     *int                        `json:"userSessionTimeout,omitempty"`
+	ID                                     string                      `json:"id"`
+	ProfileUuid                            string                      `json:"profileUuid,omitempty"`
+	SiteId                                 string                      `json:"siteId,omitempty"`
+	VersionLock                            int                         `json:"versionLock"`
+	PrestageMinimumOsTargetVersionTypeIos  string                      `json:"prestageMinimumOsTargetVersionTypeIos,omitempty"`
+	MinimumOsSpecificVersionIos            string                      `json:"minimumOsSpecificVersionIos,omitempty"`
+	PrestageMinimumOsTargetVersionTypeIpad string                      `json:"prestageMinimumOsTargetVersionTypeIpad,omitempty"`
+	MinimumOsSpecificVersionIpad           string                      `json:"minimumOsSpecificVersionIpad,omitempty"`
+	RTSEnabled                             *bool                       `json:"rtsEnabled,omitempty"`
+	RTSConfigProfileId                     string                      `json:"rtsConfigProfileId,omitempty"`
+	PreserveManagedApps                    *bool                       `json:"preserveManagedApps,omitempty"`
 }
 
 // SubsetSkipSetupItems represents the setup items to skip during enrollment.
@@ -168,9 +170,9 @@ type CreateResponse struct {
 
 // ResourceDeviceScope represents the device scope for a mobile device prestage.
 type ResourceDeviceScope struct {
-	PrestageId  string                  `json:"prestageId"`
-	Assignments []SubsetAssignmentItem  `json:"assignments"`
-	VersionLock int                     `json:"versionLock"`
+	PrestageId  string                 `json:"prestageId"`
+	Assignments []SubsetAssignmentItem `json:"assignments"`
+	VersionLock int                    `json:"versionLock"`
 }
 
 // SubsetAssignmentItem represents an assignment within the prestage scope.
@@ -228,13 +230,13 @@ type RequestDeleteAttachments struct {
 }
 
 // HistoryObject is an alias to the shared history item struct.
-type HistoryObject = shared.SharedHistoryItem
+type HistoryObject = models.SharedHistoryItem
 
 // HistoryResponse is an alias to the shared history response struct.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // RequestAddHistoryNote is an alias to the shared history note request struct.
-type RequestAddHistoryNote = shared.SharedHistoryNoteRequest
+type RequestAddHistoryNote = models.SharedHistoryNoteRequest
 
 // ResponseAddHistoryNote is the response for AddHistoryNoteByIDV3.
 type ResponseAddHistoryNote struct {
@@ -243,23 +245,23 @@ type ResponseAddHistoryNote struct {
 }
 
 // VersionLocker implementations for version_locking.VersionLocker interface.
-func (r *ResourceMobileDevicePrestage) GetVersionLock() int    { return r.VersionLock }
+func (r *ResourceMobileDevicePrestage) GetVersionLock() int     { return r.VersionLock }
 func (r *ResourceMobileDevicePrestage) SetVersionLock(lock int) { r.VersionLock = lock }
 
-func (r *ResourceDeviceScope) GetVersionLock() int    { return r.VersionLock }
+func (r *ResourceDeviceScope) GetVersionLock() int     { return r.VersionLock }
 func (r *ResourceDeviceScope) SetVersionLock(lock int) { r.VersionLock = lock }
 
-func (r *RequestReplaceScope) GetVersionLock() int    { return r.VersionLock }
+func (r *RequestReplaceScope) GetVersionLock() int     { return r.VersionLock }
 func (r *RequestReplaceScope) SetVersionLock(lock int) { r.VersionLock = lock }
 
-func (r *RequestAddScope) GetVersionLock() int    { return r.VersionLock }
+func (r *RequestAddScope) GetVersionLock() int     { return r.VersionLock }
 func (r *RequestAddScope) SetVersionLock(lock int) { r.VersionLock = lock }
 
-func (r *RequestRemoveScope) GetVersionLock() int    { return r.VersionLock }
+func (r *RequestRemoveScope) GetVersionLock() int     { return r.VersionLock }
 func (r *RequestRemoveScope) SetVersionLock(lock int) { r.VersionLock = lock }
 
-func (l *SubsetLocationInformation) GetVersionLock() int    { return l.VersionLock }
+func (l *SubsetLocationInformation) GetVersionLock() int     { return l.VersionLock }
 func (l *SubsetLocationInformation) SetVersionLock(lock int) { l.VersionLock = lock }
 
-func (p *SubsetPurchasingInformation) GetVersionLock() int    { return p.VersionLock }
+func (p *SubsetPurchasingInformation) GetVersionLock() int     { return p.VersionLock }
 func (p *SubsetPurchasingInformation) SetVersionLock(lock int) { p.VersionLock = lock }

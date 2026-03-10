@@ -7,10 +7,11 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -20,7 +21,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// JamfProtectMock is a test double implementing transport.HTTPClient.
+// JamfProtectMock is a test double implementing client.Client.
 type JamfProtectMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -230,7 +231,7 @@ func (m *JamfProtectMock) RegisterListPlansBadResultsMock() {
 	m.register("GET", "/api/v1/jamf-protect/plans", 200, `{"totalCount": 1, "results": [{"profileId": "not-a-number"}]}`)
 }
 
-// Get implements transport.HTTPClient.
+// Get implements client.Client.
 func (m *JamfProtectMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
@@ -246,10 +247,10 @@ func (m *JamfProtectMock) Get(ctx context.Context, path string, rsqlQuery map[st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// Post implements transport.HTTPClient.
+// Post implements client.Client.
 func (m *JamfProtectMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "POST " + path
 	resp, ok := m.responses[key]
@@ -264,25 +265,25 @@ func (m *JamfProtectMock) Post(ctx context.Context, path string, body any, heade
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// PostWithQuery implements transport.HTTPClient.
+// PostWithQuery implements client.Client.
 func (m *JamfProtectMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, body, headers, result)
 }
 
-// PostForm implements transport.HTTPClient.
+// PostForm implements client.Client.
 func (m *JamfProtectMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-// PostMultipart implements transport.HTTPClient.
-func (m *JamfProtectMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+// PostMultipart implements client.Client.
+func (m *JamfProtectMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
-// Put implements transport.HTTPClient.
+// Put implements client.Client.
 func (m *JamfProtectMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PUT " + path
 	resp, ok := m.responses[key]
@@ -297,10 +298,10 @@ func (m *JamfProtectMock) Put(ctx context.Context, path string, body any, header
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// Patch implements transport.HTTPClient.
+// Patch implements client.Client.
 func (m *JamfProtectMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	key := "PATCH " + path
 	resp, ok := m.responses[key]
@@ -315,10 +316,10 @@ func (m *JamfProtectMock) Patch(ctx context.Context, path string, body any, head
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// Delete implements transport.HTTPClient.
+// Delete implements client.Client.
 func (m *JamfProtectMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
 	key := "DELETE " + path
 	resp, ok := m.responses[key]
@@ -333,15 +334,15 @@ func (m *JamfProtectMock) Delete(ctx context.Context, path string, rsqlQuery map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
-// DeleteWithBody implements transport.HTTPClient.
+// DeleteWithBody implements client.Client.
 func (m *JamfProtectMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
 	return m.Delete(ctx, path, nil, headers, result)
 }
 
-// GetBytes implements transport.HTTPClient.
+// GetBytes implements client.Client.
 func (m *JamfProtectMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	m.LastRSQLQuery = rsqlQuery
 	key := "GET " + path
@@ -352,10 +353,10 @@ func (m *JamfProtectMock) GetBytes(ctx context.Context, path string, rsqlQuery m
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
-// GetPaginated implements transport.HTTPClient.
+// GetPaginated implements client.Client.
 func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	key := "GET " + path
 	resp, ok := m.responses[key]
@@ -365,7 +366,7 @@ func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	if resp.errMsg != "" {
 		return nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	ifaceResp := shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody)
+	ifaceResp := mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody)
 	if mergePage != nil && len(resp.rawBody) > 0 {
 		var page struct {
 			Results json.RawMessage `json:"results"`
@@ -380,22 +381,22 @@ func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	return ifaceResp, nil
 }
 
-// RSQLBuilder implements transport.HTTPClient.
-func (m *JamfProtectMock) RSQLBuilder() transport.RSQLFilterBuilder {
+// RSQLBuilder implements client.Client.
+func (m *JamfProtectMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 
-// InvalidateToken implements transport.HTTPClient.
+// InvalidateToken implements client.Client.
 func (m *JamfProtectMock) InvalidateToken() error {
 	return nil
 }
 
-// KeepAliveToken implements transport.HTTPClient.
+// KeepAliveToken implements client.Client.
 func (m *JamfProtectMock) KeepAliveToken() error {
 	return nil
 }
 
-// GetLogger implements transport.HTTPClient.
+// GetLogger implements client.Client.
 func (m *JamfProtectMock) GetLogger() *zap.Logger {
 	return m.logger
 }

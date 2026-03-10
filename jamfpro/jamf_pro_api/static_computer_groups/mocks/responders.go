@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -23,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// StaticComputerGroupsMock is a test double implementing transport.HTTPClient.
+// StaticComputerGroupsMock is a test double implementing client.Client.
 type StaticComputerGroupsMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -94,7 +95,7 @@ func (m *StaticComputerGroupsMock) dispatch(method, path string, result any) (*r
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
@@ -176,7 +177,7 @@ func (m *StaticComputerGroupsMock) PostForm(ctx context.Context, path string, _ 
 	return m.dispatch("POST", path, result)
 }
 
-func (m *StaticComputerGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *StaticComputerGroupsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -224,7 +225,7 @@ func (m *StaticComputerGroupsMock) GetPaginated(ctx context.Context, path string
 	return resp, nil
 }
 
-func (m *StaticComputerGroupsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *StaticComputerGroupsMock) InvalidateToken() error                    { return nil }
-func (m *StaticComputerGroupsMock) KeepAliveToken() error                     { return nil }
-func (m *StaticComputerGroupsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *StaticComputerGroupsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *StaticComputerGroupsMock) InvalidateToken() error                { return nil }
+func (m *StaticComputerGroupsMock) KeepAliveToken() error                 { return nil }
+func (m *StaticComputerGroupsMock) GetLogger() *zap.Logger                { return m.logger }

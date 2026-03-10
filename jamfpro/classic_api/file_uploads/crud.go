@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"slices"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"resty.dev/v3"
 )
 
@@ -36,12 +36,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/fileuploads
 	FileUploads struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new file uploads Service backed by the provided HTTP client.
-func NewFileUploads(client transport.HTTPClient) *FileUploads {
+func NewFileUploads(client client.Client) *FileUploads {
 	return &FileUploads{client: client}
 }
 

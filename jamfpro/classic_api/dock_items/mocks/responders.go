@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -23,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// DockItemsMock is a test double implementing transport.HTTPClient for Classic API dock items.
+// DockItemsMock is a test double implementing client.Client for Classic API dock items.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -114,7 +115,7 @@ func (m *DockItemsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/dockitems/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A dock item with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *DockItemsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -133,7 +134,7 @@ func (m *DockItemsMock) PostForm(ctx context.Context, path string, _ map[string]
 	return m.dispatch("POST", path, result)
 }
 
-func (m *DockItemsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *DockItemsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -175,10 +176,10 @@ func (m *DockItemsMock) GetPaginated(ctx context.Context, path string, rsqlQuery
 	return resp, nil
 }
 
-func (m *DockItemsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *DockItemsMock) InvalidateToken() error                    { return nil }
-func (m *DockItemsMock) KeepAliveToken() error                     { return nil }
-func (m *DockItemsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *DockItemsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *DockItemsMock) InvalidateToken() error                { return nil }
+func (m *DockItemsMock) KeepAliveToken() error                 { return nil }
+func (m *DockItemsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -215,11 +216,11 @@ func (m *DockItemsMock) dispatch(method, path string, result any) (*resty.Respon
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("DockItemsMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("DockItemsMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -34,13 +34,13 @@ func TestAcceptance_MobileDeviceGroups_lifecycle(t *testing.T) {
 	createReq := &mobile_device_groups.RequestMobileDeviceGroup{
 		Name:    groupName,
 		IsSmart: true,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &mobile_device_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Model",
 					Priority:   0,
@@ -143,13 +143,13 @@ func TestAcceptance_MobileDeviceGroups_lifecycle(t *testing.T) {
 	updateReq := &mobile_device_groups.RequestMobileDeviceGroup{
 		Name:    updatedName,
 		IsSmart: true,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &mobile_device_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Model",
 					Priority:   0,
@@ -177,13 +177,13 @@ func TestAcceptance_MobileDeviceGroups_lifecycle(t *testing.T) {
 	revertReq := &mobile_device_groups.RequestMobileDeviceGroup{
 		Name:    groupName,
 		IsSmart: true,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &mobile_device_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Model",
 					Priority:   0,

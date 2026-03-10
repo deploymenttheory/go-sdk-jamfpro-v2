@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -21,7 +22,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// CloudInformationMock is a test double implementing transport.HTTPClient.
+// CloudInformationMock is a test double implementing client.Client.
 type CloudInformationMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -56,7 +57,7 @@ func (m *CloudInformationMock) dispatch(method, path string, result any) (*resty
 	if !ok {
 		return nil, fmt.Errorf("CloudInformationMock: no response for %s %s", method, path)
 	}
-	resp := shared.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
@@ -83,7 +84,7 @@ func (m *CloudInformationMock) PostWithQuery(ctx context.Context, path string, _
 func (m *CloudInformationMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *CloudInformationMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CloudInformationMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *CloudInformationMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -118,7 +119,7 @@ func (m *CloudInformationMock) GetPaginated(ctx context.Context, path string, _ 
 	}
 	return resp, nil
 }
-func (m *CloudInformationMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *CloudInformationMock) InvalidateToken() error                    { return nil }
-func (m *CloudInformationMock) KeepAliveToken() error                     { return nil }
-func (m *CloudInformationMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *CloudInformationMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *CloudInformationMock) InvalidateToken() error                { return nil }
+func (m *CloudInformationMock) KeepAliveToken() error                 { return nil }
+func (m *CloudInformationMock) GetLogger() *zap.Logger                { return m.logger }

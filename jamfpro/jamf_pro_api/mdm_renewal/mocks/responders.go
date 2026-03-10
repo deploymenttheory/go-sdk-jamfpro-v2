@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -72,7 +73,7 @@ func (m *MDMRenewalMock) dispatch(method, path string, result any) (*resty.Respo
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
@@ -150,7 +151,7 @@ func (m *MDMRenewalMock) PostForm(ctx context.Context, path string, _ map[string
 	return m.dispatch("POST", path, result)
 }
 
-func (m *MDMRenewalMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MDMRenewalMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -166,7 +167,7 @@ func (m *MDMRenewalMock) GetBytes(ctx context.Context, path string, _ map[string
 	return resp, resp.Bytes(), nil
 }
 
-func (m *MDMRenewalMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *MDMRenewalMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *MDMRenewalMock) InvalidateToken() error                    { return nil }
 func (m *MDMRenewalMock) KeepAliveToken() error                     { return nil }
 func (m *MDMRenewalMock) GetLogger() *zap.Logger                    { return m.logger }

@@ -9,10 +9,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -89,11 +90,11 @@ func (m *EnrollmentCustomizationsMock) Get(ctx context.Context, endpoint string,
 		} else if bytesPtr, ok := out.(*[]byte); ok {
 			*bytesPtr = body
 		} else if err := json.Unmarshal(body, out); err != nil {
-			return shared.NewMockResponse(status, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(status, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *EnrollmentCustomizationsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
@@ -108,22 +109,22 @@ func (m *EnrollmentCustomizationsMock) Post(ctx context.Context, endpoint string
 		} else if bytesPtr, ok := out.(*[]byte); ok {
 			*bytesPtr = respBody
 		} else if err := json.Unmarshal(respBody, out); err != nil {
-			return shared.NewMockResponse(status, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(status, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *EnrollmentCustomizationsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EnrollmentCustomizationsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-func (m *EnrollmentCustomizationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
+func (m *EnrollmentCustomizationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
 	respBody, status, found := m.dispatch("POST_MULTIPART", endpoint)
 	if !found {
 		return nil, errNoMockRegistered
@@ -135,11 +136,11 @@ func (m *EnrollmentCustomizationsMock) PostMultipart(ctx context.Context, endpoi
 		} else if bytesPtr, ok := out.(*[]byte); ok {
 			*bytesPtr = respBody
 		} else if err := json.Unmarshal(respBody, out); err != nil {
-			return shared.NewMockResponse(status, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(status, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *EnrollmentCustomizationsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
@@ -154,15 +155,15 @@ func (m *EnrollmentCustomizationsMock) Put(ctx context.Context, endpoint string,
 		} else if bytesPtr, ok := out.(*[]byte); ok {
 			*bytesPtr = respBody
 		} else if err := json.Unmarshal(respBody, out); err != nil {
-			return shared.NewMockResponse(status, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(status, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *EnrollmentCustomizationsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EnrollmentCustomizationsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*resty.Response, error) {
@@ -171,11 +172,11 @@ func (m *EnrollmentCustomizationsMock) Delete(ctx context.Context, endpoint stri
 		return nil, errNoMockRegistered
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *EnrollmentCustomizationsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EnrollmentCustomizationsMock) GetBytes(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
@@ -184,7 +185,7 @@ func (m *EnrollmentCustomizationsMock) GetBytes(ctx context.Context, endpoint st
 		return nil, nil, errNoMockRegistered
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), body, nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), body, nil
 }
 
 func (m *EnrollmentCustomizationsMock) GetPaginated(ctx context.Context, endpoint string, rsqlQuery map[string]string, headers map[string]string, mergePage func(page []byte) error) (*resty.Response, error) {
@@ -192,7 +193,7 @@ func (m *EnrollmentCustomizationsMock) GetPaginated(ctx context.Context, endpoin
 	if !found {
 		return nil, errNoMockRegistered
 	}
-	resp := shared.NewMockResponse(status, http.Header{"Content-Type": {"application/json"}}, body)
+	resp := mockhelpers.NewMockResponse(status, http.Header{"Content-Type": {"application/json"}}, body)
 	if mergePage != nil && len(body) > 0 {
 		var page struct {
 			Results json.RawMessage `json:"results"`
@@ -211,7 +212,7 @@ func (m *EnrollmentCustomizationsMock) GetLogger() *zap.Logger {
 	return nil
 }
 
-func (m *EnrollmentCustomizationsMock) RSQLBuilder() transport.RSQLFilterBuilder {
+func (m *EnrollmentCustomizationsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 

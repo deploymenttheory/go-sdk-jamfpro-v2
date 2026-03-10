@@ -3,7 +3,7 @@ package tomcat_settings
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -13,11 +13,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_settings-issue-tomcat-ssl-certificate
 	TomcatSettings struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewTomcatSettings(client transport.HTTPClient) *TomcatSettings {
+func NewTomcatSettings(client client.Client) *TomcatSettings {
 	return &TomcatSettings{client: client}
 }
 

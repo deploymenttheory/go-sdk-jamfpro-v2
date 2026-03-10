@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/crypto"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_distribution_point"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/crypto"
 	"resty.dev/v3"
 )
 
@@ -20,13 +20,13 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-packages
 	Packages struct {
-		client transport.HTTPClient
+		client client.Client
 		// Added for convenience helpers to refresh cloud distribution point inventory.
 		cloudDistributionPoint *cloud_distribution_point.CloudDistributionPoint
 	}
 )
 
-func NewPackages(client transport.HTTPClient) *Packages {
+func NewPackages(client client.Client) *Packages {
 	return &Packages{
 		client:                 client,
 		cloudDistributionPoint: cloud_distribution_point.NewCloudDistributionPoint(client),
@@ -47,22 +47,24 @@ func (s *Packages) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Li
 	endpoint := constants.EndpointJamfProPackagesV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []ResourcePackage
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
 	headers := map[string]string{
 		"Accept": constants.ApplicationJSON,
 	}
+
 	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list packages: %w", err)
 	}
+
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 

@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -23,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// FileShareDistributionPointsMock is a test double implementing transport.HTTPClient for Classic API file share distribution points.
+// FileShareDistributionPointsMock is a test double implementing client.Client for Classic API file share distribution points.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -114,7 +115,7 @@ func (m *FileShareDistributionPointsMock) RegisterConflictErrorMock() {
 	m.registerError("POST", "/JSSResource/distributionpoints/id/0", 409, "error_conflict.xml", "Jamf Pro Classic API error (409): A distribution point with that name already exists")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *FileShareDistributionPointsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -133,7 +134,7 @@ func (m *FileShareDistributionPointsMock) PostForm(ctx context.Context, path str
 	return m.dispatch("POST", path, result)
 }
 
-func (m *FileShareDistributionPointsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *FileShareDistributionPointsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -175,10 +176,10 @@ func (m *FileShareDistributionPointsMock) GetPaginated(ctx context.Context, path
 	return resp, nil
 }
 
-func (m *FileShareDistributionPointsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *FileShareDistributionPointsMock) InvalidateToken() error                    { return nil }
-func (m *FileShareDistributionPointsMock) KeepAliveToken() error                     { return nil }
-func (m *FileShareDistributionPointsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *FileShareDistributionPointsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *FileShareDistributionPointsMock) InvalidateToken() error                { return nil }
+func (m *FileShareDistributionPointsMock) KeepAliveToken() error                 { return nil }
+func (m *FileShareDistributionPointsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -215,11 +216,11 @@ func (m *FileShareDistributionPointsMock) dispatch(method, path string, result a
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("FileShareDistributionPointsMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("FileShareDistributionPointsMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

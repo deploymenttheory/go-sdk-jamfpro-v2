@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/plist"
 	"resty.dev/v3"
@@ -15,12 +15,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/mobiledeviceconfigurationprofiles
 	MobileDeviceConfigurationProfiles struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new mobile device configuration profiles Service backed by the provided HTTP client.
-func NewMobileDeviceConfigurationProfiles(client transport.HTTPClient) *MobileDeviceConfigurationProfiles {
+func NewMobileDeviceConfigurationProfiles(client client.Client) *MobileDeviceConfigurationProfiles {
 	return &MobileDeviceConfigurationProfiles{client: client}
 }
 

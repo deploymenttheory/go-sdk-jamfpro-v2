@@ -6,7 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_invitations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_invitations/mocks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -91,7 +91,7 @@ func TestUnit_ComputerInvitations_Create(t *testing.T) {
 		MultipleUsersAllowed:        false,
 		CreateAccountIfDoesNotExist: true,
 		KeepExistingSiteMembership:  true,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},

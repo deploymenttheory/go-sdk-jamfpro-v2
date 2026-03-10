@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// LdapMock is a test double implementing transport.HTTPClient.
+// LdapMock is a test double implementing client.Client.
 type LdapMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -80,7 +81,7 @@ func (m *LdapMock) dispatch(method, path string, result any) (*resty.Response, e
 		return nil, fmt.Errorf("LdapMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
@@ -107,7 +108,7 @@ func (m *LdapMock) PostWithQuery(ctx context.Context, path string, _ map[string]
 func (m *LdapMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *LdapMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *LdapMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *LdapMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -142,7 +143,7 @@ func (m *LdapMock) GetPaginated(ctx context.Context, path string, _ map[string]s
 	}
 	return resp, nil
 }
-func (m *LdapMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *LdapMock) InvalidateToken() error                    { return nil }
-func (m *LdapMock) KeepAliveToken() error                     { return nil }
-func (m *LdapMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *LdapMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *LdapMock) InvalidateToken() error                { return nil }
+func (m *LdapMock) KeepAliveToken() error                 { return nil }
+func (m *LdapMock) GetLogger() *zap.Logger                { return m.logger }

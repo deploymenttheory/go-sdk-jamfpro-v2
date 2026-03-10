@@ -1,6 +1,6 @@
 package mobile_device_extension_attributes
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 
 // ResourceMobileDeviceExtensionAttribute represents a mobile device extension attribute resource.
 //
@@ -19,21 +19,21 @@ type ResourceMobileDeviceExtensionAttribute struct {
 
 // ListResponse is the response for ListMobileDeviceExtensionAttributesV1.
 type ListResponse struct {
-	TotalCount int                                    `json:"totalCount"`
+	TotalCount int                                      `json:"totalCount"`
 	Results    []ResourceMobileDeviceExtensionAttribute `json:"results"`
 }
 
 // RequestMobileDeviceExtensionAttribute is the body for creating and updating mobile device extension attributes.
 type RequestMobileDeviceExtensionAttribute struct {
-	Name                            string   `json:"name"`
-	Description                     string   `json:"description,omitempty"`
-	DataType                        string   `json:"dataType"`
-	Enabled                         *bool    `json:"enabled,omitempty"`
-	InventoryDisplayType             string   `json:"inventoryDisplayType"`
-	InputType                       string   `json:"inputType"`
-	PopupMenuChoices                []string `json:"popupMenuChoices,omitempty"`
-	LDAPAttributeMapping            string   `json:"ldapAttributeMapping,omitempty"`
-	LDAPExtensionAttributeAllowed   *bool    `json:"ldapExtensionAttributeAllowed,omitempty"`
+	Name                          string   `json:"name"`
+	Description                   string   `json:"description,omitempty"`
+	DataType                      string   `json:"dataType"`
+	Enabled                       *bool    `json:"enabled,omitempty"`
+	InventoryDisplayType          string   `json:"inventoryDisplayType"`
+	InputType                     string   `json:"inputType"`
+	PopupMenuChoices              []string `json:"popupMenuChoices,omitempty"`
+	LDAPAttributeMapping          string   `json:"ldapAttributeMapping,omitempty"`
+	LDAPExtensionAttributeAllowed *bool    `json:"ldapExtensionAttributeAllowed,omitempty"`
 }
 
 // CreateResponse is the response for CreateMobileDeviceExtensionAttributeV1.
@@ -48,21 +48,21 @@ type DeleteMobileDeviceExtensionAttributesByIDRequest struct {
 }
 
 // HistoryItem is an alias to the shared history item struct with string IDs.
-type HistoryItem = shared.SharedHistoryItemString
+type HistoryItem = models.SharedHistoryItemString
 
 // HistoryResponse is an alias to the shared history response struct with string IDs.
-type HistoryResponse = shared.SharedHistoryResponseString
+type HistoryResponse = models.SharedHistoryResponseString
 
 // AddHistoryNoteRequest is an alias to the shared history note request struct.
-type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
+type AddHistoryNoteRequest = models.SharedHistoryNoteRequest
 
 // DataDependencyItem represents a single dependent object (e.g., smart group).
 type DataDependencyItem struct {
-	ID                int    `json:"id"`
-	ObjectID          int    `json:"objectId"`
-	NameLocalization  string `json:"nameLocalization"`
-	IdentifiableName  string `json:"identifiableName"`
-	Hyperlink         string `json:"hyperlink"`
+	ID               int    `json:"id"`
+	ObjectID         int    `json:"objectId"`
+	NameLocalization string `json:"nameLocalization"`
+	IdentifiableName string `json:"identifiableName"`
+	Hyperlink        string `json:"hyperlink"`
 }
 
 // DataDependencyResponse is the response for GetDataDependencyByIDV1.

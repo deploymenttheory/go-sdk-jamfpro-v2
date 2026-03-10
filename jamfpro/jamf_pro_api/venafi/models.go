@@ -1,17 +1,19 @@
 package venafi
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // ResourceVenafi represents the writable Venafi PKI configuration payload.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-pki-venafi
 type ResourceVenafi struct {
-	ID                   *int   `json:"id,omitempty"`
-	Name                 string `json:"name"`
-	ProxyAddress         string `json:"proxyAddress,omitempty"`
-	RevocationEnabled   *bool  `json:"revocationEnabled,omitempty"`
-	ClientID            string `json:"clientId,omitempty"`
-	RefreshToken        string `json:"refreshToken,omitempty"`
-	RefreshTokenConfigured *bool `json:"refreshTokenConfigured,omitempty"`
+	ID                     *int   `json:"id,omitempty"`
+	Name                   string `json:"name"`
+	ProxyAddress           string `json:"proxyAddress,omitempty"`
+	RevocationEnabled      *bool  `json:"revocationEnabled,omitempty"`
+	ClientID               string `json:"clientId,omitempty"`
+	RefreshToken           string `json:"refreshToken,omitempty"`
+	RefreshTokenConfigured *bool  `json:"refreshTokenConfigured,omitempty"`
 }
 
 // ResponseVenafiCreated captures the identifier returned after creating a configuration.
@@ -48,10 +50,10 @@ type ResponseDependentProfiles struct {
 }
 
 // HistoryItem is an alias to the shared history item struct (uses int ID).
-type HistoryItem = shared.SharedHistoryItem
+type HistoryItem = models.SharedHistoryItem
 
 // ResponseHistory is an alias to the shared history response struct.
-type ResponseHistory = shared.SharedHistoryResponse
+type ResponseHistory = models.SharedHistoryResponse
 
 // HistoryNoteRequest is an alias to the shared history note request struct.
-type HistoryNoteRequest = shared.SharedHistoryNoteRequest
+type HistoryNoteRequest = models.SharedHistoryNoteRequest

@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/policies"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -33,7 +33,7 @@ func createMinimalPolicy(t *testing.T, name string) *policies.ResourcePolicy {
 			LocationUserOnly:           false,
 			TargetDrive:                "/",
 			Offline:                    false,
-			Category: &shared.SharedResourceCategory{
+			Category: &models.SharedResourceCategory{
 				ID:   -1,
 				Name: "No category assigned",
 			},
@@ -43,7 +43,7 @@ func createMinimalPolicy(t *testing.T, name string) *policies.ResourcePolicy {
 				NetworkSegments:          "",
 			},
 			NetworkRequirements: "Any",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},

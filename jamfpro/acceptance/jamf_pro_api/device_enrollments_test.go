@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -131,7 +131,7 @@ func TestAcceptance_DeviceEnrollments_history(t *testing.T) {
 	enrollmentID := list.Results[0].ID
 
 	acc.LogTestStage(t, "AddHistoryNote", "Adding history note for device enrollment ID=%s", enrollmentID)
-	noteReq := &shared.SharedHistoryNoteRequest{
+	noteReq := &models.SharedHistoryNoteRequest{
 		Note: "Acceptance test history note for device enrollment",
 	}
 	addResp, addRespHTTP, err := svc.AddHistoryNotesV1(ctx, enrollmentID, noteReq)

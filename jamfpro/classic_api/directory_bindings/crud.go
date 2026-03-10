@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,12 +15,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/directorybindings
 	DirectoryBindings struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new directory bindings Service backed by the provided HTTP client.
-func NewDirectoryBindings(client transport.HTTPClient) *DirectoryBindings {
+func NewDirectoryBindings(client client.Client) *DirectoryBindings {
 	return &DirectoryBindings{client: client}
 }
 

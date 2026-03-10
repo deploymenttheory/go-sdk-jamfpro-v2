@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -124,7 +125,7 @@ func (m *MobileDevicePrestagesMock) dispatch(method, path string, result any) (*
 		return nil, fmt.Errorf("MobileDevicePrestagesMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -148,7 +149,7 @@ func (m *MobileDevicePrestagesMock) PostWithQuery(ctx context.Context, path stri
 func (m *MobileDevicePrestagesMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *MobileDevicePrestagesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MobileDevicePrestagesMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *MobileDevicePrestagesMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -189,7 +190,7 @@ func (m *MobileDevicePrestagesMock) GetPaginated(ctx context.Context, path strin
 	}
 	return resp, nil
 }
-func (m *MobileDevicePrestagesMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *MobileDevicePrestagesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *MobileDevicePrestagesMock) InvalidateToken() error                    { return nil }
 func (m *MobileDevicePrestagesMock) KeepAliveToken() error                     { return nil }
 func (m *MobileDevicePrestagesMock) GetLogger() *zap.Logger                    { return m.logger }

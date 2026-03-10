@@ -3,7 +3,7 @@ package byoprofiles
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceBYOProfile represents a Jamf Pro Classic API BYO profile resource.
@@ -45,7 +45,7 @@ type CreateUpdateResponse struct {
 type GeneralSettings struct {
 	ID          int                        `xml:"id,omitempty"`
 	Name        string                     `xml:"name"`
-	Site        *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site        *models.SharedResourceSite `xml:"site,omitempty"`
 	Enabled     bool                       `xml:"enabled"`
 	Description string                     `xml:"description,omitempty"`
 }

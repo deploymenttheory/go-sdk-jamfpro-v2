@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -65,9 +66,9 @@ func (m *ApiIntegrationsMock) RegisterRefreshClientCredentialsMock(id string) {
 func (m *ApiIntegrationsMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("ApiIntegrationsMock: no response for %s %s", method, path)
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("ApiIntegrationsMock: no response for %s %s", method, path)
 	}
-	resp := shared.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -91,7 +92,7 @@ func (m *ApiIntegrationsMock) PostWithQuery(ctx context.Context, path string, _ 
 func (m *ApiIntegrationsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ApiIntegrationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ApiIntegrationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ApiIntegrationsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -132,7 +133,7 @@ func (m *ApiIntegrationsMock) GetPaginated(ctx context.Context, path string, _ m
 	}
 	return resp, nil
 }
-func (m *ApiIntegrationsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *ApiIntegrationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ApiIntegrationsMock) InvalidateToken() error                     { return nil }
 func (m *ApiIntegrationsMock) KeepAliveToken() error                      { return nil }
 func (m *ApiIntegrationsMock) GetLogger() *zap.Logger                     { return m.logger }

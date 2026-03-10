@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -97,7 +98,7 @@ func (m *JamfPackageMock) dispatch(method, path string, result any) (*resty.Resp
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
@@ -128,7 +129,7 @@ func (m *JamfPackageMock) PostForm(ctx context.Context, path string, _ map[strin
 	return m.dispatch("POST", path, result)
 }
 
-func (m *JamfPackageMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *JamfPackageMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -171,7 +172,7 @@ func (m *JamfPackageMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	return resp, nil
 }
 
-func (m *JamfPackageMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *JamfPackageMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *JamfPackageMock) InvalidateToken() error                    { return nil }
 func (m *JamfPackageMock) KeepAliveToken() error                     { return nil }
 func (m *JamfPackageMock) GetLogger() *zap.Logger                    { return m.logger }

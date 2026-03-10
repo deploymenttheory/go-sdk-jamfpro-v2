@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -20,7 +21,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// ClassicLdapMock is a test double implementing transport.HTTPClient.
+// ClassicLdapMock is a test double implementing client.Client.
 type ClassicLdapMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -46,7 +47,7 @@ func (m *ClassicLdapMock) dispatch(method, path string, result any) (*resty.Resp
 	if !ok {
 		return nil, fmt.Errorf("ClassicLdapMock: no response for %s %s", method, path)
 	}
-	resp := shared.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -70,7 +71,7 @@ func (m *ClassicLdapMock) PostWithQuery(ctx context.Context, path string, _ map[
 func (m *ClassicLdapMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ClassicLdapMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ClassicLdapMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ClassicLdapMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -105,7 +106,7 @@ func (m *ClassicLdapMock) GetPaginated(ctx context.Context, path string, _ map[s
 	}
 	return resp, nil
 }
-func (m *ClassicLdapMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ClassicLdapMock) InvalidateToken() error                    { return nil }
-func (m *ClassicLdapMock) KeepAliveToken() error                       { return nil }
-func (m *ClassicLdapMock) GetLogger() *zap.Logger                     { return m.logger }
+func (m *ClassicLdapMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ClassicLdapMock) InvalidateToken() error                { return nil }
+func (m *ClassicLdapMock) KeepAliveToken() error                 { return nil }
+func (m *ClassicLdapMock) GetLogger() *zap.Logger                { return m.logger }

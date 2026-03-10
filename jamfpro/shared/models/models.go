@@ -1,4 +1,4 @@
-package shared
+package models
 
 // SharedResourceSite represents a site reference used across Classic API resources.
 type SharedResourceSite struct {

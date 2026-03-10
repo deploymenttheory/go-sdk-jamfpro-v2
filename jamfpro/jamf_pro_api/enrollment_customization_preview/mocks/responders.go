@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -71,7 +72,7 @@ func (m *EnrollmentCustomizationPreviewMock) dispatch(method, path string, resul
 		return nil, fmt.Errorf("EnrollmentCustomizationPreviewMock: no response registered for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
@@ -199,7 +200,7 @@ func (m *EnrollmentCustomizationPreviewMock) PostForm(ctx context.Context, path 
 	return m.dispatch("POST", path, result)
 }
 
-func (m *EnrollmentCustomizationPreviewMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *EnrollmentCustomizationPreviewMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -215,7 +216,7 @@ func (m *EnrollmentCustomizationPreviewMock) GetBytes(ctx context.Context, path 
 	return resp, resp.Bytes(), nil
 }
 
-func (m *EnrollmentCustomizationPreviewMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *EnrollmentCustomizationPreviewMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *EnrollmentCustomizationPreviewMock) InvalidateToken() error                    { return nil }
 func (m *EnrollmentCustomizationPreviewMock) KeepAliveToken() error                     { return nil }
 func (m *EnrollmentCustomizationPreviewMock) GetLogger() *zap.Logger                    { return m.logger }

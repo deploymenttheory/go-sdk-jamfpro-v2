@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -21,7 +22,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// ApiAuthorizationMock is a test double implementing transport.HTTPClient.
+// ApiAuthorizationMock is a test double implementing client.Client.
 type ApiAuthorizationMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -52,10 +53,10 @@ func (m *ApiAuthorizationMock) RegisterGetV1Mock() {
 func (m *ApiAuthorizationMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("ApiAuthorizationMock: no response for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("ApiAuthorizationMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -79,7 +80,7 @@ func (m *ApiAuthorizationMock) PostWithQuery(ctx context.Context, path string, _
 func (m *ApiAuthorizationMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ApiAuthorizationMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ApiAuthorizationMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ApiAuthorizationMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -114,7 +115,7 @@ func (m *ApiAuthorizationMock) GetPaginated(ctx context.Context, path string, _ 
 	}
 	return resp, nil
 }
-func (m *ApiAuthorizationMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ApiAuthorizationMock) InvalidateToken() error                    { return nil }
-func (m *ApiAuthorizationMock) KeepAliveToken() error                     { return nil }
-func (m *ApiAuthorizationMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *ApiAuthorizationMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ApiAuthorizationMock) InvalidateToken() error                { return nil }
+func (m *ApiAuthorizationMock) KeepAliveToken() error                 { return nil }
+func (m *ApiAuthorizationMock) GetLogger() *zap.Logger                { return m.logger }

@@ -9,10 +9,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -90,7 +91,7 @@ func (m *DeviceEnrollmentsMock) Get(ctx context.Context, endpoint string, queryP
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *DeviceEnrollmentsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
@@ -105,7 +106,7 @@ func (m *DeviceEnrollmentsMock) Post(ctx context.Context, endpoint string, body 
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *DeviceEnrollmentsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
@@ -113,11 +114,11 @@ func (m *DeviceEnrollmentsMock) PostWithQuery(ctx context.Context, endpoint stri
 }
 
 func (m *DeviceEnrollmentsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-func (m *DeviceEnrollmentsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+func (m *DeviceEnrollmentsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DeviceEnrollmentsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
@@ -132,11 +133,11 @@ func (m *DeviceEnrollmentsMock) Put(ctx context.Context, endpoint string, body a
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *DeviceEnrollmentsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DeviceEnrollmentsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*resty.Response, error) {
@@ -145,7 +146,7 @@ func (m *DeviceEnrollmentsMock) Delete(ctx context.Context, endpoint string, que
 		return nil, errNoMockRegistered
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *DeviceEnrollmentsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
@@ -154,7 +155,7 @@ func (m *DeviceEnrollmentsMock) DeleteWithBody(ctx context.Context, endpoint str
 		return nil, errNoMockRegistered
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *DeviceEnrollmentsMock) GetBytes(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
@@ -163,7 +164,7 @@ func (m *DeviceEnrollmentsMock) GetBytes(ctx context.Context, endpoint string, q
 		return nil, nil, errNoMockRegistered
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), body, nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), body, nil
 }
 
 func (m *DeviceEnrollmentsMock) GetPaginated(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
@@ -175,21 +176,21 @@ func (m *DeviceEnrollmentsMock) GetPaginated(ctx context.Context, endpoint strin
 		// Extract "results" field from the response
 		var wrapper map[string]json.RawMessage
 		if err := json.Unmarshal(body, &wrapper); err != nil {
-			return shared.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
 		}
 		resultsData, ok := wrapper["results"]
 		if !ok {
-			return shared.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), fmt.Errorf("results field not found")
+			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), fmt.Errorf("results field not found")
 		}
 
 		if err := mergePage(resultsData); err != nil {
-			return shared.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
 		}
 	}
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
-func (m *DeviceEnrollmentsMock) RSQLBuilder() transport.RSQLFilterBuilder {
+func (m *DeviceEnrollmentsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 

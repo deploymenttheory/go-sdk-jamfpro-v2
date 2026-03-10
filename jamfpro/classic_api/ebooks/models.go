@@ -3,7 +3,7 @@ package ebooks
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for List (GET /JSSResource/ebooks).
@@ -38,9 +38,9 @@ type SubsetGeneral struct {
 	DeploymentType  string                         `xml:"deployment_type"`
 	FileType        string                         `xml:"file_type"`
 	DeployAsManaged bool                           `xml:"deploy_as_managed"`
-	Category        *shared.SharedResourceCategory `xml:"category,omitempty"`
-	SelfServiceIcon shared.SharedResourceSelfServiceIcon `xml:"self_service_icon"`
-	Site            shared.SharedResourceSite      `xml:"site"`
+	Category        *models.SharedResourceCategory `xml:"category,omitempty"`
+	SelfServiceIcon models.SharedResourceSelfServiceIcon `xml:"self_service_icon"`
+	Site            models.SharedResourceSite      `xml:"site"`
 }
 
 // SubsetScope represents the scope of an ebook.
@@ -99,7 +99,7 @@ type SubsetSelfService struct {
 	InstallButtonText           string                        `xml:"install_button_text"`
 	SelfServiceDescription      string                        `xml:"self_service_description"`
 	ForceUsersToViewDescription bool                          `xml:"force_users_to_view_description"`
-	SelfServiceIcon             shared.SharedResourceSelfServiceIcon `xml:"self_service_icon"`
+	SelfServiceIcon             models.SharedResourceSelfServiceIcon `xml:"self_service_icon"`
 	FeatureOnMainPage           bool                          `xml:"feature_on_main_page"`
 	SelfServiceCategories       SelfServiceCategories         `xml:"self_service_categories"`
 	Notification                bool                          `xml:"notification"`

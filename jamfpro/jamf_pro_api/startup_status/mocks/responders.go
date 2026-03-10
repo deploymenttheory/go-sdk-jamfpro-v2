@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -20,7 +21,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// StartupStatusMock is a test double implementing transport.HTTPClient.
+// StartupStatusMock is a test double implementing client.Client.
 type StartupStatusMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -47,7 +48,7 @@ func (m *StartupStatusMock) dispatch(method, path string, result any) (*resty.Re
 		return nil, fmt.Errorf("StartupStatusMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -71,7 +72,7 @@ func (m *StartupStatusMock) PostWithQuery(ctx context.Context, path string, _ ma
 func (m *StartupStatusMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *StartupStatusMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *StartupStatusMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *StartupStatusMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -106,7 +107,7 @@ func (m *StartupStatusMock) GetPaginated(ctx context.Context, path string, _ map
 	}
 	return resp, nil
 }
-func (m *StartupStatusMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *StartupStatusMock) InvalidateToken() error                    { return nil }
-func (m *StartupStatusMock) KeepAliveToken() error                     { return nil }
-func (m *StartupStatusMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *StartupStatusMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *StartupStatusMock) InvalidateToken() error                { return nil }
+func (m *StartupStatusMock) KeepAliveToken() error                 { return nil }
+func (m *StartupStatusMock) GetLogger() *zap.Logger                { return m.logger }

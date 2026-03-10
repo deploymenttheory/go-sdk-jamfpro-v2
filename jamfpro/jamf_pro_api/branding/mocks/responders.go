@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -57,7 +58,7 @@ func (m *BrandingMock) PostWithQuery(ctx context.Context, path string, _ map[str
 func (m *BrandingMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *BrandingMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *BrandingMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *BrandingMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -73,7 +74,7 @@ func (m *BrandingMock) DeleteWithBody(ctx context.Context, path string, _ any, _
 	return m.dispatch("DELETE", path, result)
 }
 
-// GetBytes implements transport.HTTPClient.GetBytes.
+// GetBytes implements client.Client.GetBytes.
 func (m *BrandingMock) GetBytes(ctx context.Context, path string, _ map[string]string, _ map[string]string) (*resty.Response, []byte, error) {
 	resp, err := m.dispatch("GET", path, nil)
 	if err != nil {
@@ -94,18 +95,18 @@ func (m *BrandingMock) GetPaginated(ctx context.Context, path string, _ map[stri
 	}
 	return resp, nil
 }
-func (m *BrandingMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *BrandingMock) InvalidateToken() error                    { return nil }
-func (m *BrandingMock) KeepAliveToken() error                     { return nil }
-func (m *BrandingMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *BrandingMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *BrandingMock) InvalidateToken() error                { return nil }
+func (m *BrandingMock) KeepAliveToken() error                 { return nil }
+func (m *BrandingMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *BrandingMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("no mock for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("no mock for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"image/png"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

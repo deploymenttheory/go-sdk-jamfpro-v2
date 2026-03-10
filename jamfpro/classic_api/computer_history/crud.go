@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -15,12 +15,12 @@ type (
 	//
 	// Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerhistory
 	ComputerHistory struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new computer history Service backed by the provided HTTP client.
-func NewComputerHistory(client transport.HTTPClient) *ComputerHistory {
+func NewComputerHistory(client client.Client) *ComputerHistory {
 	return &ComputerHistory{client: client}
 }
 

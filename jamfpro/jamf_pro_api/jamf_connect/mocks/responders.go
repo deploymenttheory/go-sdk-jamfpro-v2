@@ -7,10 +7,11 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -20,7 +21,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// JamfConnectMock is a test double implementing transport.HTTPClient.
+// JamfConnectMock is a test double implementing client.Client.
 type JamfConnectMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -51,11 +52,11 @@ func (m *JamfConnectMock) dispatch(method, path string, result any) (*resty.Resp
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {"application/json"}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`)), fmt.Errorf("JamfConnectMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`)), fmt.Errorf("JamfConnectMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
@@ -218,7 +219,7 @@ func (m *JamfConnectMock) PostForm(ctx context.Context, path string, _ map[strin
 	return m.dispatch("POST", path, result)
 }
 
-func (m *JamfConnectMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *JamfConnectMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -266,7 +267,7 @@ func (m *JamfConnectMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	return resp, nil
 }
 
-func (m *JamfConnectMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *JamfConnectMock) InvalidateToken() error                    { return nil }
-func (m *JamfConnectMock) KeepAliveToken() error                     { return nil }
-func (m *JamfConnectMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *JamfConnectMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *JamfConnectMock) InvalidateToken() error                { return nil }
+func (m *JamfConnectMock) KeepAliveToken() error                 { return nil }
+func (m *JamfConnectMock) GetLogger() *zap.Logger                { return m.logger }

@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -23,7 +24,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// ComputerInvitationsMock is a test double implementing transport.HTTPClient for Classic API computer invitations.
+// ComputerInvitationsMock is a test double implementing client.Client for Classic API computer invitations.
 // Responses are keyed by "METHOD:path" and loaded from XML fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 //
@@ -90,7 +91,7 @@ func (m *ComputerInvitationsMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/JSSResource/computerinvitations/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *ComputerInvitationsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -109,7 +110,7 @@ func (m *ComputerInvitationsMock) PostForm(ctx context.Context, path string, _ m
 	return m.dispatch("POST", path, result)
 }
 
-func (m *ComputerInvitationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ComputerInvitationsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -151,10 +152,10 @@ func (m *ComputerInvitationsMock) GetPaginated(ctx context.Context, path string,
 	return resp, nil
 }
 
-func (m *ComputerInvitationsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ComputerInvitationsMock) InvalidateToken() error                    { return nil }
-func (m *ComputerInvitationsMock) KeepAliveToken() error                     { return nil }
-func (m *ComputerInvitationsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *ComputerInvitationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ComputerInvitationsMock) InvalidateToken() error                { return nil }
+func (m *ComputerInvitationsMock) KeepAliveToken() error                 { return nil }
+func (m *ComputerInvitationsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -191,11 +192,11 @@ func (m *ComputerInvitationsMock) dispatch(method, path string, result any) (*re
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("ComputerInvitationsMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("ComputerInvitationsMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

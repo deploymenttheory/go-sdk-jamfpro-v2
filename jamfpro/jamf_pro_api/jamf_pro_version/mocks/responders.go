@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -64,7 +65,7 @@ func (m *JamfProVersionMock) PostWithQuery(ctx context.Context, path string, _ m
 func (m *JamfProVersionMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *JamfProVersionMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *JamfProVersionMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *JamfProVersionMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -99,7 +100,7 @@ func (m *JamfProVersionMock) GetPaginated(ctx context.Context, path string, _ ma
 	}
 	return resp, nil
 }
-func (m *JamfProVersionMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *JamfProVersionMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *JamfProVersionMock) InvalidateToken() error                    { return nil }
 func (m *JamfProVersionMock) KeepAliveToken() error                     { return nil }
 func (m *JamfProVersionMock) GetLogger() *zap.Logger                     { return m.logger }
@@ -110,7 +111,7 @@ func (m *JamfProVersionMock) dispatch(method, path string, result any) (*resty.R
 		return nil, fmt.Errorf("no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}

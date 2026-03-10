@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -12,11 +12,11 @@ import (
 type (
 	// Service handles communication with the enrollment customization preview methods of the Jamf Pro API.
 	EnrollmentCustomizationPreview struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewEnrollmentCustomizationPreview(client transport.HTTPClient) *EnrollmentCustomizationPreview {
+func NewEnrollmentCustomizationPreview(client client.Client) *EnrollmentCustomizationPreview {
 	return &EnrollmentCustomizationPreview{client: client}
 }
 

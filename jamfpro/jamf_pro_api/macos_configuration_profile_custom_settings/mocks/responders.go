@@ -8,10 +8,11 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -24,7 +25,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// MacOSConfigProfileCustomSettingsMock is a test double implementing transport.HTTPClient
+// MacOSConfigProfileCustomSettingsMock is a test double implementing client.Client
 // for macOS configuration profile custom settings operations.
 //
 // Responses are keyed by "METHOD path". Use RegisterGetSchemaListMock,
@@ -117,7 +118,7 @@ func (m *MacOSConfigProfileCustomSettingsMock) Get(ctx context.Context, path str
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *MacOSConfigProfileCustomSettingsMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -134,7 +135,7 @@ func (m *MacOSConfigProfileCustomSettingsMock) Post(ctx context.Context, path st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *MacOSConfigProfileCustomSettingsMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -145,7 +146,7 @@ func (m *MacOSConfigProfileCustomSettingsMock) PostForm(ctx context.Context, pat
 	return m.Post(ctx, path, formData, headers, result)
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *MacOSConfigProfileCustomSettingsMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.Post(ctx, path, nil, headers, result)
 }
 
@@ -163,7 +164,7 @@ func (m *MacOSConfigProfileCustomSettingsMock) Put(ctx context.Context, path str
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *MacOSConfigProfileCustomSettingsMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -180,7 +181,7 @@ func (m *MacOSConfigProfileCustomSettingsMock) Patch(ctx context.Context, path s
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *MacOSConfigProfileCustomSettingsMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
@@ -197,7 +198,7 @@ func (m *MacOSConfigProfileCustomSettingsMock) Delete(ctx context.Context, path 
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *MacOSConfigProfileCustomSettingsMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -213,14 +214,14 @@ func (m *MacOSConfigProfileCustomSettingsMock) GetBytes(ctx context.Context, pat
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
 func (m *MacOSConfigProfileCustomSettingsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in MacOSConfigProfileCustomSettingsMock")
 }
 
-func (m *MacOSConfigProfileCustomSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder {
+func (m *MacOSConfigProfileCustomSettingsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 

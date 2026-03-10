@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 const endpointIssueTomcatSslCertificate = "/api/settings/issueTomcatSslCertificate"
@@ -74,7 +75,7 @@ func (m *TomcatSettingsMock) dispatch(method, path string, result any) (*resty.R
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
@@ -138,7 +139,7 @@ func (m *TomcatSettingsMock) PostForm(ctx context.Context, path string, _ map[st
 	return m.dispatch("POST", path, result)
 }
 
-func (m *TomcatSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *TomcatSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -154,7 +155,7 @@ func (m *TomcatSettingsMock) GetBytes(ctx context.Context, path string, _ map[st
 	return resp, resp.Bytes(), nil
 }
 
-func (m *TomcatSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *TomcatSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *TomcatSettingsMock) InvalidateToken() error                    { return nil }
 func (m *TomcatSettingsMock) KeepAliveToken() error                     { return nil }
 func (m *TomcatSettingsMock) GetLogger() *zap.Logger                    { return m.logger }

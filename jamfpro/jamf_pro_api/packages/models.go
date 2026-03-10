@@ -1,7 +1,7 @@
 package packages
 
 import (
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourcePackage represents a package resource (get/list/update).
@@ -81,13 +81,13 @@ type CreateResponse struct {
 }
 
 // HistoryObject is an alias to the shared history item struct with string IDs.
-type HistoryObject = shared.SharedHistoryItemString
+type HistoryObject = models.SharedHistoryItemString
 
 // HistoryResponse is an alias to the shared history response struct with string IDs.
-type HistoryResponse = shared.SharedHistoryResponseString
+type HistoryResponse = models.SharedHistoryResponseString
 
 // AddHistoryNotesRequest is an alias to the shared history note request struct.
-type AddHistoryNotesRequest = shared.SharedHistoryNoteRequest
+type AddHistoryNotesRequest = models.SharedHistoryNoteRequest
 
 // DeletePackagesByIDRequest is the body for DeletePackagesByIDV1 (delete multiple).
 type DeletePackagesByIDRequest struct {

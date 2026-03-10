@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -13,13 +13,12 @@ import (
 type (
 	// Service provides methods for interacting with APNS client push status endpoints.
 	ApnsClientPushStatus struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-
 // NewService creates a new apns_client_push_status service.
-func NewApnsClientPushStatus(client transport.HTTPClient) *ApnsClientPushStatus {
+func NewApnsClientPushStatus(client client.Client) *ApnsClientPushStatus {
 	return &ApnsClientPushStatus{client: client}
 }
 

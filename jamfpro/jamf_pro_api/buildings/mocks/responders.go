@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// BuildingsMock is a test double implementing transport.HTTPClient.
+// BuildingsMock is a test double implementing client.Client.
 type BuildingsMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -88,7 +89,7 @@ func (m *BuildingsMock) dispatch(method, path string, result any) (*resty.Respon
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
@@ -187,7 +188,7 @@ func (m *BuildingsMock) PostForm(ctx context.Context, path string, _ map[string]
 	return m.dispatch("POST", path, result)
 }
 
-func (m *BuildingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *BuildingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -238,7 +239,7 @@ func (m *BuildingsMock) GetPaginated(ctx context.Context, path string, rsqlQuery
 	return resp, nil
 }
 
-func (m *BuildingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *BuildingsMock) InvalidateToken() error                    { return nil }
-func (m *BuildingsMock) KeepAliveToken() error                     { return nil }
-func (m *BuildingsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *BuildingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *BuildingsMock) InvalidateToken() error                { return nil }
+func (m *BuildingsMock) KeepAliveToken() error                 { return nil }
+func (m *BuildingsMock) GetLogger() *zap.Logger                { return m.logger }

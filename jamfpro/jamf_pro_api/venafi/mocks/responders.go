@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -96,7 +97,7 @@ func (m *VenafiMock) dispatch(method, path string, result any) (*resty.Response,
 		return nil, fmt.Errorf("VenafiMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -120,7 +121,7 @@ func (m *VenafiMock) PostWithQuery(ctx context.Context, path string, _ map[strin
 func (m *VenafiMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *VenafiMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *VenafiMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *VenafiMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -161,7 +162,7 @@ func (m *VenafiMock) GetPaginated(ctx context.Context, path string, _ map[string
 	}
 	return resp, nil
 }
-func (m *VenafiMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *VenafiMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *VenafiMock) InvalidateToken() error                    { return nil }
 func (m *VenafiMock) KeepAliveToken() error                     { return nil }
 func (m *VenafiMock) GetLogger() *zap.Logger                    { return m.logger }

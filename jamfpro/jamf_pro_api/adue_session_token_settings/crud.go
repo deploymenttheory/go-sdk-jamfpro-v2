@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,11 +14,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-adue-session-token-settings
 	AdueSessionTokenSettings struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewAdueSessionTokenSettings(client transport.HTTPClient) *AdueSessionTokenSettings {
+func NewAdueSessionTokenSettings(client client.Client) *AdueSessionTokenSettings {
 	return &AdueSessionTokenSettings{client: client}
 }
 

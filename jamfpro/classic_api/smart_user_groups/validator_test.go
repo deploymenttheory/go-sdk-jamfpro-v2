@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/smart_user_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +20,7 @@ func TestValidateRequest_EmptyName(t *testing.T) {
 		IsSmart: true,
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{Name: "Email Address", SearchType: "like", Value: "@example.com"},
 			},
 		},
@@ -36,7 +36,7 @@ func TestValidateRequest_IsSmartFalse(t *testing.T) {
 		IsSmart: false,
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{Name: "Email Address", SearchType: "like", Value: "@example.com"},
 			},
 		},
@@ -63,7 +63,7 @@ func TestValidateRequest_EmptyCriteria(t *testing.T) {
 		IsSmart: true,
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size:      0,
-			Criterion: []shared.SharedSubsetCriteria{},
+			Criterion: []models.SharedSubsetCriteria{},
 		},
 	}
 	err := smart_user_groups.ValidateRequest(req)
@@ -77,7 +77,7 @@ func TestValidateRequest_Valid(t *testing.T) {
 		IsSmart: true,
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{Name: "Email Address", SearchType: "like", Value: "@example.com"},
 			},
 		},

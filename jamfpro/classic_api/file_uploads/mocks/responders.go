@@ -8,11 +8,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// FileUploadsMock is a test double implementing transport.HTTPClient for Classic API file uploads.
+// FileUploadsMock is a test double implementing client.Client for Classic API file uploads.
 // Responses are keyed by "METHOD:path". File uploads use PostMultipart and dispatch to the same
 // lookup; register with RegisterCreateAttachmentMock for the path your test uses.
 //
@@ -77,7 +78,7 @@ func (m *FileUploadsMock) RegisterPeripheralsNameErrorMock() {
 	m.registerError("POST", "/JSSResource/fileuploads/peripherals/name/somename", 400, "error_peripherals_name_type.xml", "Jamf Pro Classic API error (400): Peripherals only support ID type")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *FileUploadsMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("GET", path, result)
@@ -95,9 +96,9 @@ func (m *FileUploadsMock) PostForm(ctx context.Context, path string, _ map[strin
 	return m.dispatch("POST", path, result)
 }
 
-// PostMultipart implements transport.HTTPClient.
+// PostMultipart implements client.Client.
 // File uploads dispatch by path; the mock ignores file content for unit tests.
-func (m *FileUploadsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *FileUploadsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -139,10 +140,10 @@ func (m *FileUploadsMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	return resp, nil
 }
 
-func (m *FileUploadsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *FileUploadsMock) InvalidateToken() error                    { return nil }
-func (m *FileUploadsMock) KeepAliveToken() error                     { return nil }
-func (m *FileUploadsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *FileUploadsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *FileUploadsMock) InvalidateToken() error                { return nil }
+func (m *FileUploadsMock) KeepAliveToken() error                 { return nil }
+func (m *FileUploadsMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -175,11 +176,11 @@ func (m *FileUploadsMock) dispatch(method, path string, result any) (*resty.Resp
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("FileUploadsMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("FileUploadsMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

@@ -3,7 +3,7 @@ package macos_configuration_profiles
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for List (GET /JSSResource/osxconfigurationprofiles).
@@ -51,8 +51,8 @@ type SubsetGeneral struct {
 	ID                 int                          `xml:"id,omitempty"`
 	Name               string                       `xml:"name"`
 	Description        string                       `xml:"description,omitempty"`
-	Site               *shared.SharedResourceSite   `xml:"site,omitempty"`
-	Category           *shared.SharedResourceCategory `xml:"category,omitempty"`
+	Site               *models.SharedResourceSite   `xml:"site,omitempty"`
+	Category           *models.SharedResourceCategory `xml:"category,omitempty"`
 	DistributionMethod string                       `xml:"distribution_method,omitempty"`
 	UserRemovable      bool                         `xml:"user_removable"`
 	Level              string                       `xml:"level,omitempty"`
@@ -81,7 +81,7 @@ type SubsetSelfService struct {
 	InstallButtonText           string                        `xml:"install_button_text,omitempty"`
 	SelfServiceDescription      string                        `xml:"self_service_description,omitempty"`
 	ForceUsersToViewDescription bool                          `xml:"force_users_to_view_description"`
-	SelfServiceIcon             shared.SharedResourceSelfServiceIcon `xml:"self_service_icon,omitempty"`
+	SelfServiceIcon             models.SharedResourceSelfServiceIcon `xml:"self_service_icon,omitempty"`
 	FeatureOnMainPage           bool                         `xml:"feature_on_main_page"`
 	SelfServiceCategories       []SelfServiceCategory         `xml:"self_service_categories>category,omitempty"`
 	Notification                string                        `xml:"notification,omitempty"`

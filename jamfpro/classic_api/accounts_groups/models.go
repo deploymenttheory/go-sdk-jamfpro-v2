@@ -3,7 +3,7 @@ package accounts_groups
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceAccountGroup represents a Jamf Pro Classic API account group resource.
@@ -15,7 +15,7 @@ type ResourceAccountGroup struct {
 	Name         string                     `xml:"name,omitempty"`
 	AccessLevel  string                     `xml:"access_level,omitempty"`
 	PrivilegeSet string                     `xml:"privilege_set,omitempty"`
-	Site         *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site         *models.SharedResourceSite `xml:"site,omitempty"`
 	Privileges   PrivilegesSubset           `xml:"privileges,omitempty"`
 	Members      []MemberUser               `xml:"members>user,omitempty"`
 	LdapServer   LdapServerSubset           `xml:"ldap_server,omitempty"`
@@ -28,7 +28,7 @@ type RequestAccountGroup struct {
 	Name         string                     `xml:"name,omitempty"`
 	AccessLevel  string                     `xml:"access_level,omitempty"`
 	PrivilegeSet string                     `xml:"privilege_set,omitempty"`
-	Site         *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site         *models.SharedResourceSite `xml:"site,omitempty"`
 	Privileges   PrivilegesSubset           `xml:"privileges,omitempty"`
 	Members      []MemberUser               `xml:"members>user,omitempty"`
 	LdapServer   LdapServerSubset           `xml:"ldap_server,omitempty"`

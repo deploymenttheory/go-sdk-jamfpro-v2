@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -21,7 +22,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// ServiceDiscoveryEnrollmentMock is a test double implementing transport.HTTPClient.
+// ServiceDiscoveryEnrollmentMock is a test double implementing client.Client.
 type ServiceDiscoveryEnrollmentMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -61,7 +62,7 @@ func (m *ServiceDiscoveryEnrollmentMock) dispatch(method, path string, result an
 		return nil, fmt.Errorf("ServiceDiscoveryEnrollmentMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -85,7 +86,7 @@ func (m *ServiceDiscoveryEnrollmentMock) PostWithQuery(ctx context.Context, path
 func (m *ServiceDiscoveryEnrollmentMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *ServiceDiscoveryEnrollmentMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *ServiceDiscoveryEnrollmentMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *ServiceDiscoveryEnrollmentMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -120,7 +121,7 @@ func (m *ServiceDiscoveryEnrollmentMock) GetPaginated(ctx context.Context, path 
 	}
 	return resp, nil
 }
-func (m *ServiceDiscoveryEnrollmentMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *ServiceDiscoveryEnrollmentMock) InvalidateToken() error                    { return nil }
-func (m *ServiceDiscoveryEnrollmentMock) KeepAliveToken() error                      { return nil }
-func (m *ServiceDiscoveryEnrollmentMock) GetLogger() *zap.Logger                      { return m.logger }
+func (m *ServiceDiscoveryEnrollmentMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *ServiceDiscoveryEnrollmentMock) InvalidateToken() error                { return nil }
+func (m *ServiceDiscoveryEnrollmentMock) KeepAliveToken() error                 { return nil }
+func (m *ServiceDiscoveryEnrollmentMock) GetLogger() *zap.Logger                { return m.logger }

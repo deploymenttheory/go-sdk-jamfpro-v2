@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -75,7 +76,7 @@ func (m *CloudIdpMock) dispatch(method, path string, result any) (*resty.Respons
 	if !ok {
 		return nil, fmt.Errorf("CloudIdpMock: no response for %s %s", method, path)
 	}
-	resp := shared.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -99,7 +100,7 @@ func (m *CloudIdpMock) PostWithQuery(ctx context.Context, path string, _ map[str
 func (m *CloudIdpMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *CloudIdpMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *CloudIdpMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *CloudIdpMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -144,7 +145,7 @@ func (m *CloudIdpMock) GetPaginated(ctx context.Context, path string, _ map[stri
 	}
 	return resp, nil
 }
-func (m *CloudIdpMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *CloudIdpMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *CloudIdpMock) InvalidateToken() error                    { return nil }
 func (m *CloudIdpMock) KeepAliveToken() error                     { return nil }
 func (m *CloudIdpMock) GetLogger() *zap.Logger                    { return m.logger }

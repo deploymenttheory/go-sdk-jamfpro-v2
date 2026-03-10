@@ -1,7 +1,7 @@
 package categories
 
 import (
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceCategory represents a category resource.
@@ -38,10 +38,10 @@ type DeleteCategoriesByIDRequest struct {
 }
 
 // HistoryObject represents a category history entry.
-type HistoryObject = shared.SharedHistoryItem
+type HistoryObject = models.SharedHistoryItem
 
 // CategoryHistoryResponse is the response for GetCategoryHistory.
-type CategoryHistoryResponse = shared.SharedHistoryResponse
+type CategoryHistoryResponse = models.SharedHistoryResponse
 
 // AddCategoryHistoryNotesRequest is the body for AddCategoryHistoryNotes.
-type AddCategoryHistoryNotesRequest = shared.SharedHistoryNoteRequest
+type AddCategoryHistoryNotesRequest = models.SharedHistoryNoteRequest

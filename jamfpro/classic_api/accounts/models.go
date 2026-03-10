@@ -3,7 +3,7 @@ package accounts
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceAccount represents a Jamf Pro Classic API account resource.
@@ -22,7 +22,7 @@ type ResourceAccount struct {
 	AccessLevel         string                   `xml:"access_level,omitempty"`
 	Password            string                   `xml:"password,omitempty"`
 	PrivilegeSet        string                   `xml:"privilege_set,omitempty"`
-	Site                *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site                *models.SharedResourceSite `xml:"site,omitempty"`
 	Privileges          PrivilegesSubset         `xml:"privileges,omitempty"`
 	Groups              []GroupSubset            `xml:"groups>group,omitempty"`
 }
@@ -50,7 +50,7 @@ type RequestAccount struct {
 	AccessLevel         string                   `xml:"access_level,omitempty"`
 	Password            string                   `xml:"password,omitempty"`
 	PrivilegeSet        string                   `xml:"privilege_set,omitempty"`
-	Site                *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site                *models.SharedResourceSite `xml:"site,omitempty"`
 	Privileges          PrivilegesSubset         `xml:"privileges,omitempty"`
 	Groups              []GroupSubset            `xml:"groups>group,omitempty"`
 }

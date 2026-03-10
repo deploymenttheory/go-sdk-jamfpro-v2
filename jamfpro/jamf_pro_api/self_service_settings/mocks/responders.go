@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -21,7 +22,7 @@ type registeredResponse struct {
 	rawBody    []byte
 }
 
-// SelfServiceSettingsMock is a test double implementing transport.HTTPClient.
+// SelfServiceSettingsMock is a test double implementing client.Client.
 type SelfServiceSettingsMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -67,7 +68,7 @@ func (m *SelfServiceSettingsMock) dispatch(method, path string, result any) (*re
 		return nil, errNoMockRegistered
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -91,7 +92,7 @@ func (m *SelfServiceSettingsMock) PostWithQuery(ctx context.Context, path string
 func (m *SelfServiceSettingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *SelfServiceSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SelfServiceSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *SelfServiceSettingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -132,7 +133,7 @@ func (m *SelfServiceSettingsMock) GetPaginated(ctx context.Context, path string,
 	}
 	return resp, nil
 }
-func (m *SelfServiceSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *SelfServiceSettingsMock) InvalidateToken() error                    { return nil }
-func (m *SelfServiceSettingsMock) KeepAliveToken() error                     { return nil }
-func (m *SelfServiceSettingsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *SelfServiceSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *SelfServiceSettingsMock) InvalidateToken() error                { return nil }
+func (m *SelfServiceSettingsMock) KeepAliveToken() error                 { return nil }
+func (m *SelfServiceSettingsMock) GetLogger() *zap.Logger                { return m.logger }

@@ -1,6 +1,6 @@
 package scripts
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 
 // ResourceScript represents a script resource returned by the Jamf Pro API.
 type ResourceScript struct {
@@ -70,4 +70,4 @@ type ScriptHistoryResponse struct {
 }
 
 // AddScriptHistoryNotesRequest is an alias to the shared history note request.
-type AddScriptHistoryNotesRequest = shared.SharedHistoryNoteRequest
+type AddScriptHistoryNotesRequest = models.SharedHistoryNoteRequest

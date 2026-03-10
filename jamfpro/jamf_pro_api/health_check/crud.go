@@ -3,7 +3,7 @@ package health_check
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -13,11 +13,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-health-check
 	HealthCheck struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewHealthCheck(client transport.HTTPClient) *HealthCheck {
+func NewHealthCheck(client client.Client) *HealthCheck {
 	return &HealthCheck{client: client}
 }
 

@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// SSOFailoverMock implements transport.HTTPClient for tests.
+// SSOFailoverMock implements client.Client for tests.
 type SSOFailoverMock struct {
 	responses map[string]registeredResponse
 	logger    *zap.Logger
@@ -69,7 +70,7 @@ func (m *SSOFailoverMock) PostWithQuery(ctx context.Context, path string, _ map[
 func (m *SSOFailoverMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *SSOFailoverMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *SSOFailoverMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *SSOFailoverMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -104,10 +105,10 @@ func (m *SSOFailoverMock) GetPaginated(ctx context.Context, path string, q map[s
 	}
 	return resp, nil
 }
-func (m *SSOFailoverMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *SSOFailoverMock) InvalidateToken() error                    { return nil }
-func (m *SSOFailoverMock) KeepAliveToken() error                     { return nil }
-func (m *SSOFailoverMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *SSOFailoverMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *SSOFailoverMock) InvalidateToken() error                { return nil }
+func (m *SSOFailoverMock) KeepAliveToken() error                 { return nil }
+func (m *SSOFailoverMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *SSOFailoverMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
@@ -115,7 +116,7 @@ func (m *SSOFailoverMock) dispatch(method, path string, result any) (*resty.Resp
 		return nil, fmt.Errorf("SSOFailoverMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}

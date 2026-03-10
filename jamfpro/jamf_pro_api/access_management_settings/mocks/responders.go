@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -49,10 +49,10 @@ func (m *AccessManagementSettingsMock) RegisterPostMock() {
 func (m *AccessManagementSettingsMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("AccessManagementSettingsMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("AccessManagementSettingsMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -76,7 +76,7 @@ func (m *AccessManagementSettingsMock) PostWithQuery(ctx context.Context, path s
 func (m *AccessManagementSettingsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *AccessManagementSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AccessManagementSettingsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *AccessManagementSettingsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -111,7 +111,7 @@ func (m *AccessManagementSettingsMock) GetPaginated(ctx context.Context, path st
 	}
 	return resp, nil
 }
-func (m *AccessManagementSettingsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *AccessManagementSettingsMock) InvalidateToken() error                    { return nil }
-func (m *AccessManagementSettingsMock) KeepAliveToken() error                     { return nil }
-func (m *AccessManagementSettingsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *AccessManagementSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *AccessManagementSettingsMock) InvalidateToken() error                { return nil }
+func (m *AccessManagementSettingsMock) KeepAliveToken() error                 { return nil }
+func (m *AccessManagementSettingsMock) GetLogger() *zap.Logger                { return m.logger }

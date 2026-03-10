@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/smart_user_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -35,13 +35,13 @@ func TestAcceptance_SmartUserGroups_lifecycle(t *testing.T) {
 		Name:             groupName,
 		IsSmart:          true,
 		IsNotifyOnChange: false,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Email Address",
 					Priority:   0,
@@ -146,13 +146,13 @@ func TestAcceptance_SmartUserGroups_lifecycle(t *testing.T) {
 		Name:             updatedName,
 		IsSmart:          true,
 		IsNotifyOnChange: true,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 2,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Email Address",
 					Priority:   0,
@@ -188,13 +188,13 @@ func TestAcceptance_SmartUserGroups_lifecycle(t *testing.T) {
 		Name:             groupName,
 		IsSmart:          true,
 		IsNotifyOnChange: false,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Email Address",
 					Priority:   0,
@@ -257,13 +257,13 @@ func TestAcceptance_SmartUserGroups_delete_by_name(t *testing.T) {
 		Name:             groupName,
 		IsSmart:          true,
 		IsNotifyOnChange: false,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Email Address",
 					Priority:   0,

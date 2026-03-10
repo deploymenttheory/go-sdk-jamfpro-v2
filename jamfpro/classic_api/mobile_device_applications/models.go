@@ -3,7 +3,7 @@ package mobile_device_applications
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for List (GET /JSSResource/mobiledeviceapplications).
@@ -43,7 +43,7 @@ type SubsetGeneral struct {
 	Version                          string                       `xml:"version"`
 	InternalApp                      *bool                        `xml:"internal_app,omitempty"`
 	OsType                           string                       `xml:"os_type,omitempty"`
-	Category                         *shared.SharedResourceCategory `xml:"category"`
+	Category                         *models.SharedResourceCategory `xml:"category"`
 	IPA                              SubsetIPA                    `xml:"ipa,omitempty"`
 	Icon                             SubsetIcon                   `xml:"icon"`
 	ProvisioningProfile              int                          `xml:"mobile_device_provisioning_profile,omitempty"`
@@ -63,7 +63,7 @@ type SubsetGeneral struct {
 	TakeOverManagement               *bool                        `xml:"take_over_management,omitempty"`
 	HostExternally                   *bool                        `xml:"host_externally,omitempty"`
 	ExternalURL                      string                       `xml:"external_url,omitempty"`
-	Site                             *shared.SharedResourceSite   `xml:"site"`
+	Site                             *models.SharedResourceSite   `xml:"site"`
 }
 
 // SubsetIPA represents IPA configuration for mobile device applications.
@@ -78,7 +78,7 @@ type SubsetSelfService struct {
 	SelfServiceDescription string                              `xml:"self_service_description,omitempty"`
 	SelfServiceIcon       SubsetIcon                          `xml:"self_service_icon,omitempty"`
 	FeatureOnMainPage     *bool                               `xml:"feature_on_main_page,omitempty"`
-	SelfServiceCategories []shared.SharedResourceSelfServiceCategory `xml:"self_service_categories>category,omitempty"`
+	SelfServiceCategories []models.SharedResourceSelfServiceCategory `xml:"self_service_categories>category,omitempty"`
 	Notification          *bool                               `xml:"notification,omitempty"`
 	NotificationSubject   string                              `xml:"notification_subject,omitempty"`
 	NotificationMessage   string                              `xml:"notification_message,omitempty"`

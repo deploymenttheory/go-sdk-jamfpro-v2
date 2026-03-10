@@ -1,13 +1,13 @@
 package smtp_server
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 
 // ResourceSMTPServer represents the SMTP server configuration (singleton).
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server
 type ResourceSMTPServer struct {
-	Enabled               bool                                    `json:"enabled"`
-	AuthenticationType    string                                  `json:"authenticationType"`
+	Enabled               bool                                     `json:"enabled"`
+	AuthenticationType    string                                   `json:"authenticationType"`
 	ConnectionSettings    *ResourceSMTPServerConnectionSettings    `json:"connectionSettings,omitempty"`
 	SenderSettings        *ResourceSMTPServerSenderSettings        `json:"senderSettings,omitempty"`
 	BasicAuthCredentials  *ResourceSMTPServerBasicAuthCredentials  `json:"basicAuthCredentials,omitempty"`
@@ -50,19 +50,19 @@ type ResourceSMTPServerAuthentication struct {
 
 // ResourceSMTPServerGoogleMailCredentials holds Google Mail API credentials.
 type ResourceSMTPServerGoogleMailCredentials struct {
-	ClientId        string                               `json:"clientId"`
-	ClientSecret    string                               `json:"clientSecret"`
+	ClientId        string                             `json:"clientId"`
+	ClientSecret    string                             `json:"clientSecret"`
 	Authentications []ResourceSMTPServerAuthentication `json:"authentications,omitempty"`
 }
 
 // HistoryObject is an alias to the shared history item struct with string IDs.
-type HistoryObject = shared.SharedHistoryItemString
+type HistoryObject = models.SharedHistoryItemString
 
 // HistoryResponse is an alias to the shared history response struct with string IDs.
-type HistoryResponse = shared.SharedHistoryResponseString
+type HistoryResponse = models.SharedHistoryResponseString
 
 // AddHistoryNoteRequest is an alias to the shared history note request struct.
-type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
+type AddHistoryNoteRequest = models.SharedHistoryNoteRequest
 
 // AddHistoryNoteResponse is the response for AddHistoryNoteV1 (201 Created).
 //

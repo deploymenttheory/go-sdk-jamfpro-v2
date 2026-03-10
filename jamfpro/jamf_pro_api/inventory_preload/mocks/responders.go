@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -72,7 +73,7 @@ func (m *InventoryPreloadMock) dispatch(method, path string, result any) (*resty
 		return nil, fmt.Errorf("InventoryPreloadMock: no response registered for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}
@@ -163,7 +164,7 @@ func (m *InventoryPreloadMock) PostForm(ctx context.Context, path string, _ map[
 	return m.dispatch("POST", path, result)
 }
 
-func (m *InventoryPreloadMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *InventoryPreloadMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -212,7 +213,7 @@ func (m *InventoryPreloadMock) GetPaginated(ctx context.Context, path string, rs
 	return resp, nil
 }
 
-func (m *InventoryPreloadMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
+func (m *InventoryPreloadMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *InventoryPreloadMock) InvalidateToken() error                    { return nil }
 func (m *InventoryPreloadMock) KeepAliveToken() error                     { return nil }
 func (m *InventoryPreloadMock) GetLogger() *zap.Logger                    { return m.logger }

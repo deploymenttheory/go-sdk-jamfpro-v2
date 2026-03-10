@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -22,7 +23,7 @@ type registeredResponse struct {
 	errMsg     string
 }
 
-// VPPAccountsMock is a test double implementing transport.HTTPClient for Classic API VPP accounts.
+// VPPAccountsMock is a test double implementing client.Client for Classic API VPP accounts.
 type VPPAccountsMock struct {
 	responses     map[string]registeredResponse
 	logger        *zap.Logger
@@ -84,7 +85,7 @@ func (m *VPPAccountsMock) PostWithQuery(ctx context.Context, path string, _ map[
 func (m *VPPAccountsMock) PostForm(ctx context.Context, path string, _ map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
-func (m *VPPAccountsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *VPPAccountsMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 func (m *VPPAccountsMock) Put(ctx context.Context, path string, _ any, _ map[string]string, result any) (*resty.Response, error) {
@@ -119,10 +120,10 @@ func (m *VPPAccountsMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	}
 	return resp, nil
 }
-func (m *VPPAccountsMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *VPPAccountsMock) InvalidateToken() error                    { return nil }
-func (m *VPPAccountsMock) KeepAliveToken() error                     { return nil }
-func (m *VPPAccountsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *VPPAccountsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *VPPAccountsMock) InvalidateToken() error                { return nil }
+func (m *VPPAccountsMock) KeepAliveToken() error                 { return nil }
+func (m *VPPAccountsMock) GetLogger() *zap.Logger                { return m.logger }
 
 func (m *VPPAccountsMock) register(method, path string, statusCode int, fixture string) {
 	var body []byte
@@ -152,11 +153,11 @@ func (m *VPPAccountsMock) dispatch(method, path string, result any) (*resty.Resp
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("VPPAccountsMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`<error>no mock registered</error>`)), fmt.Errorf("VPPAccountsMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {constants.ApplicationXML}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

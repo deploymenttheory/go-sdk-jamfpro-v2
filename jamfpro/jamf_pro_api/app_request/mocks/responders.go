@@ -9,10 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -23,7 +24,7 @@ type registeredResponse struct {
 	errMsg string
 }
 
-// AppRequestMock is a test double implementing transport.HTTPClient.
+// AppRequestMock is a test double implementing client.Client.
 // Responses are keyed by "METHOD:path" and loaded from JSON fixture files in
 // the mocks/ directory so that expected shapes are decoupled from test code.
 type AppRequestMock struct {
@@ -106,7 +107,7 @@ func (m *AppRequestMock) RegisterNotFoundErrorMock() {
 	m.registerError("GET", "/api/v1/app-request/form-input-fields/999", 404, "error_not_found.json")
 }
 
-// ---- transport.HTTPClient implementation ----
+// ---- client.Client implementation ----
 
 func (m *AppRequestMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, _ map[string]string, result any) (*resty.Response, error) {
 	m.LastRSQLQuery = rsqlQuery
@@ -125,7 +126,7 @@ func (m *AppRequestMock) PostForm(ctx context.Context, path string, _ map[string
 	return m.dispatch("POST", path, result)
 }
 
-func (m *AppRequestMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ transport.MultipartProgressCallback, result any) (*resty.Response, error) {
+func (m *AppRequestMock) PostMultipart(ctx context.Context, path string, _ string, _ string, _ io.Reader, _ int64, _ map[string]string, _ map[string]string, _ client.MultipartProgressCallback, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)
 }
 
@@ -175,10 +176,10 @@ func (m *AppRequestMock) GetPaginated(ctx context.Context, path string, rsqlQuer
 	return resp, nil
 }
 
-func (m *AppRequestMock) RSQLBuilder() transport.RSQLFilterBuilder { return nil }
-func (m *AppRequestMock) InvalidateToken() error                    { return nil }
-func (m *AppRequestMock) KeepAliveToken() error                     { return nil }
-func (m *AppRequestMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *AppRequestMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
+func (m *AppRequestMock) InvalidateToken() error                { return nil }
+func (m *AppRequestMock) KeepAliveToken() error                 { return nil }
+func (m *AppRequestMock) GetLogger() *zap.Logger                { return m.logger }
 
 // ---- Internal helpers ----
 
@@ -217,11 +218,11 @@ func (m *AppRequestMock) dispatch(method, path string, result any) (*resty.Respo
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {"application/json"}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`)), fmt.Errorf("AppRequestMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`)), fmt.Errorf("AppRequestMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

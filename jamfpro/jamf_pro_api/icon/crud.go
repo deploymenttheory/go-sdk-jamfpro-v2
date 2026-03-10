@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -16,11 +16,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-icon
 	Icon struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewIcon(client transport.HTTPClient) *Icon {
+func NewIcon(client client.Client) *Icon {
 	return &Icon{client: client}
 }
 

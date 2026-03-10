@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
 	"resty.dev/v3"
 )
 
@@ -14,11 +14,11 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-branding-images-download-id
 	Branding struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
-func NewBranding(client transport.HTTPClient) *Branding {
+func NewBranding(client client.Client) *Branding {
 	return &Branding{client: client}
 }
 

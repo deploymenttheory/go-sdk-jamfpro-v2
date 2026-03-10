@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"resty.dev/v3"
 )
@@ -14,12 +14,12 @@ type (
 	//
 	// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-dss-declarations-declarationid
 	DssDeclarations struct {
-		client transport.HTTPClient
+		client client.Client
 	}
 )
 
 // NewService returns a new DSS declarations Service backed by the provided HTTP client.
-func NewDssDeclarations(client transport.HTTPClient) *DssDeclarations {
+func NewDssDeclarations(client client.Client) *DssDeclarations {
 	return &DssDeclarations{client: client}
 }
 

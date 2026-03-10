@@ -3,7 +3,7 @@ package policies
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse represents the response for listing policies.
@@ -63,12 +63,12 @@ type PolicySubsetGeneral struct {
 	LocationUserOnly           bool                                    `xml:"location_user_only"`
 	TargetDrive                string                                  `xml:"target_drive,omitempty"`
 	Offline                    bool                                    `xml:"offline"`
-	Category                   *shared.SharedResourceCategory          `xml:"category,omitempty"`
+	Category                   *models.SharedResourceCategory          `xml:"category,omitempty"`
 	DateTimeLimitations        *PolicySubsetGeneralDateTimeLimitations `xml:"date_time_limitations,omitempty"`
 	NetworkLimitations         *PolicySubsetGeneralNetworkLimitations  `xml:"network_limitations,omitempty"`
 	OverrideDefaultSettings    *PolicySubsetGeneralOverrideSettings    `xml:"override_default_settings,omitempty"`
 	NetworkRequirements        string                                  `xml:"network_requirements,omitempty"`
-	Site                       *shared.SharedResourceSite              `xml:"site,omitempty"`
+	Site                       *models.SharedResourceSite              `xml:"site,omitempty"`
 }
 
 // PolicySubsetGeneralDateTimeLimitations represents the date/time limitations for a policy.

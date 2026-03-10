@@ -8,10 +8,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/transport"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
 )
 
@@ -47,7 +48,7 @@ func (m *DSSDeclarationsMock) dispatch(method, path string) ([]byte, int, bool) 
 func (m *DSSDeclarationsMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
-		return shared.NewMockResponse(http.StatusNotFound, http.Header{}, nil), nil
+		return mockhelpers.NewMockResponse(http.StatusNotFound, http.Header{}, nil), nil
 	}
 
 	if out != nil {
@@ -56,59 +57,59 @@ func (m *DSSDeclarationsMock) Get(ctx context.Context, endpoint string, queryPar
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *DSSDeclarationsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DSSDeclarationsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DSSDeclarationsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
-func (m *DSSDeclarationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback transport.MultipartProgressCallback, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+func (m *DSSDeclarationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DSSDeclarationsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DSSDeclarationsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DSSDeclarationsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DSSDeclarationsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DSSDeclarationsMock) GetBytes(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
 	body, status, found := m.dispatch("GET", endpoint)
 	if !found {
-		return shared.NewMockResponse(http.StatusNotFound, http.Header{}, nil), nil, nil
+		return mockhelpers.NewMockResponse(http.StatusNotFound, http.Header{}, nil), nil, nil
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), body, nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), body, nil
 }
 
 func (m *DSSDeclarationsMock) GetPaginated(ctx context.Context, endpoint string, rsqlQuery map[string]string, headers map[string]string, mergePage func(page []byte) error) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *DSSDeclarationsMock) GetLogger() *zap.Logger {
 	return nil
 }
 
-func (m *DSSDeclarationsMock) RSQLBuilder() transport.RSQLFilterBuilder {
+func (m *DSSDeclarationsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
 
