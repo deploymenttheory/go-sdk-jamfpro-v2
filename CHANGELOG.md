@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.7.1...v0.8.0) (2026-03-10)
+
+
+### Features
+
+* add RetryOnNotFound function and update log messages for consistency ([03ccc8b](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/03ccc8b513629cc6edaebc8bea16930b92cf74ea))
+* enhance package upload process with cloud distribution point refresh ([3727b97](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/3727b97e96e5af562a8a5fc337ea84077dcc895b))
+* enhance package upload process with cloud distribution point refresh ([212471a](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/212471a31643f20056364e0294a0c702fb2aad0f))
+* refactor ([7758145](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/775814589e956c995054650dfb53b05d85900a75))
+* rewired provider and the interfaces ([5ccaffd](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/5ccaffd45b5ca54131ec54e32eb9c82124de6371))
+* tidied up constants and interfaces ([0463d82](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/0463d822ce15a8a5236b7165b5dc2d9c5a6dd34a))
+
+
+### Bug Fixes
+
+* add RetryOnNotFound function and update log messages for consistency ([a0415e4](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/a0415e4edebc0efe7c06c9ef136c4778b7207417))
+* enhance history note functionality across multiple services ([abd62de](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/abd62de0424bf00d2eefba1eae6790be3d0ecabb))
+* enhance history note functionality across multiple services ([896566b](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/896566bcba694cbe1ece07de13b5902ba98ccd13))
+* resolved wrapper on resty.Response ([02853f2](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/02853f27ca3379d906a084a1d7dd282f1bc591b3))
+* unit test tidy up ([cc4783b](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/cc4783bfee8f1303130c4825d17a48c564bf2c39))
+* unit test tidy up ([f56d4e2](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/f56d4e2527f335d4b1e2105e2a89e27241807b05))
+* update acceptance test log messages to use StatusCode() method ([48085ee](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/48085eefec6a75d58d870b3e19280e38008c4751))
+
 ## [0.7.1](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.7.0...v0.7.1) (2026-03-01)
 
 
