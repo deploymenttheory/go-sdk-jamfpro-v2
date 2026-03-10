@@ -49,7 +49,7 @@ func (m *AccessManagementSettingsMock) RegisterPostMock() {
 func (m *AccessManagementSettingsMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("AccessManagementSettingsMock: no response for %s %s", method, path)
+		return nil, fmt.Errorf("AccessManagementSettingsMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
 	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)

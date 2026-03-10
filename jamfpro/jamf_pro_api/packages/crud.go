@@ -47,12 +47,11 @@ func (s *Packages) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Li
 	endpoint := constants.EndpointJamfProPackagesV1
 
 	mergePage := func(pageData []byte) error {
-		var pageResponse ListResponse
-		if err := json.Unmarshal(pageData, &pageResponse); err != nil {
+		var items []ResourcePackage
+		if err := json.Unmarshal(pageData, &items); err != nil {
 			return fmt.Errorf("failed to unmarshal page: %w", err)
 		}
-		result.Results = append(result.Results, pageResponse.Results...)
-		result.TotalCount = pageResponse.TotalCount
+		result.Results = append(result.Results, items...)
 		return nil
 	}
 
@@ -65,6 +64,7 @@ func (s *Packages) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Li
 		return nil, resp, fmt.Errorf("failed to list packages: %w", err)
 	}
 
+	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
 
