@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.8.0...v0.8.1) (2026-03-10)
+
+
+### Bug Fixes
+
+* code smells ([624b548](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/624b54846c6f74611e386e9fb24b1fcd489b3f8d))
+* streamline authentication and transport configuration in Jamf Pro client ([1804a60](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/1804a60e22211f03a3823ac78c1f90f73051ea81))
+
 ## [0.8.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.7.1...v0.8.0) (2026-03-10)
 
 
