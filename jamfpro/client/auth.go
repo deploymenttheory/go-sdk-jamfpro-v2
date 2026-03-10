@@ -1,6 +1,7 @@
 package client
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/url"
 	"strings"
@@ -13,23 +14,31 @@ import (
 	"resty.dev/v3"
 )
 
-// tokenHolder holds a bearer token and refreshes it automatically before expiry.
-// All exported methods are safe for concurrent use.
-type tokenHolder struct {
+// bearerTokenManager manages the full lifecycle of a Jamf Pro bearer token:
+// automatic refresh before expiry, keep-alive extension, and revocation.
+// All methods are safe for concurrent use.
+//
+// authClient is a dedicated resty client used exclusively for auth operations
+// (token fetch, keep-alive, invalidate). It is intentionally separate from
+// the main Transport client to prevent a deadlock: the Transport client carries
+// an auth middleware that calls getToken(), which holds the mutex and calls
+// fetchFn(). If fetchFn() made requests through the same client, the middleware
+// would fire again and attempt to re-acquire the mutex — deadlocking.
+type bearerTokenManager struct {
 	mu                sync.Mutex
 	token             string
 	expiry            time.Time
 	buffer            time.Duration
 	auth              *config.AuthConfig
 	logger            *zap.Logger
-	restyClient       *resty.Client
+	authClient        *resty.Client
 	baseURL           string
 	hideSensitiveData bool
 	fetchFn           func() (string, time.Time, error)
 }
 
 // logToken returns the token string for logging, redacted when HideSensitiveData is set.
-func (h *tokenHolder) logToken() string {
+func (h *bearerTokenManager) logToken() string {
 	if h.hideSensitiveData {
 		return "[REDACTED]"
 	}
@@ -38,7 +47,7 @@ func (h *tokenHolder) logToken() string {
 
 // getToken returns the current bearer token, refreshing it when expired or
 // within the buffer period before expiry.
-func (h *tokenHolder) getToken() (string, error) {
+func (h *bearerTokenManager) getToken() (string, error) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
@@ -58,7 +67,7 @@ func (h *tokenHolder) getToken() (string, error) {
 
 // invalidate revokes the current bearer token at the Jamf Pro API and clears
 // the local cache so the next request forces a full re-authentication.
-func (h *tokenHolder) invalidate() error {
+func (h *bearerTokenManager) invalidate() error {
 	h.mu.Lock()
 	currentToken := h.token
 	h.mu.Unlock()
@@ -69,7 +78,7 @@ func (h *tokenHolder) invalidate() error {
 
 	endpoint := strings.TrimSuffix(h.baseURL, "/") + constants.EndpointInvalidateToken
 
-	resp, err := h.restyClient.R().
+	resp, err := h.authClient.R().
 		SetAuthToken(currentToken).
 		Post(endpoint)
 
@@ -92,7 +101,7 @@ func (h *tokenHolder) invalidate() error {
 
 // keepAlive extends the current token lifetime via the Jamf Pro API and updates
 // the cached token and expiry time from the response.
-func (h *tokenHolder) keepAlive() error {
+func (h *bearerTokenManager) keepAlive() error {
 	h.mu.Lock()
 	currentToken := h.token
 	h.mu.Unlock()
@@ -108,7 +117,7 @@ func (h *tokenHolder) keepAlive() error {
 		Expires time.Time `json:"expires"`
 	}
 
-	resp, err := h.restyClient.R().
+	resp, err := h.authClient.R().
 		SetAuthToken(currentToken).
 		SetResult(&result).
 		Post(endpoint)
@@ -130,7 +139,7 @@ func (h *tokenHolder) keepAlive() error {
 	return nil
 }
 
-func (h *tokenHolder) fetchOAuth2() (string, time.Time, error) {
+func (h *bearerTokenManager) fetchOAuth2() (string, time.Time, error) {
 	endpoint := strings.TrimSuffix(h.baseURL, "/") + constants.EndpointOAuthToken
 
 	data := url.Values{}
@@ -143,7 +152,7 @@ func (h *tokenHolder) fetchOAuth2() (string, time.Time, error) {
 		ExpiresIn   int64  `json:"expires_in"`
 	}
 
-	resp, err := h.restyClient.R().
+	resp, err := h.authClient.R().
 		SetHeader("Content-Type", "application/x-www-form-urlencoded").
 		SetFormDataFromValues(data).
 		SetResult(&result).
@@ -185,7 +194,7 @@ func (h *tokenHolder) fetchOAuth2() (string, time.Time, error) {
 	return result.AccessToken, expiry, nil
 }
 
-func (h *tokenHolder) fetchBasic() (string, time.Time, error) {
+func (h *bearerTokenManager) fetchBasic() (string, time.Time, error) {
 	endpoint := strings.TrimSuffix(h.baseURL, "/") + constants.EndpointBearerToken
 
 	var result struct {
@@ -193,7 +202,7 @@ func (h *tokenHolder) fetchBasic() (string, time.Time, error) {
 		Expires time.Time `json:"expires"`
 	}
 
-	resp, err := h.restyClient.R().
+	resp, err := h.authClient.R().
 		SetBasicAuth(h.auth.Username, h.auth.Password).
 		SetResult(&result).
 		Post(endpoint)
@@ -236,11 +245,17 @@ func (h *tokenHolder) fetchBasic() (string, time.Time, error) {
 // authentication. A token is fetched immediately to surface misconfiguration
 // at startup. Subsequent requests refresh the token automatically via middleware.
 //
-// Returns the tokenHolder so the Transport can expose InvalidateToken and
-// KeepAliveToken.
+// A dedicated authClient is created for token operations (fetch, keep-alive,
+// invalidate). It carries the same TLS/proxy/transport settings as the main
+// client but has no auth middleware, preventing the deadlock that would occur
+// if token refresh fired the middleware re-entrantly while holding the mutex.
+// The passed restyClient is only used to install the request middleware.
+//
+// Returns the bearerTokenManager so the Transport can expose InvalidateToken
+// and KeepAliveToken.
 //
 // See: https://developer.jamf.com/jamf-pro/docs/classic-api-authentication-changes
-func SetupAuthentication(restyClient *resty.Client, authConfig *config.AuthConfig, logger *zap.Logger) (*tokenHolder, error) {
+func SetupAuthentication(restyClient *resty.Client, authConfig *config.AuthConfig, logger *zap.Logger, settings *TransportSettings) (*bearerTokenManager, error) {
 	if err := authConfig.Validate(); err != nil {
 		return nil, fmt.Errorf("authentication configuration invalid: %w", err)
 	}
@@ -251,10 +266,29 @@ func SetupAuthentication(restyClient *resty.Client, authConfig *config.AuthConfi
 		buffer = 5 * time.Minute
 	}
 
-	holder := &tokenHolder{
+	// Dedicated client for auth requests only — no middleware, no retry logic.
+	// Mirrors the TLS/proxy/transport settings of the main client so that
+	// environments requiring custom TLS (e.g. self-signed certs, corporate
+	// proxies) work correctly for auth calls too.
+	authClient := resty.New()
+	if settings != nil {
+		if settings.InsecureSkipVerify {
+			authClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true}) //nolint:gosec
+		} else if settings.TLSClientConfig != nil {
+			authClient.SetTLSClientConfig(settings.TLSClientConfig)
+		}
+		if settings.ProxyURL != "" {
+			authClient.SetProxy(settings.ProxyURL)
+		}
+		if settings.HTTPTransport != nil {
+			authClient.SetTransport(settings.HTTPTransport)
+		}
+	}
+
+	tokenManager := &bearerTokenManager{
 		auth:              authConfig,
 		logger:            logger,
-		restyClient:       restyClient,
+		authClient:        authClient,
 		baseURL:           baseURL,
 		buffer:            buffer,
 		hideSensitiveData: authConfig.HideSensitiveData,
@@ -262,19 +296,19 @@ func SetupAuthentication(restyClient *resty.Client, authConfig *config.AuthConfi
 
 	switch authConfig.AuthMethod {
 	case constants.AuthMethodOAuth2:
-		holder.fetchFn = holder.fetchOAuth2
+		tokenManager.fetchFn = tokenManager.fetchOAuth2
 	case constants.AuthMethodBasic:
-		holder.fetchFn = holder.fetchBasic
+		tokenManager.fetchFn = tokenManager.fetchBasic
 	default:
 		return nil, fmt.Errorf("unsupported auth method: %q", authConfig.AuthMethod)
 	}
 
-	if _, err := holder.getToken(); err != nil {
+	if _, err := tokenManager.getToken(); err != nil {
 		return nil, fmt.Errorf("initial token fetch failed: %w", err)
 	}
 
 	restyClient.AddRequestMiddleware(func(_ *resty.Client, r *resty.Request) error {
-		token, err := holder.getToken()
+		token, err := tokenManager.getToken()
 		if err != nil {
 			return err
 		}
@@ -286,5 +320,5 @@ func SetupAuthentication(restyClient *resty.Client, authConfig *config.AuthConfi
 		zap.String("auth_method", authConfig.AuthMethod),
 		zap.String("instance", baseURL),
 	)
-	return holder, nil
+	return tokenManager, nil
 }

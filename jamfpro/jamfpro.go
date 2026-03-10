@@ -175,40 +175,12 @@ import (
 	"go.uber.org/zap"
 )
 
-// Re-export client configuration options.
-var (
-	WithBaseURL               = client.WithBaseURL
-	WithTimeout               = client.WithTimeout
-	WithRetryCount            = client.WithRetryCount
-	WithRetryWaitTime         = client.WithRetryWaitTime
-	WithRetryMaxWaitTime      = client.WithRetryMaxWaitTime
-	WithLogger                = client.WithLogger
-	WithDebug                 = client.WithDebug
-	WithUserAgent             = client.WithUserAgent
-	WithGlobalHeader          = client.WithGlobalHeader
-	WithGlobalHeaders         = client.WithGlobalHeaders
-	WithProxy                 = client.WithProxy
-	WithTLSClientConfig       = client.WithTLSClientConfig
-	WithTransport             = client.WithTransport
-	WithInsecureSkipVerify    = client.WithInsecureSkipVerify
-	WithMaxConcurrentRequests = client.WithMaxConcurrentRequests
-	WithMandatoryRequestDelay = client.WithMandatoryRequestDelay
-	WithTotalRetryDuration    = client.WithTotalRetryDuration
-)
-
-// Re-export pagination helper functions.
-var (
-	HasNextPage          = client.HasNextPage
-	ExtractParamsFromURL = client.ExtractParamsFromURL
-)
-
-// Re-export configuration types and functions for convenience.
-// Users should only need to import the jamfpro package.
-type (
-	AuthConfig      = config.AuthConfig
-	ClientOption    = client.ClientOption
-	PaginationLinks = client.PaginationLinks
-)
+// Client is the main entry point for the Jamf Pro API SDK.
+type Client struct {
+	transport  *client.Transport
+	ClassicAPI *ClassicAPIClient
+	JamfProAPI *JamfProAPIClient
+}
 
 // ClassicAPIClient groups all Classic API services.
 type ClassicAPIClient struct {
@@ -383,13 +355,6 @@ type JamfProAPIClient struct {
 	Venafi                              *venafi.Venafi
 	VolumePurchasingLocations           *volume_purchasing_locations.VolumePurchasingLocations
 	VolumePurchasingSubscriptions       *volume_purchasing_subscriptions.VolumePurchasingSubscriptions
-}
-
-// Client is the main entry point for the Jamf Pro API SDK.
-type Client struct {
-	transport  *client.Transport
-	ClassicAPI *ClassicAPIClient
-	JamfProAPI *JamfProAPIClient
 }
 
 // NewClient creates a new Jamf Pro API client.
@@ -582,6 +547,10 @@ func newJamfProAPIClient(transport *client.Transport) *JamfProAPIClient {
 	}
 }
 
+// AuthConfig is an alias for config.AuthConfig.
+// Build one with config.AuthConfigFromEnv() or config.LoadAuthConfigFromFile().
+type AuthConfig = config.AuthConfig
+
 // NewClientFromEnv creates a new client using environment variables.
 // Required: INSTANCE_DOMAIN, AUTH_METHOD; for oauth2: CLIENT_ID, CLIENT_SECRET; for basic: BASIC_AUTH_USERNAME, BASIC_AUTH_PASSWORD.
 func NewClientFromEnv(options ...ClientOption) (*Client, error) {
@@ -597,7 +566,13 @@ func (c *Client) GetLogger() *zap.Logger {
 	return c.transport.GetLogger()
 }
 
-// GetTransport returns the underlying HTTP transport.
+// GetTransport returns the underlying HTTP transport for advanced use cases
+// not covered by the standard client methods. Through the transport you can
+// access lower-level capabilities: GetPaginated for manual pagination control,
+// KeepAliveToken/InvalidateToken for explicit token lifecycle management,
+// RSQLBuilder for constructing filter expressions, and GetHTTPClient to reach
+// the raw resty client for custom middleware or request hooks.
+// Most callers will not need this.
 func (c *Client) GetTransport() *client.Transport {
 	return c.transport
 }

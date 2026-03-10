@@ -79,7 +79,7 @@ func TestSetupAuthentication_OAuth2(t *testing.T) {
 	restyClient := resty.New()
 	restyClient.SetBaseURL(srv.URL)
 
-	holder, err := SetupAuthentication(restyClient, cfg, logger)
+	holder, err := SetupAuthentication(restyClient, cfg, logger, nil)
 	require.NoError(t, err)
 	require.NotNil(t, holder)
 }
@@ -114,7 +114,7 @@ func TestSetupAuthentication_Basic(t *testing.T) {
 	restyClient := resty.New()
 	restyClient.SetBaseURL(srv.URL)
 
-	holder, err := SetupAuthentication(restyClient, cfg, logger)
+	holder, err := SetupAuthentication(restyClient, cfg, logger, nil)
 	require.NoError(t, err)
 	require.NotNil(t, holder)
 }
@@ -123,7 +123,7 @@ func TestSetupAuthentication_InvalidMethod(t *testing.T) {
 	cfg := &config.AuthConfig{InstanceDomain: "https://x.com", AuthMethod: "other", ClientID: "c", ClientSecret: "s"}
 	logger := zap.NewNop()
 	restyClient := resty.New()
-	_, err := SetupAuthentication(restyClient, cfg, logger)
+	_, err := SetupAuthentication(restyClient, cfg, logger, nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "auth method")
 }

@@ -21,6 +21,7 @@ func TestIsIdempotentMethod(t *testing.T) {
 }
 
 func TestIsTransientStatusCode(t *testing.T) {
+	assert.True(t, isTransientStatusCode(408))
 	assert.True(t, isTransientStatusCode(500))
 	assert.True(t, isTransientStatusCode(502))
 	assert.True(t, isTransientStatusCode(503))
@@ -34,7 +35,8 @@ func TestIsNonRetryableStatusCode(t *testing.T) {
 	assert.True(t, isNonRetryableStatusCode(401))
 	assert.True(t, isNonRetryableStatusCode(404))
 	assert.True(t, isNonRetryableStatusCode(428))
-	assert.False(t, isNonRetryableStatusCode(429))
+	assert.True(t, isNonRetryableStatusCode(429)) // Jamf Pro does not return 429
+	assert.False(t, isNonRetryableStatusCode(408))
 	assert.False(t, isNonRetryableStatusCode(500))
 	assert.False(t, isNonRetryableStatusCode(200))
 }

@@ -1,7 +1,6 @@
 package client
 
 import (
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -11,7 +10,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
-
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -230,7 +229,7 @@ func TestTransport_ExecuteRequest_ConcurrencyLimit(t *testing.T) {
 	defer srv.Close()
 	close(block)
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg, WithMaxConcurrentRequests(1))
+	tr, err := NewTransport(cfg, func(s *TransportSettings) error { s.MaxConcurrentRequests = 1; return nil })
 	require.NoError(t, err)
 
 	block = make(chan struct{})
@@ -304,7 +303,7 @@ func TestTransport_WithTotalRetryDuration_Request(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg, WithTotalRetryDuration(30*time.Second))
+	tr, err := NewTransport(cfg, func(s *TransportSettings) error { s.TotalRetryDuration = 30 * time.Second; return nil })
 	require.NoError(t, err)
 	ctx := context.Background()
 	var result map[string]string
@@ -317,7 +316,7 @@ func TestTransport_RequestWithMandatoryDelay(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg, WithMandatoryRequestDelay(time.Millisecond))
+	tr, err := NewTransport(cfg, func(s *TransportSettings) error { s.MandatoryRequestDelay = time.Millisecond; return nil })
 	require.NoError(t, err)
 	ctx := context.Background()
 	var result map[string]string
@@ -447,7 +446,7 @@ func TestTransport_ApplyHeaders(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg, WithGlobalHeader("X-Global", "global-val"))
+	tr, err := NewTransport(cfg, func(s *TransportSettings) error { s.GlobalHeaders = map[string]string{"X-Global": "global-val"}; return nil })
 	require.NoError(t, err)
 	ctx := context.Background()
 

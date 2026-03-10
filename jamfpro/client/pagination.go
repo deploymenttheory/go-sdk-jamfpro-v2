@@ -5,17 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"maps"
-	"net/url"
 	"strconv"
 
 	"resty.dev/v3"
 )
-
-// PaginationLinks contains pagination navigation links (for cursor-style APIs).
-type PaginationLinks struct {
-	Self string `json:"self"`
-	Next string `json:"next,omitempty"`
-}
 
 // jamfPaginatedPage is the common Jamf Pro API v1 paginated response shape.
 type jamfPaginatedPage struct {
@@ -72,22 +65,3 @@ func (t *Transport) GetPaginated(ctx context.Context, path string, rsqlQuery map
 	return lastResp, nil
 }
 
-// HasNextPage checks if there is a next page (for link-based pagination).
-func HasNextPage(links *PaginationLinks) bool {
-	return links != nil && links.Next != ""
-}
-
-// ExtractParamsFromURL extracts query parameters from a URL string.
-func ExtractParamsFromURL(urlStr string) (map[string]string, error) {
-	parsedURL, err := url.Parse(urlStr)
-	if err != nil {
-		return nil, err
-	}
-	params := make(map[string]string)
-	for key, values := range parsedURL.Query() {
-		if len(values) > 0 {
-			params[key] = values[0]
-		}
-	}
-	return params, nil
-}

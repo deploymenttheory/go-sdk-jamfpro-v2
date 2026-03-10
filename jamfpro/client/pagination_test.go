@@ -13,26 +13,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestHasNextPage(t *testing.T) {
-	assert.False(t, HasNextPage(nil))
-	assert.False(t, HasNextPage(&PaginationLinks{}))
-	assert.False(t, HasNextPage(&PaginationLinks{Next: ""}))
-	assert.True(t, HasNextPage(&PaginationLinks{Next: "https://example.com?page=2"}))
-}
-
-func TestExtractParamsFromURL(t *testing.T) {
-	params, err := ExtractParamsFromURL("https://example.com/api?page=1&page-size=10&sort=name:asc")
-	require.NoError(t, err)
-	assert.Equal(t, "1", params["page"])
-	assert.Equal(t, "10", params["page-size"])
-	assert.Equal(t, "name:asc", params["sort"])
-}
-
-func TestExtractParamsFromURL_Invalid(t *testing.T) {
-	_, err := ExtractParamsFromURL("://invalid")
-	require.Error(t, err)
-}
-
 func TestTransport_GetPaginated(t *testing.T) {
 	pageCount := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
