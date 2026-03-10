@@ -1,6 +1,8 @@
 package enrollment
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // ResourceEnrollment represents the enrollment settings (API v4).
 type ResourceEnrollment struct {
@@ -118,10 +120,10 @@ type ResourceLanguageCode struct {
 }
 
 // HistoryObject is an alias to the shared history item struct.
-type HistoryObject = shared.SharedHistoryItem
+type HistoryObject = models.SharedHistoryItem
 
 // HistoryResponse is an alias to the shared history response struct.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // ListResponseAccessGroups is the response for ListAccessGroupsV3.
 type ListResponseAccessGroups struct {
@@ -131,7 +133,7 @@ type ListResponseAccessGroups struct {
 
 // ListResponseLanguageMessages is the response for ListLanguageMessagesV3.
 type ListResponseLanguageMessages struct {
-	TotalCount int                         `json:"totalCount"`
+	TotalCount int                          `json:"totalCount"`
 	Results    []ResourceEnrollmentLanguage `json:"results"`
 }
 
@@ -155,7 +157,7 @@ type ResourceADUESessionTokenSettings struct {
 }
 
 // RequestAddHistoryNotes is an alias to the shared history note request struct.
-type RequestAddHistoryNotes = shared.SharedHistoryNoteRequest
+type RequestAddHistoryNotes = models.SharedHistoryNoteRequest
 
 // RequestExportHistory represents the optional request body for exporting enrollment history (API v2).
 // Overrides query parameters when URI would exceed ~2k characters.

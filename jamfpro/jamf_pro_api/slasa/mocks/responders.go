@@ -8,8 +8,9 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -94,7 +95,7 @@ func (m *SLASAMock) Get(ctx context.Context, path string, rsqlQuery map[string]s
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *SLASAMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -111,7 +112,7 @@ func (m *SLASAMock) Post(ctx context.Context, path string, body any, headers map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *SLASAMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -140,7 +141,7 @@ func (m *SLASAMock) Put(ctx context.Context, path string, body any, headers map[
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *SLASAMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -157,7 +158,7 @@ func (m *SLASAMock) Patch(ctx context.Context, path string, body any, headers ma
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *SLASAMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
@@ -174,7 +175,7 @@ func (m *SLASAMock) Delete(ctx context.Context, path string, rsqlQuery map[strin
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 func (m *SLASAMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -190,7 +191,7 @@ func (m *SLASAMock) GetBytes(ctx context.Context, path string, rsqlQuery map[str
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
 func (m *SLASAMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {

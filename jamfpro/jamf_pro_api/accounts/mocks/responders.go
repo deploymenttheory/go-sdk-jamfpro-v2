@@ -9,8 +9,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -94,7 +95,7 @@ func (m *AccountsMock) Get(ctx context.Context, path string, query map[string]st
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -103,7 +104,7 @@ func (m *AccountsMock) Get(ctx context.Context, path string, query map[string]st
 		}
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // GetPaginated implements client.Client.GetPaginated.
@@ -116,7 +117,7 @@ func (m *AccountsMock) GetPaginated(ctx context.Context, path string, query map[
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if mergePage != nil && len(resp.rawBody) > 0 {
@@ -131,7 +132,7 @@ func (m *AccountsMock) GetPaginated(ctx context.Context, path string, query map[
 		}
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Post implements client.Client.Post.
@@ -143,7 +144,7 @@ func (m *AccountsMock) Post(ctx context.Context, path string, body any, headers 
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -152,7 +153,7 @@ func (m *AccountsMock) Post(ctx context.Context, path string, body any, headers 
 		}
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Delete implements client.Client.Delete.
@@ -164,10 +165,10 @@ func (m *AccountsMock) Delete(ctx context.Context, path string, query map[string
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Put implements client.Client.Put (unused in accounts).
@@ -204,10 +205,10 @@ func (m *AccountsMock) DeleteWithBody(ctx context.Context, path string, body any
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // PostWithQuery implements client.Client.PostWithQuery.

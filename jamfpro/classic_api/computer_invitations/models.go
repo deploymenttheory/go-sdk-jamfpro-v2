@@ -3,7 +3,7 @@ package computer_invitations
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for List (GET /JSSResource/computerinvitations).
@@ -45,7 +45,7 @@ type ResourceComputerInvitation struct {
 	InvitedUserUUID             string                              `xml:"invited_user_uuid,omitempty"`
 	EnrollIntoSite              *ComputerInvitationSubsetEnrollIntoState `xml:"enroll_into_site,omitempty"`
 	KeepExistingSiteMembership  bool                                `xml:"keep_existing_site_membership,omitempty"`
-	Site                        *shared.SharedResourceSite           `xml:"site,omitempty"`
+	Site                        *models.SharedResourceSite           `xml:"site,omitempty"`
 }
 
 // ComputerInvitationSubsetEnrollIntoState represents the enroll-into-site subset.

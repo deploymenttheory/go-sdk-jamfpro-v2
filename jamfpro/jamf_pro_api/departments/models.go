@@ -1,7 +1,7 @@
 package departments
 
 import (
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceDepartment represents a department resource.
@@ -28,13 +28,13 @@ type CreateResponse struct {
 }
 
 // HistoryObject represents a department history entry.
-type HistoryObject = shared.SharedHistoryItem
+type HistoryObject = models.SharedHistoryItem
 
 // HistoryResponse is the response for GetDepartmentHistoryV1.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // AddHistoryNotesRequest is the body for AddDepartmentHistoryNotesV1.
-type AddHistoryNotesRequest = shared.SharedHistoryNoteRequest
+type AddHistoryNotesRequest = models.SharedHistoryNoteRequest
 
 // DeleteDepartmentsByIDRequest is the body for DeleteDepartmentsByIDV1 (delete multiple).
 type DeleteDepartmentsByIDRequest struct {

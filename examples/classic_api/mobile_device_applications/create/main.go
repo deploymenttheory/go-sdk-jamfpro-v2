@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_applications"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 			Version:     "1.0",
 			InternalApp: &internalApp,
 			OsType:      "iOS",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},

@@ -10,9 +10,10 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -46,7 +47,7 @@ func (m *ClassicLdapMock) dispatch(method, path string, result any) (*resty.Resp
 	if !ok {
 		return nil, fmt.Errorf("ClassicLdapMock: no response for %s %s", method, path)
 	}
-	resp := shared.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

@@ -3,7 +3,7 @@ package advanced_user_searches
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for ListAdvancedUserSearches (GET /JSSResource/advancedusersearches).
@@ -28,7 +28,7 @@ type ResourceAdvancedUserSearch struct {
 	Criteria      CriteriaContainer      `xml:"criteria"`
 	DisplayFields []DisplayField         `xml:"display_fields>display_field,omitempty"`
 	Users         []UserResult           `xml:"users>user,omitempty"`
-	Site          *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site          *models.SharedResourceSite `xml:"site,omitempty"`
 }
 
 // RequestAdvancedUserSearch is the body for creating or updating an advanced user search.
@@ -38,7 +38,7 @@ type RequestAdvancedUserSearch struct {
 	Name          string                     `xml:"name"`
 	Criteria      CriteriaContainer          `xml:"criteria"`
 	DisplayFields []DisplayField             `xml:"display_fields>display_field,omitempty"`
-	Site          *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site          *models.SharedResourceSite `xml:"site,omitempty"`
 }
 
 // CreateUpdateResponse represents the response from Create/Update operations.

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/restricted_software/mocks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -122,7 +122,7 @@ func TestUnit_RestrictedSoftware_Create_Success(t *testing.T) {
 			KillProcess:           true,
 			DeleteExecutable:      false,
 			DisplayMessage:        "Calculator is restricted",
-			Site:                  &shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:                  &models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope: Scope{
 			AllComputers: false,

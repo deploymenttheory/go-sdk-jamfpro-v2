@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/licensed_software"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 			Name:      "go-sdk-v2-licensed-software",
 			Publisher: "SDK Test Publisher",
 			Platform:  "Mac",
-			Site:      shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:      models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 	}
 

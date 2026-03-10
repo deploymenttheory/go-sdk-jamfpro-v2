@@ -1,35 +1,37 @@
 package inventory_preload
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // InventoryPreloadRecord represents an inventory preload record.
 // DeviceType: "Computer", "Mobile Device", or "Unknown".
 type InventoryPreloadRecord struct {
-	ID                   string                         `json:"id,omitempty"`
-	SerialNumber         string                         `json:"serialNumber"`
-	DeviceType           string                         `json:"deviceType"` // Computer, Mobile Device, Unknown
-	Username             *string                        `json:"username,omitempty"`
-	FullName             *string                        `json:"fullName,omitempty"`
-	EmailAddress         *string                        `json:"emailAddress,omitempty"`
-	PhoneNumber          *string                        `json:"phoneNumber,omitempty"`
-	Position             *string                        `json:"position,omitempty"`
-	Department           *string                        `json:"department,omitempty"`
-	Building             *string                        `json:"building,omitempty"`
-	Room                 *string                        `json:"room,omitempty"`
-	PONumber             *string                        `json:"poNumber,omitempty"`
-	PODate               *string                        `json:"poDate,omitempty"`
-	WarrantyExpiration   *string                        `json:"warrantyExpiration,omitempty"`
-	AppleCareID         *string                        `json:"appleCareId,omitempty"`
-	LifeExpectancy       *string                        `json:"lifeExpectancy,omitempty"`
-	PurchasePrice        *string                        `json:"purchasePrice,omitempty"`
-	PurchasingContact    *string                        `json:"purchasingContact,omitempty"`
-	PurchasingAccount    *string                        `json:"purchasingAccount,omitempty"`
-	LeaseExpiration      *string                        `json:"leaseExpiration,omitempty"`
-	BarCode1             *string                        `json:"barCode1,omitempty"`
-	BarCode2             *string                        `json:"barCode2,omitempty"`
-	AssetTag             *string                        `json:"assetTag,omitempty"`
-	Vendor               *string                        `json:"vendor,omitempty"`
-	ExtensionAttributes  []InventoryPreloadExtensionAttr `json:"extensionAttributes,omitempty"`
+	ID                  string                          `json:"id,omitempty"`
+	SerialNumber        string                          `json:"serialNumber"`
+	DeviceType          string                          `json:"deviceType"` // Computer, Mobile Device, Unknown
+	Username            *string                         `json:"username,omitempty"`
+	FullName            *string                         `json:"fullName,omitempty"`
+	EmailAddress        *string                         `json:"emailAddress,omitempty"`
+	PhoneNumber         *string                         `json:"phoneNumber,omitempty"`
+	Position            *string                         `json:"position,omitempty"`
+	Department          *string                         `json:"department,omitempty"`
+	Building            *string                         `json:"building,omitempty"`
+	Room                *string                         `json:"room,omitempty"`
+	PONumber            *string                         `json:"poNumber,omitempty"`
+	PODate              *string                         `json:"poDate,omitempty"`
+	WarrantyExpiration  *string                         `json:"warrantyExpiration,omitempty"`
+	AppleCareID         *string                         `json:"appleCareId,omitempty"`
+	LifeExpectancy      *string                         `json:"lifeExpectancy,omitempty"`
+	PurchasePrice       *string                         `json:"purchasePrice,omitempty"`
+	PurchasingContact   *string                         `json:"purchasingContact,omitempty"`
+	PurchasingAccount   *string                         `json:"purchasingAccount,omitempty"`
+	LeaseExpiration     *string                         `json:"leaseExpiration,omitempty"`
+	BarCode1            *string                         `json:"barCode1,omitempty"`
+	BarCode2            *string                         `json:"barCode2,omitempty"`
+	AssetTag            *string                         `json:"assetTag,omitempty"`
+	Vendor              *string                         `json:"vendor,omitempty"`
+	ExtensionAttributes []InventoryPreloadExtensionAttr `json:"extensionAttributes,omitempty"`
 }
 
 // InventoryPreloadExtensionAttr represents an extension attribute on an inventory preload record.
@@ -74,8 +76,8 @@ type CSVValidationErrorCause struct {
 
 // InvalidCSVResponse is the response when CSV validation fails.
 type InvalidCSVResponse struct {
-	HTTPStatus int                    `json:"httpsStatus,omitempty"`
-	Errors     []CSVValidationError   `json:"errors,omitempty"`
+	HTTPStatus int                  `json:"httpsStatus,omitempty"`
+	Errors     []CSVValidationError `json:"errors,omitempty"`
 }
 
 // ExtensionAttributeColumn represents an EA column for inventory preload.
@@ -86,18 +88,18 @@ type ExtensionAttributeColumn struct {
 
 // ExtensionAttributeColumnResult is the response for GET /ea-columns.
 type ExtensionAttributeColumnResult struct {
-	TotalCount int                         `json:"totalCount"`
-	Results    []ExtensionAttributeColumn  `json:"results"`
+	TotalCount int                        `json:"totalCount"`
+	Results    []ExtensionAttributeColumn `json:"results"`
 }
 
 // HistoryObject is an alias to the shared history item struct.
-type HistoryObject = shared.SharedHistoryItem
+type HistoryObject = models.SharedHistoryItem
 
 // HistoryListResponse is an alias to the shared history response struct.
-type HistoryListResponse = shared.SharedHistoryResponse
+type HistoryListResponse = models.SharedHistoryResponse
 
 // AddHistoryNoteRequest is an alias to the shared history note request struct.
-type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
+type AddHistoryNoteRequest = models.SharedHistoryNoteRequest
 
 // AddHistoryNoteResponse is the response for adding a history note.
 type AddHistoryNoteResponse struct {

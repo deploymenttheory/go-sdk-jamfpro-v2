@@ -10,8 +10,8 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/crypto"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_distribution_point"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/crypto"
 	"resty.dev/v3"
 )
 

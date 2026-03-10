@@ -6,7 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_applications"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_applications/mocks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -140,7 +140,7 @@ func TestUnit_MobileDeviceApplications_Create(t *testing.T) {
 			BundleID:    "com.test.app",
 			Version:     "1.0",
 			InternalApp: &internalApp,
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},
@@ -198,7 +198,7 @@ func TestUnit_MobileDeviceApplications_UpdateByID(t *testing.T) {
 			DisplayName: "Updated iOS App",
 			BundleID:    "com.example.app",
 			Version:     "1.1",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},
@@ -246,7 +246,7 @@ func TestUnit_MobileDeviceApplications_UpdateByName(t *testing.T) {
 			Name:        "Updated iOS App",
 			BundleID:    "com.example.app",
 			Version:     "1.1",
-			Site:        &shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:        &models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope:       mobile_device_applications.SubsetScope{AllMobileDevices: boolPtr(true), AllJSSUsers: boolPtr(false)},
 		SelfService: mobile_device_applications.SubsetSelfService{SelfServiceDescription: "Updated"},
@@ -268,7 +268,7 @@ func TestUnit_MobileDeviceApplications_UpdateByBundleID(t *testing.T) {
 		General: mobile_device_applications.SubsetGeneral{
 			Name:     "Updated",
 			BundleID: "com.example.app",
-			Site:     &shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:     &models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope:       mobile_device_applications.SubsetScope{AllMobileDevices: boolPtr(true), AllJSSUsers: boolPtr(false)},
 		SelfService: mobile_device_applications.SubsetSelfService{},
@@ -290,7 +290,7 @@ func TestUnit_MobileDeviceApplications_UpdateByIDAndVersion(t *testing.T) {
 			Name:     "Updated",
 			BundleID: "com.example.app",
 			Version:  "1.0",
-			Site:     &shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:     &models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope:       mobile_device_applications.SubsetScope{AllMobileDevices: boolPtr(true), AllJSSUsers: boolPtr(false)},
 		SelfService: mobile_device_applications.SubsetSelfService{},
@@ -382,7 +382,7 @@ func TestUnit_MobileDeviceApplications_Conflict(t *testing.T) {
 		General: mobile_device_applications.SubsetGeneral{
 			Name:     "Duplicate App",
 			BundleID: "com.dup.app",
-			Site:     &shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:     &models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope:       mobile_device_applications.SubsetScope{AllMobileDevices: boolPtr(true), AllJSSUsers: boolPtr(false)},
 		SelfService: mobile_device_applications.SubsetSelfService{},

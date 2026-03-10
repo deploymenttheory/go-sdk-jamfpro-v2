@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/static_user_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -35,7 +35,7 @@ func TestAcceptance_StaticUserGroups_lifecycle(t *testing.T) {
 		Name:             groupName,
 		IsSmart:          false,
 		IsNotifyOnChange: false,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
@@ -134,7 +134,7 @@ func TestAcceptance_StaticUserGroups_lifecycle(t *testing.T) {
 		Name:             updatedName,
 		IsSmart:          false,
 		IsNotifyOnChange: true,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
@@ -157,7 +157,7 @@ func TestAcceptance_StaticUserGroups_lifecycle(t *testing.T) {
 		Name:             groupName,
 		IsSmart:          false,
 		IsNotifyOnChange: false,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
@@ -212,7 +212,7 @@ func TestAcceptance_StaticUserGroups_delete_by_name(t *testing.T) {
 	createReq := &static_user_groups.RequestStaticUserGroup{
 		Name:    groupName,
 		IsSmart: false,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},

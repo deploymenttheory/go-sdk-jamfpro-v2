@@ -7,7 +7,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"resty.dev/v3"
@@ -303,7 +303,7 @@ func TestAcceptance_Enrollment_history_v2(t *testing.T) {
 	ctx := context.Background()
 
 	// Add history note first
-	noteReq := &shared.SharedHistoryNoteRequest{
+	noteReq := &models.SharedHistoryNoteRequest{
 		Note: "Acceptance test history note for enrollment",
 	}
 	addResult, addResp, err := svc.AddHistoryNotesV2(ctx, noteReq)

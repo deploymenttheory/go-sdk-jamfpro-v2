@@ -8,9 +8,10 @@ import (
 	"net/http"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -246,7 +247,7 @@ func (m *JamfProtectMock) Get(ctx context.Context, path string, rsqlQuery map[st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Post implements client.Client.
@@ -264,7 +265,7 @@ func (m *JamfProtectMock) Post(ctx context.Context, path string, body any, heade
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // PostWithQuery implements client.Client.
@@ -297,7 +298,7 @@ func (m *JamfProtectMock) Put(ctx context.Context, path string, body any, header
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Patch implements client.Client.
@@ -315,7 +316,7 @@ func (m *JamfProtectMock) Patch(ctx context.Context, path string, body any, head
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Delete implements client.Client.
@@ -333,7 +334,7 @@ func (m *JamfProtectMock) Delete(ctx context.Context, path string, rsqlQuery map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // DeleteWithBody implements client.Client.
@@ -352,7 +353,7 @@ func (m *JamfProtectMock) GetBytes(ctx context.Context, path string, rsqlQuery m
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
 // GetPaginated implements client.Client.
@@ -365,7 +366,7 @@ func (m *JamfProtectMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	if resp.errMsg != "" {
 		return nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	ifaceResp := shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody)
+	ifaceResp := mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody)
 	if mergePage != nil && len(resp.rawBody) > 0 {
 		var page struct {
 			Results json.RawMessage `json:"results"`

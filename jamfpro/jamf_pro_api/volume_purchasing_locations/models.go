@@ -1,27 +1,27 @@
 package volume_purchasing_locations
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 
 // ResourceVolumePurchasingLocation represents a volume purchasing location resource.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-volume-purchasing-locations-id
 type ResourceVolumePurchasingLocation struct {
-	ID                                    string                           `json:"id,omitempty"`
-	Name                                  string                           `json:"name,omitempty"`
-	AppleID                               string                           `json:"appleId,omitempty"`
-	OrganizationName                      string                           `json:"organizationName,omitempty"`
-	TokenExpiration                       string                           `json:"tokenExpiration,omitempty"`
-	CountryCode                           string                           `json:"countryCode,omitempty"`
-	LocationName                          string                           `json:"locationName,omitempty"`
-	ClientContextMismatch                 bool                             `json:"clientContextMismatch,omitempty"`
-	AutomaticallyPopulatePurchasedContent bool                             `json:"automaticallyPopulatePurchasedContent,omitempty"`
-	SendNotificationWhenNoLongerAssigned  bool                             `json:"sendNotificationWhenNoLongerAssigned,omitempty"`
-	AutoRegisterManagedUsers              bool                             `json:"autoRegisterManagedUsers,omitempty"`
-	SiteID                                string                           `json:"siteId,omitempty"`
-	LastSyncTime                          string                           `json:"lastSyncTime,omitempty"`
-	TotalPurchasedLicenses                int                              `json:"totalPurchasedLicenses,omitempty"`
-	TotalUsedLicenses                     int                              `json:"totalUsedLicenses,omitempty"`
-	ServiceToken                          string                           `json:"serviceToken,omitempty"`
+	ID                                    string                          `json:"id,omitempty"`
+	Name                                  string                          `json:"name,omitempty"`
+	AppleID                               string                          `json:"appleId,omitempty"`
+	OrganizationName                      string                          `json:"organizationName,omitempty"`
+	TokenExpiration                       string                          `json:"tokenExpiration,omitempty"`
+	CountryCode                           string                          `json:"countryCode,omitempty"`
+	LocationName                          string                          `json:"locationName,omitempty"`
+	ClientContextMismatch                 bool                            `json:"clientContextMismatch,omitempty"`
+	AutomaticallyPopulatePurchasedContent bool                            `json:"automaticallyPopulatePurchasedContent,omitempty"`
+	SendNotificationWhenNoLongerAssigned  bool                            `json:"sendNotificationWhenNoLongerAssigned,omitempty"`
+	AutoRegisterManagedUsers              bool                            `json:"autoRegisterManagedUsers,omitempty"`
+	SiteID                                string                          `json:"siteId,omitempty"`
+	LastSyncTime                          string                          `json:"lastSyncTime,omitempty"`
+	TotalPurchasedLicenses                int                             `json:"totalPurchasedLicenses,omitempty"`
+	TotalUsedLicenses                     int                             `json:"totalUsedLicenses,omitempty"`
+	ServiceToken                          string                          `json:"serviceToken,omitempty"`
 	Content                               []VolumePurchasingSubsetContent `json:"content,omitempty"`
 }
 
@@ -62,15 +62,15 @@ type CreateResponse struct {
 
 // ContentListResponse is the response for GetContentV1.
 type ContentListResponse struct {
-	TotalCount int                           `json:"totalCount"`
+	TotalCount int                             `json:"totalCount"`
 	Results    []VolumePurchasingSubsetContent `json:"results"`
 }
 
 // HistoryEntry is an alias to the shared history item struct with string IDs.
-type HistoryEntry = shared.SharedHistoryItemString
+type HistoryEntry = models.SharedHistoryItemString
 
 // HistoryListResponse is an alias to the shared history response struct with string IDs.
-type HistoryListResponse = shared.SharedHistoryResponseString
+type HistoryListResponse = models.SharedHistoryResponseString
 
 // AddHistoryNotesRequest is the request for AddHistoryNotesV1.
 type AddHistoryNotesRequest struct {

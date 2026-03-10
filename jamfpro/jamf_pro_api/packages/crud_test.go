@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/crypto"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/packages/mocks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/crypto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

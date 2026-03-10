@@ -3,7 +3,7 @@ package mobile_device_configuration_profiles
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for List (GET /JSSResource/mobiledeviceconfigurationprofiles).
@@ -51,8 +51,8 @@ type SubsetGeneral struct {
 	Name                          string                           `xml:"name"`
 	Description                   string                           `xml:"description,omitempty"`
 	Level                         string                           `xml:"level,omitempty"`
-	Site                          *shared.SharedResourceSite       `xml:"site,omitempty"`
-	Category                      *shared.SharedResourceCategory    `xml:"category,omitempty"`
+	Site                          *models.SharedResourceSite       `xml:"site,omitempty"`
+	Category                      *models.SharedResourceCategory    `xml:"category,omitempty"`
 	UUID                          string                           `xml:"uuid,omitempty"`
 	DeploymentMethod              string                           `xml:"deployment_method,omitempty"`
 	RedeployOnUpdate              string                           `xml:"redeploy_on_update,omitempty"`
@@ -78,9 +78,9 @@ type SubsetScope struct {
 type SubsetSelfService struct {
 	SelfServiceDescription string                        `xml:"self_service_description,omitempty"`
 	SecurityName           *SubsetSelfServiceSecurityName `xml:"security_name,omitempty"`
-	SelfServiceIcon        shared.SharedResourceSelfServiceIcon `xml:"self_service_icon,omitempty"`
+	SelfServiceIcon        models.SharedResourceSelfServiceIcon `xml:"self_service_icon,omitempty"`
 	FeatureOnMainPage      bool                          `xml:"feature_on_main_page,omitempty"`
-	SelfServiceCategories  []shared.SharedResourceSelfServiceCategory `xml:"self_service_categories>category,omitempty"`
+	SelfServiceCategories  []models.SharedResourceSelfServiceCategory `xml:"self_service_categories>category,omitempty"`
 }
 
 // SubsetSelfServiceSecurityName represents the security name for self-service removal.

@@ -8,8 +8,9 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -77,7 +78,7 @@ func (m *SitesMock) Get(ctx context.Context, path string, rsqlQuery map[string]s
 	key := "GET " + path
 	resp, ok := m.responses[key]
 	if !ok {
-		return shared.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for GET %s", path)
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for GET %s", path)
 	}
 	if resp.errMsg != "" {
 		return nil, fmt.Errorf("%s", resp.errMsg)
@@ -87,7 +88,7 @@ func (m *SitesMock) Get(ctx context.Context, path string, rsqlQuery map[string]s
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // GetPaginated implements client.Client for paginated endpoints.
@@ -96,7 +97,7 @@ func (m *SitesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 	key := "GET " + path
 	resp, ok := m.responses[key]
 	if !ok {
-		return shared.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for GET %s", path)
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for GET %s", path)
 	}
 	if resp.errMsg != "" {
 		return nil, fmt.Errorf("%s", resp.errMsg)
@@ -112,52 +113,52 @@ func (m *SitesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 			return nil, fmt.Errorf("merge page failed: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Post implements client.Client.
 func (m *SitesMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 // PostWithQuery implements client.Client.
 func (m *SitesMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 // PostForm implements client.Client.
 func (m *SitesMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 // PostMultipart implements client.Client.
 func (m *SitesMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 // Put implements client.Client.
 func (m *SitesMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 // Patch implements client.Client.
 func (m *SitesMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 // Delete implements client.Client.
 func (m *SitesMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 // DeleteWithBody implements client.Client.
 func (m *SitesMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 // GetBytes implements client.Client.
 func (m *SitesMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil, nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil, nil
 }
 
 // RSQLBuilder implements client.Client.

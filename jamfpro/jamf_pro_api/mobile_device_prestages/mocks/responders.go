@@ -11,9 +11,10 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -124,7 +125,7 @@ func (m *MobileDevicePrestagesMock) dispatch(method, path string, result any) (*
 		return nil, fmt.Errorf("MobileDevicePrestagesMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

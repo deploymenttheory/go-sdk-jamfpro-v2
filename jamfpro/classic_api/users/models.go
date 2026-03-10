@@ -3,7 +3,7 @@ package users
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for List (GET /JSSResource/users).
@@ -35,7 +35,7 @@ type ResourceUser struct {
 	CustomPhotoURL       string                     `xml:"custom_photo_url,omitempty"`
 	LDAPServer           UserSubsetLDAPServer       `xml:"ldap_server,omitempty"`
 	ExtensionAttributes   UserSubsetExtensionAttributes `xml:"extension_attributes,omitempty"`
-	Sites                []shared.SharedResourceSite `xml:"sites>site,omitempty"`
+	Sites                []models.SharedResourceSite `xml:"sites>site,omitempty"`
 	Links                UserSubsetLinks            `xml:"links,omitempty"`
 }
 
@@ -53,7 +53,7 @@ type RequestUser struct {
 	CustomPhotoURL       string                     `xml:"custom_photo_url,omitempty"`
 	LDAPServer           UserSubsetLDAPServer       `xml:"ldap_server,omitempty"`
 	ExtensionAttributes   UserSubsetExtensionAttributes `xml:"extension_attributes,omitempty"`
-	Sites                []shared.SharedResourceSite `xml:"sites>site,omitempty"`
+	Sites                []models.SharedResourceSite `xml:"sites>site,omitempty"`
 	Links                *UserSubsetLinks           `xml:"links,omitempty"`
 }
 

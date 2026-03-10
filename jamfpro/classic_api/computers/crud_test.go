@@ -6,7 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computers"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computers/mocks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -91,7 +91,7 @@ func TestUnit_Computers_Create(t *testing.T) {
 			Name:         "test-computer-01",
 			MacAddress:   "00:11:22:33:44:55",
 			SerialNumber: "C02XYZ123456",
-			Site: shared.SharedResourceSite{
+			Site: models.SharedResourceSite{
 				ID:   -1,
 				Name: "none",
 			},
@@ -164,7 +164,7 @@ func TestUnit_Computers_UpdateByID_SiteDefault(t *testing.T) {
 			Name:         "MacBook-Pro-01-Updated",
 			MacAddress:   "00:11:22:33:44:55",
 			SerialNumber: "C02XYZ123456",
-			Site:         shared.SharedResourceSite{ID: 0, Name: ""},
+			Site:         models.SharedResourceSite{ID: 0, Name: ""},
 		},
 	}
 

@@ -9,8 +9,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -115,7 +116,7 @@ func (m *SSOFailoverMock) dispatch(method, path string, result any) (*resty.Resp
 		return nil, fmt.Errorf("SSOFailoverMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)
 	}

@@ -6,7 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/smart_user_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/smart_user_groups/mocks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -92,13 +92,13 @@ func TestUnit_SmartUserGroups_Create(t *testing.T) {
 		Name:             "Test Group",
 		IsSmart:          true,
 		IsNotifyOnChange: false,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Email Address",
 					Priority:   0,
@@ -151,7 +151,7 @@ func TestUnit_SmartUserGroups_UpdateByID(t *testing.T) {
 		IsSmart: true,
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Email Address",
 					SearchType: "like",
@@ -192,7 +192,7 @@ func TestUnit_SmartUserGroups_UpdateByName(t *testing.T) {
 		IsSmart: true,
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Email Address",
 					SearchType: "like",
@@ -284,7 +284,7 @@ func TestUnit_SmartUserGroups_Conflict(t *testing.T) {
 		IsSmart: true,
 		Criteria: &smart_user_groups.CriteriaContainer{
 			Size: 1,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Email Address",
 					SearchType: "like",

@@ -8,8 +8,9 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -118,7 +119,7 @@ func (m *LogFlushingMock) Get(ctx context.Context, path string, rsqlQuery map[st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
+	return mockhelpers.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
 func (m *LogFlushingMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -135,7 +136,7 @@ func (m *LogFlushingMock) Post(ctx context.Context, path string, body any, heade
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
+	return mockhelpers.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
 func (m *LogFlushingMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -164,7 +165,7 @@ func (m *LogFlushingMock) Put(ctx context.Context, path string, body any, header
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
+	return mockhelpers.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
 func (m *LogFlushingMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -181,7 +182,7 @@ func (m *LogFlushingMock) Patch(ctx context.Context, path string, body any, head
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
+	return mockhelpers.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
 func (m *LogFlushingMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
@@ -198,7 +199,7 @@ func (m *LogFlushingMock) Delete(ctx context.Context, path string, rsqlQuery map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
+	return mockhelpers.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), nil
 }
 
 func (m *LogFlushingMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
@@ -215,7 +216,7 @@ func (m *LogFlushingMock) GetBytes(ctx context.Context, path string, rsqlQuery m
 	if r.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", r.errMsg)
 	}
-	return shared.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), r.rawBody, nil
+	return mockhelpers.NewMockResponse(r.statusCode, http.Header{}, r.rawBody), r.rawBody, nil
 }
 
 func (m *LogFlushingMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {

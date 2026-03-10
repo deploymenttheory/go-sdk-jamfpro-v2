@@ -3,7 +3,7 @@ package computers
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for List (GET /JSSResource/computers).
@@ -74,7 +74,7 @@ type ComputerSubsetGeneral struct {
 	DistributionPoint         string                                 `xml:"distribution_point"`
 	Sus                        string                                 `xml:"sus"`
 	Supervised                 bool                                   `xml:"supervised"`
-	Site                       shared.SharedResourceSite              `xml:"site"`
+	Site                       models.SharedResourceSite              `xml:"site"`
 	ItunesStoreAccountIsActive bool                                   `xml:"itunes_store_account_is_active"`
 }
 

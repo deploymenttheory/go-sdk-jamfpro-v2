@@ -1,19 +1,21 @@
 package engage
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 type ResourceEngageSettings struct {
 	IsEnabled bool `json:"isEnabled"`
 }
 
 // ResourceHistoryEntry is an alias to the shared history item struct.
-type ResourceHistoryEntry = shared.SharedHistoryItem
+type ResourceHistoryEntry = models.SharedHistoryItem
 
 // HistoryResponse is an alias to the shared history response struct.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // RequestAddHistoryNotes is an alias to the shared history note request struct.
-type RequestAddHistoryNotes = shared.SharedHistoryNoteRequest
+type RequestAddHistoryNotes = models.SharedHistoryNoteRequest
 
 type ResponseAddHistoryNotes struct {
 	ID       int     `json:"id"`

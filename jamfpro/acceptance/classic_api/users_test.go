@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/users"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -35,7 +35,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 		Name:     userName,
 		FullName: "sdkv2_acc_Acceptance Test User",
 		Email:    userName + "@example.com",
-		Sites: []shared.SharedResourceSite{
+		Sites: []models.SharedResourceSite{
 			{ID: -1, Name: "None"},
 		},
 	}
@@ -146,7 +146,7 @@ func TestAcceptance_Users_lifecycle(t *testing.T) {
 		Name:     userName,
 		FullName: updatedFullName,
 		Email:    createReq.Email,
-		Sites: []shared.SharedResourceSite{
+		Sites: []models.SharedResourceSite{
 			{ID: -1, Name: "None"},
 		},
 	}
@@ -201,7 +201,7 @@ func TestAcceptance_Users_delete_by_name(t *testing.T) {
 		Name:     userName,
 		FullName: "sdkv2_acc_Delete By Name Test",
 		Email:    userName + "@example.com",
-		Sites: []shared.SharedResourceSite{
+		Sites: []models.SharedResourceSite{
 			{ID: -1, Name: "None"},
 		},
 	}

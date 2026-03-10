@@ -6,7 +6,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/sso_settings"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -63,7 +63,7 @@ func TestAcceptance_SsoSettings_get_history_v3(t *testing.T) {
 	ctx := context.Background()
 
 	// Add history note first
-	noteReq := &shared.SharedHistoryNoteRequest{
+	noteReq := &models.SharedHistoryNoteRequest{
 		Note: "Acceptance test history note for SSO settings",
 	}
 	addResult, addResp, err := svc.AddHistoryNoteV3(ctx, noteReq)

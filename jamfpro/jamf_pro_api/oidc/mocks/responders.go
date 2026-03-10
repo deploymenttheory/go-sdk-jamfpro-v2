@@ -9,9 +9,10 @@ import (
 	"net/http"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // errNoMockRegistered is returned when no mock is registered for the request.
@@ -123,7 +124,7 @@ func (m *OIDCMock) Get(ctx context.Context, path string, rsqlQuery map[string]st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Post implements client.Client.
@@ -141,7 +142,7 @@ func (m *OIDCMock) Post(ctx context.Context, path string, body any, headers map[
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // PostWithQuery implements client.Client.
@@ -170,7 +171,7 @@ func (m *OIDCMock) Put(ctx context.Context, path string, body any, headers map[s
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), nil
+	return mockhelpers.NewMockResponse(statusCode, http.Header{}, rawBody), nil
 }
 
 // Patch implements client.Client.
@@ -184,7 +185,7 @@ func (m *OIDCMock) Patch(ctx context.Context, path string, body any, headers map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), nil
+	return mockhelpers.NewMockResponse(statusCode, http.Header{}, rawBody), nil
 }
 
 // Delete implements client.Client.
@@ -198,7 +199,7 @@ func (m *OIDCMock) Delete(ctx context.Context, path string, rsqlQuery map[string
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), nil
+	return mockhelpers.NewMockResponse(statusCode, http.Header{}, rawBody), nil
 }
 
 // DeleteWithBody implements client.Client.
@@ -213,7 +214,7 @@ func (m *OIDCMock) GetBytes(ctx context.Context, path string, rsqlQuery map[stri
 	if !found {
 		return nil, nil, errNoMockRegistered
 	}
-	return shared.NewMockResponse(statusCode, http.Header{}, rawBody), rawBody, nil
+	return mockhelpers.NewMockResponse(statusCode, http.Header{}, rawBody), rawBody, nil
 }
 
 // GetPaginated implements client.Client.

@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/licensed_software"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -36,7 +36,7 @@ func TestAcceptance_LicensedSoftware_lifecycle(t *testing.T) {
 			Name:      lsName,
 			Publisher: "Acceptance Test Publisher",
 			Platform:  "Mac",
-			Site:      shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:      models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 	}
 
@@ -131,7 +131,7 @@ func TestAcceptance_LicensedSoftware_lifecycle(t *testing.T) {
 			Name:      updatedName,
 			Publisher: "Acceptance Test Publisher Updated",
 			Platform:  "Mac",
-			Site:      shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:      models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 	}
 	updated, updateResp, err := svc.UpdateByID(ctx5, lsID, updateReq)
@@ -153,7 +153,7 @@ func TestAcceptance_LicensedSoftware_lifecycle(t *testing.T) {
 			Name:      lsName,
 			Publisher: "Acceptance Test Publisher",
 			Platform:  "Mac",
-			Site:      shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:      models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 	}
 	reverted, revertResp, err := svc.UpdateByName(ctx6, updatedName, revertReq)
@@ -208,7 +208,7 @@ func TestAcceptance_LicensedSoftware_delete_by_name(t *testing.T) {
 			Name:      lsName,
 			Publisher: "Acceptance Test",
 			Platform:  "Mac",
-			Site:      shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:      models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 	}
 

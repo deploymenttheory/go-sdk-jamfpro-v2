@@ -3,7 +3,7 @@ package licensed_software
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for List (GET /JSSResource/licensedsoftware).
@@ -40,7 +40,7 @@ type SubsetGeneral struct {
 	RemoveTitlesFromInventoryReports   bool                     `xml:"remove_titles_from_inventory_reports"`
 	ExcludeTitlesPurchasedFromAppStore bool                     `xml:"exclude_titles_purchased_from_app_store"`
 	Notes                              string                   `xml:"notes"`
-	Site                               shared.SharedResourceSite `xml:"site"`
+	Site                               models.SharedResourceSite `xml:"site"`
 }
 
 // SubsetSoftwareDefinition represents a software definition.

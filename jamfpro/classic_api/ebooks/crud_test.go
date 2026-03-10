@@ -6,7 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ebooks"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ebooks/mocks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -125,7 +125,7 @@ func TestUnit_Ebooks_Create(t *testing.T) {
 			Name:   "Test Ebook",
 			Author: "Author",
 			URL:    "https://example.com/ebook.pdf",
-			Site:   shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:   models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 	}
 

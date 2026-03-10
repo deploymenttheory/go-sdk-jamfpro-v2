@@ -8,9 +8,10 @@ import (
 	"net/http"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -51,11 +52,11 @@ func (m *JamfConnectMock) dispatch(method, path string, result any) (*resty.Resp
 	r, ok := m.responses[method+":"+path]
 	if !ok {
 		headers := http.Header{"Content-Type": {"application/json"}}
-		return shared.NewMockResponse(http.StatusNotFound, headers, []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`)), fmt.Errorf("JamfConnectMock: no response registered for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, headers, []byte(`{"code":"NOT-FOUND","message":"no mock registered"}`)), fmt.Errorf("JamfConnectMock: no response registered for %s %s", method, path)
 	}
 
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

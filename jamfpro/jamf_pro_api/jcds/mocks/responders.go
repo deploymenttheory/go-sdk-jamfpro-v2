@@ -11,9 +11,10 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 // registeredResponse holds a pre-canned response for a single endpoint.
@@ -120,7 +121,7 @@ func (m *JCDSMock) Get(ctx context.Context, path string, rsqlQuery map[string]st
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Post implements client.Client.
@@ -138,7 +139,7 @@ func (m *JCDSMock) Post(ctx context.Context, path string, body any, headers map[
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // PostWithQuery implements client.Client.
@@ -171,7 +172,7 @@ func (m *JCDSMock) Put(ctx context.Context, path string, body any, headers map[s
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Patch implements client.Client.
@@ -189,7 +190,7 @@ func (m *JCDSMock) Patch(ctx context.Context, path string, body any, headers map
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // Delete implements client.Client.
@@ -207,7 +208,7 @@ func (m *JCDSMock) Delete(ctx context.Context, path string, rsqlQuery map[string
 			return nil, fmt.Errorf("unmarshal mock response: %w", err)
 		}
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // DeleteWithBody implements client.Client.
@@ -226,7 +227,7 @@ func (m *JCDSMock) GetBytes(ctx context.Context, path string, rsqlQuery map[stri
 	if resp.errMsg != "" {
 		return nil, nil, fmt.Errorf("%s", resp.errMsg)
 	}
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), resp.rawBody, nil
 }
 
 // GetPaginated implements client.Client.

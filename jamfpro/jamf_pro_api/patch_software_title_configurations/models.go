@@ -1,27 +1,29 @@
 package patch_software_title_configurations
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // ListResponse represents a list of patch software title configurations.
 type ListResponse []ResourcePatchSoftwareTitleConfiguration
 
 // ResourcePatchSoftwareTitleConfiguration represents a patch software title configuration resource.
 type ResourcePatchSoftwareTitleConfiguration struct {
-	ID                     string                                                    `json:"id,omitempty"`
-	DisplayName            string                                                    `json:"displayName"`
-	SoftwareTitleID        string                                                    `json:"softwareTitleId"`
-	CategoryID             string                                                    `json:"categoryId,omitempty"`
-	SiteID                 string                                                    `json:"siteId,omitempty"`
-	UINotifications        bool                                                      `json:"uiNotifications,omitempty"`
-	EmailNotifications     bool                                                      `json:"emailNotifications,omitempty"`
-	ExtensionAttributes    []SubsetExtensionAttribute                                `json:"extensionAttributes,omitempty"`
-	SoftwareTitleName      string                                                    `json:"softwareTitleName,omitempty"`
-	SoftwareTitleNameID    string                                                    `json:"softwareTitleNameId,omitempty"`
-	SoftwareTitlePublisher string                                                    `json:"softwareTitlePublisher,omitempty"`
-	JamfOfficial           bool                                                      `json:"jamfOfficial,omitempty"`
-	PatchSourceName        string                                                    `json:"patchSourceName,omitempty"`
-	PatchSourceEnabled     bool                                                      `json:"patchSourceEnabled,omitempty"`
-	Packages               []SubsetPackage                                           `json:"packages,omitempty"`
+	ID                     string                     `json:"id,omitempty"`
+	DisplayName            string                     `json:"displayName"`
+	SoftwareTitleID        string                     `json:"softwareTitleId"`
+	CategoryID             string                     `json:"categoryId,omitempty"`
+	SiteID                 string                     `json:"siteId,omitempty"`
+	UINotifications        bool                       `json:"uiNotifications,omitempty"`
+	EmailNotifications     bool                       `json:"emailNotifications,omitempty"`
+	ExtensionAttributes    []SubsetExtensionAttribute `json:"extensionAttributes,omitempty"`
+	SoftwareTitleName      string                     `json:"softwareTitleName,omitempty"`
+	SoftwareTitleNameID    string                     `json:"softwareTitleNameId,omitempty"`
+	SoftwareTitlePublisher string                     `json:"softwareTitlePublisher,omitempty"`
+	JamfOfficial           bool                       `json:"jamfOfficial,omitempty"`
+	PatchSourceName        string                     `json:"patchSourceName,omitempty"`
+	PatchSourceEnabled     bool                       `json:"patchSourceEnabled,omitempty"`
+	Packages               []SubsetPackage            `json:"packages,omitempty"`
 }
 
 // SubsetExtensionAttribute represents an extension attribute in a patch software title configuration.
@@ -50,13 +52,13 @@ type ResourceDashboardStatus struct {
 
 // ResourceDefinition represents a patch software title definition.
 type ResourceDefinition struct {
-	Version                 string           `json:"version"`
-	MinimumOperatingSystem  string           `json:"minimumOperatingSystem,omitempty"`
-	ReleaseDate             string           `json:"releaseDate,omitempty"`
-	RebootRequired          bool             `json:"rebootRequired,omitempty"`
-	KillApps                []ResourceKillApp `json:"killApps,omitempty"`
-	Standalone              bool             `json:"standalone,omitempty"`
-	AbsoluteOrderID         string           `json:"absoluteOrderId,omitempty"`
+	Version                string            `json:"version"`
+	MinimumOperatingSystem string            `json:"minimumOperatingSystem,omitempty"`
+	ReleaseDate            string            `json:"releaseDate,omitempty"`
+	RebootRequired         bool              `json:"rebootRequired,omitempty"`
+	KillApps               []ResourceKillApp `json:"killApps,omitempty"`
+	Standalone             bool              `json:"standalone,omitempty"`
+	AbsoluteOrderID        string            `json:"absoluteOrderId,omitempty"`
 }
 
 // ResourceKillApp represents an app to kill during patch installation.
@@ -78,8 +80,8 @@ type ResourceDependency struct {
 
 // DependenciesResponse is the paginated response for GetDependenciesByIDV2.
 type DependenciesResponse struct {
-	TotalCount int                    `json:"totalCount"`
-	Results    []ResourceDependency   `json:"results"`
+	TotalCount int                  `json:"totalCount"`
+	Results    []ResourceDependency `json:"results"`
 }
 
 // ResourceExtensionAttribute represents an extension attribute for a software title.
@@ -105,7 +107,7 @@ type ResourcePatchReportItem struct {
 
 // PatchReportResponse is the paginated response for GetPatchReportByIDV2.
 type PatchReportResponse struct {
-	TotalCount int                      `json:"totalCount"`
+	TotalCount int                       `json:"totalCount"`
 	Results    []ResourcePatchReportItem `json:"results"`
 }
 
@@ -122,13 +124,13 @@ type ResourcePatchSummary struct {
 }
 
 // ResourceHistoryItem is an alias to the shared history item struct.
-type ResourceHistoryItem = shared.SharedHistoryItem
+type ResourceHistoryItem = models.SharedHistoryItem
 
 // HistoryResponse is an alias to the shared history response struct.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // RequestAddHistoryNote is an alias to the shared history note request struct.
-type RequestAddHistoryNote = shared.SharedHistoryNoteRequest
+type RequestAddHistoryNote = models.SharedHistoryNoteRequest
 
 // ResponseAddHistoryNote is the response for AddHistoryNoteByIDV2.
 type ResponseAddHistoryNote struct {

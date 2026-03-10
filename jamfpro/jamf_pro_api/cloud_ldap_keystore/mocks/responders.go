@@ -10,8 +10,9 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -46,9 +47,9 @@ func (m *CloudLdapKeystoreMock) RegisterValidateMock() {
 func (m *CloudLdapKeystoreMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("CloudLdapKeystoreMock: no response for %s %s", method, path)
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("CloudLdapKeystoreMock: no response for %s %s", method, path)
 	}
-	resp := shared.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

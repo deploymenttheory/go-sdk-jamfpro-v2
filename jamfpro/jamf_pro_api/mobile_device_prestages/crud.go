@@ -9,7 +9,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/version_locking"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/version_locking"
 	"resty.dev/v3"
 )
 

@@ -11,7 +11,7 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -52,7 +52,7 @@ func (m *AccessManagementSettingsMock) dispatch(method, path string, result any)
 		return nil, fmt.Errorf("AccessManagementSettingsMock: no response for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"application/json"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}
@@ -112,6 +112,6 @@ func (m *AccessManagementSettingsMock) GetPaginated(ctx context.Context, path st
 	return resp, nil
 }
 func (m *AccessManagementSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
-func (m *AccessManagementSettingsMock) InvalidateToken() error                    { return nil }
-func (m *AccessManagementSettingsMock) KeepAliveToken() error                     { return nil }
-func (m *AccessManagementSettingsMock) GetLogger() *zap.Logger                    { return m.logger }
+func (m *AccessManagementSettingsMock) InvalidateToken() error                { return nil }
+func (m *AccessManagementSettingsMock) KeepAliveToken() error                 { return nil }
+func (m *AccessManagementSettingsMock) GetLogger() *zap.Logger                { return m.logger }

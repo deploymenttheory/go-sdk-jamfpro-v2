@@ -1,6 +1,8 @@
 package reenrollment
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // ResourceReenrollmentSettings is the re-enrollment settings resource (get/update).
 type ResourceReenrollmentSettings struct {
@@ -13,13 +15,13 @@ type ResourceReenrollmentSettings struct {
 }
 
 // ReenrollmentHistoryObject is an alias to the shared history item struct.
-type ReenrollmentHistoryObject = shared.SharedHistoryItem
+type ReenrollmentHistoryObject = models.SharedHistoryItem
 
 // ReenrollmentHistoryResponse is an alias to the shared history response struct.
-type ReenrollmentHistoryResponse = shared.SharedHistoryResponse
+type ReenrollmentHistoryResponse = models.SharedHistoryResponse
 
 // AddReenrollmentHistoryNotesRequest is an alias to the shared history note request struct.
-type AddReenrollmentHistoryNotesRequest = shared.SharedHistoryNoteRequest
+type AddReenrollmentHistoryNotesRequest = models.SharedHistoryNoteRequest
 
 // ExportReenrollmentHistoryRequest is the optional body for POST .../history/export (override query when URI exceeds ~2k chars).
 type ExportReenrollmentHistoryRequest struct {

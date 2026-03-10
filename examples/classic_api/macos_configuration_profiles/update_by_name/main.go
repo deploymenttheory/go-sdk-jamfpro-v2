@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/macos_configuration_profiles"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 			Name:          "go-sdk-v2-macos-profile-updated",
 			Description:   "Updated via go-sdk-jamfpro-v2",
 			UserRemovable: true,
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},

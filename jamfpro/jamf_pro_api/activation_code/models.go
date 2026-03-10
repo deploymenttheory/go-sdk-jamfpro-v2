@@ -1,6 +1,8 @@
 package activation_code
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // ActivationCodeRequest is the body for updating the activation code.
 type ActivationCodeRequest struct {
@@ -13,13 +15,13 @@ type OrganizationNameRequest struct {
 }
 
 // HistoryEntry represents a single activation code history record.
-type HistoryEntry = shared.SharedHistoryItem
+type HistoryEntry = models.SharedHistoryItem
 
 // HistoryResponse is the response for listing activation code history.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // HistoryNoteRequest is the body for adding a note to activation code history.
-type HistoryNoteRequest = shared.SharedHistoryNoteRequest
+type HistoryNoteRequest = models.SharedHistoryNoteRequest
 
 // ExportField represents a field configuration for export.
 type ExportField struct {

@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_configuration_profiles"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -36,7 +36,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 			Name:             profileName,
 			Description:      "Acceptance test profile",
 			DeploymentMethod: "Install Automatically",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},
@@ -152,7 +152,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 			Name:             updatedName,
 			Description:      "Updated acceptance test profile",
 			DeploymentMethod: "Install Automatically",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},
@@ -181,7 +181,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_lifecycle(t *testing.T) {
 			Name:             profileName,
 			Description:      "Acceptance test profile",
 			DeploymentMethod: "Install Automatically",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},
@@ -243,7 +243,7 @@ func TestAcceptance_MobileDeviceConfigurationProfiles_delete_by_name(t *testing.
 		General: mobile_device_configuration_profiles.SubsetGeneral{
 			Name:             profileName,
 			DeploymentMethod: "Install Automatically",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},

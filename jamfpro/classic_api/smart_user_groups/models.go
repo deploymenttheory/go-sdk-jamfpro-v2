@@ -3,7 +3,7 @@ package smart_user_groups
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceSmartUserGroup represents a Jamf Pro Classic API smart user group resource.
@@ -16,7 +16,7 @@ type ResourceSmartUserGroup struct {
 	Name             string                      `xml:"name,omitempty"`
 	IsSmart          bool                        `xml:"is_smart"`
 	IsNotifyOnChange bool                        `xml:"is_notify_on_change"`
-	Site             *shared.SharedResourceSite  `xml:"site,omitempty"`
+	Site             *models.SharedResourceSite  `xml:"site,omitempty"`
 	Criteria         *CriteriaContainer          `xml:"criteria,omitempty"`
 	Users            []UserItem                  `xml:"users>user,omitempty"`
 }
@@ -42,7 +42,7 @@ type RequestSmartUserGroup struct {
 	Name             string                      `xml:"name"`
 	IsSmart          bool                        `xml:"is_smart"`
 	IsNotifyOnChange bool                        `xml:"is_notify_on_change"`
-	Site             *shared.SharedResourceSite  `xml:"site,omitempty"`
+	Site             *models.SharedResourceSite  `xml:"site,omitempty"`
 	Criteria         *CriteriaContainer          `xml:"criteria,omitempty"`
 }
 
@@ -56,7 +56,7 @@ type CreateUpdateResponse struct {
 // CriteriaContainer wraps the criteria for smart user groups.
 type CriteriaContainer struct {
 	Size      int                           `xml:"size,omitempty"`
-	Criterion []shared.SharedSubsetCriteria `xml:"criterion,omitempty"`
+	Criterion []models.SharedSubsetCriteria `xml:"criterion,omitempty"`
 }
 
 // UserItem represents a user in a user group.

@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/users"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 		Name:     "go-sdk-v2-user",
 		FullName: "Go SDK v2 Test User (Updated by Email)",
 		Email:    "go-sdk-v2-user@example.com",
-		Sites: []shared.SharedResourceSite{
+		Sites: []models.SharedResourceSite{
 			{ID: -1, Name: "None"},
 		},
 	}

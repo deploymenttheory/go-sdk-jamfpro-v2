@@ -9,8 +9,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -94,7 +95,7 @@ func (m *APNSClientPushStatusMock) Get(ctx context.Context, path string, query m
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -103,7 +104,7 @@ func (m *APNSClientPushStatusMock) Get(ctx context.Context, path string, query m
 		}
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // GetPaginated implements client.Client.GetPaginated.
@@ -116,7 +117,7 @@ func (m *APNSClientPushStatusMock) GetPaginated(ctx context.Context, path string
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if mergePage != nil && len(resp.rawBody) > 0 {
@@ -132,7 +133,7 @@ func (m *APNSClientPushStatusMock) GetPaginated(ctx context.Context, path string
 		}
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Post implements client.Client.Post.
@@ -144,7 +145,7 @@ func (m *APNSClientPushStatusMock) Post(ctx context.Context, path string, body a
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -153,7 +154,7 @@ func (m *APNSClientPushStatusMock) Post(ctx context.Context, path string, body a
 		}
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Delete implements client.Client.Delete.

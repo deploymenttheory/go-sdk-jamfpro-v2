@@ -9,8 +9,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -104,7 +105,7 @@ func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[str
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -113,7 +114,7 @@ func (m *ActivationCodeMock) Get(ctx context.Context, path string, query map[str
 		}
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // GetPaginated implements client.Client.GetPaginated.
@@ -126,7 +127,7 @@ func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, quer
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if mergePage != nil && len(resp.rawBody) > 0 {
@@ -141,7 +142,7 @@ func (m *ActivationCodeMock) GetPaginated(ctx context.Context, path string, quer
 		}
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Post implements client.Client.Post.
@@ -153,7 +154,7 @@ func (m *ActivationCodeMock) Post(ctx context.Context, path string, body any, he
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
 	if out != nil && len(resp.rawBody) > 0 {
@@ -162,7 +163,7 @@ func (m *ActivationCodeMock) Post(ctx context.Context, path string, body any, he
 		}
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Delete implements client.Client.Delete.
@@ -179,10 +180,10 @@ func (m *ActivationCodeMock) Put(ctx context.Context, path string, body any, hea
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // Patch implements client.Client.Patch.
@@ -194,10 +195,10 @@ func (m *ActivationCodeMock) Patch(ctx context.Context, path string, body any, h
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
 }
 
 // DownloadFile implements client.Client.DownloadFile.
@@ -230,10 +231,10 @@ func (m *ActivationCodeMock) PostWithQuery(ctx context.Context, path string, rsq
 	}
 
 	if resp.errMsg != "" {
-		return shared.NewMockResponse(resp.statusCode, http.Header{}, []byte(resp.errMsg)), fmt.Errorf("%s", resp.errMsg)
+		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, []byte(resp.errMsg)), fmt.Errorf("%s", resp.errMsg)
 	}
 
-	return shared.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
 }
 
 // PostForm implements client.Client.PostForm.

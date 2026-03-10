@@ -10,9 +10,10 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"go.uber.org/zap"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
 type registeredResponse struct {
@@ -222,7 +223,7 @@ func (m *ComputerExtensionAttributesMock) dispatch(method, path string, result a
 		return nil, fmt.Errorf("ComputerExtensionAttributesMock: no response registered for %s %s", method, path)
 	}
 
-	resp := shared.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, http.Header{"Content-Type": {"application/json"}}, r.rawBody)
 
 	if r.errMsg != "" {
 		return resp, fmt.Errorf("%s", r.errMsg)

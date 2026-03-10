@@ -10,8 +10,9 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -102,10 +103,10 @@ func (m *BrandingMock) GetLogger() *zap.Logger                { return m.logger 
 func (m *BrandingMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	r, ok := m.responses[method+":"+path]
 	if !ok {
-		return shared.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("no mock for %s %s", method, path)
+		return mockhelpers.NewMockResponse(http.StatusNotFound, http.Header{}, nil), fmt.Errorf("no mock for %s %s", method, path)
 	}
 	headers := http.Header{"Content-Type": {"image/png"}}
-	resp := shared.NewMockResponse(r.statusCode, headers, r.rawBody)
+	resp := mockhelpers.NewMockResponse(r.statusCode, headers, r.rawBody)
 	if result != nil && len(r.rawBody) > 0 {
 		_ = json.Unmarshal(r.rawBody, result)
 	}

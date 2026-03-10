@@ -1,20 +1,20 @@
 package sso_settings
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 
 // ResourceSsoSettings is the SSO settings resource (get/update).
 type ResourceSsoSettings struct {
-	SsoEnabled                                      bool                 `json:"ssoEnabled"`
-	ConfigurationType                               string               `json:"configurationType"`
-	OidcSettings                                    *OidcSettings        `json:"oidcSettings"`
-	SamlSettings                                    *SamlSettings        `json:"samlSettings"`
-	SsoBypassAllowed                                bool                 `json:"ssoBypassAllowed"`
-	SsoForEnrollmentEnabled                         bool                 `json:"ssoForEnrollmentEnabled"`
-	SsoForMacOsSelfServiceEnabled                   bool                 `json:"ssoForMacOsSelfServiceEnabled"`
+	SsoEnabled                                     bool                 `json:"ssoEnabled"`
+	ConfigurationType                              string               `json:"configurationType"`
+	OidcSettings                                   *OidcSettings        `json:"oidcSettings"`
+	SamlSettings                                   *SamlSettings        `json:"samlSettings"`
+	SsoBypassAllowed                               bool                 `json:"ssoBypassAllowed"`
+	SsoForEnrollmentEnabled                        bool                 `json:"ssoForEnrollmentEnabled"`
+	SsoForMacOsSelfServiceEnabled                  bool                 `json:"ssoForMacOsSelfServiceEnabled"`
 	EnrollmentSsoForAccountDrivenEnrollmentEnabled bool                 `json:"enrollmentSsoForAccountDrivenEnrollmentEnabled"`
-	GroupEnrollmentAccessEnabled                    bool                 `json:"groupEnrollmentAccessEnabled"`
-	GroupEnrollmentAccessName                        string               `json:"groupEnrollmentAccessName"`
-	EnrollmentSsoConfig                             *EnrollmentSsoConfig `json:"enrollmentSsoConfig,omitempty"`
+	GroupEnrollmentAccessEnabled                   bool                 `json:"groupEnrollmentAccessEnabled"`
+	GroupEnrollmentAccessName                      string               `json:"groupEnrollmentAccessName"`
+	EnrollmentSsoConfig                            *EnrollmentSsoConfig `json:"enrollmentSsoConfig,omitempty"`
 }
 
 // OidcSettings holds OIDC provider settings.
@@ -33,8 +33,8 @@ type SamlSettings struct {
 	IdpProviderType         string `json:"idpProviderType,omitempty"`
 	GroupRdnKey             string `json:"groupRdnKey"`
 	UserAttributeName       string `json:"userAttributeName"`
-	GroupAttributeName       string `json:"groupAttributeName,omitempty"`
-	UserAttributeEnabled     bool   `json:"userAttributeEnabled"`
+	GroupAttributeName      string `json:"groupAttributeName,omitempty"`
+	UserAttributeEnabled    bool   `json:"userAttributeEnabled"`
 	MetadataFileName        string `json:"metadataFileName,omitempty"`
 	OtherProviderTypeName   string `json:"otherProviderTypeName"`
 	FederationMetadataFile  string `json:"federationMetadataFile,omitempty"`
@@ -61,13 +61,13 @@ type EnrollmentCustomizationDependency struct {
 }
 
 // HistoryEntry is an alias to the shared history item struct with string IDs.
-type HistoryEntry = shared.SharedHistoryItemString
+type HistoryEntry = models.SharedHistoryItemString
 
 // HistoryListResponse is an alias to the shared history response struct with string IDs.
-type HistoryListResponse = shared.SharedHistoryResponseString
+type HistoryListResponse = models.SharedHistoryResponseString
 
 // AddHistoryNoteRequest is an alias to the shared history note request struct.
-type AddHistoryNoteRequest = shared.SharedHistoryNoteRequest
+type AddHistoryNoteRequest = models.SharedHistoryNoteRequest
 
 // CreateResponse captures the identifier returned after creating a resource.
 type CreateResponse struct {

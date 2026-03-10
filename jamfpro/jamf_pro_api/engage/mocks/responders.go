@@ -9,8 +9,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
 	"resty.dev/v3"
+
+	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"go.uber.org/zap"
@@ -72,11 +73,11 @@ func (m *EngageMock) Get(ctx context.Context, endpoint string, queryParams map[s
 		} else if bytesPtr, ok := out.(*[]byte); ok {
 			*bytesPtr = body
 		} else if err := json.Unmarshal(body, out); err != nil {
-			return shared.NewMockResponse(status, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(status, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
@@ -91,23 +92,23 @@ func (m *EngageMock) Post(ctx context.Context, endpoint string, body any, header
 		} else if bytesPtr, ok := out.(*[]byte); ok {
 			*bytesPtr = respBody
 		} else if err := json.Unmarshal(respBody, out); err != nil {
-			return shared.NewMockResponse(status, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(status, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
@@ -122,23 +123,23 @@ func (m *EngageMock) Put(ctx context.Context, endpoint string, body any, headers
 		} else if bytesPtr, ok := out.(*[]byte); ok {
 			*bytesPtr = respBody
 		} else if err := json.Unmarshal(respBody, out); err != nil {
-			return shared.NewMockResponse(status, http.Header{}, nil), err
+			return mockhelpers.NewMockResponse(status, http.Header{}, nil), err
 		}
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) GetBytes(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
@@ -147,11 +148,11 @@ func (m *EngageMock) GetBytes(ctx context.Context, endpoint string, queryParams 
 		return nil, nil, errNoMockRegistered
 	}
 
-	return shared.NewMockResponse(status, http.Header{}, nil), body, nil
+	return mockhelpers.NewMockResponse(status, http.Header{}, nil), body, nil
 }
 
 func (m *EngageMock) GetPaginated(ctx context.Context, endpoint string, rsqlQuery map[string]string, headers map[string]string, mergePage func(page []byte) error) (*resty.Response, error) {
-	return shared.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
 }
 
 func (m *EngageMock) GetLogger() *zap.Logger {

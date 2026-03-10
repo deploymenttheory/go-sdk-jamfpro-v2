@@ -1,6 +1,8 @@
 package jamf_pro_server_url
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // ResourceJamfProServerURL represents the Jamf Pro server URL settings.
 //
@@ -11,10 +13,10 @@ type ResourceJamfProServerURL struct {
 }
 
 // HistoryObject is an alias to the shared history item struct.
-type HistoryObject = shared.SharedHistoryItem
+type HistoryObject = models.SharedHistoryItem
 
 // HistoryResponse is an alias to the shared history response struct.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // CreateHistoryNoteRequest is an alias to the shared history note request struct.
-type CreateHistoryNoteRequest = shared.SharedHistoryNoteRequest
+type CreateHistoryNoteRequest = models.SharedHistoryNoteRequest

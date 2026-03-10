@@ -3,7 +3,7 @@ package classes
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceClass represents a Jamf Pro Classic API class resource.
@@ -13,7 +13,7 @@ type ResourceClass struct {
 	Source              string                       `xml:"source,omitempty"`
 	Name                string                       `xml:"name,omitempty"`
 	Description         string                       `xml:"description,omitempty"`
-	Site                shared.SharedResourceSite    `xml:"site"`
+	Site                models.SharedResourceSite    `xml:"site"`
 	MobileDeviceGroup   MobileDeviceGroup            `xml:"mobile_device_group,omitempty"`
 	Students            []Student                    `xml:"students>student"`
 	Teachers            []Teacher                    `xml:"teachers>teacher,omitempty"`
@@ -47,7 +47,7 @@ type RequestClass struct {
 	XMLName             xml.Name                   `xml:"class"`
 	Name                string                     `xml:"name"`
 	Description         string                     `xml:"description,omitempty"`
-	Site                *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site                *models.SharedResourceSite `xml:"site,omitempty"`
 	MobileDeviceGroup   *MobileDeviceGroup         `xml:"mobile_device_group,omitempty"`
 	Students            []Student                  `xml:"students>student,omitempty"`
 	TeacherIDs          []TeacherID                `xml:"teacher_ids>id,omitempty"`

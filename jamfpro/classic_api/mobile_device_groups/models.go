@@ -3,7 +3,7 @@ package mobile_device_groups
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ResourceMobileDeviceGroup represents a Jamf Pro Classic API mobile device group resource.
@@ -13,7 +13,7 @@ type ResourceMobileDeviceGroup struct {
 	Name                    string                         `xml:"name"`
 	IsSmart                 bool                           `xml:"is_smart"`
 	Criteria                *CriteriaContainer             `xml:"criteria,omitempty"`
-	Site                    *shared.SharedResourceSite     `xml:"site,omitempty"`
+	Site                    *models.SharedResourceSite     `xml:"site,omitempty"`
 	MobileDevices           []MobileDeviceSubsetItem       `xml:"mobile_devices>mobile_device,omitempty"`
 	MobileDeviceAdditions   []MobileDeviceSubsetItem       `xml:"mobile_device_additions>mobile_device,omitempty"`
 	MobileDeviceDeletions   []MobileDeviceSubsetItem       `xml:"mobile_device_deletions>mobile_device,omitempty"`
@@ -39,7 +39,7 @@ type RequestMobileDeviceGroup struct {
 	XMLName               xml.Name                   `xml:"mobile_device_group"`
 	Name                  string                     `xml:"name"`
 	IsSmart               bool                       `xml:"is_smart"`
-	Site                  *shared.SharedResourceSite  `xml:"site,omitempty"`
+	Site                  *models.SharedResourceSite  `xml:"site,omitempty"`
 	Criteria              *CriteriaContainer         `xml:"criteria,omitempty"`
 	MobileDevices         []MobileDeviceSubsetItem   `xml:"mobile_devices>mobile_device,omitempty"`
 	MobileDeviceAdditions []MobileDeviceSubsetItem   `xml:"mobile_device_additions>mobile_device,omitempty"`
@@ -56,7 +56,7 @@ type CreateUpdateResponse struct {
 // CriteriaContainer wraps the criteria for smart mobile device groups.
 type CriteriaContainer struct {
 	Size      int                          `xml:"size,omitempty"`
-	Criterion []shared.SharedSubsetCriteria `xml:"criterion,omitempty"`
+	Criterion []models.SharedSubsetCriteria `xml:"criterion,omitempty"`
 }
 
 // MobileDeviceSubsetItem represents a single mobile device within a group.

@@ -1,6 +1,8 @@
 package cloud_distribution_point
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 // RequestCloudDistributionPointV1 is the body for CreateV1 and UpdateV1 (PATCH).
 //
@@ -56,10 +58,10 @@ type TestConnectionV1 struct {
 }
 
 // HistoryItem is an alias to the shared history item struct.
-type HistoryItem = shared.SharedHistoryItem
+type HistoryItem = models.SharedHistoryItem
 
 // HistoryResponse is an alias to the shared history response struct.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // FileItem represents a single cloud distribution point inventory file.
 type FileItem struct {

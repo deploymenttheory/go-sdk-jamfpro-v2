@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/ebooks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -41,7 +41,7 @@ func TestAcceptance_Ebooks_lifecycle(t *testing.T) {
 			DeploymentType:  "Install Automatically/Prompt Users to Install",
 			FileType:        "PDF",
 			DeployAsManaged: false,
-			Site:            shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:            models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope: ebooks.SubsetScope{
 			AllComputers:     true,
@@ -150,7 +150,7 @@ func TestAcceptance_Ebooks_lifecycle(t *testing.T) {
 			DeploymentType:  "Install Automatically/Prompt Users to Install",
 			FileType:        "PDF",
 			DeployAsManaged: false,
-			Site:            shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:            models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope: ebooks.SubsetScope{
 			AllComputers:     true,
@@ -186,7 +186,7 @@ func TestAcceptance_Ebooks_lifecycle(t *testing.T) {
 			DeploymentType:  "Install Automatically/Prompt Users to Install",
 			FileType:        "PDF",
 			DeployAsManaged: false,
-			Site:            shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:            models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope: ebooks.SubsetScope{
 			AllComputers:     true,
@@ -255,7 +255,7 @@ func TestAcceptance_Ebooks_delete_by_name(t *testing.T) {
 			Name:   ebookName,
 			Author: "Acceptance Test",
 			URL:    "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-			Site:   shared.SharedResourceSite{ID: -1, Name: "None"},
+			Site:   models.SharedResourceSite{ID: -1, Name: "None"},
 		},
 		Scope: ebooks.SubsetScope{
 			AllComputers: true,

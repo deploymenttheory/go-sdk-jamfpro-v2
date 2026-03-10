@@ -6,7 +6,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mac_applications"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mac_applications/mocks"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -145,7 +145,7 @@ func TestUnit_MacApplications_Create(t *testing.T) {
 			BundleID:       "com.test.app",
 			URL:            "https://example.com",
 			DeploymentType: "Install Automatically/Prompt Users to Install",
-			Site: &shared.SharedResourceSite{
+			Site: &models.SharedResourceSite{
 				ID:   -1,
 				Name: "None",
 			},

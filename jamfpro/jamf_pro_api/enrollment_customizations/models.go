@@ -1,6 +1,8 @@
 package enrollment_customizations
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import (
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
+)
 
 type ListResponse struct {
 	TotalCount int                               `json:"totalCount"`
@@ -8,10 +10,10 @@ type ListResponse struct {
 }
 
 type ResourceEnrollmentCustomization struct {
-	ID               string                                  `json:"id"`
-	SiteID           string                                  `json:"siteId"`
-	DisplayName      string                                  `json:"displayName"`
-	Description      string                                  `json:"description"`
+	ID               string                 `json:"id"`
+	SiteID           string                 `json:"siteId"`
+	DisplayName      string                 `json:"displayName"`
+	Description      string                 `json:"description"`
 	BrandingSettings SubsetBrandingSettings `json:"enrollmentCustomizationBrandingSettings"`
 }
 
@@ -34,13 +36,13 @@ type ImageUploadResponse struct {
 }
 
 // ResourceHistoryEntry is an alias to the shared history item struct.
-type ResourceHistoryEntry = shared.SharedHistoryItem
+type ResourceHistoryEntry = models.SharedHistoryItem
 
 // HistoryResponse is an alias to the shared history response struct.
-type HistoryResponse = shared.SharedHistoryResponse
+type HistoryResponse = models.SharedHistoryResponse
 
 // RequestAddHistoryNotes is an alias to the shared history note request struct.
-type RequestAddHistoryNotes = shared.SharedHistoryNoteRequest
+type RequestAddHistoryNotes = models.SharedHistoryNoteRequest
 
 type ResponseAddHistoryNotes struct {
 	ID       int     `json:"id"`

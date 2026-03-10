@@ -7,7 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_groups"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 func main() {
@@ -25,13 +25,13 @@ func main() {
 	createReq := &computer_groups.RequestComputerGroup{
 		Name:    "go-sdk-v2-smart-group",
 		IsSmart: true,
-		Site: &shared.SharedResourceSite{
+		Site: &models.SharedResourceSite{
 			ID:   -1,
 			Name: "None",
 		},
 		Criteria: &computer_groups.CriteriaContainer{
 			Size: 2,
-			Criterion: []shared.SharedSubsetCriteria{
+			Criterion: []models.SharedSubsetCriteria{
 				{
 					Name:       "Operating System",
 					Priority:   0,

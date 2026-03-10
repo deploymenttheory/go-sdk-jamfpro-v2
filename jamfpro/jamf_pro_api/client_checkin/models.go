@@ -1,6 +1,6 @@
 package client_checkin
 
-import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 
 // ResourceClientCheckinSettings represents client check-in settings (singleton).
 //
@@ -18,13 +18,13 @@ type ResourceClientCheckinSettings struct {
 }
 
 // ResourceClientCheckinHistoryEntry is an alias to the shared history item struct with string IDs.
-type ResourceClientCheckinHistoryEntry = shared.SharedHistoryItemString
+type ResourceClientCheckinHistoryEntry = models.SharedHistoryItemString
 
 // ResourceClientCheckinHistory is an alias to the shared history response struct with string IDs.
-type ResourceClientCheckinHistory = shared.SharedHistoryResponseString
+type ResourceClientCheckinHistory = models.SharedHistoryResponseString
 
 // RequestClientCheckinHistoryNote is an alias to the shared history note request struct.
-type RequestClientCheckinHistoryNote = shared.SharedHistoryNoteRequest
+type RequestClientCheckinHistoryNote = models.SharedHistoryNoteRequest
 
 // CreateHistoryResponse is the response for AddHistoryNoteV3 (POST history).
 type CreateHistoryResponse struct {

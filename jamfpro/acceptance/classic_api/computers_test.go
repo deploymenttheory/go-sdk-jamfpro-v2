@@ -8,7 +8,7 @@ import (
 
 	acc "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/acceptance"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computers"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -39,7 +39,7 @@ func TestAcceptance_Computers_lifecycle(t *testing.T) {
 			Name:         computerName,
 			MacAddress:   "00:11:22:33:44:55",
 			SerialNumber: fmt.Sprintf("ACC%d", time.Now().UnixMilli()),
-			Site: shared.SharedResourceSite{
+			Site: models.SharedResourceSite{
 				ID:   -1,
 				Name: "none",
 			},
@@ -141,7 +141,7 @@ func TestAcceptance_Computers_lifecycle(t *testing.T) {
 			Name:         updatedName,
 			MacAddress:   fetched.General.MacAddress,
 			SerialNumber: fetched.General.SerialNumber,
-			Site:         shared.SharedResourceSite{ID: -1, Name: "none"},
+			Site:         models.SharedResourceSite{ID: -1, Name: "none"},
 		},
 		Location:       fetched.Location,
 		Purchasing:     fetched.Purchasing,
@@ -171,7 +171,7 @@ func TestAcceptance_Computers_lifecycle(t *testing.T) {
 			Name:         computerName,
 			MacAddress:   fetched.General.MacAddress,
 			SerialNumber: fetched.General.SerialNumber,
-			Site:         shared.SharedResourceSite{ID: -1, Name: "none"},
+			Site:         models.SharedResourceSite{ID: -1, Name: "none"},
 		},
 		Location:       fetched.Location,
 		Purchasing:     fetched.Purchasing,
@@ -233,7 +233,7 @@ func TestAcceptance_Computers_delete_by_name(t *testing.T) {
 			Name:         computerName,
 			MacAddress:   "00:11:22:33:44:66",
 			SerialNumber: fmt.Sprintf("ACC%d", time.Now().UnixMilli()),
-			Site:         shared.SharedResourceSite{ID: -1, Name: "none"},
+			Site:         models.SharedResourceSite{ID: -1, Name: "none"},
 		},
 	}
 

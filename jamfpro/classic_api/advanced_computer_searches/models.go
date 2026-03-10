@@ -3,7 +3,7 @@ package advanced_computer_searches
 import (
 	"encoding/xml"
 
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
 // ListResponse is the response for ListAdvancedComputerSearches (GET /JSSResource/advancedcomputersearches).
@@ -32,7 +32,7 @@ type ResourceAdvancedComputerSearch struct {
 	Criteria      CriteriaContainer      `xml:"criteria"`
 	DisplayFields []DisplayField         `xml:"display_fields>display_field,omitempty"`
 	Computers     []ComputerResult       `xml:"computers>computer,omitempty"`
-	Site          *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site          *models.SharedResourceSite `xml:"site,omitempty"`
 }
 
 // RequestAdvancedComputerSearch is the body for creating or updating an advanced computer search.
@@ -46,7 +46,7 @@ type RequestAdvancedComputerSearch struct {
 	Sort3         string                     `xml:"sort_3,omitempty"`
 	Criteria      CriteriaContainer          `xml:"criteria"`
 	DisplayFields []DisplayField             `xml:"display_fields>display_field,omitempty"`
-	Site          *shared.SharedResourceSite `xml:"site,omitempty"`
+	Site          *models.SharedResourceSite `xml:"site,omitempty"`
 }
 
 // CreateUpdateResponse represents the response from Create/Update operations.
