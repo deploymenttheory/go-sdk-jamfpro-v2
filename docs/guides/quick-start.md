@@ -29,7 +29,6 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
@@ -40,7 +39,7 @@ func main() {
 	}
 
 	// Step 2: Make an API call using a service
-	result, resp, err := jamfClient.Reenrollment.Get(context.Background())
+	result, resp, err := jamfClient.JamfProAPI.Reenrollment.Get(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,7 +66,7 @@ go run main.go
 
 ```go
 // List (paginated)
-list, resp, err := jamfClient.ApiIntegrations.ListV1(ctx, nil)
+list, resp, err := jamfClient.JamfProAPI.ApiIntegrations.ListV1(ctx, nil)
 if err != nil {
 	log.Fatal(err)
 }
@@ -76,7 +75,7 @@ for _, item := range list.Results {
 }
 
 // Get by ID
-item, resp, err := jamfClient.ApiIntegrations.GetByIDV1(ctx, "1")
+item, resp, err := jamfClient.JamfProAPI.ApiIntegrations.GetByIDV1(ctx, "1")
 if err != nil {
 	log.Fatal(err)
 }
@@ -88,7 +87,7 @@ fmt.Println(item.DisplayName)
 ```go
 import "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/services/jamf_pro_api/categories"
 
-created, resp, err := jamfClient.Categories.CreateV1(ctx, &categories.RequestCategory{
+created, resp, err := jamfClient.JamfProAPI.Categories.CreateV1(ctx, &categories.RequestCategory{
 	Name: "My Category",
 	Priority: 1,
 })
@@ -98,18 +97,18 @@ if err != nil {
 id := created.ID
 
 // Later: delete
-_, err = jamfClient.Categories.DeleteByIDV1(ctx, id)
+_, err = jamfClient.JamfProAPI.Categories.DeleteByIDV1(ctx, id)
 ```
 
 ### List computer prestages and get device scope
 
 ```go
-list, _, err := jamfClient.ComputerPrestages.ListV3(ctx, nil)
+list, _, err := jamfClient.JamfProAPI.ComputerPrestages.ListV3(ctx, nil)
 if err != nil {
 	log.Fatal(err)
 }
 
-scope, _, err := jamfClient.ComputerPrestages.GetDeviceScopeByIDV2(ctx, list.Results[0].ID)
+scope, _, err := jamfClient.JamfProAPI.ComputerPrestages.GetDeviceScopeByIDV2(ctx, list.Results[0].ID)
 if err != nil {
 	log.Fatal(err)
 }
@@ -149,7 +148,7 @@ jamfClient, err := jamfpro.NewClientFromEnv()
 ### From a config file
 
 ```go
-authConfig, err := client.LoadAuthConfigFromFile("/path/to/clientconfig.json")
+authConfig, err := jamfpro.LoadAuthConfigFromFile("/path/to/clientconfig.json")
 if err != nil {
 	log.Fatal(err)
 }
@@ -163,7 +162,7 @@ See [Authentication](authentication.md) for file format, secret managers, and be
 Always check errors and inspect the response when needed:
 
 ```go
-result, resp, err := jamfClient.ApiIntegrations.GetByIDV1(ctx, id)
+result, resp, err := jamfClient.JamfProAPI.ApiIntegrations.GetByIDV1(ctx, id)
 
 if err != nil {
 	// Check for specific error types if your client exposes them
@@ -185,7 +184,7 @@ fmt.Println(result.DisplayName)
 Service methods return `(result, resp, err)`. The `resp` value (e.g. `*resty.Response`) carries HTTP metadata:
 
 ```go
-result, resp, err := jamfClient.Categories.ListV1(ctx, nil)
+result, resp, err := jamfClient.JamfProAPI.Categories.ListV1(ctx, nil)
 // resp.StatusCode, resp.Headers, resp.Body (if needed)
 ```
 
@@ -197,7 +196,7 @@ result, resp, err := jamfClient.Categories.ListV1(ctx, nil)
 
 ### Client options
 
-- **Logger:** `jamfpro.NewClient(authConfig, client.WithLogger(zapLogger))`
+- **Logger:** `jamfpro.NewClient(authConfig, jamfpro.WithLogger(zapLogger))`
 - **OpenTelemetry:** After creating the client, call `jamfClient.EnableTracing(otelConfig)` for HTTP tracing
 
 ### Examples and API coverage

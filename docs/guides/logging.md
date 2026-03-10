@@ -34,7 +34,6 @@ import (
     "log"
 
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
     "go.uber.org/zap"
 )
 
@@ -47,17 +46,17 @@ func main() {
     defer logger.Sync()
 
     // Step 2: Create client with custom logger
-    authConfig := client.AuthConfigFromEnv()
+    authConfig := jamfpro.AuthConfigFromEnv()
     jamfClient, err := jamfpro.NewClient(
         authConfig,
-        client.WithLogger(logger),
+        jamfpro.WithLogger(logger),
     )
     if err != nil {
         log.Fatal(err)
     }
 
     // Step 3: Use the client - logging happens automatically
-    result, resp, err := jamfClient.Buildings.ListV1(context.Background(), nil)
+    result, resp, err := jamfClient.JamfProAPI.Buildings.ListV1(context.Background(), nil)
     if err != nil {
         logger.Error("Failed to list buildings",
             zap.Error(err),
@@ -92,10 +91,10 @@ Use zap's production configuration for JSON logs:
 ```go
 logger, _ := zap.NewProduction()
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithLogger(logger),
+    jamfpro.WithLogger(logger),
 )
 ```
 
@@ -112,10 +111,10 @@ Use zap's development configuration for human-readable logs:
 ```go
 logger, _ := zap.NewDevelopment()
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithLogger(logger),
+    jamfpro.WithLogger(logger),
 )
 ```
 
@@ -156,10 +155,10 @@ config := zap.Config{
 
 logger, _ := config.Build()
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithLogger(logger),
+    jamfpro.WithLogger(logger),
 )
 ```
 
@@ -178,10 +177,10 @@ config.Level = zap.NewAtomicLevelAt(zap.WarnLevel)
 
 logger, _ := config.Build()
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithLogger(logger),
+    jamfpro.WithLogger(logger),
 )
 ```
 
@@ -210,10 +209,10 @@ config.OutputPaths = []string{
 
 logger, _ := config.Build()
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithLogger(logger),
+    jamfpro.WithLogger(logger),
 )
 ```
 
@@ -271,7 +270,7 @@ Add your own structured logs throughout your application:
 func processBuildings(logger *zap.Logger, jamfClient *jamfpro.Client) error {
     logger.Info("Starting building list retrieval")
 
-    result, resp, err := jamfClient.Buildings.ListV1(context.Background(), nil)
+    result, resp, err := jamfClient.JamfProAPI.Buildings.ListV1(context.Background(), nil)
     if err != nil {
         logger.Error("Building list retrieval failed",
             zap.Error(err),
@@ -298,7 +297,7 @@ logger.Info("API request",
     zap.String("endpoint", "/api/v1/buildings"),
 )
 
-result, resp, err := jamfClient.Buildings.ListV1(ctx, nil)
+result, resp, err := jamfClient.JamfProAPI.Buildings.ListV1(ctx, nil)
 
 logger.Info("API response",
     zap.Int("status_code", resp.StatusCode),
@@ -326,7 +325,7 @@ if err != nil {
 import "time"
 
 start := time.Now()
-result, _, err := jamfClient.Buildings.ListV1(ctx, nil)
+result, _, err := jamfClient.JamfProAPI.Buildings.ListV1(ctx, nil)
 duration := time.Since(start)
 
 logger.Info("API call completed",
@@ -363,8 +362,8 @@ logger = logger.With(
     zap.String("version", "1.0.0"),
 )
 
-authConfig := client.AuthConfigFromEnv()
-jamfClient, _ := jamfpro.NewClient(authConfig, client.WithLogger(logger))
+authConfig := jamfpro.AuthConfigFromEnv()
+jamfClient, _ := jamfpro.NewClient(authConfig, jamfpro.WithLogger(logger))
 ```
 
 ### Datadog
@@ -385,11 +384,11 @@ logger, _ := config.Build()
 Enable debug mode for detailed HTTP request/response logging:
 
 ```go
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, _ := jamfpro.NewClient(
     authConfig,
-    client.WithLogger(logger),
-    client.WithDebug(), // Enables detailed HTTP logging
+    jamfpro.WithLogger(logger),
+    jamfpro.WithDebug(), // Enables detailed HTTP logging
 )
 ```
 
@@ -425,20 +424,23 @@ logger, _ := config.Build()
 ### Capture Logs in Tests
 
 ```go
-import "go.uber.org/zap/zaptest"
+import (
+    "go.uber.org/zap/zaptest"
+    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+)
 
 func TestMyFunction(t *testing.T) {
     // Create test logger that writes to test output
     logger := zaptest.NewLogger(t)
 
-    authConfig := &client.AuthConfig{
+    authConfig := &jamfpro.AuthConfig{
         InstanceDomain: "https://test.jamfcloud.com",
-        AuthMethod:     client.AuthMethodOAuth2,
+        AuthMethod:     constants.AuthMethodOAuth2,
         ClientID:       "test-id",
         ClientSecret:   "test-secret",
     }
 
-    jamfClient, _ := jamfpro.NewClient(authConfig, client.WithLogger(logger))
+    jamfClient, _ := jamfpro.NewClient(authConfig, jamfpro.WithLogger(logger))
 
     // Logs will appear in test output
     // ...
@@ -452,6 +454,7 @@ import (
     "go.uber.org/zap"
     "go.uber.org/zap/zapcore"
     "go.uber.org/zap/zaptest/observer"
+    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 )
 
 func TestLogging(t *testing.T) {
@@ -459,14 +462,14 @@ func TestLogging(t *testing.T) {
     observedCore, observedLogs := observer.New(zapcore.InfoLevel)
     logger := zap.New(observedCore)
 
-    authConfig := &client.AuthConfig{
+    authConfig := &jamfpro.AuthConfig{
         InstanceDomain: "https://test.jamfcloud.com",
-        AuthMethod:     client.AuthMethodOAuth2,
+        AuthMethod:     constants.AuthMethodOAuth2,
         ClientID:       "test-id",
         ClientSecret:   "test-secret",
     }
 
-    jamfClient, _ := jamfpro.NewClient(authConfig, client.WithLogger(logger))
+    jamfClient, _ := jamfpro.NewClient(authConfig, jamfpro.WithLogger(logger))
 
     // Perform operations...
 

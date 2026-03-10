@@ -37,24 +37,23 @@ import (
     "time"
 
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-    authConfig := client.AuthConfigFromEnv()
+    authConfig := jamfpro.AuthConfigFromEnv()
 
     // Create client with timeout and retry configuration
     jamfClient, err := jamfpro.NewClient(
         authConfig,
-        client.WithTimeout(30*time.Second),  // 30 second timeout
-        client.WithRetryCount(3),             // Retry up to 3 times
+        jamfpro.WithTimeout(30*time.Second),  // 30 second timeout
+        jamfpro.WithRetryCount(3),             // Retry up to 3 times
     )
     if err != nil {
         log.Fatal(err)
     }
 
     // Use the client - timeouts and retries are automatic
-    result, _, err := jamfClient.Buildings.ListV1(context.Background(), nil)
+    result, _, err := jamfClient.JamfProAPI.Buildings.ListV1(context.Background(), nil)
     if err != nil {
         log.Fatal(err)
     }
@@ -76,16 +75,16 @@ Set a timeout appropriate for your use case:
 
 ```go
 // Short timeout for quick operations
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithTimeout(10*time.Second),
+    jamfpro.WithTimeout(10*time.Second),
 )
 
 // Longer timeout for bulk operations
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithTimeout(5*time.Minute),
+    jamfpro.WithTimeout(5*time.Minute),
 )
 ```
 
@@ -113,20 +112,20 @@ The wait time doubles with each retry (exponential backoff) up to the maximum.
 import "time"
 
 // Conservative: Few retries, quick backoff
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithRetryCount(2),                      // Retry twice
-    client.WithRetryWaitTime(1*time.Second),       // Wait 1s initially
-    client.WithRetryMaxWaitTime(5*time.Second),    // Max wait 5s
+    jamfpro.WithRetryCount(2),                      // Retry twice
+    jamfpro.WithRetryWaitTime(1*time.Second),       // Wait 1s initially
+    jamfpro.WithRetryMaxWaitTime(5*time.Second),    // Max wait 5s
 )
 
 // Aggressive: More retries, longer backoff
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithRetryCount(5),                      // Retry 5 times
-    client.WithRetryWaitTime(3*time.Second),       // Wait 3s initially
-    client.WithRetryMaxWaitTime(30*time.Second),   // Max wait 30s
+    jamfpro.WithRetryCount(5),                      // Retry 5 times
+    jamfpro.WithRetryWaitTime(3*time.Second),       // Wait 3s initially
+    jamfpro.WithRetryMaxWaitTime(30*time.Second),   // Max wait 30s
 )
 ```
 
@@ -148,11 +147,11 @@ Set a maximum wall-clock time for all retry attempts:
 ```go
 import "time"
 
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithRetryCount(10),
-    client.WithTotalRetryDuration(2*time.Minute), // Max 2 minutes total
+    jamfpro.WithRetryCount(10),
+    jamfpro.WithTotalRetryDuration(2*time.Minute), // Max 2 minutes total
 )
 ```
 

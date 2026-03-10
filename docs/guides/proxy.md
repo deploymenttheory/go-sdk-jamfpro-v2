@@ -35,16 +35,15 @@ import (
     "log"
 
     "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-    "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 )
 
 func main() {
-    authConfig := client.AuthConfigFromEnv()
+    authConfig := jamfpro.AuthConfigFromEnv()
 
     // Configure client with HTTP proxy
     jamfClient, err := jamfpro.NewClient(
         authConfig,
-        client.WithProxy("http://proxy.company.com:8080"),
+        jamfpro.WithProxy("http://proxy.company.com:8080"),
     )
     if err != nil {
         log.Fatal(err)
@@ -61,10 +60,10 @@ func main() {
 Configure a standard HTTP proxy:
 
 ```go
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithProxy("http://proxy.example.com:8080"),
+    jamfpro.WithProxy("http://proxy.example.com:8080"),
 )
 ```
 
@@ -77,10 +76,10 @@ jamfClient, err := jamfpro.NewClient(
 Use an HTTPS proxy for encrypted proxy connections:
 
 ```go
-authConfig := client.AuthConfigFromEnv()
+authConfig := jamfpro.AuthConfigFromEnv()
 jamfClient, err := jamfpro.NewClient(
     authConfig,
-    client.WithProxy("https://secure-proxy.example.com:8443"),
+    jamfpro.WithProxy("https://secure-proxy.example.com:8443"),
 )
 ```
 
