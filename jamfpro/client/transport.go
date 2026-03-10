@@ -2,11 +2,13 @@ package client
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"io"
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -20,7 +22,7 @@ type Transport struct {
 	client        *resty.Client
 	logger        *zap.Logger
 	authConfig    *config.AuthConfig
-	holder        *tokenHolder
+	tokenManager  *bearerTokenManager
 	BaseURL       string
 	globalHeaders map[string]string
 	userAgent     string
@@ -54,13 +56,13 @@ func (t *Transport) RSQLBuilder() RSQLFilterBuilder {
 // InvalidateToken revokes the current bearer token at the Jamf Pro API and
 // clears the local cache. The next request triggers a full re-authentication.
 func (t *Transport) InvalidateToken() error {
-	return t.holder.invalidate()
+	return t.tokenManager.invalidate()
 }
 
 // KeepAliveToken extends the current bearer token lifetime without re-auth.
 // Use before long-running operations to prevent mid-operation token expiry.
 func (t *Transport) KeepAliveToken() error {
-	return t.holder.keepAlive()
+	return t.tokenManager.keepAlive()
 }
 
 // NewTransport creates and fully configures a Jamf Pro API transport.
@@ -74,21 +76,64 @@ func (t *Transport) KeepAliveToken() error {
 //
 // Jamf Pro does not emit rate-limit HTTP headers. Throttling is inferred
 // from observed response times per Jamf scalability best practices.
-func NewTransport(authConfig *config.AuthConfig, options ...ClientOption) (*Transport, error) {
-	logger, err := zap.NewProduction()
-	if err != nil {
-		return nil, fmt.Errorf("failed to create logger: %w", err)
-	}
-
+func NewTransport(authConfig *config.AuthConfig, opts ...ClientOption) (*Transport, error) {
 	if authConfig == nil {
 		return nil, fmt.Errorf("auth config is required")
 	}
-	baseURL := authConfig.InstanceDomain
+
+	// Collect all caller-supplied options into a settings struct.
+	// Zero values signal "use the built-in default".
+	settings := &TransportSettings{
+		GlobalHeaders: make(map[string]string),
+	}
+	for _, opt := range opts {
+		if err := opt(settings); err != nil {
+			return nil, fmt.Errorf("failed to apply client option: %w", err)
+		}
+	}
+
+	// Logger: caller-supplied or production default.
+	logger := settings.Logger
+	if logger == nil {
+		var err error
+		logger, err = zap.NewProduction()
+		if err != nil {
+			return nil, fmt.Errorf("failed to create logger: %w", err)
+		}
+	}
+
+	// BaseURL: option overrides authConfig.InstanceDomain.
+	baseURL := settings.BaseURL
+	if baseURL == "" {
+		baseURL = authConfig.InstanceDomain
+	}
 	if baseURL == "" {
 		return nil, fmt.Errorf("instance domain is required")
 	}
 	baseURL = trimTrailingSlash(baseURL)
-	userAgent := fmt.Sprintf("%s/%s", UserAgentBase, Version)
+
+	// UserAgent: option overrides SDK default.
+	userAgent := settings.UserAgent
+	if userAgent == "" {
+		userAgent = fmt.Sprintf("%s/%s", UserAgentBase, constants.Version)
+	}
+	// Timeouts/retries: option value if non-zero, else SDK default.
+	timeout := settings.Timeout
+	if timeout == 0 {
+		timeout = DefaultTimeout
+	}
+	retryCount := settings.RetryCount
+	if retryCount == 0 {
+		retryCount = MaxRetries
+	}
+	retryWait := settings.RetryWaitTime
+	if retryWait == 0 {
+		retryWait = RetryWaitTime
+	}
+	retryMaxWait := settings.RetryMaxWaitTime
+	if retryMaxWait == 0 {
+		retryMaxWait = RetryMaxWaitTime
+	}
 
 	// Resty creates a cookie jar by default, which enables sticky sessions automatically.
 	// Jamf Cloud sets jpro-ingress / APBALANCEID / JSESSIONID in Set-Cookie
@@ -96,10 +141,10 @@ func NewTransport(authConfig *config.AuthConfig, options ...ClientOption) (*Tran
 	// See: https://developer.jamf.com/jamf-pro/docs/sticky-sessions-for-jamf-cloud
 	restyClient := resty.New()
 	restyClient.SetBaseURL(baseURL)
-	restyClient.SetTimeout(DefaultTimeout)
-	restyClient.SetRetryCount(MaxRetries)
-	restyClient.SetRetryWaitTime(RetryWaitTime)
-	restyClient.SetRetryMaxWaitTime(RetryMaxWaitTime)
+	restyClient.SetTimeout(timeout)
+	restyClient.SetRetryCount(retryCount)
+	restyClient.SetRetryWaitTime(retryWait)
+	restyClient.SetRetryMaxWaitTime(retryMaxWait)
 	restyClient.SetHeader("User-Agent", userAgent)
 
 	// Only retry idempotent methods on transient server errors.
@@ -107,21 +152,44 @@ func NewTransport(authConfig *config.AuthConfig, options ...ClientOption) (*Tran
 	// See: https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-scalability-best-practices
 	restyClient.AddRetryConditions(retryCondition)
 
-	transport := &Transport{
-		client:          restyClient,
-		logger:          logger,
-		authConfig:      authConfig,
-		BaseURL:         baseURL,
-		globalHeaders:   make(map[string]string),
-		userAgent:       userAgent,
-		responseTracker: newResponseTimeTracker(),
+	if settings.Debug {
+		restyClient.SetDebug(true)
 	}
 
-	// Apply caller-supplied options before auth so WithLogger takes effect first.
-	for _, opt := range options {
-		if err := opt(transport); err != nil {
-			return nil, fmt.Errorf("failed to apply client option: %w", err)
-		}
+	// TLS: InsecureSkipVerify takes precedence over a custom TLSClientConfig.
+	if settings.InsecureSkipVerify {
+		restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true}) //nolint:gosec
+	} else if settings.TLSClientConfig != nil {
+		restyClient.SetTLSClientConfig(settings.TLSClientConfig)
+	}
+
+	if settings.ProxyURL != "" {
+		restyClient.SetProxy(settings.ProxyURL)
+	}
+	if settings.HTTPTransport != nil {
+		restyClient.SetTransport(settings.HTTPTransport)
+	}
+	for k, v := range settings.GlobalHeaders {
+		restyClient.SetHeader(k, v)
+	}
+
+	// Build optional concurrency semaphore.
+	var sem *semaphore
+	if settings.MaxConcurrentRequests > 0 {
+		sem = newSemaphore(settings.MaxConcurrentRequests)
+	}
+
+	transport := &Transport{
+		client:             restyClient,
+		logger:             logger,
+		authConfig:         authConfig,
+		BaseURL:            baseURL,
+		globalHeaders:      settings.GlobalHeaders,
+		userAgent:          userAgent,
+		responseTracker:    newResponseTimeTracker(),
+		sem:                sem,
+		requestDelay:       settings.MandatoryRequestDelay,
+		totalRetryDuration: settings.TotalRetryDuration,
 	}
 
 	// Log deprecated endpoint warnings and cookie usage via resty response middleware.
@@ -147,28 +215,30 @@ func NewTransport(authConfig *config.AuthConfig, options ...ClientOption) (*Tran
 		return nil
 	})
 
-	// Wire authentication — returns tokenHolder for InvalidateToken/KeepAliveToken.
+	// Wire authentication — returns bearerTokenManager for InvalidateToken/KeepAliveToken.
 	// The OAuth token request (first request) captures the sticky session cookie automatically.
 	// IMPORTANT: This must happen AFTER SetBaseURL so the cookie jar associates the cookie
 	// with the correct domain for all subsequent requests.
-	holder, err := SetupAuthentication(restyClient, authConfig, transport.logger)
+	tokenManager, err := SetupAuthentication(restyClient, authConfig, transport.logger, settings)
 	if err != nil {
 		return nil, fmt.Errorf("failed to setup authentication: %w", err)
 	}
-	transport.holder = holder
+	transport.tokenManager = tokenManager
 
 	// Apply OpenTelemetry instrumentation (always enabled, uses global providers).
 	// If no global providers are configured, this is a no-op.
-	// This must happen AFTER all other options are applied.
+	// This must happen AFTER construction is complete.
 	transport.applyOpenTelemetry()
 
-	transport.logger.Info("Jamf Pro API transport created",
+	logger.Info("Jamf Pro API transport created",
 		zap.String("base_url", transport.BaseURL),
 		zap.String("auth_method", authConfig.AuthMethod),
 	)
 	return transport, nil
 }
 
+// trimTrailingSlash removes trailing slashes from a string.
+// This is used to ensure that the base URL is correctly formatted.
 func trimTrailingSlash(s string) string {
 	if len(s) > 0 && s[len(s)-1] == '/' {
 		return s[:len(s)-1]
