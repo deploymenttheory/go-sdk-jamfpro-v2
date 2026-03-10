@@ -1,45 +1,19 @@
 package mocks
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-// registeredResponse holds a pre-canned response for a single endpoint.
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-	errMsg     string
-}
-
-// APNSClientPushStatusMock is a test double implementing client.Client.
 type APNSClientPushStatusMock struct {
-	responses     map[string]registeredResponse
-	logger        *zap.Logger
-	LastRSQLQuery map[string]string
+	*mocks.GenericMock
 }
 
-// NewAPNSClientPushStatusMock returns an empty mock ready for response registration.
 func NewAPNSClientPushStatusMock() *APNSClientPushStatusMock {
 	return &APNSClientPushStatusMock{
-		responses: make(map[string]registeredResponse),
-		logger:    zap.NewNop(),
+		GenericMock: mocks.NewJSONMock("APNSClientPushStatusMock"),
 	}
 }
 
-// RegisterMocks registers all standard success responses in one call.
 func (m *APNSClientPushStatusMock) RegisterMocks() {
 	m.RegisterListMock()
 	m.RegisterEnableAllClientsMock()
@@ -47,205 +21,18 @@ func (m *APNSClientPushStatusMock) RegisterMocks() {
 	m.RegisterEnableClientMock()
 }
 
-func (m *APNSClientPushStatusMock) register(method, path string, statusCode int, fixture string) {
-	var body []byte
-	if fixture != "" {
-		data, err := loadMockResponse(fixture)
-		if err != nil {
-			panic(fmt.Sprintf("APNSClientPushStatusMock: failed to load fixture %q: %v", fixture, err))
-		}
-		body = data
-	}
-	m.responses[method+":"+path] = registeredResponse{statusCode: statusCode, rawBody: body}
-}
-
-// RegisterListMock registers the list APNS client push status response.
 func (m *APNSClientPushStatusMock) RegisterListMock() {
-	m.register("GET", "/api/v1/apns-client-push-status", 200, "validate_list.json")
+	m.Register("GET", "/api/v1/apns-client-push-status", 200, "validate_list.json")
 }
 
-// RegisterEnableAllClientsMock registers the enable-all-clients POST response (no content).
 func (m *APNSClientPushStatusMock) RegisterEnableAllClientsMock() {
-	m.register("POST", "/api/v1/apns-client-push-status/enable-all-clients", 202, "")
+	m.Register("POST", "/api/v1/apns-client-push-status/enable-all-clients", 202, "")
 }
 
-// RegisterGetEnableAllClientsStatusMock registers the enable-all-clients status GET response.
 func (m *APNSClientPushStatusMock) RegisterGetEnableAllClientsStatusMock() {
-	m.register("GET", "/api/v1/apns-client-push-status/enable-all-clients/status", 200, "validate_get_enable_all_clients_status.json")
+	m.Register("GET", "/api/v1/apns-client-push-status/enable-all-clients/status", 200, "validate_get_enable_all_clients_status.json")
 }
 
-// RegisterEnableClientMock registers the enable-client POST response (204 No Content).
 func (m *APNSClientPushStatusMock) RegisterEnableClientMock() {
-	m.register("POST", "/api/v1/apns-client-push-status/enable-client", 204, "")
-}
-
-// loadMockResponse loads a JSON fixture from the mocks directory.
-func loadMockResponse(filename string) ([]byte, error) {
-	wd, _ := os.Getwd()
-	return os.ReadFile(filepath.Join(wd, "mocks", filename))
-}
-
-
-func (m *APNSClientPushStatusMock) dispatch(method, path string, result any) (*resty.Response, error) {
-	key := method + ":" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for %s %s", method, path)
-	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
-	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
-			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("unmarshal: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
-}
-
-// Get implements client.Client.Get.
-func (m *APNSClientPushStatusMock) Get(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	m.LastRSQLQuery = query
-	key := "GET:" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for GET %s", path)
-	}
-
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
-	}
-
-	if out != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, out); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal mock response: %w", err)
-		}
-	}
-
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
-}
-
-// GetPaginated implements client.Client.GetPaginated.
-func (m *APNSClientPushStatusMock) GetPaginated(ctx context.Context, path string, query map[string]string, headers map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
-	m.LastRSQLQuery = query
-	key := "GET:" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for GET %s", path)
-	}
-
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
-	}
-
-	if mergePage != nil && len(resp.rawBody) > 0 {
-		// Extract "results" field from the response, just like the real GetPaginated does
-		var pageResp struct {
-			Results json.RawMessage `json:"results"`
-		}
-		if err := json.Unmarshal(resp.rawBody, &pageResp); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal paginated response: %w", err)
-		}
-		if err := mergePage(pageResp.Results); err != nil {
-			return nil, fmt.Errorf("mergePage failed: %w", err)
-		}
-	}
-
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
-}
-func (m *APNSClientPushStatusMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
-		return m.dispatch(method, path, result)
-	}, &m.LastRSQLQuery)
-}
-
-// Post implements client.Client.Post.
-func (m *APNSClientPushStatusMock) Post(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	key := "POST:" + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for POST %s", path)
-	}
-
-	if resp.errMsg != "" {
-		return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), fmt.Errorf("%s", resp.errMsg)
-	}
-
-	if out != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, out); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal mock response: %w", err)
-		}
-	}
-
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
-}
-
-// Delete implements client.Client.Delete.
-func (m *APNSClientPushStatusMock) Delete(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("Delete not implemented in APNSClientPushStatusMock")
-}
-
-// Put implements client.Client.Put.
-func (m *APNSClientPushStatusMock) Put(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("Put not implemented in APNSClientPushStatusMock")
-}
-
-// Patch implements client.Client.Patch.
-func (m *APNSClientPushStatusMock) Patch(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("Patch not implemented in APNSClientPushStatusMock")
-}
-
-// DownloadFile implements client.Client.DownloadFile.
-func (m *APNSClientPushStatusMock) DownloadFile(ctx context.Context, url string) (io.ReadCloser, *http.Response, error) {
-	return nil, nil, fmt.Errorf("DownloadFile not implemented in APNSClientPushStatusMock")
-}
-
-// SetLogger implements client.Client.SetLogger.
-func (m *APNSClientPushStatusMock) SetLogger(logger *zap.Logger) {
-	m.logger = logger
-}
-
-// GetLogger implements client.Client.GetLogger.
-func (m *APNSClientPushStatusMock) GetLogger() *zap.Logger {
-	return m.logger
-}
-
-// DeleteWithBody implements client.Client.DeleteWithBody.
-func (m *APNSClientPushStatusMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("DeleteWithBody not implemented in APNSClientPushStatusMock")
-}
-
-// PostWithQuery implements client.Client.PostWithQuery.
-func (m *APNSClientPushStatusMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("PostWithQuery not implemented in APNSClientPushStatusMock")
-}
-
-// PostForm implements client.Client.PostForm.
-func (m *APNSClientPushStatusMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("PostForm not implemented in APNSClientPushStatusMock")
-}
-
-// PostMultipart implements client.Client.PostMultipart.
-func (m *APNSClientPushStatusMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
-	return nil, fmt.Errorf("PostMultipart not implemented in APNSClientPushStatusMock")
-}
-
-// GetBytes implements client.Client.GetBytes.
-func (m *APNSClientPushStatusMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
-	return nil, nil, fmt.Errorf("GetBytes not implemented in APNSClientPushStatusMock")
-}
-
-// RSQLBuilder implements client.Client.RSQLBuilder.
-func (m *APNSClientPushStatusMock) RSQLBuilder() client.RSQLFilterBuilder {
-	return nil
-}
-
-// InvalidateToken implements client.Client.InvalidateToken.
-func (m *APNSClientPushStatusMock) InvalidateToken() error {
-	return nil
-}
-
-// KeepAliveToken implements client.Client.KeepAliveToken.
-func (m *APNSClientPushStatusMock) KeepAliveToken() error {
-	return nil
+	m.Register("POST", "/api/v1/apns-client-push-status/enable-client", 204, "")
 }

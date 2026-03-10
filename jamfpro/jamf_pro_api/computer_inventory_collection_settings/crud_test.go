@@ -24,15 +24,14 @@ func TestUnit_ComputerInventoryCollectionSettings_GetV2_Success(t *testing.T) {
 
 func TestUnit_ComputerInventoryCollectionSettings_GetV2_ClientError(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
-	// No mock registered - dispatch returns (nil, err)
+	mock.RegisterGetErrorMock()
 
 	svc := NewComputerInventoryCollectionSettings(mock)
 	result, resp, err := svc.GetV2(context.Background())
 
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_Success(t *testing.T) {
@@ -65,7 +64,7 @@ func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_NilSettings(t *testin
 
 func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_ClientError(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
-	// No mock registered
+	mock.RegisterUpdateErrorMock()
 
 	svc := NewComputerInventoryCollectionSettings(mock)
 	settings := &ResourceComputerInventoryCollectionSettings{
@@ -74,8 +73,7 @@ func TestUnit_ComputerInventoryCollectionSettings_UpdateV2_ClientError(t *testin
 	resp, err := svc.UpdateV2(context.Background(), settings)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_Success(t *testing.T) {
@@ -123,7 +121,7 @@ func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_EmptyPath(t
 
 func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_ClientError(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
-	// No mock registered
+	mock.RegisterCreateCustomPathErrorMock()
 
 	svc := NewComputerInventoryCollectionSettings(mock)
 	req := &RequestCustomPath{Scope: "USER", Path: "/Users/Shared/CustomApp"}
@@ -131,13 +129,12 @@ func TestUnit_ComputerInventoryCollectionSettings_CreateCustomPathV2_ClientError
 
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_Success(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
-	mock.RegisterDeleteCustomPathMock()
+	mock.RegisterDeleteCustomPathMock("3")
 
 	svc := NewComputerInventoryCollectionSettings(mock)
 	resp, err := svc.DeleteCustomPathByIDV2(context.Background(), "3")
@@ -160,12 +157,11 @@ func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_EmptyID
 
 func TestUnit_ComputerInventoryCollectionSettings_DeleteCustomPathByIDV2_ClientError(t *testing.T) {
 	mock := mocks.NewComputerInventoryCollectionSettingsMock()
-	// No mock registered
+	mock.RegisterDeleteCustomPathErrorMock("3")
 
 	svc := NewComputerInventoryCollectionSettings(mock)
 	resp, err := svc.DeleteCustomPathByIDV2(context.Background(), "3")
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }

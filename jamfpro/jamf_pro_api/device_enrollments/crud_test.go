@@ -11,7 +11,7 @@ import (
 
 func TestUnit_DeviceEnrollments_ListV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterListMock(mock)
+	mock.RegisterListMock()
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -30,7 +30,7 @@ func TestUnit_DeviceEnrollments_ListV1_Success(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_ListV1_WithPagination(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterListMock(mock)
+	mock.RegisterListMock()
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -63,7 +63,7 @@ func TestUnit_DeviceEnrollments_ListV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_GetByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterGetByIDMock(mock)
+	mock.RegisterGetByIDMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -102,7 +102,7 @@ func TestUnit_DeviceEnrollments_GetByIDV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_GetByNameV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterListMock(mock)
+	mock.RegisterListMock()
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -129,7 +129,7 @@ func TestUnit_DeviceEnrollments_GetByNameV1_EmptyName(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_GetByNameV1_NotFound(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterListMock(mock)
+	mock.RegisterListMock()
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -156,7 +156,7 @@ func TestUnit_DeviceEnrollments_GetByNameV1_ListFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_GetHistoryV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterGetHistoryMock(mock)
+	mock.RegisterGetHistoryMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -196,7 +196,7 @@ func TestUnit_DeviceEnrollments_GetHistoryV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_GetSyncStatesV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterGetSyncStatesMock(mock)
+	mock.RegisterGetSyncStatesMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -236,7 +236,7 @@ func TestUnit_DeviceEnrollments_GetSyncStatesV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_GetLatestSyncStateV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterGetLatestSyncStateMock(mock)
+	mock.RegisterGetLatestSyncStateMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -275,7 +275,7 @@ func TestUnit_DeviceEnrollments_GetLatestSyncStateV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_GetAllSyncStatesV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterGetAllSyncStatesMock(mock)
+	mock.RegisterGetAllSyncStatesMock()
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -302,7 +302,7 @@ func TestUnit_DeviceEnrollments_GetAllSyncStatesV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_GetPublicKeyV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterGetPublicKeyMock(mock)
+	mock.RegisterGetPublicKeyMock()
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -329,7 +329,7 @@ func TestUnit_DeviceEnrollments_GetPublicKeyV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_CreateWithTokenV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterCreateWithTokenMock(mock)
+	mock.RegisterCreateWithTokenMock()
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -391,7 +391,7 @@ func TestUnit_DeviceEnrollments_CreateWithTokenV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_UpdateByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterUpdateByIDMock(mock)
+	mock.RegisterUpdateByIDMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -463,7 +463,7 @@ func TestUnit_DeviceEnrollments_UpdateByIDV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_UpdateTokenByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterUpdateTokenByIDMock(mock)
+	mock.RegisterUpdateTokenByIDMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -533,7 +533,7 @@ func TestUnit_DeviceEnrollments_UpdateTokenByIDV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_DeleteByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterDeleteByIDMock(mock)
+	mock.RegisterDeleteByIDMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -570,7 +570,7 @@ func TestUnit_DeviceEnrollments_DeleteByIDV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_DisownDevicesByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterDisownDevicesMock(mock)
+	mock.RegisterDisownDevicesMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -642,7 +642,7 @@ func TestUnit_DeviceEnrollments_DisownDevicesByIDV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_AddHistoryNotesV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterAddHistoryNotesMock(mock)
+	mock.RegisterAddHistoryNotesMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()
@@ -713,7 +713,7 @@ func TestUnit_DeviceEnrollments_AddHistoryNotesV1_APIFailure(t *testing.T) {
 
 func TestUnit_DeviceEnrollments_GetDevicesByIDV1_Success(t *testing.T) {
 	mock := mocks.NewDeviceEnrollmentsMock()
-	mocks.RegisterGetDevicesByIDMock(mock)
+	mock.RegisterGetDevicesByIDMock("1")
 
 	svc := NewDeviceEnrollments(mock)
 	ctx := context.Background()

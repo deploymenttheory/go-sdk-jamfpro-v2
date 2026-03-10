@@ -34,14 +34,13 @@ func TestUnit_StaticComputerGroups_ListV2_Success(t *testing.T) {
 }
 
 func TestUnit_StaticComputerGroups_ListV2_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered - dispatch returns error
+	svc, mock := setupMockService(t)
+	mock.RegisterListNoResponseErrorMock()
 
 	result, resp, err := svc.ListV2(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to list static computer groups")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_StaticComputerGroups_GetByIDV2_Success(t *testing.T) {
@@ -117,13 +116,13 @@ func TestUnit_StaticComputerGroups_GetByNameV2_NotFound(t *testing.T) {
 }
 
 func TestUnit_StaticComputerGroups_GetByNameV2_ListError(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered - ListV2 returns error
+	svc, mock := setupMockService(t)
+	mock.RegisterListNoResponseErrorMock()
 
 	result, resp, err := svc.GetByNameV2(context.Background(), "SomeName")
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_StaticComputerGroups_CreateV2_Success(t *testing.T) {

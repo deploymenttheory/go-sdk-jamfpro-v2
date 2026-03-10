@@ -139,7 +139,9 @@ func TestUnit_AppInstallers_DeleteDeploymentByIDV1_EmptyID(t *testing.T) {
 }
 
 func TestUnit_AppInstallers_ListTitlesV1_Error(t *testing.T) {
-	svc := NewAppInstallers(mocks.NewAppInstallersMock())
+	mock := mocks.NewAppInstallersMock()
+	mock.RegisterErrorMocks()
+	svc := NewAppInstallers(mock)
 	result, resp, err := svc.ListTitlesV1(context.Background(), nil)
 	require.Error(t, err)
 	require.Nil(t, result)
@@ -147,7 +149,9 @@ func TestUnit_AppInstallers_ListTitlesV1_Error(t *testing.T) {
 }
 
 func TestUnit_AppInstallers_GetTitleByIDV1_Error(t *testing.T) {
-	svc := NewAppInstallers(mocks.NewAppInstallersMock())
+	mock := mocks.NewAppInstallersMock()
+	mock.RegisterErrorMocks()
+	svc := NewAppInstallers(mock)
 	result, resp, err := svc.GetTitleByIDV1(context.Background(), "1")
 	require.Error(t, err)
 	require.Nil(t, result)
@@ -155,7 +159,9 @@ func TestUnit_AppInstallers_GetTitleByIDV1_Error(t *testing.T) {
 }
 
 func TestUnit_AppInstallers_ListDeploymentsV1_Error(t *testing.T) {
-	svc := NewAppInstallers(mocks.NewAppInstallersMock())
+	mock := mocks.NewAppInstallersMock()
+	mock.RegisterErrorMocks()
+	svc := NewAppInstallers(mock)
 	result, resp, err := svc.ListDeploymentsV1(context.Background(), nil)
 	require.Error(t, err)
 	require.Nil(t, result)
@@ -163,7 +169,9 @@ func TestUnit_AppInstallers_ListDeploymentsV1_Error(t *testing.T) {
 }
 
 func TestUnit_AppInstallers_GetDeploymentByIDV1_Error(t *testing.T) {
-	svc := NewAppInstallers(mocks.NewAppInstallersMock())
+	mock := mocks.NewAppInstallersMock()
+	mock.RegisterErrorMocks()
+	svc := NewAppInstallers(mock)
 	result, resp, err := svc.GetDeploymentByIDV1(context.Background(), "1")
 	require.Error(t, err)
 	require.Nil(t, result)
@@ -171,7 +179,9 @@ func TestUnit_AppInstallers_GetDeploymentByIDV1_Error(t *testing.T) {
 }
 
 func TestUnit_AppInstallers_CreateDeploymentV1_Error(t *testing.T) {
-	svc := NewAppInstallers(mocks.NewAppInstallersMock())
+	mock := mocks.NewAppInstallersMock()
+	mock.RegisterErrorMocks()
+	svc := NewAppInstallers(mock)
 	req := &RequestDeployment{Name: "New", AppTitleId: "1"}
 	result, resp, err := svc.CreateDeploymentV1(context.Background(), req)
 	require.Error(t, err)
@@ -180,7 +190,9 @@ func TestUnit_AppInstallers_CreateDeploymentV1_Error(t *testing.T) {
 }
 
 func TestUnit_AppInstallers_UpdateDeploymentByIDV1_Error(t *testing.T) {
-	svc := NewAppInstallers(mocks.NewAppInstallersMock())
+	mock := mocks.NewAppInstallersMock()
+	mock.RegisterErrorMocks()
+	svc := NewAppInstallers(mock)
 	enabled := true
 	req := &RequestDeployment{Name: "Updated", AppTitleId: "1", Enabled: &enabled}
 	result, resp, err := svc.UpdateDeploymentByIDV1(context.Background(), "1", req)
@@ -190,7 +202,9 @@ func TestUnit_AppInstallers_UpdateDeploymentByIDV1_Error(t *testing.T) {
 }
 
 func TestUnit_AppInstallers_DeleteDeploymentByIDV1_Error(t *testing.T) {
-	svc := NewAppInstallers(mocks.NewAppInstallersMock())
+	mock := mocks.NewAppInstallersMock()
+	mock.RegisterErrorMocks()
+	svc := NewAppInstallers(mock)
 	resp, err := svc.DeleteDeploymentByIDV1(context.Background(), "1")
 	require.Error(t, err)
 	require.NotNil(t, resp)

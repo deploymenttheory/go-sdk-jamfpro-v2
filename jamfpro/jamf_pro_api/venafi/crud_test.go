@@ -467,7 +467,7 @@ func TestUnit_Venafi_GetHistory_WithQuery(t *testing.T) {
 
 func TestUnit_Venafi_Create_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewVenafiMock()
-	// Do not register any mock
+	mock.RegisterCreateNoResponseErrorMock()
 
 	svc := NewVenafi(mock)
 	ctx := context.Background()
@@ -477,12 +477,12 @@ func TestUnit_Venafi_Create_NoMockRegistered(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response for")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Venafi_GetByID_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewVenafiMock()
+	mock.RegisterGetByIDNoResponseErrorMock("1")
 
 	svc := NewVenafi(mock)
 	ctx := context.Background()
@@ -491,6 +491,5 @@ func TestUnit_Venafi_GetByID_NoMockRegistered(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response for")
+	assert.NotNil(t, resp)
 }

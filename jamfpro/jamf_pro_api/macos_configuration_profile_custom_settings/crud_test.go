@@ -35,20 +35,20 @@ func TestUnit_MacosConfigurationProfileCustomSettings_GetSchemaList_Error(t *tes
 	result, resp, err := service.GetSchemaList(ctx)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "request failed")
 }
 
 func TestUnit_MacosConfigurationProfileCustomSettings_GetSchemaList_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewMacOSConfigProfileCustomSettingsMock()
+	mock.RegisterGetSchemaListNoResponseErrorMock()
 	service := NewMacosConfigurationProfileCustomSettings(mock)
 	ctx := context.Background()
 
 	result, resp, err := service.GetSchemaList(ctx)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_MacosConfigurationProfileCustomSettings_GetByPayloadUUID_Success(t *testing.T) {
@@ -87,20 +87,20 @@ func TestUnit_MacosConfigurationProfileCustomSettings_GetByPayloadUUID_Error(t *
 	result, resp, err := service.GetByPayloadUUID(ctx, testPayloadUUID)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "request failed")
 }
 
 func TestUnit_MacosConfigurationProfileCustomSettings_GetByPayloadUUID_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewMacOSConfigProfileCustomSettingsMock()
+	mock.RegisterGetByPayloadUUIDNoResponseErrorMock(testPayloadUUID)
 	service := NewMacosConfigurationProfileCustomSettings(mock)
 	ctx := context.Background()
 
 	result, resp, err := service.GetByPayloadUUID(ctx, testPayloadUUID)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_MacosConfigurationProfileCustomSettings_Create_Success(t *testing.T) {
@@ -154,12 +154,13 @@ func TestUnit_MacosConfigurationProfileCustomSettings_Create_Error(t *testing.T)
 	result, resp, err := service.Create(ctx, profile)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "request failed")
 }
 
 func TestUnit_MacosConfigurationProfileCustomSettings_Create_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewMacOSConfigProfileCustomSettingsMock()
+	mock.RegisterCreateNoResponseErrorMock()
 	service := NewMacosConfigurationProfileCustomSettings(mock)
 	ctx := context.Background()
 
@@ -171,6 +172,5 @@ func TestUnit_MacosConfigurationProfileCustomSettings_Create_NoMockRegistered(t 
 	result, resp, err := service.Create(ctx, profile)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }

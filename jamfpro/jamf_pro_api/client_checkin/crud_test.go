@@ -76,35 +76,43 @@ func TestUnit_ClientCheckin_AddHistoryNoteV3_NilRequest(t *testing.T) {
 }
 
 func TestUnit_ClientCheckin_GetV3_Error(t *testing.T) {
-	svc := NewClientCheckin(mocks.NewClientCheckinMock())
+	mock := mocks.NewClientCheckinMock()
+	mock.RegisterErrorMocks()
+	svc := NewClientCheckin(mock)
 	result, resp, err := svc.GetV3(context.Background())
 	require.Error(t, err)
 	require.Nil(t, result)
-	require.Nil(t, resp)
+	require.NotNil(t, resp)
 }
 
 func TestUnit_ClientCheckin_GetHistoryV3_Error(t *testing.T) {
-	svc := NewClientCheckin(mocks.NewClientCheckinMock())
+	mock := mocks.NewClientCheckinMock()
+	mock.RegisterErrorMocks()
+	svc := NewClientCheckin(mock)
 	result, resp, err := svc.GetHistoryV3(context.Background(), nil)
 	require.Error(t, err)
 	require.Nil(t, result)
-	require.Nil(t, resp)
+	require.NotNil(t, resp)
 }
 
 func TestUnit_ClientCheckin_UpdateV3_Error(t *testing.T) {
-	svc := NewClientCheckin(mocks.NewClientCheckinMock())
+	mock := mocks.NewClientCheckinMock()
+	mock.RegisterErrorMocks()
+	svc := NewClientCheckin(mock)
 	settings := &ResourceClientCheckinSettings{CheckInFrequency: 30, CreateHooks: true}
 	result, resp, err := svc.UpdateV3(context.Background(), settings)
 	require.Error(t, err)
 	require.Nil(t, result)
-	require.Nil(t, resp)
+	require.NotNil(t, resp)
 }
 
 func TestUnit_ClientCheckin_AddHistoryNoteV3_Error(t *testing.T) {
-	svc := NewClientCheckin(mocks.NewClientCheckinMock())
+	mock := mocks.NewClientCheckinMock()
+	mock.RegisterErrorMocks()
+	svc := NewClientCheckin(mock)
 	req := &RequestClientCheckinHistoryNote{Note: "Test note"}
 	result, resp, err := svc.AddHistoryNoteV3(context.Background(), req)
 	require.Error(t, err)
 	require.Nil(t, result)
-	require.Nil(t, resp)
+	require.NotNil(t, resp)
 }

@@ -16,13 +16,13 @@ func setupMockService(t *testing.T) (*ReturnToService, *mocks.ReturnToServiceMoc
 }
 
 func TestUnit_ReturnToService_ListV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered - dispatch returns nil, err
+	svc, mock := setupMockService(t)
+	mock.RegisterListNoResponseErrorMock()
 
 	result, resp, err := svc.ListV1(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_ReturnToService_ListV1_Success(t *testing.T) {

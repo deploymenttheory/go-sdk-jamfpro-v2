@@ -82,7 +82,8 @@ func TestUnit_MDMRenewal_UpdateDeviceCommonDetailsV1_EmptyClientManagementID(t *
 }
 
 func TestUnit_MDMRenewal_UpdateDeviceCommonDetailsV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateDeviceCommonDetailsErrorMock()
 
 	req := &RequestDeviceCommonDetailsUpdate{
 		ClientManagementID: "abc-123",
@@ -90,7 +91,7 @@ func TestUnit_MDMRenewal_UpdateDeviceCommonDetailsV1_NoMockRegistered(t *testing
 
 	resp, err := svc.UpdateDeviceCommonDetailsV1(context.Background(), req)
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_MDMRenewal_GetDeviceCommonDetailsV1_Success(t *testing.T) {
@@ -137,12 +138,13 @@ func TestUnit_MDMRenewal_GetDeviceCommonDetailsV1_NotFound(t *testing.T) {
 }
 
 func TestUnit_MDMRenewal_GetDeviceCommonDetailsV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetDeviceCommonDetailsErrorMock("abc-123")
 
 	result, resp, err := svc.GetDeviceCommonDetailsV1(context.Background(), "abc-123")
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_MDMRenewal_GetRenewalStrategiesV1_Success(t *testing.T) {
@@ -188,12 +190,13 @@ func TestUnit_MDMRenewal_GetRenewalStrategiesV1_NotFound(t *testing.T) {
 }
 
 func TestUnit_MDMRenewal_GetRenewalStrategiesV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetRenewalStrategiesErrorMock("abc-123")
 
 	result, resp, err := svc.GetRenewalStrategiesV1(context.Background(), "abc-123")
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_MDMRenewal_DeleteRenewalStrategiesV1_Success(t *testing.T) {
@@ -226,9 +229,10 @@ func TestUnit_MDMRenewal_DeleteRenewalStrategiesV1_NotFound(t *testing.T) {
 }
 
 func TestUnit_MDMRenewal_DeleteRenewalStrategiesV1_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteRenewalStrategiesErrorMock("abc-123")
 
 	resp, err := svc.DeleteRenewalStrategiesV1(context.Background(), "abc-123")
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }

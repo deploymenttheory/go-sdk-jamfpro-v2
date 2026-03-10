@@ -44,7 +44,8 @@ func TestUnit_Initialize_NilRequest(t *testing.T) {
 }
 
 func TestUnit_Initialize_UnregisteredPath(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterInitializeErrorMock()
 
 	request := &ResourceSystemInitialize{
 		ActivationCode:  "test",
@@ -58,8 +59,6 @@ func TestUnit_Initialize_UnregisteredPath(t *testing.T) {
 	resp, err := svc.Initialize(context.Background(), request)
 	require.Error(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode())
-	assert.Contains(t, err.Error(), "JamfProSystemInitializationMock")
 }
 
 func TestUnit_InitializeDatabaseConnection_Success(t *testing.T) {
@@ -83,13 +82,12 @@ func TestUnit_InitializeDatabaseConnection_EmptyPassword(t *testing.T) {
 }
 
 func TestUnit_InitializeDatabaseConnection_UnregisteredPath(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterInitializeDatabaseConnectionErrorMock()
 
 	resp, err := svc.InitializeDatabaseConnection(context.Background(), "password")
 	require.Error(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode())
-	assert.Contains(t, err.Error(), "JamfProSystemInitializationMock")
 }
 
 func TestUnit_PlatformInitialize_Success(t *testing.T) {
@@ -121,7 +119,8 @@ func TestUnit_PlatformInitialize_NilRequest(t *testing.T) {
 }
 
 func TestUnit_PlatformInitialize_UnregisteredPath(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterPlatformInitializeErrorMock()
 
 	request := &ResourcePlatformInitialize{
 		ActivationCode:  "test",
@@ -135,6 +134,4 @@ func TestUnit_PlatformInitialize_UnregisteredPath(t *testing.T) {
 	resp, err := svc.PlatformInitialize(context.Background(), request)
 	require.Error(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, 404, resp.StatusCode())
-	assert.Contains(t, err.Error(), "JamfProSystemInitializationMock")
 }

@@ -42,8 +42,8 @@ func TestUnit_AppStoreCountryCodes_ListV1_NoMockRegistered(t *testing.T) {
 	result, resp, err := svc.ListV1(context.Background())
 	require.Error(t, err)
 	require.Nil(t, result)
-	require.Nil(t, resp)
-	require.Contains(t, err.Error(), "no response for")
+	require.NotNil(t, resp)
+	require.Contains(t, err.Error(), "no response")
 }
 
 func TestUnit_AppStoreCountryCodes_ListV1_EmptyList(t *testing.T) {

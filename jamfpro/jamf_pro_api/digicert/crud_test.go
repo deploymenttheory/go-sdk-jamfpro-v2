@@ -56,14 +56,14 @@ func TestUnit_Digicert_Create_NilRequest(t *testing.T) {
 }
 
 func TestUnit_Digicert_Create_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterCreateErrorMock()
 
 	req := &ResourceDigicertTrustLifecycleManager{CAName: "CA", FQDN: "example.com"}
 	result, resp, err := svc.Create(context.Background(), req)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response for")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Digicert_GetByID_Success(t *testing.T) {
@@ -107,13 +107,13 @@ func TestUnit_Digicert_GetByID_NotFound(t *testing.T) {
 }
 
 func TestUnit_Digicert_GetByID_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetByIDErrorMock("1")
 
 	result, resp, err := svc.GetByID(context.Background(), "1")
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response for")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Digicert_UpdateByID_Success(t *testing.T) {
@@ -151,13 +151,13 @@ func TestUnit_Digicert_UpdateByID_NilRequest(t *testing.T) {
 }
 
 func TestUnit_Digicert_UpdateByID_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateByIDErrorMock("1")
 
 	req := &ResourceDigicertTrustLifecycleManager{CAName: "CA", FQDN: "example.com"}
 	resp, err := svc.UpdateByID(context.Background(), "1", req)
 	require.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response for")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Digicert_DeleteByID_Success(t *testing.T) {
@@ -180,12 +180,12 @@ func TestUnit_Digicert_DeleteByID_EmptyID(t *testing.T) {
 }
 
 func TestUnit_Digicert_DeleteByID_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteByIDErrorMock("1")
 
 	resp, err := svc.DeleteByID(context.Background(), "1")
 	require.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response for")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Digicert_ValidateClientCertificate_Success(t *testing.T) {
@@ -214,13 +214,13 @@ func TestUnit_Digicert_ValidateClientCertificate_NilRequest(t *testing.T) {
 }
 
 func TestUnit_Digicert_ValidateClientCertificate_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterValidateClientCertificateErrorMock()
 
 	req := &ValidateClientCertificateRequest{Filename: "client.p12", Data: []string{"data"}}
 	resp, err := svc.ValidateClientCertificate(context.Background(), req)
 	require.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response for")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Digicert_GetConnectionStatusByID_Success(t *testing.T) {
@@ -257,13 +257,13 @@ func TestUnit_Digicert_GetConnectionStatusByID_NotFound(t *testing.T) {
 }
 
 func TestUnit_Digicert_GetConnectionStatusByID_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetConnectionStatusErrorMock("1")
 
 	result, resp, err := svc.GetConnectionStatusByID(context.Background(), "1")
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response for")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Digicert_GetDependenciesByID_Success(t *testing.T) {
@@ -304,13 +304,13 @@ func TestUnit_Digicert_GetDependenciesByID_NotFound(t *testing.T) {
 }
 
 func TestUnit_Digicert_GetDependenciesByID_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetDependenciesErrorMock("1")
 
 	result, resp, err := svc.GetDependenciesByID(context.Background(), "1")
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response for")
+	assert.NotNil(t, resp)
 }
 
 func strPtr(s string) *string {

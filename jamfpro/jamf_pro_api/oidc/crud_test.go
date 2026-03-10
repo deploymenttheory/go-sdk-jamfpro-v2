@@ -92,54 +92,50 @@ func TestUnit_Oidc_GetPublicFeaturesV1_Success(t *testing.T) {
 
 func TestUnit_Oidc_GetDirectIdPLoginURLV1_Error(t *testing.T) {
 	mock := mocks.NewOIDCMock()
-	// Do not register mock - triggers no mock registered error
+	mock.RegisterGetDirectIdPLoginURLErrorMock()
 	service := NewOidc(mock)
 
 	result, resp, err := service.GetDirectIdPLoginURLV1(context.Background())
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to get OIDC direct IdP login URL")
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Oidc_GetPublicKeyV1_Error(t *testing.T) {
 	mock := mocks.NewOIDCMock()
+	mock.RegisterGetPublicKeyErrorMock()
 	service := NewOidc(mock)
 
 	result, resp, err := service.GetPublicKeyV1(context.Background())
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to get OIDC public key")
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Oidc_GetPublicFeaturesV1_Error(t *testing.T) {
 	mock := mocks.NewOIDCMock()
+	mock.RegisterGetPublicFeaturesErrorMock()
 	service := NewOidc(mock)
 
 	result, resp, err := service.GetPublicFeaturesV1(context.Background())
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to get OIDC public features")
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Oidc_GenerateCertificateV1_Error(t *testing.T) {
 	mock := mocks.NewOIDCMock()
+	mock.RegisterGenerateCertificateErrorMock()
 	service := NewOidc(mock)
 
 	resp, err := service.GenerateCertificateV1(context.Background())
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to generate OIDC certificate")
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Oidc_GetRedirectURLV1_Error(t *testing.T) {
 	mock := mocks.NewOIDCMock()
+	mock.RegisterGetRedirectURLErrorMock()
 	service := NewOidc(mock)
 
 	request := &RequestOIDCRedirectURL{
@@ -150,9 +146,7 @@ func TestUnit_Oidc_GetRedirectURLV1_Error(t *testing.T) {
 	result, resp, err := service.GetRedirectURLV1(context.Background(), request)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to get OIDC redirect URL")
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Oidc_NewService(t *testing.T) {

@@ -1,146 +1,19 @@
 package mocks
 
 import (
-	"context"
-	_ "embed"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"strings"
-
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-//go:embed validate_get.json
-var mockGetResponse []byte
-
-type registeredResponse struct {
-	method   string
-	path     string
-	response []byte
-	status   int
-}
-
 type DSSDeclarationsMock struct {
-	responses []registeredResponse
+	*mocks.GenericMock
 }
 
 func NewDSSDeclarationsMock() *DSSDeclarationsMock {
 	return &DSSDeclarationsMock{
-		responses: make([]registeredResponse, 0),
+		GenericMock: mocks.NewJSONMock("DSSDeclarationsMock"),
 	}
 }
 
-func (m *DSSDeclarationsMock) dispatch(method, path string) ([]byte, int, bool) {
-	for _, r := range m.responses {
-		if r.method == method && strings.HasPrefix(path, r.path) {
-			return r.response, r.status, true
-		}
-	}
-	return nil, 0, false
-}
-
-func (m *DSSDeclarationsMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	body, status, found := m.dispatch("GET", endpoint)
-	if !found {
-		return mockhelpers.NewMockResponse(http.StatusNotFound, http.Header{}, nil), nil
-	}
-
-	if out != nil {
-		if err := json.Unmarshal(body, out); err != nil {
-			return nil, err
-		}
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
-}
-
-func (m *DSSDeclarationsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-func (m *DSSDeclarationsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-func (m *DSSDeclarationsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-func (m *DSSDeclarationsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-func (m *DSSDeclarationsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-func (m *DSSDeclarationsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-func (m *DSSDeclarationsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-func (m *DSSDeclarationsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-
-func (m *DSSDeclarationsMock) GetBytes(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
-	body, status, found := m.dispatch("GET", endpoint)
-	if !found {
-		return mockhelpers.NewMockResponse(http.StatusNotFound, http.Header{}, nil), nil, nil
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), body, nil
-}
-
-func (m *DSSDeclarationsMock) GetPaginated(ctx context.Context, endpoint string, rsqlQuery map[string]string, headers map[string]string, mergePage func(page []byte) error) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
-}
-func (m *DSSDeclarationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		data, status, ok := m.dispatch(method, path)
-		if !ok {
-			return nil, fmt.Errorf("no mock registered for %s %s", method, path)
-		}
-		if result != nil && data != nil {
-			if err := json.Unmarshal(data, result); err != nil {
-				return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
-			}
-		}
-		return mockhelpers.NewMockResponse(status, http.Header{}, data), nil
-	})
-}
-
-func (m *DSSDeclarationsMock) GetLogger() *zap.Logger {
-	return nil
-}
-
-func (m *DSSDeclarationsMock) RSQLBuilder() client.RSQLFilterBuilder {
-	return nil
-}
-
-func (m *DSSDeclarationsMock) InvalidateToken() error {
-	return nil
-}
-
-func (m *DSSDeclarationsMock) KeepAliveToken() error {
-	return nil
-}
-
-func RegisterGetByUUIDMock(mock *DSSDeclarationsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v1/dss-declarations/",
-		response: mockGetResponse,
-		status:   http.StatusOK,
-	})
+func (m *DSSDeclarationsMock) RegisterGetByUUIDMock(uuid string) {
+	m.Register("GET", "/api/v1/dss-declarations/"+uuid, 200, "validate_get.json")
 }

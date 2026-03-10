@@ -1,58 +1,19 @@
 package mocks
 
 import (
-	"context"
-	_ "embed"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-// errNoMockRegistered is returned when no mock is registered for the request.
-var errNoMockRegistered = fmt.Errorf("no mock registered")
-
-//go:embed validate_direct_idp_login_url.json
-var validateDirectIdPLoginURLJSON []byte
-
-//go:embed validate_public_key.json
-var validatePublicKeyJSON []byte
-
-//go:embed validate_public_features.json
-var validatePublicFeaturesJSON []byte
-
-//go:embed validate_redirect_url.json
-var validateRedirectURLJSON []byte
-
-// registeredResponse holds a pre-canned response for a single endpoint.
-type registeredResponse struct {
-	statusCode int
-	rawBody    []byte
-	errMsg     string
-}
-
-// OIDCMock is a test double implementing client.Client.
 type OIDCMock struct {
-	responses     map[string]registeredResponse
-	logger        *zap.Logger
-	LastRSQLQuery map[string]string
+	*mocks.GenericMock
 }
 
-// NewOIDCMock returns an empty mock ready for response registration.
 func NewOIDCMock() *OIDCMock {
 	return &OIDCMock{
-		responses: make(map[string]registeredResponse),
-		logger:    zap.NewNop(),
+		GenericMock: mocks.NewJSONMock("OIDCMock"),
 	}
 }
 
-// RegisterMocks registers all standard success responses in one call.
 func (m *OIDCMock) RegisterMocks() {
 	m.RegisterGetDirectIdPLoginURLMock()
 	m.RegisterGetPublicKeyMock()
@@ -61,197 +22,42 @@ func (m *OIDCMock) RegisterMocks() {
 	m.RegisterGetRedirectURLMock()
 }
 
-func (m *OIDCMock) register(method, path string, statusCode int, rawBody []byte) {
-	key := method + " " + path
-	m.responses[key] = registeredResponse{
-		statusCode: statusCode,
-		rawBody:    rawBody,
-	}
-}
-
-// dispatch returns the registered response for the given method and path.
-// When no mock is registered, it returns (nil, 0, false).
-func (m *OIDCMock) dispatch(method, path string) ([]byte, int, bool) {
-	key := method + " " + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, 0, false
-	}
-	if resp.errMsg != "" {
-		return nil, 0, false
-	}
-	return resp.rawBody, resp.statusCode, true
-}
-
-// RegisterGetDirectIdPLoginURLMock registers a successful response for GetDirectIdPLoginURLV1.
 func (m *OIDCMock) RegisterGetDirectIdPLoginURLMock() {
-	m.register("GET", "/api/v1/oidc/direct-idp-login-url", 200, validateDirectIdPLoginURLJSON)
+	m.Register("GET", "/api/v1/oidc/direct-idp-login-url", 200, "validate_direct_idp_login_url.json")
 }
 
-// RegisterGetPublicKeyMock registers a successful response for GetPublicKeyV1.
 func (m *OIDCMock) RegisterGetPublicKeyMock() {
-	m.register("GET", "/api/v1/oidc/public-key", 200, validatePublicKeyJSON)
+	m.Register("GET", "/api/v1/oidc/public-key", 200, "validate_public_key.json")
 }
 
-// RegisterGetPublicFeaturesMock registers a successful response for GetPublicFeaturesV1.
 func (m *OIDCMock) RegisterGetPublicFeaturesMock() {
-	m.register("GET", "/api/v1/oidc/public-features", 200, validatePublicFeaturesJSON)
+	m.Register("GET", "/api/v1/oidc/public-features", 200, "validate_public_features.json")
 }
 
-// RegisterGenerateCertificateMock registers a successful response for GenerateCertificateV1.
 func (m *OIDCMock) RegisterGenerateCertificateMock() {
-	m.register("POST", "/api/v1/oidc/generate-certificate", 204, []byte{})
+	m.Register("POST", "/api/v1/oidc/generate-certificate", 204, "")
 }
 
-// RegisterGetRedirectURLMock registers a successful response for GetRedirectURLV1.
 func (m *OIDCMock) RegisterGetRedirectURLMock() {
-	m.register("POST", "/api/v2/oidc/dispatch", 200, validateRedirectURLJSON)
+	m.Register("POST", "/api/v2/oidc/dispatch", 200, "validate_redirect_url.json")
 }
 
-// Get implements client.Client.
-func (m *OIDCMock) Get(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	m.LastRSQLQuery = rsqlQuery
-	key := "GET " + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for GET %s", path)
-	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
-	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
-			return nil, fmt.Errorf("unmarshal mock response: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+func (m *OIDCMock) RegisterGetDirectIdPLoginURLErrorMock() {
+	m.RegisterError("GET", "/api/v1/oidc/direct-idp-login-url", 500, "error_internal.json", "no response registered")
 }
 
-// Post implements client.Client.
-func (m *OIDCMock) Post(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	key := "POST " + path
-	resp, ok := m.responses[key]
-	if !ok {
-		return nil, fmt.Errorf("no mock registered for POST %s", path)
-	}
-	if resp.errMsg != "" {
-		return nil, fmt.Errorf("%s", resp.errMsg)
-	}
-	if result != nil && len(resp.rawBody) > 0 {
-		if err := json.Unmarshal(resp.rawBody, result); err != nil {
-			return nil, fmt.Errorf("unmarshal mock response: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+func (m *OIDCMock) RegisterGetPublicKeyErrorMock() {
+	m.RegisterError("GET", "/api/v1/oidc/public-key", 500, "error_internal.json", "no response registered")
 }
 
-// PostWithQuery implements client.Client.
-func (m *OIDCMock) PostWithQuery(ctx context.Context, path string, rsqlQuery map[string]string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return m.Post(ctx, path, body, headers, result)
+func (m *OIDCMock) RegisterGetPublicFeaturesErrorMock() {
+	m.RegisterError("GET", "/api/v1/oidc/public-features", 500, "error_internal.json", "no response registered")
 }
 
-// PostForm implements client.Client.
-func (m *OIDCMock) PostForm(ctx context.Context, path string, formData map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	return m.Post(ctx, path, formData, headers, result)
+func (m *OIDCMock) RegisterGenerateCertificateErrorMock() {
+	m.RegisterError("POST", "/api/v1/oidc/generate-certificate", 500, "error_internal.json", "no response registered")
 }
 
-// PostMultipart implements client.Client.
-func (m *OIDCMock) PostMultipart(ctx context.Context, path string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, result any) (*resty.Response, error) {
-	return m.Post(ctx, path, nil, headers, result)
-}
-
-// Put implements client.Client.
-func (m *OIDCMock) Put(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	rawBody, statusCode, found := m.dispatch("PUT", path)
-	if !found {
-		return nil, errNoMockRegistered
-	}
-	if result != nil && len(rawBody) > 0 {
-		if err := json.Unmarshal(rawBody, result); err != nil {
-			return nil, fmt.Errorf("unmarshal mock response: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(statusCode, http.Header{}, rawBody), nil
-}
-
-// Patch implements client.Client.
-func (m *OIDCMock) Patch(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	rawBody, statusCode, found := m.dispatch("PATCH", path)
-	if !found {
-		return nil, errNoMockRegistered
-	}
-	if result != nil && len(rawBody) > 0 {
-		if err := json.Unmarshal(rawBody, result); err != nil {
-			return nil, fmt.Errorf("unmarshal mock response: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(statusCode, http.Header{}, rawBody), nil
-}
-
-// Delete implements client.Client.
-func (m *OIDCMock) Delete(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, result any) (*resty.Response, error) {
-	rawBody, statusCode, found := m.dispatch("DELETE", path)
-	if !found {
-		return nil, errNoMockRegistered
-	}
-	if result != nil && len(rawBody) > 0 {
-		if err := json.Unmarshal(rawBody, result); err != nil {
-			return nil, fmt.Errorf("unmarshal mock response: %w", err)
-		}
-	}
-	return mockhelpers.NewMockResponse(statusCode, http.Header{}, rawBody), nil
-}
-
-// DeleteWithBody implements client.Client.
-func (m *OIDCMock) DeleteWithBody(ctx context.Context, path string, body any, headers map[string]string, result any) (*resty.Response, error) {
-	return m.Delete(ctx, path, nil, headers, result)
-}
-
-// GetBytes implements client.Client.
-func (m *OIDCMock) GetBytes(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
-	m.LastRSQLQuery = rsqlQuery
-	rawBody, statusCode, found := m.dispatch("GET", path)
-	if !found {
-		return nil, nil, errNoMockRegistered
-	}
-	return mockhelpers.NewMockResponse(statusCode, http.Header{}, rawBody), rawBody, nil
-}
-
-// GetPaginated implements client.Client.
-func (m *OIDCMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
-	return nil, fmt.Errorf("GetPaginated not implemented in OIDCMock")
-}
-func (m *OIDCMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		data, status, ok := m.dispatch(method, path)
-		if !ok {
-			return nil, fmt.Errorf("no mock registered for %s %s", method, path)
-		}
-		if result != nil && data != nil {
-			if err := json.Unmarshal(data, result); err != nil {
-				return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
-			}
-		}
-		return mockhelpers.NewMockResponse(status, http.Header{}, data), nil
-	})
-}
-
-// RSQLBuilder implements client.Client.
-func (m *OIDCMock) RSQLBuilder() client.RSQLFilterBuilder {
-	return nil
-}
-
-// InvalidateToken implements client.Client.
-func (m *OIDCMock) InvalidateToken() error {
-	return nil
-}
-
-// KeepAliveToken implements client.Client.
-func (m *OIDCMock) KeepAliveToken() error {
-	return nil
-}
-
-// GetLogger implements client.Client.
-func (m *OIDCMock) GetLogger() *zap.Logger {
-	return m.logger
+func (m *OIDCMock) RegisterGetRedirectURLErrorMock() {
+	m.RegisterError("POST", "/api/v2/oidc/dispatch", 500, "error_internal.json", "no response registered")
 }

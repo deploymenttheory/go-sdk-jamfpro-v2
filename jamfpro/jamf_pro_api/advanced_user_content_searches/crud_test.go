@@ -127,7 +127,8 @@ func TestUnit_AdvancedUserContentSearches_DeleteByIDV1_Success(t *testing.T) {
 }
 
 func TestUnit_AdvancedUserContentSearches_DeleteByIDV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteErrorMock()
 	resp, err := svc.DeleteByIDV1(context.Background(), "999")
 	require.Error(t, err)
 	require.NotNil(t, resp)

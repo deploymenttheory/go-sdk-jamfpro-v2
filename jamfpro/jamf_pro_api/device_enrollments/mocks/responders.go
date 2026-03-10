@@ -1,348 +1,71 @@
 package mocks
 
 import (
-	"context"
-	_ "embed"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"strings"
-
-	"resty.dev/v3"
-
-	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
-
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
-	"go.uber.org/zap"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 )
 
-//go:embed validate_list.json
-var mockListResponse []byte
-
-//go:embed validate_get.json
-var mockGetResponse []byte
-
-//go:embed validate_history.json
-var mockHistoryResponse []byte
-
-//go:embed validate_sync_states.json
-var mockSyncStatesResponse []byte
-
-//go:embed validate_create.json
-var mockCreateResponse []byte
-
-//go:embed validate_disown.json
-var mockDisownResponse []byte
-
-//go:embed validate_add_history_notes.json
-var mockAddHistoryNotesResponse []byte
-
-//go:embed validate_latest_sync_state.json
-var mockLatestSyncStateResponse []byte
-
-//go:embed validate_devices.json
-var mockDevicesResponse []byte
-
-type registeredResponse struct {
-	method   string
-	path     string
-	response []byte
-	status   int
-}
-
 type DeviceEnrollmentsMock struct {
-	responses []registeredResponse
+	*mocks.GenericMock
 }
 
 func NewDeviceEnrollmentsMock() *DeviceEnrollmentsMock {
 	return &DeviceEnrollmentsMock{
-		responses: make([]registeredResponse, 0),
+		GenericMock: mocks.NewJSONMock("DeviceEnrollmentsMock"),
 	}
 }
 
-func (m *DeviceEnrollmentsMock) dispatch(method, path string) ([]byte, int, bool) {
-	for _, r := range m.responses {
-		if r.method == method && strings.HasPrefix(path, r.path) {
-			return r.response, r.status, true
-		}
-	}
-	return nil, 0, false
+func (m *DeviceEnrollmentsMock) RegisterListMock() {
+	m.Register("GET", "/api/v1/device-enrollments", 200, "validate_list.json")
 }
 
-// errNoMockRegistered is returned when no mock is registered for the request.
-var errNoMockRegistered = fmt.Errorf("no mock registered")
-
-func (m *DeviceEnrollmentsMock) Get(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	body, status, found := m.dispatch("GET", endpoint)
-	if !found {
-		return nil, errNoMockRegistered
-	}
-
-	if out != nil {
-		if strPtr, ok := out.(*string); ok {
-			*strPtr = string(body)
-		} else if bytesPtr, ok := out.(*[]byte); ok {
-			*bytesPtr = body
-		} else {
-			if err := json.Unmarshal(body, out); err != nil {
-				return nil, err
-			}
-		}
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
+func (m *DeviceEnrollmentsMock) RegisterGetByIDMock(id string) {
+	m.Register("GET", "/api/v1/device-enrollments/"+id, 200, "validate_get.json")
 }
 
-func (m *DeviceEnrollmentsMock) Post(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	respBody, status, found := m.dispatch("POST", endpoint)
-	if !found {
-		return nil, errNoMockRegistered
-	}
-
-	if out != nil {
-		if err := json.Unmarshal(respBody, out); err != nil {
-			return nil, err
-		}
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
+func (m *DeviceEnrollmentsMock) RegisterGetHistoryMock(id string) {
+	m.Register("GET", "/api/v1/device-enrollments/"+id+"/history", 200, "validate_history.json")
 }
 
-func (m *DeviceEnrollmentsMock) PostWithQuery(ctx context.Context, endpoint string, queryParams map[string]string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return m.Post(ctx, endpoint, body, headers, out)
+func (m *DeviceEnrollmentsMock) RegisterGetSyncStatesMock(id string) {
+	m.Register("GET", "/api/v1/device-enrollments/"+id+"/syncs", 200, "validate_sync_states.json")
 }
 
-func (m *DeviceEnrollmentsMock) PostForm(ctx context.Context, endpoint string, formData map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+func (m *DeviceEnrollmentsMock) RegisterGetPublicKeyMock() {
+	m.Register("GET", "/api/v1/device-enrollments/public-key", 200, "validate_public_key.txt")
 }
 
-func (m *DeviceEnrollmentsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+func (m *DeviceEnrollmentsMock) RegisterGetLatestSyncStateMock(id string) {
+	m.Register("GET", "/api/v1/device-enrollments/"+id+"/syncs/latest", 200, "validate_latest_sync_state.json")
 }
 
-func (m *DeviceEnrollmentsMock) Put(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	respBody, status, found := m.dispatch("PUT", endpoint)
-	if !found {
-		return nil, errNoMockRegistered
-	}
-
-	if out != nil {
-		if err := json.Unmarshal(respBody, out); err != nil {
-			return nil, err
-		}
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
+func (m *DeviceEnrollmentsMock) RegisterGetAllSyncStatesMock() {
+	m.Register("GET", "/api/v1/device-enrollments/syncs", 200, "validate_sync_states.json")
 }
 
-func (m *DeviceEnrollmentsMock) Patch(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	return mockhelpers.NewMockResponse(http.StatusMethodNotAllowed, http.Header{}, nil), nil
+func (m *DeviceEnrollmentsMock) RegisterCreateWithTokenMock() {
+	m.Register("POST", "/api/v1/device-enrollments/upload-token", 201, "validate_create.json")
 }
 
-func (m *DeviceEnrollmentsMock) Delete(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, out any) (*resty.Response, error) {
-	_, status, found := m.dispatch("DELETE", endpoint)
-	if !found {
-		return nil, errNoMockRegistered
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
+func (m *DeviceEnrollmentsMock) RegisterUpdateByIDMock(id string) {
+	m.Register("PUT", "/api/v1/device-enrollments/"+id, 200, "validate_get.json")
 }
 
-func (m *DeviceEnrollmentsMock) DeleteWithBody(ctx context.Context, endpoint string, body any, headers map[string]string, out any) (*resty.Response, error) {
-	_, status, found := m.dispatch("DELETE", endpoint)
-	if !found {
-		return nil, errNoMockRegistered
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
+func (m *DeviceEnrollmentsMock) RegisterUpdateTokenByIDMock(id string) {
+	m.Register("PUT", "/api/v1/device-enrollments/"+id+"/upload-token", 200, "validate_get.json")
 }
 
-func (m *DeviceEnrollmentsMock) GetBytes(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string) (*resty.Response, []byte, error) {
-	body, status, found := m.dispatch("GET", endpoint)
-	if !found {
-		return nil, nil, errNoMockRegistered
-	}
-
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), body, nil
+func (m *DeviceEnrollmentsMock) RegisterDeleteByIDMock(id string) {
+	m.Register("DELETE", "/api/v1/device-enrollments/"+id, 204, "")
 }
 
-func (m *DeviceEnrollmentsMock) GetPaginated(ctx context.Context, endpoint string, queryParams map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
-	body, status, found := m.dispatch("GET", endpoint)
-	if !found {
-		return nil, errNoMockRegistered
-	}
-	if mergePage != nil && body != nil {
-		// Extract "results" field from the response
-		var wrapper map[string]json.RawMessage
-		if err := json.Unmarshal(body, &wrapper); err != nil {
-			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
-		}
-		resultsData, ok := wrapper["results"]
-		if !ok {
-			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), fmt.Errorf("results field not found")
-		}
-
-		if err := mergePage(resultsData); err != nil {
-			return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
-		}
-	}
-	return mockhelpers.NewMockResponse(status, http.Header{}, nil), nil
-}
-func (m *DeviceEnrollmentsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
-	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
-		data, status, ok := m.dispatch(method, path)
-		if !ok {
-			return nil, fmt.Errorf("no mock registered for %s %s", method, path)
-		}
-		if result != nil && data != nil {
-			if err := json.Unmarshal(data, result); err != nil {
-				return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
-			}
-		}
-		return mockhelpers.NewMockResponse(status, http.Header{}, data), nil
-	})
+func (m *DeviceEnrollmentsMock) RegisterDisownDevicesMock(id string) {
+	m.Register("POST", "/api/v1/device-enrollments/"+id+"/disown", 200, "validate_disown.json")
 }
 
-func (m *DeviceEnrollmentsMock) RSQLBuilder() client.RSQLFilterBuilder {
-	return nil
+func (m *DeviceEnrollmentsMock) RegisterAddHistoryNotesMock(id string) {
+	m.Register("POST", "/api/v1/device-enrollments/"+id+"/history", 201, "validate_add_history_notes.json")
 }
 
-func (m *DeviceEnrollmentsMock) InvalidateToken() error {
-	return nil
-}
-
-func (m *DeviceEnrollmentsMock) KeepAliveToken() error {
-	return nil
-}
-
-func (m *DeviceEnrollmentsMock) GetLogger() *zap.Logger {
-	return nil
-}
-
-func RegisterListMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v1/device-enrollments",
-		response: mockListResponse,
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterGetByIDMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v1/device-enrollments/",
-		response: mockGetResponse,
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterGetHistoryMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v1/device-enrollments/",
-		response: mockHistoryResponse,
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterGetSyncStatesMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v1/device-enrollments/",
-		response: mockSyncStatesResponse,
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterGetPublicKeyMock(mock *DeviceEnrollmentsMock) {
-	publicKey := "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v1/device-enrollments/public-key",
-		response: []byte(publicKey),
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterGetLatestSyncStateMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v1/device-enrollments/",
-		response: mockLatestSyncStateResponse,
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterGetAllSyncStatesMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v1/device-enrollments/syncs",
-		response: mockSyncStatesResponse,
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterCreateWithTokenMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "POST",
-		path:     "/api/v1/device-enrollments/upload-token",
-		response: mockCreateResponse,
-		status:   http.StatusCreated,
-	})
-}
-
-func RegisterUpdateByIDMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "PUT",
-		path:     "/api/v1/device-enrollments/",
-		response: mockGetResponse,
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterUpdateTokenByIDMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "PUT",
-		path:     "/api/v1/device-enrollments/",
-		response: mockGetResponse,
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterDeleteByIDMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "DELETE",
-		path:     "/api/v1/device-enrollments/",
-		response: nil,
-		status:   http.StatusNoContent,
-	})
-}
-
-func RegisterDisownDevicesMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "POST",
-		path:     "/api/v1/device-enrollments/",
-		response: mockDisownResponse,
-		status:   http.StatusOK,
-	})
-}
-
-func RegisterAddHistoryNotesMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "POST",
-		path:     "/api/v1/device-enrollments/",
-		response: mockAddHistoryNotesResponse,
-		status:   http.StatusCreated,
-	})
-}
-
-func RegisterGetDevicesByIDMock(mock *DeviceEnrollmentsMock) {
-	mock.responses = append(mock.responses, registeredResponse{
-		method:   "GET",
-		path:     "/api/v1/device-enrollments/",
-		response: mockDevicesResponse,
-		status:   http.StatusOK,
-	})
+func (m *DeviceEnrollmentsMock) RegisterGetDevicesByIDMock(id string) {
+	m.Register("GET", "/api/v1/device-enrollments/"+id+"/devices", 200, "validate_devices.json")
 }

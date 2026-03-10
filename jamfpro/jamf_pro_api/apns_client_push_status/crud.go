@@ -45,6 +45,7 @@ func (s *ApnsClientPushStatus) ListV1(ctx context.Context, rsqlQuery map[string]
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get APNS client push status: %w", err)
 	}
+
 	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }

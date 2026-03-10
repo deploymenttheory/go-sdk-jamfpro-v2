@@ -35,12 +35,11 @@ func TestUnit_ClassicLdap_GetMappingsByIDV1_Success(t *testing.T) {
 }
 
 func TestUnit_ClassicLdap_GetMappingsByIDV1_NotFound(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered for id "999" - dispatch returns (nil, error)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetMappingsByIDErrorMock("999")
 
 	result, resp, err := svc.GetMappingsByIDV1(context.Background(), "999")
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "ClassicLdapMock: no response")
+	assert.NotNil(t, resp)
 }

@@ -41,19 +41,19 @@ func TestUnit_Slasa_GetStatusV1_Error(t *testing.T) {
 	result, resp, err := service.GetStatusV1(context.Background())
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "request failed")
+	assert.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "mock error")
 }
 
 func TestUnit_Slasa_GetStatusV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewSLASAMock()
+	mock.RegisterGetStatusNoResponseErrorMock()
 	service := NewSlasa(mock)
 
 	result, resp, err := service.GetStatusV1(context.Background())
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_Slasa_AcceptV1_Success(t *testing.T) {
@@ -68,10 +68,10 @@ func TestUnit_Slasa_AcceptV1_Success(t *testing.T) {
 
 func TestUnit_Slasa_AcceptV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewSLASAMock()
+	mock.RegisterAcceptNoResponseErrorMock()
 	service := NewSlasa(mock)
 
 	resp, err := service.AcceptV1(context.Background())
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }

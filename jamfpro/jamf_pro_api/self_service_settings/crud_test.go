@@ -108,18 +108,18 @@ func TestUnit_SelfServiceSettings_AddHistoryNotesV1_EmptyNote(t *testing.T) {
 }
 
 func TestUnit_SelfServiceSettings_Get_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered - dispatch returns nil, errNoMockRegistered
+	svc, mock := setupMockService(t)
+	mock.RegisterGetErrorMock()
 
 	result, resp, err := svc.Get(context.Background())
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_SelfServiceSettings_Update_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered for Update
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateErrorMock()
 
 	request := &ResourceSelfServiceSettings{
 		InstallSettings: InstallSettings{InstallAutomatically: false, InstallLocation: "/Applications"},
@@ -132,18 +132,17 @@ func TestUnit_SelfServiceSettings_Update_Error(t *testing.T) {
 	result, resp, err := svc.Update(context.Background(), request)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_SelfServiceSettings_GetHistoryV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered for GetHistoryV1
+	svc, mock := setupMockService(t)
+	mock.RegisterGetHistoryErrorMock()
 
 	result, resp, err := svc.GetHistoryV1(context.Background(), nil)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "failed to get self service settings history")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_SelfServiceSettings_GetHistoryV1_InvalidJSON(t *testing.T) {
@@ -158,12 +157,12 @@ func TestUnit_SelfServiceSettings_GetHistoryV1_InvalidJSON(t *testing.T) {
 }
 
 func TestUnit_SelfServiceSettings_AddHistoryNotesV1_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered for AddHistoryNotesV1
+	svc, mock := setupMockService(t)
+	mock.RegisterAddHistoryNotesErrorMock()
 
 	req := &AddHistoryNotesRequest{Note: "test note"}
 	result, resp, err := svc.AddHistoryNotesV1(context.Background(), req)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }

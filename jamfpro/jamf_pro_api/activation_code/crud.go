@@ -64,6 +64,7 @@ func (s *ActivationCode) UpdateOrganizationNameV1(ctx context.Context, req *Orga
 		SetHeader("Content-Type", constants.ApplicationJSON).
 		SetBody(req).
 		Patch(endpoint)
+
 	if err != nil {
 		return resp, err
 	}
@@ -139,8 +140,8 @@ func (s *ActivationCode) ExportHistoryV1(ctx context.Context, queryParams map[st
 	endpoint := constants.EndpointJamfProActivationCodeHistoryExportV1
 
 	var result HistoryExportResponse
-
 	var body any
+
 	if req != nil {
 		body = req
 	}

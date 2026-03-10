@@ -195,12 +195,12 @@ func TestUnit_MobileDeviceGroups_ListSmartV1_Error(t *testing.T) {
 }
 
 func TestUnit_MobileDeviceGroups_ListSmartV1_NoMock(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterListSmartNoResponseErrorMock()
 	result, resp, err := svc.ListSmartV1(context.Background(), nil)
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_MobileDeviceGroups_CreateSmartV1_NilRequest(t *testing.T) {

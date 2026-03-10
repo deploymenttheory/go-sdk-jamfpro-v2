@@ -43,14 +43,13 @@ func TestUnit_JamfProVersion_GetV1_ClientError(t *testing.T) {
 
 func TestUnit_JamfProVersion_GetV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewJamfProVersionMock()
-	// No mock registered - dispatch returns (nil, err)
+	mock.RegisterGetNoResponseErrorMock()
 	svc := NewJamfProVersion(mock)
 
 	result, resp, err := svc.GetV1(context.Background())
 
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "no response for")
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 

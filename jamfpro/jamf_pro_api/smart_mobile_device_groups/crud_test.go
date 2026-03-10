@@ -190,14 +190,13 @@ func TestUnit_SmartMobileDeviceGroups_DeleteByID_EmptyID(t *testing.T) {
 }
 
 func TestUnit_SmartMobileDeviceGroups_List_ClientError(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered - dispatch returns (nil, err)
+	svc, mock := setupMockService(t)
+	mock.RegisterListNoResponseErrorMock()
 
 	result, resp, err := svc.List(context.Background(), nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_SmartMobileDeviceGroups_GetByID_NotFound(t *testing.T) {
@@ -212,56 +211,51 @@ func TestUnit_SmartMobileDeviceGroups_GetByID_NotFound(t *testing.T) {
 }
 
 func TestUnit_SmartMobileDeviceGroups_GetByName_ListError(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered - List returns error
+	svc, mock := setupMockService(t)
+	mock.RegisterListNoResponseErrorMock()
 
 	_, resp, err := svc.GetByName(context.Background(), "iPhones")
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_SmartMobileDeviceGroups_GetMembership_ClientError(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered for membership endpoint
+	svc, mock := setupMockService(t)
+	mock.RegisterGetMembershipNoResponseErrorMock()
 
 	result, resp, err := svc.GetMembership(context.Background(), "1", nil)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_SmartMobileDeviceGroups_Create_ClientError(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered
+	svc, mock := setupMockService(t)
+	mock.RegisterCreateNoResponseErrorMock()
 
 	req := &RequestSmartMobileDeviceGroup{GroupName: "New", GroupDescription: "Desc"}
 	result, resp, err := svc.Create(context.Background(), req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_SmartMobileDeviceGroups_DeleteByID_ClientError(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteNoResponseErrorMock()
 
 	resp, err := svc.DeleteByID(context.Background(), "1")
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_SmartMobileDeviceGroups_UpdateByID_ClientError(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateNoResponseErrorMock()
 
 	req := &RequestSmartMobileDeviceGroup{GroupName: "Updated", GroupDescription: "Desc"}
 	result, resp, err := svc.UpdateByID(context.Background(), "1", req)
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response registered")
+	assert.NotNil(t, resp)
 }

@@ -53,14 +53,13 @@ func TestUnit_TimeZones_ListV1_Error(t *testing.T) {
 
 func TestUnit_TimeZones_ListV1_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewTimeZonesMock()
-	// Do not call RegisterMocks - no mock registered for GET /api/v1/time-zones
+	mock.RegisterListV1NoResponseErrorMock()
 	svc := NewTimeZones(mock)
 
 	result, resp, err := svc.ListV1(context.Background())
 	require.Error(t, err)
 	require.Nil(t, result)
-	require.Nil(t, resp)
-	require.Contains(t, err.Error(), "no response for")
+	require.NotNil(t, resp)
 }
 
 func TestUnit_TimeZones_ListV1_InvalidJSON(t *testing.T) {

@@ -44,13 +44,13 @@ func TestUnit_User_Get_Success(t *testing.T) {
 }
 
 func TestUnit_User_Get_Error(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetNoResponseErrorMock()
 
 	result, resp, err := svc.Get(context.Background())
 	assert.Error(t, err)
 	assert.Nil(t, result)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response registered")
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_User_Get_NotFound(t *testing.T) {

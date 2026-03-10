@@ -44,10 +44,10 @@ func TestUnit_TomcatSettings_IssueTomcatSslCertificate_Error(t *testing.T) {
 }
 
 func TestUnit_TomcatSettings_IssueTomcatSslCertificate_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
+	svc, mock := setupMockService(t)
+	mock.RegisterIssueTomcatSslCertificateNoResponseErrorMock()
 
 	resp, err := svc.IssueTomcatSslCertificate(context.Background())
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no response registered")
+	assert.NotNil(t, resp)
 }

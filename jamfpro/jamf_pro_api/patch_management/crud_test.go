@@ -26,16 +26,16 @@ func TestUnit_PatchManagement_AcceptDisclaimerV2_Error(t *testing.T) {
 
 	resp, err := service.AcceptDisclaimerV2(context.Background())
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "request failed")
+	assert.NotNil(t, resp)
+	assert.Contains(t, err.Error(), "mock error")
 }
 
 func TestUnit_PatchManagement_AcceptDisclaimerV2_NoMockRegistered(t *testing.T) {
 	mock := mocks.NewPatchManagementMock()
+	mock.RegisterAcceptDisclaimerNoResponseErrorMock()
 	service := NewPatchManagement(mock)
 
 	resp, err := service.AcceptDisclaimerV2(context.Background())
 	assert.Error(t, err)
-	assert.Nil(t, resp)
-	assert.Contains(t, err.Error(), "no mock registered")
+	assert.NotNil(t, resp)
 }

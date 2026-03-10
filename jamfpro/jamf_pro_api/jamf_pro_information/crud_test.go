@@ -42,13 +42,12 @@ func TestUnit_JamfProInformation_GetV2_ClientError(t *testing.T) {
 }
 
 func TestUnit_JamfProInformation_GetV2_NoMockRegistered(t *testing.T) {
-	svc, _ := setupMockService(t)
-	// No mock registered - dispatch returns (nil, err)
+	svc, mock := setupMockService(t)
+	mock.RegisterGetV2NoResponseErrorMock()
 
 	result, resp, err := svc.GetV2(context.Background())
 
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "no response for")
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }

@@ -400,40 +400,48 @@ func TestUnit_CloudIdp_TestUserMembershipByIDV1_NilRequest(t *testing.T) {
 }
 
 func TestUnit_CloudIdp_ListV1_Error(t *testing.T) {
-	svc := NewCloudIdp(mocks.NewCloudIdpMock())
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudIdp(mock)
 	ctx := context.Background()
 
 	result, resp, err := svc.ListV1(ctx, nil)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudIdp_GetByIDV1_Error(t *testing.T) {
-	svc := NewCloudIdp(mocks.NewCloudIdpMock())
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudIdp(mock)
 	ctx := context.Background()
 
 	result, resp, err := svc.GetByIDV1(ctx, "1")
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudIdp_GetByNameV1_Error(t *testing.T) {
-	svc := NewCloudIdp(mocks.NewCloudIdpMock())
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudIdp(mock)
 	ctx := context.Background()
 
 	result, resp, err := svc.GetByNameV1(ctx, "Test Azure IDP")
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudIdp_ExportV1_Error(t *testing.T) {
-	svc := NewCloudIdp(mocks.NewCloudIdpMock())
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudIdp(mock)
 	ctx := context.Background()
 
 	request := &ExportRequest{
@@ -445,23 +453,27 @@ func TestUnit_CloudIdp_ExportV1_Error(t *testing.T) {
 	resp, data, err := svc.ExportV1(ctx, nil, request)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, data)
 }
 
 func TestUnit_CloudIdp_GetHistoryByIDV1_Error(t *testing.T) {
-	svc := NewCloudIdp(mocks.NewCloudIdpMock())
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudIdp(mock)
 	ctx := context.Background()
 
 	result, resp, err := svc.GetHistoryByIDV1(ctx, "1", nil)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudIdp_AddHistoryNoteByIDV1_Error(t *testing.T) {
-	svc := NewCloudIdp(mocks.NewCloudIdpMock())
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudIdp(mock)
 	ctx := context.Background()
 
 	request := &HistoryNoteRequest{Note: "Test note"}
@@ -469,11 +481,13 @@ func TestUnit_CloudIdp_AddHistoryNoteByIDV1_Error(t *testing.T) {
 	resp, err := svc.AddHistoryNoteByIDV1(ctx, "1", request)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 }
 
 func TestUnit_CloudIdp_TestGroupSearchByIDV1_Error(t *testing.T) {
-	svc := NewCloudIdp(mocks.NewCloudIdpMock())
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudIdp(mock)
 	ctx := context.Background()
 
 	request := &TestGroupSearchRequest{GroupName: "TestGroup"}
@@ -481,12 +495,14 @@ func TestUnit_CloudIdp_TestGroupSearchByIDV1_Error(t *testing.T) {
 	result, resp, err := svc.TestGroupSearchByIDV1(ctx, "1", request)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudIdp_TestUserSearchByIDV1_Error(t *testing.T) {
-	svc := NewCloudIdp(mocks.NewCloudIdpMock())
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudIdp(mock)
 	ctx := context.Background()
 
 	request := &TestUserSearchRequest{Username: "testuser"}
@@ -494,12 +510,14 @@ func TestUnit_CloudIdp_TestUserSearchByIDV1_Error(t *testing.T) {
 	result, resp, err := svc.TestUserSearchByIDV1(ctx, "1", request)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }
 
 func TestUnit_CloudIdp_TestUserMembershipByIDV1_Error(t *testing.T) {
-	svc := NewCloudIdp(mocks.NewCloudIdpMock())
+	mock := mocks.NewCloudIdpMock()
+	mock.RegisterErrorMocks()
+	svc := NewCloudIdp(mock)
 	ctx := context.Background()
 
 	request := &TestUserMembershipRequest{
@@ -510,6 +528,6 @@ func TestUnit_CloudIdp_TestUserMembershipByIDV1_Error(t *testing.T) {
 	result, resp, err := svc.TestUserMembershipByIDV1(ctx, "1", request)
 
 	assert.Error(t, err)
-	assert.Nil(t, resp)
+	assert.NotNil(t, resp)
 	assert.Nil(t, result)
 }

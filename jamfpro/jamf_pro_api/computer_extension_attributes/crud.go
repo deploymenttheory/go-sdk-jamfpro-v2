@@ -49,6 +49,7 @@ func (s *ComputerExtensionAttributes) ListV1(ctx context.Context, rsqlQuery map[
 		SetHeader("Accept", constants.ApplicationJSON).
 		SetQueryParams(rsqlQuery).
 		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list computer extension attributes: %w", err)
 	}
@@ -72,6 +73,7 @@ func (s *ComputerExtensionAttributes) GetByIDV1(ctx context.Context, id string) 
 		SetHeader("Accept", constants.ApplicationJSON).
 		SetResult(&result).
 		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -97,6 +99,7 @@ func (s *ComputerExtensionAttributes) CreateV1(ctx context.Context, request *Req
 		SetBody(request).
 		SetResult(&result).
 		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -126,6 +129,7 @@ func (s *ComputerExtensionAttributes) UpdateByIDV1(ctx context.Context, id strin
 		SetBody(request).
 		SetResult(&result).
 		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -146,6 +150,7 @@ func (s *ComputerExtensionAttributes) DeleteByIDV1(ctx context.Context, id strin
 	resp, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.ApplicationJSON).
 		Delete(endpoint)
+
 	if err != nil {
 		return resp, err
 	}
@@ -168,6 +173,7 @@ func (s *ComputerExtensionAttributes) DeleteComputerExtensionAttributesByIDV1(ct
 		SetHeader("Content-Type", constants.ApplicationJSON).
 		SetBody(req).
 		Post(endpoint)
+
 	if err != nil {
 		return resp, err
 	}
@@ -201,6 +207,7 @@ func (s *ComputerExtensionAttributes) GetHistoryByIDV1(ctx context.Context, id s
 		SetHeader("Accept", constants.ApplicationJSON).
 		SetQueryParams(rsqlQuery).
 		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get computer extension attribute history: %w", err)
 	}
