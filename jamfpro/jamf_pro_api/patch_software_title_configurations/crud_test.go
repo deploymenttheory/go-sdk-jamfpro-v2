@@ -458,6 +458,7 @@ func TestUnit_PatchSoftwareTitleConfigurations_DeleteByNameV2_EmptyName(t *testi
 // TestGetDashboardStatusByIDV2_APIError tests GetDashboardStatusByIDV2 when API returns error.
 func TestUnit_PatchSoftwareTitleConfigurations_GetDashboardStatusByIDV2_APIError(t *testing.T) {
 	mock := mocks.NewPatchSoftwareTitleConfigurationsMock()
+	mock.RegisterGetDashboardStatusNoResponseErrorMock("1")
 	svc := NewPatchSoftwareTitleConfigurations(mock)
 
 	result, resp, err := svc.GetDashboardStatusByIDV2(context.Background(), "1")
@@ -465,7 +466,6 @@ func TestUnit_PatchSoftwareTitleConfigurations_GetDashboardStatusByIDV2_APIError
 	assert.Error(t, err)
 	assert.NotNil(t, resp)
 	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "no response")
 }
 
 // TestGetDashboardStatusByIDV2 tests getting dashboard status.

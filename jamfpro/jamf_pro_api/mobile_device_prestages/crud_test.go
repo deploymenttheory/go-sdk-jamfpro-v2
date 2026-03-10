@@ -477,7 +477,7 @@ func TestUnit_MobileDevicePrestages_UpdateByIDV3_FetchVersionLockError(t *testin
 // version lock retrieval) fails.
 func TestUnit_MobileDevicePrestages_UpdateByNameV3_FetchVersionLockError(t *testing.T) {
 	mock := mocks.NewMobileDevicePrestagesMock()
-	// No list mock registered – GetByNameV3 will fail.
+	mock.RegisterListNoResponseErrorMock()
 
 	svc := NewMobileDevicePrestages(mock)
 	prestage := &ResourceMobileDevicePrestage{DisplayName: "Updated Prestage"}

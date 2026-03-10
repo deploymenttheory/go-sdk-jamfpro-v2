@@ -10,19 +10,16 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"slices"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
 
 // ContentType defines the serialization format for mock responses.
 type ContentType string
-
-const (
-	ContentTypeJSON ContentType = "application/json"
-	ContentTypeXML  ContentType = "application/xml"
-)
 
 // registeredResponse holds a pre-canned response for a single endpoint.
 type registeredResponse struct {
@@ -55,7 +52,7 @@ func NewGenericMock(config GenericMockConfig) *GenericMock {
 		config.Name = "GenericMock"
 	}
 	if config.ContentType == "" {
-		config.ContentType = ContentTypeJSON
+		config.ContentType = constants.ApplicationJSON
 	}
 	if config.FixtureDir == "" {
 		// Default to "mocks" directory relative to the caller's package
@@ -89,7 +86,7 @@ func NewGenericMock(config GenericMockConfig) *GenericMock {
 func NewJSONMock(name string) *GenericMock {
 	return NewGenericMock(GenericMockConfig{
 		Name:        name,
-		ContentType: ContentTypeJSON,
+		ContentType: constants.ApplicationJSON,
 	})
 }
 
@@ -97,7 +94,7 @@ func NewJSONMock(name string) *GenericMock {
 func NewXMLMock(name string) *GenericMock {
 	return NewGenericMock(GenericMockConfig{
 		Name:        name,
-		ContentType: ContentTypeXML,
+		ContentType: constants.ApplicationXML,
 	})
 }
 
@@ -127,7 +124,7 @@ func (m *GenericMock) RegisterError(method, path string, statusCode int, fixture
 		}
 
 		// If no custom error message provided, try to extract from JSON
-		if errMsg == "" && m.contentType == ContentTypeJSON {
+		if errMsg == "" && m.contentType == constants.ApplicationJSON {
 			var parsed struct {
 				Code    string `json:"code"`
 				Message string `json:"message"`
@@ -152,13 +149,36 @@ func (m *GenericMock) RegisterRawBody(method, path string, statusCode int, body 
 }
 
 // loadFixture loads a fixture file from the configured fixture directory.
+// If not found, falls back to centralized test_fixtures directory for common errors.
 func (m *GenericMock) loadFixture(filename string) ([]byte, error) {
+	// Try local fixture directory first
 	path := filepath.Join(m.fixtureDir, filename)
 	data, err := os.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("read fixture %s: %w", filename, err)
+	if err == nil {
+		return data, nil
 	}
-	return data, nil
+
+	// Fall back to centralized test_fixtures for common error files
+	if isCommonErrorFixture(filename) {
+		centralPath := filepath.Join(filepath.Dir(m.fixtureDir), "..", "..", "mocks", "test_fixtures", filename)
+		data, err = os.ReadFile(centralPath)
+		if err == nil {
+			return data, nil
+		}
+	}
+
+	return nil, fmt.Errorf("read fixture %s: %w", filename, err)
+}
+
+// isCommonErrorFixture checks if a filename is a common error fixture.
+func isCommonErrorFixture(filename string) bool {
+	commonErrors := []string{
+		"error_not_found.json", "error_not_found.xml",
+		"error_conflict.json", "error_conflict.xml",
+		"error_internal.json", "error_internal.xml",
+		"error_bad_request.json",
+	}
+	return slices.Contains(commonErrors, filename)
 }
 
 // dispatch is the core routing logic for all HTTP methods.
@@ -183,7 +203,7 @@ func (m *GenericMock) dispatch(method, path string, result any) (*resty.Response
 			*byteSlicePtr = r.rawBody
 		} else {
 			var err error
-			if m.contentType == ContentTypeJSON {
+			if m.contentType == constants.ApplicationJSON {
 				err = json.Unmarshal(r.rawBody, result)
 			} else {
 				err = xml.Unmarshal(r.rawBody, result)
@@ -272,3 +292,42 @@ func (m *GenericMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *GenericMock) InvalidateToken() error                { return nil }
 func (m *GenericMock) KeepAliveToken() error                 { return nil }
 func (m *GenericMock) GetLogger() *zap.Logger                { return m.logger }
+
+// Convenience methods for registering common error responses
+
+// RegisterNotFoundError registers a 404 Not Found error for the given method and path.
+func (m *GenericMock) RegisterNotFoundError(method, path string) {
+	ext := ".json"
+	if m.contentType == constants.ApplicationXML {
+		ext = ".xml"
+	}
+	m.RegisterError(method, path, http.StatusNotFound, "error_not_found"+ext, "")
+}
+
+// RegisterConflictError registers a 409 Conflict error for the given method and path.
+func (m *GenericMock) RegisterConflictError(method, path string) {
+	ext := ".json"
+	if m.contentType == constants.ApplicationXML {
+		ext = ".xml"
+	}
+	m.RegisterError(method, path, http.StatusConflict, "error_conflict"+ext, "")
+}
+
+// RegisterInternalError registers a 500 Internal Server Error for the given method and path.
+func (m *GenericMock) RegisterInternalError(method, path string) {
+	ext := ".json"
+	if m.contentType == constants.ApplicationXML {
+		ext = ".xml"
+	}
+	m.RegisterError(method, path, http.StatusInternalServerError, "error_internal"+ext, "")
+}
+
+// RegisterBadRequestError registers a 400 Bad Request error for the given method and path.
+func (m *GenericMock) RegisterBadRequestError(method, path string) {
+	if m.contentType == constants.ApplicationXML {
+		// XML API doesn't typically use 400 errors
+		m.RegisterInternalError(method, path)
+		return
+	}
+	m.RegisterError(method, path, http.StatusBadRequest, "error_bad_request.json", "")
+}

@@ -21,3 +21,7 @@ func (m *AppStoreCountryCodesMock) RegisterMocks() {
 func (m *AppStoreCountryCodesMock) RegisterEmptyListMock() {
 	m.Register("GET", "/api/v1/app-store-country-codes", 200, "empty_list.json")
 }
+
+func (m *AppStoreCountryCodesMock) RegisterListErrorMock() {
+	m.RegisterError("GET", "/api/v1/app-store-country-codes", 500, "error_internal.json", "")
+}

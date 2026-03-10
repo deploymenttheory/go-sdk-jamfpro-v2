@@ -18,16 +18,14 @@
     "mdmCapable": {
       "capable": true,
       "userManagementInfo": [
-        [
-          {
-            "capableUser": "admin",
-            "managementId": "123e4567-e89b-42d3-a456-426614174000"
-          },
-          {
-            "capableUser": "rootadmin",
-            "managementId": "123e4567-e89b-42d3-a456-426614174001"
-          }
-        ]
+        {
+          "capableUser": "admin",
+          "managementId": "123e4567-e89b-42d3-a456-426614174000"
+        },
+        {
+          "capableUser": "rootadmin",
+          "managementId": "123e4567-e89b-42d3-a456-426614174001"
+        }
       ]
     },
     "reportDate": "2018-10-31T18:04:13Z",
