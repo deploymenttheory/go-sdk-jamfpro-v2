@@ -29,12 +29,12 @@ func NewMacosConfigurationProfileCustomSettings(client client.Client) *MacosConf
 func (s *MacosConfigurationProfileCustomSettings) GetSchemaList(ctx context.Context) (*ResponseCustomSettingsSchemaList, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProCustomSettingsSchemaList
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResponseCustomSettingsSchemaList
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get custom settings schema list: %w", err)
 	}
@@ -51,12 +51,12 @@ func (s *MacosConfigurationProfileCustomSettings) GetByPayloadUUID(ctx context.C
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProConfigProfilesMacOS, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResourceConfigProfile
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get macOS configuration profile with ID %s: %w", id, err)
 	}
@@ -73,13 +73,14 @@ func (s *MacosConfigurationProfileCustomSettings) Create(ctx context.Context, pr
 
 	endpoint := constants.EndpointJamfProConfigProfilesMacOS
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var result ResponseConfigProfileCreate
-	resp, err := s.client.Post(ctx, endpoint, profile, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(profile).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to create macOS configuration profile: %w", err)
 	}

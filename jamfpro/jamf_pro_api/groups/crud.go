@@ -41,10 +41,10 @@ func (s *Groups) ListV1(ctx context.Context, rsqlQuery map[string]string) (*List
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list groups: %w", err)
 	}
@@ -64,11 +64,10 @@ func (s *Groups) GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *res
 
 	var result ResourceGroup
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -187,12 +186,12 @@ func (s *Groups) UpdateByIDV1(ctx context.Context, id string, req *RequestUpdate
 
 	var result ResourceGroup
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Patch(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -210,11 +209,9 @@ func (s *Groups) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, 
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProGroupsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

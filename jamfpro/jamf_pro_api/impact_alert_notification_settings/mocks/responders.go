@@ -175,6 +175,11 @@ func (m *ImpactAlertNotificationSettingsMock) GetPaginated(ctx context.Context, 
 	}
 	return resp, nil
 }
+func (m *ImpactAlertNotificationSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *ImpactAlertNotificationSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ImpactAlertNotificationSettingsMock) InvalidateToken() error                { return nil }

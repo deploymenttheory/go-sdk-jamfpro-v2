@@ -173,6 +173,11 @@ func (m *MacOSConfigurationProfilesMock) GetPaginated(ctx context.Context, path 
 	}
 	return resp, nil
 }
+func (m *MacOSConfigurationProfilesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *MacOSConfigurationProfilesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *MacOSConfigurationProfilesMock) InvalidateToken() error                { return nil }

@@ -106,6 +106,11 @@ func (m *AppInstallersMock) GetPaginated(ctx context.Context, path string, q map
 	}
 	return resp, nil
 }
+func (m *AppInstallersMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *AppInstallersMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *AppInstallersMock) InvalidateToken() error                { return nil }
 func (m *AppInstallersMock) KeepAliveToken() error                 { return nil }

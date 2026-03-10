@@ -101,6 +101,11 @@ func (m *NotificationsMock) GetBytes(ctx context.Context, path string, q map[str
 func (m *NotificationsMock) GetPaginated(ctx context.Context, path string, q map[string]string, _ map[string]string, mergePage func([]byte) error) (*resty.Response, error) {
 	return m.dispatch("GET", path, nil)
 }
+func (m *NotificationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *NotificationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *NotificationsMock) InvalidateToken() error                { return nil }
 func (m *NotificationsMock) KeepAliveToken() error                 { return nil }

@@ -149,6 +149,11 @@ func (m *ComputerPrestagesMock) GetPaginated(ctx context.Context, path string, _
 	}
 	return resp, nil
 }
+func (m *ComputerPrestagesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *ComputerPrestagesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ComputerPrestagesMock) InvalidateToken() error                    { return nil }
 func (m *ComputerPrestagesMock) KeepAliveToken() error                     { return nil }

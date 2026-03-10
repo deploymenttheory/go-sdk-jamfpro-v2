@@ -202,6 +202,11 @@ func (m *SelfServiceBrandingMobileMock) GetPaginated(ctx context.Context, path s
 	}
 	return resp, nil
 }
+func (m *SelfServiceBrandingMobileMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *SelfServiceBrandingMobileMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *SelfServiceBrandingMobileMock) InvalidateToken() error                { return nil }

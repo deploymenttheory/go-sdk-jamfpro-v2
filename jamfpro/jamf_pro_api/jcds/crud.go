@@ -35,12 +35,12 @@ func NewJcds(client client.Client) *Jcds {
 func (s *Jcds) GetPackagesV1(ctx context.Context) ([]ResourceJCDSFile, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProJCDSV1 + "/files"
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result []ResourceJCDSFile
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get JCDS packages: %w", err)
 	}
@@ -58,12 +58,12 @@ func (s *Jcds) GetPackageURIByNameV1(ctx context.Context, packageName string) (*
 
 	endpoint := fmt.Sprintf("%s/files/%s", constants.EndpointJamfProJCDSV1, packageName)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResponseJCDSFile
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get JCDS package URI for '%s': %w", packageName, err)
 	}
@@ -77,13 +77,13 @@ func (s *Jcds) GetPackageURIByNameV1(ctx context.Context, packageName string) (*
 func (s *Jcds) RenewCredentialsV1(ctx context.Context) (*ResourceJCDSUploadCredentials, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProJCDSV1 + "/renew-credentials"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var result ResourceJCDSUploadCredentials
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to renew JCDS credentials: %w", err)
 	}
@@ -103,12 +103,11 @@ func (s *Jcds) CreatePackageV1(ctx context.Context, filePath string) (*ResponseJ
 	var uploadCredentials ResourceJCDSUploadCredentials
 	endpoint := constants.EndpointJamfProJCDSV1 + "/files"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, &uploadCredentials)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&uploadCredentials).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to obtain upload credentials: %w", err)
 	}
@@ -187,12 +186,11 @@ func (s *Jcds) DeletePackageV1(ctx context.Context, filePath string) (*resty.Res
 	var uploadCredentials ResourceJCDSUploadCredentials
 	endpoint := constants.EndpointJamfProJCDSV1 + "/files"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, &uploadCredentials)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&uploadCredentials).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to obtain deletion credentials: %w", err)
 	}
@@ -240,12 +238,10 @@ func (s *Jcds) DeletePackageV1(ctx context.Context, filePath string) (*resty.Res
 func (s *Jcds) RefreshInventoryV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProJCDSV1 + "/refresh-inventory"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to refresh JCDS inventory: %w", err)
 	}

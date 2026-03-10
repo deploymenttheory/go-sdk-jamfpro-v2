@@ -37,11 +37,6 @@ func (s *ApiRoles) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Li
 
 	endpoint := constants.EndpointJamfProAPIRolesV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var pageResults []ResourceAPIRole
 		if err := json.Unmarshal(pageData, &pageResults); err != nil {
@@ -51,7 +46,12 @@ func (s *ApiRoles) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Li
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -72,11 +72,11 @@ func (s *ApiRoles) GetByIDV1(ctx context.Context, id string) (*ResourceAPIRole, 
 
 	var result ResourceAPIRole
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -96,12 +96,13 @@ func (s *ApiRoles) CreateV1(ctx context.Context, request *RequestAPIRole) (*Reso
 
 	endpoint := constants.EndpointJamfProAPIRolesV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -125,12 +126,13 @@ func (s *ApiRoles) UpdateByIDV1(ctx context.Context, id string, request *Request
 
 	var result ResourceAPIRole
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -147,11 +149,10 @@ func (s *ApiRoles) DeleteByIDV1(ctx context.Context, id string) (*resty.Response
 	}
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAPIRolesV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}

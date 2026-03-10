@@ -37,11 +37,10 @@ func (s *InventoryInformation) GetV1(ctx context.Context) (*ResourceInventoryInf
 
 	var result ResourceInventoryInformation
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get inventory information: %w", err)
 	}

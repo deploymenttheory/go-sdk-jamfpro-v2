@@ -44,10 +44,10 @@ func (s *DistributionPoint) ListV1(ctx context.Context, rsqlQuery map[string]str
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list distribution points: %w", err)
 	}
@@ -70,12 +70,12 @@ func (s *DistributionPoint) CreateV1(ctx context.Context, request *RequestDistri
 
 	endpoint := constants.EndpointJamfProDistributionPointsV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to create distribution point: %w", err)
 	}
@@ -95,12 +95,11 @@ func (s *DistributionPoint) DeleteMultipleV1(ctx context.Context, ids []string) 
 
 	request := DeleteMultipleRequest{IDs: ids}
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to delete multiple distribution points: %w", err)
 	}
@@ -120,11 +119,10 @@ func (s *DistributionPoint) GetByIDV1(ctx context.Context, id string) (*Resource
 
 	var result ResourceDistributionPoint
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get distribution point by ID: %w", err)
 	}
@@ -148,12 +146,12 @@ func (s *DistributionPoint) UpdateByIDV1(ctx context.Context, id string, request
 
 	var result ResourceDistributionPoint
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to update distribution point: %w", err)
 	}
@@ -171,11 +169,9 @@ func (s *DistributionPoint) DeleteByIDV1(ctx context.Context, id string) (*resty
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDistributionPointsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to delete distribution point: %w", err)
 	}
@@ -199,12 +195,12 @@ func (s *DistributionPoint) PatchByIDV1(ctx context.Context, id string, request 
 
 	var result ResourceDistributionPoint
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Patch(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to patch distribution point: %w", err)
 	}
@@ -233,10 +229,10 @@ func (s *DistributionPoint) GetHistoryByIDV1(ctx context.Context, id string, rsq
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get distribution point history: %w", err)
 	}
@@ -265,12 +261,12 @@ func (s *DistributionPoint) CreateHistoryNoteV1(ctx context.Context, id string, 
 
 	var result HistoryEntry
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to create distribution point history note: %w", err)
 	}

@@ -139,6 +139,20 @@ func (m *ComputerInventoryCollectionSettingsMock) GetBytes(ctx context.Context, 
 func (m *ComputerInventoryCollectionSettingsMock) GetPaginated(ctx context.Context, endpoint string, params map[string]string, headers map[string]string, mergePage func(page []byte) error) (*resty.Response, error) {
 	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("GetPaginated not implemented in mock")
 }
+func (m *ComputerInventoryCollectionSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		data, status, ok := m.dispatch(method, path)
+		if !ok {
+			return nil, fmt.Errorf("no mock registered for %s %s", method, path)
+		}
+		if result != nil && data != nil {
+			if err := json.Unmarshal(data, result); err != nil {
+				return mockhelpers.NewMockResponse(http.StatusInternalServerError, http.Header{}, nil), err
+			}
+		}
+		return mockhelpers.NewMockResponse(status, http.Header{}, data), nil
+	})
+}
 
 func (m *ComputerInventoryCollectionSettingsMock) PostMultipart(ctx context.Context, endpoint string, fileField string, fileName string, fileReader io.Reader, fileSize int64, formFields map[string]string, headers map[string]string, progressCallback client.MultipartProgressCallback, out any) (*resty.Response, error) {
 	return mockhelpers.NewMockResponse(http.StatusNotImplemented, http.Header{}, nil), fmt.Errorf("PostMultipart not implemented in mock")

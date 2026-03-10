@@ -46,13 +46,15 @@ func (s *Categories) ListV1(ctx context.Context, rsqlQuery map[string]string) (*
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list categories: %w", err)
 	}
+
 	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
@@ -69,11 +71,10 @@ func (s *Categories) GetByIDV1(ctx context.Context, id string) (*ResourceCategor
 
 	var result ResourceCategory
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -94,12 +95,12 @@ func (s *Categories) CreateV1(ctx context.Context, request *RequestCategory) (*C
 
 	endpoint := constants.EndpointJamfProCategoriesV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -124,12 +125,12 @@ func (s *Categories) UpdateByIDV1(ctx context.Context, id string, request *Reque
 
 	var result CreateUpdateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -147,11 +148,9 @@ func (s *Categories) DeleteByIDV1(ctx context.Context, id string) (*resty.Respon
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCategoriesV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -170,12 +169,11 @@ func (s *Categories) DeleteCategoriesByIDV1(ctx context.Context, req *DeleteCate
 
 	endpoint := constants.EndpointJamfProCategoriesV1 + "/delete-multiple"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -205,10 +203,10 @@ func (s *Categories) GetCategoryHistoryV1(ctx context.Context, id string, rsqlQu
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get category history: %w", err)
 	}
@@ -230,12 +228,11 @@ func (s *Categories) AddCategoryHistoryNotesV1(ctx context.Context, id string, r
 
 	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProCategoriesV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}

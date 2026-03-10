@@ -156,13 +156,16 @@ func (s *ComputerHistory) GetByMACAddressAndSubset(ctx context.Context, macAddre
 // get performs the GET request and unmarshals the response.
 func (s *ComputerHistory) get(ctx context.Context, endpoint string) (*ResourceComputerHistory, *resty.Response, error) {
 	var out ResourceComputerHistory
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }

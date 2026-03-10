@@ -119,6 +119,11 @@ func (m *AdvancedMobileDeviceSearchesMock) GetPaginated(ctx context.Context, pat
 	}
 	return resp, nil
 }
+func (m *AdvancedMobileDeviceSearchesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *AdvancedMobileDeviceSearchesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *AdvancedMobileDeviceSearchesMock) InvalidateToken() error                    { return nil }
 func (m *AdvancedMobileDeviceSearchesMock) KeepAliveToken() error                     { return nil }

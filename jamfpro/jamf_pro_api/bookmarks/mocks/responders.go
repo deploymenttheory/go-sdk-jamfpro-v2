@@ -93,6 +93,11 @@ func (m *BookmarksMock) GetPaginated(ctx context.Context, path string, _ map[str
 	}
 	return resp, nil
 }
+func (m *BookmarksMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *BookmarksMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *BookmarksMock) InvalidateToken() error                    { return nil }
 func (m *BookmarksMock) KeepAliveToken() error                     { return nil }

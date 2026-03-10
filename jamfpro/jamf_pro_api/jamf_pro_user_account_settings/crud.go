@@ -40,11 +40,10 @@ func (s *JamfProUserAccountSettings) GetSettingsV1(ctx context.Context, keyID st
 
 	var result ResourceUserPreferencesSettings
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -64,11 +63,9 @@ func (s *JamfProUserAccountSettings) GetV1(ctx context.Context, keyID string) (s
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesV1, keyID)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, body, err := s.client.GetBytes(ctx, endpoint, nil, headers)
+	resp, body, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		GetBytes(endpoint)
 	if err != nil {
 		return "", resp, err
 	}
@@ -97,12 +94,11 @@ func (s *JamfProUserAccountSettings) PutV1(ctx context.Context, keyID string, va
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesV1, keyID)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, values, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(values).
+		Put(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -121,11 +117,9 @@ func (s *JamfProUserAccountSettings) DeleteV1(ctx context.Context, keyID string)
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProUserPreferencesV1, keyID)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

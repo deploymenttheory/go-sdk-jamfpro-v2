@@ -177,6 +177,11 @@ func (m *LicensedSoftwareMock) GetPaginated(ctx context.Context, path string, rs
 	}
 	return resp, nil
 }
+func (m *LicensedSoftwareMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *LicensedSoftwareMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *LicensedSoftwareMock) InvalidateToken() error                { return nil }

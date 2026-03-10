@@ -95,6 +95,11 @@ func (m *BrandingMock) GetPaginated(ctx context.Context, path string, _ map[stri
 	}
 	return resp, nil
 }
+func (m *BrandingMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *BrandingMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *BrandingMock) InvalidateToken() error                { return nil }
 func (m *BrandingMock) KeepAliveToken() error                 { return nil }

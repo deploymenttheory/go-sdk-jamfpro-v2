@@ -31,10 +31,11 @@ func NewSsoCertificate(client client.Client) *SsoCertificate {
 func (s *SsoCertificate) GetV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error) {
 	var result ResourceSSOKeystoreResponse
 	endpoint := constants.EndpointJamfProSSOCertV2
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -47,11 +48,12 @@ func (s *SsoCertificate) GetV2(ctx context.Context) (*ResourceSSOKeystoreRespons
 func (s *SsoCertificate) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResponse, *resty.Response, error) {
 	var result ResourceSSOKeystoreResponse
 	endpoint := constants.EndpointJamfProSSOCertV2
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -64,11 +66,13 @@ func (s *SsoCertificate) CreateV2(ctx context.Context) (*ResourceSSOKeystoreResp
 func (s *SsoCertificate) UpdateV2(ctx context.Context, request *UpdateKeystoreRequest) (*ResourceSSOKeystoreResponse, *resty.Response, error) {
 	var result ResourceSSOKeystoreResponse
 	endpoint := constants.EndpointJamfProSSOCertV2
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -79,16 +83,15 @@ func (s *SsoCertificate) UpdateV2(ctx context.Context, request *UpdateKeystoreRe
 // URL: GET /api/v2/sso/cert/download
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-sso-cert-download
 func (s *SsoCertificate) DownloadV2(ctx context.Context) ([]byte, *resty.Response, error) {
-	var result []byte
 	endpoint := constants.EndpointJamfProSSOCertDownloadV2
-	headers := map[string]string{
-		"Accept": constants.ApplicationOctetStream,
-	}
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, data, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationOctetStream).
+		GetBytes(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
-	return result, resp, nil
+	return data, resp, nil
 }
 
 // ParseV2 parses the provided keystore file and returns keystore information.
@@ -97,11 +100,13 @@ func (s *SsoCertificate) DownloadV2(ctx context.Context) ([]byte, *resty.Respons
 func (s *SsoCertificate) ParseV2(ctx context.Context, request *ParseKeystoreRequest) (*ParseKeystoreResponse, *resty.Response, error) {
 	var result ParseKeystoreResponse
 	endpoint := constants.EndpointJamfProSSOCertParseV2
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -113,10 +118,10 @@ func (s *SsoCertificate) ParseV2(ctx context.Context, request *ParseKeystoreRequ
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v2-sso-cert
 func (s *SsoCertificate) DeleteV2(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProSSOCertV2
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return nil, err
 	}

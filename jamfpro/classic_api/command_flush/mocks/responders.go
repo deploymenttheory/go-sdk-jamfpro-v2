@@ -202,6 +202,11 @@ func (m *CommandFlushMock) GetPaginated(ctx context.Context, path string, rsqlQu
 	}
 	return resp, nil
 }
+func (m *CommandFlushMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *CommandFlushMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *CommandFlushMock) InvalidateToken() error                { return nil }

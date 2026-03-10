@@ -206,6 +206,11 @@ func (m *ManagedSoftwareUpdatesMock) GetPaginated(ctx context.Context, path stri
 	}
 	return resp, nil
 }
+func (m *ManagedSoftwareUpdatesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *ManagedSoftwareUpdatesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ManagedSoftwareUpdatesMock) InvalidateToken() error                    { return nil }
 func (m *ManagedSoftwareUpdatesMock) KeepAliveToken() error                     { return nil }

@@ -28,8 +28,12 @@ func NewCacheSettings(client client.Client) *CacheSettings {
 func (s *CacheSettings) GetV1(ctx context.Context) (*ResourceCacheSettings, *resty.Response, error) {
 	var result ResourceCacheSettings
 	endpoint := constants.EndpointJamfProCacheSettingsV1
-	headers := map[string]string{"Accept": constants.ApplicationJSON}
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -45,10 +49,17 @@ func (s *CacheSettings) UpdateV1(ctx context.Context, request *ResourceCacheSett
 	}
 	var result ResourceCacheSettings
 	endpoint := constants.EndpointJamfProCacheSettingsV1
-	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }

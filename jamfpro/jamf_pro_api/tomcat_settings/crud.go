@@ -26,12 +26,10 @@ func NewTomcatSettings(client client.Client) *TomcatSettings {
 func (s *TomcatSettings) IssueTomcatSslCertificate(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProIssueTomcatSslCertificate
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}

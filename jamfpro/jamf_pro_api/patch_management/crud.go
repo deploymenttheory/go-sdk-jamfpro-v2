@@ -32,12 +32,10 @@ func NewPatchManagement(client client.Client) *PatchManagement {
 func (s *PatchManagement) AcceptDisclaimerV2(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProPatchManagementAcceptDisclaimerV2
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to accept Patch Management disclaimer: %w", err)
 	}

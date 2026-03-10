@@ -109,6 +109,11 @@ func (m *SelfServiceBrandingUploadMock) GetPaginated(ctx context.Context, path s
 	}
 	return resp, nil
 }
+func (m *SelfServiceBrandingUploadMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *SelfServiceBrandingUploadMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *SelfServiceBrandingUploadMock) InvalidateToken() error                { return nil }
 func (m *SelfServiceBrandingUploadMock) KeepAliveToken() error                 { return nil }

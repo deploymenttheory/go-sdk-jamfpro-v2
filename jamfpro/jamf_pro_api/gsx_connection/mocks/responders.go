@@ -185,6 +185,11 @@ func (m *GSXConnectionMock) GetPaginated(ctx context.Context, path string, rsqlQ
 	}
 	return resp, nil
 }
+func (m *GSXConnectionMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	}, &m.LastRSQLQuery)
+}
 
 func (m *GSXConnectionMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *GSXConnectionMock) InvalidateToken() error                { return nil }

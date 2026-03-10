@@ -29,12 +29,12 @@ func NewOidc(client client.Client) *Oidc {
 func (s *Oidc) GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDirectIdPLoginURL, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProOIDCV1 + "/direct-idp-login-url"
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResourceOIDCDirectIdPLoginURL
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get OIDC direct IdP login URL: %w", err)
 	}
@@ -48,12 +48,12 @@ func (s *Oidc) GetDirectIdPLoginURLV1(ctx context.Context) (*ResourceOIDCDirectI
 func (s *Oidc) GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProOIDCV1 + "/public-key"
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResourceOIDCPublicKey
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get OIDC public key: %w", err)
 	}
@@ -67,12 +67,12 @@ func (s *Oidc) GetPublicKeyV1(ctx context.Context) (*ResourceOIDCPublicKey, *res
 func (s *Oidc) GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatures, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProOIDCV1 + "/public-features"
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResourcePublicFeatures
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get OIDC public features: %w", err)
 	}
@@ -86,12 +86,10 @@ func (s *Oidc) GetPublicFeaturesV1(ctx context.Context) (*ResourcePublicFeatures
 func (s *Oidc) GenerateCertificateV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProOIDCV1 + "/generate-certificate"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to generate OIDC certificate: %w", err)
 	}
@@ -109,13 +107,14 @@ func (s *Oidc) GetRedirectURLV1(ctx context.Context, request *RequestOIDCRedirec
 
 	endpoint := constants.EndpointJamfProOIDCV2 + "/dispatch"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var result ResourceOIDCRedirectURL
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get OIDC redirect URL: %w", err)
 	}

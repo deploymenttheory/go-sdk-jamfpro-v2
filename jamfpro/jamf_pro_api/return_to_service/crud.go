@@ -33,11 +33,10 @@ func (s *ReturnToService) ListV1(ctx context.Context) (*ListResponse, *resty.Res
 	endpoint := constants.EndpointJamfProReturnToServiceV1
 	var result ListResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -53,8 +52,11 @@ func (s *ReturnToService) GetByIDV1(ctx context.Context, id string) (*ResourceRe
 	}
 	endpoint := constants.EndpointJamfProReturnToServiceV1 + "/" + id
 	var result ResourceReturnToServiceConfiguration
-	headers := map[string]string{"Accept": constants.ApplicationJSON}
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -71,12 +73,12 @@ func (s *ReturnToService) CreateV1(ctx context.Context, request *ResourceReturnT
 	endpoint := constants.EndpointJamfProReturnToServiceV1
 	var result CreateResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -96,12 +98,12 @@ func (s *ReturnToService) UpdateByIDV1(ctx context.Context, id string, request *
 	endpoint := constants.EndpointJamfProReturnToServiceV1 + "/" + id
 	var result ResourceReturnToServiceConfiguration
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -117,11 +119,9 @@ func (s *ReturnToService) DeleteByIDV1(ctx context.Context, id string) (*resty.R
 	}
 	endpoint := constants.EndpointJamfProReturnToServiceV1 + "/" + id
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return nil, err
 	}

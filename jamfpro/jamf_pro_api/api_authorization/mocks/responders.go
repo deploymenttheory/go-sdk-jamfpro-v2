@@ -115,6 +115,11 @@ func (m *ApiAuthorizationMock) GetPaginated(ctx context.Context, path string, _ 
 	}
 	return resp, nil
 }
+func (m *ApiAuthorizationMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *ApiAuthorizationMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ApiAuthorizationMock) InvalidateToken() error                { return nil }
 func (m *ApiAuthorizationMock) KeepAliveToken() error                 { return nil }

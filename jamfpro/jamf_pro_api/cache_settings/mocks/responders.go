@@ -111,6 +111,11 @@ func (m *CacheSettingsMock) GetPaginated(ctx context.Context, path string, _ map
 	}
 	return resp, nil
 }
+func (m *CacheSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *CacheSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *CacheSettingsMock) InvalidateToken() error                   { return nil }
 func (m *CacheSettingsMock) KeepAliveToken() error                     { return nil }

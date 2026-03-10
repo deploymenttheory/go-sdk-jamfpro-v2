@@ -179,6 +179,11 @@ func (m *ComputerHistoryMock) GetPaginated(ctx context.Context, path string, rsq
 	}
 	return resp, nil
 }
+func (m *ComputerHistoryMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *ComputerHistoryMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ComputerHistoryMock) InvalidateToken() error                { return nil }

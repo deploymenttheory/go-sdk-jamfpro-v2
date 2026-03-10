@@ -174,6 +174,11 @@ func (m *VolumePurchasingSubscriptionsMock) GetPaginated(ctx context.Context, pa
 	}
 	return resp, nil
 }
+func (m *VolumePurchasingSubscriptionsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *VolumePurchasingSubscriptionsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *VolumePurchasingSubscriptionsMock) InvalidateToken() error                { return nil }

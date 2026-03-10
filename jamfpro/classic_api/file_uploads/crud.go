@@ -94,19 +94,21 @@ func (s *FileUploads) CreateAttachment(ctx context.Context, resource string, idT
 
 	endpoint := fmt.Sprintf("%s/%s/%s/%s", constants.EndpointClassicFileUploads, resource, idType, identifier)
 
-	// Add query parameter for IPA upload if specified
 	if forceIpaUpload && resource == "mobiledeviceapplicationsipa" {
 		endpoint = fmt.Sprintf("%s?FORCE_IPA_UPLOAD=true", endpoint)
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationXML,
-	}
-
 	var result any
-	resp, err := s.client.PostMultipart(ctx, endpoint, fileUploadFormFieldName, fileName, f, info.Size(), nil, headers, nil, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetMultipartFile(fileUploadFormFieldName, fileName, f, info.Size(), nil).
+		SetResult(&result).
+		Post(endpoint)
+
 	if err != nil {
 		return resp, fmt.Errorf("failed to upload file: %w", err)
 	}
+
 	return resp, nil
 }

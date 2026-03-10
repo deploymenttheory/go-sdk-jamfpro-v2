@@ -130,6 +130,11 @@ func (m *TomcatSettingsMock) GetPaginated(ctx context.Context, path string, _ ma
 	}
 	return resp, nil
 }
+func (m *TomcatSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *TomcatSettingsMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)

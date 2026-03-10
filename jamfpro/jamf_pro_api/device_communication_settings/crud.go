@@ -28,12 +28,17 @@ func NewDeviceCommunicationSettings(client client.Client) *DeviceCommunicationSe
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-device-communication-settings
 func (s *DeviceCommunicationSettings) GetV1(ctx context.Context) (*ResourceDeviceCommunicationSettings, *resty.Response, error) {
 	var result ResourceDeviceCommunicationSettings
+
 	endpoint := constants.EndpointJamfProDeviceCommunicationSettingsV1
-	headers := map[string]string{"Accept": constants.ApplicationJSON}
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -44,13 +49,22 @@ func (s *DeviceCommunicationSettings) UpdateV1(ctx context.Context, request *Res
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
 	var result ResourceDeviceCommunicationSettings
+
 	endpoint := constants.EndpointJamfProDeviceCommunicationSettingsV1
-	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }
 
@@ -71,13 +85,16 @@ func (s *DeviceCommunicationSettings) GetHistoryV1(ctx context.Context, rsqlQuer
 	}
 
 	endpoint := constants.EndpointJamfProDeviceCommunicationSettingsHistoryV1
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device communication settings history: %w", err)
 	}
+
 	result.TotalCount = len(result.Results)
 	return &result, resp, nil
 }
@@ -94,11 +111,19 @@ func (s *DeviceCommunicationSettings) AddHistoryNotesV1(ctx context.Context, req
 	}
 
 	var result ResponseAddHistoryNotes
+
 	endpoint := constants.EndpointJamfProDeviceCommunicationSettingsHistoryV1
-	headers := map[string]string{"Accept": constants.ApplicationJSON, "Content-Type": constants.ApplicationJSON}
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &result, resp, nil
 }

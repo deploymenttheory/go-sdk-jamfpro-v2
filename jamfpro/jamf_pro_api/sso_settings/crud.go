@@ -34,11 +34,11 @@ func (s *SsoSettings) GetV3(ctx context.Context) (*ResourceSsoSettings, *resty.R
 	var result ResourceSsoSettings
 
 	endpoint := constants.EndpointJamfProSsoV3
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -57,12 +57,13 @@ func (s *SsoSettings) UpdateV3(ctx context.Context, request *ResourceSsoSettings
 	var result ResourceSsoSettings
 
 	endpoint := constants.EndpointJamfProSsoV3
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -77,11 +78,11 @@ func (s *SsoSettings) GetEnrollmentCustomizationDependenciesV3(ctx context.Conte
 	var result ResponseSsoEnrollmentCustomizationDependencies
 
 	endpoint := constants.EndpointJamfProDependenciesV3
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -94,12 +95,11 @@ func (s *SsoSettings) GetEnrollmentCustomizationDependenciesV3(ctx context.Conte
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-disable
 func (s *SsoSettings) DisableV3(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProDisableV3
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -124,11 +124,10 @@ func (s *SsoSettings) GetHistoryV3(ctx context.Context, rsqlQuery map[string]str
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -148,12 +147,13 @@ func (s *SsoSettings) AddHistoryNoteV3(ctx context.Context, request *AddHistoryN
 	var result CreateResponse
 
 	endpoint := constants.EndpointJamfProHistoryV3
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -165,17 +165,14 @@ func (s *SsoSettings) AddHistoryNoteV3(ctx context.Context, request *AddHistoryN
 // URL: GET /api/v3/sso/metadata/download
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v3-sso-metadata-download
 func (s *SsoSettings) DownloadMetadataV3(ctx context.Context) ([]byte, *resty.Response, error) {
-	var result []byte
-
 	endpoint := constants.EndpointJamfProMetadataDownloadV3
-	headers := map[string]string{
-		"Accept": constants.ApplicationXML,
-	}
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, data, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		GetBytes(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return result, resp, nil
+	return data, resp, nil
 }

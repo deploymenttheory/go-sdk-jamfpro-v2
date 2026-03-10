@@ -184,6 +184,11 @@ func (m *PatchPoliciesMock) GetPaginated(ctx context.Context, path string, _ map
 	}
 	return resp, nil
 }
+func (m *PatchPoliciesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *PatchPoliciesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *PatchPoliciesMock) InvalidateToken() error                     { return nil }
 func (m *PatchPoliciesMock) KeepAliveToken() error                      { return nil }

@@ -29,12 +29,12 @@ func NewLogFlushing(client client.Client) *LogFlushing {
 func (s *LogFlushing) GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSettings, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProLogFlushingV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResourceLogFlushingSettings
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get log flushing settings: %w", err)
 	}
@@ -48,12 +48,12 @@ func (s *LogFlushing) GetSettingsV1(ctx context.Context) (*ResourceLogFlushingSe
 func (s *LogFlushing) ListTasksV1(ctx context.Context) ([]ResourceLogFlushingTask, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProLogFlushingV1 + "/task"
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result []ResourceLogFlushingTask
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list log flushing tasks: %w", err)
 	}
@@ -71,12 +71,12 @@ func (s *LogFlushing) GetTaskByIDV1(ctx context.Context, id string) (*ResourceLo
 
 	endpoint := fmt.Sprintf("%s/task/%s", constants.EndpointJamfProLogFlushingV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResourceLogFlushingTask
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get log flushing task %s: %w", id, err)
 	}
@@ -94,13 +94,14 @@ func (s *LogFlushing) QueueTaskV1(ctx context.Context, request *RequestLogFlushi
 
 	endpoint := constants.EndpointJamfProLogFlushingV1 + "/task"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var result CreateResponse
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to queue log flushing task: %w", err)
 	}
@@ -118,11 +119,9 @@ func (s *LogFlushing) DeleteTaskByIDV1(ctx context.Context, id string) (*resty.R
 
 	endpoint := fmt.Sprintf("%s/task/%s", constants.EndpointJamfProLogFlushingV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to delete log flushing task %s: %w", id, err)
 	}

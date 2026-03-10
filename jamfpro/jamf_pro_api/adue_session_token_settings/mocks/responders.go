@@ -114,6 +114,11 @@ func (m *AdueSessionTokenSettingsMock) GetPaginated(ctx context.Context, path st
 	}
 	return resp, nil
 }
+func (m *AdueSessionTokenSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *AdueSessionTokenSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *AdueSessionTokenSettingsMock) InvalidateToken() error                { return nil }
 func (m *AdueSessionTokenSettingsMock) KeepAliveToken() error                 { return nil }

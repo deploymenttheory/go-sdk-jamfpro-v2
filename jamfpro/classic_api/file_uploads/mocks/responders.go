@@ -139,6 +139,11 @@ func (m *FileUploadsMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	}
 	return resp, nil
 }
+func (m *FileUploadsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *FileUploadsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *FileUploadsMock) InvalidateToken() error                { return nil }

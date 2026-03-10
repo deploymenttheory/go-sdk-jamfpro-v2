@@ -40,19 +40,20 @@ func applySiteDefault(computer *ResponseComputer) {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/findcomputers
 func (s *Computers) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := constants.EndpointClassicComputers
-
 	var out ListResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := constants.EndpointClassicComputers
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -65,19 +66,20 @@ func (s *Computers) GetByID(ctx context.Context, id string) (*ResponseComputer, 
 		return nil, nil, fmt.Errorf("computer ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputers, id)
-
 	var out ResponseComputer
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputers, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -90,19 +92,20 @@ func (s *Computers) GetByName(ctx context.Context, name string) (*ResponseComput
 		return nil, nil, fmt.Errorf("computer name cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputers, name)
-
 	var out ResponseComputer
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputers, name)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -118,19 +121,21 @@ func (s *Computers) Create(ctx context.Context, computer *ResponseComputer) (*Re
 		return nil, nil, fmt.Errorf("computer name is required")
 	}
 
-	endpoint := constants.EndpointClassicComputers
-
 	var out ResponseComputer
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := constants.EndpointClassicComputers
 
-	resp, err := s.client.Post(ctx, endpoint, computer, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(computer).
+		SetResult(&out).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -148,19 +153,21 @@ func (s *Computers) UpdateByID(ctx context.Context, id string, computer *Respons
 
 	applySiteDefault(computer)
 
-	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputers, id)
-
 	var out ResponseComputer
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputers, id)
 
-	resp, err := s.client.Put(ctx, endpoint, computer, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(computer).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -178,19 +185,21 @@ func (s *Computers) UpdateByName(ctx context.Context, name string, computer *Res
 
 	applySiteDefault(computer)
 
-	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputers, name)
-
 	var out ResponseComputer
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputers, name)
 
-	resp, err := s.client.Put(ctx, endpoint, computer, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(computer).
+		SetResult(&out).
+		Put(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -205,15 +214,14 @@ func (s *Computers) DeleteByID(ctx context.Context, id string) (*resty.Response,
 
 	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputers, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }
 
@@ -228,14 +236,13 @@ func (s *Computers) DeleteByName(ctx context.Context, name string) (*resty.Respo
 
 	endpoint := fmt.Sprintf("%s/name/%s", constants.EndpointClassicComputers, name)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }

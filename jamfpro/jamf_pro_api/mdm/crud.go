@@ -46,10 +46,10 @@ func (s *Mdm) ListCommandsV2(ctx context.Context, rsqlQuery map[string]string) (
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list MDM commands: %w", err)
 	}
@@ -69,12 +69,13 @@ func (s *Mdm) BlankPush(ctx context.Context, clientManagementIDs []string) (*Bla
 	var result BlankPushResponse
 
 	endpoint := constants.EndpointJamfProBlankPush
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, reqBody, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(reqBody).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -93,12 +94,13 @@ func (s *Mdm) SendCommand(ctx context.Context, req *CommandRequest) (*CommandRes
 	var result CommandResponse
 
 	endpoint := constants.EndpointJamfProCommands
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -117,12 +119,12 @@ func (s *Mdm) DeployPackage(ctx context.Context, req *DeployPackageRequest) (*De
 	endpoint := constants.EndpointJamfProDeployPackage + "?verbose=true"
 	var result DeployPackageResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -141,12 +143,13 @@ func (s *Mdm) RenewProfile(ctx context.Context, req *RenewProfileRequest) (*Rene
 	var result RenewProfileResponse
 
 	endpoint := constants.EndpointJamfProProfileRenewal
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

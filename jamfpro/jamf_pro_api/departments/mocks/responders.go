@@ -240,6 +240,11 @@ func (m *DepartmentsMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	}
 	return resp, nil
 }
+func (m *DepartmentsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	}, &m.LastRSQLQuery)
+}
 
 func (m *DepartmentsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *DepartmentsMock) InvalidateToken() error                { return nil }

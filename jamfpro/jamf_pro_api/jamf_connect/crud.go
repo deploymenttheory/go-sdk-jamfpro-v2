@@ -31,11 +31,10 @@ func (s *JamfConnect) GetSettingsV1(ctx context.Context) (*ResourceJamfConnect, 
 
 	endpoint := constants.EndpointJamfProJamfConnectV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -60,10 +59,10 @@ func (s *JamfConnect) ListConfigProfilesV1(ctx context.Context, rsqlQuery map[st
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf connect config profiles: %w", err)
 	}
@@ -153,12 +152,12 @@ func (s *JamfConnect) UpdateConfigProfileByUUIDV1(ctx context.Context, uuid stri
 
 	var result ResourceJamfConnectConfigProfile
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -188,10 +187,10 @@ func (s *JamfConnect) GetDeploymentTasksByIDV1(ctx context.Context, id string, r
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get deployment tasks: %w", err)
 	}
@@ -217,10 +216,10 @@ func (s *JamfConnect) GetHistoryV1(ctx context.Context, rsqlQuery map[string]str
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get jamf connect history: %w", err)
 	}
@@ -240,12 +239,12 @@ func (s *JamfConnect) AddHistoryNoteV1(ctx context.Context, req *RequestAddHisto
 	}
 
 	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProJamfConnectV1)
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -271,12 +270,11 @@ func (s *JamfConnect) RetryDeploymentTasksByUUIDV1(ctx context.Context, uuid str
 		IDs: computerIDs,
 	}
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, requestBody, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(requestBody).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}

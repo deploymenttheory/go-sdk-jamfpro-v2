@@ -178,6 +178,11 @@ func (m *SitesMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 	}
 	return resp, nil
 }
+func (m *SitesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *SitesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *SitesMock) InvalidateToken() error                { return nil }

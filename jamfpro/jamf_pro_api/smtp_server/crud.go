@@ -31,11 +31,10 @@ func (s *SmtpServer) GetV2(ctx context.Context) (*ResourceSMTPServer, *resty.Res
 
 	endpoint := constants.EndpointJamfProSMTPServerV2
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -55,12 +54,12 @@ func (s *SmtpServer) UpdateV2(ctx context.Context, request *ResourceSMTPServer) 
 
 	endpoint := constants.EndpointJamfProSMTPServerV2
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationMergePatchJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationMergePatchJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -85,10 +84,11 @@ func (s *SmtpServer) GetHistoryV1(ctx context.Context, rsqlQuery map[string]stri
 	}
 
 	endpoint := constants.EndpointJamfProSMTPServerHistoryV1
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get SMTP server history: %w", err)
 	}
@@ -109,12 +109,13 @@ func (s *SmtpServer) AddHistoryNoteV1(ctx context.Context, req *AddHistoryNoteRe
 
 	var result AddHistoryNoteResponse
 	endpoint := constants.EndpointJamfProSMTPServerHistoryV1
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -134,12 +135,12 @@ func (s *SmtpServer) TestV1(ctx context.Context, req *TestRequest) (*resty.Respo
 	}
 
 	endpoint := constants.EndpointJamfProSMTPServerTestV1
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return nil, err
 	}

@@ -120,6 +120,11 @@ func (m *VPPAccountsMock) GetPaginated(ctx context.Context, path string, rsqlQue
 	}
 	return resp, nil
 }
+func (m *VPPAccountsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *VPPAccountsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *VPPAccountsMock) InvalidateToken() error                { return nil }
 func (m *VPPAccountsMock) KeepAliveToken() error                 { return nil }

@@ -128,6 +128,11 @@ func (m *PatchExternalSourcesMock) GetPaginated(ctx context.Context, path string
 	}
 	return resp, nil
 }
+func (m *PatchExternalSourcesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *PatchExternalSourcesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *PatchExternalSourcesMock) InvalidateToken() error                { return nil }
 func (m *PatchExternalSourcesMock) KeepAliveToken() error                 { return nil }

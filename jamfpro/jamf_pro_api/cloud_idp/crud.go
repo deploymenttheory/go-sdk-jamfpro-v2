@@ -31,10 +31,6 @@ func NewCloudIdp(client client.Client) *CloudIdp {
 func (s *CloudIdp) ListV1(ctx context.Context, query map[string]string) (*ListResponse, *resty.Response, error) {
 	var result ListResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var items []ResourceCloudIdProvider
 		if err := json.Unmarshal(pageData, &items); err != nil {
@@ -44,7 +40,12 @@ func (s *CloudIdp) ListV1(ctx context.Context, query map[string]string) (*ListRe
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, constants.EndpointJamfProCloudIdpV1, query, headers, mergePage)
+	endpoint := constants.EndpointJamfProCloudIdpV1
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -65,11 +66,10 @@ func (s *CloudIdp) GetByIDV1(ctx context.Context, id string) (*ResourceCloudIdPr
 
 	var result ResourceCloudIdProviderDetails
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -111,20 +111,17 @@ func (s *CloudIdp) ExportV1(ctx context.Context, query map[string]string, reques
 		acceptHeader = accept[0]
 	}
 
-	headers := map[string]string{
-		"Accept":       acceptHeader,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	var resp *resty.Response
-	var err error
+	reqBuilder := s.client.NewRequest(ctx).
+		SetHeader("Accept", acceptHeader).
+		SetHeader("Content-Type", constants.ApplicationJSON)
 
 	if request != nil {
-		resp, err = s.client.Post(ctx, endpoint, request, headers, nil)
-	} else {
-		resp, err = s.client.PostWithQuery(ctx, endpoint, query, nil, headers, nil)
+		reqBuilder = reqBuilder.SetBody(request)
+	} else if query != nil {
+		reqBuilder = reqBuilder.SetQueryParams(query)
 	}
 
+	resp, err := reqBuilder.Post(endpoint)
 	if err != nil {
 		return resp, nil, err
 	}
@@ -153,10 +150,10 @@ func (s *CloudIdp) GetHistoryByIDV1(ctx context.Context, id string, query map[st
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get cloud IDP history: %w", err)
 	}
@@ -177,12 +174,11 @@ func (s *CloudIdp) AddHistoryNoteByIDV1(ctx context.Context, id string, request 
 
 	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProCloudIdpV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -205,12 +201,12 @@ func (s *CloudIdp) TestGroupSearchByIDV1(ctx context.Context, id string, request
 
 	var result TestGroupSearchResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -233,12 +229,12 @@ func (s *CloudIdp) TestUserSearchByIDV1(ctx context.Context, id string, request 
 
 	var result TestUserSearchResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -261,12 +257,12 @@ func (s *CloudIdp) TestUserMembershipByIDV1(ctx context.Context, id string, requ
 
 	var result TestUserMembershipResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

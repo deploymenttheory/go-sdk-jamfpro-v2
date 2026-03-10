@@ -28,12 +28,12 @@ func NewSites(client client.Client) *Sites {
 func (s *Sites) ListV1(ctx context.Context) ([]ResourceSite, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProSitesV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result []ResourceSite
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list sites: %w", err)
 	}
@@ -61,10 +61,10 @@ func (s *Sites) GetObjectsByIDV1(ctx context.Context, id string, rsqlQuery map[s
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get site objects: %w", err)
 	}

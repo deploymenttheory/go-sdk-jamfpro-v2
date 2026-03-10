@@ -177,6 +177,11 @@ func (m *NetworkSegmentsMock) GetPaginated(ctx context.Context, path string, rsq
 	}
 	return resp, nil
 }
+func (m *NetworkSegmentsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *NetworkSegmentsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *NetworkSegmentsMock) InvalidateToken() error                { return nil }

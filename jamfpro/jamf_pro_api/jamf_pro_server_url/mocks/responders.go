@@ -143,6 +143,11 @@ func (m *JamfProServerURLMock) GetPaginated(ctx context.Context, path string, _ 
 	}
 	return resp, nil
 }
+func (m *JamfProServerURLMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *JamfProServerURLMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *JamfProServerURLMock) InvalidateToken() error                    { return nil }

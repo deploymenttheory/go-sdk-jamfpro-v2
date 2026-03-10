@@ -45,15 +45,15 @@ func (s *Buildings) ListV1(ctx context.Context, rsqlQuery map[string]string) (*L
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list buildings: %w", err)
 	}
 
-	// Set totalCount to the actual number of results retrieved
 	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
@@ -71,11 +71,11 @@ func (s *Buildings) GetByIDV1(ctx context.Context, id string) (*ResourceBuilding
 
 	var result ResourceBuilding
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -96,12 +96,13 @@ func (s *Buildings) CreateV1(ctx context.Context, request *RequestBuilding) (*Cr
 
 	endpoint := constants.EndpointJamfProBuildingsV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -126,12 +127,13 @@ func (s *Buildings) UpdateByIDV1(ctx context.Context, id string, request *Reques
 
 	var result ResourceBuilding
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -149,11 +151,10 @@ func (s *Buildings) DeleteByIDV1(ctx context.Context, id string) (*resty.Respons
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBuildingsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -172,12 +173,12 @@ func (s *Buildings) DeleteBuildingsByIDV1(ctx context.Context, req *DeleteBuildi
 
 	endpoint := constants.EndpointJamfProBuildingsV1 + "/delete-multiple"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -207,15 +208,15 @@ func (s *Buildings) GetBuildingHistoryV1(ctx context.Context, id string, rsqlQue
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get building history: %w", err)
 	}
 
-	// Set totalCount to the actual number of results retrieved
 	result.TotalCount = len(result.Results)
 
 	return &result, resp, nil
@@ -235,12 +236,12 @@ func (s *Buildings) AddBuildingHistoryNotesV1(ctx context.Context, id string, re
 
 	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProBuildingsV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -261,17 +262,24 @@ func (s *Buildings) ExportV1(ctx context.Context, rsqlQuery map[string]string, r
 		acceptType = constants.ApplicationJSON
 	}
 
-	headers := map[string]string{
-		"Accept":       acceptType,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var body any
 	if req != nil {
 		body = req
 	}
 
-	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, body, headers, nil)
+	reqBuilder := s.client.NewRequest(ctx).
+		SetHeader("Accept", acceptType).
+		SetHeader("Content-Type", constants.ApplicationJSON)
+
+	if rsqlQuery != nil {
+		reqBuilder = reqBuilder.SetQueryParams(rsqlQuery)
+	}
+
+	if body != nil {
+		reqBuilder = reqBuilder.SetBody(body)
+	}
+
+	resp, err := reqBuilder.Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to export buildings: %w", err)
 	}
@@ -297,17 +305,24 @@ func (s *Buildings) ExportHistoryV1(ctx context.Context, id string, rsqlQuery ma
 		acceptType = constants.ApplicationJSON
 	}
 
-	headers := map[string]string{
-		"Accept":       acceptType,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	var body any
 	if req != nil {
 		body = req
 	}
 
-	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, body, headers, nil)
+	reqBuilder := s.client.NewRequest(ctx).
+		SetHeader("Accept", acceptType).
+		SetHeader("Content-Type", constants.ApplicationJSON)
+
+	if rsqlQuery != nil {
+		reqBuilder = reqBuilder.SetQueryParams(rsqlQuery)
+	}
+
+	if body != nil {
+		reqBuilder = reqBuilder.SetBody(body)
+	}
+
+	resp, err := reqBuilder.Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to export building history: %w", err)
 	}

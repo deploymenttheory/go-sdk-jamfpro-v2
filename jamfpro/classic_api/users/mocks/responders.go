@@ -197,6 +197,11 @@ func (m *UsersMock) GetPaginated(ctx context.Context, path string, rsqlQuery map
 	}
 	return resp, nil
 }
+func (m *UsersMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *UsersMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *UsersMock) InvalidateToken() error                { return nil }

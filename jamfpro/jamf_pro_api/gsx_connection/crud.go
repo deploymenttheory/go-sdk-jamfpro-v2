@@ -30,11 +30,11 @@ func (s *GsxConnection) GetV1(ctx context.Context) (*ResourceGSXConnection, *res
 	var result ResourceGSXConnection
 
 	endpoint := constants.EndpointJamfProGSXConnectionV1
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -53,12 +53,13 @@ func (s *GsxConnection) ReplaceV1(ctx context.Context, request *ResourceGSXConne
 	var result ResourceGSXConnection
 
 	endpoint := constants.EndpointJamfProGSXConnectionV1
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationMergePatchJSON,
-	}
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationMergePatchJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -77,12 +78,13 @@ func (s *GsxConnection) UpdateV1(ctx context.Context, request *ResourceGSXConnec
 	var result ResourceGSXConnection
 
 	endpoint := constants.EndpointJamfProGSXConnectionV1
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationMergePatchJSON,
-	}
 
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationMergePatchJSON).
+		SetBody(request).
+		SetResult(&result).
+		Patch(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -107,10 +109,12 @@ func (s *GsxConnection) GetHistoryV1(ctx context.Context, rsqlQuery map[string]s
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
+	req := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON)
+	if rsqlQuery != nil {
+		req = req.SetQueryParams(rsqlQuery)
 	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := req.GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get GSX connection history: %w", err)
 	}
@@ -130,12 +134,12 @@ func (s *GsxConnection) AddHistoryNoteV1(ctx context.Context, request *AddHistor
 
 	endpoint := fmt.Sprintf("%s/history", constants.EndpointJamfProGSXConnectionV1)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -149,11 +153,9 @@ func (s *GsxConnection) AddHistoryNoteV1(ctx context.Context, request *AddHistor
 func (s *GsxConnection) TestV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/test", constants.EndpointJamfProGSXConnectionV1)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}

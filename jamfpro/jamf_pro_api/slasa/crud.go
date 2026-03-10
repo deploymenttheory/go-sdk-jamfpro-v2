@@ -29,12 +29,12 @@ func NewSlasa(client client.Client) *Slasa {
 func (s *Slasa) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProSLASAV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result ResourceSLASAStatus
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get SLASA status: %w", err)
 	}
@@ -48,12 +48,10 @@ func (s *Slasa) GetStatusV1(ctx context.Context) (*ResourceSLASAStatus, *resty.R
 func (s *Slasa) AcceptV1(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProSLASAV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to accept SLASA: %w", err)
 	}

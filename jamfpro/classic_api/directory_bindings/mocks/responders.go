@@ -145,6 +145,11 @@ func (m *DirectoryBindingsMock) GetPaginated(ctx context.Context, path string, r
 	}
 	return resp, nil
 }
+func (m *DirectoryBindingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *DirectoryBindingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *DirectoryBindingsMock) InvalidateToken() error                { return nil }
 func (m *DirectoryBindingsMock) KeepAliveToken() error                 { return nil }

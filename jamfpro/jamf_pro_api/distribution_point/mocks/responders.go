@@ -166,6 +166,11 @@ func (m *DistributionPointMock) GetPaginated(ctx context.Context, path string, q
 	}
 	return resp, nil
 }
+func (m *DistributionPointMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *DistributionPointMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *DistributionPointMock) InvalidateToken() error                { return nil }
 func (m *DistributionPointMock) KeepAliveToken() error                 { return nil }

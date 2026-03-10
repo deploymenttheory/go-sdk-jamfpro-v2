@@ -33,11 +33,11 @@ func (s *Reenrollment) Get(ctx context.Context) (*ResourceReenrollmentSettings, 
 	var result ResourceReenrollmentSettings
 
 	endpoint := constants.EndpointJamfProReenrollmentV1
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -55,12 +55,13 @@ func (s *Reenrollment) Update(ctx context.Context, request *ResourceReenrollment
 	var result ResourceReenrollmentSettings
 
 	endpoint := constants.EndpointJamfProReenrollmentV1
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -84,11 +85,10 @@ func (s *Reenrollment) GetHistory(ctx context.Context, query map[string]string) 
 
 	endpoint := constants.EndpointJamfProReenrollmentHistoryV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -105,11 +105,13 @@ func (s *Reenrollment) AddHistoryNotes(ctx context.Context, request *AddReenroll
 	var result ReenrollmentHistoryObject
 
 	endpoint := constants.EndpointJamfProReenrollmentHistoryV1
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -120,16 +122,21 @@ func (s *Reenrollment) AddHistoryNotes(ctx context.Context, request *AddReenroll
 // URL: POST /api/v1/reenrollment/history/export
 func (s *Reenrollment) ExportHistory(ctx context.Context, query map[string]string, body *ExportReenrollmentHistoryRequest) (*resty.Response, []byte, error) {
 	endpoint := constants.EndpointJamfProReenrollmentHistoryExport
-	headers := map[string]string{
-		"Accept": constants.TextCSVApplicationJSON,
-	}
 
 	var sendBody any
 	if body != nil {
 		sendBody = body
-		headers["Content-Type"] = constants.ApplicationJSON
 	}
-	resp, err := s.client.PostWithQuery(ctx, endpoint, query, sendBody, headers, nil)
+
+	req := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.TextCSVApplicationJSON).
+		SetQueryParams(query)
+
+	if body != nil {
+		req = req.SetHeader("Content-Type", constants.ApplicationJSON).SetBody(sendBody)
+	}
+
+	resp, err := req.Post(endpoint)
 	if err != nil {
 		return nil, nil, err
 	}

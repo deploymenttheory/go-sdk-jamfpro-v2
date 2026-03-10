@@ -30,11 +30,10 @@ func (s *ComputerInventoryCollectionSettings) GetV2(ctx context.Context) (*Resou
 
 	var result ResourceComputerInventoryCollectionSettings
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -53,12 +52,11 @@ func (s *ComputerInventoryCollectionSettings) UpdateV2(ctx context.Context, sett
 
 	endpoint := constants.EndpointJamfProComputerInventoryCollectionSettingsV2
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, settings, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(settings).
+		Patch(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -81,12 +79,12 @@ func (s *ComputerInventoryCollectionSettings) CreateCustomPathV2(ctx context.Con
 
 	var result SubsetPathItem
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -104,11 +102,9 @@ func (s *ComputerInventoryCollectionSettings) DeleteCustomPathByIDV2(ctx context
 
 	endpoint := fmt.Sprintf("%s/custom-path/%s", constants.EndpointJamfProComputerInventoryCollectionSettingsV2, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

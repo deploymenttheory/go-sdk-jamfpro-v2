@@ -29,12 +29,11 @@ func NewJamfProNotifications(client client.Client) *JamfProNotifications {
 func (s *JamfProNotifications) GetForUserAndSiteV1(ctx context.Context) ([]ResourceNotification, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProNotificationsV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	var result []ResourceNotification
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get notifications: %w", err)
 	}
@@ -55,11 +54,9 @@ func (s *JamfProNotifications) DeleteByTypeAndIDV1(ctx context.Context, notifica
 
 	endpoint := fmt.Sprintf("%s/%s/%s", constants.EndpointJamfProNotificationsV1, notificationType, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

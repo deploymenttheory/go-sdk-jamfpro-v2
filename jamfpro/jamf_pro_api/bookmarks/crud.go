@@ -34,11 +34,15 @@ func (s *Bookmarks) ListV1(ctx context.Context, rsqlQuery map[string]string) (*L
 
 	endpoint := constants.EndpointJamfProBookmarksV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
+	reqBuilder := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result)
+
+	if rsqlQuery != nil {
+		reqBuilder = reqBuilder.SetQueryParams(rsqlQuery)
 	}
 
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := reqBuilder.Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -53,14 +57,16 @@ func (s *Bookmarks) GetByIDV1(ctx context.Context, id string) (*ResourceBookmark
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBookmarksV1, id)
+
 	var result ResourceBookmark
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -80,12 +86,13 @@ func (s *Bookmarks) CreateV1(ctx context.Context, request *ResourceBookmark) (*C
 
 	endpoint := constants.EndpointJamfProBookmarksV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -109,12 +116,13 @@ func (s *Bookmarks) UpdateByIDV1(ctx context.Context, id string, request *Resour
 
 	var result ResourceBookmark
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -129,13 +137,12 @@ func (s *Bookmarks) DeleteByIDV1(ctx context.Context, id string) (*resty.Respons
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProBookmarksV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}

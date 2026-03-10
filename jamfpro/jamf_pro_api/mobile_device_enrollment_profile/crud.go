@@ -39,11 +39,9 @@ func (s *MobileDeviceEnrollmentProfile) GetDownloadProfileV1(ctx context.Context
 
 	endpoint := fmt.Sprintf("%s/%s/download-profile", constants.EndpointJamfProMobileDeviceEnrollmentProfileV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationXAppleAspenConfig,
-	}
-
-	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
+	resp, data, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXAppleAspenConfig).
+		GetBytes(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to download profile for ID %s: %w", id, err)
 	}

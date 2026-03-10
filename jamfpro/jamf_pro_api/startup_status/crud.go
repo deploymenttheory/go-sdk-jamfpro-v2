@@ -33,11 +33,10 @@ func (s *StartupStatus) GetV1(ctx context.Context) (*ResourceStartupStatusV1, *r
 
 	endpoint := constants.EndpointJamfProStartupStatus
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

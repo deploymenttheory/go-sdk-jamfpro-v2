@@ -121,6 +121,11 @@ func (m *SelfServicePlusSettingsMock) GetPaginated(ctx context.Context, path str
 	}
 	return resp, nil
 }
+func (m *SelfServicePlusSettingsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *SelfServicePlusSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *SelfServicePlusSettingsMock) InvalidateToken() error                    { return nil }
 func (m *SelfServicePlusSettingsMock) KeepAliveToken() error                      { return nil }

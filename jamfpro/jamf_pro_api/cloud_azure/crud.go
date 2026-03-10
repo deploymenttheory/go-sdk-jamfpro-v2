@@ -30,11 +30,11 @@ func (s *CloudAzure) GetDefaultServerConfigurationV1(ctx context.Context) (*Clou
 
 	var result CloudAzureServer
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -54,11 +54,11 @@ func (s *CloudAzure) GetByIDV1(ctx context.Context, id string) (*ResourceCloudAz
 
 	var result ResourceCloudAzure
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -77,11 +77,11 @@ func (s *CloudAzure) GetByNameV1(ctx context.Context, name string) (*ResourceClo
 
 	var providers []ResourceCloudAzure
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&providers).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &providers)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -107,12 +107,13 @@ func (s *CloudAzure) CreateV1(ctx context.Context, request *ResourceCloudAzure) 
 
 	var result ResponseCloudAzureCreated
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -135,12 +136,13 @@ func (s *CloudAzure) UpdateByIDV1(ctx context.Context, id string, request *Resou
 
 	var result ResourceCloudAzure
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -172,11 +174,10 @@ func (s *CloudAzure) DeleteByIDV1(ctx context.Context, id string) (*resty.Respon
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudAzureV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
@@ -206,11 +207,11 @@ func (s *CloudAzure) GetDefaultMappingsV1(ctx context.Context) (*CloudAzureServe
 
 	var result CloudAzureServerMappings
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

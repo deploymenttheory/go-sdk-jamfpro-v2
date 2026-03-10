@@ -36,11 +36,10 @@ func (s *JamfRemoteAssist) ListSessionsV1(ctx context.Context) ([]SessionHistory
 
 	var result []SessionHistory
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf remote assist sessions (v1): %w", err)
 	}
@@ -60,11 +59,10 @@ func (s *JamfRemoteAssist) GetSessionByIDV1(ctx context.Context, id string) (*Se
 
 	var result SessionHistory
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get jamf remote assist session by ID (v1): %w", err)
 	}
@@ -95,11 +93,10 @@ func (s *JamfRemoteAssist) ListSessionsV2(ctx context.Context, rsqlQuery map[str
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf remote assist sessions (v2): %w", err)
 	}
@@ -119,11 +116,10 @@ func (s *JamfRemoteAssist) GetSessionByIDV2(ctx context.Context, id string) (*Se
 
 	var result SessionHistory
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get jamf remote assist session by ID (v2): %w", err)
 	}
@@ -149,12 +145,12 @@ func (s *JamfRemoteAssist) ExportSessionsV2(ctx context.Context, request *Export
 
 	var result []byte
 
-	headers := map[string]string{
-		"Accept":       acceptType,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", acceptType).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to export jamf remote assist sessions: %w", err)
 	}

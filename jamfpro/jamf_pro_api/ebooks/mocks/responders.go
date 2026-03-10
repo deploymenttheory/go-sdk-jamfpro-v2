@@ -179,6 +179,11 @@ func (m *EbooksMock) GetPaginated(ctx context.Context, path string, rsqlQuery ma
 	}
 	return resp, nil
 }
+func (m *EbooksMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	}, &m.LastRSQLQuery)
+}
 
 func (m *EbooksMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *EbooksMock) InvalidateToken() error                { return nil }

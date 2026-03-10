@@ -2,7 +2,6 @@ package computer_inventory_collection
 
 import (
 	"context"
-	"encoding/xml"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
@@ -36,12 +35,12 @@ func (s *ComputerInventoryCollection) Get(ctx context.Context) (*ResourceCompute
 
 	endpoint := constants.EndpointClassicComputerInventoryCollection
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -59,19 +58,12 @@ func (s *ComputerInventoryCollection) Update(ctx context.Context, settings *Reso
 
 	endpoint := constants.EndpointClassicComputerInventoryCollection
 
-	requestBody := struct {
-		XMLName xml.Name `xml:"computer_inventory_collection"`
-		*ResourceComputerInventoryCollection
-	}{
-		ResourceComputerInventoryCollection: settings,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(settings).
+		Put(endpoint)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, &requestBody, headers, nil)
 	if err != nil {
 		return resp, err
 	}

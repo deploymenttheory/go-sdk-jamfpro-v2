@@ -188,6 +188,11 @@ func (m *RemoveableMacAddressesMock) GetPaginated(ctx context.Context, path stri
 	}
 	return resp, nil
 }
+func (m *RemoveableMacAddressesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *RemoveableMacAddressesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *RemoveableMacAddressesMock) InvalidateToken() error                { return nil }

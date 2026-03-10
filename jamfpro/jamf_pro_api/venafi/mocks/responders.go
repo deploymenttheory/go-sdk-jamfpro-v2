@@ -162,6 +162,11 @@ func (m *VenafiMock) GetPaginated(ctx context.Context, path string, _ map[string
 	}
 	return resp, nil
 }
+func (m *VenafiMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *VenafiMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *VenafiMock) InvalidateToken() error                    { return nil }
 func (m *VenafiMock) KeepAliveToken() error                     { return nil }

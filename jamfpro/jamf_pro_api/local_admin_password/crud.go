@@ -34,11 +34,10 @@ func (s *LocalAdminPassword) GetPendingRotationsV2(ctx context.Context) (*Pendin
 
 	endpoint := fmt.Sprintf("%s/pending-rotations", constants.EndpointJamfProLocalAdminPasswordV2)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -54,11 +53,10 @@ func (s *LocalAdminPassword) GetSettingsV2(ctx context.Context) (*SettingsResour
 
 	endpoint := fmt.Sprintf("%s/settings", constants.EndpointJamfProLocalAdminPasswordV2)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -76,12 +74,11 @@ func (s *LocalAdminPassword) UpdateSettingsV2(ctx context.Context, settings *Set
 
 	endpoint := fmt.Sprintf("%s/settings", constants.EndpointJamfProLocalAdminPasswordV2)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, settings, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(settings).
+		Put(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -105,11 +102,10 @@ func (s *LocalAdminPassword) GetPasswordHistoryByClientManagementIDV2(ctx contex
 
 	var result PasswordHistoryResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -133,11 +129,10 @@ func (s *LocalAdminPassword) GetCurrentPasswordByClientManagementIDV2(ctx contex
 
 	var result CurrentPasswordResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -161,11 +156,10 @@ func (s *LocalAdminPassword) GetHistoryByUsernameV2(ctx context.Context, clientM
 
 	var result AccountHistoryResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -192,11 +186,10 @@ func (s *LocalAdminPassword) GetAuditByUsernameAndGUIDV2(ctx context.Context, cl
 
 	var result PasswordHistoryResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -223,11 +216,10 @@ func (s *LocalAdminPassword) GetHistoryByUsernameAndGUIDV2(ctx context.Context, 
 
 	var result AccountHistoryResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -255,11 +247,10 @@ func (s *LocalAdminPassword) GetPasswordByUsernameAndGUIDV2(ctx context.Context,
 
 	var result CurrentPasswordResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -280,11 +271,10 @@ func (s *LocalAdminPassword) GetFullHistoryByClientManagementIDV2(ctx context.Co
 
 	var result FullHistoryResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -305,11 +295,10 @@ func (s *LocalAdminPassword) GetCapableAccountsByClientManagementIDV2(ctx contex
 
 	var result CapableAccountsResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -333,12 +322,12 @@ func (s *LocalAdminPassword) SetPasswordByClientManagementIDV2(ctx context.Conte
 
 	var result SetPasswordResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, passwordList, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(passwordList).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

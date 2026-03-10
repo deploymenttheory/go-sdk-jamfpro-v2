@@ -224,6 +224,11 @@ func (m *StaticComputerGroupsMock) GetPaginated(ctx context.Context, path string
 	}
 	return resp, nil
 }
+func (m *StaticComputerGroupsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *StaticComputerGroupsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *StaticComputerGroupsMock) InvalidateToken() error                { return nil }

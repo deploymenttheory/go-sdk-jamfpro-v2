@@ -32,19 +32,20 @@ func NewComputerInvitations(client client.Client) *ComputerInvitations {
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/computerinvitations
 func (s *ComputerInvitations) List(ctx context.Context) (*ListResponse, *resty.Response, error) {
-	endpoint := constants.EndpointClassicComputerInvitations
-
 	var out ListResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := constants.EndpointClassicComputerInvitations
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -57,19 +58,20 @@ func (s *ComputerInvitations) GetByID(ctx context.Context, id string) (*Resource
 		return nil, nil, fmt.Errorf("computer invitation ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputerInvitations, id)
-
 	var out ResourceComputerInvitation
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputerInvitations, id)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -82,19 +84,20 @@ func (s *ComputerInvitations) GetByInvitationID(ctx context.Context, invitationI
 		return nil, nil, fmt.Errorf("computer invitation invitation ID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/invitation/%s", constants.EndpointClassicComputerInvitations, invitationID)
-
 	var out ResourceComputerInvitation
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/invitation/%s", constants.EndpointClassicComputerInvitations, invitationID)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetResult(&out).
+		Get(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -107,19 +110,21 @@ func (s *ComputerInvitations) Create(ctx context.Context, req *ResourceComputerI
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
-	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicComputerInvitations)
-
 	var out ResourceComputerInvitation
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicComputerInvitations)
 
-	resp, err := s.client.Post(ctx, endpoint, req, headers, &out)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetHeader("Content-Type", constants.ApplicationXML).
+		SetBody(req).
+		SetResult(&out).
+		Post(endpoint)
+
 	if err != nil {
 		return nil, resp, err
 	}
+
 	return &out, resp, nil
 }
 
@@ -134,14 +139,13 @@ func (s *ComputerInvitations) DeleteByID(ctx context.Context, id string) (*resty
 
 	endpoint := fmt.Sprintf("%s/id/%s", constants.EndpointClassicComputerInvitations, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationXML,
-		"Content-Type": constants.ApplicationXML,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		Delete(endpoint)
 
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
 	if err != nil {
 		return resp, err
 	}
+
 	return resp, nil
 }

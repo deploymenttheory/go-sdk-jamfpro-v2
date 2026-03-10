@@ -36,14 +36,14 @@ func (s *CloudLdapKeystore) ValidateV1(ctx context.Context, request *ValidateKey
 
 	var result ResponseValidateKeystore
 
-	Endpoint := constants.EndpointJamfProCloudLdapKeystoreV1
+	endpoint := constants.EndpointJamfProCloudLdapKeystoreV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, Endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

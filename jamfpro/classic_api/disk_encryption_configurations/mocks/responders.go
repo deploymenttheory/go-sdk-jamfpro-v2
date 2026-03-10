@@ -132,6 +132,11 @@ func (m *DiskEncryptionConfigurationsMock) GetPaginated(ctx context.Context, pat
 	}
 	return resp, nil
 }
+func (m *DiskEncryptionConfigurationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *DiskEncryptionConfigurationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *DiskEncryptionConfigurationsMock) InvalidateToken() error                { return nil }
 func (m *DiskEncryptionConfigurationsMock) KeepAliveToken() error                 { return nil }

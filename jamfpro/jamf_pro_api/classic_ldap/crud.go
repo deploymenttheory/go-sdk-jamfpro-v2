@@ -29,11 +29,11 @@ func (s *ClassicLdap) GetMappingsByIDV1(ctx context.Context, id string) (*Resour
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProClassicLdapV1, id)
 	var result ResourceOnPremLdapMappingsV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

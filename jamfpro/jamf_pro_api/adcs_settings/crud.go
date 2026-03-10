@@ -35,12 +35,13 @@ func (s *AdcsSettings) CreateV1(ctx context.Context, request *ResourceAdcsSettin
 
 	var result ResponseAdcsSettingsCreated
 
-	headers := map[string]string{
-		"Accept":       constants.AcceptAny,
-		"Content-Type": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.AcceptAny).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -60,11 +61,11 @@ func (s *AdcsSettings) GetByIDV1(ctx context.Context, id string) (*ResponseAdcsS
 
 	var result ResponseAdcsSettings
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -85,12 +86,11 @@ func (s *AdcsSettings) UpdateByIDV1(ctx context.Context, id string, request *Res
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdcsSettingsV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationMergePatchJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationMergePatchJSON).
+		SetBody(request).
+		Patch(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -108,11 +108,9 @@ func (s *AdcsSettings) DeleteByIDV1(ctx context.Context, id string) (*resty.Resp
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAdcsSettingsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -130,11 +128,10 @@ func (s *AdcsSettings) ValidateServerCertificateV1(ctx context.Context, request 
 
 	endpoint := fmt.Sprintf("%s/validate-certificate", constants.EndpointJamfProAdcsSettingsV1)
 
-	headers := map[string]string{
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -152,11 +149,10 @@ func (s *AdcsSettings) ValidateClientCertificateV1(ctx context.Context, request 
 
 	endpoint := fmt.Sprintf("%s/validate-client-certificate", constants.EndpointJamfProAdcsSettingsV1)
 
-	headers := map[string]string{
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -176,11 +172,10 @@ func (s *AdcsSettings) GetDependenciesByIDV1(ctx context.Context, id string) (*D
 
 	var result DependenciesResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -202,10 +197,6 @@ func (s *AdcsSettings) GetHistoryByIDV1(ctx context.Context, id string, query ma
 
 	var result HistoryResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var items []HistoryItem
 		if err := json.Unmarshal(pageData, &items); err != nil {
@@ -215,7 +206,11 @@ func (s *AdcsSettings) GetHistoryByIDV1(ctx context.Context, id string, query ma
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
+
 	if err != nil {
 		return nil, resp, err
 	}
@@ -236,12 +231,11 @@ func (s *AdcsSettings) AddHistoryNoteByIDV1(ctx context.Context, id string, requ
 
 	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProAdcsSettingsV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}

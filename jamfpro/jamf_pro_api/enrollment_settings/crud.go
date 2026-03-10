@@ -27,11 +27,11 @@ func NewEnrollmentSettings(client client.Client) *EnrollmentSettings {
 func (s *EnrollmentSettings) GetV4(ctx context.Context) (*ResourceEnrollmentSettingsV4, *resty.Response, error) {
 	var result ResourceEnrollmentSettingsV4
 	endpoint := constants.EndpointJamfProEnrollmentSettingsV4
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

@@ -147,6 +147,11 @@ func (m *OnboardingMock) GetPaginated(ctx context.Context, path string, _ map[st
 	}
 	return resp, nil
 }
+func (m *OnboardingMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *OnboardingMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *OnboardingMock) InvalidateToken() error                    { return nil }
 func (m *OnboardingMock) KeepAliveToken() error                     { return nil }

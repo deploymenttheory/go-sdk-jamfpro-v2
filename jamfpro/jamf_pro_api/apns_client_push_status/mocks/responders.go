@@ -85,6 +85,24 @@ func loadMockResponse(filename string) ([]byte, error) {
 	return os.ReadFile(filepath.Join(wd, "mocks", filename))
 }
 
+
+func (m *APNSClientPushStatusMock) dispatch(method, path string, result any) (*resty.Response, error) {
+	key := method + ":" + path
+	resp, ok := m.responses[key]
+	if !ok {
+		return mockhelpers.NewMockResponse(404, http.Header{}, nil), fmt.Errorf("no mock registered for %s %s", method, path)
+	}
+	if resp.errMsg != "" {
+		return nil, fmt.Errorf("%s", resp.errMsg)
+	}
+	if result != nil && len(resp.rawBody) > 0 {
+		if err := json.Unmarshal(resp.rawBody, result); err != nil {
+			return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), fmt.Errorf("unmarshal: %w", err)
+		}
+	}
+	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, resp.rawBody), nil
+}
+
 // Get implements client.Client.Get.
 func (m *APNSClientPushStatusMock) Get(ctx context.Context, path string, query map[string]string, headers map[string]string, out any) (*resty.Response, error) {
 	m.LastRSQLQuery = query
@@ -134,6 +152,11 @@ func (m *APNSClientPushStatusMock) GetPaginated(ctx context.Context, path string
 	}
 
 	return mockhelpers.NewMockResponse(resp.statusCode, http.Header{}, nil), nil
+}
+func (m *APNSClientPushStatusMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	}, &m.LastRSQLQuery)
 }
 
 // Post implements client.Client.Post.

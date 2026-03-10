@@ -42,12 +42,11 @@ func (s *MobileDeviceApps) ReinstallAppConfigV1(ctx context.Context, request *Re
 
 	endpoint := fmt.Sprintf("%s/reinstall-app-config", constants.EndpointJamfProMobileDeviceAppsV1)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		Post(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to reinstall app config: %w", err)
 	}

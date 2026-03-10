@@ -105,6 +105,11 @@ func (m *SSOFailoverMock) GetPaginated(ctx context.Context, path string, q map[s
 	}
 	return resp, nil
 }
+func (m *SSOFailoverMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *SSOFailoverMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *SSOFailoverMock) InvalidateToken() error                { return nil }
 func (m *SSOFailoverMock) KeepAliveToken() error                 { return nil }

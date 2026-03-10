@@ -175,6 +175,11 @@ func (m *FileShareDistributionPointsMock) GetPaginated(ctx context.Context, path
 	}
 	return resp, nil
 }
+func (m *FileShareDistributionPointsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *FileShareDistributionPointsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *FileShareDistributionPointsMock) InvalidateToken() error                { return nil }

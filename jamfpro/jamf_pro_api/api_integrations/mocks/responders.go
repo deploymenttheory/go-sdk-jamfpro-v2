@@ -133,6 +133,11 @@ func (m *ApiIntegrationsMock) GetPaginated(ctx context.Context, path string, _ m
 	}
 	return resp, nil
 }
+func (m *ApiIntegrationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *ApiIntegrationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ApiIntegrationsMock) InvalidateToken() error                     { return nil }
 func (m *ApiIntegrationsMock) KeepAliveToken() error                      { return nil }

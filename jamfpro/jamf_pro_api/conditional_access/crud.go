@@ -28,11 +28,10 @@ func (s *ConditionalAccess) GetDeviceComplianceFeatureToggleV1(ctx context.Conte
 
 	var result ResourceDeviceComplianceStatus
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -47,11 +46,10 @@ func (s *ConditionalAccess) GetDeviceComplianceInformationComputerV1(ctx context
 
 	var result []ResourceDeviceComplianceInfo
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -66,11 +64,10 @@ func (s *ConditionalAccess) GetDeviceComplianceInformationMobileV1(ctx context.C
 
 	var result []ResourceDeviceComplianceInfo
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

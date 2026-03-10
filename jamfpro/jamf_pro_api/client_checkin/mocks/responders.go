@@ -95,6 +95,11 @@ func (m *ClientCheckinMock) GetPaginated(ctx context.Context, path string, _ map
 	}
 	return resp, nil
 }
+func (m *ClientCheckinMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *ClientCheckinMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *ClientCheckinMock) InvalidateToken() error                    { return nil }
 func (m *ClientCheckinMock) KeepAliveToken() error                     { return nil }

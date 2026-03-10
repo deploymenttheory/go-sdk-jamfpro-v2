@@ -167,6 +167,11 @@ func (m *JamfAccountPreferencesMock) GetPaginated(ctx context.Context, path stri
 	}
 	return resp, nil
 }
+func (m *JamfAccountPreferencesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *JamfAccountPreferencesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *JamfAccountPreferencesMock) InvalidateToken() error                    { return nil }

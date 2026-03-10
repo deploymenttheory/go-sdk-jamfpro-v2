@@ -46,10 +46,10 @@ func (s *Scripts) ListScriptsV1(ctx context.Context, rsqlQuery map[string]string
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list scripts: %w", err)
 	}
@@ -69,11 +69,10 @@ func (s *Scripts) GetScriptByIDV1(ctx context.Context, id string) (*ResourceScri
 
 	var result ResourceScript
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -93,12 +92,12 @@ func (s *Scripts) CreateScriptV1(ctx context.Context, request *RequestScript) (*
 
 	endpoint := constants.EndpointJamfProScriptsV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -123,12 +122,12 @@ func (s *Scripts) UpdateScriptByIDV1(ctx context.Context, id string, request *Re
 
 	var result ResourceScript
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -146,11 +145,9 @@ func (s *Scripts) DeleteScriptByIDV1(ctx context.Context, id string) (*resty.Res
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProScriptsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -168,11 +165,9 @@ func (s *Scripts) DownloadScriptByIDV1(ctx context.Context, id string) ([]byte, 
 
 	endpoint := fmt.Sprintf("%s/%s/download", constants.EndpointJamfProScriptsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.TextPlain,
-	}
-
-	resp, data, err := s.client.GetBytes(ctx, endpoint, nil, headers)
+	resp, data, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.TextPlain).
+		GetBytes(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -193,11 +188,11 @@ func (s *Scripts) GetScriptHistoryV1(ctx context.Context, id string, rsqlQuery m
 
 	var result ScriptHistoryResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -218,12 +213,11 @@ func (s *Scripts) AddScriptHistoryNotesV1(ctx context.Context, id string, req *A
 
 	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProScriptsV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}

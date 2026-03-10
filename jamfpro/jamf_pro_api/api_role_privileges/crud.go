@@ -31,11 +31,11 @@ func (s *ApiRolePrivileges) ListV1(ctx context.Context) (*ListResponse, *resty.R
 
 	endpoint := constants.EndpointJamfProAPIRolePrivilegesV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -56,11 +56,11 @@ func (s *ApiRolePrivileges) SearchPrivilegesByNameV1(ctx context.Context, name s
 	endpoint := fmt.Sprintf("%s/search?name=%s&limit=%d", constants.EndpointJamfProAPIRolePrivilegesV1, url.QueryEscape(name), limit)
 	var result ListResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}

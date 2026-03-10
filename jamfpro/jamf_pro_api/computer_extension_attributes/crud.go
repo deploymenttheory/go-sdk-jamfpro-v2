@@ -45,11 +45,10 @@ func (s *ComputerExtensionAttributes) ListV1(ctx context.Context, rsqlQuery map[
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list computer extension attributes: %w", err)
 	}
@@ -69,11 +68,10 @@ func (s *ComputerExtensionAttributes) GetByIDV1(ctx context.Context, id string) 
 
 	var result ResourceComputerExtensionAttribute
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -93,12 +91,12 @@ func (s *ComputerExtensionAttributes) CreateV1(ctx context.Context, request *Req
 
 	endpoint := constants.EndpointJamfProComputerExtensionAttributesV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -122,12 +120,12 @@ func (s *ComputerExtensionAttributes) UpdateByIDV1(ctx context.Context, id strin
 
 	var result ResourceComputerExtensionAttribute
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -145,11 +143,9 @@ func (s *ComputerExtensionAttributes) DeleteByIDV1(ctx context.Context, id strin
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -167,12 +163,11 @@ func (s *ComputerExtensionAttributes) DeleteComputerExtensionAttributesByIDV1(ct
 
 	endpoint := constants.EndpointJamfProComputerExtensionAttributesV1 + "/delete-multiple"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -202,10 +197,10 @@ func (s *ComputerExtensionAttributes) GetHistoryByIDV1(ctx context.Context, id s
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get computer extension attribute history: %w", err)
 	}
@@ -226,12 +221,11 @@ func (s *ComputerExtensionAttributes) AddHistoryNoteByIDV1(ctx context.Context, 
 
 	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -256,10 +250,10 @@ func (s *ComputerExtensionAttributes) ListTemplatesV1(ctx context.Context, rsqlQ
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list computer extension attribute templates: %w", err)
 	}
@@ -279,11 +273,10 @@ func (s *ComputerExtensionAttributes) GetTemplateByIDV1(ctx context.Context, id 
 
 	var result ResourceComputerExtensionAttributeTemplate
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -306,11 +299,11 @@ func (s *ComputerExtensionAttributes) UploadV1(ctx context.Context, fileReader i
 
 	var result ResourceComputerExtensionAttribute
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.PostMultipart(ctx, endpoint, "file", filename, fileReader, fileSize, nil, headers, nil, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetMultipartFile("file", filename, fileReader, fileSize, nil).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -330,11 +323,10 @@ func (s *ComputerExtensionAttributes) GetDataDependencyByIDV1(ctx context.Contex
 
 	var result DataDependencyResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -352,13 +344,12 @@ func (s *ComputerExtensionAttributes) DownloadByIDV1(ctx context.Context, id str
 
 	endpoint := fmt.Sprintf("%s/%s/download", constants.EndpointJamfProComputerExtensionAttributesV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationXML,
-	}
-
 	var result []byte
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationXML).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

@@ -381,6 +381,11 @@ func (m *EnrollmentMock) GetPaginated(ctx context.Context, path string, rsqlQuer
 	}
 	return resp, nil
 }
+func (m *EnrollmentMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *EnrollmentMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *EnrollmentMock) InvalidateToken() error                { return nil }

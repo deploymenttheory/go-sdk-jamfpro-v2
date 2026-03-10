@@ -55,11 +55,10 @@ func (s *Packages) ListV1(ctx context.Context, rsqlQuery map[string]string) (*Li
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list packages: %w", err)
 	}
@@ -80,11 +79,10 @@ func (s *Packages) GetByIDV1(ctx context.Context, id string) (*ResourcePackage, 
 
 	var result ResourcePackage
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -105,12 +103,12 @@ func (s *Packages) CreateV1(ctx context.Context, request *RequestPackage) (*Crea
 
 	endpoint := constants.EndpointJamfProPackagesV1
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -127,11 +125,6 @@ func (s *Packages) UploadV1(ctx context.Context, id string, filePath string) (*C
 	}
 	if filePath == "" {
 		return nil, nil, fmt.Errorf("file path is required")
-	}
-
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
 	}
 
 	f, err := os.Open(filePath)
@@ -152,7 +145,13 @@ func (s *Packages) UploadV1(ctx context.Context, id string, filePath string) (*C
 	}
 
 	var result CreateResponse
-	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, f, info.Size(), nil, headers, nil, &result)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetMultipartFile("file", fileName, f, info.Size(), nil).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -177,12 +176,12 @@ func (s *Packages) UpdateByIDV1(ctx context.Context, id string, request *Resourc
 
 	var result ResourcePackage
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Put(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -219,12 +218,13 @@ func (s *Packages) AssignManifestToPackageV1(ctx context.Context, id string, man
 	}
 
 	var result CreateResponse
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
 
-	resp, err := s.client.PostMultipart(ctx, endpoint, "file", fileName, f, info.Size(), nil, headers, nil, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetMultipartFile("file", fileName, f, info.Size(), nil).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -242,11 +242,9 @@ func (s *Packages) DeletePackageManifestV1(ctx context.Context, id string) (*res
 
 	endpoint := fmt.Sprintf("%s/%s/manifest", constants.EndpointJamfProPackagesV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -264,11 +262,9 @@ func (s *Packages) DeleteByIDV1(ctx context.Context, id string) (*resty.Response
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPackagesV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -287,12 +283,11 @@ func (s *Packages) DeletePackagesByIDV1(ctx context.Context, req *DeletePackages
 
 	endpoint := constants.EndpointJamfProPackagesV1 + "/delete-multiple"
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -313,11 +308,11 @@ func (s *Packages) GetHistoryV1(ctx context.Context, id string, rsqlQuery map[st
 
 	var result HistoryResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, rsqlQuery, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -339,12 +334,11 @@ func (s *Packages) AddHistoryNotesV1(ctx context.Context, id string, req *AddHis
 
 	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProPackagesV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, req, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -361,15 +355,18 @@ func (s *Packages) ExportV1(ctx context.Context, rsqlQuery map[string]string, bo
 	if acceptType == "" {
 		acceptType = constants.ApplicationJSON
 	}
-	headers := map[string]string{
-		"Accept":       acceptType,
-		"Content-Type": constants.ApplicationJSON,
-	}
+
 	var reqBody any
 	if body != nil {
 		reqBody = body
 	}
-	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, reqBody, headers, nil)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", acceptType).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		SetBody(reqBody).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to export packages: %w", err)
 	}
@@ -388,15 +385,18 @@ func (s *Packages) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map
 	if acceptType == "" {
 		acceptType = constants.ApplicationJSON
 	}
-	headers := map[string]string{
-		"Accept":       acceptType,
-		"Content-Type": constants.ApplicationJSON,
-	}
+
 	var reqBody any
 	if body != nil {
 		reqBody = body
 	}
-	resp, err := s.client.PostWithQuery(ctx, endpoint, rsqlQuery, reqBody, headers, nil)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", acceptType).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		SetBody(reqBody).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to export package history: %w", err)
 	}

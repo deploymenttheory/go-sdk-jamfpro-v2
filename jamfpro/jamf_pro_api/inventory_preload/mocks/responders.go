@@ -212,6 +212,11 @@ func (m *InventoryPreloadMock) GetPaginated(ctx context.Context, path string, rs
 	}
 	return resp, nil
 }
+func (m *InventoryPreloadMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilderWithQueryCapture(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	}, &m.LastRSQLQuery)
+}
 
 func (m *InventoryPreloadMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *InventoryPreloadMock) InvalidateToken() error                    { return nil }

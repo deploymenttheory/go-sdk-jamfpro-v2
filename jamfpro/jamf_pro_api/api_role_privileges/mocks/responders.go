@@ -109,6 +109,11 @@ func (m *APIRolePrivilegesMock) GetPaginated(ctx context.Context, path string, q
 	}
 	return resp, nil
 }
+func (m *APIRolePrivilegesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *APIRolePrivilegesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *APIRolePrivilegesMock) InvalidateToken() error                { return nil }
 func (m *APIRolePrivilegesMock) KeepAliveToken() error                 { return nil }

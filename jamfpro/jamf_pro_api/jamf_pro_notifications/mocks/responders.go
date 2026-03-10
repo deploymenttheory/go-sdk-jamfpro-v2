@@ -217,6 +217,11 @@ func (m *NotificationsMock) GetBytes(ctx context.Context, path string, rsqlQuery
 func (m *NotificationsMock) GetPaginated(ctx context.Context, path string, rsqlQuery map[string]string, headers map[string]string, mergePage func(pageData []byte) error) (*resty.Response, error) {
 	return nil, fmt.Errorf("GetPaginated not implemented in NotificationsMock")
 }
+func (m *NotificationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 // RSQLBuilder implements client.Client.
 func (m *NotificationsMock) RSQLBuilder() client.RSQLFilterBuilder {

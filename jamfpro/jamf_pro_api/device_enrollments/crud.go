@@ -46,10 +46,7 @@ func (s *DeviceEnrollments) ListV1(ctx context.Context, rsqlQuery map[string]str
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetQueryParams(rsqlQuery).GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list device enrollments: %w", err)
 	}
@@ -69,11 +66,7 @@ func (s *DeviceEnrollments) GetByIDV1(ctx context.Context, id string) (*Resource
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetResult(&result).Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device enrollment by ID %s: %w", id, err)
 	}
@@ -124,10 +117,7 @@ func (s *DeviceEnrollments) GetHistoryV1(ctx context.Context, id string, rsqlQue
 		return nil
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-	resp, err := s.client.GetPaginated(ctx, endpoint, rsqlQuery, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetQueryParams(rsqlQuery).GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device enrollment history for ID %s: %w", id, err)
 	}
@@ -147,11 +137,7 @@ func (s *DeviceEnrollments) GetSyncStatesV1(ctx context.Context, id string) ([]R
 
 	endpoint := fmt.Sprintf("%s/%s/syncs", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetResult(&result).Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device enrollment sync states for ID %s: %w", id, err)
 	}
@@ -171,11 +157,7 @@ func (s *DeviceEnrollments) GetLatestSyncStateV1(ctx context.Context, id string)
 
 	endpoint := fmt.Sprintf("%s/%s/syncs/latest", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetResult(&result).Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get latest sync state for device enrollment ID %s: %w", id, err)
 	}
@@ -191,11 +173,7 @@ func (s *DeviceEnrollments) GetAllSyncStatesV1(ctx context.Context) ([]ResourceS
 
 	endpoint := fmt.Sprintf("%s/syncs", constants.EndpointJamfProDeviceEnrollmentsV1)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetResult(&result).Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get all device enrollment sync states: %w", err)
 	}
@@ -209,11 +187,7 @@ func (s *DeviceEnrollments) GetAllSyncStatesV1(ctx context.Context) ([]ResourceS
 func (s *DeviceEnrollments) GetPublicKeyV1(ctx context.Context) ([]byte, *resty.Response, error) {
 	endpoint := fmt.Sprintf("%s/public-key", constants.EndpointJamfProDeviceEnrollmentsV1)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationXPEMFile,
-	}
-
-	resp, result, err := s.client.GetBytes(ctx, endpoint, nil, headers)
+	resp, result, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationXPEMFile).GetBytes(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get device enrollments public key: %w", err)
 	}
@@ -236,12 +210,7 @@ func (s *DeviceEnrollments) CreateWithTokenV1(ctx context.Context, request *Requ
 
 	endpoint := fmt.Sprintf("%s/upload-token", constants.EndpointJamfProDeviceEnrollmentsV1)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetHeader("Content-Type", constants.ApplicationJSON).SetBody(request).SetResult(&result).Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to create device enrollment with token: %w", err)
 	}
@@ -267,12 +236,7 @@ func (s *DeviceEnrollments) UpdateByIDV1(ctx context.Context, id string, request
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetHeader("Content-Type", constants.ApplicationJSON).SetBody(request).SetResult(&result).Put(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to update device enrollment by ID %s: %w", id, err)
 	}
@@ -298,12 +262,7 @@ func (s *DeviceEnrollments) UpdateTokenByIDV1(ctx context.Context, id string, re
 
 	endpoint := fmt.Sprintf("%s/%s/upload-token", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Put(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetHeader("Content-Type", constants.ApplicationJSON).SetBody(request).SetResult(&result).Put(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to update device enrollment token by ID %s: %w", id, err)
 	}
@@ -321,11 +280,7 @@ func (s *DeviceEnrollments) DeleteByIDV1(ctx context.Context, id string) (*resty
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).Delete(endpoint)
 	if err != nil {
 		return resp, fmt.Errorf("failed to delete device enrollment by ID %s: %w", id, err)
 	}
@@ -351,12 +306,7 @@ func (s *DeviceEnrollments) DisownDevicesByIDV1(ctx context.Context, id string, 
 
 	endpoint := fmt.Sprintf("%s/%s/disown", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetHeader("Content-Type", constants.ApplicationJSON).SetBody(request).SetResult(&result).Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to disown devices for device enrollment ID %s: %w", id, err)
 	}
@@ -382,12 +332,7 @@ func (s *DeviceEnrollments) AddHistoryNotesV1(ctx context.Context, id string, re
 
 	endpoint := fmt.Sprintf("%s/%s/history", constants.EndpointJamfProDeviceEnrollmentsV1, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetHeader("Content-Type", constants.ApplicationJSON).SetBody(request).SetResult(&result).Post(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to add history notes for device enrollment ID %s: %w", id, err)
 	}
@@ -407,11 +352,7 @@ func (s *DeviceEnrollments) GetDevicesByIDV1(ctx context.Context, id string) (*D
 
 	var result DevicesResponse
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetResult(&result).Get(endpoint)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get devices for device enrollment ID %s: %w", id, err)
 	}

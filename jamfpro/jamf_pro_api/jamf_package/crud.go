@@ -50,11 +50,11 @@ func (s *JamfPackage) ListV1(ctx context.Context, application string) (ListV1Res
 		"application": strings.ToLower(strings.TrimSpace(application)),
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, constants.EndpointJamfProJamfPackageV1, rsqlQuery, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		SetResult(&result).
+		Get(constants.EndpointJamfProJamfPackageV1)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to list jamf packages: %w", err)
 	}
@@ -76,11 +76,11 @@ func (s *JamfPackage) GetV2(ctx context.Context, application string) (*ResourceJ
 		"application": strings.ToLower(strings.TrimSpace(application)),
 	}
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, constants.EndpointJamfProJamfPackageV2, rsqlQuery, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(rsqlQuery).
+		SetResult(&result).
+		Get(constants.EndpointJamfProJamfPackageV2)
 	if err != nil {
 		return nil, resp, fmt.Errorf("failed to get jamf package: %w", err)
 	}

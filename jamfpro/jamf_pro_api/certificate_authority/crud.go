@@ -33,11 +33,11 @@ func (s *CertificateAuthority) GetV1(ctx context.Context) (*ResourceActiveCertif
 	endpoint := fmt.Sprintf("%s/active", constants.EndpointJamfProCertificateAuthorityV1)
 	var result ResourceActiveCertificateAuthorityV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -51,9 +51,11 @@ func (s *CertificateAuthority) GetV1(ctx context.Context) (*ResourceActiveCertif
 func (s *CertificateAuthority) GetActiveCertificateAuthorityDERV1(ctx context.Context) (*resty.Response, []byte, error) {
 	endpoint := fmt.Sprintf("%s/active/der", constants.EndpointJamfProCertificateAuthorityV1)
 
-	headers := map[string]string{"Accept": constants.ApplicationPKIXCert}
+	resp, body, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationPKIXCert).
+		GetBytes(endpoint)
 
-	return s.client.GetBytes(ctx, endpoint, nil, headers)
+	return resp, body, err
 }
 
 // GetActiveCertificateAuthorityPEMV1 returns the active certificate authority in PEM format.
@@ -62,11 +64,11 @@ func (s *CertificateAuthority) GetActiveCertificateAuthorityDERV1(ctx context.Co
 func (s *CertificateAuthority) GetActiveCertificateAuthorityPEMV1(ctx context.Context) (*resty.Response, []byte, error) {
 	endpoint := fmt.Sprintf("%s/active/pem", constants.EndpointJamfProCertificateAuthorityV1)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationPEMCertificateChain,
-	}
+	resp, body, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationPEMCertificateChain).
+		GetBytes(endpoint)
 
-	return s.client.GetBytes(ctx, endpoint, nil, headers)
+	return resp, body, err
 }
 
 // GetCertificateAuthorityByIDV1 returns X.509 details of the certificate authority with the given ID.
@@ -76,11 +78,11 @@ func (s *CertificateAuthority) GetCertificateAuthorityByIDV1(ctx context.Context
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCertificateAuthorityV1, id)
 	var result ResourceActiveCertificateAuthorityV1
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -94,11 +96,11 @@ func (s *CertificateAuthority) GetCertificateAuthorityByIDV1(ctx context.Context
 func (s *CertificateAuthority) GetCertificateAuthorityByIDDERV1(ctx context.Context, id string) (*resty.Response, []byte, error) {
 	endpoint := fmt.Sprintf("%s/%s/der", constants.EndpointJamfProCertificateAuthorityV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationPKIXCert,
-	}
+	resp, body, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationPKIXCert).
+		GetBytes(endpoint)
 
-	return s.client.GetBytes(ctx, endpoint, nil, headers)
+	return resp, body, err
 }
 
 // GetCertificateAuthorityByIDPEMV1 returns the certificate authority with the given ID in PEM format.
@@ -107,9 +109,9 @@ func (s *CertificateAuthority) GetCertificateAuthorityByIDDERV1(ctx context.Cont
 func (s *CertificateAuthority) GetCertificateAuthorityByIDPEMV1(ctx context.Context, id string) (*resty.Response, []byte, error) {
 	endpoint := fmt.Sprintf("%s/%s/pem", constants.EndpointJamfProCertificateAuthorityV1, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationPEMCertificateChain,
-	}
+	resp, body, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationPEMCertificateChain).
+		GetBytes(endpoint)
 
-	return s.client.GetBytes(ctx, endpoint, nil, headers)
+	return resp, body, err
 }

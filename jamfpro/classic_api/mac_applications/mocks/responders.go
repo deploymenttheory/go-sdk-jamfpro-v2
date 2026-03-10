@@ -189,6 +189,11 @@ func (m *MacApplicationsMock) GetPaginated(ctx context.Context, path string, rsq
 	}
 	return resp, nil
 }
+func (m *MacApplicationsMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *MacApplicationsMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *MacApplicationsMock) InvalidateToken() error                { return nil }

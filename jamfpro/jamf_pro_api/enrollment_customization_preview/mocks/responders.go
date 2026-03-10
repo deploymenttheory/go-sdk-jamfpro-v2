@@ -191,6 +191,11 @@ func (m *EnrollmentCustomizationPreviewMock) GetPaginated(ctx context.Context, p
 	}
 	return resp, nil
 }
+func (m *EnrollmentCustomizationPreviewMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 
 func (m *EnrollmentCustomizationPreviewMock) PostWithQuery(ctx context.Context, path string, _ map[string]string, _ any, _ map[string]string, result any) (*resty.Response, error) {
 	return m.dispatch("POST", path, result)

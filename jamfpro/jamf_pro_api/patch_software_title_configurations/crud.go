@@ -36,12 +36,11 @@ func (s *PatchSoftwareTitleConfigurations) ListV2(ctx context.Context) (*ListRes
 
 	endpoint := constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -61,11 +60,10 @@ func (s *PatchSoftwareTitleConfigurations) GetByIDV2(ctx context.Context, id str
 
 	var result ResourcePatchSoftwareTitleConfiguration
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -114,12 +112,12 @@ func (s *PatchSoftwareTitleConfigurations) CreateV2(ctx context.Context, config 
 
 	endpoint := constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, config, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(config).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -143,12 +141,12 @@ func (s *PatchSoftwareTitleConfigurations) UpdateByIDV2(ctx context.Context, id 
 
 	var result ResourcePatchSoftwareTitleConfiguration
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Patch(ctx, endpoint, config, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(config).
+		SetResult(&result).
+		Patch(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -180,11 +178,9 @@ func (s *PatchSoftwareTitleConfigurations) DeleteByIDV2(ctx context.Context, id 
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -221,11 +217,10 @@ func (s *PatchSoftwareTitleConfigurations) GetDashboardStatusByIDV2(ctx context.
 
 	var result ResourceDashboardStatus
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -242,12 +237,10 @@ func (s *PatchSoftwareTitleConfigurations) AddToDashboardByIDV2(ctx context.Cont
 
 	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		Post(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -264,11 +257,9 @@ func (s *PatchSoftwareTitleConfigurations) RemoveFromDashboardByIDV2(ctx context
 
 	endpoint := fmt.Sprintf("%s/%s/dashboard", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Delete(ctx, endpoint, nil, headers, nil)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Delete(endpoint)
 	if err != nil {
 		return resp, err
 	}
@@ -291,11 +282,6 @@ func (s *PatchSoftwareTitleConfigurations) GetDefinitionsByIDV2(ctx context.Cont
 
 	var result DefinitionsResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var page []ResourceDefinition
 		if err := json.Unmarshal(pageData, &page); err != nil {
@@ -305,12 +291,15 @@ func (s *PatchSoftwareTitleConfigurations) GetDefinitionsByIDV2(ctx context.Cont
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	// Get totalCount from response
 	var rawResp struct {
 		TotalCount int `json:"totalCount"`
 	}
@@ -336,11 +325,6 @@ func (s *PatchSoftwareTitleConfigurations) GetDependenciesByIDV2(ctx context.Con
 
 	var result DependenciesResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var page []ResourceDependency
 		if err := json.Unmarshal(pageData, &page); err != nil {
@@ -350,7 +334,11 @@ func (s *PatchSoftwareTitleConfigurations) GetDependenciesByIDV2(ctx context.Con
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -378,11 +366,10 @@ func (s *PatchSoftwareTitleConfigurations) ExportReportByIDV2(ctx context.Contex
 
 	endpoint := fmt.Sprintf("%s/%s/export-report", constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2, id)
 
-	headers := map[string]string{
-		"Accept": constants.TextCSV,
-	}
-
-	resp, body, err := s.client.GetBytes(ctx, endpoint, query, headers)
+	resp, body, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.TextCSV).
+		SetQueryParams(query).
+		GetBytes(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -401,11 +388,10 @@ func (s *PatchSoftwareTitleConfigurations) GetExtensionAttributesByIDV2(ctx cont
 
 	var result []ResourceExtensionAttribute
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -424,11 +410,6 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchReportByIDV2(ctx context.Cont
 
 	var result PatchReportResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var page []ResourcePatchReportItem
 		if err := json.Unmarshal(pageData, &page); err != nil {
@@ -438,7 +419,11 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchReportByIDV2(ctx context.Cont
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -468,11 +453,10 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchSummaryByIDV2(ctx context.Con
 
 	var result ResourcePatchSummary
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -495,11 +479,6 @@ func (s *PatchSoftwareTitleConfigurations) GetHistoryByIDV2(ctx context.Context,
 
 	var result HistoryResponse
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
 	mergePage := func(pageData []byte) error {
 		var page []ResourceHistoryItem
 		if err := json.Unmarshal(pageData, &page); err != nil {
@@ -509,7 +488,11 @@ func (s *PatchSoftwareTitleConfigurations) GetHistoryByIDV2(ctx context.Context,
 		return nil
 	}
 
-	resp, err := s.client.GetPaginated(ctx, endpoint, query, headers, mergePage)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetQueryParams(query).
+		GetPaginated(endpoint, mergePage)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -545,12 +528,12 @@ func (s *PatchSoftwareTitleConfigurations) AddHistoryNoteByIDV2(ctx context.Cont
 
 	var result ResponseAddHistoryNote
 
-	headers := map[string]string{
-		"Accept":       constants.ApplicationJSON,
-		"Content-Type": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Post(ctx, endpoint, request, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Post(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -573,11 +556,10 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchVersionsByIDV2(ctx context.Co
 
 	var result []ResourcePatchVersion
 
-	headers := map[string]string{
-		"Accept": constants.ApplicationJSON,
-	}
-
-	resp, err := s.client.Get(ctx, endpoint, nil, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
 	if err != nil {
 		return nil, resp, err
 	}

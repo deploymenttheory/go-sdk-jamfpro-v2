@@ -116,6 +116,11 @@ func (m *TimeZonesMock) GetPaginated(ctx context.Context, path string, q map[str
 	}
 	return resp, nil
 }
+func (m *TimeZonesMock) NewRequest(ctx context.Context) *client.RequestBuilder {
+	return client.NewMockRequestBuilder(ctx, func(method, path string, result any) (*resty.Response, error) {
+		return m.dispatch(method, path, result)
+	})
+}
 func (m *TimeZonesMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *TimeZonesMock) InvalidateToken() error                    { return nil }
 func (m *TimeZonesMock) KeepAliveToken() error                     { return nil }
