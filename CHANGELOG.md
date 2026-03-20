@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.9.0...v0.10.0) (2026-03-20)
+
+
+### Features
+
+* add PKCS7 signature stripping for configuration profiles ([54b6e73](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/54b6e731cefa26d6f7b50f7ef257e762ef179e16))
+* add PKCS7 signature stripping for configuration profiles ([953c02d](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/953c02dab7bfac454978de8a9b1081ff73b209ae))
+
 ## [0.9.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.8.1...v0.9.0) (2026-03-11)
 
 
