@@ -2,10 +2,12 @@ package mobile_device_configuration_profiles
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/crypto"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/plist"
 	"resty.dev/v3"
 )
@@ -178,6 +180,16 @@ func (s *MobileDeviceConfigurationProfiles) Create(ctx context.Context, req *Req
 		return nil, nil, fmt.Errorf("mobile device configuration profile name is required")
 	}
 
+	if req.General.Payloads != "" {
+		strippedPayloads, err := crypto.StripSignature([]byte(req.General.Payloads))
+		if err != nil && !errors.Is(err, crypto.ErrAlreadyUnsigned) {
+			return nil, nil, fmt.Errorf("failed to strip signature from payloads: %w", err)
+		}
+		if err == nil {
+			req.General.Payloads = string(strippedPayloads)
+		}
+	}
+
 	var out CreateUpdateResponse
 
 	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicMobileDeviceConfigurationProfiles)
@@ -200,9 +212,10 @@ func (s *MobileDeviceConfigurationProfiles) Create(ctx context.Context, req *Req
 //
 // This method automatically:
 // 1. Fetches the existing profile from Jamf Pro
-// 2. Extracts PayloadUUID and PayloadIdentifier from the existing plist
-// 3. Injects them into the new plist to maintain UUID continuity
-// 4. Sends the update request with preserved UUIDs
+// 2. Strips any CMS/PKCS#7 signatures from the new payload
+// 3. Extracts PayloadUUID and PayloadIdentifier from the existing plist
+// 4. Injects them into the new plist to maintain UUID continuity
+// 5. Sends the update request with preserved UUIDs
 //
 // Jamf Pro modifies the top-level PayloadUUID and PayloadIdentifier upon profile creation.
 // If these UUIDs are not preserved during updates, Jamf Pro treats the update as a brand
@@ -223,6 +236,14 @@ func (s *MobileDeviceConfigurationProfiles) UpdateByID(ctx context.Context, id i
 	}
 
 	if req.General.Payloads != "" {
+		strippedPayloads, err := crypto.StripSignature([]byte(req.General.Payloads))
+		if err != nil && !errors.Is(err, crypto.ErrAlreadyUnsigned) {
+			return nil, nil, fmt.Errorf("failed to strip signature from payloads: %w", err)
+		}
+		if err == nil {
+			req.General.Payloads = string(strippedPayloads)
+		}
+
 		existingProfile, _, err := s.GetByID(ctx, id)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to get existing profile for UUID preservation: %w", err)
@@ -259,9 +280,10 @@ func (s *MobileDeviceConfigurationProfiles) UpdateByID(ctx context.Context, id i
 //
 // This method automatically:
 // 1. Fetches the existing profile from Jamf Pro
-// 2. Extracts PayloadUUID and PayloadIdentifier from the existing plist
-// 3. Injects them into the new plist to maintain UUID continuity
-// 4. Sends the update request with preserved UUIDs
+// 2. Strips any CMS/PKCS#7 signatures from the new payload
+// 3. Extracts PayloadUUID and PayloadIdentifier from the existing plist
+// 4. Injects them into the new plist to maintain UUID continuity
+// 5. Sends the update request with preserved UUIDs
 //
 // Jamf Pro modifies the top-level PayloadUUID and PayloadIdentifier upon profile creation.
 // If these UUIDs are not preserved during updates, Jamf Pro treats the update as a brand
@@ -282,6 +304,14 @@ func (s *MobileDeviceConfigurationProfiles) UpdateByName(ctx context.Context, na
 	}
 
 	if req.General.Payloads != "" {
+		strippedPayloads, err := crypto.StripSignature([]byte(req.General.Payloads))
+		if err != nil && !errors.Is(err, crypto.ErrAlreadyUnsigned) {
+			return nil, nil, fmt.Errorf("failed to strip signature from payloads: %w", err)
+		}
+		if err == nil {
+			req.General.Payloads = string(strippedPayloads)
+		}
+
 		existingProfile, _, err := s.GetByName(ctx, name)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to get existing profile for UUID preservation: %w", err)
