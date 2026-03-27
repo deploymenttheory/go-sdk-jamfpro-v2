@@ -37,6 +37,7 @@ type ResourcePackage struct {
 	SHA256               string `json:"sha256,omitempty"`
 	HashType             string `json:"hashType,omitempty"`
 	HashValue            string `json:"hashValue,omitempty"`
+	SHA3512              string `json:"sha3512,omitempty"`
 	Size                 string `json:"size,omitempty"`
 	OSInstallerVersion   string `json:"osInstallerVersion,omitempty"`
 	Manifest             string `json:"manifest,omitempty"`
