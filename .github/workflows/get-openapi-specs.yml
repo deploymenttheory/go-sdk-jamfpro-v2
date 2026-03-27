@@ -1,13 +1,32 @@
 # Fetches Jamf Pro version via SDK (scripts/swagger/GetJamfProVersion), downloads
 # Classic API swagger and Jamf Pro API schema, suffixes filenames with version, opens a PR.
-# Requires repository secrets: INSTANCE_DOMAIN, AUTH_METHOD, and either
-# (CLIENT_ID + CLIENT_SECRET) or (BASIC_AUTH_USERNAME + BASIC_AUTH_PASSWORD).
+#
+# Required repository secrets:
+#   INSTANCE_DOMAIN            — Jamf Pro instance base URL (e.g. https://example.jamfcloud.com)
+#   CLIENT_ID                  — OAuth2 client ID      (used when auth_method == oauth2)
+#   CLIENT_SECRET              — OAuth2 client secret  (used when auth_method == oauth2)
+#   BASIC_AUTH_USERNAME        — Username              (used when auth_method == basic)
+#   BASIC_AUTH_PASSWORD        — Password              (used when auth_method == basic)
+#
+# AUTH_METHOD is intentionally NOT stored as a secret — storing it as one causes
+# GitHub Actions to mask the value ("oauth2" → "***") in all log output, making
+# authentication errors impossible to diagnose. Set it via the workflow_dispatch
+# input below or accept the default.
 name: Maintainence | Get OpenAPI specs
 
 on:
   schedule:
     - cron: '0 6 * * 1'
   workflow_dispatch:
+    inputs:
+      auth_method:
+        description: 'Authentication method (oauth2 or basic)'
+        required: false
+        type: choice
+        options:
+          - oauth2
+          - basic
+        default: oauth2
 
 permissions:
   contents: write
@@ -19,9 +38,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       INSTANCE_DOMAIN: ${{ secrets.INSTANCE_DOMAIN }}
-      AUTH_METHOD: ${{ secrets.AUTH_METHOD }}
+      # AUTH_METHOD must not be a secret — see note above.
+      # For scheduled runs the default is oauth2; workflow_dispatch can override.
+      AUTH_METHOD: ${{ inputs.auth_method || 'oauth2' }}
       CLIENT_ID: ${{ secrets.CLIENT_ID }}
       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
+      BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
@@ -38,13 +61,24 @@ jobs:
           cache-dependency-path: 'go.sum'
           cache: true
 
+      - name: Download Dependencies
+        run: |
+          echo "::group::📦 Downloading Go modules"
+          go mod download
+          go mod verify
+          echo "::endgroup::"
+
       - name: Get Jamf Pro version
         id: version
         run: |
+          echo "::group::🔍 Fetching Jamf Pro version"
+          echo "Auth method: $AUTH_METHOD"
+          echo "Instance: $INSTANCE_DOMAIN"
           VERSION=$(go run ./scripts/swagger/GetJamfProVersion)
           VERSION="${VERSION// /}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Jamf Pro version: $VERSION"
+          echo "::endgroup::"
 
       - name: Ensure base URL
         id: base
