@@ -445,13 +445,13 @@ func (s *Packages) CreateAndUpload(ctx context.Context, filePath string, req *Re
 
 		_, refreshErr := s.cloudDistributionPoint.RefreshInventoryV1(ctx, createReq.FileName)
 		if refreshErr != nil {
-			return nil, resp, fmt.Errorf("refresh cloud distribution point inventory: %w", refreshErr)
+			return created, resp, fmt.Errorf("refresh cloud distribution point inventory: %w", refreshErr)
 		}
 		uploaded, resp, err = s.GetByIDV1(ctx, packageID)
 		if err != nil {
-			return nil, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
+			return created, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
 		}
-		if uploaded.HashType == "SHA3_512" && uploaded.HashValue != "" {
+		if uploaded.SHA3512 != "" {
 			break
 		}
 		if i < maxAttempts {
@@ -459,11 +459,11 @@ func (s *Packages) CreateAndUpload(ctx context.Context, filePath string, req *Re
 		}
 	}
 
-	if uploaded.HashType != "SHA3_512" || uploaded.HashValue == "" {
-		return nil, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
+	if uploaded.SHA3512 == "" {
+		return created, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
 	}
-	if uploaded.HashValue != initialHash {
-		return nil, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.HashValue)
+	if uploaded.SHA3512 != initialHash {
+		return created, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.SHA3512)
 	}
 
 	return created, resp, nil
@@ -513,14 +513,14 @@ func (s *Packages) UpdateAndUpload(ctx context.Context, id string, filePath stri
 
 		_, refreshErr := s.cloudDistributionPoint.RefreshInventoryV1(ctx, updateReq.FileName)
 		if refreshErr != nil {
-			return nil, resp, fmt.Errorf("refresh cloud distribution point inventory: %w", refreshErr)
+			return updated, resp, fmt.Errorf("refresh cloud distribution point inventory: %w", refreshErr)
 		}
 
 		uploaded, resp, err = s.GetByIDV1(ctx, id)
 		if err != nil {
-			return nil, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
+			return updated, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
 		}
-		if uploaded.HashType == "SHA3_512" && uploaded.HashValue != "" {
+		if uploaded.SHA3512 != "" {
 			break
 		}
 		if i < maxAttempts {
@@ -528,11 +528,11 @@ func (s *Packages) UpdateAndUpload(ctx context.Context, id string, filePath stri
 		}
 	}
 
-	if uploaded.HashType != "SHA3_512" || uploaded.HashValue == "" {
-		return nil, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
+	if uploaded.SHA3512 == "" {
+		return updated, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
 	}
-	if uploaded.HashValue != initialHash {
-		return nil, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.HashValue)
+	if uploaded.SHA3512 != initialHash {
+		return updated, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.SHA3512)
 	}
 
 	return updated, resp, nil
