@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.1](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.10.0...v0.10.1) (2026-03-27)
+
+
+### Bug Fixes
+
+* **ci:** remove AUTH_METHOD from secrets to prevent log masking ([1d1a0ec](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/1d1a0ec9468494fa9ac041ab23dd5f52d602d9ad))
+* **ci:** remove AUTH_METHOD from secrets to prevent log masking ([31d643a](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/31d643acea7f6ada6b0fd9319a14be47af39594d))
+
 ## [0.10.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.9.0...v0.10.0) (2026-03-20)
 
 
