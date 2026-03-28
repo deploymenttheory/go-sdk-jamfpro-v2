@@ -383,13 +383,17 @@ func TestUnit_CloudLdap_UpdateMappingsByIDV2_Success(t *testing.T) {
 
 	request := &CloudLdapMappings{
 		UserMappings: CloudLdapUserMappings{
-			UserID:   "uid",
-			Username: "uid",
-			RealName: "cn",
+			ObjectClassLimitation: "ANY_OBJECT_CLASSES",
+			SearchScope:           "ALL_SUBTREES",
+			UserID:                "uid",
+			Username:              "uid",
+			RealName:              "cn",
 		},
 		GroupMappings: CloudLdapGroupMappings{
-			GroupID:   "cn",
-			GroupName: "cn",
+			ObjectClassLimitation: "ANY_OBJECT_CLASSES",
+			SearchScope:           "ALL_SUBTREES",
+			GroupID:               "cn",
+			GroupName:             "cn",
 		},
 		MembershipMappings: CloudLdapMembershipMappings{
 			GroupMembershipMapping: "member",

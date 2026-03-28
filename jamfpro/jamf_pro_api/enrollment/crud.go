@@ -500,6 +500,12 @@ func (s *Enrollment) UpdateV4(ctx context.Context, request *ResourceEnrollment) 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if request.FlushMdmCommandsOnReenroll != "" {
+		if _, ok := validFlushMdmCommandsOnReenroll[request.FlushMdmCommandsOnReenroll]; !ok {
+			return nil, nil, fmt.Errorf("invalid flushMdmCommandsOnReenroll %q: must be one of DELETE_NOTHING, DELETE_ERRORS, DELETE_EVERYTHING_EXCEPT_ACKNOWLEDGED, DELETE_EVERYTHING", request.FlushMdmCommandsOnReenroll)
+		}
+	}
+
 	endpoint := constants.EndpointJamfProEnrollmentV4
 
 	var result ResourceEnrollment

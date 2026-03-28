@@ -1,1 +1,1 @@
-{"id":"1","name":"MDEA One Updated","description":"Updated","dataType":"String","inventoryDisplayType":"General","inputType":"Text Field","popupMenuChoices":[],"ldapAttributeMapping":"","ldapExtensionAttributeAllowed":false}
+{"id":"1","name":"MDEA One Updated","description":"Updated","dataType":"STRING","inventoryDisplayType":"GENERAL","inputType":"TEXT","popupMenuChoices":[],"ldapAttributeMapping":"","ldapExtensionAttributeAllowed":false}

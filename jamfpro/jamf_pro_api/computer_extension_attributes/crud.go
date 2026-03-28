@@ -89,6 +89,18 @@ func (s *ComputerExtensionAttributes) CreateV1(ctx context.Context, request *Req
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if _, ok := validDataTypes[request.DataType]; !ok {
+		return nil, nil, fmt.Errorf("invalid dataType %q: must be one of STRING, INTEGER, DATE_TIME", request.DataType)
+	}
+
+	if _, ok := validInventoryDisplayTypes[request.InventoryDisplayType]; !ok {
+		return nil, nil, fmt.Errorf("invalid inventoryDisplayType %q: must be one of GENERAL, HARDWARE, OPERATING_SYSTEM, USER_AND_LOCATION, PURCHASING, EXTENSION_ATTRIBUTES", request.InventoryDisplayType)
+	}
+
+	if _, ok := validInputTypes[request.InputType]; !ok {
+		return nil, nil, fmt.Errorf("invalid inputType %q: must be one of TEXT, POPUP, SCRIPT, LDAP", request.InputType)
+	}
+
 	var result CreateResponse
 
 	endpoint := constants.EndpointJamfProComputerExtensionAttributesV1
@@ -117,6 +129,18 @@ func (s *ComputerExtensionAttributes) UpdateByIDV1(ctx context.Context, id strin
 
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	if _, ok := validDataTypes[request.DataType]; !ok {
+		return nil, nil, fmt.Errorf("invalid dataType %q: must be one of STRING, INTEGER, DATE_TIME", request.DataType)
+	}
+
+	if _, ok := validInventoryDisplayTypes[request.InventoryDisplayType]; !ok {
+		return nil, nil, fmt.Errorf("invalid inventoryDisplayType %q: must be one of GENERAL, HARDWARE, OPERATING_SYSTEM, USER_AND_LOCATION, PURCHASING, EXTENSION_ATTRIBUTES", request.InventoryDisplayType)
+	}
+
+	if _, ok := validInputTypes[request.InputType]; !ok {
+		return nil, nil, fmt.Errorf("invalid inputType %q: must be one of TEXT, POPUP, SCRIPT, LDAP", request.InputType)
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProComputerExtensionAttributesV1, id)

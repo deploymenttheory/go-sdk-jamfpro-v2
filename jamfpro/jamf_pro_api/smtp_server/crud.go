@@ -50,6 +50,16 @@ func (s *SmtpServer) UpdateV2(ctx context.Context, request *ResourceSMTPServer) 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if _, ok := validAuthenticationTypes[request.AuthenticationType]; !ok {
+		return nil, nil, fmt.Errorf("invalid authenticationType %q: must be one of NONE, BASIC, GRAPH_API, GOOGLE_MAIL", request.AuthenticationType)
+	}
+
+	if request.ConnectionSettings != nil {
+		if _, ok := validEncryptionTypes[request.ConnectionSettings.EncryptionType]; !ok {
+			return nil, nil, fmt.Errorf("invalid encryptionType %q: must be one of NONE, SSL, TLS_1_2, TLS_1_1, TLS_1, TLS_1_3", request.ConnectionSettings.EncryptionType)
+		}
+	}
+
 	var result ResourceSMTPServer
 
 	endpoint := constants.EndpointJamfProSMTPServerV2

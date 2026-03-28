@@ -54,6 +54,34 @@ func (s *SsoSettings) UpdateV3(ctx context.Context, request *ResourceSsoSettings
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if _, ok := validConfigurationTypes[request.ConfigurationType]; !ok {
+		return nil, nil, fmt.Errorf("invalid configurationType %q: must be one of SAML, OIDC, OIDC_WITH_SAML", request.ConfigurationType)
+	}
+
+	if request.OidcSettings != nil {
+		if _, ok := validUserMappings[request.OidcSettings.UserMapping]; !ok {
+			return nil, nil, fmt.Errorf("invalid userMapping %q: must be one of USERNAME, EMAIL", request.OidcSettings.UserMapping)
+		}
+	}
+
+	if request.SamlSettings != nil {
+		if request.SamlSettings.MetadataSource != "" {
+			if _, ok := validMetadataSources[request.SamlSettings.MetadataSource]; !ok {
+				return nil, nil, fmt.Errorf("invalid metadataSource %q: must be one of URL, FILE, UNKNOWN", request.SamlSettings.MetadataSource)
+			}
+		}
+		if request.SamlSettings.IdpProviderType != "" {
+			if _, ok := validIdpProviderTypes[request.SamlSettings.IdpProviderType]; !ok {
+				return nil, nil, fmt.Errorf("invalid idpProviderType %q: must be one of ADFS, OKTA, GOOGLE, SHIBBOLETH, ONELOGIN, PING, CENTRIFY, AZURE, OTHER", request.SamlSettings.IdpProviderType)
+			}
+		}
+		if request.SamlSettings.UserMapping != "" {
+			if _, ok := validUserMappings[request.SamlSettings.UserMapping]; !ok {
+				return nil, nil, fmt.Errorf("invalid userMapping %q: must be one of USERNAME, EMAIL", request.SamlSettings.UserMapping)
+			}
+		}
+	}
+
 	var result ResourceSsoSettings
 
 	endpoint := constants.EndpointJamfProSsoV3

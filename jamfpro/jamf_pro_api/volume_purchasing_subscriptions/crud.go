@@ -77,6 +77,12 @@ func (s *VolumePurchasingSubscriptions) CreateV1(ctx context.Context, request *R
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	for _, trigger := range request.Triggers {
+		if _, ok := validSubscriptionTriggers[trigger]; !ok {
+			return nil, nil, fmt.Errorf("invalid trigger %q: must be one of NO_MORE_LICENSES, REMOVED_FROM_APP_STORE", trigger)
+		}
+	}
+
 	var result CreateResponse
 
 	endpoint := constants.EndpointJamfProVolumePurchasingSubscriptionsV1
@@ -104,6 +110,12 @@ func (s *VolumePurchasingSubscriptions) UpdateByIDV1(ctx context.Context, id str
 
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	for _, trigger := range request.Triggers {
+		if _, ok := validSubscriptionTriggers[trigger]; !ok {
+			return nil, nil, fmt.Errorf("invalid trigger %q: must be one of NO_MORE_LICENSES, REMOVED_FROM_APP_STORE", trigger)
+		}
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProVolumePurchasingSubscriptionsV1, id)

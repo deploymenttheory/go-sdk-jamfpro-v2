@@ -58,6 +58,10 @@ func (s *DockItems) CreateV1(ctx context.Context, request *RequestDockItem) (*Cr
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if _, ok := validDockItemTypes[request.Type]; !ok {
+		return nil, nil, fmt.Errorf("invalid type %q: must be one of APP, FILE, FOLDER", request.Type)
+	}
+
 	var result CreateResponse
 
 	endpoint := constants.EndpointJamfProDockItemsV1
@@ -86,6 +90,10 @@ func (s *DockItems) UpdateByIDV1(ctx context.Context, id string, request *Reques
 
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	if _, ok := validDockItemTypes[request.Type]; !ok {
+		return nil, nil, fmt.Errorf("invalid type %q: must be one of APP, FILE, FOLDER", request.Type)
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDockItemsV1, id)

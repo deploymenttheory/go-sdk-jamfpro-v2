@@ -76,6 +76,27 @@ func (s *CloudLdap) CreateV2(ctx context.Context, request *ResourceCloudLdap) (*
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if request.Server != nil {
+		if _, ok := validConnectionTypes[request.Server.ConnectionType]; !ok {
+			return nil, nil, fmt.Errorf("invalid connectionType %q: must be one of LDAPS, START_TLS", request.Server.ConnectionType)
+		}
+	}
+
+	if request.Mappings != nil {
+		if _, ok := validObjectClassLimitations[request.Mappings.UserMappings.ObjectClassLimitation]; !ok {
+			return nil, nil, fmt.Errorf("invalid objectClassLimitation %q: must be one of ANY_OBJECT_CLASSES, ALL_OBJECT_CLASSES", request.Mappings.UserMappings.ObjectClassLimitation)
+		}
+		if _, ok := validSearchScopes[request.Mappings.UserMappings.SearchScope]; !ok {
+			return nil, nil, fmt.Errorf("invalid searchScope %q: must be one of ALL_SUBTREES, FIRST_LEVEL_ONLY", request.Mappings.UserMappings.SearchScope)
+		}
+		if _, ok := validObjectClassLimitations[request.Mappings.GroupMappings.ObjectClassLimitation]; !ok {
+			return nil, nil, fmt.Errorf("invalid objectClassLimitation %q: must be one of ANY_OBJECT_CLASSES, ALL_OBJECT_CLASSES", request.Mappings.GroupMappings.ObjectClassLimitation)
+		}
+		if _, ok := validSearchScopes[request.Mappings.GroupMappings.SearchScope]; !ok {
+			return nil, nil, fmt.Errorf("invalid searchScope %q: must be one of ALL_SUBTREES, FIRST_LEVEL_ONLY", request.Mappings.GroupMappings.SearchScope)
+		}
+	}
+
 	endpoint := constants.EndpointJamfProCloudLdapV2
 
 	var result ResponseCloudLdapCreated
@@ -125,6 +146,27 @@ func (s *CloudLdap) UpdateByIDV2(ctx context.Context, id string, request *Resour
 	}
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	if request.Server != nil {
+		if _, ok := validConnectionTypes[request.Server.ConnectionType]; !ok {
+			return nil, nil, fmt.Errorf("invalid connectionType %q: must be one of LDAPS, START_TLS", request.Server.ConnectionType)
+		}
+	}
+
+	if request.Mappings != nil {
+		if _, ok := validObjectClassLimitations[request.Mappings.UserMappings.ObjectClassLimitation]; !ok {
+			return nil, nil, fmt.Errorf("invalid objectClassLimitation %q: must be one of ANY_OBJECT_CLASSES, ALL_OBJECT_CLASSES", request.Mappings.UserMappings.ObjectClassLimitation)
+		}
+		if _, ok := validSearchScopes[request.Mappings.UserMappings.SearchScope]; !ok {
+			return nil, nil, fmt.Errorf("invalid searchScope %q: must be one of ALL_SUBTREES, FIRST_LEVEL_ONLY", request.Mappings.UserMappings.SearchScope)
+		}
+		if _, ok := validObjectClassLimitations[request.Mappings.GroupMappings.ObjectClassLimitation]; !ok {
+			return nil, nil, fmt.Errorf("invalid objectClassLimitation %q: must be one of ANY_OBJECT_CLASSES, ALL_OBJECT_CLASSES", request.Mappings.GroupMappings.ObjectClassLimitation)
+		}
+		if _, ok := validSearchScopes[request.Mappings.GroupMappings.SearchScope]; !ok {
+			return nil, nil, fmt.Errorf("invalid searchScope %q: must be one of ALL_SUBTREES, FIRST_LEVEL_ONLY", request.Mappings.GroupMappings.SearchScope)
+		}
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudLdapV2, id)
@@ -265,6 +307,19 @@ func (s *CloudLdap) UpdateMappingsByIDV2(ctx context.Context, id string, request
 	}
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	if _, ok := validObjectClassLimitations[request.UserMappings.ObjectClassLimitation]; !ok {
+		return nil, nil, fmt.Errorf("invalid objectClassLimitation %q: must be one of ANY_OBJECT_CLASSES, ALL_OBJECT_CLASSES", request.UserMappings.ObjectClassLimitation)
+	}
+	if _, ok := validSearchScopes[request.UserMappings.SearchScope]; !ok {
+		return nil, nil, fmt.Errorf("invalid searchScope %q: must be one of ALL_SUBTREES, FIRST_LEVEL_ONLY", request.UserMappings.SearchScope)
+	}
+	if _, ok := validObjectClassLimitations[request.GroupMappings.ObjectClassLimitation]; !ok {
+		return nil, nil, fmt.Errorf("invalid objectClassLimitation %q: must be one of ANY_OBJECT_CLASSES, ALL_OBJECT_CLASSES", request.GroupMappings.ObjectClassLimitation)
+	}
+	if _, ok := validSearchScopes[request.GroupMappings.SearchScope]; !ok {
+		return nil, nil, fmt.Errorf("invalid searchScope %q: must be one of ALL_SUBTREES, FIRST_LEVEL_ONLY", request.GroupMappings.SearchScope)
 	}
 
 	endpoint := fmt.Sprintf("%s/%s/mappings", constants.EndpointJamfProCloudLdapV2, id)

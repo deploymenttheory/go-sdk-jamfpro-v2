@@ -43,7 +43,7 @@ func TestUnit_MobileDeviceExtensionAttributes_GetByID_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "1", result.ID)
 	assert.Equal(t, "MDEA One", result.Name)
-	assert.Equal(t, "String", result.DataType)
+	assert.Equal(t, "STRING", result.DataType)
 }
 
 func TestUnit_MobileDeviceExtensionAttributes_GetByID_EmptyID(t *testing.T) {
@@ -72,9 +72,9 @@ func TestUnit_MobileDeviceExtensionAttributes_Create_Success(t *testing.T) {
 
 	req := &RequestMobileDeviceExtensionAttribute{
 		Name:                 "New MDEA",
-		DataType:             "String",
-		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		DataType:             "STRING",
+		InventoryDisplayType: "GENERAL",
+		InputType:            "TEXT",
 	}
 	result, resp, err := svc.CreateV1(context.Background(), req)
 	require.NoError(t, err)
@@ -102,9 +102,9 @@ func TestUnit_MobileDeviceExtensionAttributes_UpdateByID_Success(t *testing.T) {
 	req := &RequestMobileDeviceExtensionAttribute{
 		Name:                 "MDEA One Updated",
 		Description:          "Updated",
-		DataType:             "String",
-		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		DataType:             "STRING",
+		InventoryDisplayType: "GENERAL",
+		InputType:            "TEXT",
 	}
 	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.NoError(t, err)
@@ -208,9 +208,9 @@ func TestUnit_MobileDeviceExtensionAttributes_CreateV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestMobileDeviceExtensionAttribute{
 		Name:                 "New MDEA",
-		DataType:             "String",
-		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		DataType:             "STRING",
+		InventoryDisplayType: "GENERAL",
+		InputType:            "TEXT",
 	}
 	_, _, err := svc.CreateV1(context.Background(), req)
 	require.Error(t, err)
@@ -220,9 +220,9 @@ func TestUnit_MobileDeviceExtensionAttributes_UpdateByIDV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 	req := &RequestMobileDeviceExtensionAttribute{
 		Name:                 "MDEA One Updated",
-		DataType:             "String",
-		InventoryDisplayType: "General",
-		InputType:            "Text Field",
+		DataType:             "STRING",
+		InventoryDisplayType: "GENERAL",
+		InputType:            "TEXT",
 	}
 	_, _, err := svc.UpdateByIDV1(context.Background(), "1", req)
 	require.Error(t, err)

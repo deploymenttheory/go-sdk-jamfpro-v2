@@ -88,6 +88,12 @@ func (s *Scripts) CreateScriptV1(ctx context.Context, request *RequestScript) (*
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if request.Priority != "" {
+		if _, ok := validScriptPriorities[request.Priority]; !ok {
+			return nil, nil, fmt.Errorf("invalid priority %q: must be one of BEFORE, AFTER, AT_REBOOT", request.Priority)
+		}
+	}
+
 	var result CreateResponse
 
 	endpoint := constants.EndpointJamfProScriptsV1
@@ -116,6 +122,12 @@ func (s *Scripts) UpdateScriptByIDV1(ctx context.Context, id string, request *Re
 
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	if request.Priority != "" {
+		if _, ok := validScriptPriorities[request.Priority]; !ok {
+			return nil, nil, fmt.Errorf("invalid priority %q: must be one of BEFORE, AFTER, AT_REBOOT", request.Priority)
+		}
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProScriptsV1, id)
