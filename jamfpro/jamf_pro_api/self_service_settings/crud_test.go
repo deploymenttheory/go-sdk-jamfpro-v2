@@ -24,7 +24,7 @@ func TestUnit_SelfServiceSettings_Get_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode())
-	assert.Equal(t, "USER", result.LoginSettings.UserLoginLevel)
+	assert.Equal(t, "Required", result.LoginSettings.UserLoginLevel)
 	assert.True(t, result.ConfigurationSettings.NotificationsEnabled)
 }
 
@@ -34,7 +34,7 @@ func TestUnit_SelfServiceSettings_Update_Success(t *testing.T) {
 
 	request := &ResourceSelfServiceSettings{
 		InstallSettings: InstallSettings{InstallAutomatically: false, InstallLocation: "/Applications"},
-		LoginSettings:   LoginSettings{UserLoginLevel: "USER", AllowRememberMe: true, UseFido2: false, AuthType: "JAMF"},
+		LoginSettings:   LoginSettings{UserLoginLevel: "Required", AllowRememberMe: true, UseFido2: false, AuthType: "Basic"},
 		ConfigurationSettings: ConfigurationSettings{
 			NotificationsEnabled: true, AlertUserApprovedMdm: false, DefaultLandingPage: "HOME",
 			DefaultHomeCategoryId: 0, BookmarksName: "Bookmarks",
@@ -123,7 +123,7 @@ func TestUnit_SelfServiceSettings_Update_Error(t *testing.T) {
 
 	request := &ResourceSelfServiceSettings{
 		InstallSettings: InstallSettings{InstallAutomatically: false, InstallLocation: "/Applications"},
-		LoginSettings:   LoginSettings{UserLoginLevel: "USER", AllowRememberMe: true, UseFido2: false, AuthType: "JAMF"},
+		LoginSettings:   LoginSettings{UserLoginLevel: "Required", AllowRememberMe: true, UseFido2: false, AuthType: "Basic"},
 		ConfigurationSettings: ConfigurationSettings{
 			NotificationsEnabled: true, AlertUserApprovedMdm: false, DefaultLandingPage: "HOME",
 			DefaultHomeCategoryId: 0, BookmarksName: "Bookmarks",

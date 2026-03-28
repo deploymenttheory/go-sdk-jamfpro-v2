@@ -252,6 +252,10 @@ func (s *InventoryPreload) CreateRecord(ctx context.Context, record *InventoryPr
 		return nil, nil, fmt.Errorf("record is required")
 	}
 
+	if _, ok := validDeviceType[record.DeviceType]; !ok {
+		return nil, nil, fmt.Errorf("invalid deviceType %q: must be one of Computer, Mobile Device, Unknown", record.DeviceType)
+	}
+
 	endpoint := constants.EndpointJamfProInventoryPreloadV2 + "/records"
 
 	var result CreateRecordResponse
@@ -312,6 +316,11 @@ func (s *InventoryPreload) UpdateRecord(ctx context.Context, id string, record *
 	if record == nil {
 		return nil, nil, fmt.Errorf("record is required")
 	}
+
+	if _, ok := validDeviceType[record.DeviceType]; !ok {
+		return nil, nil, fmt.Errorf("invalid deviceType %q: must be one of Computer, Mobile Device, Unknown", record.DeviceType)
+	}
+
 	endpoint := fmt.Sprintf("%s/records/%s", constants.EndpointJamfProInventoryPreloadV2, id)
 
 	var result InventoryPreloadRecord

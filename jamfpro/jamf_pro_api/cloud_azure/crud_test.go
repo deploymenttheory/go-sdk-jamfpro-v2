@@ -101,6 +101,7 @@ func TestUnit_CloudAzure_CreateV1_Success(t *testing.T) {
 		Server: CloudAzureServer{
 			TenantId: "12345678-1234-1234-1234-123456789012",
 			Enabled:  true,
+			Type:     "PUBLIC",
 		},
 	}
 
@@ -138,6 +139,7 @@ func TestUnit_CloudAzure_UpdateByIDV1_Success(t *testing.T) {
 			DisplayName:  "Updated Azure IDP",
 			ProviderName: "AZURE",
 		},
+		Server: CloudAzureServer{Type: "PUBLIC"},
 	}
 
 	result, resp, err := svc.UpdateByIDV1(ctx, "1", request)
@@ -190,6 +192,7 @@ func TestUnit_CloudAzure_UpdateByNameV1_Success(t *testing.T) {
 			DisplayName:  "Updated Azure IDP",
 			ProviderName: "AZURE",
 		},
+		Server: CloudAzureServer{Type: "PUBLIC"},
 	}
 
 	result, resp, err := svc.UpdateByNameV1(ctx, "Test Azure IDP", request)
@@ -335,6 +338,7 @@ func TestUnit_CloudAzure_CreateV1_Error(t *testing.T) {
 			DisplayName:  "Test Azure IDP",
 			ProviderName: "AZURE",
 		},
+		Server: CloudAzureServer{Type: "PUBLIC"},
 	}
 
 	result, resp, err := svc.CreateV1(ctx, request)
@@ -355,6 +359,7 @@ func TestUnit_CloudAzure_UpdateByIDV1_Error(t *testing.T) {
 			DisplayName:  "Updated Azure IDP",
 			ProviderName: "AZURE",
 		},
+		Server: CloudAzureServer{Type: "PUBLIC"},
 	}
 
 	result, resp, err := svc.UpdateByIDV1(ctx, "1", request)

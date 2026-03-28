@@ -103,6 +103,10 @@ func (s *CloudAzure) CreateV1(ctx context.Context, request *ResourceCloudAzure) 
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if _, ok := validAzureServerConfigurationTypes[request.Server.Type]; !ok {
+		return nil, nil, fmt.Errorf("invalid type %q: must be one of PUBLIC, GCC_HIGH", request.Server.Type)
+	}
+
 	endpoint := constants.EndpointJamfProCloudAzureV1
 
 	var result ResponseCloudAzureCreated
@@ -130,6 +134,10 @@ func (s *CloudAzure) UpdateByIDV1(ctx context.Context, id string, request *Resou
 	}
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	if _, ok := validAzureServerConfigurationTypes[request.Server.Type]; !ok {
+		return nil, nil, fmt.Errorf("invalid type %q: must be one of PUBLIC, GCC_HIGH", request.Server.Type)
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProCloudAzureV1, id)

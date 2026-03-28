@@ -19,7 +19,7 @@ func (m *TomcatSettingsMock) RegisterIssueTomcatSslCertificateMock() {
 }
 
 func (m *TomcatSettingsMock) RegisterIssueTomcatSslCertificateErrorMock() {
-	m.RegisterError("POST", "/api/settings/issueTomcatSslCertificate", 500, "error_not_found.json", "")
+	m.RegisterError("POST", "/api/settings/issueTomcatSslCertificate", 500, "error_not_found.json", "Jamf Pro API error (500) [CERTIFICATE_ISSUE_FAILED]: SSL certificate issue failed")
 }
 
 func (m *TomcatSettingsMock) RegisterIssueTomcatSslCertificateNoResponseErrorMock() {

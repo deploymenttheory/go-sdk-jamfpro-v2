@@ -52,6 +52,10 @@ func (s *Reenrollment) Update(ctx context.Context, request *ResourceReenrollment
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if _, ok := validFlushMDMQueue[request.FlushMdmQueue]; !ok {
+		return nil, nil, fmt.Errorf("invalid flushMDMQueue %q: must be one of DELETE_NOTHING, DELETE_ERRORS, DELETE_EVERYTHING_EXCEPT_ACKNOWLEDGED, DELETE_EVERYTHING", request.FlushMdmQueue)
+	}
+
 	var result ResourceReenrollmentSettings
 
 	endpoint := constants.EndpointJamfProReenrollmentV1

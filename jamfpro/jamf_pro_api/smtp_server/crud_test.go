@@ -32,7 +32,7 @@ func TestUnit_SmtpServer_UpdateV2_Success(t *testing.T) {
 	settings := &ResourceSMTPServer{
 		Enabled:            false,
 		AuthenticationType: "NONE",
-		ConnectionSettings: &ResourceSMTPServerConnectionSettings{Host: "smtp.example.com", Port: 587},
+		ConnectionSettings: &ResourceSMTPServerConnectionSettings{Host: "smtp.example.com", Port: 587, EncryptionType: "NONE"},
 		SenderSettings:     &ResourceSMTPServerSenderSettings{EmailAddress: "jamf@example.com"},
 	}
 	result, resp, err := svc.UpdateV2(context.Background(), settings)
@@ -133,7 +133,7 @@ func TestUnit_SmtpServer_UpdateV2_Error(t *testing.T) {
 	settings := &ResourceSMTPServer{
 		Enabled:            false,
 		AuthenticationType: "NONE",
-		ConnectionSettings: &ResourceSMTPServerConnectionSettings{Host: "smtp.example.com", Port: 587},
+		ConnectionSettings: &ResourceSMTPServerConnectionSettings{Host: "smtp.example.com", Port: 587, EncryptionType: "NONE"},
 		SenderSettings:     &ResourceSMTPServerSenderSettings{EmailAddress: "jamf@example.com"},
 	}
 	result, resp, err := svc.UpdateV2(context.Background(), settings)

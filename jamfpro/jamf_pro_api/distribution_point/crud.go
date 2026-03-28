@@ -66,6 +66,16 @@ func (s *DistributionPoint) CreateV1(ctx context.Context, request *RequestDistri
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if _, ok := validFileSharingConnectionTypes[request.FileSharingConnectionType]; !ok {
+		return nil, nil, fmt.Errorf("invalid fileSharingConnectionType %q: must be one of AFP, SMB, NONE", request.FileSharingConnectionType)
+	}
+
+	if request.HTTPSSecurityType != "" {
+		if _, ok := validHTTPSSecurityTypes[request.HTTPSSecurityType]; !ok {
+			return nil, nil, fmt.Errorf("invalid httpsSecurityType %q: must be one of USERNAME_PASSWORD, NONE", request.HTTPSSecurityType)
+		}
+	}
+
 	var result CreateResponse
 
 	endpoint := constants.EndpointJamfProDistributionPointsV1
@@ -140,6 +150,16 @@ func (s *DistributionPoint) UpdateByIDV1(ctx context.Context, id string, request
 
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	if _, ok := validFileSharingConnectionTypes[request.FileSharingConnectionType]; !ok {
+		return nil, nil, fmt.Errorf("invalid fileSharingConnectionType %q: must be one of AFP, SMB, NONE", request.FileSharingConnectionType)
+	}
+
+	if request.HTTPSSecurityType != "" {
+		if _, ok := validHTTPSSecurityTypes[request.HTTPSSecurityType]; !ok {
+			return nil, nil, fmt.Errorf("invalid httpsSecurityType %q: must be one of USERNAME_PASSWORD, NONE", request.HTTPSSecurityType)
+		}
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProDistributionPointsV1, id)

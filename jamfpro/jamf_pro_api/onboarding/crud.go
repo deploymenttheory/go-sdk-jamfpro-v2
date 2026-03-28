@@ -51,6 +51,13 @@ func (s *Onboarding) UpdateV1(ctx context.Context, request *ResourceUpdateOnboar
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
+	for _, item := range request.OnboardingItems {
+		if _, ok := validSelfServiceEntityTypes[item.SelfServiceEntityType]; !ok {
+			return nil, nil, fmt.Errorf("invalid selfServiceEntityType %q: must be one of OS_X_POLICY, OS_X_CONFIG_PROFILE, OS_X_MAC_APP, OS_X_APP_INSTALLER, OS_X_EBOOK, OS_X_PATCH_POLICY, UNKNOWN", item.SelfServiceEntityType)
+		}
+	}
+
 	var result ResponseOnboardingSettings
 	endpoint := constants.EndpointJamfProOnboardingV1
 

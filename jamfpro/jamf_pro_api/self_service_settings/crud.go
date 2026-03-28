@@ -52,6 +52,22 @@ func (s *SelfServiceSettings) Update(ctx context.Context, request *ResourceSelfS
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if request.LoginSettings.UserLoginLevel != "" {
+		if _, ok := validUserLoginLevels[request.LoginSettings.UserLoginLevel]; !ok {
+			return nil, nil, fmt.Errorf("invalid userLoginLevel %q: must be one of NotRequired, Anonymous, Required", request.LoginSettings.UserLoginLevel)
+		}
+	}
+	if request.LoginSettings.AuthType != "" {
+		if _, ok := validAuthTypes[request.LoginSettings.AuthType]; !ok {
+			return nil, nil, fmt.Errorf("invalid authType %q: must be one of Basic, Saml", request.LoginSettings.AuthType)
+		}
+	}
+	if request.ConfigurationSettings.DefaultLandingPage != "" {
+		if _, ok := validDefaultLandingPages[request.ConfigurationSettings.DefaultLandingPage]; !ok {
+			return nil, nil, fmt.Errorf("invalid defaultLandingPage %q: must be one of HOME, BROWSE, HISTORY, NOTIFICATIONS", request.ConfigurationSettings.DefaultLandingPage)
+		}
+	}
+
 	var result ResourceSelfServiceSettings
 
 	endpoint := constants.EndpointJamfProSelfServiceSettingsV1

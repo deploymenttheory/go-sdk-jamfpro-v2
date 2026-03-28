@@ -1,0 +1,2443 @@
+[
+  {
+    "package": "accounts",
+    "schema": "Account",
+    "field": "accessLevel",
+    "enumValues": [
+      "FullAccess",
+      "SiteAccess",
+      "GroupBasedAccess"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "Account",
+    "field": "privilegeSet",
+    "enumValues": [
+      "ADMINISTRATOR",
+      "AUDITOR",
+      "ENROLLMENT",
+      "CUSTOM"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "AccountGroup",
+    "field": "accessLevel",
+    "enumValues": [
+      "FullAccess",
+      "SiteAccess",
+      "GroupBasedAccess"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "AccountGroup",
+    "field": "privilegeSet",
+    "enumValues": [
+      "ADMINISTRATOR",
+      "AUDITOR",
+      "ENROLLMENT",
+      "CUSTOM"
+    ]
+  },
+  {
+    "package": "account_preferences",
+    "schema": "AccountPreferencesSearchType",
+    "field": "AccountPreferencesSearchType",
+    "enumValues": [
+      "EXACT_MATCH",
+      "STARTS_WITH",
+      "CONTAINS"
+    ]
+  },
+  {
+    "package": "account_preferences",
+    "schema": "AccountPreferencesUserInterfaceDisplayTheme",
+    "field": "AccountPreferencesUserInterfaceDisplayTheme",
+    "enumValues": [
+      "MATCH_SYSTEM",
+      "LIGHT",
+      "DARK"
+    ]
+  },
+  {
+    "package": "account_preferences",
+    "schema": "AccountPreferencesV5",
+    "field": "language",
+    "enumValues": [
+      "en",
+      "de",
+      "fr",
+      "es",
+      "ja",
+      "zh-hant"
+    ]
+  },
+  {
+    "package": "account_preferences",
+    "schema": "AccountPreferencesV6",
+    "field": "language",
+    "enumValues": [
+      "en",
+      "de",
+      "fr",
+      "es",
+      "ja",
+      "zh-hant"
+    ]
+  },
+  {
+    "package": "computer_prestages",
+    "schema": "AccountSettingsRequest",
+    "field": "userAccountType",
+    "enumValues": [
+      "ADMINISTRATOR",
+      "STANDARD",
+      "SKIP"
+    ]
+  },
+  {
+    "package": "computer_prestages",
+    "schema": "AccountSettingsResponse",
+    "field": "userAccountType",
+    "enumValues": [
+      "ADMINISTRATOR",
+      "STANDARD",
+      "SKIP"
+    ]
+  },
+  {
+    "package": "certificate_authority",
+    "schema": "AdcsDependency",
+    "field": "configProfileType",
+    "enumValues": [
+      "OSX_CONFIGURATION_PROFILE",
+      "IOS_CONFIGURATION_PROFILE"
+    ]
+  },
+  {
+    "package": "api_integrations",
+    "schema": "ApiIntegrationResponse",
+    "field": "appType",
+    "enumValues": [
+      "CLIENT_CREDENTIALS",
+      "NATIVE_APP_OAUTH",
+      "NONE"
+    ]
+  },
+  {
+    "package": "apns_client_push_status",
+    "schema": "ApnsClientPushStatus",
+    "field": "deviceType",
+    "enumValues": [
+      "MOBILE_DEVICE",
+      "MOBILE_DEVICE_USER",
+      "COMPUTER",
+      "COMPUTER_USER",
+      "TV",
+      "WATCH",
+      "VISION_PRO",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "apns_client_push_status",
+    "schema": "ApnsPushEnableRequest",
+    "field": "status",
+    "enumValues": [
+      "QUEUED",
+      "STARTED",
+      "COMPLETED"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "AppAnalyticsSetting",
+    "field": "AppAnalyticsSetting",
+    "enumValues": [
+      "ENABLE_APP_ANALYTICS",
+      "DISABLE_APP_ANALYTICS"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "AuthAccount",
+    "field": "accessLevel",
+    "enumValues": [
+      "FullAccess",
+      "SiteAccess",
+      "GroupBasedAccess"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "AuthAccount",
+    "field": "privilegeSet",
+    "enumValues": [
+      "ADMINISTRATOR",
+      "AUDITOR",
+      "ENROLLMENT",
+      "CUSTOM"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "AuthAccountV1",
+    "field": "accessLevel",
+    "enumValues": [
+      "FullAccess",
+      "SiteAccess",
+      "GroupBasedAccess"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "AuthAccountV1",
+    "field": "privilegeSet",
+    "enumValues": [
+      "ADMINISTRATOR",
+      "AUDITOR",
+      "ENROLLMENT",
+      "CUSTOM"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "AuthenticationType",
+    "field": "AuthenticationType",
+    "enumValues": [
+      "JSS",
+      "LDAP",
+      "SAML",
+      "INVITE",
+      "NATIVE_APP_API_INTEGRATION",
+      "DEVICE_SIGNATURE",
+      "CLOUD_CONNECTOR",
+      "SYSTEM_ACCOUNT",
+      "USER_ENROLLMENT",
+      "CLIENT_CREDENTIALS",
+      "OIDC",
+      "M2M"
+    ]
+  },
+  {
+    "package": "cloud_azure",
+    "schema": "AzureServerConfiguration",
+    "field": "type",
+    "enumValues": [
+      "PUBLIC",
+      "GCC_HIGH"
+    ]
+  },
+  {
+    "package": "cloud_azure",
+    "schema": "AzureServerConfigurationRequest",
+    "field": "type",
+    "enumValues": [
+      "PUBLIC",
+      "GCC_HIGH"
+    ]
+  },
+  {
+    "package": "cloud_distribution_point",
+    "schema": "CloudDistributionPoint",
+    "field": "cdnType",
+    "enumValues": [
+      "NONE",
+      "JAMF_CLOUD",
+      "RACKSPACE_CLOUD_FILES",
+      "AMAZON_S3",
+      "AKAMAI"
+    ]
+  },
+  {
+    "package": "cloud_distribution_point",
+    "schema": "CloudDistributionPointInventoryFileInfo",
+    "field": "type",
+    "enumValues": [
+      "NONE",
+      "PACKAGE",
+      "EBOOK",
+      "MOBILE_DEVICE_APP",
+      "SCRIPT"
+    ]
+  },
+  {
+    "package": "cloud_distribution_point",
+    "schema": "CloudDistributionPointInventoryFileInfo",
+    "field": "status",
+    "enumValues": [
+      "READY",
+      "PENDING",
+      "ERROR"
+    ]
+  },
+  {
+    "package": "cloud_azure",
+    "schema": "CloudIdPCommon",
+    "field": "providerName",
+    "enumValues": [
+      "GOOGLE",
+      "AZURE"
+    ]
+  },
+  {
+    "package": "cloud_azure",
+    "schema": "CloudIdPCommonRequest",
+    "field": "providerName",
+    "enumValues": [
+      "GOOGLE",
+      "AZURE"
+    ]
+  },
+  {
+    "package": "cloud_idp",
+    "schema": "CloudIdPCommonResponse",
+    "field": "providerName",
+    "enumValues": [
+      "GOOGLE",
+      "AZURE"
+    ]
+  },
+  {
+    "package": "cloud_ldap",
+    "schema": "CloudLdapServerRequest",
+    "field": "connectionType",
+    "enumValues": [
+      "LDAPS",
+      "START_TLS"
+    ]
+  },
+  {
+    "package": "cloud_ldap",
+    "schema": "CloudLdapServerResponse",
+    "field": "connectionType",
+    "enumValues": [
+      "LDAPS",
+      "START_TLS"
+    ]
+  },
+  {
+    "package": "cloud_ldap",
+    "schema": "CloudLdapServerUpdate",
+    "field": "connectionType",
+    "enumValues": [
+      "LDAPS",
+      "START_TLS"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerCertificate",
+    "field": "lifecycleStatus",
+    "enumValues": [
+      "ACTIVE",
+      "INACTIVE"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerCertificate",
+    "field": "certificateStatus",
+    "enumValues": [
+      "EXPIRING",
+      "EXPIRED",
+      "REVOKED",
+      "PENDING_REVOKE",
+      "ISSUED"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerContentCaching",
+    "field": "registrationStatus",
+    "enumValues": [
+      "CONTENT_CACHING_FAILED",
+      "CONTENT_CACHING_PENDING",
+      "CONTENT_CACHING_SUCCEEDED"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerContentCaching",
+    "field": "tetheratorStatus",
+    "enumValues": [
+      "CONTENT_CACHING_UNKNOWN",
+      "CONTENT_CACHING_DISABLED",
+      "CONTENT_CACHING_ENABLED"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerDiskEncryption",
+    "field": "individualRecoveryKeyValidityStatus",
+    "enumValues": [
+      "VALID",
+      "INVALID",
+      "UNKNOWN",
+      "NOT_APPLICABLE"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerExtensionAttribute",
+    "field": "dataType",
+    "enumValues": [
+      "STRING",
+      "INTEGER",
+      "DATE_TIME"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerExtensionAttribute",
+    "field": "inputType",
+    "enumValues": [
+      "TEXT",
+      "POPUP",
+      "SCRIPT",
+      "LDAP"
+    ]
+  },
+  {
+    "package": "computer_extension_attributes",
+    "schema": "ComputerExtensionAttributes",
+    "field": "inventoryDisplayType",
+    "enumValues": [
+      "GENERAL",
+      "HARDWARE",
+      "OPERATING_SYSTEM",
+      "USER_AND_LOCATION",
+      "PURCHASING",
+      "EXTENSION_ATTRIBUTES"
+    ]
+  },
+  {
+    "package": "computer_extension_attributes",
+    "schema": "ComputerExtensionAttributes",
+    "field": "inputType",
+    "enumValues": [
+      "SCRIPT",
+      "TEXT",
+      "POPUP",
+      "DIRECTORY_SERVICE_ATTRIBUTE_MAPPING"
+    ]
+  },
+  {
+    "package": "computer_extension_attributes",
+    "schema": "ComputerExtensionAttributes",
+    "field": "manageExistingData",
+    "enumValues": [
+      "RETAIN",
+      "DELETE"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerGeneralCreate",
+    "field": "platform",
+    "enumValues": [
+      "WINDOWS",
+      "MAC",
+      "NONE"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerHardware",
+    "field": "batteryHealth",
+    "enumValues": [
+      "NON_GENUINE",
+      "NORMAL",
+      "SERVICE_RECOMMENDED",
+      "UNKNOWN",
+      "UNSUPPORTED"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerHardwareCreate",
+    "field": "batteryHealth",
+    "enumValues": [
+      "NON_GENUINE",
+      "NORMAL",
+      "SERVICE_RECOMMENDED",
+      "UNKNOWN",
+      "UNSUPPORTED"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerInventoryFileVault",
+    "field": "individualRecoveryKeyValidityStatus",
+    "enumValues": [
+      "VALID",
+      "INVALID",
+      "UNKNOWN",
+      "NOT_APPLICABLE"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerLocalUserAccount",
+    "field": "userAccountType",
+    "enumValues": [
+      "LOCAL",
+      "MOBILE",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerLocalUserAccount",
+    "field": "azureActiveDirectoryId",
+    "enumValues": [
+      "ACTIVATED",
+      "DEACTIVATED",
+      "UNRESPONSIVE",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerLocalUserAccountCreate",
+    "field": "userAccountType",
+    "enumValues": [
+      "LOCAL",
+      "MOBILE",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerOperatingSystem",
+    "field": "fileVault2Status",
+    "enumValues": [
+      "NOT_APPLICABLE",
+      "NOT_ENCRYPTED",
+      "BOOT_ENCRYPTED",
+      "SOME_ENCRYPTED",
+      "ALL_ENCRYPTED"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerPartition",
+    "field": "partitionType",
+    "enumValues": [
+      "BOOT",
+      "RECOVERY",
+      "OTHER"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerPartitionCreate",
+    "field": "partitionType",
+    "enumValues": [
+      "BOOT",
+      "RECOVERY",
+      "OTHER"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerPartitionFileVault2State",
+    "field": "ComputerPartitionFileVault2State",
+    "enumValues": [
+      "UNKNOWN",
+      "UNENCRYPTED",
+      "INELIGIBLE",
+      "DECRYPTED",
+      "DECRYPTING",
+      "ENCRYPTED",
+      "ENCRYPTING",
+      "RESTART_NEEDED",
+      "OPTIMIZING",
+      "DECRYPTING_PAUSED",
+      "ENCRYPTING_PAUSED"
+    ]
+  },
+  {
+    "package": "computer_prestages",
+    "schema": "ComputerPrestageV3",
+    "field": "recoveryLockPasswordType",
+    "enumValues": [
+      "MANUAL",
+      "RANDOM"
+    ]
+  },
+  {
+    "package": "computer_prestages",
+    "schema": "ComputerPrestageV3",
+    "field": "prestageMinimumOsTargetVersionType",
+    "enumValues": [
+      "NO_ENFORCEMENT",
+      "MINIMUM_OS_LATEST_VERSION",
+      "MINIMUM_OS_LATEST_MAJOR_VERSION",
+      "MINIMUM_OS_LATEST_MINOR_VERSION",
+      "MINIMUM_OS_SPECIFIC_VERSION"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSection",
+    "field": "ComputerSection",
+    "enumValues": [
+      "GENERAL",
+      "DISK_ENCRYPTION",
+      "PURCHASING",
+      "APPLICATIONS",
+      "STORAGE",
+      "USER_AND_LOCATION",
+      "CONFIGURATION_PROFILES",
+      "PRINTERS",
+      "SERVICES",
+      "HARDWARE",
+      "LOCAL_USER_ACCOUNTS",
+      "CERTIFICATES",
+      "ATTACHMENTS",
+      "PLUGINS",
+      "PACKAGE_RECEIPTS",
+      "FONTS",
+      "SECURITY",
+      "OPERATING_SYSTEM",
+      "LICENSED_SOFTWARE",
+      "IBEACONS",
+      "SOFTWARE_UPDATES",
+      "EXTENSION_ATTRIBUTES",
+      "CONTENT_CACHING",
+      "GROUP_MEMBERSHIPS"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSectionV2",
+    "field": "ComputerSectionV2",
+    "enumValues": [
+      "GENERAL",
+      "DISK_ENCRYPTION",
+      "PURCHASING",
+      "APPLICATIONS",
+      "STORAGE",
+      "USER_AND_LOCATION",
+      "CONFIGURATION_PROFILES",
+      "PRINTERS",
+      "SERVICES",
+      "HARDWARE",
+      "LOCAL_USER_ACCOUNTS",
+      "CERTIFICATES",
+      "ATTACHMENTS",
+      "PACKAGE_RECEIPTS",
+      "SECURITY",
+      "OPERATING_SYSTEM",
+      "LICENSED_SOFTWARE",
+      "IBEACONS",
+      "SOFTWARE_UPDATES",
+      "EXTENSION_ATTRIBUTES",
+      "CONTENT_CACHING",
+      "GROUP_MEMBERSHIPS"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSectionV3",
+    "field": "ComputerSectionV3",
+    "enumValues": [
+      "GENERAL",
+      "DISK_ENCRYPTION",
+      "PURCHASING",
+      "APPLICATIONS",
+      "STORAGE",
+      "USER_AND_LOCATION",
+      "CONFIGURATION_PROFILES",
+      "PRINTERS",
+      "SERVICES",
+      "HARDWARE",
+      "LOCAL_USER_ACCOUNTS",
+      "CERTIFICATES",
+      "ATTACHMENTS",
+      "PACKAGE_RECEIPTS",
+      "SECURITY",
+      "OPERATING_SYSTEM",
+      "LICENSED_SOFTWARE",
+      "IBEACONS",
+      "SOFTWARE_UPDATES",
+      "EXTENSION_ATTRIBUTES",
+      "CONTENT_CACHING",
+      "GROUP_MEMBERSHIPS"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurity",
+    "field": "sipStatus",
+    "enumValues": [
+      "NOT_COLLECTED",
+      "NOT_AVAILABLE",
+      "DISABLED",
+      "ENABLED"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurity",
+    "field": "gatekeeperStatus",
+    "enumValues": [
+      "NOT_COLLECTED",
+      "DISABLED",
+      "APP_STORE_AND_IDENTIFIED_DEVELOPERS",
+      "APP_STORE"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurity",
+    "field": "secureBootLevel",
+    "enumValues": [
+      "NO_SECURITY",
+      "MEDIUM_SECURITY",
+      "FULL_SECURITY",
+      "NOT_SUPPORTED",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurity",
+    "field": "externalBootLevel",
+    "enumValues": [
+      "ALLOW_BOOTING_FROM_EXTERNAL_MEDIA",
+      "DISALLOW_BOOTING_FROM_EXTERNAL_MEDIA",
+      "NOT_SUPPORTED",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurity",
+    "field": "bootstrapTokenEscrowedStatus",
+    "enumValues": [
+      "ESCROWED",
+      "NOT_ESCROWED",
+      "NOT_SUPPORTED"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurity",
+    "field": "attestationStatus",
+    "enumValues": [
+      "PENDING",
+      "SUCCESS",
+      "CERTIFICATE_INVALID",
+      "DEVICE_PROPERTIES_MISMATCH",
+      "MDA_UNSUPPORTED_DUE_TO_HARDWARE",
+      "MDA_UNSUPPORTED_DUE_TO_SOFTWARE"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurityCreate",
+    "field": "sipStatus",
+    "enumValues": [
+      "NOT_COLLECTED",
+      "NOT_AVAILABLE",
+      "DISABLED",
+      "ENABLED"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurityCreate",
+    "field": "gatekeeperStatus",
+    "enumValues": [
+      "NOT_COLLECTED",
+      "DISABLED",
+      "APP_STORE_AND_IDENTIFIED_DEVELOPERS",
+      "APP_STORE"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurityCreate",
+    "field": "secureBootLevel",
+    "enumValues": [
+      "NO_SECURITY",
+      "MEDIUM_SECURITY",
+      "FULL_SECURITY",
+      "NOT_SUPPORTED",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "computer_inventory",
+    "schema": "ComputerSecurityCreate",
+    "field": "externalBootLevel",
+    "enumValues": [
+      "ALLOW_BOOTING_FROM_EXTERNAL_MEDIA",
+      "DISALLOW_BOOTING_FROM_EXTERNAL_MEDIA",
+      "NOT_SUPPORTED",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "computer_inventory_collection_settings",
+    "schema": "CreatePath",
+    "field": "scope",
+    "enumValues": [
+      "APP",
+      "FONT",
+      "PLUGIN"
+    ]
+  },
+  {
+    "package": "computer_inventory_collection_settings",
+    "schema": "CreatePathV2",
+    "field": "scope",
+    "enumValues": [
+      "APP"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "CurrentAccount",
+    "field": "accessLevel",
+    "enumValues": [
+      "FullAccess",
+      "SiteAccess",
+      "GroupBasedAccess"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "CurrentAccount",
+    "field": "privilegeSet",
+    "enumValues": [
+      "ADMINISTRATOR",
+      "AUDITOR",
+      "ENROLLMENT",
+      "CUSTOM"
+    ]
+  },
+  {
+    "package": "self_service_settings",
+    "schema": "DashboardObject",
+    "field": "objectType",
+    "enumValues": [
+      "TYPE_IOS_CONFIGURATION_PROFILE",
+      "TYPE_MACOS_CONFIGURATION_PROFILE",
+      "TYPE_USER_GROUP",
+      "TYPE_LICENSED_SOFTWARE",
+      "TYPE_PATCH_SOFTWARE_TITLE_CONFIGURATION",
+      "TYPE_PATCH_POLICY",
+      "TYPE_POLICY",
+      "TYPE_COMPUTER_GROUP",
+      "TYPE_MOBILE_DEVICE_GROUP",
+      "TYPE_DIGICERT_PKI_MANAGER_SETTINGS"
+    ]
+  },
+  {
+    "package": "self_service_settings",
+    "schema": "DashboardSetup",
+    "field": "setupTaskOptions.setupTask",
+    "enumValues": [
+      "TYPE_LDAP_SERVER_SETUP_TASK",
+      "TYPE_PUSH_NOTIFICATION_SETTINGS_SETUP_TASK",
+      "TYPE_SMTP_SERVER_SETUP_TASK",
+      "TYPE_SSL_SETUP_TASK"
+    ]
+  },
+  {
+    "package": "self_service_settings",
+    "schema": "DashboardSetup",
+    "field": "featureOptions.feature",
+    "enumValues": [
+      "TYPE_IOS_CONFIGURATION_PROFILE",
+      "TYPE_MACOS_CONFIGURATION_PROFILE",
+      "TYPE_USER_GROUP",
+      "TYPE_LICENSED_SOFTWARE",
+      "TYPE_PATCH_SOFTWARE_TITLE_CONFIGURATION",
+      "TYPE_PATCH_POLICY",
+      "TYPE_POLICY",
+      "TYPE_COMPUTER_GROUP",
+      "TYPE_MOBILE_DEVICE_GROUP",
+      "TYPE_DIGICERT_PKI_MANAGER_SETTINGS"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "DataRoamingSetting",
+    "field": "DataRoamingSetting",
+    "enumValues": [
+      "ENABLE_DATA_ROAMING",
+      "DISABLE_DATA_ROAMING"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "DayOfWeek",
+    "field": "DayOfWeek",
+    "enumValues": [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+      "SATURDAY",
+      "SUNDAY"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "DeploymentTask",
+    "field": "status",
+    "enumValues": [
+      "COMMAND_QUEUED",
+      "NO_COMMAND",
+      "PENDING_MANIFEST",
+      "COMPLETE",
+      "GAVE_UP",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "DetailsV2",
+    "field": "batteryHealth",
+    "enumValues": [
+      "NON_GENUINE",
+      "NORMAL",
+      "SERVICE_RECOMMENDED",
+      "UNKNOWN",
+      "UNSUPPORTED"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "DeviceComplianceInformation",
+    "field": "complianceState",
+    "enumValues": [
+      "UNKNOWN",
+      "NON_COMPLIANT",
+      "COMPLIANT"
+    ]
+  },
+  {
+    "package": "device_enrollments",
+    "schema": "DeviceEnrollmentDevice",
+    "field": "profileStatus",
+    "enumValues": [
+      "EMPTY",
+      "ASSIGNED",
+      "PUSHED",
+      "REMOVED"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "DiagnosticSubmissionSetting",
+    "field": "DiagnosticSubmissionSetting",
+    "enumValues": [
+      "ENABLE_DIAGNOSTIC_SUBMISSION",
+      "DISABLE_DIAGNOSTIC_SUBMISSION"
+    ]
+  },
+  {
+    "package": "certificate_authority",
+    "schema": "DigicertDependency",
+    "field": "configProfileType",
+    "enumValues": [
+      "OSX_CONFIGURATION_PROFILE",
+      "IOS_CONFIGURATION_PROFILE"
+    ]
+  },
+  {
+    "package": "distribution_point",
+    "schema": "DistributionPoint",
+    "field": "fileSharingConnectionType",
+    "enumValues": [
+      "AFP",
+      "SMB",
+      "NONE"
+    ]
+  },
+  {
+    "package": "distribution_point",
+    "schema": "DistributionPoint",
+    "field": "httpsSecurityType",
+    "enumValues": [
+      "USERNAME_PASSWORD",
+      "NONE"
+    ]
+  },
+  {
+    "package": "dock_items",
+    "schema": "DockItem",
+    "field": "type",
+    "enumValues": [
+      "APP",
+      "FILE",
+      "FOLDER"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "DssDeclaration",
+    "field": "group",
+    "enumValues": [
+      "ACTIVATION",
+      "ASSET",
+      "CONFIGURATION",
+      "MANAGEMENT"
+    ]
+  },
+  {
+    "package": "ebooks",
+    "schema": "Ebook",
+    "field": "kind",
+    "enumValues": [
+      "UNKNOWN",
+      "PDF",
+      "EPUB",
+      "IBOOKS"
+    ]
+  },
+  {
+    "package": "enrollment",
+    "schema": "EnrollmentSettingsV4",
+    "field": "flushMdmCommandsOnReenroll",
+    "enumValues": [
+      "DELETE_NOTHING",
+      "DELETE_ERRORS",
+      "DELETE_EVERYTHING_EXCEPT_ACKNOWLEDGED",
+      "DELETE_EVERYTHING"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "EraseDeviceCommand",
+    "field": "obliterationBehavior",
+    "enumValues": [
+      "Default",
+      "DoNotObliterate",
+      "ObliterateWithWarning",
+      "Always"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "ExtensionAttributeV2",
+    "field": "type",
+    "enumValues": [
+      "STRING",
+      "INTEGER",
+      "DATE"
+    ]
+  },
+  {
+    "package": "computer_extension_attributes",
+    "schema": "ExtensionAttributes",
+    "field": "dataType",
+    "enumValues": [
+      "INTEGER",
+      "STRING",
+      "DATE"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "FileTransferItem",
+    "field": "fileTransferType",
+    "enumValues": [
+      "DOWNLOAD",
+      "UPLOAD"
+    ]
+  },
+  {
+    "package": "computer_groups",
+    "schema": "GroupDtoV1",
+    "field": "groupType",
+    "enumValues": [
+      "MOBILE",
+      "COMPUTER"
+    ]
+  },
+  {
+    "package": "cloud_ldap",
+    "schema": "GroupMappings",
+    "field": "objectClassLimitation",
+    "enumValues": [
+      "ANY_OBJECT_CLASSES",
+      "ALL_OBJECT_CLASSES"
+    ]
+  },
+  {
+    "package": "cloud_ldap",
+    "schema": "GroupMappings",
+    "field": "searchScope",
+    "enumValues": [
+      "ALL_SUBTREES",
+      "FIRST_LEVEL_ONLY"
+    ]
+  },
+  {
+    "package": "computer_groups",
+    "schema": "GroupWithCriteriaDtoV1",
+    "field": "groupType",
+    "enumValues": [
+      "MOBILE",
+      "COMPUTER"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "InstalledApplicationListCommand",
+    "field": "items",
+    "enumValues": [
+      "AdHocCodeSigned",
+      "AppStoreVendable",
+      "BetaApp",
+      "BundleSize",
+      "DeviceBasedVpp",
+      "DistributorIdentifier",
+      "DynamicSize",
+      "ExternalVersionIdentifier",
+      "HasUpdateAvailable",
+      "Identifier",
+      "Installing",
+      "AppClip",
+      "Validated",
+      "Name",
+      "ShortVersion",
+      "Version"
+    ]
+  },
+  {
+    "package": "volume_purchasing_subscriptions",
+    "schema": "InternalRecipient",
+    "field": "frequency",
+    "enumValues": [
+      "DAILY"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "InventoryListMobileDevice",
+    "field": "batteryHealth",
+    "enumValues": [
+      "NON_GENUINE",
+      "NORMAL",
+      "SERVICE_RECOMMENDED",
+      "UNKNOWN",
+      "UNSUPPORTED"
+    ]
+  },
+  {
+    "package": "inventory_preload",
+    "schema": "InventoryPreloadRecord",
+    "field": "deviceType",
+    "enumValues": [
+      "Computer",
+      "Mobile Device",
+      "Unknown"
+    ]
+  },
+  {
+    "package": "inventory_preload",
+    "schema": "InventoryPreloadRecordV2",
+    "field": "deviceType",
+    "enumValues": [
+      "Computer",
+      "Mobile Device",
+      "Unknown"
+    ]
+  },
+  {
+    "package": "local_admin_password",
+    "schema": "LapsAccountManagementHistory",
+    "field": "eventType",
+    "enumValues": [
+      "PENDING",
+      "COMPLETED",
+      "VIEWED",
+      "ERROR",
+      "INVALID"
+    ]
+  },
+  {
+    "package": "local_admin_password",
+    "schema": "LapsAccountManagementHistory",
+    "field": "userSource",
+    "enumValues": [
+      "MDM",
+      "JMF"
+    ]
+  },
+  {
+    "package": "local_admin_password",
+    "schema": "LapsHistory",
+    "field": "rotationStatus",
+    "enumValues": [
+      "PENDING",
+      "COMPLETED",
+      "VIEWED",
+      "ERROR",
+      "INVALID"
+    ]
+  },
+  {
+    "package": "local_admin_password",
+    "schema": "LapsUserV2",
+    "field": "userSource",
+    "enumValues": [
+      "MDM",
+      "JMF"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "LinkedConnectProfile",
+    "field": "autoDeploymentType",
+    "enumValues": [
+      "PATCH_UPDATES",
+      "MINOR_AND_PATCH_UPDATES",
+      "INITIAL_INSTALLATION_ONLY",
+      "NONE"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "MacOsManagedSoftwareUpdate",
+    "field": "updateAction",
+    "enumValues": [
+      "DOWNLOAD_AND_INSTALL",
+      "DOWNLOAD_ONLY"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "MacOsManagedSoftwareUpdate",
+    "field": "priority",
+    "enumValues": [
+      "HIGH",
+      "LOW"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "ManagedSoftwareUpdatePlan",
+    "field": "updateAction",
+    "enumValues": [
+      "DOWNLOAD_ONLY",
+      "DOWNLOAD_INSTALL",
+      "DOWNLOAD_INSTALL_ALLOW_DEFERRAL",
+      "DOWNLOAD_INSTALL_RESTART",
+      "DOWNLOAD_INSTALL_SCHEDULE",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "ManagedSoftwareUpdatePlan",
+    "field": "versionType",
+    "enumValues": [
+      "LATEST_MAJOR",
+      "LATEST_MINOR",
+      "LATEST_ANY",
+      "SPECIFIC_VERSION",
+      "CUSTOM_VERSION",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "ManagedSoftwareUpdatePlanToggleStatus",
+    "field": "state",
+    "enumValues": [
+      "NOT_RUNNING",
+      "RUNNING",
+      "NEVER_RAN"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "ManagedSoftwareUpdatePlanToggleStatus",
+    "field": "exitState",
+    "enumValues": [
+      "UNKNOWN",
+      "EXECUTING",
+      "COMPLETED",
+      "NOOP",
+      "FAILED",
+      "STOPPED"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "ManagedSoftwareUpdateStatus",
+    "field": "device.objectType",
+    "enumValues": [
+      "COMPUTER",
+      "MOBILE_DEVICE",
+      "APPLE_TV"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "ManagedSoftwareUpdateStatus",
+    "field": "status",
+    "enumValues": [
+      "DOWNLOADING",
+      "IDLE",
+      "INSTALLING",
+      "INSTALLED",
+      "ERROR",
+      "DOWNLOAD_FAILED",
+      "DOWNLOAD_REQUIRES_COMPUTER",
+      "DOWNLOAD_INSUFFICIENT_SPACE",
+      "DOWNLOAD_INSUFFICIENT_POWER",
+      "DOWNLOAD_INSUFFICIENT_NETWORK",
+      "INSTALL_INSUFFICIENT_SPACE",
+      "INSTALL_INSUFFICIENT_POWER",
+      "INSTALL_PHONE_CALL_IN_PROGRESS",
+      "INSTALL_FAILED",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "MdmClientType",
+    "field": "MdmClientType",
+    "enumValues": [
+      "MOBILE_DEVICE",
+      "TV",
+      "VISION_PRO",
+      "WATCH",
+      "COMPUTER",
+      "COMPUTER_USER",
+      "MOBILE_DEVICE_USER",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "MdmCommandState",
+    "field": "MdmCommandState",
+    "enumValues": [
+      "PENDING",
+      "ACKNOWLEDGED",
+      "NOT_NOW",
+      "ERROR"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "MdmCommandType",
+    "field": "MdmCommandType",
+    "enumValues": [
+      "APPLY_REDEMPTION_CODE",
+      "CERTIFICATE_LIST",
+      "CLEAR_PASSCODE",
+      "CLEAR_RESTRICTIONS_PASSWORD",
+      "DECLARATIVE_MANAGEMENT",
+      "DELETE_USER",
+      "DEVICE_INFORMATION",
+      "DEVICE_LOCATION",
+      "DEVICE_LOCK",
+      "DISABLE_LOST_MODE",
+      "DISABLE_REMOTE_DESKTOP",
+      "ENABLE_LOST_MODE",
+      "ENABLE_REMOTE_DESKTOP",
+      "ERASE_DEVICE",
+      "INSTALLED_APPLICATION_LIST",
+      "LOG_OUT_USER",
+      "MANAGED_APPLICATION_LIST",
+      "MANAGED_MEDIA_LIST",
+      "REFRESH_CELLULAR_PLANS",
+      "PLAY_LOST_MODE_SOUND",
+      "PROVISIONING_PROFILE_LIST",
+      "RESTART_DEVICE",
+      "REQUEST_MIRRORING",
+      "SECURITY_INFO",
+      "SETTINGS",
+      "SET_AUTO_ADMIN_PASSWORD",
+      "SET_RECOVERY_LOCK",
+      "SHUT_DOWN_DEVICE",
+      "STOP_MIRRORING",
+      "UNLOCK_USER_ACCOUNT",
+      "VALIDATE_APPLICATIONS",
+      "VALIDATE_RECOVERY_LOCK"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "MdmRenewalErrorType",
+    "field": "MdmRenewalErrorType",
+    "enumValues": [
+      "SERVER_ERROR",
+      "CHECK_IN_ERROR",
+      "OTHER"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "MdmRenewalStrategyType",
+    "field": "MdmRenewalStrategyType",
+    "enumValues": [
+      "RETURN_NO_CHECK_IN_INVITATION",
+      "RETURN_CHECK_IN_INVITATION_FROM_MDM_INVITATION_TABLE",
+      "RETURN_CHECK_IN_INVITATION_FROM_ENROLLMENT_USAGE_TABLE",
+      "RETURN_CHECK_IN_INVITATION_FROM_MDM_PROFILE_PROTOTYPE_TABLE",
+      "JSS_URL_OVERRIDE",
+      "PAYLOAD_IDENTIFIER"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceCertificateV2",
+    "field": "certificateStatus",
+    "enumValues": [
+      "EXPIRING",
+      "EXPIRED",
+      "REVOKED",
+      "PENDING_REVOKE",
+      "ISSUED"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceCertificateV2",
+    "field": "lifecycleStatus",
+    "enumValues": [
+      "ACTIVE",
+      "INACTIVE"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceDetailsV2",
+    "field": "type",
+    "enumValues": [
+      "ios",
+      "tvos",
+      "watchos",
+      "visionos",
+      "unknown"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceExtensionAttribute",
+    "field": "type",
+    "enumValues": [
+      "STRING",
+      "INTEGER",
+      "DATE"
+    ]
+  },
+  {
+    "package": "mobile_device_extension_attributes",
+    "schema": "MobileDeviceExtensionAttributes",
+    "field": "inventoryDisplayType",
+    "enumValues": [
+      "GENERAL",
+      "HARDWARE",
+      "USER_AND_LOCATION",
+      "PURCHASING",
+      "EXTENSION_ATTRIBUTES"
+    ]
+  },
+  {
+    "package": "mobile_device_extension_attributes",
+    "schema": "MobileDeviceExtensionAttributes",
+    "field": "inputType",
+    "enumValues": [
+      "TEXT",
+      "POPUP",
+      "DIRECTORY_SERVICE_ATTRIBUTE_MAPPING"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceGeneral",
+    "field": "deviceOwnershipType",
+    "enumValues": [
+      "Institutional",
+      "UserEnrollment",
+      "AccountDrivenUserEnrollment",
+      "AccountDrivenDeviceEnrollment"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceHardware",
+    "field": "batteryHealth",
+    "enumValues": [
+      "NON_GENUINE",
+      "NORMAL",
+      "SERVICE_RECOMMENDED",
+      "UNKNOWN",
+      "UNSUPPORTED"
+    ]
+  },
+  {
+    "package": "mobile_device_prestages",
+    "schema": "MobileDevicePrestageV2",
+    "field": "prestageMinimumOsTargetVersionTypeIos",
+    "enumValues": [
+      "NO_ENFORCEMENT",
+      "MINIMUM_OS_LATEST_VERSION",
+      "MINIMUM_OS_LATEST_MAJOR_VERSION",
+      "MINIMUM_OS_LATEST_MINOR_VERSION",
+      "MINIMUM_OS_SPECIFIC_VERSION"
+    ]
+  },
+  {
+    "package": "mobile_device_prestages",
+    "schema": "MobileDevicePrestageV2",
+    "field": "prestageMinimumOsTargetVersionTypeIpad",
+    "enumValues": [
+      "NO_ENFORCEMENT",
+      "MINIMUM_OS_LATEST_VERSION",
+      "MINIMUM_OS_LATEST_MAJOR_VERSION",
+      "MINIMUM_OS_LATEST_MINOR_VERSION",
+      "MINIMUM_OS_SPECIFIC_VERSION"
+    ]
+  },
+  {
+    "package": "mobile_device_prestages",
+    "schema": "MobileDevicePrestageV3",
+    "field": "prestageMinimumOsTargetVersionTypeIos",
+    "enumValues": [
+      "NO_ENFORCEMENT",
+      "MINIMUM_OS_LATEST_VERSION",
+      "MINIMUM_OS_LATEST_MAJOR_VERSION",
+      "MINIMUM_OS_LATEST_MINOR_VERSION",
+      "MINIMUM_OS_SPECIFIC_VERSION"
+    ]
+  },
+  {
+    "package": "mobile_device_prestages",
+    "schema": "MobileDevicePrestageV3",
+    "field": "prestageMinimumOsTargetVersionTypeIpad",
+    "enumValues": [
+      "NO_ENFORCEMENT",
+      "MINIMUM_OS_LATEST_VERSION",
+      "MINIMUM_OS_LATEST_MAJOR_VERSION",
+      "MINIMUM_OS_LATEST_MINOR_VERSION",
+      "MINIMUM_OS_SPECIFIC_VERSION"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceSection",
+    "field": "MobileDeviceSection",
+    "enumValues": [
+      "GENERAL",
+      "HARDWARE",
+      "USER_AND_LOCATION",
+      "PURCHASING",
+      "SECURITY",
+      "APPLICATIONS",
+      "EBOOKS",
+      "NETWORK",
+      "SERVICE_SUBSCRIPTIONS",
+      "CERTIFICATES",
+      "PROFILES",
+      "USER_PROFILES",
+      "PROVISIONING_PROFILES",
+      "SHARED_USERS",
+      "GROUPS",
+      "EXTENSION_ATTRIBUTES"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceSecurity",
+    "field": "attestationStatus",
+    "enumValues": [
+      "PENDING",
+      "SUCCESS",
+      "CERTIFICATE_INVALID",
+      "DEVICE_PROPERTIES_MISMATCH",
+      "MDA_UNSUPPORTED_DUE_TO_HARDWARE",
+      "MDA_UNSUPPORTED_DUE_TO_SOFTWARE"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceSecurity",
+    "field": "bootstrapTokenEscrowed",
+    "enumValues": [
+      "ESCROWED",
+      "NOT_ESCROWED",
+      "NOT_SUPPORTED"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "MobileDeviceV2",
+    "field": "type",
+    "enumValues": [
+      "ios",
+      "tvos",
+      "watchos",
+      "visionos",
+      "unknown"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "NotificationType",
+    "field": "NotificationType",
+    "enumValues": [
+      "APNS_CERT_REVOKED",
+      "APNS_CONNECTION_FAILURE",
+      "APPLE_SCHOOL_MANAGER_T_C_NOT_SIGNED",
+      "BUILT_IN_CA_EXPIRED",
+      "BUILT_IN_CA_EXPIRING",
+      "BUILT_IN_CA_RENEWAL_FAILED",
+      "BUILT_IN_CA_RENEWAL_SUCCESS",
+      "CLOUD_LDAP_CERT_EXPIRED",
+      "CLOUD_LDAP_CERT_WILL_EXPIRE",
+      "DEP_INSTANCE_EXPIRED",
+      "DEP_INSTANCE_WILL_EXPIRE",
+      "DEVICE_ENROLLMENT_PROGRAM_T_C_NOT_SIGNED",
+      "EXCEEDED_LICENSE_COUNT",
+      "FREQUENT_INVENTORY_COLLECTION_POLICY",
+      "GSX_CERT_EXPIRED",
+      "GSX_CERT_WILL_EXPIRE",
+      "HCL_BIND_ERROR",
+      "HCL_ERROR",
+      "INSECURE_LDAP",
+      "INVALID_REFERENCES_EXT_ATTR",
+      "INVALID_REFERENCES_POLICIES",
+      "INVALID_REFERENCES_SCRIPTS",
+      "JAMF_CONNECT_UPDATE",
+      "JAMF_PROTECT_UPDATE",
+      "JIM_ERROR",
+      "LDAP_CONNECTION_CHECK_THROUGH_JIM_FAILED",
+      "LDAP_CONNECTION_CHECK_THROUGH_JIM_SUCCESSFUL",
+      "MDM_EXTERNAL_SIGNING_CERTIFICATE_EXPIRED",
+      "MDM_EXTERNAL_SIGNING_CERTIFICATE_EXPIRING",
+      "MDM_EXTERNAL_SIGNING_CERTIFICATE_EXPIRING_TODAY",
+      "MII_HEARTBEAT_FAILED_NOTIFICATION",
+      "MII_INVENTORY_UPLOAD_FAILED_NOTIFICATION",
+      "MII_UNATHORIZED_RESPONSE_NOTIFICATION",
+      "PATCH_EXTENTION_ATTRIBUTE",
+      "PATCH_UPDATE",
+      "POLICY_MANAGEMENT_ACCOUNT_PAYLOAD_SECURITY_MULTIPLE",
+      "POLICY_MANAGEMENT_ACCOUNT_PAYLOAD_SECURITY_SINGLE",
+      "PUSH_CERT_EXPIRED",
+      "PUSH_CERT_WILL_EXPIRE",
+      "PUSH_PROXY_CERT_EXPIRED",
+      "SSO_CERT_EXPIRED",
+      "SSO_IDP_CERT_EXPIRED",
+      "SSO_CERT_WILL_EXPIRE",
+      "SSO_IDP_CERT_WILL_EXPIRE",
+      "TOMCAT_SSL_CERT_EXPIRED",
+      "TOMCAT_SSL_CERT_WILL_EXPIRE",
+      "USER_INITIATED_ENROLLMENT_MANAGEMENT_ACCOUNT_SECURITY_ISSUE",
+      "USER_MAID_DUPLICATE_ERROR",
+      "USER_MAID_MISMATCH_ERROR",
+      "USER_MAID_ROSTER_DUPLICATE_ERROR",
+      "VPP_ACCOUNT_EXPIRED",
+      "VPP_ACCOUNT_WILL_EXPIRE",
+      "VPP_TOKEN_REVOKED",
+      "DEVICE_COMPLIANCE_CONNECTION_ERROR",
+      "CONDITIONAL_ACCESS_CONNECTION_ERROR",
+      "AZURE_AD_MIGRATION_REPORT_GENERATED",
+      "BEYOND_CORP_CONNECTION_ERROR",
+      "APP_INSTALLERS_NEW_APP_VERSION_AVAILABLE",
+      "APP_INSTALLERS_NEW_APP_VERSION_DEPLOYMENT_STARTED",
+      "APP_INSTALLERS_APP_VERSION_REMOVED",
+      "APP_INSTALLERS_APP_TITLE_REMOVED",
+      "APP_INSTALLERS_DEPLOYMENT_INSTALLATION_FAILED",
+      "SAML_RESPONSE_ASSERTION_SIGNING_REQUIRED",
+      "DIRECTORY_CACHE_AWAITING_SYNC"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "OidcSettings",
+    "field": "userMapping",
+    "enumValues": [
+      "USERNAME",
+      "EMAIL"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "OidcSettings",
+    "field": "usernameAttributeClaimMapping",
+    "enumValues": [
+      "USERNAME",
+      "EMAIL"
+    ]
+  },
+  {
+    "package": "onboarding",
+    "schema": "OnboardingItem",
+    "field": "selfServiceEntityType",
+    "enumValues": [
+      "OS_X_POLICY",
+      "OS_X_CONFIG_PROFILE",
+      "OS_X_MAC_APP",
+      "OS_X_APP_INSTALLER",
+      "OS_X_EBOOK",
+      "OS_X_PATCH_POLICY",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "packages",
+    "schema": "PackageManifest",
+    "field": "hashType",
+    "enumValues": [
+      "MD5",
+      "SHA256"
+    ]
+  },
+  {
+    "package": "patch_policies",
+    "schema": "PatchPolicyLogV2",
+    "field": "statusEnum",
+    "enumValues": [
+      "UNKNOWN",
+      "PENDING",
+      "COMPLETED",
+      "FAILED"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "PersonalHotspotSetting",
+    "field": "PersonalHotspotSetting",
+    "enumValues": [
+      "ENABLE_PERSONAL_HOTSPOT",
+      "DISABLE_PERSONAL_HOTSPOT"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "PlanConfigurationPost",
+    "field": "updateAction",
+    "enumValues": [
+      "DOWNLOAD_ONLY",
+      "DOWNLOAD_INSTALL",
+      "DOWNLOAD_INSTALL_ALLOW_DEFERRAL",
+      "DOWNLOAD_INSTALL_RESTART",
+      "DOWNLOAD_INSTALL_SCHEDULE",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "PlanConfigurationPost",
+    "field": "versionType",
+    "enumValues": [
+      "LATEST_MAJOR",
+      "LATEST_MINOR",
+      "LATEST_ANY",
+      "SPECIFIC_VERSION",
+      "CUSTOM_VERSION",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "PlanDevice",
+    "field": "objectType",
+    "enumValues": [
+      "COMPUTER",
+      "MOBILE_DEVICE",
+      "APPLE_TV"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "PlanDevicePost",
+    "field": "objectType",
+    "enumValues": [
+      "COMPUTER",
+      "MOBILE_DEVICE",
+      "APPLE_TV"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "PlanGroupPost",
+    "field": "objectType",
+    "enumValues": [
+      "COMPUTER_GROUP",
+      "MOBILE_DEVICE_GROUP"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "PlanStatus",
+    "field": "state",
+    "enumValues": [
+      "Init",
+      "PendingPlanValidation",
+      "AcceptingPlan",
+      "RejectingPlan",
+      "ProcessingPlanType",
+      "ProcessingPlanTypeMdm",
+      "StartingPlan",
+      "PlanFailed",
+      "SchedulingScanForOSUpdates",
+      "ProcessingScheduleOSUpdateScanResponse",
+      "WaitingForScheduledOSUpdateScanToComplete",
+      "CollectingAvailableOSUpdates",
+      "ProcessingAvailableOSUpdatesResponse",
+      "ProcessingSchedulingType",
+      "SchedulingDDM",
+      "DDMPlanScheduled",
+      "WaitingToStartDDMUpdate",
+      "ProcessingDDMStatusResponse",
+      "CollectingDDMStatus",
+      "SchedulingMDM",
+      "MDMPlanScheduled",
+      "SchedulingOSUpdate",
+      "ProcessingScheduleOSUpdateResponse",
+      "CollectingOSUpdateStatus",
+      "ProcessingOSUpdateStatusResponse",
+      "WaitingToCollectOSUpdateStatus",
+      "VerifyingInstallation",
+      "ProcessingInstallationVerification",
+      "PlanCompleted",
+      "PlanCanceled",
+      "PlanException",
+      "Unknown"
+    ]
+  },
+  {
+    "package": "managed_software_updates",
+    "schema": "PlanStatus",
+    "field": "errorReasons",
+    "enumValues": [
+      "APPLE_SILICON_NO_ESCROW_KEY",
+      "NOT_SUPERVISED",
+      "NOT_MANAGED",
+      "NO_DISK_SPACE",
+      "NO_UPDATES_AVAILABLE",
+      "SPECIFIC_VERSION_UNAVAILABLE",
+      "SPECIFIC_VERSION_UNAVAILABLE_FOR_DEVICE_MODEL",
+      "ACTION_NOT_SUPPORTED_FOR_DEVICE_TYPE",
+      "DECLARATIVE_DEVICE_MANAGEMENT_SOFTWARE_UPDATES_NOT_SUPPORTED_FOR_DEVICE_OS_VERSION",
+      "DECLARATIVE_DEVICE_MANAGEMENT_SOFTWARE_UPDATES_NOT_SUPPORTED_FOR_DEVICE_TYPE",
+      "PLAN_NOT_FOUND",
+      "APPLE_SOFTWARE_LOOKUP_SERVICE_ERROR",
+      "EXISTING_PLAN_FOR_DEVICE_IN_PROGRESS",
+      "DOWNGRADE_NOT_SUPPORTED",
+      "DECLARATIVE_SERVICE_ERROR",
+      "UNABLE_TO_FIND_UPDATES_AND_OUT_OF_RETRIES",
+      "DATA_INTEGRITY_VIOLATION_EXCEPTION",
+      "ILLEGAL_ARGUMENT_EXCEPTION",
+      "MDM_EXCEPTION",
+      "INSTALL_REASON_UNKNOWN",
+      "ACCEPT_PLAN_FAILURE",
+      "SCHEDULE_PLAN_FAILURE",
+      "REJECT_PLAN_FAILURE",
+      "START_PLAN_FAILURE",
+      "QUEUE_SCHEDULED_OS_UPDATE_SCAN_FAILURE",
+      "SCAN_WAIT_FINISHED_FAILURE",
+      "QUEUE_AVAILABLE_OS_UPDATE_COMMAND_FAILURE",
+      "MDM_CLIENT_EXCEPTION",
+      "QUEUE_SCHEDULE_OS_UPDATE_FAILURE",
+      "QUEUE_OS_UPDATE_STATUS_COMMAND_FAILURE",
+      "STILL_IN_PROGRESS_FAILURE",
+      "WAIT_TO_COLLECT_OS_UPDATE_STATUS_FAILURE",
+      "IS_DOWNLOADED_AND_NEEDS_INSTALL_FAILURE",
+      "IS_INSTALLED_FAILURE",
+      "IS_DOWNLOAD_ONLY_AND_DOWNLOADED_FAILURE",
+      "VERIFY_INSTALLATION_FAILURE",
+      "IS_MAC_OS_UPDATE_FAILURE",
+      "IS_LATEST_FAILURE",
+      "IS_SPECIFIC_VERSION_FAILURE",
+      "HANDLE_COMMAND_QUEUE_FAILURE",
+      "INVALID_CONFIGURATION_DECLARATION",
+      "DECLARATIVE_DEVICE_MANAGEMENT_STATUS_RESPONSE_FAILURE_REASON_RECEIVED",
+      "NO_DEVICE_STATUS_BY_GRACE_PERIOD",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "ProtectSettingsResponse",
+    "field": "syncStatus",
+    "enumValues": [
+      "IN_PROGRESS",
+      "COMPLETED",
+      "ERROR",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "reenrollment",
+    "schema": "Reenrollment",
+    "field": "flushMDMQueue",
+    "enumValues": [
+      "DELETE_NOTHING",
+      "DELETE_ERRORS",
+      "DELETE_EVERYTHING_EXCEPT_ACKNOWLEDGED",
+      "DELETE_EVERYTHING"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "RemoteAdministrationResponse",
+    "field": "type",
+    "enumValues": [
+      "team-viewer"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SamlSettings",
+    "field": "userMapping",
+    "enumValues": [
+      "USERNAME",
+      "EMAIL"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SamlSettings",
+    "field": "idpProviderType",
+    "enumValues": [
+      "ADFS",
+      "OKTA",
+      "GOOGLE",
+      "SHIBBOLETH",
+      "ONELOGIN",
+      "PING",
+      "CENTRIFY",
+      "AZURE",
+      "OTHER"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SamlSettings",
+    "field": "metadataSource",
+    "enumValues": [
+      "URL",
+      "FILE",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "scripts",
+    "schema": "Script",
+    "field": "priority",
+    "enumValues": [
+      "BEFORE",
+      "AFTER",
+      "AT_REBOOT"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "SecurityV2",
+    "field": "attestationStatus",
+    "enumValues": [
+      "PENDING",
+      "SUCCESS",
+      "CERTIFICATE_INVALID",
+      "DEVICE_PROPERTIES_MISMATCH",
+      "MDA_UNSUPPORTED_DUE_TO_HARDWARE",
+      "MDA_UNSUPPORTED_DUE_TO_SOFTWARE"
+    ]
+  },
+  {
+    "package": "mobile_devices",
+    "schema": "SecurityV2",
+    "field": "bootstrapTokenEscrowed",
+    "enumValues": [
+      "ESCROWED",
+      "NOT_ESCROWED",
+      "NOT_SUPPORTED"
+    ]
+  },
+  {
+    "package": "self_service_settings",
+    "schema": "SelfServiceInteractionSettings",
+    "field": "defaultLandingPage",
+    "enumValues": [
+      "HOME",
+      "BROWSE",
+      "HISTORY",
+      "NOTIFICATIONS"
+    ]
+  },
+  {
+    "package": "self_service_settings",
+    "schema": "SelfServiceLoginSettings",
+    "field": "userLoginLevel",
+    "enumValues": [
+      "NotRequired",
+      "Anonymous",
+      "Required"
+    ]
+  },
+  {
+    "package": "self_service_settings",
+    "schema": "SelfServiceLoginSettings",
+    "field": "authType",
+    "enumValues": [
+      "Basic",
+      "Saml"
+    ]
+  },
+  {
+    "package": "enrollment",
+    "schema": "ServiceDiscoveryVersion",
+    "field": "ServiceDiscoveryVersion",
+    "enumValues": [
+      "none",
+      "mdm-byod",
+      "mdm-adde"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "SessionCandidateRequest",
+    "field": "deviceType",
+    "enumValues": [
+      "COMPUTER"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "SessionDetails",
+    "field": "deviceType",
+    "enumValues": [
+      "COMPUTER"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "SessionDetails",
+    "field": "state",
+    "enumValues": [
+      "OPEN",
+      "CLOSED",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "SessionHistoryItem",
+    "field": "sessionType",
+    "enumValues": [
+      "ATTENDED",
+      "UNATTENDED"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "SessionHistoryItem",
+    "field": "statusType",
+    "enumValues": [
+      "STARTED",
+      "FINISHED",
+      "ERROR"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "SessionHistoryItemWithDetails",
+    "field": "sessionType",
+    "enumValues": [
+      "ATTENDED",
+      "UNATTENDED"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "SessionHistoryItemWithDetails",
+    "field": "statusType",
+    "enumValues": [
+      "STARTED",
+      "FINISHED",
+      "ERROR"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "SessionStatus",
+    "field": "sessionState",
+    "enumValues": [
+      "OPEN",
+      "CLOSED",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "SiteObject",
+    "field": "objectType",
+    "enumValues": [
+      "Computer",
+      "Peripheral",
+      "Licensed Software",
+      "Licensed Software Template",
+      "Policy",
+      "macOS Configuration Profile",
+      "Restricted Software",
+      "Managed Preference Profile",
+      "Computer Group",
+      "Mobile Device",
+      "Apple TV",
+      "User Group",
+      "iOS Configuration Profile",
+      "Mobile Device App",
+      "E-book",
+      "Mobile Device Group",
+      "Classroom",
+      "Advanced Computer Search",
+      "Advanced Mobile Search",
+      "Advanced User Search",
+      "Advanced User Content Search",
+      "Computer Invitation",
+      "Mobile Device Invitation",
+      "Mobile Device Enrollment Profile",
+      "Device Enrollment Program Instance",
+      "Mobile Device Prestage",
+      "Computer DEP Prestage",
+      "Enrollment Customization",
+      "VPP Location",
+      "VPP Subscription",
+      "VPP Invitation",
+      "VPP Assignment",
+      "User",
+      "Network Integration",
+      "Mac App",
+      "App Installer",
+      "Self Service Plugin",
+      "Software Title",
+      "Patch Software Title Summary",
+      "Patch Policy",
+      "Patch Software Title Configuration",
+      "Change Password",
+      "Mobile Device Inventory",
+      "Computer Inventory",
+      "Change Management",
+      "Licensed Software License",
+      "Unknown"
+    ]
+  },
+  {
+    "package": "slasa",
+    "schema": "SlasaAcceptance",
+    "field": "slasaAcceptanceStatus",
+    "enumValues": [
+      "ACCEPTED",
+      "NOT_ACCEPTED"
+    ]
+  },
+  {
+    "package": "smtp_server",
+    "schema": "SmtpConnectionSettings",
+    "field": "encryptionType",
+    "enumValues": [
+      "NONE",
+      "SSL",
+      "TLS_1_2",
+      "TLS_1_1",
+      "TLS_1",
+      "TLS_1_3"
+    ]
+  },
+  {
+    "package": "smtp_server",
+    "schema": "SmtpGoogleMailAuthentication",
+    "field": "status",
+    "enumValues": [
+      "FAILED",
+      "UNAUTHENTICATED",
+      "AUTHENTICATED"
+    ]
+  },
+  {
+    "package": "smtp_server",
+    "schema": "SmtpServerV2",
+    "field": "authenticationType",
+    "enumValues": [
+      "NONE",
+      "BASIC",
+      "GRAPH_API",
+      "GOOGLE_MAIL"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "SoftwareUpdateSettings",
+    "field": "recommendationCadence",
+    "enumValues": [
+      "ALLOW_ALL_UPDATES",
+      "ONLY_ALLOW_LEAST_CURRENT_UPDATE",
+      "ONLY_ALLOW_MOST_CURRENT_UPDATE"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SsoKeystore",
+    "field": "type",
+    "enumValues": [
+      "PKCS12",
+      "JKS",
+      "NONE"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SsoKeystore",
+    "field": "keystoreSetupType",
+    "enumValues": [
+      "NONE",
+      "UPLOADED",
+      "GENERATED"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SsoKeystoreCertParseResponse",
+    "field": "type",
+    "enumValues": [
+      "PKCS12",
+      "JKS",
+      "NONE"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SsoKeystoreCertParseResponse",
+    "field": "keystoreSetupType",
+    "enumValues": [
+      "NONE",
+      "UPLOADED",
+      "GENERATED"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SsoKeystoreResponse",
+    "field": "type",
+    "enumValues": [
+      "PKCS12",
+      "JKS",
+      "NONE"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SsoKeystoreResponse",
+    "field": "keystoreSetupType",
+    "enumValues": [
+      "NONE",
+      "UPLOADED",
+      "GENERATED"
+    ]
+  },
+  {
+    "package": "sso_settings",
+    "schema": "SsoSettingsV3",
+    "field": "configurationType",
+    "enumValues": [
+      "SAML",
+      "OIDC",
+      "OIDC_WITH_SAML"
+    ]
+  },
+  {
+    "package": "startup_status",
+    "schema": "StartupStatus",
+    "field": "stepCode",
+    "enumValues": [
+      "SERVER_INIT_START",
+      "SERVER_INIT_ANALYZING_WEBAPP",
+      "SERVER_INIT_POPULATING_NAVIGATION",
+      "SERVER_INIT_POPULATING_OBJECTS",
+      "SERVER_INIT_INITIALIZING_OBJ",
+      "SERVER_INIT_VERIFYING_CACHE",
+      "SERVER_INIT_INITIALIZING_CHANGE_MANAGEMENT",
+      "SERVER_INIT_INITIALIZING_COMMUNICATION_SYSTEM",
+      "SERVER_INIT_INITIALIZING_MDM_QUEUE_MONITOR",
+      "SERVER_INIT_CALCULATING_SMART_GROUPS",
+      "SERVER_INIT_DB_SCHEMA_COMPARE",
+      "SERVER_INIT_DB_TABLE_CHECK_FOR_RENAME",
+      "SERVER_INIT_DB_TABLE_ALTER",
+      "SERVER_INIT_DB_TABLE_ANALYZING",
+      "SERVER_INIT_DB_TABLE_CREATE",
+      "SERVER_INIT_DB_TABLE_DROP",
+      "SERVER_INIT_DB_TABLE_RENAME",
+      "SERVER_INIT_DB_COLUMN_RENAME",
+      "SERVER_INIT_DB_COLUMN_ENCODING_CHANGE_STEP_1",
+      "SERVER_INIT_DB_COLUMN_ENCODING_CHANGE_STEP_2",
+      "SERVER_INIT_DB_COLUMN_ENCODING_CHANGE_STEP_3",
+      "SERVER_INIT_DB_UPGRADE_CHECK",
+      "SERVER_INIT_DB_UPGRADE_COMPLETE",
+      "SERVER_INIT_SS_GENERATE_NOTIFICATIONS",
+      "SERVER_INIT_SS_GENERATE_NOTIFICATIONS_STATUS",
+      "SERVER_INIT_SS_GENERATE_NOTIFICATIONS_FINALIZE",
+      "SERVER_INIT_PKI_MIGRATION_DONE",
+      "SERVER_INIT_PKI_MIGRATION_STATUS",
+      "SERVER_INIT_MEMCACHED_ENDPOINTS_CHECK",
+      "SERVER_INIT_CACHE_FLUSHING",
+      "SERVER_INIT_COMPLETE"
+    ]
+  },
+  {
+    "package": "startup_status",
+    "schema": "StartupStatus",
+    "field": "warningCode",
+    "enumValues": [
+      "SERVER_INIT_WARNING_DB_TABLE_ENCODING"
+    ]
+  },
+  {
+    "package": "startup_status",
+    "schema": "StartupStatus",
+    "field": "errorCode",
+    "enumValues": [
+      "CACHE_CONFIGURATION_ERROR",
+      "SECONDARY_NODE_STARTUP_ERROR",
+      "MORE_THAN_ONE_CLUSTER_SETTINGS_ERROR",
+      "PRIMARY_NODE_NOT_SET_ERROR",
+      "DATABASE_ERROR",
+      "DATABASE_PASSWORD_MISSING",
+      "EHCACHE_ERROR",
+      "FLAG_INITIALIZATION_FAILED",
+      "MEMCACHED_ERROR",
+      "DATABASE_MYISAM_ERROR",
+      "OLD_VERSION_ERROR"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "TimeZone",
+    "field": "region",
+    "enumValues": [
+      "Africa",
+      "America",
+      "Asia",
+      "Atlantic",
+      "Australia",
+      "Europe",
+      "Indian",
+      "Pacific",
+      "None"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "UserAccount",
+    "field": "accessLevel",
+    "enumValues": [
+      "FullAccess",
+      "SiteAccess",
+      "GroupBasedAccess"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "UserAccount",
+    "field": "privilegeLevel",
+    "enumValues": [
+      "ADMINISTRATOR",
+      "AUDITOR",
+      "ENROLLMENT",
+      "CUSTOM"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "UserAccount",
+    "field": "accountStatus",
+    "enumValues": [
+      "Enabled",
+      "Disabled"
+    ]
+  },
+  {
+    "package": "accounts",
+    "schema": "UserAccount",
+    "field": "accountType",
+    "enumValues": [
+      "DEFAULT",
+      "FEDERATED"
+    ]
+  },
+  {
+    "package": "cloud_ldap",
+    "schema": "UserMappings",
+    "field": "objectClassLimitation",
+    "enumValues": [
+      "ANY_OBJECT_CLASSES",
+      "ALL_OBJECT_CLASSES"
+    ]
+  },
+  {
+    "package": "cloud_ldap",
+    "schema": "UserMappings",
+    "field": "searchScope",
+    "enumValues": [
+      "ALL_SUBTREES",
+      "FIRST_LEVEL_ONLY"
+    ]
+  },
+  {
+    "package": "mdm",
+    "schema": "VoiceRoamingSetting",
+    "field": "VoiceRoamingSetting",
+    "enumValues": [
+      "ENABLE_VOICE_ROAMING",
+      "DISABLE_VOICE_ROAMING"
+    ]
+  },
+  {
+    "package": "volume_purchasing_locations",
+    "schema": "VolumePurchasingContent",
+    "field": "deviceTypes",
+    "enumValues": [
+      "IOS",
+      "MACOS",
+      "TVOS"
+    ]
+  },
+  {
+    "package": "volume_purchasing_locations",
+    "schema": "VolumePurchasingContent",
+    "field": "contentType",
+    "enumValues": [
+      "IOS_APP",
+      "MAC_APP",
+      "BOOK",
+      "UNKNOWN"
+    ]
+  },
+  {
+    "package": "volume_purchasing_locations",
+    "schema": "VolumePurchasingContent",
+    "field": "pricingParam",
+    "enumValues": [
+      "STDQ",
+      "PLUS",
+      "Unknown"
+    ]
+  },
+  {
+    "package": "volume_purchasing_subscriptions",
+    "schema": "VolumePurchasingSubscriptionBase",
+    "field": "triggers",
+    "enumValues": [
+      "NO_MORE_LICENSES",
+      "REMOVED_FROM_APP_STORE"
+    ]
+  }
+]

@@ -92,6 +92,27 @@ func (s *Accounts) CreateV1(ctx context.Context, req *RequestAccount) (*CreateRe
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if req.AccessLevel != "" {
+		if _, ok := validAccessLevels[req.AccessLevel]; !ok {
+			return nil, nil, fmt.Errorf("invalid accessLevel %q: must be one of FullAccess, SiteAccess, GroupBasedAccess", req.AccessLevel)
+		}
+	}
+	if req.PrivilegeLevel != "" {
+		if _, ok := validPrivilegeLevels[req.PrivilegeLevel]; !ok {
+			return nil, nil, fmt.Errorf("invalid privilegeLevel %q: must be one of ADMINISTRATOR, AUDITOR, ENROLLMENT, CUSTOM", req.PrivilegeLevel)
+		}
+	}
+	if req.AccountStatus != "" {
+		if _, ok := validAccountStatuses[req.AccountStatus]; !ok {
+			return nil, nil, fmt.Errorf("invalid accountStatus %q: must be one of Enabled, Disabled", req.AccountStatus)
+		}
+	}
+	if req.AccountType != "" {
+		if _, ok := validAccountTypes[req.AccountType]; !ok {
+			return nil, nil, fmt.Errorf("invalid accountType %q: must be one of DEFAULT, FEDERATED", req.AccountType)
+		}
+	}
+
 	endpoint := constants.EndpointJamfProAccountsV1
 
 	var result CreateResponse

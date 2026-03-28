@@ -100,6 +100,13 @@ func (s *ApiIntegrations) CreateV1(ctx context.Context, request *RequestApiInteg
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
+
+	if request.AppType != "" {
+		if _, ok := validAppTypes[request.AppType]; !ok {
+			return nil, nil, fmt.Errorf("invalid appType %q: must be one of CLIENT_CREDENTIALS, NATIVE_APP_OAUTH, NONE", request.AppType)
+		}
+	}
+
 	var result ResourceApiIntegration
 
 	endpoint := constants.EndpointJamfProApiIntegrationsV1
@@ -126,6 +133,12 @@ func (s *ApiIntegrations) UpdateByIDV1(ctx context.Context, id string, request *
 	}
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	if request.AppType != "" {
+		if _, ok := validAppTypes[request.AppType]; !ok {
+			return nil, nil, fmt.Errorf("invalid appType %q: must be one of CLIENT_CREDENTIALS, NATIVE_APP_OAUTH, NONE", request.AppType)
+		}
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProApiIntegrationsV1, id)
