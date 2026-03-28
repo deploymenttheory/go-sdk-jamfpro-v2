@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.10.1...v0.11.0) (2026-03-28)
+
+
+### Features
+
+* added enum value validation for all services that stipulate specific valid values ([63af9fb](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/63af9fba115d5d0967172659ad3646ff66ca8692))
+* added enum value validation for all services that stipulate specific valid values ([d8dae39](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/d8dae39bdf38b529b692131a86ddd7698a68962a))
+* updates for jamf pro v11.25 ([1cc6c19](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/1cc6c19ee2b7aa70674309f0cfd2f430e32e996f))
+* updates for jamf pro v11.25 ([89d6c00](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/89d6c00a42ad5008670ba304d9f782cd3e11354b))
+
+
+### Bug Fixes
+
+* package upload and retrieval processes by implementing SHA3_512 hash handling ([ffc5f5f](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/ffc5f5ff1a8adc634da78531af9b8208687d57ff))
+
 ## [0.10.1](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.10.0...v0.10.1) (2026-03-27)
 
 
