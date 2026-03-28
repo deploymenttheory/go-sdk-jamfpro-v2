@@ -7,6 +7,8 @@ type ResourceSite struct {
 }
 
 // ResourceSiteObject represents an object within a site.
+// Note: as of Jamf Pro 11.25, the "BYO Profile" object type was removed from the
+// GET /v1/sites/{id}/objects filter options.
 type ResourceSiteObject struct {
 	SiteID     string `json:"siteId"`
 	ObjectType string `json:"objectType"`

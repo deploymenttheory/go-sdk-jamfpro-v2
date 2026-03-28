@@ -96,6 +96,17 @@ func (m *PackagesMock) RegisterExportHistoryMock() {
 	m.Register("POST", "/api/v1/packages/1/history/export", 200, "validate_export_history.json")
 }
 
+func (m *PackagesMock) RegisterGetCloudDistributionPointMock(cdnType string) {
+	body, _ := json.Marshal(map[string]any{
+		"cdnType":                cdnType,
+		"master":                 true,
+		"hasConnectionSucceeded": true,
+		"message":                "Test connection success",
+		"inventoryId":            "1",
+	})
+	m.RegisterRawBody("GET", "/api/v1/cloud-distribution-point", 200, body)
+}
+
 func (m *PackagesMock) RegisterRefreshCloudDistributionPointMock() {
 	m.Register("POST", "/api/v1/cloud-distribution-point/refresh-inventory", 204, "")
 }
@@ -104,7 +115,7 @@ func (m *PackagesMock) RegisterGetPackageWithHashMock(id string, hashValue strin
 	path := "/api/v1/packages/" + id
 	body, _ := json.Marshal(map[string]any{
 		"id": id, "packageName": "Test", "fileName": "test.pkg", "categoryId": "1",
-		"hashType": "SHA3_512", "hashValue": hashValue,
+		"hashType": "SHA_512", "hashValue": hashValue,
 	})
 	m.RegisterRawBody("GET", path, 200, body)
 }

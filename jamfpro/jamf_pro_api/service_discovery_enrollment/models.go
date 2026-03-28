@@ -1,5 +1,15 @@
 package service_discovery_enrollment
 
+// ServiceDiscoveryVersion constants define the valid enrollment types for well-known settings.
+// Used in ResourceWellKnownSettingV1.EnrollmentType.
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings
+const (
+	ServiceDiscoveryVersionNone    = "none"
+	ServiceDiscoveryVersionMDMBYOD = "mdm-byod"
+	ServiceDiscoveryVersionMDMADDE = "mdm-adde"
+)
+
 // ResourceWellKnownSettingV1 represents a single well-known setting entry.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-service-discovery-enrollment-well-known-settings

@@ -51,6 +51,10 @@ func (s *CloudDistributionPoint) CreateV1(ctx context.Context, request *RequestC
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	if _, ok := validCdnTypes[request.CdnType]; !ok {
+		return nil, nil, fmt.Errorf("invalid cdnType %q: must be one of NONE, JAMF_CLOUD, RACKSPACE_CLOUD_FILES, AMAZON_S3, AKAMAI", request.CdnType)
+	}
+
 	var result ResourceCloudDistributionPointV1
 
 	endpoint := constants.EndpointJamfProCloudDistributionPointV1
@@ -75,6 +79,9 @@ func (s *CloudDistributionPoint) CreateV1(ctx context.Context, request *RequestC
 func (s *CloudDistributionPoint) UpdateV1(ctx context.Context, request *RequestCloudDistributionPointV1) (*ResourceCloudDistributionPointV1, *resty.Response, error) {
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
+	}
+	if _, ok := validCdnTypes[request.CdnType]; !ok {
+		return nil, nil, fmt.Errorf("invalid cdnType %q: must be one of NONE, JAMF_CLOUD, RACKSPACE_CLOUD_FILES, AMAZON_S3, AKAMAI", request.CdnType)
 	}
 
 	var result ResourceCloudDistributionPointV1

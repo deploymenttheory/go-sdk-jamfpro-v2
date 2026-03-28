@@ -2,6 +2,7 @@ package crypto
 
 import (
 	"crypto/md5"
+	"crypto/sha512"
 	"crypto/sha3"
 	"encoding/hex"
 	"fmt"
@@ -20,6 +21,21 @@ func CalculateSHA3_512(filePath string) (string, error) {
 	h := sha3.New512()
 	if _, err := io.Copy(h, f); err != nil {
 		return "", fmt.Errorf("calculate SHA3-512: %w", err)
+	}
+	return hex.EncodeToString(h.Sum(nil)), nil
+}
+
+// CalculateSHA512 calculates the SHA-512 (SHA-2 family) hash of the file at filePath.
+func CalculateSHA512(filePath string) (string, error) {
+	f, err := os.Open(filePath)
+	if err != nil {
+		return "", fmt.Errorf("open file for SHA-512: %w", err)
+	}
+	defer f.Close()
+
+	h := sha512.New()
+	if _, err := io.Copy(h, f); err != nil {
+		return "", fmt.Errorf("calculate SHA-512: %w", err)
 	}
 	return hex.EncodeToString(h.Sum(nil)), nil
 }

@@ -105,6 +105,7 @@ func TestUnit_Packages_GetByID_NotFound(t *testing.T) {
 
 func TestUnit_Packages_Create_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
+	mock.RegisterGetCloudDistributionPointMock("JAMF_CLOUD")
 	mock.RegisterCreatePackageMock()
 
 	req := &RequestPackage{
@@ -204,8 +205,21 @@ func TestUnit_Packages_DeletePackageManifestV1_Success(t *testing.T) {
 	assert.Equal(t, 204, resp.StatusCode())
 }
 
+func TestUnit_Packages_Create_CDPNotEnabled(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterGetCloudDistributionPointMock("NONE")
+
+	req := &RequestPackage{PackageName: "Test", FileName: "test.pkg", CategoryID: "1", Priority: 1}
+	result, resp, err := svc.CreateV1(context.Background(), req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "content delivery network")
+}
+
 func TestUnit_Packages_Create_Conflict(t *testing.T) {
 	svc, mock := setupMockService(t)
+	mock.RegisterGetCloudDistributionPointMock("JAMF_CLOUD")
 	mock.RegisterConflictErrorMock()
 
 	req := &RequestPackage{
@@ -501,6 +515,7 @@ func TestUnit_Packages_CreateAndUpload_Success(t *testing.T) {
 	hash, err := crypto.CalculateSHA3_512(pkgPath)
 	require.NoError(t, err)
 
+	mock.RegisterGetCloudDistributionPointMock("JAMF_CLOUD")
 	mock.RegisterCreatePackageMock()
 	mock.RegisterUploadPackageMockForID("3")
 	mock.RegisterRefreshCloudDistributionPointMock()
@@ -570,6 +585,7 @@ func TestUnit_Packages_CreateAndUpload_HashVerificationFailed(t *testing.T) {
 	pkgPath := filepath.Join(tmp, "test.pkg")
 	require.NoError(t, os.WriteFile(pkgPath, []byte("test content"), 0644))
 
+	mock.RegisterGetCloudDistributionPointMock("JAMF_CLOUD")
 	mock.RegisterCreatePackageMock()
 	mock.RegisterUploadPackageMockForID("3")
 	mock.RegisterRefreshCloudDistributionPointMock()
@@ -592,7 +608,9 @@ func TestUnit_Packages_CreateAndUpload_HashVerificationFailed(t *testing.T) {
 
 	result, resp, err := svc.CreateAndUpload(context.Background(), pkgPath, req)
 	assert.Error(t, err)
-	assert.Nil(t, result)
+	// result is non-nil: the package was created on the server even though hash verification failed.
+	// Callers should use result.ID to clean up the orphaned package.
+	assert.NotNil(t, result)
 	require.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "hash verification failed")
 }
@@ -604,6 +622,7 @@ func TestUnit_Packages_CreateAndUpload_CreateError(t *testing.T) {
 	pkgPath := filepath.Join(tmp, "test.pkg")
 	require.NoError(t, os.WriteFile(pkgPath, []byte("x"), 0644))
 
+	mock.RegisterGetCloudDistributionPointMock("JAMF_CLOUD")
 	mock.RegisterConflictErrorMock() // Create returns 409
 
 	req := &RequestPackage{
@@ -634,6 +653,7 @@ func TestUnit_Packages_CreateAndUpload_UploadError(t *testing.T) {
 	pkgPath := filepath.Join(tmp, "test.pkg")
 	require.NoError(t, os.WriteFile(pkgPath, []byte("x"), 0644))
 
+	mock.RegisterGetCloudDistributionPointMock("JAMF_CLOUD")
 	mock.RegisterCreatePackageMock()
 	mock.RegisterAPIError("POST", "/api/v1/packages/3/upload", 500, "upload failed")
 
@@ -906,7 +926,9 @@ func TestUnit_Packages_UpdateAndUpload_HashVerificationFailed(t *testing.T) {
 
 	result, resp, err := svc.UpdateAndUpload(context.Background(), "1", pkgPath, req)
 	assert.Error(t, err)
-	assert.Nil(t, result)
+	// result is non-nil: the package was updated on the server even though hash verification failed.
+	// Callers should use result.ID to investigate or roll back the orphaned package.
+	assert.NotNil(t, result)
 	require.NotNil(t, resp)
 	assert.Contains(t, err.Error(), "hash verification failed")
 }

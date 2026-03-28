@@ -1,5 +1,45 @@
 package mdm
 
+// MDM command type constants for use with CommandData.CommandType in POST /api/v2/mdm/commands.
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
+const (
+	CommandTypeApplyRedemptionCode        = "APPLY_REDEMPTION_CODE"
+	CommandTypeCertificateList            = "CERTIFICATE_LIST"
+	CommandTypeClearPasscode              = "CLEAR_PASSCODE"
+	CommandTypeClearRestrictionsPassword  = "CLEAR_RESTRICTIONS_PASSWORD"
+	CommandTypeDeclarativeManagement      = "DECLARATIVE_MANAGEMENT"
+	CommandTypeDeleteUser                 = "DELETE_USER"
+	CommandTypeDeviceInformation          = "DEVICE_INFORMATION"
+	CommandTypeDeviceLocation             = "DEVICE_LOCATION"
+	CommandTypeDeviceLock                 = "DEVICE_LOCK"
+	CommandTypeDisableLostMode            = "DISABLE_LOST_MODE"
+	CommandTypeDisableRemoteDesktop       = "DISABLE_REMOTE_DESKTOP"
+	CommandTypeEnableLostMode             = "ENABLE_LOST_MODE"
+	CommandTypeEnableRemoteDesktop        = "ENABLE_REMOTE_DESKTOP"
+	CommandTypeEraseDevice                = "ERASE_DEVICE"
+	CommandTypeInstalledApplicationList   = "INSTALLED_APPLICATION_LIST"
+	CommandTypeLogOutUser                 = "LOG_OUT_USER"
+	CommandTypeManagedApplicationList     = "MANAGED_APPLICATION_LIST"
+	CommandTypeManagedMediaList           = "MANAGED_MEDIA_LIST"
+	CommandTypeRefreshCellularPlans       = "REFRESH_CELLULAR_PLANS"
+	CommandTypePlayLostModeSound          = "PLAY_LOST_MODE_SOUND"
+	// CommandTypeProvisioningProfileList requests a list of installed provisioning profiles.
+	// Added in Jamf Pro 11.25.
+	CommandTypeProvisioningProfileList    = "PROVISIONING_PROFILE_LIST"
+	CommandTypeRestartDevice              = "RESTART_DEVICE"
+	CommandTypeRequestMirroring           = "REQUEST_MIRRORING"
+	CommandTypeSecurityInfo               = "SECURITY_INFO"
+	CommandTypeSettings                   = "SETTINGS"
+	CommandTypeSetAutoAdminPassword       = "SET_AUTO_ADMIN_PASSWORD"
+	CommandTypeSetRecoveryLock            = "SET_RECOVERY_LOCK"
+	CommandTypeShutDownDevice             = "SHUT_DOWN_DEVICE"
+	CommandTypeStopMirroring              = "STOP_MIRRORING"
+	CommandTypeUnlockUserAccount          = "UNLOCK_USER_ACCOUNT"
+	CommandTypeValidateApplications       = "VALIDATE_APPLICATIONS"
+	CommandTypeValidateRecoveryLock       = "VALIDATE_RECOVERY_LOCK"
+)
+
 // BlankPushResponse represents the response structure for the blank push MDM command.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-blank-push
