@@ -88,6 +88,8 @@ type ResourceMobileDeviceGroupSummary struct {
 
 // ResourceMobileDeviceMember represents a mobile device in group membership responses.
 // Used by GetStaticGroupMembershipV1 and GetSmartGroupMembershipV1.
+// Note: as of Jamf Pro 11.25, the "personalDeviceProfileCurrent" field was removed from
+// the filter and sort options for GET /v1/mobile-device-groups/static-group-membership/{id}.
 type ResourceMobileDeviceMember struct {
 	MobileDeviceID   string `json:"mobileDeviceId"`
 	UDID             string `json:"udid"`

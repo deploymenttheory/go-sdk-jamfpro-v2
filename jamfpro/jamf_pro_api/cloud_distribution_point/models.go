@@ -4,6 +4,24 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/models"
 )
 
+// CdnType enum values for RequestCloudDistributionPointV1.CdnType and ResourceCloudDistributionPointV1.CdnType.
+const (
+	CdnTypeNone               = "NONE"
+	CdnTypeJamfCloud          = "JAMF_CLOUD"
+	CdnTypeRackspaceCloudFiles = "RACKSPACE_CLOUD_FILES"
+	CdnTypeAmazonS3           = "AMAZON_S3"
+	CdnTypeAkamai             = "AKAMAI"
+)
+
+// validCdnTypes is the set of accepted cdnType values for request validation.
+var validCdnTypes = map[string]struct{}{
+	CdnTypeNone:               {},
+	CdnTypeJamfCloud:          {},
+	CdnTypeRackspaceCloudFiles: {},
+	CdnTypeAmazonS3:           {},
+	CdnTypeAkamai:             {},
+}
+
 // RequestCloudDistributionPointV1 is the body for CreateV1 and UpdateV1 (PATCH).
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-cloud-distribution-point

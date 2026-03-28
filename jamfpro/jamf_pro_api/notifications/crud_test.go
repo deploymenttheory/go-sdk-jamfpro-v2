@@ -35,3 +35,38 @@ func TestUnit_Notifications_ListV1_Error(t *testing.T) {
 	require.NotNil(t, resp)
 	require.Equal(t, 500, resp.StatusCode())
 }
+
+func TestUnit_Notifications_DeleteByTypeAndIDV1_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	resp, err := svc.DeleteByTypeAndIDV1(context.Background(), "APNS_CERT_REVOKED", "1")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.Equal(t, 204, resp.StatusCode())
+}
+
+func TestUnit_Notifications_DeleteByTypeAndIDV1_Error(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterDeleteErrorMock()
+	resp, err := svc.DeleteByTypeAndIDV1(context.Background(), "APNS_CERT_REVOKED", "1")
+	require.Error(t, err)
+	require.NotNil(t, resp)
+	require.Equal(t, 500, resp.StatusCode())
+}
+
+func TestUnit_Notifications_DeleteByTypeAndIDV1_ValidationErrors(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	t.Run("empty notificationType", func(t *testing.T) {
+		resp, err := svc.DeleteByTypeAndIDV1(context.Background(), "", "1")
+		require.Error(t, err)
+		require.Nil(t, resp)
+		require.Contains(t, err.Error(), "notificationType is required")
+	})
+
+	t.Run("empty id", func(t *testing.T) {
+		resp, err := svc.DeleteByTypeAndIDV1(context.Background(), "APNS_CERT_REVOKED", "")
+		require.Error(t, err)
+		require.Nil(t, resp)
+		require.Contains(t, err.Error(), "id is required")
+	})
+}

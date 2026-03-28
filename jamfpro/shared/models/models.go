@@ -1,5 +1,7 @@
 package models
 
+import "encoding/json"
+
 // SharedResourceSite represents a site reference used across Classic API resources.
 type SharedResourceSite struct {
 	ID   int    `xml:"id,omitempty"`
@@ -54,13 +56,32 @@ type SharedHistoryResponse struct {
 	Results    []SharedHistoryItem `json:"results"`
 }
 
-// SharedHistoryItemString represents a history entry from Jamf Pro API with string IDs.
+// SharedHistoryItemString represents a history entry from Jamf Pro API.
+// The ID field accepts both JSON strings and JSON numbers (the Jamf Pro API
+// returns numeric IDs even for this "string" variant).
 type SharedHistoryItemString struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
 	Date     string `json:"date"`
 	Note     string `json:"note"`
 	Details  string `json:"details"`
+}
+
+// UnmarshalJSON implements json.Unmarshaler so that ID is accepted as either
+// a JSON string or a JSON number, coercing numbers to their string representation.
+func (h *SharedHistoryItemString) UnmarshalJSON(data []byte) error {
+	type alias SharedHistoryItemString
+	aux := &struct {
+		ID json.Number `json:"id"`
+		*alias
+	}{
+		alias: (*alias)(h),
+	}
+	if err := json.Unmarshal(data, aux); err != nil {
+		return err
+	}
+	h.ID = aux.ID.String()
+	return nil
 }
 
 // SharedHistoryResponseString represents a paginated history response with string IDs.

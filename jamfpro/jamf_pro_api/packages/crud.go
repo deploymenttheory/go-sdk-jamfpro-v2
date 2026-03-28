@@ -12,6 +12,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/cloud_distribution_point"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/crypto"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/tools/upload_counter"
 	"resty.dev/v3"
 )
 
@@ -99,6 +100,15 @@ func (s *Packages) CreateV1(ctx context.Context, request *RequestPackage) (*Crea
 		return nil, nil, fmt.Errorf("request is required")
 	}
 
+	cdp, _, err := s.cloudDistributionPoint.GetV1(ctx)
+	if err != nil {
+		return nil, nil, fmt.Errorf("preflight: failed to check cloud distribution point: %w", err)
+	}
+
+	if cdp.CdnType == cloud_distribution_point.CdnTypeNone {
+		return nil, nil, fmt.Errorf("The content delivery network to use for the distribution point must be enabled first before creating a package")
+	}
+
 	var result CreateResponse
 
 	endpoint := constants.EndpointJamfProPackagesV1
@@ -146,10 +156,11 @@ func (s *Packages) UploadV1(ctx context.Context, id string, filePath string) (*C
 
 	var result CreateResponse
 
+	bar := upload_counter.New(nil)
 	resp, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.ApplicationJSON).
 		SetHeader("Content-Type", constants.ApplicationJSON).
-		SetMultipartFile("file", fileName, f, info.Size(), nil).
+		SetMultipartFile("file", fileName, f, info.Size(), client.MultipartProgressCallback(bar.Callback)).
 		SetResult(&result).
 		Post(endpoint)
 	if err != nil {
@@ -403,9 +414,10 @@ func (s *Packages) ExportHistoryV1(ctx context.Context, id string, rsqlQuery map
 	return resp.Bytes(), resp, nil
 }
 
-// CreateAndUpload creates package metadata, uploads the file, and verifies SHA3_512.
-// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Create metadata; 3) Upload file;
-// 4) Refresh cloud distribution point inventory (forces immediate hash recalculation); 5) Poll until HashType==SHA3_512; 6) Verify hash.
+// CreateAndUpload creates package metadata, uploads the file, and verifies SHA3-512.
+// Flow: 1) Calculate SHA3-512 and MD5 of local file; 2) Create metadata (CDP preflight);
+// 3) Upload file; 4) Refresh cloud distribution point inventory; 5) Poll until hashValue
+// (SHA3-512) is populated; 6) Verify hash matches local file.
 func (s *Packages) CreateAndUpload(ctx context.Context, filePath string, req *RequestPackage) (*CreateResponse, *resty.Response, error) {
 	if filePath == "" {
 		return nil, nil, fmt.Errorf("file path is required")
@@ -442,7 +454,6 @@ func (s *Packages) CreateAndUpload(ctx context.Context, filePath string, req *Re
 	const sleepBetween = 3 * time.Second
 	var uploaded *ResourcePackage
 	for i := 1; i <= maxAttempts; i++ {
-
 		_, refreshErr := s.cloudDistributionPoint.RefreshInventoryV1(ctx, createReq.FileName)
 		if refreshErr != nil {
 			return created, resp, fmt.Errorf("refresh cloud distribution point inventory: %w", refreshErr)
@@ -451,7 +462,7 @@ func (s *Packages) CreateAndUpload(ctx context.Context, filePath string, req *Re
 		if err != nil {
 			return created, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
 		}
-		if uploaded.SHA3512 != "" {
+		if uploaded.HashValue != "" {
 			break
 		}
 		if i < maxAttempts {
@@ -459,19 +470,20 @@ func (s *Packages) CreateAndUpload(ctx context.Context, filePath string, req *Re
 		}
 	}
 
-	if uploaded.SHA3512 == "" {
-		return created, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
+	if uploaded.HashValue == "" {
+		return created, resp, fmt.Errorf("timed out waiting for SHA3_512 hash after %d attempts", maxAttempts)
 	}
-	if uploaded.SHA3512 != initialHash {
-		return created, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.SHA3512)
+	if uploaded.HashValue != initialHash {
+		return created, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.HashValue)
 	}
 
 	return created, resp, nil
 }
 
-// UpdateAndUpload updates package metadata, uploads a new file, and verifies SHA3_512.
-// Flow: 1) Calculate SHA3_512 and MD5 of local file; 2) Update metadata; 3) Upload file;
-// 4) Refresh cloud distribution point inventory (forces immediate hash recalculation); 5) Poll until HashType==SHA3_512; 6) Verify hash.
+// UpdateAndUpload updates package metadata, uploads a new file, and verifies SHA3-512.
+// Flow: 1) Calculate SHA3-512 and MD5 of local file; 2) Update metadata; 3) Upload file;
+// 4) Refresh cloud distribution point inventory (forces immediate hash recalculation);
+// 5) Poll until hashValue (SHA3-512) is populated; 6) Verify hash matches local file.
 func (s *Packages) UpdateAndUpload(ctx context.Context, id string, filePath string, req *ResourcePackage) (*ResourcePackage, *resty.Response, error) {
 	if id == "" {
 		return nil, nil, fmt.Errorf("package ID is required")
@@ -520,7 +532,7 @@ func (s *Packages) UpdateAndUpload(ctx context.Context, id string, filePath stri
 		if err != nil {
 			return updated, resp, fmt.Errorf("get package (attempt %d/%d): %w", i, maxAttempts, err)
 		}
-		if uploaded.SHA3512 != "" {
+		if uploaded.HashValue != "" {
 			break
 		}
 		if i < maxAttempts {
@@ -528,11 +540,11 @@ func (s *Packages) UpdateAndUpload(ctx context.Context, id string, filePath stri
 		}
 	}
 
-	if uploaded.SHA3512 == "" {
-		return updated, resp, fmt.Errorf("timed out waiting for SHA3_512 after %d attempts", maxAttempts)
+	if uploaded.HashValue == "" {
+		return updated, resp, fmt.Errorf("timed out waiting for SHA3_512 hash after %d attempts", maxAttempts)
 	}
-	if uploaded.SHA3512 != initialHash {
-		return updated, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.SHA3512)
+	if uploaded.HashValue != initialHash {
+		return updated, resp, fmt.Errorf("hash verification failed: initial=%s uploaded=%s", initialHash, uploaded.HashValue)
 	}
 
 	return updated, resp, nil

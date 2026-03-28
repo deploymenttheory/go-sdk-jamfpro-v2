@@ -88,10 +88,14 @@ type ResourceEnrollmentLanguage struct {
 	CertificateButton                string `json:"certificateButton"`
 	CertificateProfileName           string `json:"certificateProfileName"`
 	CertificateProfileDescription    string `json:"certificateProfileDescription"`
-	PersonalText                     string `json:"personalText"`
-	PersonalButton                   string `json:"personalButton"`
-	PersonalProfileName              string `json:"personalProfileName"`
-	PersonalProfileDescription       string `json:"personalProfileDescription"`
+	// Deprecated: PersonalText is deprecated as of Jamf Pro 11.25 and always returns an empty string.
+	PersonalText string `json:"personalText"`
+	// Deprecated: PersonalButton is deprecated as of Jamf Pro 11.25 and always returns an empty string.
+	PersonalButton string `json:"personalButton"`
+	// Deprecated: PersonalProfileName is deprecated as of Jamf Pro 11.25 and always returns an empty string.
+	PersonalProfileName string `json:"personalProfileName"`
+	// Deprecated: PersonalProfileDescription is deprecated as of Jamf Pro 11.25 and always returns an empty string.
+	PersonalProfileDescription string `json:"personalProfileDescription"`
 	UserEnrollmentText               string `json:"userEnrollmentText"`
 	UserEnrollmentButton             string `json:"userEnrollmentButton"`
 	UserEnrollmentProfileName        string `json:"userEnrollmentProfileName"`

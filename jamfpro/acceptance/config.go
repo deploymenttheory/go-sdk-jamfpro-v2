@@ -60,7 +60,8 @@ func InitClient() error {
 	}
 
 	var err error
-	Client, err = jamfpro.NewClient(authConfig)
+	transportTimeout := environment.GetDurationEnv("JAMF_TRANSPORT_TIMEOUT", 10*time.Minute)
+	Client, err = jamfpro.NewClient(authConfig, jamfpro.WithTimeout(transportTimeout))
 	if err != nil {
 		return fmt.Errorf("failed to create Jamf Pro client: %w", err)
 	}

@@ -35,10 +35,10 @@ func TestAcceptance_ServiceDiscoveryEnrollment_update_v1(t *testing.T) {
 	request := *current
 	if len(request.WellKnownSettings) > 0 {
 		origType := request.WellKnownSettings[0].EnrollmentType
-		if request.WellKnownSettings[0].EnrollmentType == "USER_ENROLLMENT" {
-			request.WellKnownSettings[0].EnrollmentType = "DEVICE_ENROLLMENT"
+		if request.WellKnownSettings[0].EnrollmentType == "mdm-byod" {
+			request.WellKnownSettings[0].EnrollmentType = "mdm-adde"
 		} else {
-			request.WellKnownSettings[0].EnrollmentType = "USER_ENROLLMENT"
+			request.WellKnownSettings[0].EnrollmentType = "mdm-byod"
 		}
 		_, resp, err := svc.UpdateV1(ctx, &request)
 		require.NoError(t, err)

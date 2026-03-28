@@ -64,6 +64,9 @@ type RequestPackage struct {
 	Priority             int    `json:"priority"`
 	MD5                  string `json:"md5,omitempty"`
 	SHA256               string `json:"sha256,omitempty"`
+	// SHA3512 is the SHA3-512 hash of the package file (distinct from hashType/hashValue which use SHA-512).
+	// Added in Jamf Pro 11.25 for PUT /v1/packages/{id}.
+	SHA3512              string `json:"sha3512,omitempty"`
 	OSRequirements       string `json:"osRequirements,omitempty"`
 	FillUserTemplate     *bool  `json:"fillUserTemplate,omitempty"`
 	FillExistingUsers    *bool  `json:"fillExistingUsers,omitempty"`
