@@ -110,7 +110,7 @@ func (s *Computers) GetByName(ctx context.Context, name string) (*ResponseComput
 }
 
 // Create creates a new computer.
-// URL: POST /JSSResource/computers
+// URL: POST /JSSResource/computers/id/0
 //
 // Classic API docs: https://developer.jamf.com/jamf-pro/reference/createcomputerbyid
 func (s *Computers) Create(ctx context.Context, computer *ResponseComputer) (*ResponseComputer, *resty.Response, error) {
@@ -123,7 +123,7 @@ func (s *Computers) Create(ctx context.Context, computer *ResponseComputer) (*Re
 
 	var out ResponseComputer
 
-	endpoint := constants.EndpointClassicComputers
+	endpoint := fmt.Sprintf("%s/id/0", constants.EndpointClassicComputers)
 
 	resp, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.ApplicationXML).
