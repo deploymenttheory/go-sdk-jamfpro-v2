@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.1](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.11.0...v0.11.1) (2026-04-06)
+
+
+### Bug Fixes
+
+* update computer creation endpoint to use ID 0 in Classic API ([74bb9ac](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/74bb9aca3e120a596f0df551b09a1788e4011de2))
+* update computer creation endpoint to use ID 0 in Classic API ([c33dc24](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/c33dc2478da1442774abe2fcadf5e3b88bbe47d0))
+
 ## [0.11.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.10.1...v0.11.0) (2026-03-28)
 
 
