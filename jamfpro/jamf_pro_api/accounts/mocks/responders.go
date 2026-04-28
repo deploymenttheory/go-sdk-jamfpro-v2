@@ -18,6 +18,7 @@ func (m *AccountsMock) RegisterMocks() {
 	m.RegisterListAccountsMock()
 	m.RegisterGetAccountMock()
 	m.RegisterCreateAccountMock()
+	m.RegisterUpdateAccountMock()
 	m.RegisterDeleteAccountMock()
 }
 
@@ -31,6 +32,10 @@ func (m *AccountsMock) RegisterGetAccountMock() {
 
 func (m *AccountsMock) RegisterCreateAccountMock() {
 	m.Register("POST", "/api/v1/accounts", 201, "validate_create.json")
+}
+
+func (m *AccountsMock) RegisterUpdateAccountMock() {
+	m.Register("PUT", "/api/v1/accounts/1", 200, "validate_update.json")
 }
 
 func (m *AccountsMock) RegisterDeleteAccountMock() {

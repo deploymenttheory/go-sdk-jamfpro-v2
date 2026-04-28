@@ -120,6 +120,8 @@ func (s *SsoSettings) GetEnrollmentCustomizationDependenciesV3(ctx context.Conte
 
 // DisableV3 disables SSO.
 // URL: POST /api/v3/sso/disable
+// Returns 409 if SSO cannot be disabled due to existing dependencies
+// (enrollment customizations depending on it, or SSO is the only auth method available for users).
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v3-sso-disable
 func (s *SsoSettings) DisableV3(ctx context.Context) (*resty.Response, error) {
 	endpoint := constants.EndpointJamfProDisableV3

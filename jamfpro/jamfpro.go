@@ -52,6 +52,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/access_management_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/account_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/account_preferences"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/accounts"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/activation_code"
@@ -122,6 +123,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_pro_version"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_protect"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_remote_assist"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/last_login"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jcds"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/ldap"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/local_admin_password"
@@ -169,6 +171,8 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/time_zones"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/tomcat_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/user"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/user_sessions"
+	users_inventory "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/users_inventory"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/venafi"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/volume_purchasing_locations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/volume_purchasing_subscriptions"
@@ -235,6 +239,7 @@ type ClassicAPIClient struct {
 // JamfProAPIClient groups all Jamf Pro API services.
 type JamfProAPIClient struct {
 	AccessManagementSettings            *access_management_settings.AccessManagementSettings
+	AccountGroups                       *account_groups.AccountGroups
 	AccountPreferences                  *account_preferences.AccountPreferences
 	Accounts                            *accounts.Accounts
 	ActivationCode                      *activation_code.ActivationCode
@@ -305,6 +310,7 @@ type JamfProAPIClient struct {
 	JamfProVersion                      *jamf_pro_version.JamfProVersion
 	JamfProtect                         *jamf_protect.JamfProtect
 	JamfRemoteAssist                    *jamf_remote_assist.JamfRemoteAssist
+	LastLogin                           *last_login.LastLogin
 	Jcds                                *jcds.Jcds
 	Ldap                                *ldap.Ldap
 	LocalAdminPassword                  *local_admin_password.LocalAdminPassword
@@ -352,6 +358,8 @@ type JamfProAPIClient struct {
 	TimeZones                           *time_zones.TimeZones
 	TomcatSettings                      *tomcat_settings.TomcatSettings
 	User                                *user.User
+	UserSessions                        *user_sessions.UserSessions
+	UsersInventory                      *users_inventory.UsersInventory
 	Venafi                              *venafi.Venafi
 	VolumePurchasingLocations           *volume_purchasing_locations.VolumePurchasingLocations
 	VolumePurchasingSubscriptions       *volume_purchasing_subscriptions.VolumePurchasingSubscriptions
@@ -424,6 +432,7 @@ func newClassicAPIClient(transport *client.Transport) *ClassicAPIClient {
 func newJamfProAPIClient(transport *client.Transport) *JamfProAPIClient {
 	return &JamfProAPIClient{
 		AccessManagementSettings:            access_management_settings.NewAccessManagementSettings(transport),
+		AccountGroups:                       account_groups.NewAccountGroups(transport),
 		AccountPreferences:                  account_preferences.NewAccountPreferences(transport),
 		Accounts:                            accounts.NewAccounts(transport),
 		ActivationCode:                      activation_code.NewActivationCode(transport),
@@ -494,6 +503,7 @@ func newJamfProAPIClient(transport *client.Transport) *JamfProAPIClient {
 		JamfProVersion:                      jamf_pro_version.NewJamfProVersion(transport),
 		JamfProtect:                         jamf_protect.NewJamfProtect(transport),
 		JamfRemoteAssist:                    jamf_remote_assist.NewJamfRemoteAssist(transport),
+		LastLogin:                           last_login.NewLastLogin(transport),
 		Jcds:                                jcds.NewJcds(transport),
 		Ldap:                                ldap.NewLdap(transport),
 		LocalAdminPassword:                  local_admin_password.NewLocalAdminPassword(transport),
@@ -541,6 +551,8 @@ func newJamfProAPIClient(transport *client.Transport) *JamfProAPIClient {
 		TimeZones:                           time_zones.NewTimeZones(transport),
 		TomcatSettings:                      tomcat_settings.NewTomcatSettings(transport),
 		User:                                user.NewUser(transport),
+		UserSessions:                        user_sessions.NewUserSessions(transport),
+		UsersInventory:                      users_inventory.NewUsersInventory(transport),
 		Venafi:                              venafi.NewVenafi(transport),
 		VolumePurchasingLocations:           volume_purchasing_locations.NewVolumePurchasingLocations(transport),
 		VolumePurchasingSubscriptions:       volume_purchasing_subscriptions.NewVolumePurchasingSubscriptions(transport),

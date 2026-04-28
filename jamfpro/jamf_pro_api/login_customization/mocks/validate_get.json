@@ -1,5 +1,7 @@
 {
   "rampInstance": false,
+  "fedRampInstance": false,
+  "highComplianceInstance": false,
   "includeCustomDisclaimer": true,
   "disclaimerHeading": "Disclaimer",
   "disclaimerMainText": "By signing in you accept the terms.",

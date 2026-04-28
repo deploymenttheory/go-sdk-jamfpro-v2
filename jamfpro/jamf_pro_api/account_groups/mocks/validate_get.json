@@ -1,0 +1,21 @@
+{
+  "id": "1",
+  "name": "Administrators",
+  "description": "Full administrator access group",
+  "accessLevel": "FullAccess",
+  "privilegeLevel": "ADMINISTRATOR",
+  "site": {
+    "id": -1,
+    "name": "None"
+  },
+  "ldapServer": {
+    "id": -1,
+    "name": "None"
+  },
+  "users": [
+    {
+      "id": "1",
+      "username": "admin"
+    }
+  ]
+}

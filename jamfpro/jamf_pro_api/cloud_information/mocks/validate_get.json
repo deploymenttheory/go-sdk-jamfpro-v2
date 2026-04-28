@@ -2,5 +2,8 @@
   "cloudInstance": true,
   "rampInstance": false,
   "govCloudInstance": false,
-  "managedServiceProviderInstance": true
+  "managedServiceProviderInstance": true,
+  "fedRampInstance": false,
+  "fipsEnabled": false,
+  "highComplianceInstance": false
 }

@@ -4,6 +4,8 @@ package login_customization
 // disclaimerHeading max 20 characters; disclaimerMainText and actionText are required on PUT.
 type ResourceLoginCustomizationV1 struct {
 	RampInstance            bool   `json:"rampInstance,omitempty"`
+	FedRampInstance         bool   `json:"fedRampInstance,omitempty"`
+	HighComplianceInstance  bool   `json:"highComplianceInstance,omitempty"`
 	IncludeCustomDisclaimer bool   `json:"includeCustomDisclaimer"`
 	DisclaimerHeading       string `json:"disclaimerHeading,omitempty"` // max 20 chars
 	DisclaimerMainText      string `json:"disclaimerMainText"`          // required on PUT

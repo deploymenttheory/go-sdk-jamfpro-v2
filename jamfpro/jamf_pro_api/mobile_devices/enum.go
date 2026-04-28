@@ -1,3 +1,8 @@
+// Package mobile_devices provides types and constants for the Jamf Pro mobile devices API.
+//
+// Implementation note (11.27.0): PATCH /v2/mobile-devices/{id} response uses V1SiteBase
+// (fields: id, name only) for the site property, not the full V1Site schema.
+// When implementing CRUD for this endpoint, use a SiteBase struct with only id and name.
 package mobile_devices
 
 // MobileDeviceType represents the type of a mobile device.
