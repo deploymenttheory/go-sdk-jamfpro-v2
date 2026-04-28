@@ -27,6 +27,9 @@ const (
 	// CommandTypeProvisioningProfileList requests a list of installed provisioning profiles.
 	// Added in Jamf Pro 11.25.
 	CommandTypeProvisioningProfileList    = "PROVISIONING_PROFILE_LIST"
+	// CommandTypeProfileList requests a list of installed configuration profiles.
+	// Added in Jamf Pro 11.26.
+	CommandTypeProfileList                = "PROFILE_LIST"
 	CommandTypeRestartDevice              = "RESTART_DEVICE"
 	CommandTypeRequestMirroring           = "REQUEST_MIRRORING"
 	CommandTypeSecurityInfo               = "SECURITY_INFO"
@@ -100,6 +103,8 @@ type CommandData struct {
 	// Set_Auto_Admin_Password
 	GUID     string `json:"guid,omitempty"`
 	Password string `json:"password,omitempty"`
+	// Profile_List
+	ManagedOnly *bool `json:"managedOnly,omitempty"`
 }
 
 // ReturnToService represents the return to service structure in the erase device command.

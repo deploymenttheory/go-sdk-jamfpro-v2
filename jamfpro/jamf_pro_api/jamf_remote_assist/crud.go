@@ -30,6 +30,7 @@ func NewJamfRemoteAssist(client client.Client) *JamfRemoteAssist {
 // ListSessionsV1 retrieves session history items (v1, no pagination).
 // URL: GET /api/v1/jamf-remote-assist/session
 // Returns up to 100 latest session history items.
+// Returns 404 if Jamf Remote Assist is not available on this instance.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-remote-assist-session
 func (s *JamfRemoteAssist) ListSessionsV1(ctx context.Context) ([]SessionHistory, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProSessionV1
@@ -49,6 +50,7 @@ func (s *JamfRemoteAssist) ListSessionsV1(ctx context.Context) ([]SessionHistory
 
 // GetSessionByIDV1 retrieves a single session history item by ID (v1).
 // URL: GET /api/v1/jamf-remote-assist/session/{id}
+// Returns 404 if the session history item is not found, or if Jamf Remote Assist is not available on this instance.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-jamf-remote-assist-session-id
 func (s *JamfRemoteAssist) GetSessionByIDV1(ctx context.Context, id string) (*SessionHistory, *resty.Response, error) {
 	if id == "" {
@@ -78,6 +80,7 @@ func (s *JamfRemoteAssist) GetSessionByIDV1(ctx context.Context, id string) (*Se
 // URL: GET /api/v2/jamf-remote-assist/session
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
 // Fields allowed in filter: sessionId, deviceId, sessionAdminId.
+// Returns 404 if Jamf Remote Assist is not available on this instance.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-remote-assist-session
 func (s *JamfRemoteAssist) ListSessionsV2(ctx context.Context, rsqlQuery map[string]string) (*ListSessionsResponse, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProSessionV2
@@ -106,6 +109,7 @@ func (s *JamfRemoteAssist) ListSessionsV2(ctx context.Context, rsqlQuery map[str
 
 // GetSessionByIDV2 retrieves a single session history item by ID with details (v2).
 // URL: GET /api/v2/jamf-remote-assist/session/{id}
+// Returns 404 if the session history item is not found, or if Jamf Remote Assist is not available on this instance.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-jamf-remote-assist-session-id
 func (s *JamfRemoteAssist) GetSessionByIDV2(ctx context.Context, id string) (*SessionHistory, *resty.Response, error) {
 	if id == "" {
@@ -131,6 +135,7 @@ func (s *JamfRemoteAssist) GetSessionByIDV2(ctx context.Context, id string) (*Se
 // URL: POST /api/v2/jamf-remote-assist/session/export
 // Returns CSV or JSON format based on Accept header.
 // acceptType should be "text/csv" or "application/json".
+// Returns 404 if Jamf Remote Assist is not available on this instance.
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-jamf-remote-assist-session-export
 func (s *JamfRemoteAssist) ExportSessionsV2(ctx context.Context, request *ExportSessionsRequest, acceptType string) ([]byte, *resty.Response, error) {
 	if request == nil {

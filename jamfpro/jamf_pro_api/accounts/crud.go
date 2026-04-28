@@ -131,6 +131,56 @@ func (s *Accounts) CreateV1(ctx context.Context, req *RequestAccount) (*CreateRe
 	return &result, resp, nil
 }
 
+// UpdateByIDV1 updates the user account for the given id.
+// URL: PUT /api/v1/accounts/{id}
+// https://developer.jamf.com/jamf-pro/reference/put_v1-accounts-id
+func (s *Accounts) UpdateByIDV1(ctx context.Context, id string, req *RequestAccount) (*ResourceAccount, *resty.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("account ID is required")
+	}
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	if req.AccessLevel != "" {
+		if _, ok := validAccessLevels[req.AccessLevel]; !ok {
+			return nil, nil, fmt.Errorf("invalid accessLevel %q: must be one of FullAccess, SiteAccess, GroupBasedAccess", req.AccessLevel)
+		}
+	}
+	if req.PrivilegeLevel != "" {
+		if _, ok := validPrivilegeLevels[req.PrivilegeLevel]; !ok {
+			return nil, nil, fmt.Errorf("invalid privilegeLevel %q: must be one of ADMINISTRATOR, AUDITOR, ENROLLMENT, CUSTOM", req.PrivilegeLevel)
+		}
+	}
+	if req.AccountStatus != "" {
+		if _, ok := validAccountStatuses[req.AccountStatus]; !ok {
+			return nil, nil, fmt.Errorf("invalid accountStatus %q: must be one of Enabled, Disabled", req.AccountStatus)
+		}
+	}
+	if req.AccountType != "" {
+		if _, ok := validAccountTypes[req.AccountType]; !ok {
+			return nil, nil, fmt.Errorf("invalid accountType %q: must be one of DEFAULT, FEDERATED", req.AccountType)
+		}
+	}
+
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProAccountsV1, id)
+
+	var result ResourceAccount
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(req).
+		SetResult(&result).
+		Put(endpoint)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
 // DeleteByIDV1 deletes the user account for the given id.
 // URL: DELETE /api/v1/accounts/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-accounts-id

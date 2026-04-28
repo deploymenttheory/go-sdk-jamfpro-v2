@@ -26,6 +26,8 @@ func NewGroups(client client.Client) *Groups {
 // ListV1 retrieves a paginated list of groups.
 // URL: GET /api/v1/groups
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).
+// As of Jamf Pro 11.27.0, the filter parameter supports groupPlatformId with
+// =in= and =out= operators: filter=groupPlatformId=in=('uuid1','uuid2','uuid3')
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
 func (s *Groups) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProGroupsV1

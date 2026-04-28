@@ -161,6 +161,62 @@ func TestUnit_Accounts_CreateV1_NilRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "request is required")
 }
 
+// Test UpdateByIDV1 with success response
+func TestUnit_Accounts_UpdateByIDV1_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterUpdateAccountMock()
+
+	req := &RequestAccount{
+		Realname:       "Updated User One",
+		AccessLevel:    "FullAccess",
+		PrivilegeLevel: "ADMINISTRATOR",
+		AccountStatus:  "Enabled",
+		AccountType:    "DEFAULT",
+	}
+
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	assert.Equal(t, "1", result.ID)
+	assert.Equal(t, "Updated User One", result.Realname)
+}
+
+// Test UpdateByIDV1 with empty ID
+func TestUnit_Accounts_UpdateByIDV1_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "", &RequestAccount{})
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "account ID is required")
+}
+
+// Test UpdateByIDV1 with nil request
+func TestUnit_Accounts_UpdateByIDV1_NilRequest(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", nil)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+// Test UpdateByIDV1 with invalid access level
+func TestUnit_Accounts_UpdateByIDV1_InvalidAccessLevel(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	req := &RequestAccount{AccessLevel: "InvalidLevel"}
+	result, resp, err := svc.UpdateByIDV1(context.Background(), "1", req)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "invalid accessLevel")
+}
+
 // Test DeleteByIDV1 with success response
 func TestUnit_Accounts_DeleteByIDV1_Success(t *testing.T) {
 	svc, mock := setupMockService(t)
@@ -197,6 +253,12 @@ func TestUnit_Accounts_GetByIDV1_Error(t *testing.T) {
 func TestUnit_Accounts_CreateV1_Error(t *testing.T) {
 	svc, _ := setupMockService(t)
 	_, _, err := svc.CreateV1(context.Background(), &RequestAccount{Username: "user"})
+	require.Error(t, err)
+}
+
+func TestUnit_Accounts_UpdateByIDV1_Error(t *testing.T) {
+	svc, _ := setupMockService(t)
+	_, _, err := svc.UpdateByIDV1(context.Background(), "1", &RequestAccount{Username: "user"})
 	require.Error(t, err)
 }
 
