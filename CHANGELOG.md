@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.11.1...v0.12.0) (2026-04-28)
+
+
+### Features
+
+* implement Jamf Pro API 11.26.0 and 11.27.0 changes ([8b45f60](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/8b45f607d71462234e154bf07edfb07ca48eda1e))
+* implement Jamf Pro API 11.26.0 and 11.27.0 changes ([f7cb50a](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/f7cb50a8a641dc19d2bbd1cb586cdb008e5c5f85))
+
+
+### Bug Fixes
+
+* correct last_login field name and user_sessions response type ([fbb1f4b](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/fbb1f4b2925b020b5fd920981ca830cca816076d))
+* correct user_sessions model and add graceful skips for privilege-restricted acceptance tests ([133f74a](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/133f74ab319df868b7868e49141cd3a28721b22b))
+* jamf pro api 11 26 27 changes ([ea78be6](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/ea78be64278a932c5e7d4bf7862276554f19c16a))
+
 ## [0.11.1](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.11.0...v0.11.1) (2026-04-06)
 
 
