@@ -32,9 +32,7 @@ func TestAcceptance_Accounts_lifecycle(t *testing.T) {
 	}
 
 	created, resp, err := svc.CreateV1(ctx, createReq)
-	if err != nil {
-		t.Skipf("accounts CreateV1 returned an error (may require elevated API client privileges or unsupported on this tenant): %v", err)
-	}
+	require.NoError(t, err)
 	require.NotNil(t, created)
 	assert.Equal(t, 201, resp.StatusCode())
 	assert.NotEmpty(t, created.ID)
@@ -120,9 +118,7 @@ func TestAcceptance_Accounts_list_with_rsql_filter(t *testing.T) {
 		AccountType:    "DEFAULT",
 	}
 	created, resp, err := svc.CreateV1(ctx, createReq)
-	if err != nil {
-		t.Skipf("accounts CreateV1 returned an error (may require elevated API client privileges or unsupported on this tenant): %v", err)
-	}
+	require.NoError(t, err)
 	assert.Equal(t, 201, resp.StatusCode())
 
 	acc.Cleanup(t, func() {

@@ -26,10 +26,10 @@ func NewUserSessions(client client.Client) *UserSessions {
 // GetActiveV1 returns detailed information about currently logged-in users.
 // URL: GET /api/v1/user-sessions/active
 // https://developer.jamf.com/jamf-pro/reference/get_v1-user-sessions-active
-func (s *UserSessions) GetActiveV1(ctx context.Context) ([]ResourceActiveUserSession, *resty.Response, error) {
+func (s *UserSessions) GetActiveV1(ctx context.Context) (*ListActiveUserSessionsResponse, *resty.Response, error) {
 	endpoint := constants.EndpointJamfProUserSessionsActiveV1
 
-	var result []ResourceActiveUserSession
+	var result ListActiveUserSessionsResponse
 
 	resp, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.ApplicationJSON).
@@ -39,7 +39,7 @@ func (s *UserSessions) GetActiveV1(ctx context.Context) ([]ResourceActiveUserSes
 		return nil, resp, fmt.Errorf("failed to get active user sessions: %w", err)
 	}
 
-	return result, resp, nil
+	return &result, resp, nil
 }
 
 // GetCountV1 returns the number of currently logged-in users.

@@ -1,12 +1,15 @@
-[
-  {
-    "id": "1",
-    "username": "admin",
-    "lastAccess": "2024-04-28T09:00:00Z"
-  },
-  {
-    "id": "2",
-    "username": "testuser",
-    "lastAccess": "2024-04-28T09:10:00Z"
-  }
-]
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "username": "admin",
+      "lastAccess": "2024-04-28T09:00:00Z"
+    },
+    {
+      "id": "2",
+      "username": "testuser",
+      "lastAccess": "2024-04-28T09:10:00Z"
+    }
+  ]
+}
