@@ -4,5 +4,5 @@ package last_login
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-last-login
 type ResourceLastLogin struct {
-	Date string `json:"date"` // ISO 8601 timestamp of the last login event
+	LastLogin string `json:"lastLogin"` // ISO 8601 timestamp of the last login event
 }

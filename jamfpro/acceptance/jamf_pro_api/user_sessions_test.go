@@ -32,10 +32,10 @@ func TestAcceptance_UserSessions_get_active_v1(t *testing.T) {
 	acc.LogTestStage(t, "get", "retrieving active user sessions")
 	result, resp, err := acc.Client.JamfProAPI.UserSessions.GetActiveV1(ctx)
 	require.NoError(t, err)
-	require.NotNil(t, result)
+	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode())
-	assert.GreaterOrEqual(t, result.TotalCount, 0)
-	acc.LogTestSuccess(t, "active user sessions count=%d", result.TotalCount)
+	assert.GreaterOrEqual(t, len(result), 0)
+	acc.LogTestSuccess(t, "active user sessions count=%d", len(result))
 }
 
 // TestAcceptance_UserSessions_get_count_v1 verifies the user session count endpoint.

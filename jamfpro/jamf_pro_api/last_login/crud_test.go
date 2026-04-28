@@ -25,8 +25,8 @@ func TestUnit_LastLogin_GetV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode())
-	assert.NotEmpty(t, result.Date)
-	assert.Equal(t, "2024-04-28T09:15:32Z", result.Date)
+	assert.NotEmpty(t, result.LastLogin)
+	assert.Equal(t, "2024-04-28T09:15:32Z", result.LastLogin)
 }
 
 // Test GetV1 error (no mock registered)
