@@ -22,13 +22,11 @@ func TestUnit_UserSessions_GetActiveV1_Success(t *testing.T) {
 
 	result, resp, err := svc.GetActiveV1(context.Background())
 	require.NoError(t, err)
-	require.NotNil(t, result)
 	require.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode())
-	assert.Equal(t, 2, result.TotalCount)
-	assert.Len(t, result.Results, 2)
-	assert.Equal(t, "1", result.Results[0].ID)
-	assert.Equal(t, "admin", result.Results[0].Username)
+	assert.Len(t, result, 2)
+	assert.Equal(t, "1", result[0].ID)
+	assert.Equal(t, "admin", result[0].Username)
 }
 
 // Test GetCountV1 success
