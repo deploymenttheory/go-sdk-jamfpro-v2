@@ -36,6 +36,9 @@ func TestUnit_ApiAuthorization_GetV1_Success(t *testing.T) {
 	assert.Len(t, result.Sites, 1)
 	assert.Equal(t, "1", result.Sites[0].ID)
 	assert.Equal(t, "Eau Claire", result.Sites[0].Name)
+	// 11.29 platform division identifiers (additive)
+	assert.Equal(t, "5", result.Account.CurrentDivisionID)
+	assert.Equal(t, "5", result.Sites[0].DivisionID)
 }
 
 func TestUnit_ApiAuthorization_GetV1_Error(t *testing.T) {

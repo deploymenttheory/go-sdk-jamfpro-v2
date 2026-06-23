@@ -1,0 +1,8 @@
+{
+  "name": "All Managed Clients",
+  "description": "",
+  "criteria": [
+    { "name": "Operating System", "priority": 0, "andOr": "and", "searchType": "not like", "value": "server", "openingParen": false, "closingParen": false }
+  ],
+  "siteId": "-1"
+}

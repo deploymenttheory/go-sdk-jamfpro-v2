@@ -111,6 +111,16 @@ func IsBadRequest(err error) bool {
 	return false
 }
 
+// IsForbidden reports whether err is an APIError with HTTP 403 Forbidden.
+// Jamf Pro returns 403 (rather than 404) from the Jamf Remote Assist session
+// endpoints when the feature is not enabled on the instance.
+func IsForbidden(err error) bool {
+	if apiErr, ok := err.(*APIError); ok {
+		return apiErr.StatusCode == http.StatusForbidden
+	}
+	return false
+}
+
 // IsServerError checks if the error is a server error (5xx).
 func IsServerError(err error) bool {
 	if apiErr, ok := err.(*APIError); ok {

@@ -14,6 +14,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -37,6 +38,13 @@ type GenericMock struct {
 	contentType   ContentType
 	LastRSQLQuery map[string]string
 	fixtureDir    string // Directory containing fixture files
+
+	// ServerVersionStr, when non-empty, is parsed and returned by ServerVersion.
+	// Tests set it to simulate the connected Jamf Pro server version (e.g. "11.27.0").
+	ServerVersionStr string
+	// ServerVersionError, when non-nil, is returned by ServerVersion to simulate
+	// a version-endpoint failure (used to exercise the removal guard's fail-open path).
+	ServerVersionError error
 }
 
 // GenericMockConfig configures a GenericMock instance.
@@ -292,6 +300,19 @@ func (m *GenericMock) RSQLBuilder() client.RSQLFilterBuilder { return nil }
 func (m *GenericMock) InvalidateToken() error                { return nil }
 func (m *GenericMock) KeepAliveToken() error                 { return nil }
 func (m *GenericMock) GetLogger() *zap.Logger                { return m.logger }
+
+// ServerVersion returns the simulated Jamf Pro server version. Set
+// ServerVersionStr (or ServerVersionError) on the mock before invoking a
+// service that consults the API-lifecycle removal guard.
+func (m *GenericMock) ServerVersion(_ context.Context) (apilifecycle.Version, error) {
+	if m.ServerVersionError != nil {
+		return apilifecycle.Version{}, m.ServerVersionError
+	}
+	if m.ServerVersionStr == "" {
+		return apilifecycle.Version{}, fmt.Errorf("%s: ServerVersionStr not set", m.name)
+	}
+	return apilifecycle.Parse(m.ServerVersionStr)
+}
 
 // Convenience methods for registering common error responses
 

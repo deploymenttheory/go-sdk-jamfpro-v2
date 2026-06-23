@@ -11,6 +11,7 @@ import (
 	"runtime"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 
@@ -185,3 +186,10 @@ func (m *UserAccountSettingsMock) RSQLBuilder() client.RSQLFilterBuilder { retur
 func (m *UserAccountSettingsMock) InvalidateToken() error                { return nil }
 func (m *UserAccountSettingsMock) KeepAliveToken() error                 { return nil }
 func (m *UserAccountSettingsMock) GetLogger() *zap.Logger                { return m.logger }
+
+// ServerVersion returns a zero (0.0.0) version so the API-lifecycle removal
+// guard treats every capability as supported. These mocks do not exercise
+// removal gating; set a real version here if a future test needs it.
+func (m *UserAccountSettingsMock) ServerVersion(_ context.Context) (apilifecycle.Version, error) {
+	return apilifecycle.Version{}, nil
+}

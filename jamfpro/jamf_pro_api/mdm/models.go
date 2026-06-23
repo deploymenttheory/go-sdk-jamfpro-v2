@@ -4,43 +4,43 @@ package mdm
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
 const (
-	CommandTypeApplyRedemptionCode        = "APPLY_REDEMPTION_CODE"
-	CommandTypeCertificateList            = "CERTIFICATE_LIST"
-	CommandTypeClearPasscode              = "CLEAR_PASSCODE"
-	CommandTypeClearRestrictionsPassword  = "CLEAR_RESTRICTIONS_PASSWORD"
-	CommandTypeDeclarativeManagement      = "DECLARATIVE_MANAGEMENT"
-	CommandTypeDeleteUser                 = "DELETE_USER"
-	CommandTypeDeviceInformation          = "DEVICE_INFORMATION"
-	CommandTypeDeviceLocation             = "DEVICE_LOCATION"
-	CommandTypeDeviceLock                 = "DEVICE_LOCK"
-	CommandTypeDisableLostMode            = "DISABLE_LOST_MODE"
-	CommandTypeDisableRemoteDesktop       = "DISABLE_REMOTE_DESKTOP"
-	CommandTypeEnableLostMode             = "ENABLE_LOST_MODE"
-	CommandTypeEnableRemoteDesktop        = "ENABLE_REMOTE_DESKTOP"
-	CommandTypeEraseDevice                = "ERASE_DEVICE"
-	CommandTypeInstalledApplicationList   = "INSTALLED_APPLICATION_LIST"
-	CommandTypeLogOutUser                 = "LOG_OUT_USER"
-	CommandTypeManagedApplicationList     = "MANAGED_APPLICATION_LIST"
-	CommandTypeManagedMediaList           = "MANAGED_MEDIA_LIST"
-	CommandTypeRefreshCellularPlans       = "REFRESH_CELLULAR_PLANS"
-	CommandTypePlayLostModeSound          = "PLAY_LOST_MODE_SOUND"
+	CommandTypeApplyRedemptionCode       = "APPLY_REDEMPTION_CODE"
+	CommandTypeCertificateList           = "CERTIFICATE_LIST"
+	CommandTypeClearPasscode             = "CLEAR_PASSCODE"
+	CommandTypeClearRestrictionsPassword = "CLEAR_RESTRICTIONS_PASSWORD"
+	CommandTypeDeclarativeManagement     = "DECLARATIVE_MANAGEMENT"
+	CommandTypeDeleteUser                = "DELETE_USER"
+	CommandTypeDeviceInformation         = "DEVICE_INFORMATION"
+	CommandTypeDeviceLocation            = "DEVICE_LOCATION"
+	CommandTypeDeviceLock                = "DEVICE_LOCK"
+	CommandTypeDisableLostMode           = "DISABLE_LOST_MODE"
+	CommandTypeDisableRemoteDesktop      = "DISABLE_REMOTE_DESKTOP"
+	CommandTypeEnableLostMode            = "ENABLE_LOST_MODE"
+	CommandTypeEnableRemoteDesktop       = "ENABLE_REMOTE_DESKTOP"
+	CommandTypeEraseDevice               = "ERASE_DEVICE"
+	CommandTypeInstalledApplicationList  = "INSTALLED_APPLICATION_LIST"
+	CommandTypeLogOutUser                = "LOG_OUT_USER"
+	CommandTypeManagedApplicationList    = "MANAGED_APPLICATION_LIST"
+	CommandTypeManagedMediaList          = "MANAGED_MEDIA_LIST"
+	CommandTypeRefreshCellularPlans      = "REFRESH_CELLULAR_PLANS"
+	CommandTypePlayLostModeSound         = "PLAY_LOST_MODE_SOUND"
 	// CommandTypeProvisioningProfileList requests a list of installed provisioning profiles.
 	// Added in Jamf Pro 11.25.
-	CommandTypeProvisioningProfileList    = "PROVISIONING_PROFILE_LIST"
+	CommandTypeProvisioningProfileList = "PROVISIONING_PROFILE_LIST"
 	// CommandTypeProfileList requests a list of installed configuration profiles.
 	// Added in Jamf Pro 11.26.
-	CommandTypeProfileList                = "PROFILE_LIST"
-	CommandTypeRestartDevice              = "RESTART_DEVICE"
-	CommandTypeRequestMirroring           = "REQUEST_MIRRORING"
-	CommandTypeSecurityInfo               = "SECURITY_INFO"
-	CommandTypeSettings                   = "SETTINGS"
-	CommandTypeSetAutoAdminPassword       = "SET_AUTO_ADMIN_PASSWORD"
-	CommandTypeSetRecoveryLock            = "SET_RECOVERY_LOCK"
-	CommandTypeShutDownDevice             = "SHUT_DOWN_DEVICE"
-	CommandTypeStopMirroring              = "STOP_MIRRORING"
-	CommandTypeUnlockUserAccount          = "UNLOCK_USER_ACCOUNT"
-	CommandTypeValidateApplications       = "VALIDATE_APPLICATIONS"
-	CommandTypeValidateRecoveryLock       = "VALIDATE_RECOVERY_LOCK"
+	CommandTypeProfileList          = "PROFILE_LIST"
+	CommandTypeRestartDevice        = "RESTART_DEVICE"
+	CommandTypeRequestMirroring     = "REQUEST_MIRRORING"
+	CommandTypeSecurityInfo         = "SECURITY_INFO"
+	CommandTypeSettings             = "SETTINGS"
+	CommandTypeSetAutoAdminPassword = "SET_AUTO_ADMIN_PASSWORD"
+	CommandTypeSetRecoveryLock      = "SET_RECOVERY_LOCK"
+	CommandTypeShutDownDevice       = "SHUT_DOWN_DEVICE"
+	CommandTypeStopMirroring        = "STOP_MIRRORING"
+	CommandTypeUnlockUserAccount    = "UNLOCK_USER_ACCOUNT"
+	CommandTypeValidateApplications = "VALIDATE_APPLICATIONS"
+	CommandTypeValidateRecoveryLock = "VALIDATE_RECOVERY_LOCK"
 )
 
 // BlankPushResponse represents the response structure for the blank push MDM command.
@@ -70,7 +70,9 @@ type CommandData struct {
 	UserName       string `json:"userName,omitempty"`
 	ForceDeletion  bool   `json:"forceDeletion,omitempty"`
 	DeleteAllUsers bool   `json:"deleteAllUsers,omitempty"`
-	// Enable_Lost_Mode
+	// Enable_Lost_Mode — at least one of LostModeMessage or LostModePhone must
+	// be provided. LostModeMessage and LostModeFootnote render on the device's
+	// Lock Screen; LostModePhone renders as a tappable phone number.
 	LostModeMessage  string `json:"lostModeMessage,omitempty"`
 	LostModePhone    string `json:"lostModePhone,omitempty"`
 	LostModeFootnote string `json:"lostModeFootnote,omitempty"`
@@ -89,17 +91,20 @@ type CommandData struct {
 	SharedDeviceConfiguration *SharedDeviceConfiguration `json:"sharedDeviceConfiguration,omitempty"`
 	ApplicationConfiguration  *ApplicationConfiguration  `json:"applicationConfiguration,omitempty"`
 	SoftwareUpdateSettings    *SoftwareUpdateSettings    `json:"softwareUpdateSettings,omitempty"`
-	BootstrapTokenAllowed     bool                       `json:"bootstrapTokenAllowed,omitempty"`
-	Bluetooth                 bool                       `json:"bluetooth,omitempty"`
-	AppAnalytics              string                     `json:"appAnalytics,omitempty"`
-	DiagnosticSubmission      string                     `json:"diagnosticSubmission,omitempty"`
-	DataRoaming               string                     `json:"dataRoaming,omitempty"`
-	VoiceRoaming              string                     `json:"voiceRoaming,omitempty"`
-	PersonalHotspot           string                     `json:"personalHotspot,omitempty"`
-	MaximumResidentUsers      int                        `json:"maximumResidentUsers,omitempty"`
-	DeviceName                string                     `json:"deviceName,omitempty"`
-	TimeZone                  string                     `json:"timeZone,omitempty"`
-	PasscodeLockGracePeriod   int                        `json:"passcodeLockGracePeriod,omitempty"`
+	// Deprecated: deprecated in Jamf Pro 11.28. macOS 11+ manages bootstrap
+	// tokens automatically, so this field is no longer necessary. It remains
+	// functional for backward compatibility.
+	BootstrapTokenAllowed   bool   `json:"bootstrapTokenAllowed,omitempty"`
+	Bluetooth               bool   `json:"bluetooth,omitempty"`
+	AppAnalytics            string `json:"appAnalytics,omitempty"`
+	DiagnosticSubmission    string `json:"diagnosticSubmission,omitempty"`
+	DataRoaming             string `json:"dataRoaming,omitempty"`
+	VoiceRoaming            string `json:"voiceRoaming,omitempty"`
+	PersonalHotspot         string `json:"personalHotspot,omitempty"`
+	MaximumResidentUsers    int    `json:"maximumResidentUsers,omitempty"`
+	DeviceName              string `json:"deviceName,omitempty"`
+	TimeZone                string `json:"timeZone,omitempty"`
+	PasscodeLockGracePeriod int    `json:"passcodeLockGracePeriod,omitempty"`
 	// Set_Auto_Admin_Password
 	GUID     string `json:"guid,omitempty"`
 	Password string `json:"password,omitempty"`

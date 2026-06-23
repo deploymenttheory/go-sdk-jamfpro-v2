@@ -7,35 +7,35 @@ package mobile_devices
 
 // MobileDeviceType represents the type of a mobile device.
 const (
-	MobileDeviceTypeIos     = "ios"
-	MobileDeviceTypeTvos    = "tvos"
-	MobileDeviceTypeWatchos = "watchos"
+	MobileDeviceTypeIos      = "ios"
+	MobileDeviceTypeTvos     = "tvos"
+	MobileDeviceTypeWatchos  = "watchos"
 	MobileDeviceTypeVisionos = "visionos"
-	MobileDeviceTypeUnknown = "unknown"
+	MobileDeviceTypeUnknown  = "unknown"
 )
 
 // MobileDeviceGeneralDeviceOwnershipType represents the ownership type of a mobile device.
 const (
-	DeviceOwnershipTypeInstitutional                  = "Institutional"
-	DeviceOwnershipTypeUserEnrollment                 = "UserEnrollment"
-	DeviceOwnershipTypeAccountDrivenUserEnrollment    = "AccountDrivenUserEnrollment"
-	DeviceOwnershipTypeAccountDrivenDeviceEnrollment  = "AccountDrivenDeviceEnrollment"
+	DeviceOwnershipTypeInstitutional                 = "Institutional"
+	DeviceOwnershipTypeUserEnrollment                = "UserEnrollment"
+	DeviceOwnershipTypeAccountDrivenUserEnrollment   = "AccountDrivenUserEnrollment"
+	DeviceOwnershipTypeAccountDrivenDeviceEnrollment = "AccountDrivenDeviceEnrollment"
 )
 
 // MobileDeviceSecurityAttestationStatus represents the attestation status of a mobile device.
 const (
-	MobileDeviceAttestationStatusPending                      = "PENDING"
-	MobileDeviceAttestationStatusSuccess                      = "SUCCESS"
-	MobileDeviceAttestationStatusCertificateInvalid           = "CERTIFICATE_INVALID"
-	MobileDeviceAttestationStatusDevicePropertiesMismatch     = "DEVICE_PROPERTIES_MISMATCH"
-	MobileDeviceAttestationStatusMdaUnsupportedDueToHardware  = "MDA_UNSUPPORTED_DUE_TO_HARDWARE"
-	MobileDeviceAttestationStatusMdaUnsupportedDueToSoftware  = "MDA_UNSUPPORTED_DUE_TO_SOFTWARE"
+	MobileDeviceAttestationStatusPending                     = "PENDING"
+	MobileDeviceAttestationStatusSuccess                     = "SUCCESS"
+	MobileDeviceAttestationStatusCertificateInvalid          = "CERTIFICATE_INVALID"
+	MobileDeviceAttestationStatusDevicePropertiesMismatch    = "DEVICE_PROPERTIES_MISMATCH"
+	MobileDeviceAttestationStatusMdaUnsupportedDueToHardware = "MDA_UNSUPPORTED_DUE_TO_HARDWARE"
+	MobileDeviceAttestationStatusMdaUnsupportedDueToSoftware = "MDA_UNSUPPORTED_DUE_TO_SOFTWARE"
 )
 
 // MobileDeviceSecurityBootstrapTokenEscrowed represents the bootstrap token escrowed status.
 const (
-	MobileDeviceBootstrapTokenEscrowedEscrowed    = "ESCROWED"
-	MobileDeviceBootstrapTokenEscrowedNotEscrowed = "NOT_ESCROWED"
+	MobileDeviceBootstrapTokenEscrowedEscrowed     = "ESCROWED"
+	MobileDeviceBootstrapTokenEscrowedNotEscrowed  = "NOT_ESCROWED"
 	MobileDeviceBootstrapTokenEscrowedNotSupported = "NOT_SUPPORTED"
 )
 
@@ -63,22 +63,31 @@ const (
 	MobileDeviceBatteryHealthUnsupported        = "UNSUPPORTED"
 )
 
+// MobileDeviceExceptionHandling represents the values for the `exception-handling`
+// query parameter on GET /v2/mobile-devices/detail (added in Jamf Pro 11.29).
+// STRICT (the default) fails the request if any device record cannot be returned;
+// LENIENT skips records that cannot be returned and returns the remainder.
+const (
+	MobileDeviceExceptionHandlingStrict  = "STRICT"
+	MobileDeviceExceptionHandlingLenient = "LENIENT"
+)
+
 // MobileDeviceSection represents a section of mobile device inventory data.
 const (
-	MobileDeviceSectionGeneral               = "GENERAL"
-	MobileDeviceSectionHardware              = "HARDWARE"
-	MobileDeviceSectionUserAndLocation       = "USER_AND_LOCATION"
-	MobileDeviceSectionPurchasing            = "PURCHASING"
-	MobileDeviceSectionSecurity              = "SECURITY"
-	MobileDeviceSectionApplications          = "APPLICATIONS"
-	MobileDeviceSectionEbooks                = "EBOOKS"
-	MobileDeviceSectionNetwork               = "NETWORK"
-	MobileDeviceSectionServiceSubscriptions  = "SERVICE_SUBSCRIPTIONS"
-	MobileDeviceSectionCertificates          = "CERTIFICATES"
-	MobileDeviceSectionProfiles              = "PROFILES"
-	MobileDeviceSectionUserProfiles          = "USER_PROFILES"
-	MobileDeviceSectionProvisioningProfiles  = "PROVISIONING_PROFILES"
-	MobileDeviceSectionSharedUsers           = "SHARED_USERS"
-	MobileDeviceSectionGroups                = "GROUPS"
-	MobileDeviceSectionExtensionAttributes   = "EXTENSION_ATTRIBUTES"
+	MobileDeviceSectionGeneral              = "GENERAL"
+	MobileDeviceSectionHardware             = "HARDWARE"
+	MobileDeviceSectionUserAndLocation      = "USER_AND_LOCATION"
+	MobileDeviceSectionPurchasing           = "PURCHASING"
+	MobileDeviceSectionSecurity             = "SECURITY"
+	MobileDeviceSectionApplications         = "APPLICATIONS"
+	MobileDeviceSectionEbooks               = "EBOOKS"
+	MobileDeviceSectionNetwork              = "NETWORK"
+	MobileDeviceSectionServiceSubscriptions = "SERVICE_SUBSCRIPTIONS"
+	MobileDeviceSectionCertificates         = "CERTIFICATES"
+	MobileDeviceSectionProfiles             = "PROFILES"
+	MobileDeviceSectionUserProfiles         = "USER_PROFILES"
+	MobileDeviceSectionProvisioningProfiles = "PROVISIONING_PROFILES"
+	MobileDeviceSectionSharedUsers          = "SHARED_USERS"
+	MobileDeviceSectionGroups               = "GROUPS"
+	MobileDeviceSectionExtensionAttributes  = "EXTENSION_ATTRIBUTES"
 )

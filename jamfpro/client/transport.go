@@ -4,10 +4,12 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/config"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -34,6 +36,12 @@ type Transport struct {
 	// responseTracker measures per-request latency and derives an adaptive
 	// inter-request delay when the server begins responding slowly.
 	responseTracker *responseTimeTracker
+
+	// serverVersion is the connected Jamf Pro version, fetched at most once via
+	// GET /api/v1/jamf-pro-version and cached for the transport's lifetime.
+	serverVersionOnce sync.Once
+	serverVersion     apilifecycle.Version
+	serverVersionErr  error
 }
 
 // GetHTTPClient returns the underlying resty client for advanced use.
@@ -317,7 +325,7 @@ func (t *Transport) executeRequest(req *resty.Request, method, path string) (*re
 		return resp, err
 	}
 
-	if resp.IsError() {
+	if resp.IsStatusFailure() {
 		return resp, ParseErrorResponse(
 			[]byte(resp.String()),
 			resp.StatusCode(),
@@ -368,4 +376,38 @@ func (t *Transport) executeRequest(req *resty.Request, method, path string) (*re
 	}
 
 	return resp, nil
+}
+
+// ServerVersion fetches and caches the connected Jamf Pro server version. The
+// version endpoint is hit at most once per Transport instance; both the parsed
+// version and any error are memoised.
+//
+// The version GET is inlined here (against a local struct) rather than calling
+// the jamf_pro_version service, which would create an import cycle
+// (service -> client -> service).
+func (t *Transport) ServerVersion(ctx context.Context) (apilifecycle.Version, error) {
+	t.serverVersionOnce.Do(func() {
+		var result struct {
+			Version *string `json:"Version,omitempty"`
+		}
+		_, err := t.NewRequest(ctx).
+			SetHeader("Accept", constants.ApplicationJSON).
+			SetResult(&result).
+			Get(constants.EndpointJamfProJamfProVersionV1)
+		if err != nil {
+			t.serverVersionErr = fmt.Errorf("failed to fetch Jamf Pro server version: %w", err)
+			return
+		}
+		if result.Version == nil || *result.Version == "" {
+			t.serverVersionErr = fmt.Errorf("Jamf Pro server returned an empty version")
+			return
+		}
+		v, perr := apilifecycle.Parse(*result.Version)
+		if perr != nil {
+			t.serverVersionErr = fmt.Errorf("failed to parse Jamf Pro server version %q: %w", *result.Version, perr)
+			return
+		}
+		t.serverVersion = v
+	})
+	return t.serverVersion, t.serverVersionErr
 }

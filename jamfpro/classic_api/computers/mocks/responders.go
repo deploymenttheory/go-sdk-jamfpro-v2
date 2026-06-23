@@ -42,7 +42,7 @@ func (m *ComputersMock) RegisterGetComputerByNameMock() {
 }
 
 func (m *ComputersMock) RegisterCreateComputerMock() {
-	m.Register("POST", "/JSSResource/computers", 201, "validate_create_computer.xml")
+	m.Register("POST", "/JSSResource/computers/id/0", 201, "validate_create_computer.xml")
 }
 
 func (m *ComputersMock) RegisterUpdateComputerByIDMock() {
@@ -64,4 +64,3 @@ func (m *ComputersMock) RegisterDeleteComputerByNameMock() {
 func (m *ComputersMock) RegisterNotFoundErrorMock() {
 	m.RegisterError("GET", "/JSSResource/computers/id/999", 404, "error_not_found.xml", "Jamf Pro Classic API error (404): Resource not found")
 }
-

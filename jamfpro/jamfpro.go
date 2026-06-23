@@ -12,6 +12,7 @@ import (
 	classic_byoprofiles "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/byoprofiles"
 	classic_classes "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/classes"
 	classic_command_flush "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/command_flush"
+	classic_computer_commands "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_commands"
 	classic_computer_groups "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_groups"
 	classic_computer_history "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_history"
 	classic_computer_inventory_collection "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/computer_inventory_collection"
@@ -29,6 +30,7 @@ import (
 	classic_mac_applications "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mac_applications"
 	classic_macos_configuration_profiles "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/macos_configuration_profiles"
 	classic_mobile_device_applications "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_applications"
+	classic_mobile_device_commands "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_commands"
 	classic_mobile_device_configuration_profiles "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_configuration_profiles"
 	classic_mobile_device_enrollment_profiles "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_enrollment_profiles"
 	classic_mobile_device_groups "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/classic_api/mobile_device_groups"
@@ -123,13 +125,14 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_pro_version"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_protect"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jamf_remote_assist"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/last_login"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/jcds"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/last_login"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/ldap"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/local_admin_password"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/locales"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/log_flushing"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/login_customization"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/m2m"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/macos_configuration_profile_custom_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/managed_software_updates"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mdm"
@@ -139,6 +142,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mobile_device_extension_attributes"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mobile_device_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mobile_device_prestages"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mobile_devices"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/notifications"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/oauth2_session_tokens"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/oidc"
@@ -197,6 +201,7 @@ type ClassicAPIClient struct {
 	BYOProfiles                       *classic_byoprofiles.Byoprofiles
 	Classes                           *classic_classes.Classes
 	CommandFlush                      *classic_command_flush.CommandFlush
+	ComputerCommands                  *classic_computer_commands.ComputerCommands
 	ComputerGroups                    *classic_computer_groups.ComputerGroups
 	Computers                         *classic_computers.Computers
 	ComputerHistory                   *classic_computer_history.ComputerHistory
@@ -214,6 +219,7 @@ type ClassicAPIClient struct {
 	MacApplications                   *classic_mac_applications.MacApplications
 	MacOSConfigurationProfiles        *classic_macos_configuration_profiles.MacosConfigurationProfiles
 	MobileDeviceApplications          *classic_mobile_device_applications.MobileDeviceApplications
+	MobileDeviceCommands              *classic_mobile_device_commands.MobileDeviceCommands
 	MobileDeviceConfigurationProfiles *classic_mobile_device_configuration_profiles.MobileDeviceConfigurationProfiles
 	MobileDeviceEnrollmentProfiles    *classic_mobile_device_enrollment_profiles.MobileDeviceEnrollmentProfiles
 	MobileDeviceGroups                *classic_mobile_device_groups.MobileDeviceGroups
@@ -311,6 +317,7 @@ type JamfProAPIClient struct {
 	JamfProtect                         *jamf_protect.JamfProtect
 	JamfRemoteAssist                    *jamf_remote_assist.JamfRemoteAssist
 	LastLogin                           *last_login.LastLogin
+	M2M                                 *m2m.M2M
 	Jcds                                *jcds.Jcds
 	Ldap                                *ldap.Ldap
 	LocalAdminPassword                  *local_admin_password.LocalAdminPassword
@@ -326,6 +333,7 @@ type JamfProAPIClient struct {
 	MobileDeviceExtensionAttributes     *mobile_device_extension_attributes.MobileDeviceExtensionAttributes
 	MobileDeviceGroups                  *mobile_device_groups.MobileDeviceGroups
 	MobileDevicePrestages               *mobile_device_prestages.MobileDevicePrestages
+	MobileDevices                       *mobile_devices.MobileDevices
 	Notifications                       *notifications.Notifications
 	Oauth2SessionTokens                 *oauth2_session_tokens.Oauth2SessionTokens
 	Oidc                                *oidc.Oidc
@@ -389,6 +397,7 @@ func newClassicAPIClient(transport *client.Transport) *ClassicAPIClient {
 		BYOProfiles:                       classic_byoprofiles.NewByoprofiles(transport),
 		Classes:                           classic_classes.NewClasses(transport),
 		CommandFlush:                      classic_command_flush.NewCommandFlush(transport),
+		ComputerCommands:                  classic_computer_commands.NewComputerCommands(transport),
 		ComputerGroups:                    classic_computer_groups.NewComputerGroups(transport),
 		Computers:                         classic_computers.NewComputers(transport),
 		ComputerHistory:                   classic_computer_history.NewComputerHistory(transport),
@@ -406,6 +415,7 @@ func newClassicAPIClient(transport *client.Transport) *ClassicAPIClient {
 		MacApplications:                   classic_mac_applications.NewMacApplications(transport),
 		MacOSConfigurationProfiles:        classic_macos_configuration_profiles.NewMacosConfigurationProfiles(transport),
 		MobileDeviceApplications:          classic_mobile_device_applications.NewMobileDeviceApplications(transport),
+		MobileDeviceCommands:              classic_mobile_device_commands.NewMobileDeviceCommands(transport),
 		MobileDeviceConfigurationProfiles: classic_mobile_device_configuration_profiles.NewMobileDeviceConfigurationProfiles(transport),
 		MobileDeviceEnrollmentProfiles:    classic_mobile_device_enrollment_profiles.NewMobileDeviceEnrollmentProfiles(transport),
 		MobileDeviceGroups:                classic_mobile_device_groups.NewMobileDeviceGroups(transport),
@@ -504,6 +514,7 @@ func newJamfProAPIClient(transport *client.Transport) *JamfProAPIClient {
 		JamfProtect:                         jamf_protect.NewJamfProtect(transport),
 		JamfRemoteAssist:                    jamf_remote_assist.NewJamfRemoteAssist(transport),
 		LastLogin:                           last_login.NewLastLogin(transport),
+		M2M:                                 m2m.NewM2M(transport),
 		Jcds:                                jcds.NewJcds(transport),
 		Ldap:                                ldap.NewLdap(transport),
 		LocalAdminPassword:                  local_admin_password.NewLocalAdminPassword(transport),
@@ -519,6 +530,7 @@ func newJamfProAPIClient(transport *client.Transport) *JamfProAPIClient {
 		MobileDeviceExtensionAttributes:     mobile_device_extension_attributes.NewMobileDeviceExtensionAttributes(transport),
 		MobileDeviceGroups:                  mobile_device_groups.NewMobileDeviceGroups(transport),
 		MobileDevicePrestages:               mobile_device_prestages.NewMobileDevicePrestages(transport),
+		MobileDevices:                       mobile_devices.NewMobileDevices(transport),
 		Notifications:                       notifications.NewNotifications(transport),
 		Oauth2SessionTokens:                 oauth2_session_tokens.NewOauth2SessionTokens(transport),
 		Oidc:                                oidc.NewOidc(transport),

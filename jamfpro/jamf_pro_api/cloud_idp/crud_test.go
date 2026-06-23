@@ -366,6 +366,8 @@ func TestUnit_CloudIdp_TestUserMembershipByIDV1_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "testuser", result.Username)
 	assert.True(t, result.IsMember)
+	// 11.28 additive field
+	assert.True(t, result.IsMemberByUUID)
 }
 
 func TestUnit_CloudIdp_TestUserMembershipByIDV1_EmptyID(t *testing.T) {

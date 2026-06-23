@@ -1,0 +1,31 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "name": "iPad",
+      "serialNumber": "DMQVGC0DHLA0",
+      "wifiMacAddress": "C4:84:66:92:78:00",
+      "udid": "0dad565fb40b010a9e490440188063a378721069",
+      "phoneNumber": "651-555-5555 Ext111",
+      "model": "iPad 5th Generation (Wi-Fi)",
+      "modelIdentifier": "iPad6,11",
+      "username": "admin",
+      "type": "ios",
+      "managementId": "73226fb6-61df-4c10-9552-eb9bc353d507",
+      "softwareUpdateDeviceId": "J132AP"
+    },
+    {
+      "id": "2",
+      "name": "Apple TV",
+      "serialNumber": "C02XYZ987ABC",
+      "wifiMacAddress": "C4:84:66:92:78:11",
+      "udid": "1ebd565fb40b010a9e490440188063a378721070",
+      "model": "Apple TV 4K",
+      "modelIdentifier": "AppleTV6,2",
+      "username": "tvuser",
+      "type": "tvos",
+      "managementId": "84337fb6-61df-4c10-9552-eb9bc353d508"
+    }
+  ]
+}

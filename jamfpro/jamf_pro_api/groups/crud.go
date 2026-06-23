@@ -7,8 +7,17 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"resty.dev/v3"
 )
+
+// deprecatedV1Replacement is the migration hint logged for the deprecated V1
+// unified-group methods.
+const deprecatedV1Replacement = "use the v2 unified group endpoints (…V2 methods)"
+
+func (s *Groups) warnV1Deprecated(method string) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/groups.Groups."+method, "11.28", deprecatedV1Replacement)
+}
 
 type (
 	// Service handles communication with the Groups-related methods of the Jamf Pro API.
@@ -29,7 +38,11 @@ func NewGroups(client client.Client) *Groups {
 // As of Jamf Pro 11.27.0, the filter parameter supports groupPlatformId with
 // =in= and =out= operators: filter=groupPlatformId=in=('uuid1','uuid2','uuid3')
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListV2.
 func (s *Groups) ListV1(ctx context.Context, rsqlQuery map[string]string) (*ListResponse, *resty.Response, error) {
+	s.warnV1Deprecated("ListV1")
+
 	endpoint := constants.EndpointJamfProGroupsV1
 
 	var result ListResponse
@@ -57,7 +70,11 @@ func (s *Groups) ListV1(ctx context.Context, rsqlQuery map[string]string) (*List
 // GetByIDV1 retrieves a group by its platform ID (groupPlatformId).
 // URL: GET /api/v1/groups/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use GetByIDV2.
 func (s *Groups) GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("GetByIDV1")
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("group ID is required")
 	}
@@ -80,7 +97,11 @@ func (s *Groups) GetByIDV1(ctx context.Context, id string) (*ResourceGroup, *res
 // GetComputerGroupByNameV1 retrieves a computer group by its name (groupName).
 // URL: GET /api/v1/groups?filter=groupName=="name"
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListV2 with a groupName filter.
 func (s *Groups) GetComputerGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("GetComputerGroupByNameV1")
+
 	if name == "" {
 		return nil, nil, fmt.Errorf("group name is required")
 	}
@@ -106,7 +127,11 @@ func (s *Groups) GetComputerGroupByNameV1(ctx context.Context, name string) (*Re
 // GetMobileGroupByNameV1 retrieves a mobile device group by its name (groupName).
 // URL: GET /api/v1/groups?filter=groupName=="name"
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListV2 with a groupName filter.
 func (s *Groups) GetMobileGroupByNameV1(ctx context.Context, name string) (*ResourceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("GetMobileGroupByNameV1")
+
 	if name == "" {
 		return nil, nil, fmt.Errorf("group name is required")
 	}
@@ -132,7 +157,11 @@ func (s *Groups) GetMobileGroupByNameV1(ctx context.Context, name string) (*Reso
 // GetComputerGroupByIDV1 retrieves a computer group by its Jamf Pro ID (groupJamfProId).
 // URL: GET /api/v1/groups
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListV2 with a filter.
 func (s *Groups) GetComputerGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("GetComputerGroupByIDV1")
+
 	if jamfProID == "" {
 		return nil, nil, fmt.Errorf("group Jamf Pro ID is required")
 	}
@@ -154,7 +183,11 @@ func (s *Groups) GetComputerGroupByIDV1(ctx context.Context, jamfProID string) (
 // GetMobileGroupByIDV1 retrieves a mobile device group by its Jamf Pro ID (groupJamfProId).
 // URL: GET /api/v1/groups
 // https://developer.jamf.com/jamf-pro/reference/get_v1-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListV2 with a filter.
 func (s *Groups) GetMobileGroupByIDV1(ctx context.Context, jamfProID string) (*ResourceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("GetMobileGroupByIDV1")
+
 	if jamfProID == "" {
 		return nil, nil, fmt.Errorf("group Jamf Pro ID is required")
 	}
@@ -176,7 +209,11 @@ func (s *Groups) GetMobileGroupByIDV1(ctx context.Context, jamfProID string) (*R
 // UpdateByIDV1 updates a group by its platform ID.
 // URL: PATCH /api/v1/groups/{id}
 // https://developer.jamf.com/jamf-pro/reference/patch_v1-groups-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use UpdateByIDV2.
 func (s *Groups) UpdateByIDV1(ctx context.Context, id string, req *RequestUpdateGroup) (*ResourceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("UpdateByIDV1")
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("group ID is required")
 	}
@@ -204,7 +241,11 @@ func (s *Groups) UpdateByIDV1(ctx context.Context, id string, req *RequestUpdate
 // DeleteByIDV1 removes the specified group by its platform ID.
 // URL: DELETE /api/v1/groups/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v1-groups-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use DeleteByIDV2.
 func (s *Groups) DeleteByIDV1(ctx context.Context, id string) (*resty.Response, error) {
+	s.warnV1Deprecated("DeleteByIDV1")
+
 	if id == "" {
 		return nil, fmt.Errorf("group ID is required")
 	}
