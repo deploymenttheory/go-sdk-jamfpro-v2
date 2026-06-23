@@ -1,0 +1,52 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "mobileDeviceId": "1",
+      "deviceType": "ios",
+      "hardware": {
+        "capacityMb": 100,
+        "availableSpaceMb": 30,
+        "usedSpacePercentage": 70,
+        "batteryLevel": 60,
+        "batteryHealth": "NORMAL",
+        "serialNumber": "5c28fdae",
+        "wifiMacAddress": "ee:00:7c:f0:e5:ff",
+        "bluetoothMacAddress": "ee:00:7c:f0:e5:aa",
+        "model": "iPad 7th Generation (Wi-Fi)",
+        "modelIdentifier": "iPad7,11",
+        "modelNumber": "MW742LL",
+        "bluetoothLowEnergyCapable": false,
+        "deviceId": "c6a49c6d-8c09-4d71-a37d-2f6a9dfbb69b"
+      },
+      "userAndLocation": {
+        "username": "admin",
+        "realName": "IT Bob",
+        "emailAddress": "ITBob@jamf.com",
+        "position": "IT Team Lead",
+        "phoneNumber": "555-555-5555",
+        "departmentId": "1",
+        "buildingId": "1",
+        "room": "room",
+        "building": "Building 1",
+        "department": "Department 1",
+        "lastLoggedInUsernameMdm": "mdmadmin",
+        "lastLoggedInUsernameMdmTimestamp": "2024-10-31T18:04:13Z"
+      },
+      "general": {
+        "udid": "0dad565fb40b010a9e490440188063a378721069",
+        "displayName": "Banezicron",
+        "assetTag": "8675309",
+        "siteId": "-1",
+        "osVersion": "11.4",
+        "osBuild": "15F79",
+        "managed": true,
+        "supervised": true,
+        "deviceOwnershipType": "Institutional",
+        "managementId": "9932fad3-29e9-4b71-bc7c-77dcefce819d",
+        "lastLoggedInUsernameSelfService": "admin",
+        "lastLoggedInUsernameSelfServiceTimestamp": "2018-10-31T18:04:13Z"
+      }
+    }
+  ]
+}

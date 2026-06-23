@@ -44,6 +44,11 @@ func TestUnit_ComputerInventory_GetByIDV3(t *testing.T) {
 	assert.Equal(t, "C02ABC123DEF", result.Hardware.SerialNumber)
 	assert.Equal(t, "MacBook Pro", result.Hardware.Model)
 	assert.Equal(t, "testuser", result.UserAndLocation.Username)
+	// 11.29 additive fields
+	assert.Equal(t, "admin", result.General.LastLoggedInUsernameMdm)
+	assert.Equal(t, "2018-10-31T18:04:13Z", result.General.LastLoggedInUsernameMdmTimestamp)
+	require.Len(t, result.ConfigurationProfiles, 1)
+	assert.Equal(t, "0ae590fe-9b30-11ea-bb37-0242ac130002", result.ConfigurationProfiles[0].UUID)
 }
 
 func TestUnit_ComputerInventory_GetByIDV3_EmptyID(t *testing.T) {

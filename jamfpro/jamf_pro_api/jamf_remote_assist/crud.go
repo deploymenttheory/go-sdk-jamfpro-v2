@@ -1,3 +1,9 @@
+// Package jamf_remote_assist provides access to the Jamf Remote Assist session
+// endpoints of the Jamf Pro API.
+//
+// Note: these session endpoints return HTTP 403 Forbidden (rather than 404 Not
+// Found) when Jamf Remote Assist is not enabled on the instance. Callers can use
+// client.IsForbidden(err) to detect this condition.
 package jamf_remote_assist
 
 import (

@@ -65,6 +65,16 @@ func TestIsBadRequest(t *testing.T) {
 	assert.True(t, IsBadRequest(&APIError{StatusCode: http.StatusBadRequest}))
 }
 
+func TestIsForbidden(t *testing.T) {
+	assert.False(t, IsForbidden(nil))
+	assert.False(t, IsForbidden(&APIError{StatusCode: http.StatusNotFound}))
+	assert.True(t, IsForbidden(&APIError{StatusCode: http.StatusForbidden}))
+}
+
+func TestIsForbidden_NonAPIError(t *testing.T) {
+	assert.False(t, IsForbidden(assert.AnError))
+}
+
 func TestIsServerError(t *testing.T) {
 	assert.True(t, IsServerError(&APIError{StatusCode: 500}))
 	assert.True(t, IsServerError(&APIError{StatusCode: 503}))

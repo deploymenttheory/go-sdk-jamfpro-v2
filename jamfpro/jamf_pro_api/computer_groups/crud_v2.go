@@ -7,8 +7,13 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"resty.dev/v3"
 )
+
+// deprecatedV2Replacement is the migration hint logged for the deprecated V2
+// computer-group methods.
+const deprecatedV2Replacement = "use the v3 computer-groups endpoints (…V3 methods)"
 
 type (
 	// Service handles communication with the computer groups-related methods of the Jamf Pro API.
@@ -29,7 +34,11 @@ func NewComputerGroups(client client.Client) *ComputerGroups {
 
 // ListSmartV2 returns all smart computer groups.
 // URL: GET /api/v2/computer-groups/smart-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListSmartV3.
 func (s *ComputerGroups) ListSmartV2(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.ListSmartV2", "11.28", deprecatedV2Replacement)
+
 	var result ListSmartResponse
 
 	endpoint := constants.EndpointJamfProSmartComputerGroupsV2
@@ -72,7 +81,11 @@ func (s *ComputerGroups) ListSmartV2(ctx context.Context, rsqlQuery map[string]s
 
 // GetSmartByIDV2 returns the specified smart group by ID.
 // URL: GET /api/v2/computer-groups/smart-groups/{id}
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use GetSmartByIDV3.
 func (s *ComputerGroups) GetSmartByIDV2(ctx context.Context, id string) (*ResourceSmartGroup, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.GetSmartByIDV2", "11.28", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("smart group ID is required")
 	}
@@ -94,7 +107,11 @@ func (s *ComputerGroups) GetSmartByIDV2(ctx context.Context, id string) (*Resour
 
 // CreateSmartV2 creates a new smart computer group.
 // URL: POST /api/v2/computer-groups/smart-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use CreateSmartV3.
 func (s *ComputerGroups) CreateSmartV2(ctx context.Context, request *RequestSmartGroup) (*CreateSmartResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.CreateSmartV2", "11.28", deprecatedV2Replacement)
+
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -118,7 +135,11 @@ func (s *ComputerGroups) CreateSmartV2(ctx context.Context, request *RequestSmar
 
 // UpdateSmartV2 updates the specified smart group by ID.
 // URL: PUT /api/v2/computer-groups/smart-groups/{id}
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use UpdateSmartByIDV3.
 func (s *ComputerGroups) UpdateSmartV2(ctx context.Context, id string, request *RequestSmartGroup) (*ResourceSmartGroup, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.UpdateSmartV2", "11.28", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -146,7 +167,11 @@ func (s *ComputerGroups) UpdateSmartV2(ctx context.Context, id string, request *
 
 // DeleteSmartV2 removes the specified smart group by ID.
 // URL: DELETE /api/v2/computer-groups/smart-groups/{id}
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use DeleteSmartByIDV3.
 func (s *ComputerGroups) DeleteSmartV2(ctx context.Context, id string) (*resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.DeleteSmartV2", "11.28", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, fmt.Errorf("smart group ID is required")
 	}
@@ -169,7 +194,11 @@ func (s *ComputerGroups) DeleteSmartV2(ctx context.Context, id string) (*resty.R
 
 // ListStaticV2 returns all static computer groups.
 // URL: GET /api/v2/computer-groups/static-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListStaticV3.
 func (s *ComputerGroups) ListStaticV2(ctx context.Context, rsqlQuery map[string]string) (*ListStaticResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.ListStaticV2", "11.28", deprecatedV2Replacement)
+
 	var result ListStaticResponse
 
 	result.Results = []ResourceStaticGroup{}
@@ -212,7 +241,11 @@ func (s *ComputerGroups) ListStaticV2(ctx context.Context, rsqlQuery map[string]
 
 // GetStaticByIDV2 returns the specified static group by ID.
 // URL: GET /api/v2/computer-groups/static-groups/{id}
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use GetStaticByIDV3.
 func (s *ComputerGroups) GetStaticByIDV2(ctx context.Context, id string) (*ResourceStaticGroup, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.GetStaticByIDV2", "11.28", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("static group ID is required")
 	}
@@ -234,7 +267,11 @@ func (s *ComputerGroups) GetStaticByIDV2(ctx context.Context, id string) (*Resou
 
 // CreateStaticV2 creates a new static computer group with membership.
 // URL: POST /api/v2/computer-groups/static-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use CreateStaticV3.
 func (s *ComputerGroups) CreateStaticV2(ctx context.Context, request *RequestStaticGroup) (*CreateStaticResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.CreateStaticV2", "11.28", deprecatedV2Replacement)
+
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -258,7 +295,11 @@ func (s *ComputerGroups) CreateStaticV2(ctx context.Context, request *RequestSta
 
 // UpdateStaticByIDV2 updates the specified static group by ID.
 // URL: PUT /api/v2/computer-groups/static-groups/{id}
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use UpdateStaticByIDV3.
 func (s *ComputerGroups) UpdateStaticByIDV2(ctx context.Context, id string, request *RequestStaticGroup) (*ResourceStaticGroup, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.UpdateStaticByIDV2", "11.28", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -286,7 +327,11 @@ func (s *ComputerGroups) UpdateStaticByIDV2(ctx context.Context, id string, requ
 
 // DeleteStaticByIDV2 removes the specified static group by ID.
 // URL: DELETE /api/v2/computer-groups/static-groups/{id}
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use DeleteStaticByIDV3.
 func (s *ComputerGroups) DeleteStaticByIDV2(ctx context.Context, id string) (*resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.DeleteStaticByIDV2", "11.28", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, fmt.Errorf("static group ID is required")
 	}
@@ -327,7 +372,11 @@ func (s *ComputerGroups) ListAllV1(ctx context.Context) ([]ResourceGroupV1, *res
 
 // GetSmartGroupMembershipByIDV2 returns the membership (computer IDs) for a smart group.
 // URL: GET /api/v2/computer-groups/smart-group-membership/{id}
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use GetSmartGroupMembershipByIDV3.
 func (s *ComputerGroups) GetSmartGroupMembershipByIDV2(ctx context.Context, id string) (*SmartGroupMembershipResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/computer_groups.ComputerGroups.GetSmartGroupMembershipByIDV2", "11.28", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("smart group ID is required")
 	}

@@ -6,15 +6,15 @@ type ListResponse struct {
 }
 
 type ResourceGroup struct {
-	GroupPlatformId  string              `json:"groupPlatformId,omitempty"`
-	GroupJamfProId   string              `json:"groupJamfProId,omitempty"`
-	GroupName        string              `json:"groupName,omitempty"`
-	GroupDescription string              `json:"groupDescription,omitempty"`
-	GroupType        string              `json:"groupType,omitempty"`
-	Smart            bool                `json:"smart"`
-	MembershipCount  int                 `json:"membershipCount"`
-	Criteria         []SubsetCriterion   `json:"criteria,omitempty"`
-	Assignments      []SubsetAssignment  `json:"assignments,omitempty"`
+	GroupPlatformId  string             `json:"groupPlatformId,omitempty"`
+	GroupJamfProId   string             `json:"groupJamfProId,omitempty"`
+	GroupName        string             `json:"groupName,omitempty"`
+	GroupDescription string             `json:"groupDescription,omitempty"`
+	GroupType        string             `json:"groupType,omitempty"`
+	Smart            bool               `json:"smart"`
+	MembershipCount  int                `json:"membershipCount"`
+	Criteria         []SubsetCriterion  `json:"criteria,omitempty"`
+	Assignments      []SubsetAssignment `json:"assignments,omitempty"`
 }
 
 type SubsetCriterion struct {

@@ -33,30 +33,30 @@ type ResourceStaticMobileDeviceGroup struct {
 
 // ListSmartResponse is the response for ListSmartV1.
 type ListSmartResponse struct {
-	TotalCount int                            `json:"totalCount"`
+	TotalCount int                              `json:"totalCount"`
 	Results    []ResourceSmartMobileDeviceGroup `json:"results"`
 }
 
 // ListStaticResponse is the response for ListStaticV1.
 type ListStaticResponse struct {
-	TotalCount int                             `json:"totalCount"`
+	TotalCount int                               `json:"totalCount"`
 	Results    []ResourceStaticMobileDeviceGroup `json:"results"`
 }
 
 // RequestSmartMobileDeviceGroup is the body for creating and updating smart mobile device groups.
 type RequestSmartMobileDeviceGroup struct {
-	Name        string              `json:"groupName"`
-	Description string              `json:"groupDescription,omitempty"`
+	Name        string               `json:"groupName"`
+	Description string               `json:"groupDescription,omitempty"`
 	Criteria    []CriteriaJamfProAPI `json:"criteria,omitempty"`
-	SiteId      *string             `json:"siteId,omitempty"`
+	SiteId      *string              `json:"siteId,omitempty"`
 }
 
 // RequestStaticMobileDeviceGroup is the body for creating and updating static mobile device groups.
 type RequestStaticMobileDeviceGroup struct {
-	Name        string                           `json:"groupName"`
-	Description string                           `json:"groupDescription,omitempty"`
+	Name        string                              `json:"groupName"`
+	Description string                              `json:"groupDescription,omitempty"`
 	Assignments []StaticMobileDeviceGroupAssignment `json:"assignments"`
-	SiteId      string                           `json:"siteId"`
+	SiteId      string                              `json:"siteId"`
 }
 
 // StaticMobileDeviceGroupAssignment represents a device assignment for a static group.
@@ -91,29 +91,33 @@ type ResourceMobileDeviceGroupSummary struct {
 // Note: as of Jamf Pro 11.25, the "personalDeviceProfileCurrent" field was removed from
 // the filter and sort options for GET /v1/mobile-device-groups/static-group-membership/{id}.
 type ResourceMobileDeviceMember struct {
-	MobileDeviceID   string `json:"mobileDeviceId"`
-	UDID             string `json:"udid"`
-	DisplayName      string `json:"displayName"`
-	SerialNumber     string `json:"serialNumber"`
-	WifiMacAddress   string `json:"wifiMacAddress"`
+	MobileDeviceID    string `json:"mobileDeviceId"`
+	UDID              string `json:"udid"`
+	DisplayName       string `json:"displayName"`
+	SerialNumber      string `json:"serialNumber"`
+	WifiMacAddress    string `json:"wifiMacAddress"`
 	DevicePhoneNumber string `json:"devicePhoneNumber"`
-	Model            string `json:"model"`
-	ModelIdentifier  string `json:"modelIdentifier"`
-	OSVersion        string `json:"osVersion"`
-	Managed          bool   `json:"managed"`
-	Supervised       bool   `json:"supervised"`
+	Model             string `json:"model"`
+	ModelIdentifier   string `json:"modelIdentifier"`
+	OSVersion         string `json:"osVersion"`
+	Managed           bool   `json:"managed"`
+	Supervised        bool   `json:"supervised"`
+	// LastLoggedInUsernameMdm and LastLoggedInUsernameMdmTimestamp were added
+	// to the membership response in Jamf Pro 11.29 (additive fields).
+	LastLoggedInUsernameMdm          string `json:"lastLoggedInUsernameMdm,omitempty"`
+	LastLoggedInUsernameMdmTimestamp string `json:"lastLoggedInUsernameMdmTimestamp,omitempty"`
 }
 
 // GroupMembershipResponse is the response for GetStaticGroupMembershipV1 and GetSmartGroupMembershipV1.
 type GroupMembershipResponse struct {
-	TotalCount int                        `json:"totalCount"`
+	TotalCount int                          `json:"totalCount"`
 	Results    []ResourceMobileDeviceMember `json:"results"`
 }
 
 // RequestEraseDevices is the optional request body for EraseDevicesByGroupIDV1.
 type RequestEraseDevices struct {
-	PreserveDataPlan        *bool `json:"preserveDataPlan,omitempty"`
-	DisallowProximitySetup  *bool `json:"disallowProximitySetup,omitempty"`
-	ClearActivationLock     *bool `json:"clearActivationLock,omitempty"`
+	PreserveDataPlan       *bool `json:"preserveDataPlan,omitempty"`
+	DisallowProximitySetup *bool `json:"disallowProximitySetup,omitempty"`
+	ClearActivationLock    *bool `json:"clearActivationLock,omitempty"`
 	ReturnToService        *bool `json:"returnToService,omitempty"`
 }

@@ -19,7 +19,7 @@ func (t *Transport) validateResponse(resp *resty.Response, method, path string) 
 			zap.Int("status_code", resp.StatusCode()))
 		return nil
 	}
-	if !resp.IsError() && bodyLen > 0 {
+	if !resp.IsStatusFailure() && bodyLen > 0 {
 		contentType := resp.Header().Get("Content-Type")
 		if contentType != "" &&
 			!strings.HasPrefix(contentType, constants.ApplicationJSON) &&
@@ -35,21 +35,21 @@ func (t *Transport) validateResponse(resp *resty.Response, method, path string) 
 }
 
 // IsResponseSuccess returns true if the response status code is 2xx.
-// Delegates to resty's native IsSuccess() method.
+// Delegates to resty's native IsStatusSuccess() method.
 func IsResponseSuccess(resp *resty.Response) bool {
 	if resp == nil {
 		return false
 	}
-	return resp.IsSuccess()
+	return resp.IsStatusSuccess()
 }
 
 // IsResponseError returns true if the response status code is 4xx or 5xx.
-// Delegates to resty's native IsError() method.
+// Delegates to resty's native IsStatusFailure() method.
 func IsResponseError(resp *resty.Response) bool {
 	if resp == nil {
 		return false
 	}
-	return resp.IsError()
+	return resp.IsStatusFailure()
 }
 
 // GetResponseHeader returns a header value from the response by key.

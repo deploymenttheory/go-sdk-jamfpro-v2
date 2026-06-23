@@ -1,0 +1,56 @@
+{
+  "id": "1",
+  "name": "iPad",
+  "enforceName": false,
+  "assetTag": "8675309",
+  "lastInventoryUpdateTimestamp": "2022-10-17T11:48:56.307Z",
+  "osVersion": "11.4",
+  "osBuild": "15F79",
+  "serialNumber": "DMQVGC0DHLA0",
+  "udid": "0dad565fb40b010a9e490440188063a378721069",
+  "ipAddress": "10.0.0.1",
+  "wifiMacAddress": "C4:84:66:92:78:00",
+  "managed": true,
+  "timeZone": "Europe/Warsaw",
+  "deviceOwnershipLevel": "Institutional",
+  "enrollmentMethod": "PRESTAGE",
+  "declarativeDeviceManagementEnabled": true,
+  "site": {
+    "id": "1",
+    "name": "Main Site",
+    "divisionId": "5"
+  },
+  "location": {
+    "username": "admin",
+    "realName": "IT Bob",
+    "emailAddress": "ITBob@jamf.com",
+    "position": "IT Team Lead",
+    "phoneNumber": "555-555-5555",
+    "departmentId": "1",
+    "buildingId": "1",
+    "room": "4th Floor"
+  },
+  "type": "ios",
+  "managementId": "9932fad3-29e9-4b71-bc7c-77dcefce819d",
+  "ios": {
+    "model": "iPad 7th Generation (Wi-Fi)",
+    "modelIdentifier": "iPad7,11",
+    "modelNumber": "MW742LL",
+    "supervised": true,
+    "batteryLevel": 60,
+    "batteryHealth": "NORMAL",
+    "capacityMb": 100,
+    "availableMb": 30,
+    "percentageUsed": 70,
+    "purchasing": {
+      "purchased": true,
+      "poNumber": "8675309",
+      "vendor": "Apple"
+    },
+    "security": {
+      "passcodePresent": true,
+      "passcodeCompliant": true,
+      "bootstrapTokenEscrowed": "NOT_SUPPORTED"
+    }
+  }
+}

@@ -71,7 +71,9 @@
     "lastLoggedInUsernameSelfService": "admin",
     "lastLoggedInUsernameSelfServiceTimestamp": "2018-10-31T18:04:13Z",
     "lastLoggedInUsernameBinary": "admin",
-    "lastLoggedInUsernameBinaryTimestamp": "2018-10-31T18:04:13Z"
+    "lastLoggedInUsernameBinaryTimestamp": "2018-10-31T18:04:13Z",
+    "lastLoggedInUsernameMdm": "admin",
+    "lastLoggedInUsernameMdmTimestamp": "2018-10-31T18:04:13Z"
   },
   "diskEncryption": {
     "bootPartitionEncryptionDetails": {
@@ -198,7 +200,8 @@
       "lastInstalled": "2018-10-31T18:04:13Z",
       "removable": true,
       "displayName": "Displayed profile",
-      "profileIdentifier": "0ae590fe-9b30-11ea-bb37-0242ac130002"
+      "profileIdentifier": "0ae590fe-9b30-11ea-bb37-0242ac130002",
+      "uuid": "0ae590fe-9b30-11ea-bb37-0242ac130002"
     }
   ],
   "printers": [

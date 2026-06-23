@@ -20,18 +20,18 @@ func NewMockResponse(statusCode int, headers http.Header, body []byte) *resty.Re
 	if body == nil {
 		body = []byte{}
 	}
-	
+
 	status := http.StatusText(statusCode)
 	if status == "" {
 		status = fmt.Sprintf("%d", statusCode)
 	}
-	
+
 	bodyReader := io.NopCloser(bytes.NewReader(body))
 
 	// Create a minimal Request to avoid nil pointer dereferences
 	req := &resty.Request{
-		URL:                "",
-		DoNotParseResponse: false,
+		URL:                  "",
+		IsResponseDoNotParse: false,
 	}
 
 	resp := &resty.Response{

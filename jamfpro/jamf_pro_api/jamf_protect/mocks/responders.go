@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 
@@ -231,7 +232,6 @@ func (m *JamfProtectMock) RegisterListPlansBadResultsMock() {
 	m.register("GET", "/api/v1/jamf-protect/plans", 200, `{"totalCount": 1, "results": [{"profileId": "not-a-number"}]}`)
 }
 
-
 func (m *JamfProtectMock) dispatch(method, path string, result any) (*resty.Response, error) {
 	key := method + " " + path
 	resp, ok := m.responses[key]
@@ -422,4 +422,11 @@ func (m *JamfProtectMock) KeepAliveToken() error {
 // GetLogger implements client.Client.
 func (m *JamfProtectMock) GetLogger() *zap.Logger {
 	return m.logger
+}
+
+// ServerVersion returns a zero (0.0.0) version so the API-lifecycle removal
+// guard treats every capability as supported. These mocks do not exercise
+// removal gating; set a real version here if a future test needs it.
+func (m *JamfProtectMock) ServerVersion(_ context.Context) (apilifecycle.Version, error) {
+	return apilifecycle.Version{}, nil
 }

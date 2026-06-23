@@ -84,6 +84,22 @@ func (m *ComputerGroupsMock) RegisterNotFoundErrorMock() {
 	m.RegisterError("GET", "/api/v2/computer-groups/smart-groups/999", 404, "error_not_found.json", "")
 }
 
+// --- V3 registrations (Jamf Pro 11.28 computer-groups v3 surface) ---
+
+func (m *ComputerGroupsMock) RegisterV3Mocks() {
+	m.Register("GET", "/api/v3/computer-groups/smart-groups", 200, "validate_list_smart_groups_v3.json")
+	m.Register("GET", "/api/v3/computer-groups/smart-groups/1", 200, "validate_get_smart_group_v3.json")
+	m.Register("POST", "/api/v3/computer-groups/smart-groups", 201, "validate_create_group_v3.json")
+	m.Register("PUT", "/api/v3/computer-groups/smart-groups/1", 200, "validate_get_smart_group_v3.json")
+	m.Register("DELETE", "/api/v3/computer-groups/smart-groups/1", 204, "")
+	m.Register("GET", "/api/v3/computer-groups/smart-group-membership/1", 200, "validate_get_membership_v3.json")
+	m.Register("GET", "/api/v3/computer-groups/static-groups", 200, "validate_list_static_groups_v3.json")
+	m.Register("GET", "/api/v3/computer-groups/static-groups/10", 200, "validate_get_static_group_v3.json")
+	m.Register("POST", "/api/v3/computer-groups/static-groups", 201, "validate_create_group_v3.json")
+	m.Register("PUT", "/api/v3/computer-groups/static-groups/10", 200, "validate_get_static_group_v3.json")
+	m.Register("DELETE", "/api/v3/computer-groups/static-groups/10", 204, "")
+}
+
 func (m *ComputerGroupsMock) RegisterStaticNotFoundErrorMock() {
 	m.RegisterError("GET", "/api/v2/computer-groups/static-groups/999", 404, "error_not_found.json", "")
 }

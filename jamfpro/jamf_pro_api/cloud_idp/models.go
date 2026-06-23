@@ -109,6 +109,7 @@ type TestUserMembershipRequest struct {
 
 // TestUserMembershipResponse represents the response from testing user membership.
 type TestUserMembershipResponse struct {
-	Username string `json:"username"`
-	IsMember bool   `json:"isMember"`
+	Username       string `json:"username"`
+	IsMember       bool   `json:"isMember"`
+	IsMemberByUUID bool   `json:"isMemberByUuid"`
 }

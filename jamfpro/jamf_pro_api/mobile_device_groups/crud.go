@@ -7,8 +7,17 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"resty.dev/v3"
 )
+
+// deprecatedV1Replacement is the migration hint logged for the deprecated V1
+// mobile-device-group methods.
+const deprecatedV1Replacement = "use the v2 mobile-device-groups endpoints (…V2 methods)"
+
+func (s *MobileDeviceGroups) warnV1Deprecated(method string) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/mobile_device_groups.MobileDeviceGroups."+method, "11.28", deprecatedV1Replacement)
+}
 
 type (
 	// Service handles communication with the mobile device groups-related methods of the Jamf Pro API.
@@ -30,7 +39,11 @@ func NewMobileDeviceGroups(client client.Client) *MobileDeviceGroups {
 // ListSmartV1 returns all smart mobile device groups.
 // URL: GET /api/v1/mobile-device-groups/smart-groups
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListSmartV2.
 func (s *MobileDeviceGroups) ListSmartV1(ctx context.Context, rsqlQuery map[string]string) (*ListSmartResponse, *resty.Response, error) {
+	s.warnV1Deprecated("ListSmartV1")
+
 	var result ListSmartResponse
 
 	endpoint := constants.EndpointJamfProSmartMobileDeviceGroupsV1
@@ -58,7 +71,11 @@ func (s *MobileDeviceGroups) ListSmartV1(ctx context.Context, rsqlQuery map[stri
 // GetSmartByIDV1 returns the specified smart mobile device group by ID.
 // URL: GET /api/v1/mobile-device-groups/smart-groups/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-groups-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use GetSmartByIDV2.
 func (s *MobileDeviceGroups) GetSmartByIDV1(ctx context.Context, id string) (*ResourceSmartMobileDeviceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("GetSmartByIDV1")
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("smart mobile device group ID is required")
 	}
@@ -81,7 +98,11 @@ func (s *MobileDeviceGroups) GetSmartByIDV1(ctx context.Context, id string) (*Re
 // CreateSmartV1 creates a new smart mobile device group.
 // URL: POST /api/v1/mobile-device-groups/smart-groups
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-smart-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use CreateSmartV2.
 func (s *MobileDeviceGroups) CreateSmartV1(ctx context.Context, request *RequestSmartMobileDeviceGroup) (*CreateSmartResponse, *resty.Response, error) {
+	s.warnV1Deprecated("CreateSmartV1")
+
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -106,7 +127,11 @@ func (s *MobileDeviceGroups) CreateSmartV1(ctx context.Context, request *Request
 // UpdateSmartByIDV1 updates the specified smart mobile device group by ID.
 // URL: PUT /api/v1/mobile-device-groups/smart-groups/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v1-mobile-device-groups-smart-groups-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use UpdateSmartByIDV2.
 func (s *MobileDeviceGroups) UpdateSmartByIDV1(ctx context.Context, id string, request *RequestSmartMobileDeviceGroup) (*ResourceSmartMobileDeviceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("UpdateSmartByIDV1")
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -135,7 +160,11 @@ func (s *MobileDeviceGroups) UpdateSmartByIDV1(ctx context.Context, id string, r
 // DeleteSmartByIDV1 removes the specified smart mobile device group by ID.
 // URL: DELETE /api/v1/mobile-device-groups/smart-groups/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mobile-device-groups-smart-groups-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use DeleteSmartByIDV2.
 func (s *MobileDeviceGroups) DeleteSmartByIDV1(ctx context.Context, id string) (*resty.Response, error) {
+	s.warnV1Deprecated("DeleteSmartByIDV1")
+
 	if id == "" {
 		return nil, fmt.Errorf("smart mobile device group ID is required")
 	}
@@ -159,7 +188,11 @@ func (s *MobileDeviceGroups) DeleteSmartByIDV1(ctx context.Context, id string) (
 // ListStaticV1 returns all static mobile device groups.
 // URL: GET /api/v1/mobile-device-groups/static-groups
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListStaticV2.
 func (s *MobileDeviceGroups) ListStaticV1(ctx context.Context, rsqlQuery map[string]string) (*ListStaticResponse, *resty.Response, error) {
+	s.warnV1Deprecated("ListStaticV1")
+
 	var result ListStaticResponse
 
 	endpoint := constants.EndpointJamfProStaticMobileDeviceGroupsV1
@@ -187,7 +220,11 @@ func (s *MobileDeviceGroups) ListStaticV1(ctx context.Context, rsqlQuery map[str
 // GetStaticByIDV1 returns the specified static mobile device group by ID.
 // URL: GET /api/v1/mobile-device-groups/static-groups/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-groups-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use GetStaticByIDV2.
 func (s *MobileDeviceGroups) GetStaticByIDV1(ctx context.Context, id string) (*ResourceStaticMobileDeviceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("GetStaticByIDV1")
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("static mobile device group ID is required")
 	}
@@ -210,7 +247,11 @@ func (s *MobileDeviceGroups) GetStaticByIDV1(ctx context.Context, id string) (*R
 // CreateStaticV1 creates a new static mobile device group.
 // URL: POST /api/v1/mobile-device-groups/static-groups
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-static-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use CreateStaticV2.
 func (s *MobileDeviceGroups) CreateStaticV1(ctx context.Context, request *RequestStaticMobileDeviceGroup) (*CreateStaticResponse, *resty.Response, error) {
+	s.warnV1Deprecated("CreateStaticV1")
+
 	if request == nil {
 		return nil, nil, fmt.Errorf("request is required")
 	}
@@ -239,7 +280,11 @@ func (s *MobileDeviceGroups) CreateStaticV1(ctx context.Context, request *Reques
 // UpdateStaticByIDV1 updates the specified static mobile device group by ID (PATCH).
 // URL: PATCH /api/v1/mobile-device-groups/static-groups/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v1-mobile-device-groups-static-groups-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use UpdateStaticByIDV2.
 func (s *MobileDeviceGroups) UpdateStaticByIDV1(ctx context.Context, id string, request *RequestStaticMobileDeviceGroup) (*ResourceStaticMobileDeviceGroup, *resty.Response, error) {
+	s.warnV1Deprecated("UpdateStaticByIDV1")
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -272,7 +317,11 @@ func (s *MobileDeviceGroups) UpdateStaticByIDV1(ctx context.Context, id string, 
 // DeleteStaticByIDV1 removes the specified static mobile device group by ID.
 // URL: DELETE /api/v1/mobile-device-groups/static-groups/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/delete_v1-mobile-device-groups-static-groups-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use DeleteStaticByIDV2.
 func (s *MobileDeviceGroups) DeleteStaticByIDV1(ctx context.Context, id string) (*resty.Response, error) {
+	s.warnV1Deprecated("DeleteStaticByIDV1")
+
 	if id == "" {
 		return nil, fmt.Errorf("static mobile device group ID is required")
 	}
@@ -296,7 +345,11 @@ func (s *MobileDeviceGroups) DeleteStaticByIDV1(ctx context.Context, id string) 
 // ListAllV1 returns all mobile device groups (smart + static) as a simple list.
 // URL: GET /api/v1/mobile-device-groups
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use ListAllV2.
 func (s *MobileDeviceGroups) ListAllV1(ctx context.Context) ([]ResourceMobileDeviceGroupSummary, *resty.Response, error) {
+	s.warnV1Deprecated("ListAllV1")
+
 	var result []ResourceMobileDeviceGroupSummary
 
 	endpoint := constants.EndpointJamfProMobileDeviceGroupsV1
@@ -315,7 +368,11 @@ func (s *MobileDeviceGroups) ListAllV1(ctx context.Context) ([]ResourceMobileDev
 // GetStaticGroupMembershipV1 returns the mobile devices in the specified static group.
 // URL: GET /api/v1/mobile-device-groups/static-group-membership/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-static-group-membership-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use GetStaticGroupMembershipV2.
 func (s *MobileDeviceGroups) GetStaticGroupMembershipV1(ctx context.Context, id string, rsqlQuery map[string]string) (*GroupMembershipResponse, *resty.Response, error) {
+	s.warnV1Deprecated("GetStaticGroupMembershipV1")
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("static group ID is required")
 	}
@@ -348,7 +405,11 @@ func (s *MobileDeviceGroups) GetStaticGroupMembershipV1(ctx context.Context, id 
 // GetSmartGroupMembershipV1 returns the mobile devices in the specified smart group.
 // URL: GET /api/v1/mobile-device-groups/smart-group-membership/{id}
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-mobile-device-groups-smart-group-membership-id
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use GetSmartGroupMembershipV2.
 func (s *MobileDeviceGroups) GetSmartGroupMembershipV1(ctx context.Context, id string, rsqlQuery map[string]string) (*GroupMembershipResponse, *resty.Response, error) {
+	s.warnV1Deprecated("GetSmartGroupMembershipV1")
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("smart group ID is required")
 	}
@@ -380,7 +441,11 @@ func (s *MobileDeviceGroups) GetSmartGroupMembershipV1(ctx context.Context, id s
 // EraseDevicesByGroupIDV1 erases all devices in the specified mobile device group.
 // URL: POST /api/v1/mobile-device-groups/{id}/erase
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v1-mobile-device-groups-id-erase
+//
+// Deprecated: deprecated in Jamf Pro 11.28; use EraseDevicesByGroupIDV2.
 func (s *MobileDeviceGroups) EraseDevicesByGroupIDV1(ctx context.Context, id string, request *RequestEraseDevices) (*resty.Response, error) {
+	s.warnV1Deprecated("EraseDevicesByGroupIDV1")
+
 	if id == "" {
 		return nil, fmt.Errorf("group ID is required")
 	}

@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 
@@ -241,4 +242,11 @@ func (m *NotificationsMock) KeepAliveToken() error {
 // GetLogger implements client.Client.
 func (m *NotificationsMock) GetLogger() *zap.Logger {
 	return m.logger
+}
+
+// ServerVersion returns a zero (0.0.0) version so the API-lifecycle removal
+// guard treats every capability as supported. These mocks do not exercise
+// removal gating; set a real version here if a future test needs it.
+func (m *NotificationsMock) ServerVersion(_ context.Context) (apilifecycle.Version, error) {
+	return apilifecycle.Version{}, nil
 }

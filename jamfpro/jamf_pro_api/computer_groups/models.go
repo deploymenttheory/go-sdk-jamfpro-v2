@@ -82,3 +82,74 @@ type ResourceGroupV1 struct {
 type SmartGroupMembershipResponse struct {
 	Members []int `json:"members"`
 }
+
+// -----------------------------------------------------------------------------
+// V3 models (Jamf Pro 11.28 computer-groups v3 surface).
+//
+// The v3 smart-group criteria use the ComputerSmartGroupCriteriaV2 shape, which
+// adds openingParen/closingParen to the legacy criterion.
+// -----------------------------------------------------------------------------
+
+// CriterionV3 is a smart computer group criterion in the v3 (ComputerSmartGroupCriteriaV2) shape.
+type CriterionV3 struct {
+	Name         string `json:"name"`
+	Priority     int    `json:"priority"`
+	AndOr        string `json:"andOr"`
+	SearchType   string `json:"searchType"`
+	Value        string `json:"value"`
+	OpeningParen bool   `json:"openingParen"`
+	ClosingParen bool   `json:"closingParen"`
+}
+
+// ResourceSmartGroupV3 is a smart computer group as returned by the v3 endpoints.
+// The list response omits criteria; GetSmartByIDV3 includes them.
+type ResourceSmartGroupV3 struct {
+	ID              string        `json:"id,omitempty"`
+	Name            string        `json:"name"`
+	Description     string        `json:"description,omitempty"`
+	SiteID          string        `json:"siteId,omitempty"`
+	MembershipCount int           `json:"membershipCount,omitempty"`
+	Criteria        []CriterionV3 `json:"criteria,omitempty"`
+}
+
+// ListSmartV3Response is the response for ListSmartV3.
+type ListSmartV3Response struct {
+	TotalCount int                    `json:"totalCount"`
+	Results    []ResourceSmartGroupV3 `json:"results"`
+}
+
+// RequestSmartGroupV3 is the SmartComputerGroupV3 create/update body.
+type RequestSmartGroupV3 struct {
+	Name        string        `json:"name"`
+	Description string        `json:"description,omitempty"`
+	SiteID      string        `json:"siteId,omitempty"`
+	Criteria    []CriterionV3 `json:"criteria"`
+}
+
+// ResourceStaticGroupV3 is a static computer group as returned by the v3 list/get endpoints.
+type ResourceStaticGroupV3 struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	SiteID      string `json:"siteId,omitempty"`
+	Count       int    `json:"count,omitempty"`
+}
+
+// ListStaticV3Response is the response for ListStaticV3.
+type ListStaticV3Response struct {
+	TotalCount int                     `json:"totalCount"`
+	Results    []ResourceStaticGroupV3 `json:"results"`
+}
+
+// RequestStaticGroupV3 is the static computer group create/update body.
+// Assignments is the set of computer IDs to assign; the API treats it as a set
+// (uniqueItems), and the SDK deduplicates it before sending.
+type RequestStaticGroupV3 struct {
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	SiteID      string `json:"siteId,omitempty"`
+	// Assignments must always be serialized (the API rejects a missing
+	// assignments key with a 500); the create/update methods normalise a nil
+	// slice to an empty array.
+	Assignments []string `json:"assignments"`
+}

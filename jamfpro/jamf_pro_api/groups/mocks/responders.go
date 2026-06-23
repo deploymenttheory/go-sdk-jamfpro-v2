@@ -14,6 +14,7 @@ import (
 	mockhelpers "github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/mocks"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"go.uber.org/zap"
 )
 
@@ -197,6 +198,13 @@ func (m *GroupsMock) GetLogger() *zap.Logger {
 	return nil
 }
 
+// ServerVersion returns a zero (0.0.0) version so the API-lifecycle removal
+// guard treats every capability as supported. These mocks do not exercise
+// removal gating; set a real version here if a future test needs it.
+func (m *GroupsMock) ServerVersion(_ context.Context) (apilifecycle.Version, error) {
+	return apilifecycle.Version{}, nil
+}
+
 func (m *GroupsMock) RSQLBuilder() client.RSQLFilterBuilder {
 	return nil
 }
@@ -262,4 +270,15 @@ func (m *GroupsMock) RegisterListInvalidJSONMock() {
 		response: validateListInvalidJSON,
 		status:   http.StatusOK,
 	})
+}
+
+// --- V2 registrations (Jamf Pro 11.28 unified groups v2 surface) ---
+
+func (m *GroupsMock) RegisterV2Mocks() {
+	m.responses = append(m.responses,
+		registeredResponse{method: "GET", path: "/api/v2/groups", response: validateListJSON, status: http.StatusOK},
+		registeredResponse{method: "GET", path: "/api/v2/groups/", response: validateGetJSON, status: http.StatusOK},
+		registeredResponse{method: "PATCH", path: "/api/v2/groups/", response: validateGetJSON, status: http.StatusOK},
+		registeredResponse{method: "DELETE", path: "/api/v2/groups/", response: nil, status: http.StatusNoContent},
+	)
 }

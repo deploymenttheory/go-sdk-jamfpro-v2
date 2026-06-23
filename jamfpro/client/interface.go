@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"go.uber.org/zap"
 )
 
@@ -34,6 +35,12 @@ type Client interface {
 
 	// GetLogger returns the configured zap logger instance.
 	GetLogger() *zap.Logger
+
+	// ServerVersion returns the connected Jamf Pro server's parsed semantic
+	// version. The value is fetched once via GET /api/v1/jamf-pro-version and
+	// cached for the lifetime of the client. It is consumed by the SDK's
+	// API-lifecycle removal guard (apilifecycle.EnsureSupported).
+	ServerVersion(ctx context.Context) (apilifecycle.Version, error)
 }
 
 // RSQLFilterBuilder builds RSQL filter expressions for Jamf Pro API endpoints
