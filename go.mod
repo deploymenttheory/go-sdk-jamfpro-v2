@@ -9,7 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.29
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.104.1
 	github.com/stretchr/testify v1.11.1
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.68.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.69.0
 	go.opentelemetry.io/otel v1.44.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.44.0
 	go.opentelemetry.io/otel/sdk v1.44.0
