@@ -4,26 +4,30 @@ package mdm
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-commands
 const (
-	CommandTypeApplyRedemptionCode       = "APPLY_REDEMPTION_CODE"
-	CommandTypeCertificateList           = "CERTIFICATE_LIST"
-	CommandTypeClearPasscode             = "CLEAR_PASSCODE"
-	CommandTypeClearRestrictionsPassword = "CLEAR_RESTRICTIONS_PASSWORD"
-	CommandTypeDeclarativeManagement     = "DECLARATIVE_MANAGEMENT"
-	CommandTypeDeleteUser                = "DELETE_USER"
-	CommandTypeDeviceInformation         = "DEVICE_INFORMATION"
-	CommandTypeDeviceLocation            = "DEVICE_LOCATION"
-	CommandTypeDeviceLock                = "DEVICE_LOCK"
-	CommandTypeDisableLostMode           = "DISABLE_LOST_MODE"
-	CommandTypeDisableRemoteDesktop      = "DISABLE_REMOTE_DESKTOP"
-	CommandTypeEnableLostMode            = "ENABLE_LOST_MODE"
-	CommandTypeEnableRemoteDesktop       = "ENABLE_REMOTE_DESKTOP"
-	CommandTypeEraseDevice               = "ERASE_DEVICE"
-	CommandTypeInstalledApplicationList  = "INSTALLED_APPLICATION_LIST"
-	CommandTypeLogOutUser                = "LOG_OUT_USER"
-	CommandTypeManagedApplicationList    = "MANAGED_APPLICATION_LIST"
-	CommandTypeManagedMediaList          = "MANAGED_MEDIA_LIST"
-	CommandTypeRefreshCellularPlans      = "REFRESH_CELLULAR_PLANS"
-	CommandTypePlayLostModeSound         = "PLAY_LOST_MODE_SOUND"
+	CommandTypeApplyRedemptionCode = "APPLY_REDEMPTION_CODE"
+	// CommandTypeCancelEnhancedLogCollection cancels an in-progress enhanced log
+	// collection session on the device.
+	// Added in Jamf Pro 11.29.
+	CommandTypeCancelEnhancedLogCollection = "CANCEL_ENHANCED_LOG_COLLECTION"
+	CommandTypeCertificateList             = "CERTIFICATE_LIST"
+	CommandTypeClearPasscode               = "CLEAR_PASSCODE"
+	CommandTypeClearRestrictionsPassword   = "CLEAR_RESTRICTIONS_PASSWORD"
+	CommandTypeDeclarativeManagement       = "DECLARATIVE_MANAGEMENT"
+	CommandTypeDeleteUser                  = "DELETE_USER"
+	CommandTypeDeviceInformation           = "DEVICE_INFORMATION"
+	CommandTypeDeviceLocation              = "DEVICE_LOCATION"
+	CommandTypeDeviceLock                  = "DEVICE_LOCK"
+	CommandTypeDisableLostMode             = "DISABLE_LOST_MODE"
+	CommandTypeDisableRemoteDesktop        = "DISABLE_REMOTE_DESKTOP"
+	CommandTypeEnableLostMode              = "ENABLE_LOST_MODE"
+	CommandTypeEnableRemoteDesktop         = "ENABLE_REMOTE_DESKTOP"
+	CommandTypeEraseDevice                 = "ERASE_DEVICE"
+	CommandTypeInstalledApplicationList    = "INSTALLED_APPLICATION_LIST"
+	CommandTypeLogOutUser                  = "LOG_OUT_USER"
+	CommandTypeManagedApplicationList      = "MANAGED_APPLICATION_LIST"
+	CommandTypeManagedMediaList            = "MANAGED_MEDIA_LIST"
+	CommandTypeRefreshCellularPlans        = "REFRESH_CELLULAR_PLANS"
+	CommandTypePlayLostModeSound           = "PLAY_LOST_MODE_SOUND"
 	// CommandTypeProvisioningProfileList requests a list of installed provisioning profiles.
 	// Added in Jamf Pro 11.25.
 	CommandTypeProvisioningProfileList = "PROVISIONING_PROFILE_LIST"
@@ -38,9 +42,13 @@ const (
 	CommandTypeSetRecoveryLock      = "SET_RECOVERY_LOCK"
 	CommandTypeShutDownDevice       = "SHUT_DOWN_DEVICE"
 	CommandTypeStopMirroring        = "STOP_MIRRORING"
-	CommandTypeUnlockUserAccount    = "UNLOCK_USER_ACCOUNT"
-	CommandTypeValidateApplications = "VALIDATE_APPLICATIONS"
-	CommandTypeValidateRecoveryLock = "VALIDATE_RECOVERY_LOCK"
+	// CommandTypeTriggerEnhancedLogCollection starts an enhanced log collection
+	// session on the device. Requires CommandData.AppleCareToken.
+	// Added in Jamf Pro 11.29.
+	CommandTypeTriggerEnhancedLogCollection = "TRIGGER_ENHANCED_LOG_COLLECTION"
+	CommandTypeUnlockUserAccount            = "UNLOCK_USER_ACCOUNT"
+	CommandTypeValidateApplications         = "VALIDATE_APPLICATIONS"
+	CommandTypeValidateRecoveryLock         = "VALIDATE_RECOVERY_LOCK"
 )
 
 // BlankPushResponse represents the response structure for the blank push MDM command.
@@ -110,6 +118,10 @@ type CommandData struct {
 	Password string `json:"password,omitempty"`
 	// Profile_List
 	ManagedOnly *bool `json:"managedOnly,omitempty"`
+	// Trigger_Enhanced_Log_Collection — the AppleCare token the device uses for
+	// authenticating the enhanced log collection session (required for
+	// TRIGGER_ENHANCED_LOG_COLLECTION). Added in Jamf Pro 11.29.
+	AppleCareToken string `json:"appleCareToken,omitempty"`
 }
 
 // ReturnToService represents the return to service structure in the erase device command.

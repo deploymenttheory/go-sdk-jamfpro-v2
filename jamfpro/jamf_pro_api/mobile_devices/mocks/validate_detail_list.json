@@ -29,9 +29,7 @@
         "buildingId": "1",
         "room": "room",
         "building": "Building 1",
-        "department": "Department 1",
-        "lastLoggedInUsernameMdm": "mdmadmin",
-        "lastLoggedInUsernameMdmTimestamp": "2024-10-31T18:04:13Z"
+        "department": "Department 1"
       },
       "general": {
         "udid": "0dad565fb40b010a9e490440188063a378721069",
@@ -45,8 +43,23 @@
         "deviceOwnershipType": "Institutional",
         "managementId": "9932fad3-29e9-4b71-bc7c-77dcefce819d",
         "lastLoggedInUsernameSelfService": "admin",
-        "lastLoggedInUsernameSelfServiceTimestamp": "2018-10-31T18:04:13Z"
-      }
+        "lastLoggedInUsernameSelfServiceTimestamp": "2018-10-31T18:04:13Z",
+        "lastLoggedInUsernameMdm": "mdmadmin",
+        "lastLoggedInUsernameMdmTimestamp": "2024-10-31T18:04:13Z"
+      },
+      "applications": [
+        {
+          "identifier": "com.apple.airport.mobileairportutility",
+          "name": "AirPort Utility",
+          "version": "135.24",
+          "shortVersion": "7.0",
+          "managementStatus": "Managed",
+          "validationStatus": true,
+          "bundleSize": "1024",
+          "dynamicSize": "1423",
+          "appClip": true
+        }
+      ]
     }
   ]
 }
