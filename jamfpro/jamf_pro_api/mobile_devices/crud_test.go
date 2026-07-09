@@ -101,9 +101,13 @@ func TestUnit_MobileDevices_GetDetailV2(t *testing.T) {
 	assert.Equal(t, "Banezicron", device.General.DisplayName)
 	require.NotNil(t, device.UserAndLocation)
 	assert.Equal(t, "admin", device.UserAndLocation.Username)
-	// 11.29 additive fields
-	assert.Equal(t, "mdmadmin", device.UserAndLocation.LastLoggedInUsernameMdm)
-	assert.Equal(t, "2024-10-31T18:04:13Z", device.UserAndLocation.LastLoggedInUsernameMdmTimestamp)
+	// 11.29 additive MDM self-service login fields live on the general section.
+	assert.Equal(t, "mdmadmin", device.General.LastLoggedInUsernameMdm)
+	assert.Equal(t, "2024-10-31T18:04:13Z", device.General.LastLoggedInUsernameMdmTimestamp)
+	// 11.29 additive appClip flag on application inventory entries.
+	require.Len(t, device.Applications, 1)
+	assert.Equal(t, "AirPort Utility", device.Applications[0].Name)
+	assert.True(t, device.Applications[0].AppClip)
 }
 
 func TestUnit_MobileDevices_GetDetailByIDV2(t *testing.T) {

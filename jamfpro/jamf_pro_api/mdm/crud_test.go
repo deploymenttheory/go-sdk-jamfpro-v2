@@ -2,6 +2,7 @@ package mdm
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mdm/mocks"
@@ -69,6 +70,70 @@ func TestUnit_Mdm_SendCommand_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "cmd-12345", result.ID)
 	assert.Equal(t, "/api/v2/mdm/commands/cmd-12345", result.Href)
+}
+
+// TestUnit_Mdm_SendCommand_TriggerEnhancedLogCollection_Success exercises the
+// TRIGGER_ENHANCED_LOG_COLLECTION command type added in Jamf Pro 11.29, verifying
+// the appleCareToken field is serialised on the wire.
+func TestUnit_Mdm_SendCommand_TriggerEnhancedLogCollection_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterSendCommandMock()
+
+	req := &CommandRequest{
+		CommandData: CommandData{
+			CommandType:    CommandTypeTriggerEnhancedLogCollection,
+			AppleCareToken: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		},
+		ClientData: []ClientData{
+			{ManagementID: "device-001"},
+		},
+	}
+
+	// The appleCareToken must be marshalled into the request body.
+	body, err := json.Marshal(req.CommandData)
+	require.NoError(t, err)
+	assert.Contains(t, string(body), `"commandType":"TRIGGER_ENHANCED_LOG_COLLECTION"`)
+	assert.Contains(t, string(body), `"appleCareToken":"a1b2c3d4-e5f6-7890-abcd-ef1234567890"`)
+
+	result, resp, err := svc.SendCommand(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode())
+	assert.Equal(t, "cmd-12345", result.ID)
+	assert.Equal(t, "/api/v2/mdm/commands/cmd-12345", result.Href)
+}
+
+// TestUnit_Mdm_SendCommand_CancelEnhancedLogCollection_Success exercises the
+// CANCEL_ENHANCED_LOG_COLLECTION command type added in Jamf Pro 11.29, which
+// carries no command-type-specific fields.
+func TestUnit_Mdm_SendCommand_CancelEnhancedLogCollection_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterSendCommandMock()
+
+	req := &CommandRequest{
+		CommandData: CommandData{
+			CommandType: CommandTypeCancelEnhancedLogCollection,
+		},
+		ClientData: []ClientData{
+			{ManagementID: "device-001"},
+		},
+	}
+
+	// No appleCareToken should be emitted for the cancel command.
+	body, err := json.Marshal(req.CommandData)
+	require.NoError(t, err)
+	assert.Contains(t, string(body), `"commandType":"CANCEL_ENHANCED_LOG_COLLECTION"`)
+	assert.NotContains(t, string(body), "appleCareToken")
+
+	result, resp, err := svc.SendCommand(context.Background(), req)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+
+	assert.Equal(t, 200, resp.StatusCode())
+	assert.Equal(t, "cmd-12345", result.ID)
 }
 
 func TestUnit_Mdm_SendCommand_NilRequest(t *testing.T) {

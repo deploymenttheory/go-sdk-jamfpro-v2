@@ -113,60 +113,60 @@ type MobileDeviceSubsetUserAndLocation struct {
 	Building            string                                 `json:"building,omitempty"`
 	Department          string                                 `json:"department,omitempty"`
 	ExtensionAttributes []MobileDeviceSubsetExtensionAttribute `json:"extensionAttributes,omitempty"`
-
-	// 11.29 additive MDM self-service login fields.
-	LastLoggedInUsernameMdm          string `json:"lastLoggedInUsernameMdm,omitempty"`
-	LastLoggedInUsernameMdmTimestamp string `json:"lastLoggedInUsernameMdmTimestamp,omitempty"`
 }
 
 // MobileDeviceSubsetGeneral is the GENERAL section.
 type MobileDeviceSubsetGeneral struct {
-	Udid                                        string                                      `json:"udid,omitempty"`
-	DisplayName                                 string                                      `json:"displayName,omitempty"`
-	AssetTag                                    string                                      `json:"assetTag,omitempty"`
-	SiteID                                      string                                      `json:"siteId,omitempty"`
-	LastInventoryUpdateDate                     string                                      `json:"lastInventoryUpdateDate,omitempty"`
-	OsVersion                                   string                                      `json:"osVersion,omitempty"`
-	OsRapidSecurityResponse                     string                                      `json:"osRapidSecurityResponse,omitempty"`
-	OsBuild                                     string                                      `json:"osBuild,omitempty"`
-	OsSupplementalBuildVersion                  string                                      `json:"osSupplementalBuildVersion,omitempty"`
-	SoftwareUpdateDeviceID                      string                                      `json:"softwareUpdateDeviceId,omitempty"`
-	IPAddress                                   string                                      `json:"ipAddress,omitempty"`
-	Managed                                     bool                                        `json:"managed,omitempty"`
-	Supervised                                  bool                                        `json:"supervised,omitempty"`
-	DeviceOwnershipType                         string                                      `json:"deviceOwnershipType,omitempty"`
-	EnrollmentMethodPrestage                    *MobileDeviceSubsetEnrollmentMethodPrestage `json:"enrollmentMethodPrestage,omitempty"`
-	EnrollmentSessionTokenValid                 bool                                        `json:"enrollmentSessionTokenValid,omitempty"`
-	LastEnrolledDate                            string                                      `json:"lastEnrolledDate,omitempty"`
-	MdmProfileExpirationDate                    string                                      `json:"mdmProfileExpirationDate,omitempty"`
-	TimeZone                                    string                                      `json:"timeZone,omitempty"`
-	DeclarativeDeviceManagementEnabled          bool                                        `json:"declarativeDeviceManagementEnabled,omitempty"`
-	ManagementID                                string                                      `json:"managementId,omitempty"`
-	ExtensionAttributes                         []MobileDeviceSubsetExtensionAttribute      `json:"extensionAttributes,omitempty"`
-	LastLoggedInUsernameSelfService             string                                      `json:"lastLoggedInUsernameSelfService,omitempty"`
-	LastLoggedInUsernameSelfServiceTimestamp    string                                      `json:"lastLoggedInUsernameSelfServiceTimestamp,omitempty"`
-	DiagnosticAndUsageReportingEnabled          bool                                        `json:"diagnosticAndUsageReportingEnabled,omitempty"`
-	AppAnalyticsEnabled                         bool                                        `json:"appAnalyticsEnabled,omitempty"`
-	DeviceLocatorServiceEnabled                 bool                                        `json:"deviceLocatorServiceEnabled,omitempty"`
-	DoNotDisturbEnabled                         bool                                        `json:"doNotDisturbEnabled,omitempty"`
-	LastCloudBackupDate                         string                                      `json:"lastCloudBackupDate,omitempty"`
-	ItunesStoreAccountActive                    bool                                        `json:"itunesStoreAccountActive,omitempty"`
-	AirPlayPassword                             string                                      `json:"airPlayPassword,omitempty"`
-	Locales                                     string                                      `json:"locales,omitempty"`
-	Languages                                   string                                      `json:"languages,omitempty"`
-	SharedIpad                                  bool                                        `json:"sharedIpad,omitempty"`
-	ResidentUsers                               int                                         `json:"residentUsers,omitempty"`
-	QuotaSize                                   int                                         `json:"quotaSize,omitempty"`
-	TemporarySessionOnly                        bool                                        `json:"temporarySessionOnly,omitempty"`
-	TemporarySessionTimeout                     int                                         `json:"temporarySessionTimeout,omitempty"`
-	UserSessionTimeout                          int                                         `json:"userSessionTimeout,omitempty"`
-	SyncedToComputer                            int                                         `json:"syncedToComputer,omitempty"`
-	MaximumSharediPadUsersStored                int                                         `json:"maximumSharediPadUsersStored,omitempty"`
-	LastBackupDate                              string                                      `json:"lastBackupDate,omitempty"`
-	CloudBackupEnabled                          bool                                        `json:"cloudBackupEnabled,omitempty"`
-	LocationServicesForSelfServiceMobileEnabled bool                                        `json:"locationServicesForSelfServiceMobileEnabled,omitempty"`
-	ExchangeDeviceID                            string                                      `json:"exchangeDeviceId,omitempty"`
-	Tethered                                    bool                                        `json:"tethered,omitempty"`
+	Udid                                     string                                      `json:"udid,omitempty"`
+	DisplayName                              string                                      `json:"displayName,omitempty"`
+	AssetTag                                 string                                      `json:"assetTag,omitempty"`
+	SiteID                                   string                                      `json:"siteId,omitempty"`
+	LastInventoryUpdateDate                  string                                      `json:"lastInventoryUpdateDate,omitempty"`
+	OsVersion                                string                                      `json:"osVersion,omitempty"`
+	OsRapidSecurityResponse                  string                                      `json:"osRapidSecurityResponse,omitempty"`
+	OsBuild                                  string                                      `json:"osBuild,omitempty"`
+	OsSupplementalBuildVersion               string                                      `json:"osSupplementalBuildVersion,omitempty"`
+	SoftwareUpdateDeviceID                   string                                      `json:"softwareUpdateDeviceId,omitempty"`
+	IPAddress                                string                                      `json:"ipAddress,omitempty"`
+	Managed                                  bool                                        `json:"managed,omitempty"`
+	Supervised                               bool                                        `json:"supervised,omitempty"`
+	DeviceOwnershipType                      string                                      `json:"deviceOwnershipType,omitempty"`
+	EnrollmentMethodPrestage                 *MobileDeviceSubsetEnrollmentMethodPrestage `json:"enrollmentMethodPrestage,omitempty"`
+	EnrollmentSessionTokenValid              bool                                        `json:"enrollmentSessionTokenValid,omitempty"`
+	LastEnrolledDate                         string                                      `json:"lastEnrolledDate,omitempty"`
+	MdmProfileExpirationDate                 string                                      `json:"mdmProfileExpirationDate,omitempty"`
+	TimeZone                                 string                                      `json:"timeZone,omitempty"`
+	DeclarativeDeviceManagementEnabled       bool                                        `json:"declarativeDeviceManagementEnabled,omitempty"`
+	ManagementID                             string                                      `json:"managementId,omitempty"`
+	ExtensionAttributes                      []MobileDeviceSubsetExtensionAttribute      `json:"extensionAttributes,omitempty"`
+	LastLoggedInUsernameSelfService          string                                      `json:"lastLoggedInUsernameSelfService,omitempty"`
+	LastLoggedInUsernameSelfServiceTimestamp string                                      `json:"lastLoggedInUsernameSelfServiceTimestamp,omitempty"`
+	// 11.29 additive MDM self-service login fields (general section per the
+	// 11.29.1 spec, alongside the self-service pair above).
+	LastLoggedInUsernameMdm                     string `json:"lastLoggedInUsernameMdm,omitempty"`
+	LastLoggedInUsernameMdmTimestamp            string `json:"lastLoggedInUsernameMdmTimestamp,omitempty"`
+	DiagnosticAndUsageReportingEnabled          bool   `json:"diagnosticAndUsageReportingEnabled,omitempty"`
+	AppAnalyticsEnabled                         bool   `json:"appAnalyticsEnabled,omitempty"`
+	DeviceLocatorServiceEnabled                 bool   `json:"deviceLocatorServiceEnabled,omitempty"`
+	DoNotDisturbEnabled                         bool   `json:"doNotDisturbEnabled,omitempty"`
+	LastCloudBackupDate                         string `json:"lastCloudBackupDate,omitempty"`
+	ItunesStoreAccountActive                    bool   `json:"itunesStoreAccountActive,omitempty"`
+	AirPlayPassword                             string `json:"airPlayPassword,omitempty"`
+	Locales                                     string `json:"locales,omitempty"`
+	Languages                                   string `json:"languages,omitempty"`
+	SharedIpad                                  bool   `json:"sharedIpad,omitempty"`
+	ResidentUsers                               int    `json:"residentUsers,omitempty"`
+	QuotaSize                                   int    `json:"quotaSize,omitempty"`
+	TemporarySessionOnly                        bool   `json:"temporarySessionOnly,omitempty"`
+	TemporarySessionTimeout                     int    `json:"temporarySessionTimeout,omitempty"`
+	UserSessionTimeout                          int    `json:"userSessionTimeout,omitempty"`
+	SyncedToComputer                            int    `json:"syncedToComputer,omitempty"`
+	MaximumSharediPadUsersStored                int    `json:"maximumSharediPadUsersStored,omitempty"`
+	LastBackupDate                              string `json:"lastBackupDate,omitempty"`
+	CloudBackupEnabled                          bool   `json:"cloudBackupEnabled,omitempty"`
+	LocationServicesForSelfServiceMobileEnabled bool   `json:"locationServicesForSelfServiceMobileEnabled,omitempty"`
+	ExchangeDeviceID                            string `json:"exchangeDeviceId,omitempty"`
+	Tethered                                    bool   `json:"tethered,omitempty"`
 }
 
 // MobileDeviceSubsetEnrollmentMethodPrestage describes the prestage used at enrollment.
@@ -263,6 +263,9 @@ type MobileDeviceSubsetApplication struct {
 	ValidationStatus bool   `json:"validationStatus,omitempty"`
 	BundleSize       string `json:"bundleSize,omitempty"`
 	DynamicSize      string `json:"dynamicSize,omitempty"`
+	// AppClip indicates whether the application is an App Clip.
+	// Added in Jamf Pro 11.29.
+	AppClip bool `json:"appClip,omitempty"`
 }
 
 // MobileDeviceSubsetEbook is a single EBOOKS entry.
