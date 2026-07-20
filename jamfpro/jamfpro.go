@@ -133,7 +133,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/log_flushing"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/login_customization"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/m2m"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/macos_configuration_profile_custom_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/macos_configuration_profiles"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/managed_software_updates"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mdm"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mdm_renewal"
@@ -324,7 +324,7 @@ type JamfProAPIClient struct {
 	Locales                             *locales.Locales
 	LogFlushing                         *log_flushing.LogFlushing
 	LoginCustomization                  *login_customization.LoginCustomization
-	MacosConfigProfileCustomSettings    *macos_configuration_profile_custom_settings.MacosConfigurationProfileCustomSettings
+	MacosConfigurationProfiles          *macos_configuration_profiles.MacosConfigurationProfiles
 	ManagedSoftwareUpdates              *managed_software_updates.ManagedSoftwareUpdates
 	Mdm                                 *mdm.Mdm
 	MdmRenewal                          *mdm_renewal.MdmRenewal
@@ -521,7 +521,7 @@ func newJamfProAPIClient(transport *client.Transport) *JamfProAPIClient {
 		Locales:                             locales.NewLocales(transport),
 		LogFlushing:                         log_flushing.NewLogFlushing(transport),
 		LoginCustomization:                  login_customization.NewLoginCustomization(transport),
-		MacosConfigProfileCustomSettings:    macos_configuration_profile_custom_settings.NewMacosConfigurationProfileCustomSettings(transport),
+		MacosConfigurationProfiles:          macos_configuration_profiles.NewMacosConfigurationProfiles(transport),
 		ManagedSoftwareUpdates:              managed_software_updates.NewManagedSoftwareUpdates(transport),
 		Mdm:                                 mdm.NewMdm(transport),
 		MdmRenewal:                          mdm_renewal.NewMdmRenewal(transport),
