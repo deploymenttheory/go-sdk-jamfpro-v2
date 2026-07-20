@@ -12,6 +12,7 @@ import (
 
 func TestAcceptance_ComputerInventory_list(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v4 computers-inventory added in 11.30
 	ctx := context.Background()
 
 	svc := acc.Client.JamfProAPI.ComputerInventory
@@ -28,6 +29,7 @@ func TestAcceptance_ComputerInventory_list(t *testing.T) {
 
 func TestAcceptance_ComputerInventory_get_by_id(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v4 computers-inventory added in 11.30
 	ctx := context.Background()
 
 	svc := acc.Client.JamfProAPI.ComputerInventory
@@ -48,6 +50,7 @@ func TestAcceptance_ComputerInventory_get_by_id(t *testing.T) {
 
 func TestAcceptance_ComputerInventory_update(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v4 computers-inventory added in 11.30
 	ctx := context.Background()
 
 	svc := acc.Client.JamfProAPI.ComputerInventory
@@ -85,6 +88,7 @@ func TestAcceptance_ComputerInventory_update(t *testing.T) {
 
 func TestAcceptance_ComputerInventory_file_vault(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v4 computers-inventory added in 11.30
 	ctx := context.Background()
 
 	svc := acc.Client.JamfProAPI.ComputerInventory
@@ -114,6 +118,7 @@ func TestAcceptance_ComputerInventory_file_vault(t *testing.T) {
 
 func TestAcceptance_ComputerInventory_recovery_lock_password(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v4 computers-inventory added in 11.30
 	ctx := context.Background()
 
 	svc := acc.Client.JamfProAPI.ComputerInventory
@@ -137,6 +142,7 @@ func TestAcceptance_ComputerInventory_recovery_lock_password(t *testing.T) {
 
 func TestAcceptance_ComputerInventory_get_detail_by_id(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v4 computers-inventory added in 11.30
 	ctx := context.Background()
 
 	svc := acc.Client.JamfProAPI.ComputerInventory
@@ -157,6 +163,7 @@ func TestAcceptance_ComputerInventory_get_detail_by_id(t *testing.T) {
 
 func TestAcceptance_ComputerInventory_device_lock_pin(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v4 computers-inventory added in 11.30
 	ctx := context.Background()
 
 	svc := acc.Client.JamfProAPI.ComputerInventory
@@ -181,6 +188,7 @@ func TestAcceptance_ComputerInventory_device_lock_pin(t *testing.T) {
 
 func TestAcceptance_ComputerInventory_attachments(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v4 computers-inventory added in 11.30
 	ctx := context.Background()
 
 	svc := acc.Client.JamfProAPI.ComputerInventory

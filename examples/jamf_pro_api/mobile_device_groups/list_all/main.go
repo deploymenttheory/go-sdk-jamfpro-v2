@@ -19,21 +19,22 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	groupID := "1"
-
-	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetByID(context.Background(), groupID)
+	// Returns both smart and static groups in a single summary list.
+	result, _, err := jamfClient.JamfProAPI.MobileDeviceGroups.ListAllV2(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("ID: %s\n", result.GroupID)
-	fmt.Printf("Name: %s\n", result.GroupName)
-	fmt.Printf("Description: %s\n", result.GroupDescription)
-	fmt.Printf("Member Count: %d\n\n", result.Count)
-
-	fmt.Printf("Criteria: %d\n", len(result.Criteria))
-	for _, c := range result.Criteria {
-		fmt.Printf("  [%d] %s %s %q (%s)\n", c.Priority, c.Name, c.SearchType, c.Value, c.AndOr)
+	fmt.Printf("Total Groups: %d\n\n", len(result))
+	for _, group := range result {
+		kind := "static"
+		if group.IsSmartGroup {
+			kind = "smart"
+		}
+		fmt.Printf("ID: %d\n", group.ID)
+		fmt.Printf("  Name: %s\n", group.Name)
+		fmt.Printf("  Kind: %s\n", kind)
+		fmt.Println()
 	}
 }

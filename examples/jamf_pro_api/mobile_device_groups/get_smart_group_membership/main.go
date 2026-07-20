@@ -21,19 +21,19 @@ func main() {
 
 	groupID := "1"
 
-	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetByID(context.Background(), groupID)
+	result, _, err := jamfClient.JamfProAPI.MobileDeviceGroups.GetSmartGroupMembershipV2(context.Background(), groupID, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("ID: %s\n", result.GroupID)
-	fmt.Printf("Name: %s\n", result.GroupName)
-	fmt.Printf("Description: %s\n", result.GroupDescription)
-	fmt.Printf("Member Count: %d\n\n", result.Count)
-
-	fmt.Printf("Criteria: %d\n", len(result.Criteria))
-	for _, c := range result.Criteria {
-		fmt.Printf("  [%d] %s %s %q (%s)\n", c.Priority, c.Name, c.SearchType, c.Value, c.AndOr)
+	fmt.Printf("Members: %d\n\n", result.TotalCount)
+	for _, member := range result.Results {
+		fmt.Printf("ID: %s\n", member.MobileDeviceID)
+		fmt.Printf("  Name: %s\n", member.DisplayName)
+		fmt.Printf("  Serial: %s\n", member.SerialNumber)
+		// lastContactDate was added to the membership response in Jamf Pro 11.30.
+		fmt.Printf("  Last Contact: %s\n", member.LastContactDate)
+		fmt.Println()
 	}
 }

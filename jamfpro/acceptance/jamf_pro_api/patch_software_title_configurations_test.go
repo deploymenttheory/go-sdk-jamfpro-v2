@@ -70,6 +70,7 @@ import (
 
 func TestAcceptance_PatchSoftwareTitleConfigurations_list_v2(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v3 patch-software-title-configurations added in 11.30
 	svc := acc.Client.JamfProAPI.PatchSoftwareTitleConfigurations
 	ctx := context.Background()
 
@@ -83,6 +84,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_list_v2(t *testing.T) {
 
 func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v3 patch-software-title-configurations added in 11.30
 	svc := acc.Client.JamfProAPI.PatchSoftwareTitleConfigurations
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-patch-config")

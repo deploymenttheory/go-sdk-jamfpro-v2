@@ -21,15 +21,15 @@ func main() {
 
 	groupID := "1"
 
-	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetByID(context.Background(), groupID)
+	result, _, err := jamfClient.JamfProAPI.MobileDeviceGroups.GetSmartByIDV2(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("ID: %s\n", result.GroupID)
-	fmt.Printf("Name: %s\n", result.GroupName)
-	fmt.Printf("Description: %s\n", result.GroupDescription)
+	fmt.Printf("ID: %s\n", result.ID)
+	fmt.Printf("Name: %s\n", result.Name)
+	fmt.Printf("Description: %s\n", result.Description)
 	fmt.Printf("Member Count: %d\n\n", result.Count)
 
 	fmt.Printf("Criteria: %d\n", len(result.Criteria))

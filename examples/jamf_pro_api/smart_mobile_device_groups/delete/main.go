@@ -21,19 +21,11 @@ func main() {
 
 	groupID := "1"
 
-	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetByID(context.Background(), groupID)
+	_, err = jamfClient.JamfProAPI.SmartMobileDeviceGroups.DeleteByID(context.Background(), groupID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("ID: %s\n", result.GroupID)
-	fmt.Printf("Name: %s\n", result.GroupName)
-	fmt.Printf("Description: %s\n", result.GroupDescription)
-	fmt.Printf("Member Count: %d\n\n", result.Count)
-
-	fmt.Printf("Criteria: %d\n", len(result.Criteria))
-	for _, c := range result.Criteria {
-		fmt.Printf("  [%d] %s %s %q (%s)\n", c.Priority, c.Name, c.SearchType, c.Value, c.AndOr)
-	}
+	fmt.Printf("Deleted smart mobile device group: %s\n", groupID)
 }

@@ -19,21 +19,20 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	groupID := "1"
-
-	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetByID(context.Background(), groupID)
+	// Returns the JWKS used to verify Jamf Pro OIDC tokens. Note this endpoint
+	// returns HTTP 503 on instances where OIDC/SSO is not configured.
+	result, _, err := jamfClient.JamfProAPI.Oidc.GetPublicKeyV1(context.Background())
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("ID: %s\n", result.GroupID)
-	fmt.Printf("Name: %s\n", result.GroupName)
-	fmt.Printf("Description: %s\n", result.GroupDescription)
-	fmt.Printf("Member Count: %d\n\n", result.Count)
-
-	fmt.Printf("Criteria: %d\n", len(result.Criteria))
-	for _, c := range result.Criteria {
-		fmt.Printf("  [%d] %s %s %q (%s)\n", c.Priority, c.Name, c.SearchType, c.Value, c.AndOr)
+	fmt.Printf("Keys: %d\n\n", len(result.Keys))
+	for _, key := range result.Keys {
+		fmt.Printf("Key ID: %s\n", key.Kid)
+		fmt.Printf("  Type: %s\n", key.Kty)
+		fmt.Printf("  Algorithm: %s\n", key.Alg)
+		fmt.Printf("  Use: %s\n", key.Use)
+		fmt.Println()
 	}
 }

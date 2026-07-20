@@ -19,21 +19,19 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	groupID := "1"
+	mobileDeviceID := "1"
 
-	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetByID(context.Background(), groupID)
+	result, _, err := jamfClient.JamfProAPI.MobileDevices.GetDetailByIDV2(context.Background(), mobileDeviceID, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("ID: %s\n", result.GroupID)
-	fmt.Printf("Name: %s\n", result.GroupName)
-	fmt.Printf("Description: %s\n", result.GroupDescription)
-	fmt.Printf("Member Count: %d\n\n", result.Count)
-
-	fmt.Printf("Criteria: %d\n", len(result.Criteria))
-	for _, c := range result.Criteria {
-		fmt.Printf("  [%d] %s %s %q (%s)\n", c.Priority, c.Name, c.SearchType, c.Value, c.AndOr)
-	}
+	fmt.Printf("ID: %s\n", result.ID)
+	fmt.Printf("Name: %s\n", result.Name)
+	fmt.Printf("Serial: %s\n", result.SerialNumber)
+	fmt.Printf("Type: %s\n", result.Type)
+	fmt.Printf("Last Inventory Update: %s\n", result.LastInventoryUpdateTimestamp)
+	// lastContactTimestamp was added in Jamf Pro 11.30.
+	fmt.Printf("Last Contact: %s\n", result.LastContactTimestamp)
 }

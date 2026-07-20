@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro"
-	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/smart_mobile_device_groups"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/mobile_device_groups"
 )
 
 func main() {
@@ -20,12 +20,14 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
+	groupID := "1"
+
 	siteID := "-1"
-	req := &smart_mobile_device_groups.RequestSmartMobileDeviceGroup{
-		GroupName:        "Supervised iPads",
-		GroupDescription: "All supervised iPads, created via the SDK",
-		SiteId:           &siteID,
-		Criteria: []smart_mobile_device_groups.SharedSubsetCriteriaJamfProAPI{
+	req := &mobile_device_groups.RequestSmartMobileDeviceGroup{
+		Name:        "Supervised iPads (updated)",
+		Description: "Updated via the SDK",
+		SiteId:      &siteID,
+		Criteria: []mobile_device_groups.CriteriaJamfProAPI{
 			{
 				Name:       "Supervised",
 				Priority:   0,
@@ -36,12 +38,12 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.Create(context.Background(), req)
+	result, _, err := jamfClient.JamfProAPI.MobileDeviceGroups.UpdateSmartByIDV2(context.Background(), groupID, req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("Created smart mobile device group ID: %s\n", result.ID)
-	fmt.Printf("Href: %s\n", result.Href)
+	fmt.Printf("Updated smart group: %s\n", result.ID)
+	fmt.Printf("  Name: %s\n", result.Name)
 }

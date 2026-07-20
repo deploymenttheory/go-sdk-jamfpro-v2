@@ -19,21 +19,19 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	groupID := "1"
-
-	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetByID(context.Background(), groupID)
+	result, _, err := jamfClient.JamfProAPI.MobileDevices.ListV2(context.Background(), nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
-	fmt.Printf("ID: %s\n", result.GroupID)
-	fmt.Printf("Name: %s\n", result.GroupName)
-	fmt.Printf("Description: %s\n", result.GroupDescription)
-	fmt.Printf("Member Count: %d\n\n", result.Count)
-
-	fmt.Printf("Criteria: %d\n", len(result.Criteria))
-	for _, c := range result.Criteria {
-		fmt.Printf("  [%d] %s %s %q (%s)\n", c.Priority, c.Name, c.SearchType, c.Value, c.AndOr)
+	fmt.Printf("Total Mobile Devices: %d\n\n", result.TotalCount)
+	for _, device := range result.Results {
+		fmt.Printf("ID: %s\n", device.ID)
+		fmt.Printf("  Name: %s\n", device.Name)
+		fmt.Printf("  Serial: %s\n", device.SerialNumber)
+		fmt.Printf("  Type: %s\n", device.Type)
+		fmt.Printf("  Management ID: %s\n", device.ManagementID)
+		fmt.Println()
 	}
 }
