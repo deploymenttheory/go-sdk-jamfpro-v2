@@ -51,6 +51,30 @@ const (
 	CommandTypeValidateRecoveryLock         = "VALIDATE_RECOVERY_LOCK"
 )
 
+// Additional MDM command types observed in live GET /api/v2/mdm/commands and
+// GET /api/v1/mdm/commands responses but absent from the MdmCommandType enum in
+// Jamf's published OpenAPI schema (verified against the 11.30.0 spec).
+//
+// These are returned by the server, so match on them when reading command
+// history. They are not necessarily all valid inputs to POST /v2/mdm/commands —
+// several are raised by Jamf Pro itself rather than sent by an API caller.
+//
+// Source: 5,132 commands sampled from a live Jamf Pro 11.29.1 instance.
+const (
+	CommandTypeAccountConfiguration          = "ACCOUNT_CONFIGURATION"
+	CommandTypeActivationLockBypassCode      = "ACTIVATION_LOCK_BYPASS_CODE"
+	CommandTypeClearActivationLockBypassCode = "CLEAR_ACTIVATION_LOCK_BYPASS_CODE"
+	CommandTypeContentCachingInformation     = "CONTENT_CACHING_INFORMATION"
+	CommandTypeDeviceConfigured              = "DEVICE_CONFIGURED"
+	CommandTypeDeviceInfoAccountHash         = "DEVICE_INFO_ACCOUNT_HASH"
+	CommandTypeDeviceInfoITunesActive        = "DEVICE_INFO_ITUNES_ACTIVE"
+	CommandTypeInstallApplication            = "INSTALL_APPLICATION"
+	CommandTypeInstallEnterpriseApplication  = "INSTALL_ENTERPRISE_APPLICATION"
+	CommandTypeInstallProfile                = "INSTALL_PROFILE"
+	CommandTypeRemoveProfile                 = "REMOVE_PROFILE"
+	CommandTypeUserList                      = "USER_LIST"
+)
+
 // BlankPushResponse represents the response structure for the blank push MDM command.
 //
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/post_v2-mdm-blank-push

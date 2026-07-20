@@ -370,3 +370,46 @@ func TestUnit_Mdm_ListCommandsV1_NoMock(t *testing.T) {
 
 	assert.Error(t, err)
 }
+
+// TestUnit_Mdm_CommandTypeConstants_CoverObservedServerValues guards the command
+// type constants against regression.
+//
+// Jamf's published MdmCommandType enum is incomplete: the 12 values below are
+// returned by live Jamf Pro servers but absent from the OpenAPI schema (verified
+// against 11.30.0, sampled from 5,132 commands on a live 11.29.1 instance).
+// If someone later regenerates these constants from the spec, this test fails.
+func TestUnit_Mdm_CommandTypeConstants_CoverObservedServerValues(t *testing.T) {
+	observedButUndocumented := []string{
+		"ACCOUNT_CONFIGURATION",
+		"ACTIVATION_LOCK_BYPASS_CODE",
+		"CLEAR_ACTIVATION_LOCK_BYPASS_CODE",
+		"CONTENT_CACHING_INFORMATION",
+		"DEVICE_CONFIGURED",
+		"DEVICE_INFO_ACCOUNT_HASH",
+		"DEVICE_INFO_ITUNES_ACTIVE",
+		"INSTALL_APPLICATION",
+		"INSTALL_ENTERPRISE_APPLICATION",
+		"INSTALL_PROFILE",
+		"REMOVE_PROFILE",
+		"USER_LIST",
+	}
+
+	declared := map[string]bool{
+		CommandTypeAccountConfiguration:          true,
+		CommandTypeActivationLockBypassCode:      true,
+		CommandTypeClearActivationLockBypassCode: true,
+		CommandTypeContentCachingInformation:     true,
+		CommandTypeDeviceConfigured:              true,
+		CommandTypeDeviceInfoAccountHash:         true,
+		CommandTypeDeviceInfoITunesActive:        true,
+		CommandTypeInstallApplication:            true,
+		CommandTypeInstallEnterpriseApplication:  true,
+		CommandTypeInstallProfile:                true,
+		CommandTypeRemoveProfile:                 true,
+		CommandTypeUserList:                      true,
+	}
+
+	for _, want := range observedButUndocumented {
+		assert.True(t, declared[want], "no constant declared for observed command type %q", want)
+	}
+}
