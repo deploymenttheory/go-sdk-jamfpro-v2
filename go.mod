@@ -15,7 +15,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.44.0
 	go.uber.org/zap v1.28.0
 	howett.net/plist v1.0.1
-	resty.dev/v3 v3.0.0-rc.2
+	resty.dev/v3 v3.0.0-rc.3
 )
 
 require (
