@@ -25,6 +25,12 @@ import (
 //
 // See: https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-scalability-best-practices
 func retryCondition(resp *resty.Response, err error) bool {
+	// Requests carrying an optimistic lock opt out: replaying them resubmits a
+	// versionLock the server has already consumed. See RequestBuilder.DisableRetry.
+	if retryDisabled(resp) {
+		return false
+	}
+
 	method := ""
 	if resp != nil && resp.Request != nil {
 		method = resp.Request.Method
