@@ -20,11 +20,19 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
+	siteID := "-1"
 	req := &smart_mobile_device_groups.RequestSmartMobileDeviceGroup{
-		GroupName:        "go-sdk-v2-Smart-Mobile-Group",
-		GroupDescription: "Created via SDK v2",
+		GroupName:        "Supervised iPads",
+		GroupDescription: "All supervised iPads, created via the SDK",
+		SiteId:           &siteID,
 		Criteria: []smart_mobile_device_groups.SharedSubsetCriteriaJamfProAPI{
-			{Name: "Model", Priority: 0, AndOr: "and", SearchType: "is", Value: "iPhone"},
+			{
+				Name:       "Supervised",
+				Priority:   0,
+				AndOr:      "and",
+				SearchType: "is",
+				Value:      "true",
+			},
 		},
 	}
 
@@ -33,5 +41,7 @@ func main() {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Printf("Created smart mobile device group: %+v\n", result)
+
+	fmt.Printf("Created smart mobile device group ID: %s\n", result.ID)
+	fmt.Printf("Href: %s\n", result.Href)
 }

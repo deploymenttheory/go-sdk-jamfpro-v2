@@ -206,3 +206,81 @@ func TestUnit_MobileDevices_GetDetailV2_ClientError(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Contains(t, err.Error(), "simulated GetDetailV2 API error")
 }
+
+// -----------------------------------------------------------------------------
+// Jamf Pro 11.30
+// -----------------------------------------------------------------------------
+
+func TestUnit_MobileDevices_UpdateByIDV2_Success(t *testing.T) {
+	mock := mocks.NewMobileDevicesMock()
+	mock.RegisterUpdateByIDMock("1")
+
+	svc := NewMobileDevices(mock)
+
+	enforce := true
+	request := &RequestMobileDeviceUpdateV2{
+		Name:        "Jan's Mobile Device",
+		EnforceName: &enforce,
+		AssetTag:    "8675309",
+		TimeZone:    "Europe/Warsaw",
+		Location:    &MobileDeviceSubsetLocationV2{Username: "admin"},
+	}
+
+	result, resp, err := svc.UpdateByIDV2(context.Background(), "1", request)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	require.NotNil(t, result)
+	// 11.30 additive field on the /{id}/detail shape.
+	assert.Equal(t, "2018-10-15T16:39:56Z", result.LastContactTimestamp)
+}
+
+func TestUnit_MobileDevices_UpdateByIDV2_EmptyID(t *testing.T) {
+	svc := NewMobileDevices(mocks.NewMobileDevicesMock())
+
+	result, resp, err := svc.UpdateByIDV2(context.Background(), "", &RequestMobileDeviceUpdateV2{})
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_MobileDevices_UpdateByIDV2_NilRequest(t *testing.T) {
+	svc := NewMobileDevices(mocks.NewMobileDevicesMock())
+
+	result, resp, err := svc.UpdateByIDV2(context.Background(), "1", nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "request is required")
+}
+
+func TestUnit_MobileDevices_UpdateByIDV2_Error(t *testing.T) {
+	mock := mocks.NewMobileDevicesMock()
+	mock.RegisterUpdateByIDErrorMock("1")
+
+	svc := NewMobileDevices(mock)
+
+	result, _, err := svc.UpdateByIDV2(context.Background(), "1", &RequestMobileDeviceUpdateV2{})
+
+	assert.Error(t, err)
+	assert.Nil(t, result)
+}
+
+func TestUnit_MobileDevices_GetDetailV2_LastContactDate(t *testing.T) {
+	mock := mocks.NewMobileDevicesMock()
+	mock.RegisterGetDetailMock()
+
+	svc := NewMobileDevices(mock)
+
+	result, _, err := svc.GetDetailV2(context.Background(), nil)
+
+	require.NoError(t, err)
+	require.NotEmpty(t, result.Results)
+	require.NotNil(t, result.Results[0].General)
+	// 11.30 additive field on the general section.
+	assert.Equal(t, "2022-10-17T11:48:56.307Z", result.Results[0].General.LastContactDate)
+}

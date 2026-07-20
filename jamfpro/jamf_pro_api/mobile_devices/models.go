@@ -117,11 +117,14 @@ type MobileDeviceSubsetUserAndLocation struct {
 
 // MobileDeviceSubsetGeneral is the GENERAL section.
 type MobileDeviceSubsetGeneral struct {
-	Udid                                     string                                      `json:"udid,omitempty"`
-	DisplayName                              string                                      `json:"displayName,omitempty"`
-	AssetTag                                 string                                      `json:"assetTag,omitempty"`
-	SiteID                                   string                                      `json:"siteId,omitempty"`
-	LastInventoryUpdateDate                  string                                      `json:"lastInventoryUpdateDate,omitempty"`
+	Udid                    string `json:"udid,omitempty"`
+	DisplayName             string `json:"displayName,omitempty"`
+	AssetTag                string `json:"assetTag,omitempty"`
+	SiteID                  string `json:"siteId,omitempty"`
+	LastInventoryUpdateDate string `json:"lastInventoryUpdateDate,omitempty"`
+	// LastContactDate is the date and time of the most recent device contact via
+	// MDM or DDM channels. Added in Jamf Pro 11.30.
+	LastContactDate                          string                                      `json:"lastContactDate,omitempty"`
 	OsVersion                                string                                      `json:"osVersion,omitempty"`
 	OsRapidSecurityResponse                  string                                      `json:"osRapidSecurityResponse,omitempty"`
 	OsBuild                                  string                                      `json:"osBuild,omitempty"`
@@ -363,11 +366,14 @@ type MobileDeviceSubsetSite struct {
 // ResourceMobileDeviceDetailsV2 is the full mobile device record returned by
 // GET /v2/mobile-devices/{id}/detail.
 type ResourceMobileDeviceDetailsV2 struct {
-	ID                                 string                                   `json:"id,omitempty"`
-	Name                               string                                   `json:"name,omitempty"`
-	EnforceName                        bool                                     `json:"enforceName,omitempty"`
-	AssetTag                           string                                   `json:"assetTag,omitempty"`
-	LastInventoryUpdateTimestamp       string                                   `json:"lastInventoryUpdateTimestamp,omitempty"`
+	ID                           string `json:"id,omitempty"`
+	Name                         string `json:"name,omitempty"`
+	EnforceName                  bool   `json:"enforceName,omitempty"`
+	AssetTag                     string `json:"assetTag,omitempty"`
+	LastInventoryUpdateTimestamp string `json:"lastInventoryUpdateTimestamp,omitempty"`
+	// LastContactTimestamp is the date and time of the most recent device contact
+	// via MDM or DDM channels. Added in Jamf Pro 11.30.
+	LastContactTimestamp               string                                   `json:"lastContactTimestamp,omitempty"`
 	OsVersion                          string                                   `json:"osVersion,omitempty"`
 	OsBuild                            string                                   `json:"osBuild,omitempty"`
 	OsSupplementalBuildVersion         string                                   `json:"osSupplementalBuildVersion,omitempty"`
@@ -583,4 +589,38 @@ type MobileDeviceSubsetConfigurationProfile struct {
 type MobileDeviceSubsetAttachmentV2 struct {
 	Name string `json:"name,omitempty"`
 	ID   string `json:"id,omitempty"`
+}
+
+// -----------------------------------------------------------------------------
+// Update — PATCH /v2/mobile-devices/{id}
+// -----------------------------------------------------------------------------
+
+// RequestMobileDeviceUpdateV2 is the merge-patch body for UpdateByIDV2. Every
+// field is optional; only the fields present in the request are modified.
+type RequestMobileDeviceUpdateV2 struct {
+	// Name is the mobile device name. When updated, Jamf Pro sends an MDM settings
+	// command to the device (the device must be supervised).
+	Name string `json:"name,omitempty"`
+	// EnforceName reverts the device name to Name on each check-in. The device must
+	// be supervised. Tri-state: nil leaves the current setting untouched.
+	EnforceName *bool  `json:"enforceName,omitempty"`
+	AssetTag    string `json:"assetTag,omitempty"`
+	SiteID      string `json:"siteId,omitempty"`
+	// TimeZone is an IANA time zone database name (e.g. "Europe/Warsaw").
+	TimeZone                   string                                   `json:"timeZone,omitempty"`
+	Location                   *MobileDeviceSubsetLocationV2            `json:"location,omitempty"`
+	UpdatedExtensionAttributes []MobileDeviceSubsetExtensionAttributeV2 `json:"updatedExtensionAttributes,omitempty"`
+	Ios                        *RequestMobileDeviceUpdateIosV2          `json:"ios,omitempty"`
+	Tvos                       *RequestMobileDeviceUpdateTvOsV2         `json:"tvos,omitempty"`
+}
+
+// RequestMobileDeviceUpdateIosV2 is the ios-specific portion of an update.
+type RequestMobileDeviceUpdateIosV2 struct {
+	Purchasing *MobileDeviceSubsetPurchasing `json:"purchasing,omitempty"`
+}
+
+// RequestMobileDeviceUpdateTvOsV2 is the tvos-specific portion of an update.
+type RequestMobileDeviceUpdateTvOsV2 struct {
+	AirplayPassword string                        `json:"airplayPassword,omitempty"`
+	Purchasing      *MobileDeviceSubsetPurchasing `json:"purchasing,omitempty"`
 }

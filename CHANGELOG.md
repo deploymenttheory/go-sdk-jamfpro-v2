@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.14.0...v0.15.0) (2026-07-20)
+
+
+### Features
+
+* enhance version locking for computer and mobile device prestages ([2c69c49](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/2c69c494071ea65f2fd1c577d29ad7714f2eebcc))
+* enhance version locking for computer and mobile device prestages ([55093ce](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/55093ce6654a4a569b8dd55b700b33be2f25228c))
+* implement Jamf Pro 11.30 API changes ([e6685e3](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/e6685e382e670a86595e84094d8bf1030b21c4ec))
+* implement Jamf Pro 11.30 API changes ([0895cfb](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/0895cfbc0eb5e5b56c466b9bcd5cfca7f299012f))
+* implement Jamf Pro 11.30 API changes ([dcbdfd3](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/dcbdfd304dc50bf34c0becad29cdc62437211292))
+
 ## [0.14.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.13.0...v0.14.0) (2026-07-09)
 
 

@@ -18,15 +18,15 @@ import (
 //
 // Service Operations Available
 // -----------------------------------------------------------------------------
-//   Configuration CRUD (V2 API):
-//   • ListV2(ctx) - Lists patch software title configurations
-//   • GetByIDV2(ctx, id) - Retrieves a patch software title configuration by ID
-//   • GetByNameV2(ctx, name) - Retrieves a patch software title configuration by display name (helper)
-//   • CreateV2(ctx, request) - Creates a new patch software title configuration
-//   • UpdateByIDV2(ctx, id, request) - Updates an existing patch software title configuration
-//   • UpdateByNameV2(ctx, name, request) - Updates a patch software title configuration by display name (helper)
-//   • DeleteByIDV2(ctx, id) - Deletes a patch software title configuration by ID
-//   • DeleteByNameV2(ctx, name) - Deletes a patch software title configuration by display name (helper)
+//   Configuration CRUD (V3 API):
+//   • ListV3(ctx) - Lists patch software title configurations
+//   • GetByIDV3(ctx, id) - Retrieves a patch software title configuration by ID
+//   • GetByNameV3(ctx, name) - Retrieves a patch software title configuration by display name (helper)
+//   • CreateV3(ctx, request) - Creates a new patch software title configuration
+//   • UpdateByIDV3(ctx, id, request) - Updates an existing patch software title configuration
+//   • UpdateByNameV3(ctx, name, request) - Updates a patch software title configuration by display name (helper)
+//   • DeleteByIDV3(ctx, id) - Deletes a patch software title configuration by ID
+//   • DeleteByNameV3(ctx, name) - Deletes a patch software title configuration by display name (helper)
 //
 // Test Strategies Applied
 // -----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ import (
 //     -- Flow: List all configurations → Verify response structure
 //
 //   Note: RSQL Filter Testing NOT applicable
-//     -- ListV2 uses pagination, not RSQL filtering
+//     -- ListV3 uses pagination, not RSQL filtering
 //
 // Test Coverage
 // -----------------------------------------------------------------------------
@@ -60,20 +60,21 @@ import (
 //   • Configurations link packages to patch versions for specific software titles
 //   • ExtensionAttributes can be used to control patching behavior
 //   • UINotifications and EmailNotifications control user/admin notification settings
-//   • GetByName, UpdateByName, DeleteByName are helper methods (use ListV2 for lookup)
+//   • GetByName, UpdateByName, DeleteByName are helper methods (use ListV3 for lookup)
 //   • All tests register cleanup handlers to remove test configurations
 //   • Tests use acc.UniqueName() to avoid conflicts in shared test environments
 //   • TODO: Add validation error tests for empty IDs, nil requests, etc.
-//   • TODO: Add tests for UpdateByNameV2 and DeleteByNameV2 operations
+//   • TODO: Add tests for UpdateByNameV3 and DeleteByNameV3 operations
 //
 // =============================================================================
 
 func TestAcceptance_PatchSoftwareTitleConfigurations_list_v2(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v3 patch-software-title-configurations added in 11.30
 	svc := acc.Client.JamfProAPI.PatchSoftwareTitleConfigurations
 	ctx := context.Background()
 
-	result, resp, err := svc.ListV2(ctx)
+	result, resp, err := svc.ListV3(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	require.NotNil(t, resp)
@@ -83,13 +84,14 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_list_v2(t *testing.T) {
 
 func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 29, 9) // v3 patch-software-title-configurations added in 11.30
 	svc := acc.Client.JamfProAPI.PatchSoftwareTitleConfigurations
 	ctx := context.Background()
 	name := acc.UniqueName("sdkv2_acc_acc-patch-config")
 
 	// Get existing configurations to find a valid software title ID
 	acc.LogTestStage(t, "Pre-check", "Finding valid software title ID")
-	existingConfigs, _, err := svc.ListV2(ctx)
+	existingConfigs, _, err := svc.ListV3(ctx)
 	require.NoError(t, err)
 
 	var softwareTitleID string
@@ -102,7 +104,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 
 	// Create
 	acc.LogTestStage(t, "Create", "Creating patch software title configuration")
-	created, resp, err := svc.CreateV2(ctx, &patch_software_title_configurations.ResourcePatchSoftwareTitleConfiguration{
+	created, resp, err := svc.CreateV3(ctx, &patch_software_title_configurations.ResourcePatchSoftwareTitleConfiguration{
 		DisplayName:        name,
 		SoftwareTitleID:    softwareTitleID,
 		UINotifications:    true,
@@ -121,7 +123,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	assert.Equal(t, 200, resp.StatusCode())
 	acc.Cleanup(t, func() {
 		acc.LogTestStage(t, "Cleanup", "Deleting patch software title configuration ID: %s", created.ID)
-		_, _ = svc.DeleteByIDV2(ctx, created.ID)
+		_, _ = svc.DeleteByIDV3(ctx, created.ID)
 	})
 
 	// GetByID (with retry for eventual consistency)
@@ -130,7 +132,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 	var getResp *resty.Response
 	err = acc.RetryOnNotFound(t, 3, 500*time.Millisecond, func() error {
 		var getErr error
-		retrieved, getResp, getErr = svc.GetByIDV2(ctx, created.ID)
+		retrieved, getResp, getErr = svc.GetByIDV3(ctx, created.ID)
 		return getErr
 	})
 	require.NoError(t, err, "Failed to get patch software title configuration by ID")
@@ -145,7 +147,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 
 	// GetByName
 	acc.LogTestStage(t, "Read", "Getting patch software title configuration by name: %s", name)
-	retrievedByName, resp, err := svc.GetByNameV2(ctx, name)
+	retrievedByName, resp, err := svc.GetByNameV3(ctx, name)
 	require.NoError(t, err, "Failed to get patch software title configuration by name")
 	require.NotNil(t, retrievedByName)
 	assert.Equal(t, created.ID, retrievedByName.ID)
@@ -154,7 +156,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 
 	// Update
 	acc.LogTestStage(t, "Update", "Updating patch software title configuration ID: %s", created.ID)
-	updated, resp, err := svc.UpdateByIDV2(ctx, created.ID, &patch_software_title_configurations.ResourcePatchSoftwareTitleConfiguration{
+	updated, resp, err := svc.UpdateByIDV3(ctx, created.ID, &patch_software_title_configurations.ResourcePatchSoftwareTitleConfiguration{
 		DisplayName:        name,
 		SoftwareTitleID:    softwareTitleID,
 		UINotifications:    false,
@@ -173,7 +175,7 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 
 	// Verify update
 	acc.LogTestStage(t, "Verify", "Verifying patch software title configuration update")
-	updatedRetrieved, resp, err := svc.GetByIDV2(ctx, created.ID)
+	updatedRetrieved, resp, err := svc.GetByIDV3(ctx, created.ID)
 	require.NoError(t, err, "Failed to get updated patch software title configuration")
 	require.NotNil(t, updatedRetrieved)
 	assert.Equal(t, created.ID, updatedRetrieved.ID)
@@ -181,13 +183,13 @@ func TestAcceptance_PatchSoftwareTitleConfigurations_lifecycle(t *testing.T) {
 
 	// Delete
 	acc.LogTestStage(t, "Delete", "Deleting patch software title configuration ID: %s", created.ID)
-	resp, err = svc.DeleteByIDV2(ctx, created.ID)
+	resp, err = svc.DeleteByIDV3(ctx, created.ID)
 	require.NoError(t, err, "Failed to delete patch software title configuration")
 	assert.Equal(t, 200, resp.StatusCode())
 
 	// Verify deletion
 	acc.LogTestStage(t, "Verify", "Verifying patch software title configuration deletion")
-	_, resp, err = svc.GetByIDV2(ctx, created.ID)
+	_, resp, err = svc.GetByIDV3(ctx, created.ID)
 	assert.Error(t, err, "Expected error when getting deleted patch software title configuration")
 	if resp != nil {
 		assert.Equal(t, 404, resp.StatusCode())

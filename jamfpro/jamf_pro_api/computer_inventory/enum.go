@@ -28,6 +28,34 @@ const (
 	ComputerSectionGroupMemberships       = "GROUP_MEMBERSHIPS"
 )
 
+// ComputerSectionV4* constants represent a section of v4 computer inventory data.
+// Jamf Pro 11.30 removed the PLUGINS and FONTS sections from the v4 surface; every
+// other section carries over from v3 unchanged.
+const (
+	ComputerSectionV4General               = "GENERAL"
+	ComputerSectionV4DiskEncryption        = "DISK_ENCRYPTION"
+	ComputerSectionV4Purchasing            = "PURCHASING"
+	ComputerSectionV4Applications          = "APPLICATIONS"
+	ComputerSectionV4Storage               = "STORAGE"
+	ComputerSectionV4UserAndLocation       = "USER_AND_LOCATION"
+	ComputerSectionV4ConfigurationProfiles = "CONFIGURATION_PROFILES"
+	ComputerSectionV4Printers              = "PRINTERS"
+	ComputerSectionV4Services              = "SERVICES"
+	ComputerSectionV4Hardware              = "HARDWARE"
+	ComputerSectionV4LocalUserAccounts     = "LOCAL_USER_ACCOUNTS"
+	ComputerSectionV4Certificates          = "CERTIFICATES"
+	ComputerSectionV4Attachments           = "ATTACHMENTS"
+	ComputerSectionV4PackageReceipts       = "PACKAGE_RECEIPTS"
+	ComputerSectionV4Security              = "SECURITY"
+	ComputerSectionV4OperatingSystem       = "OPERATING_SYSTEM"
+	ComputerSectionV4LicensedSoftware      = "LICENSED_SOFTWARE"
+	ComputerSectionV4Ibeacons              = "IBEACONS"
+	ComputerSectionV4SoftwareUpdates       = "SOFTWARE_UPDATES"
+	ComputerSectionV4ExtensionAttributes   = "EXTENSION_ATTRIBUTES"
+	ComputerSectionV4ContentCaching        = "CONTENT_CACHING"
+	ComputerSectionV4GroupMemberships      = "GROUP_MEMBERSHIPS"
+)
+
 // ComputerSecurityAttestationStatus represents the attestation status of a computer.
 const (
 	AttestationStatusPending                        = "PENDING"

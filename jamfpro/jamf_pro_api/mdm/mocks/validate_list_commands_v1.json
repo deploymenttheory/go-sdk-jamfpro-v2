@@ -1,0 +1,30 @@
+[
+  {
+    "uuid": "aaaaaaaa-3f1e-4b3a-a5b3-ca0cd7430937",
+    "dateSent": "2019-05-16T20:43:43.945Z",
+    "dateCompleted": "2019-05-16T20:44:01.112Z",
+    "client": {
+      "managementId": "bbbbbbbb-3f1e-4b3a-a5b3-ca0cd7430937",
+      "clientType": "COMPUTER"
+    },
+    "commandState": "ACKNOWLEDGED",
+    "commandType": "DEVICE_INFORMATION",
+    "profileId": 1
+  },
+  {
+    "uuid": "cccccccc-3f1e-4b3a-a5b3-ca0cd7430937",
+    "dateSent": "2019-05-16T20:43:43.945Z",
+    "client": {
+      "managementId": "dddddddd-3f1e-4b3a-a5b3-ca0cd7430937",
+      "clientType": "MOBILE_DEVICE"
+    },
+    "commandState": "COMMAND_FORMAT_ERROR",
+    "commandType": "TRIGGER_ENHANCED_LOG_COLLECTION",
+    "commandError": {
+      "errorCode": 1234,
+      "errorDomain": "MDMErrorDomain",
+      "errorLocalizedDescription": "An error occurred while processing the command.",
+      "errorEnglishDescription": "An error occurred while processing the command."
+    }
+  }
+]

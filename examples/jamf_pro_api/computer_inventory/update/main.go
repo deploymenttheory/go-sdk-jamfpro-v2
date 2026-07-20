@@ -22,7 +22,7 @@ func main() {
 
 	computerID := "1"
 
-	updateReq := &computer_inventory.ResourceComputerInventory{
+	updateReq := &computer_inventory.ResourceComputerInventoryV4{
 		UserAndLocation: computer_inventory.ComputerInventorySubsetUserAndLocation{
 			Username: "newuser",
 			Realname: "New User",
@@ -32,7 +32,7 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.JamfProAPI.ComputerInventory.UpdateByIDV3(context.Background(), computerID, updateReq)
+	result, _, err := jamfClient.JamfProAPI.ComputerInventory.UpdateByIDV4(context.Background(), computerID, updateReq)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

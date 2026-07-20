@@ -267,3 +267,38 @@ type ListCommandsResponse struct {
 	TotalCount int           `json:"totalCount"`
 	Results    []CommandInfo `json:"results"`
 }
+
+// -----------------------------------------------------------------------------
+// MDM command detail — GET /v1/mdm/commands
+// -----------------------------------------------------------------------------
+
+// ResourceMdmCommand is a single MDM command as returned by ListCommandsV1. It
+// carries more detail than CommandInfo (the v2 list shape): completion time, the
+// target client, and any command error.
+type ResourceMdmCommand struct {
+	UUID          string                    `json:"uuid,omitempty"`
+	DateSent      string                    `json:"dateSent,omitempty"`
+	DateCompleted string                    `json:"dateCompleted,omitempty"`
+	Client        *ResourceMdmCommandClient `json:"client,omitempty"`
+	// CommandState is one of the MdmCommandState* constants.
+	CommandState string `json:"commandState,omitempty"`
+	// CommandType is one of the CommandType* constants.
+	CommandType  string                   `json:"commandType,omitempty"`
+	CommandError *ResourceMdmCommandError `json:"commandError,omitempty"`
+	ProfileID    int                      `json:"profileId,omitempty"`
+}
+
+// ResourceMdmCommandClient identifies the device an MDM command targeted.
+type ResourceMdmCommandClient struct {
+	ManagementID string `json:"managementId,omitempty"`
+	// ClientType is one of the MdmClientType* constants.
+	ClientType string `json:"clientType,omitempty"`
+}
+
+// ResourceMdmCommandError describes why an MDM command failed.
+type ResourceMdmCommandError struct {
+	ErrorCode                 int    `json:"errorCode,omitempty"`
+	ErrorDomain               string `json:"errorDomain,omitempty"`
+	ErrorLocalizedDescription string `json:"errorLocalizedDescription,omitempty"`
+	ErrorEnglishDescription   string `json:"errorEnglishDescription,omitempty"`
+}

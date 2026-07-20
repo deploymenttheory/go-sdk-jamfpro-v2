@@ -28,7 +28,7 @@ func main() {
 		log.Fatalf("Failed to read attachment file: %v", err)
 	}
 
-	resp, err := jamfClient.JamfProAPI.ComputerInventory.UploadAttachmentByIDV3(context.Background(), computerID, attachmentData)
+	resp, err := jamfClient.JamfProAPI.ComputerInventory.UploadAttachmentByIDV4(context.Background(), computerID, attachmentData)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

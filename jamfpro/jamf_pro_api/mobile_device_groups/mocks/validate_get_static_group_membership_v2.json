@@ -1,1 +1,35 @@
-{"totalCount":2,"results":[{"mobileDeviceId":"101","udid":"abc-123","displayName":"iPhone 1","serialNumber":"SN101","wifiMacAddress":"00:11:22:33:44:55","devicePhoneNumber":"","model":"iPhone 14","modelIdentifier":"iPhone14,1","osVersion":"17.0","managed":true,"supervised":true,"lastLoggedInUsernameMdm":"jdoe","lastLoggedInUsernameMdmTimestamp":"2026-06-01T12:00:00Z"},{"mobileDeviceId":"102","udid":"def-456","displayName":"iPhone 2","serialNumber":"SN102","wifiMacAddress":"00:11:22:33:44:66","devicePhoneNumber":"","model":"iPhone 14","modelIdentifier":"iPhone14,1","osVersion":"17.0","managed":true,"supervised":false}]}
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "mobileDeviceId": "101",
+      "udid": "abc-123",
+      "displayName": "iPhone 1",
+      "serialNumber": "SN101",
+      "wifiMacAddress": "00:11:22:33:44:55",
+      "devicePhoneNumber": "",
+      "model": "iPhone 14",
+      "modelIdentifier": "iPhone14,1",
+      "osVersion": "17.0",
+      "managed": true,
+      "supervised": true,
+      "lastLoggedInUsernameMdm": "jdoe",
+      "lastLoggedInUsernameMdmTimestamp": "2026-06-01T12:00:00Z",
+      "lastContactDate": "2022-10-17T11:48:56.307Z"
+    },
+    {
+      "mobileDeviceId": "102",
+      "udid": "def-456",
+      "displayName": "iPhone 2",
+      "serialNumber": "SN102",
+      "wifiMacAddress": "00:11:22:33:44:66",
+      "devicePhoneNumber": "",
+      "model": "iPhone 14",
+      "modelIdentifier": "iPhone14,1",
+      "osVersion": "17.0",
+      "managed": true,
+      "supervised": false,
+      "lastContactDate": "2022-10-17T11:48:56.307Z"
+    }
+  ]
+}

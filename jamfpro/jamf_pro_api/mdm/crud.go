@@ -28,6 +28,34 @@ func NewMdm(client client.Client) *Mdm {
 // Jamf Pro API - MDM Commands
 // -----------------------------------------------------------------------------
 
+// ListCommandsV1 retrieves information about MDM commands made by Jamf Pro, looked
+// up either by command UUID or by client management ID.
+//
+// URL: GET /api/v1/mdm/commands
+// query supports exactly one of: "uuids" (comma-separated, max 40) or
+// "client-management-id". Supplying more than 40 UUIDs returns HTTP 414.
+// https://developer.jamf.com/jamf-pro/reference/get_v1-mdm-commands
+//
+// Deprecated: Jamf deprecated this endpoint on 2023-10-16; use ListCommandsV2.
+// It is implemented here for completeness and for tenants still relying on the
+// richer per-command detail it returns.
+func (s *Mdm) ListCommandsV1(ctx context.Context, query map[string]string) ([]ResourceMdmCommand, *resty.Response, error) {
+	endpoint := constants.EndpointJamfProCommandsV1
+
+	var result []ResourceMdmCommand
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetQueryParams(query).
+		SetResult(&result).
+		Get(endpoint)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to list MDM commands: %w", err)
+	}
+
+	return result, resp, nil
+}
+
 // ListCommandsV2 retrieves information about MDM commands made by Jamf Pro.
 // URL: GET /api/v2/mdm/commands
 // rsqlQuery supports: filter (RSQL), sort, page, page-size (all optional).

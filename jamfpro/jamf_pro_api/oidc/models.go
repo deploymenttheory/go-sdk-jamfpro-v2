@@ -30,6 +30,21 @@ type RequestOIDCRedirectURL struct {
 // ResourceOIDCRedirectURL represents the OIDC redirect URL response.
 type ResourceOIDCRedirectURL struct {
 	RedirectURL string `json:"redirectUrl"` // URL to redirect for OIDC authentication
+	// IdpRedirects lists the configured identity providers the user may be
+	// redirected to. Added in Jamf Pro 11.30.
+	IdpRedirects []ResourceOIDCIdpRedirect `json:"idpRedirects,omitempty"`
+}
+
+// ResourceOIDCIdpRedirect represents a single identity provider redirect option
+// returned by the OIDC dispatch endpoint.
+type ResourceOIDCIdpRedirect struct {
+	RedirectURL string `json:"redirectUrl"` // URL to redirect for this identity provider
+	IdpName     string `json:"idpName"`     // Display name of the identity provider
+	IdpType     string `json:"idpType"`     // Identity provider type (e.g. "GENERIC_OIDC")
+	// LogoURL is a customer-provided icon served by the Jamf Account URL for this
+	// connection. Null when no custom icon is configured (Jamf ID connections always
+	// return null). Added in Jamf Pro 11.30.
+	LogoURL *string `json:"logoUrl,omitempty"`
 }
 
 // ResourcePublicFeatures represents the public OIDC configuration features.

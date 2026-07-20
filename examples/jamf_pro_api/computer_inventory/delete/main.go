@@ -21,7 +21,7 @@ func main() {
 
 	computerID := "1"
 
-	_, err = jamfClient.JamfProAPI.ComputerInventory.DeleteByIDV3(context.Background(), computerID)
+	_, err = jamfClient.JamfProAPI.ComputerInventory.DeleteByIDV4(context.Background(), computerID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

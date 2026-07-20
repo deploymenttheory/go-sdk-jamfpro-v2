@@ -80,6 +80,8 @@ func TestUnit_SmartMobileDeviceGroups_GetMembership_Success(t *testing.T) {
 	require.Len(t, result.Results, 2)
 	assert.Equal(t, "1", result.Results[0].MobileDeviceId)
 	assert.Equal(t, "iPhone 14", result.Results[0].DisplayName)
+	// Additive 11.30 field.
+	assert.Equal(t, "2022-10-17T11:48:56.307Z", result.Results[0].LastContactDate)
 }
 
 func TestUnit_SmartMobileDeviceGroups_Create_Success(t *testing.T) {

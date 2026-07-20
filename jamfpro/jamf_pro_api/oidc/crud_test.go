@@ -65,6 +65,15 @@ func TestUnit_Oidc_GetRedirectURLV1_Success(t *testing.T) {
 	require.NotNil(t, result)
 	assert.Equal(t, 200, resp.StatusCode())
 	assert.Equal(t, "https://idp.example.com/login?redirect=https://jamf.example.com", result.RedirectURL)
+
+	// 11.30 added idpRedirects, each carrying a nullable logoUrl.
+	require.Len(t, result.IdpRedirects, 2)
+	assert.Equal(t, "Acme SSO", result.IdpRedirects[0].IdpName)
+	assert.Equal(t, "GENERIC_OIDC", result.IdpRedirects[0].IdpType)
+	require.NotNil(t, result.IdpRedirects[0].LogoURL)
+	assert.Equal(t, "https://account.jamf.com/logos/acme.png", *result.IdpRedirects[0].LogoURL)
+	// Jamf ID connections always return a null logoUrl.
+	assert.Nil(t, result.IdpRedirects[1].LogoURL)
 }
 
 func TestUnit_Oidc_GetRedirectURLV1_NilRequest(t *testing.T) {
