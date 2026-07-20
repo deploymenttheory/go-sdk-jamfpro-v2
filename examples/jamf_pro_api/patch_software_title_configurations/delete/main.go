@@ -26,7 +26,7 @@ func main() {
 	// Replace "1" with an actual patch software title configuration ID to delete
 	configID := "1"
 
-	resp, err := jamfClient.JamfProAPI.PatchSoftwareTitleConfigurations.DeleteByIDV2(context.Background(), configID)
+	resp, err := jamfClient.JamfProAPI.PatchSoftwareTitleConfigurations.DeleteByIDV3(context.Background(), configID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

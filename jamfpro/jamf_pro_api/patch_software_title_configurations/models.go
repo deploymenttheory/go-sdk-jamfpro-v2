@@ -111,6 +111,27 @@ type PatchReportResponse struct {
 	Results    []ResourcePatchReportItem `json:"results"`
 }
 
+// ResourcePatchReportItemV3 represents a single item in the v3 patch report.
+// Jamf Pro 11.30 renamed lastContactTime to lastCheckIn; every other field is
+// unchanged from ResourcePatchReportItem.
+type ResourcePatchReportItemV3 struct {
+	ComputerName           string `json:"computerName,omitempty"`
+	DeviceID               string `json:"deviceId,omitempty"`
+	Username               string `json:"username,omitempty"`
+	OperatingSystemVersion string `json:"operatingSystemVersion,omitempty"`
+	LastCheckIn            string `json:"lastCheckIn,omitempty"`
+	BuildingName           string `json:"buildingName,omitempty"`
+	DepartmentName         string `json:"departmentName,omitempty"`
+	SiteName               string `json:"siteName,omitempty"`
+	Version                string `json:"version,omitempty"`
+}
+
+// PatchReportResponseV3 is the paginated response for GetPatchReportByIDV3.
+type PatchReportResponseV3 struct {
+	TotalCount int                         `json:"totalCount"`
+	Results    []ResourcePatchReportItemV3 `json:"results"`
+}
+
 // ResourcePatchSummary represents the patch summary for a software title configuration.
 type ResourcePatchSummary struct {
 	SoftwareTitleID              string `json:"softwareTitleId,omitempty"`

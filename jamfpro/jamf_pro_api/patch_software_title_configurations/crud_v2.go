@@ -7,6 +7,7 @@ import (
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/client"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/constants"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"resty.dev/v3"
 )
 
@@ -24,6 +25,10 @@ func NewPatchSoftwareTitleConfigurations(client client.Client) *PatchSoftwareTit
 	return &PatchSoftwareTitleConfigurations{client: client}
 }
 
+// deprecatedV2Replacement is the migration hint logged for the deprecated V2
+// patch-software-title-configuration methods.
+const deprecatedV2Replacement = "use the v3 patch-software-title-configurations endpoints (\u2026V3 methods)"
+
 // -----------------------------------------------------------------------------
 // Jamf Pro API - Patch Software Title Configurations CRUD Operations (v2)
 // -----------------------------------------------------------------------------
@@ -31,7 +36,11 @@ func NewPatchSoftwareTitleConfigurations(client client.Client) *PatchSoftwareTit
 // ListV2 returns all patch software title configurations.
 // URL: GET /api/v2/patch-software-title-configurations
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use ListV3.
 func (s *PatchSoftwareTitleConfigurations) ListV2(ctx context.Context) (*ListResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.ListV2", "11.30", deprecatedV2Replacement)
+
 	var result ListResponse
 
 	endpoint := constants.EndpointJamfProPatchSoftwareTitleConfigurationsV2
@@ -51,7 +60,11 @@ func (s *PatchSoftwareTitleConfigurations) ListV2(ctx context.Context) (*ListRes
 // GetByIDV2 returns the patch software title configuration by ID.
 // URL: GET /api/v2/patch-software-title-configurations/{id}
 // https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations-id
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetByIDV3.
 func (s *PatchSoftwareTitleConfigurations) GetByIDV2(ctx context.Context, id string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -73,7 +86,11 @@ func (s *PatchSoftwareTitleConfigurations) GetByIDV2(ctx context.Context, id str
 
 // GetByNameV2 returns the patch software title configuration by display name.
 // This is a convenience method that calls ListV2 and filters by DisplayName.
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetByNameV3.
 func (s *PatchSoftwareTitleConfigurations) GetByNameV2(ctx context.Context, name string) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetByNameV2", "11.30", deprecatedV2Replacement)
+
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -95,7 +112,11 @@ func (s *PatchSoftwareTitleConfigurations) GetByNameV2(ctx context.Context, name
 // CreateV2 creates a new patch software title configuration.
 // URL: POST /api/v2/patch-software-title-configurations
 // https://developer.jamf.com/jamf-pro/reference/post_v2-patch-software-title-configurations
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use CreateV3.
 func (s *PatchSoftwareTitleConfigurations) CreateV2(ctx context.Context, config *ResourcePatchSoftwareTitleConfiguration) (*CreateResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.CreateV2", "11.30", deprecatedV2Replacement)
+
 	if config == nil {
 		return nil, nil, fmt.Errorf("config is required")
 	}
@@ -128,7 +149,11 @@ func (s *PatchSoftwareTitleConfigurations) CreateV2(ctx context.Context, config 
 // UpdateByIDV2 updates the patch software title configuration by ID.
 // URL: PATCH /api/v2/patch-software-title-configurations/{id}
 // https://developer.jamf.com/jamf-pro/reference/patch_v2-patch-software-title-configurations-id
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use UpdateByIDV3.
 func (s *PatchSoftwareTitleConfigurations) UpdateByIDV2(ctx context.Context, id string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.UpdateByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -155,7 +180,11 @@ func (s *PatchSoftwareTitleConfigurations) UpdateByIDV2(ctx context.Context, id 
 }
 
 // UpdateByNameV2 updates the patch software title configuration by display name.
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use UpdateByNameV3.
 func (s *PatchSoftwareTitleConfigurations) UpdateByNameV2(ctx context.Context, name string, config *ResourcePatchSoftwareTitleConfiguration) (*ResourcePatchSoftwareTitleConfiguration, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.UpdateByNameV2", "11.30", deprecatedV2Replacement)
+
 	if name == "" {
 		return nil, nil, fmt.Errorf("name is required")
 	}
@@ -171,7 +200,11 @@ func (s *PatchSoftwareTitleConfigurations) UpdateByNameV2(ctx context.Context, n
 // DeleteByIDV2 deletes the patch software title configuration by ID.
 // URL: DELETE /api/v2/patch-software-title-configurations/{id}
 // https://developer.jamf.com/jamf-pro/reference/delete_v2-patch-software-title-configurations-id
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use DeleteByIDV3.
 func (s *PatchSoftwareTitleConfigurations) DeleteByIDV2(ctx context.Context, id string) (*resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.DeleteByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -189,7 +222,11 @@ func (s *PatchSoftwareTitleConfigurations) DeleteByIDV2(ctx context.Context, id 
 }
 
 // DeleteByNameV2 deletes the patch software title configuration by display name.
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use DeleteByNameV3.
 func (s *PatchSoftwareTitleConfigurations) DeleteByNameV2(ctx context.Context, name string) (*resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.DeleteByNameV2", "11.30", deprecatedV2Replacement)
+
 	if name == "" {
 		return nil, fmt.Errorf("name is required")
 	}
@@ -208,7 +245,11 @@ func (s *PatchSoftwareTitleConfigurations) DeleteByNameV2(ctx context.Context, n
 
 // GetDashboardStatusByIDV2 returns whether the software title configuration is on the dashboard.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/dashboard
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetDashboardStatusByIDV3.
 func (s *PatchSoftwareTitleConfigurations) GetDashboardStatusByIDV2(ctx context.Context, id string) (*ResourceDashboardStatus, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetDashboardStatusByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -230,7 +271,11 @@ func (s *PatchSoftwareTitleConfigurations) GetDashboardStatusByIDV2(ctx context.
 
 // AddToDashboardByIDV2 adds the software title configuration to the dashboard.
 // URL: POST /api/v2/patch-software-title-configurations/{id}/dashboard
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use AddToDashboardByIDV3.
 func (s *PatchSoftwareTitleConfigurations) AddToDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.AddToDashboardByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -250,7 +295,11 @@ func (s *PatchSoftwareTitleConfigurations) AddToDashboardByIDV2(ctx context.Cont
 
 // RemoveFromDashboardByIDV2 removes the software title configuration from the dashboard.
 // URL: DELETE /api/v2/patch-software-title-configurations/{id}/dashboard
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use RemoveFromDashboardByIDV3.
 func (s *PatchSoftwareTitleConfigurations) RemoveFromDashboardByIDV2(ctx context.Context, id string) (*resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.RemoveFromDashboardByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -273,7 +322,11 @@ func (s *PatchSoftwareTitleConfigurations) RemoveFromDashboardByIDV2(ctx context
 
 // GetDefinitionsByIDV2 returns paginated patch software title definitions.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/definitions
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetDefinitionsByIDV3.
 func (s *PatchSoftwareTitleConfigurations) GetDefinitionsByIDV2(ctx context.Context, id string, query map[string]string) (*DefinitionsResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetDefinitionsByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -316,7 +369,11 @@ func (s *PatchSoftwareTitleConfigurations) GetDefinitionsByIDV2(ctx context.Cont
 
 // GetDependenciesByIDV2 returns paginated dependencies (smart groups) for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/dependencies
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetDependenciesByIDV3.
 func (s *PatchSoftwareTitleConfigurations) GetDependenciesByIDV2(ctx context.Context, id string, query map[string]string) (*DependenciesResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetDependenciesByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -359,7 +416,11 @@ func (s *PatchSoftwareTitleConfigurations) GetDependenciesByIDV2(ctx context.Con
 
 // ExportReportByIDV2 exports patch reporting data as CSV bytes.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/export-report
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use ExportReportByIDV3.
 func (s *PatchSoftwareTitleConfigurations) ExportReportByIDV2(ctx context.Context, id string, query map[string]string) ([]byte, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.ExportReportByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -379,7 +440,11 @@ func (s *PatchSoftwareTitleConfigurations) ExportReportByIDV2(ctx context.Contex
 
 // GetExtensionAttributesByIDV2 returns extension attributes for the software title.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/extension-attributes
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetExtensionAttributesByIDV3.
 func (s *PatchSoftwareTitleConfigurations) GetExtensionAttributesByIDV2(ctx context.Context, id string) ([]ResourceExtensionAttribute, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetExtensionAttributesByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -401,7 +466,11 @@ func (s *PatchSoftwareTitleConfigurations) GetExtensionAttributesByIDV2(ctx cont
 
 // GetPatchReportByIDV2 returns paginated patch report for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/patch-report
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetPatchReportByIDV3.
 func (s *PatchSoftwareTitleConfigurations) GetPatchReportByIDV2(ctx context.Context, id string, query map[string]string) (*PatchReportResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetPatchReportByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -444,7 +513,11 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchReportByIDV2(ctx context.Cont
 
 // GetPatchSummaryByIDV2 returns the patch summary for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/patch-summary
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetPatchSummaryByIDV3.
 func (s *PatchSoftwareTitleConfigurations) GetPatchSummaryByIDV2(ctx context.Context, id string) (*ResourcePatchSummary, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetPatchSummaryByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -470,7 +543,11 @@ func (s *PatchSoftwareTitleConfigurations) GetPatchSummaryByIDV2(ctx context.Con
 
 // GetHistoryByIDV2 returns paginated history for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/history
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetHistoryByIDV3.
 func (s *PatchSoftwareTitleConfigurations) GetHistoryByIDV2(ctx context.Context, id string, query map[string]string) (*HistoryResponse, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetHistoryByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -513,7 +590,11 @@ func (s *PatchSoftwareTitleConfigurations) GetHistoryByIDV2(ctx context.Context,
 
 // AddHistoryNoteByIDV2 adds a history note to the configuration.
 // URL: POST /api/v2/patch-software-title-configurations/{id}/history
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use AddHistoryNoteByIDV3.
 func (s *PatchSoftwareTitleConfigurations) AddHistoryNoteByIDV2(ctx context.Context, id string, request *RequestAddHistoryNote) (*ResponseAddHistoryNote, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.AddHistoryNoteByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}
@@ -547,7 +628,11 @@ func (s *PatchSoftwareTitleConfigurations) AddHistoryNoteByIDV2(ctx context.Cont
 
 // GetPatchVersionsByIDV2 returns patch versions for the configuration.
 // URL: GET /api/v2/patch-software-title-configurations/{id}/patch-summary/versions
+//
+// Deprecated: deprecated in Jamf Pro 11.30; use GetPatchVersionsByIDV3.
 func (s *PatchSoftwareTitleConfigurations) GetPatchVersionsByIDV2(ctx context.Context, id string) ([]ResourcePatchVersion, *resty.Response, error) {
+	apilifecycle.DeprecationWarning(s.client.GetLogger(), "jamf_pro_api/patch_software_title_configurations.PatchSoftwareTitleConfigurations.GetPatchVersionsByIDV2", "11.30", deprecatedV2Replacement)
+
 	if id == "" {
 		return nil, nil, fmt.Errorf("id is required")
 	}

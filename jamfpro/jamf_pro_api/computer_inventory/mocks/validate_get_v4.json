@@ -1,0 +1,31 @@
+{
+  "id": "1",
+  "udid": "123",
+  "general": {
+    "name": "Test-Mac-001",
+    "lastIpAddress": "247.185.82.186",
+    "lastReportedIpV4": "247.185.82.186",
+    "lastReportedIpV6": "2001:0db8:85a3:0000:0000:8a2e:0370:7335",
+    "lastContact": "2018-10-31T18:04:13Z",
+    "lastCheckIn": "2018-10-31T19:12:44Z",
+    "jamfBinaryVersion": "9.27",
+    "platform": "Mac",
+    "assetTag": "304822",
+    "supervised": true,
+    "reportDate": "2018-10-31T18:04:13Z",
+    "site": {
+      "id": "1",
+      "name": "Default"
+    },
+    "lastLoggedInUsernameMdm": "admin",
+    "lastLoggedInUsernameMdmTimestamp": "2018-10-31T18:04:13Z"
+  },
+  "hardware": {
+    "make": "Apple",
+    "model": "MacBook Pro",
+    "serialNumber": "C02ABC123DEF"
+  },
+  "userAndLocation": {
+    "username": "testuser"
+  }
+}

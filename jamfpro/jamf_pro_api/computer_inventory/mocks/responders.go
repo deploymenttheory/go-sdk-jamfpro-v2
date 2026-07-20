@@ -102,3 +102,79 @@ func (m *ComputerInventoryMock) RegisterGetByIDErrorMock(id string) {
 func (m *ComputerInventoryMock) RegisterDeleteErrorMock(id string) {
 	m.RegisterError("DELETE", "/api/v3/computers-inventory/"+id, 500, "", "simulated Delete API error")
 }
+
+// -----------------------------------------------------------------------------
+// V4 responders (Jamf Pro 11.30)
+// -----------------------------------------------------------------------------
+
+func (m *ComputerInventoryMock) RegisterListV4Mock() {
+	m.Register("GET", "/api/v4/computers-inventory", 200, "validate_list_v4.json")
+}
+
+func (m *ComputerInventoryMock) RegisterCreateV4Mock() {
+	m.Register("POST", "/api/v4/computers-inventory", 201, "validate_create.json")
+}
+
+func (m *ComputerInventoryMock) RegisterGetByIDV4Mock(id string) {
+	m.Register("GET", "/api/v4/computers-inventory/"+id, 200, "validate_get_v4.json")
+}
+
+func (m *ComputerInventoryMock) RegisterGetDetailByIDV4Mock(id string) {
+	m.Register("GET", "/api/v4/computers-inventory-detail/"+id, 200, "validate_get_v4.json")
+}
+
+func (m *ComputerInventoryMock) RegisterUpdateByIDV4Mock(id string) {
+	m.Register("PATCH", "/api/v4/computers-inventory-detail/"+id, 200, "validate_get_v4.json")
+}
+
+func (m *ComputerInventoryMock) RegisterDeleteByIDV4Mock(id string) {
+	m.Register("DELETE", "/api/v4/computers-inventory/"+id, 204, "")
+}
+
+func (m *ComputerInventoryMock) RegisterListFileVaultV4Mock() {
+	m.Register("GET", "/api/v4/computers-inventory/filevault", 200, "validate_filevault_list.json")
+}
+
+func (m *ComputerInventoryMock) RegisterGetFileVaultByIDV4Mock(id string) {
+	m.Register("GET", "/api/v4/computers-inventory/"+id+"/filevault", 200, "validate_filevault.json")
+}
+
+func (m *ComputerInventoryMock) RegisterGetDeviceLockPinV4Mock(id string) {
+	m.Register("GET", "/api/v4/computers-inventory/"+id+"/view-device-lock-pin", 200, "validate_device_lock_pin.json")
+}
+
+func (m *ComputerInventoryMock) RegisterGetRecoveryLockPasswordByIDV4Mock(id string) {
+	m.Register("GET", "/api/v4/computers-inventory/"+id+"/view-recovery-lock-password", 200, "validate_recovery_lock.json")
+}
+
+func (m *ComputerInventoryMock) RegisterUploadAttachmentV4Mock(computerID string) {
+	m.Register("POST", "/api/v4/computers-inventory/"+computerID+"/attachments", 201, "validate_attachment.json")
+}
+
+func (m *ComputerInventoryMock) RegisterGetAttachmentV4Mock(computerID, attachmentID string) {
+	m.Register("GET", "/api/v4/computers-inventory/"+computerID+"/attachments/"+attachmentID, 200, "validate_attachment_get.json")
+}
+
+func (m *ComputerInventoryMock) RegisterDeleteAttachmentV4Mock(computerID, attachmentID string) {
+	m.Register("DELETE", "/api/v4/computers-inventory/"+computerID+"/attachments/"+attachmentID, 204, "")
+}
+
+func (m *ComputerInventoryMock) RegisterRemoveMDMProfileV4Mock(id string) {
+	m.Register("POST", "/api/v4/computers-inventory/"+id+"/remove-mdm-profile", 200, "validate_remove_mdm.json")
+}
+
+func (m *ComputerInventoryMock) RegisterEraseV4Mock(id string) {
+	m.Register("POST", "/api/v4/computers-inventory/"+id+"/erase", 204, "")
+}
+
+func (m *ComputerInventoryMock) RegisterListV4ErrorMock() {
+	m.RegisterError("GET", "/api/v4/computers-inventory", 500, "", "simulated ListV4 API error")
+}
+
+func (m *ComputerInventoryMock) RegisterGetByIDV4ErrorMock(id string) {
+	m.RegisterError("GET", "/api/v4/computers-inventory/"+id, 500, "", "simulated GetByIDV4 API error")
+}
+
+func (m *ComputerInventoryMock) RegisterListV4InvalidJSONMock() {
+	m.Register("GET", "/api/v4/computers-inventory", 200, "validate_list_invalid.json")
+}

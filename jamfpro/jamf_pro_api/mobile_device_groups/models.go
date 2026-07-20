@@ -106,6 +106,9 @@ type ResourceMobileDeviceMember struct {
 	// to the membership response in Jamf Pro 11.29 (additive fields).
 	LastLoggedInUsernameMdm          string `json:"lastLoggedInUsernameMdm,omitempty"`
 	LastLoggedInUsernameMdmTimestamp string `json:"lastLoggedInUsernameMdmTimestamp,omitempty"`
+	// LastContactDate is the date and time of the most recent device contact via
+	// MDM or DDM channels. Added in Jamf Pro 11.30.
+	LastContactDate string `json:"lastContactDate,omitempty"`
 }
 
 // GroupMembershipResponse is the response for GetStaticGroupMembershipV1 and GetSmartGroupMembershipV1.

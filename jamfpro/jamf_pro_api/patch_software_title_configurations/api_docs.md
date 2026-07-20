@@ -1,3 +1,20 @@
+<!-- SDK NOTE — Jamf Pro 11.30 -->
+# Version status
+
+The scraped reference below documents the **v2** surface, which Jamf deprecated on
+2026-07-14. The SDK now also implements **v3** (`*V3` methods in `crud_v3.go`); the v2
+methods in `crud_v2.go` remain available but log a deprecation warning.
+
+Difference in v3 (`/api/v3/patch-software-title-configurations`):
+
+- `GET .../{id}/patch-report` — `results[].lastContactTime` renamed to `results[].lastCheckIn`
+- `GET .../{id}/export-report` — request `lastCheckIn` in `columns-to-export` instead of
+  `lastContactTime`; the default column set was updated to match
+
+Everything else is unchanged.
+
+---
+
 Retrieve Patch Software Title Configurations
 get
 https://yourServer.jamfcloud.com/api/v2/patch-software-title-configurations

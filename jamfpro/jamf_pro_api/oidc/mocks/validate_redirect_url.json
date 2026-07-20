@@ -1,1 +1,17 @@
-{"redirectUrl": "https://idp.example.com/login?redirect=https://jamf.example.com"}
+{
+  "redirectUrl": "https://idp.example.com/login?redirect=https://jamf.example.com",
+  "idpRedirects": [
+    {
+      "redirectUrl": "/oauth2/authorization/acme",
+      "idpName": "Acme SSO",
+      "idpType": "GENERIC_OIDC",
+      "logoUrl": "https://account.jamf.com/logos/acme.png"
+    },
+    {
+      "redirectUrl": "/oauth2/authorization/jamf-id",
+      "idpName": "Jamf ID",
+      "idpType": "JAMF_ID",
+      "logoUrl": null
+    }
+  ]
+}

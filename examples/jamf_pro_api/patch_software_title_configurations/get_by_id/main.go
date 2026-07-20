@@ -23,7 +23,7 @@ func main() {
 	// Replace "1" with an actual patch software title configuration ID
 	configID := "1"
 
-	result, _, err := jamfClient.JamfProAPI.PatchSoftwareTitleConfigurations.GetByIDV2(context.Background(), configID)
+	result, _, err := jamfClient.JamfProAPI.PatchSoftwareTitleConfigurations.GetByIDV3(context.Background(), configID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

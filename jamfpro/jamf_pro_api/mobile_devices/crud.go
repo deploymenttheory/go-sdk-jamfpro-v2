@@ -200,3 +200,31 @@ func (s *MobileDevices) GetPairedDevicesByIDV2(ctx context.Context, id string, q
 
 	return &result, resp, nil
 }
+
+// UpdateByIDV2 updates the specified mobile device and returns the updated record.
+// URL: PATCH /api/v2/mobile-devices/{id}
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/patch_v2-mobile-devices-id
+func (s *MobileDevices) UpdateByIDV2(ctx context.Context, id string, request *RequestMobileDeviceUpdateV2) (*ResourceMobileDeviceDetailsV2, *resty.Response, error) {
+	if id == "" {
+		return nil, nil, fmt.Errorf("id is required")
+	}
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDevicesV2, id)
+
+	var result ResourceMobileDeviceDetailsV2
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetBody(request).
+		SetResult(&result).
+		Patch(endpoint)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}

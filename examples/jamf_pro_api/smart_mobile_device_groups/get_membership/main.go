@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 
@@ -20,13 +19,21 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	groupID := "1" // Replace with the desired smart mobile device group ID
-	query := map[string]string{"page": "0", "page-size": "50"}
-	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetMembership(context.Background(), groupID, query)
+	groupID := "1"
+
+	result, _, err := jamfClient.JamfProAPI.SmartMobileDeviceGroups.GetMembership(context.Background(), groupID, nil)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	out, _ := json.MarshalIndent(result, "", "    ")
-	fmt.Println("Smart mobile device group membership:\n" + string(out))
+
+	fmt.Printf("Members: %d\n\n", result.TotalCount)
+	for _, member := range result.Results {
+		fmt.Printf("ID: %s\n", member.MobileDeviceId)
+		fmt.Printf("  Name: %s\n", member.DisplayName)
+		fmt.Printf("  Serial: %s\n", member.SerialNumber)
+		// lastContactDate was added to the membership response in Jamf Pro 11.30.
+		fmt.Printf("  Last Contact: %s\n", member.LastContactDate)
+		fmt.Println()
+	}
 }
