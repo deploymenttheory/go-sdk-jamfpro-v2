@@ -47,7 +47,7 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.JamfProAPI.PatchSoftwareTitleConfigurations.CreateV2(context.Background(), req)
+	result, _, err := jamfClient.JamfProAPI.PatchSoftwareTitleConfigurations.CreateV3(context.Background(), req)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

@@ -1,0 +1,49 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "id": "1",
+      "udid": "12345678-1234-1234-1234-123456789012",
+      "general": {
+        "name": "Test-Mac-001",
+        "lastIpAddress": "192.168.1.100",
+        "lastReportedIpV4": "192.168.1.100",
+        "lastContact": "2018-10-31T18:04:13Z",
+        "lastCheckIn": "2018-10-31T19:12:44Z",
+        "platform": "Mac",
+        "jamfBinaryVersion": "10.50.0",
+        "site": {
+          "id": "1",
+          "name": "Default"
+        }
+      },
+      "hardware": {
+        "make": "Apple",
+        "model": "MacBook Pro",
+        "serialNumber": "C02ABC123DEF"
+      }
+    },
+    {
+      "id": "2",
+      "udid": "87654321-4321-4321-4321-210987654321",
+      "general": {
+        "name": "Test-Mac-002",
+        "lastIpAddress": "192.168.1.101",
+        "lastReportedIpV4": "192.168.1.101",
+        "lastContact": "2018-11-01T09:22:01Z",
+        "lastCheckIn": "2018-11-01T10:05:17Z",
+        "platform": "Mac",
+        "jamfBinaryVersion": "10.50.0",
+        "site": {
+          "id": "1",
+          "name": "Default"
+        }
+      },
+      "hardware": {
+        "make": "Apple",
+        "model": "MacBook Air",
+        "serialNumber": "C02XYZ789GHI"
+      }
+    }
+  ]
+}

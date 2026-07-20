@@ -46,6 +46,95 @@ type ResourceComputerInventory struct {
 	GroupMemberships      []ComputerInventorySubsetGroupMembership      `json:"groupMemberships"`
 }
 
+// V4 (Jamf Pro 11.30)
+//
+// The v4 computer-inventory surface differs from v3 in three ways:
+//   - general.lastContactTime was renamed to general.lastContact
+//   - general.lastReportedIp was removed (use lastReportedIpV4)
+//   - general.lastCheckIn was added
+//   - the plugins and fonts sections were removed entirely, along with the
+//     PLUGINS and FONTS section enum members
+//
+// Every other section is byte-identical to v3 and reuses the same subset types.
+
+// ResponseComputerInventoryListV4 is the top-level response for ListV4.
+type ResponseComputerInventoryListV4 struct {
+	TotalCount int                           `json:"totalCount"`
+	Results    []ResourceComputerInventoryV4 `json:"results"`
+}
+
+// ResourceComputerInventoryV4 is an individual computer from the v4 inventory.
+// It is used for both responses and the CreateV4/UpdateByIDV4 request bodies,
+// mirroring how ResourceComputerInventory serves v3.
+type ResourceComputerInventoryV4 struct {
+	ID                    string                                        `json:"id"`
+	UDID                  string                                        `json:"udid"`
+	General               ComputerInventorySubsetGeneralV4              `json:"general"`
+	DiskEncryption        ComputerInventorySubsetDiskEncryption         `json:"diskEncryption"`
+	Purchasing            ComputerInventorySubsetPurchasing             `json:"purchasing"`
+	Applications          []ComputerInventorySubsetApplication          `json:"applications"`
+	Storage               ComputerInventorySubsetStorage                `json:"storage"`
+	UserAndLocation       ComputerInventorySubsetUserAndLocation        `json:"userAndLocation"`
+	ConfigurationProfiles []ComputerInventorySubsetConfigurationProfile `json:"configurationProfiles"`
+	Printers              []ComputerInventorySubsetPrinter              `json:"printers"`
+	Services              []ComputerInventorySubsetService              `json:"services"`
+	Hardware              ComputerInventorySubsetHardware               `json:"hardware"`
+	LocalUserAccounts     []ComputerInventorySubsetLocalUserAccount     `json:"localUserAccounts"`
+	Certificates          []ComputerInventorySubsetCertificate          `json:"certificates"`
+	Attachments           []ComputerInventorySubsetAttachment           `json:"attachments"`
+	PackageReceipts       ComputerInventorySubsetPackageReceipts        `json:"packageReceipts"`
+	Security              ComputerInventorySubsetSecurity               `json:"security"`
+	OperatingSystem       ComputerInventorySubsetOperatingSystem        `json:"operatingSystem"`
+	LicensedSoftware      []ComputerInventorySubsetLicensedSoftware     `json:"licensedSoftware"`
+	Ibeacons              []ComputerInventorySubsetIBeacon              `json:"ibeacons"`
+	SoftwareUpdates       []ComputerInventorySubsetSoftwareUpdate       `json:"softwareUpdates"`
+	ExtensionAttributes   []ComputerInventorySubsetExtensionAttribute   `json:"extensionAttributes"`
+	ContentCaching        ComputerInventorySubsetContentCaching         `json:"contentCaching"`
+	GroupMemberships      []ComputerInventorySubsetGroupMembership      `json:"groupMemberships"`
+}
+
+// ComputerInventorySubsetGeneralV4 is the v4 GENERAL section.
+type ComputerInventorySubsetGeneralV4 struct {
+	Name             string `json:"name"`
+	LastIpAddress    string `json:"lastIpAddress"`
+	LastReportedIpV4 string `json:"lastReportedIpV4"`
+	LastReportedIpV6 string `json:"lastReportedIpV6"`
+	// LastContact replaces v3's lastContactTime (same date-time value). It is the
+	// most recent time the device communicated with Jamf Pro via any channel
+	// (binary check-in, MDM ack, or DDM status report).
+	LastContact string `json:"lastContact"`
+	// LastCheckIn was added in Jamf Pro 11.30.
+	LastCheckIn                              string                                         `json:"lastCheckIn"`
+	JamfBinaryVersion                        string                                         `json:"jamfBinaryVersion"`
+	Platform                                 string                                         `json:"platform"`
+	Barcode1                                 string                                         `json:"barcode1"`
+	Barcode2                                 string                                         `json:"barcode2"`
+	AssetTag                                 string                                         `json:"assetTag"`
+	RemoteManagement                         ComputerInventorySubsetGeneralRemoteManagement `json:"remoteManagement"`
+	Supervised                               bool                                           `json:"supervised"`
+	MdmCapable                               ComputerInventorySubsetGeneralMdmCapable       `json:"mdmCapable"`
+	ReportDate                               string                                         `json:"reportDate"`
+	LastCloudBackupDate                      string                                         `json:"lastCloudBackupDate"`
+	LastEnrolledDate                         string                                         `json:"lastEnrolledDate"`
+	MdmProfileExpiration                     string                                         `json:"mdmProfileExpiration"`
+	InitialEntryDate                         string                                         `json:"initialEntryDate"`
+	DistributionPoint                        string                                         `json:"distributionPoint"`
+	EnrollmentMethod                         ComputerInventorySubsetGeneralEnrollmentMethod `json:"enrollmentMethod"`
+	Site                                     SharedResourceSiteProAPI                       `json:"site"`
+	ItunesStoreAccountActive                 bool                                           `json:"itunesStoreAccountActive"`
+	EnrolledViaAutomatedDeviceEnrollment     bool                                           `json:"enrolledViaAutomatedDeviceEnrollment"`
+	UserApprovedMdm                          bool                                           `json:"userApprovedMdm"`
+	DeclarativeDeviceManagementEnabled       bool                                           `json:"declarativeDeviceManagementEnabled"`
+	ExtensionAttributes                      []ComputerInventorySubsetExtensionAttribute    `json:"extensionAttributes"`
+	ManagementId                             string                                         `json:"managementId"`
+	LastLoggedInUsernameSelfService          string                                         `json:"lastLoggedInUsernameSelfService"`
+	LastLoggedInUsernameSelfServiceTimestamp string                                         `json:"lastLoggedInUsernameSelfServiceTimestamp"`
+	LastLoggedInUsernameBinary               string                                         `json:"lastLoggedInUsernameBinary"`
+	LastLoggedInUsernameBinaryTimestamp      string                                         `json:"lastLoggedInUsernameBinaryTimestamp"`
+	LastLoggedInUsernameMdm                  string                                         `json:"lastLoggedInUsernameMdm"`
+	LastLoggedInUsernameMdmTimestamp         string                                         `json:"lastLoggedInUsernameMdmTimestamp"`
+}
+
 // Subsets
 
 // General

@@ -317,3 +317,56 @@ func TestUnit_Mdm_RenewProfile_Error(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Equal(t, 500, resp.StatusCode())
 }
+
+// -----------------------------------------------------------------------------
+// Jamf Pro 11.30
+// -----------------------------------------------------------------------------
+
+func TestUnit_Mdm_ListCommandsV1_Success(t *testing.T) {
+	mock := mocks.NewMDMMock()
+	mock.RegisterListCommandsV1Mock()
+
+	svc := NewMdm(mock)
+
+	result, resp, err := svc.ListCommandsV1(context.Background(), map[string]string{
+		"client-management-id": "bbbbbbbb-3f1e-4b3a-a5b3-ca0cd7430937",
+	})
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	require.Len(t, result, 2)
+
+	assert.Equal(t, "aaaaaaaa-3f1e-4b3a-a5b3-ca0cd7430937", result[0].UUID)
+	assert.Equal(t, MdmCommandStateAcknowledged, result[0].CommandState)
+	assert.Equal(t, "2019-05-16T20:44:01.112Z", result[0].DateCompleted)
+	require.NotNil(t, result[0].Client)
+	assert.Equal(t, MdmClientTypeComputer, result[0].Client.ClientType)
+	assert.Equal(t, 1, result[0].ProfileID)
+
+	// 11.30 added COMMAND_FORMAT_ERROR to the command state enum.
+	assert.Equal(t, MdmCommandStateCommandFormatError, result[1].CommandState)
+	assert.Equal(t, CommandTypeTriggerEnhancedLogCollection, result[1].CommandType)
+	require.NotNil(t, result[1].CommandError)
+	assert.Equal(t, 1234, result[1].CommandError.ErrorCode)
+}
+
+func TestUnit_Mdm_ListCommandsV1_Error(t *testing.T) {
+	mock := mocks.NewMDMMock()
+	mock.RegisterListCommandsV1ErrorMock()
+
+	svc := NewMdm(mock)
+
+	result, _, err := svc.ListCommandsV1(context.Background(), nil)
+
+	assert.Error(t, err)
+	assert.Nil(t, result)
+}
+
+func TestUnit_Mdm_ListCommandsV1_NoMock(t *testing.T) {
+	svc := NewMdm(mocks.NewMDMMock())
+
+	_, _, err := svc.ListCommandsV1(context.Background(), nil)
+
+	assert.Error(t, err)
+}

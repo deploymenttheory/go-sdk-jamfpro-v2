@@ -45,3 +45,12 @@ func (m *MobileDevicesMock) RegisterListErrorMock() {
 func (m *MobileDevicesMock) RegisterGetDetailErrorMock() {
 	m.RegisterError("GET", "/api/v2/mobile-devices/detail", 500, "", "simulated GetDetailV2 API error")
 }
+
+// RegisterUpdateByIDMock registers PATCH /api/v2/mobile-devices/{id}.
+func (m *MobileDevicesMock) RegisterUpdateByIDMock(id string) {
+	m.Register("PATCH", "/api/v2/mobile-devices/"+id, 200, "validate_detail_get.json")
+}
+
+func (m *MobileDevicesMock) RegisterUpdateByIDErrorMock(id string) {
+	m.RegisterError("PATCH", "/api/v2/mobile-devices/"+id, 500, "", "simulated UpdateByIDV2 API error")
+}

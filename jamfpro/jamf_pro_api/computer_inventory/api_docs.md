@@ -1,3 +1,24 @@
+<!-- SDK NOTE — Jamf Pro 11.30 -->
+# Version status
+
+The scraped reference below documents the **v3** surface, which Jamf deprecated on
+2026-07-14. The SDK now also implements **v4** (`*V4` methods in `crud_v4.go`); the v3
+methods in `crud_v3.go` remain available but log a deprecation warning.
+
+Differences in v4 (`/api/v4/computers-inventory`):
+
+- `general.lastContactTime` renamed to `general.lastContact` (same date-time value)
+- `general.lastReportedIp` removed — use `general.lastReportedIpV4`
+- `general.lastCheckIn` added
+- the `plugins` and `fonts` sections were removed, along with the `PLUGINS` and `FONTS`
+  section enum members (use `ComputerSectionV4*` constants with v4)
+- `POST /v4/computers-inventory/{id}/erase` and `.../remove-mdm-profile` replace the
+  singular `/api/v1/computer-inventory/{id}/...` action paths
+
+No query parameters changed.
+
+---
+
 Return paginated Computer Inventory records
 get
 https://yourServer.jamfcloud.com/api/v3/computers-inventory

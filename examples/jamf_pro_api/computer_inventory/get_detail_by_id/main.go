@@ -22,7 +22,7 @@ func main() {
 
 	computerID := "1"
 
-	result, _, err := jamfClient.JamfProAPI.ComputerInventory.GetDetailByIDV3(context.Background(), computerID)
+	result, _, err := jamfClient.JamfProAPI.ComputerInventory.GetDetailByIDV4(context.Background(), computerID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

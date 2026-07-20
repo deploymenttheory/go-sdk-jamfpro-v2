@@ -53,20 +53,23 @@ type CreateResponse struct {
 
 // MembershipResponse is the response for GetMembership.
 type MembershipResponse struct {
-	TotalCount int                      `json:"totalCount"`
+	TotalCount int                             `json:"totalCount"`
 	Results    []InventoryListMobileDeviceItem `json:"results"`
 }
 
 // InventoryListMobileDeviceItem represents a mobile device in the membership/inventory list.
 type InventoryListMobileDeviceItem struct {
-	MobileDeviceId     string `json:"mobileDeviceId,omitempty"`
-	Udid               string `json:"udid,omitempty"`
-	DisplayName        string `json:"displayName,omitempty"`
-	Model              string `json:"model,omitempty"`
-	ModelIdentifier    string `json:"modelIdentifier,omitempty"`
-	SerialNumber       string `json:"serialNumber,omitempty"`
-	OsVersion          string `json:"osVersion,omitempty"`
-	Managed            bool   `json:"managed,omitempty"`
-	Supervised         bool   `json:"supervised,omitempty"`
+	MobileDeviceId      string `json:"mobileDeviceId,omitempty"`
+	Udid                string `json:"udid,omitempty"`
+	DisplayName         string `json:"displayName,omitempty"`
+	Model               string `json:"model,omitempty"`
+	ModelIdentifier     string `json:"modelIdentifier,omitempty"`
+	SerialNumber        string `json:"serialNumber,omitempty"`
+	OsVersion           string `json:"osVersion,omitempty"`
+	Managed             bool   `json:"managed,omitempty"`
+	Supervised          bool   `json:"supervised,omitempty"`
 	DeviceOwnershipType string `json:"deviceOwnershipType,omitempty"`
+	// LastContactDate is the date and time of the most recent device contact via
+	// MDM or DDM channels. Added in Jamf Pro 11.30.
+	LastContactDate string `json:"lastContactDate,omitempty"`
 }

@@ -21,7 +21,7 @@ func main() {
 
 	computerID := "1"
 
-	result, _, err := jamfClient.JamfProAPI.ComputerInventory.RemoveMDMProfileByIDV1(context.Background(), computerID)
+	result, _, err := jamfClient.JamfProAPI.ComputerInventory.RemoveMDMProfileByIDV4(context.Background(), computerID)
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 		return

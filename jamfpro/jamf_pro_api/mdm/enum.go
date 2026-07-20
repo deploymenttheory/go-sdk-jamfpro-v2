@@ -6,6 +6,8 @@ const (
 	MdmCommandStateAcknowledged = "ACKNOWLEDGED"
 	MdmCommandStateNotNow       = "NOT_NOW"
 	MdmCommandStateError        = "ERROR"
+	// MdmCommandStateCommandFormatError was added in Jamf Pro 11.30.
+	MdmCommandStateCommandFormatError = "COMMAND_FORMAT_ERROR"
 )
 
 // MdmClientType* constants represent the types of MDM client devices.

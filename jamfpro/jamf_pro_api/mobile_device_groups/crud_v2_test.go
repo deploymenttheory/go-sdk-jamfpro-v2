@@ -359,6 +359,8 @@ func TestUnit_MobileDeviceGroups_GetStaticGroupMembershipV2_Success(t *testing.T
 	// Additive 11.29 fields.
 	assert.Equal(t, "jdoe", result.Results[0].LastLoggedInUsernameMdm)
 	assert.Equal(t, "2026-06-01T12:00:00Z", result.Results[0].LastLoggedInUsernameMdmTimestamp)
+	// Additive 11.30 field.
+	assert.Equal(t, "2022-10-17T11:48:56.307Z", result.Results[0].LastContactDate)
 }
 
 func TestUnit_MobileDeviceGroups_GetStaticGroupMembershipV2_EmptyID(t *testing.T) {
@@ -380,6 +382,8 @@ func TestUnit_MobileDeviceGroups_GetSmartGroupMembershipV2_Success(t *testing.T)
 	assert.Equal(t, 200, resp.StatusCode())
 	require.Len(t, result.Results, 1)
 	assert.Equal(t, "201", result.Results[0].MobileDeviceID)
+	// Additive 11.30 field.
+	assert.Equal(t, "2022-10-17T11:48:56.307Z", result.Results[0].LastContactDate)
 }
 
 func TestUnit_MobileDeviceGroups_GetSmartGroupMembershipV2_EmptyID(t *testing.T) {

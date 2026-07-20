@@ -27,7 +27,7 @@ func main() {
 		Pin: &pin,
 	}
 
-	_, err = jamfClient.JamfProAPI.ComputerInventory.EraseByIDV1(context.Background(), computerID, request)
+	_, err = jamfClient.JamfProAPI.ComputerInventory.EraseByIDV4(context.Background(), computerID, request)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

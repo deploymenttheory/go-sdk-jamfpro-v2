@@ -22,7 +22,7 @@ func main() {
 
 	computerID := "1"
 
-	result, _, err := jamfClient.JamfProAPI.ComputerInventory.GetDeviceLockPinByIDV3(context.Background(), computerID)
+	result, _, err := jamfClient.JamfProAPI.ComputerInventory.GetDeviceLockPinByIDV4(context.Background(), computerID)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

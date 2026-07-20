@@ -21,8 +21,8 @@ func main() {
 		log.Fatalf("Failed to initialize Jamf Pro client: %v", err)
 	}
 
-	computerInventoryRequest := &computer_inventory.ResourceComputerInventory{
-		General: computer_inventory.ComputerInventorySubsetGeneral{
+	computerInventoryRequest := &computer_inventory.ResourceComputerInventoryV4{
+		General: computer_inventory.ComputerInventorySubsetGeneralV4{
 			Name:         "New-Test-Computer",
 			AssetTag:     "ASSET-12345",
 			Site:         computer_inventory.SharedResourceSiteProAPI{ID: "1", Name: "Default"},
@@ -47,7 +47,7 @@ func main() {
 		},
 	}
 
-	result, _, err := jamfClient.JamfProAPI.ComputerInventory.CreateV3(context.Background(), computerInventoryRequest)
+	result, _, err := jamfClient.JamfProAPI.ComputerInventory.CreateV4(context.Background(), computerInventoryRequest)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

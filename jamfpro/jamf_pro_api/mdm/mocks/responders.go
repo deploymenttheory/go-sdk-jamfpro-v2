@@ -61,3 +61,12 @@ func (m *MDMMock) RegisterListCommandsInvalidJSONMock() {
 func (m *MDMMock) RegisterListCommandsNoResponseErrorMock() {
 	m.RegisterError("GET", "/api/v2/mdm/commands", 500, "error_internal.json", "")
 }
+
+// RegisterListCommandsV1Mock registers the deprecated v1 command lookup endpoint.
+func (m *MDMMock) RegisterListCommandsV1Mock() {
+	m.Register("GET", "/api/v1/mdm/commands", 200, "validate_list_commands_v1.json")
+}
+
+func (m *MDMMock) RegisterListCommandsV1ErrorMock() {
+	m.RegisterError("GET", "/api/v1/mdm/commands", 500, "", "simulated ListCommandsV1 API error")
+}
