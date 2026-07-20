@@ -111,6 +111,10 @@ func (s *MobileDevicePrestages) CreateV3(ctx context.Context, prestage *Resource
 		return nil, nil, fmt.Errorf("display name is required")
 	}
 
+	// A create has no prior state to echo; Jamf requires every lock in the tree
+	// to be 0, and rejects anything else.
+	version_locking.ZeroAll(prestage)
+
 	var result CreateResponse
 
 	endpoint := constants.EndpointJamfProMobileDevicePrestagesV3
@@ -147,30 +151,7 @@ func (s *MobileDevicePrestages) UpdateByIDV3(ctx context.Context, id string, pre
 		return nil, nil, fmt.Errorf("display name is required")
 	}
 
-	current, _, err := s.GetByIDV3(ctx, id)
-	if err != nil {
-		return nil, nil, fmt.Errorf("failed to fetch current prestage for version locking: %w", err)
-	}
-
-	version_locking.EnsureVersionLock(current, prestage)
-	version_locking.EnsureVersionLock(&current.LocationInformation, &prestage.LocationInformation)
-	version_locking.EnsureVersionLock(&current.PurchasingInformation, &prestage.PurchasingInformation)
-
-	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDevicePrestagesV3, id)
-
-	var result ResourceMobileDevicePrestage
-
-	resp, err := s.client.NewRequest(ctx).
-		SetHeader("Accept", constants.ApplicationJSON).
-		SetHeader("Content-Type", constants.ApplicationJSON).
-		SetBody(prestage).
-		SetResult(&result).
-		Put(endpoint)
-	if err != nil {
-		return nil, resp, err
-	}
-
-	return &result, resp, nil
+	return version_locking.Update(ctx, prestage, s.fetchForUpdate(id, nil), s.putByID(id))
 }
 
 // UpdateByNameV3 updates the mobile device prestage by display name.
@@ -194,25 +175,10 @@ func (s *MobileDevicePrestages) UpdateByNameV3(ctx context.Context, name string,
 		return nil, resp, fmt.Errorf("failed to get mobile device prestage by name: %w", err)
 	}
 
-	version_locking.EnsureVersionLock(existing, prestage)
-	version_locking.EnsureVersionLock(&existing.LocationInformation, &prestage.LocationInformation)
-	version_locking.EnsureVersionLock(&existing.PurchasingInformation, &prestage.PurchasingInformation)
-
-	endpoint := fmt.Sprintf("%s/%s", constants.EndpointJamfProMobileDevicePrestagesV3, existing.ID)
-
-	var result ResourceMobileDevicePrestage
-
-	resp, err = s.client.NewRequest(ctx).
-		SetHeader("Accept", constants.ApplicationJSON).
-		SetHeader("Content-Type", constants.ApplicationJSON).
-		SetBody(prestage).
-		SetResult(&result).
-		Put(endpoint)
-	if err != nil {
-		return nil, resp, err
-	}
-
-	return &result, resp, nil
+	// The name lookup already returned current state, so hand it straight to the
+	// first attempt; retries fall back to a fetch by the resolved ID.
+	return version_locking.Update(ctx, prestage,
+		s.fetchForUpdate(existing.ID, existing), s.putByID(existing.ID))
 }
 
 // DeleteByIDV3 deletes the mobile device prestage by ID.
