@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.15.0...v0.16.0) (2026-07-20)
+
+
+### Features
+
+* **macos-config-profiles:** add update/delete, fix level enum, rename package ([fa613b8](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/fa613b855a3aed74f36bb9a65711298d553a2c67))
+* **macos-config-profiles:** add update/delete, fix level enum, rename package ([c0a074f](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/c0a074f5400a3568bd84b144596a081d19acd569))
+
+
+### Bug Fixes
+
+* **mdm:** add command type constants returned by the server but absen… ([0f5af09](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/0f5af093fd8aed5ddeeca3f30d295e4b5d1685e5))
+* **mdm:** add command type constants returned by the server but absent from the spec ([fe739e4](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/fe739e485324867f9cfe1841e052a40324502c48))
+
 ## [0.15.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.14.0...v0.15.0) (2026-07-20)
 
 
