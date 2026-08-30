@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.17.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.16.0...v0.17.0) (2026-08-30)
+
+
+### Features
+
+* implement Jamf Pro 11.31.1 API changes ([c89b797](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/c89b7976923cfcbe7dc58e36a056bbc8c7ccf3de))
+* implement Jamf Pro 11.31.1 API changes ([0b3fe8c](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/commit/0b3fe8cb5f2a28666c1538bfbe40cefdb26c2f09))
+
 ## [0.16.0](https://github.com/deploymenttheory/go-sdk-jamfpro-v2/compare/v0.15.0...v0.16.0) (2026-07-20)
 
 
