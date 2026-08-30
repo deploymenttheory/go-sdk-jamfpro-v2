@@ -42,8 +42,35 @@ func (s *SmtpServer) GetV2(ctx context.Context) (*ResourceSMTPServer, *resty.Res
 	return &result, resp, nil
 }
 
+// GetAllowedAuthTypesV2 returns the SMTP authentication types this instance permits.
+// Availability is controlled at the instance level and is independent of the
+// current SMTP settings.
+// URL: GET /api/v2/smtp-server/allowed-auth-types
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server-allowed-auth-types
+func (s *SmtpServer) GetAllowedAuthTypesV2(ctx context.Context) (*ResponseSMTPAllowedAuthTypes, *resty.Response, error) {
+	var result ResponseSMTPAllowedAuthTypes
+
+	endpoint := constants.EndpointJamfProSMTPServerAllowedAuthTypesV2
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &result, resp, nil
+}
+
 // UpdateV2 updates the SMTP server configuration.
 // URL: PUT /api/v2/smtp-server
+//
+// authenticationType is validated against the full set of documented values.
+// Note that NONE and BASIC may be unavailable on a given instance regardless
+// of that validation; call GetAllowedAuthTypesV2 for the types the instance
+// currently permits. The server remains the authority.
+//
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/put_v2-smtp-server
 func (s *SmtpServer) UpdateV2(ctx context.Context, request *ResourceSMTPServer) (*ResourceSMTPServer, *resty.Response, error) {
 	if request == nil {

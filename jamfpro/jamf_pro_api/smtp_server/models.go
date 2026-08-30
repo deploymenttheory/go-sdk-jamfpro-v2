@@ -78,3 +78,10 @@ type AddHistoryNoteResponse struct {
 type TestRequest struct {
 	RecipientEmail string `json:"recipientEmail"`
 }
+
+// ResponseSMTPAllowedAuthTypes is the response for GetAllowedAuthTypesV2.
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v2-smtp-server-allowed-auth-types
+type ResponseSMTPAllowedAuthTypes struct {
+	AllowedAuthenticationTypes []string `json:"allowedAuthenticationTypes"`
+}

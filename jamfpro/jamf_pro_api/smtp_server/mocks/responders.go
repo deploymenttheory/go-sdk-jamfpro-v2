@@ -20,10 +20,15 @@ func (m *SMTPServerMock) RegisterMocks() {
 	m.Register("GET", "/api/v1/smtp-server/history", 200, "validate_history.json")
 	m.Register("POST", "/api/v1/smtp-server/history", 201, "validate_add_history_note.json")
 	m.Register("POST", "/api/v1/smtp-server/test", 202, "")
+	m.Register("GET", "/api/v2/smtp-server/allowed-auth-types", 200, "validate_allowed_auth_types.json")
 }
 
 func (m *SMTPServerMock) RegisterGetErrorMock() {
 	m.RegisterError("GET", "/api/v2/smtp-server", 500, "validate_get.json", "Jamf Pro API error (500): server error")
+}
+
+func (m *SMTPServerMock) RegisterGetAllowedAuthTypesErrorMock() {
+	m.RegisterError("GET", "/api/v2/smtp-server/allowed-auth-types", 500, "validate_allowed_auth_types.json", "Jamf Pro API error (500): server error")
 }
 
 func (m *SMTPServerMock) RegisterPutErrorMock() {

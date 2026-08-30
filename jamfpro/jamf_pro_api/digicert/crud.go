@@ -159,6 +159,35 @@ func (s *Digicert) GetConnectionStatusByID(ctx context.Context, id string) (*Con
 	return &result, resp, nil
 }
 
+// CheckPrivilegesByID reports whether the DigiCert account associated with the
+// given configuration holds every permission required to deploy certificates
+// via the Trust Lifecycle Manager.
+// URL: GET /api/v1/pki/digicert/trust-lifecycle-manager/{id}/privilege-check
+//
+// The server answers 204 No Content when all required permissions are present,
+// so a nil error means the check passed. A 403 is returned as a
+// *client.APIError whose message carries the missing permission names -- test
+// for it with client.IsForbidden(err). A 404 means the DigiCert Trust
+// Lifecycle Manager settings do not exist.
+//
+// Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-digicert-trust-lifecycle-manager-id-privilege-check
+func (s *Digicert) CheckPrivilegesByID(ctx context.Context, id string) (*resty.Response, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/privilege-check", constants.EndpointJamfProTrustLifecycleManagerV1, id)
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		Get(endpoint)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
 // GetDependenciesByID returns the list of dependencies for a DigiCert Trust Lifecycle Manager configuration.
 // URL: GET /api/v1/pki/digicert/trust-lifecycle-manager/{id}/dependencies
 // Jamf Pro API docs: https://developer.jamf.com/jamf-pro/reference/get_v1-pki-digicert-trust-lifecycle-manager-id-dependencies

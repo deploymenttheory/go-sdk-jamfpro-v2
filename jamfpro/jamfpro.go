@@ -106,6 +106,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment_customization_preview"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment_customizations"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/enrollment_settings"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/environment_type"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/gsx_connection"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/health_check"
@@ -297,6 +298,7 @@ type JamfProAPIClient struct {
 	EnrollmentCustomizationPreview      *enrollment_customization_preview.EnrollmentCustomizationPreview
 	EnrollmentCustomizations            *enrollment_customizations.EnrollmentCustomizations
 	EnrollmentSettings                  *enrollment_settings.EnrollmentSettings
+	EnvironmentType                     *environment_type.EnvironmentType
 	Groups                              *groups.Groups
 	GsxConnection                       *gsx_connection.GsxConnection
 	HealthCheck                         *health_check.HealthCheck
@@ -494,6 +496,7 @@ func newJamfProAPIClient(transport *client.Transport) *JamfProAPIClient {
 		EnrollmentCustomizationPreview:      enrollment_customization_preview.NewEnrollmentCustomizationPreview(transport),
 		EnrollmentCustomizations:            enrollment_customizations.NewEnrollmentCustomizations(transport),
 		EnrollmentSettings:                  enrollment_settings.NewEnrollmentSettings(transport),
+		EnvironmentType:                     environment_type.NewEnvironmentType(transport),
 		Groups:                              groups.NewGroups(transport),
 		GsxConnection:                       gsx_connection.NewGsxConnection(transport),
 		HealthCheck:                         health_check.NewHealthCheck(transport),

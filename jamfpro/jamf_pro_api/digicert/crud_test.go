@@ -316,3 +316,53 @@ func TestUnit_Digicert_GetDependenciesByID_NoMockRegistered(t *testing.T) {
 func strPtr(s string) *string {
 	return &s
 }
+
+func TestUnit_Digicert_CheckPrivilegesByID_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterCheckPrivilegesMock("12")
+
+	resp, err := svc.CheckPrivilegesByID(context.Background(), "12")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 204, resp.StatusCode())
+}
+
+func TestUnit_Digicert_CheckPrivilegesByID_EmptyID(t *testing.T) {
+	svc, _ := setupMockService(t)
+
+	resp, err := svc.CheckPrivilegesByID(context.Background(), "")
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "id is required")
+}
+
+func TestUnit_Digicert_CheckPrivilegesByID_Forbidden(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterCheckPrivilegesForbiddenMock("12")
+
+	resp, err := svc.CheckPrivilegesByID(context.Background(), "12")
+	require.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 403, resp.StatusCode())
+	assert.Contains(t, err.Error(), "missing required DigiCert permissions")
+	assert.Contains(t, string(resp.Bytes()), "Certificate Issuance")
+}
+
+func TestUnit_Digicert_CheckPrivilegesByID_NotFound(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterCheckPrivilegesNotFoundErrorMock("99")
+
+	resp, err := svc.CheckPrivilegesByID(context.Background(), "99")
+	require.Error(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode())
+}
+
+func TestUnit_Digicert_CheckPrivilegesByID_NoMockRegistered(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterCheckPrivilegesErrorMock("12")
+
+	resp, err := svc.CheckPrivilegesByID(context.Background(), "12")
+	require.Error(t, err)
+	assert.NotNil(t, resp)
+}

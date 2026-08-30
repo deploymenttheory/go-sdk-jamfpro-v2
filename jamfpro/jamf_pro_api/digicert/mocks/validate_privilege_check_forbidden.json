@@ -1,0 +1,11 @@
+{
+  "httpStatus": 403,
+  "errors": [
+    {
+      "code": "MISSING_PERMISSIONS",
+      "field": "privileges",
+      "description": "The DigiCert account is missing the following required permissions: Certificate Issuance, Certificate Revocation",
+      "id": "12"
+    }
+  ]
+}
