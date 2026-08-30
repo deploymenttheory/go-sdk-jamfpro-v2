@@ -1,0 +1,6 @@
+{
+  "allowedAuthenticationTypes": [
+    "GRAPH_API",
+    "GOOGLE_MAIL"
+  ]
+}

@@ -22,6 +22,7 @@ import (
 //   • ValidateClientCertificate(ctx, request) - Validates a client certificate
 //   • GetConnectionStatusByID(ctx, id) - Gets connection status
 //   • GetDependenciesByID(ctx, id) - Gets dependent configuration profiles
+//   • CheckPrivilegesByID(ctx, id) - Checks the DigiCert account permissions
 //
 // Test Strategies Applied
 // -----------------------------------------------------------------------------
@@ -88,6 +89,12 @@ func TestAcceptance_Digicert_validation_errors(t *testing.T) {
 
 	t.Run("GetDependenciesByID_EmptyID", func(t *testing.T) {
 		_, _, err := svc.GetDependenciesByID(context.Background(), "")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "id is required")
+	})
+
+	t.Run("CheckPrivilegesByID_EmptyID", func(t *testing.T) {
+		_, err := svc.CheckPrivilegesByID(context.Background(), "")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "id is required")
 	})

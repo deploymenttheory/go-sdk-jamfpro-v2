@@ -187,3 +187,22 @@ func TestUnit_SmtpServer_TestV1_Error(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, resp)
 }
+
+func TestUnit_SmtpServer_GetAllowedAuthTypesV2_Success(t *testing.T) {
+	svc, _ := setupMockService(t)
+	result, resp, err := svc.GetAllowedAuthTypesV2(context.Background())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 200, resp.StatusCode())
+	require.Equal(t, []string{AuthenticationTypeGraphApi, AuthenticationTypeGoogleMail}, result.AllowedAuthenticationTypes)
+}
+
+func TestUnit_SmtpServer_GetAllowedAuthTypesV2_Error(t *testing.T) {
+	svc, _ := setupMockServiceWithError(t, func(m *mocks.SMTPServerMock) { m.RegisterGetAllowedAuthTypesErrorMock() })
+	result, resp, err := svc.GetAllowedAuthTypesV2(context.Background())
+	require.Error(t, err)
+	require.Nil(t, result)
+	require.NotNil(t, resp)
+	require.Equal(t, 500, resp.StatusCode())
+}

@@ -42,6 +42,22 @@ func (m *DigicertMock) RegisterGetDependenciesMock(id string) {
 	m.Register("GET", "/api/v1/pki/digicert/trust-lifecycle-manager/"+id+"/dependencies", 200, "validate_dependencies.json")
 }
 
+func (m *DigicertMock) RegisterCheckPrivilegesMock(id string) {
+	m.Register("GET", "/api/v1/pki/digicert/trust-lifecycle-manager/"+id+"/privilege-check", 204, "")
+}
+
+func (m *DigicertMock) RegisterCheckPrivilegesForbiddenMock(id string) {
+	m.RegisterError("GET", "/api/v1/pki/digicert/trust-lifecycle-manager/"+id+"/privilege-check", 403, "validate_privilege_check_forbidden.json", "Jamf Pro API error (403): missing required DigiCert permissions")
+}
+
+func (m *DigicertMock) RegisterCheckPrivilegesNotFoundErrorMock(id string) {
+	m.RegisterError("GET", "/api/v1/pki/digicert/trust-lifecycle-manager/"+id+"/privilege-check", 404, "error_not_found.json", "Jamf Pro API error (404): not found")
+}
+
+func (m *DigicertMock) RegisterCheckPrivilegesErrorMock(id string) {
+	m.RegisterError("GET", "/api/v1/pki/digicert/trust-lifecycle-manager/"+id+"/privilege-check", 500, "error_internal.json", "no response for")
+}
+
 func (m *DigicertMock) RegisterNotFoundErrorMock(id string) {
 	m.RegisterError("GET", "/api/v1/pki/digicert/trust-lifecycle-manager/"+id, 404, "error_not_found.json", "")
 }
