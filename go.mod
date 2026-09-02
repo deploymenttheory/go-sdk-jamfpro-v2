@@ -3,7 +3,7 @@ module github.com/deploymenttheory/go-sdk-jamfpro-v2
 go 1.25.0
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.44.0
+	github.com/aws/aws-sdk-go-v2 v1.45.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.38
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.39
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.43
