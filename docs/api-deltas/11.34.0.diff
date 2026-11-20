@@ -1,0 +1,1587 @@
+
+paths
+CHANGED /auth
+--- 
+
++++ 
+
+@@ -19,5 +19,6 @@
+
+     ],
+     "x-authentication-required": true,
+-    "x-deprecation-date": "2020-06-01"
++    "x-deprecation-date": "2020-06-01",
++    "x-deprecation-replacement": "/v1/auth"
+   }
+ }
+CHANGED /auth/current
+--- 
+
++++ 
+
+@@ -20,5 +20,6 @@
+
+     "x-authentication-required": true,
+     "x-action": true,
+-    "x-deprecation-date": "2020-06-01"
++    "x-deprecation-date": "2020-06-01",
++    "x-deprecation-replacement": "/v1/auth"
+   }
+ }
+CHANGED /auth/invalidateToken
+--- 
+
++++ 
+
+@@ -12,5 +12,6 @@
+
+     "x-authentication-required": true,
+     "x-action": true,
+-    "x-deprecation-date": "2020-06-01"
++    "x-deprecation-date": "2020-06-01",
++    "x-deprecation-replacement": "/v1/auth/invalidate-token"
+   }
+ }
+CHANGED /auth/keepAlive
+--- 
+
++++ 
+
+@@ -20,5 +20,6 @@
+
+     "x-authentication-required": true,
+     "x-action": true,
+-    "x-deprecation-date": "2020-06-01"
++    "x-deprecation-date": "2020-06-01",
++    "x-deprecation-replacement": "/v1/auth/keep-alive"
+   }
+ }
+REMOVED /preview/remote-administration-configurations
+REMOVED /preview/remote-administration-configurations/team-viewer
+REMOVED /preview/remote-administration-configurations/team-viewer/{configurationId}/sessions
+REMOVED /preview/remote-administration-configurations/team-viewer/{configurationId}/sessions/{sessionId}
+REMOVED /preview/remote-administration-configurations/team-viewer/{configurationId}/sessions/{sessionId}/close
+REMOVED /preview/remote-administration-configurations/team-viewer/{configurationId}/sessions/{sessionId}/resend-notification
+REMOVED /preview/remote-administration-configurations/team-viewer/{configurationId}/sessions/{sessionId}/status
+REMOVED /preview/remote-administration-configurations/team-viewer/{id}
+REMOVED /preview/remote-administration-configurations/team-viewer/{id}/status
+CHANGED /settings/obj/policyProperties
+--- 
+
++++ 
+
+@@ -16,5 +16,6 @@
+
+       "Read Policies"
+     ],
+-    "x-deprecation-date": "2021-11-07"
++    "x-deprecation-date": "2021-11-07",
++    "x-deprecation-replacement": "/v1/policy-properties"
+   },
+   "put": {
+@@ -44,5 +45,6 @@
+
+       "Update Policies"
+     ],
+-    "x-deprecation-date": "2021-11-07"
++    "x-deprecation-date": "2021-11-07",
++    "x-deprecation-replacement": "/v1/policy-properties"
+   }
+ }
+ADDED /v1/action-logs
+ADDED /v1/action-logs/{id}
+ADDED /v1/action-logs/{id}/devices
+CHANGED /v1/cloud-azure/defaults/mappings
+--- 
+
++++ 
+
+@@ -32,4 +32,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-05-21",
++    "x-deprecation-replacement": "none",
+     "x-required-privileges": [
+       "Read LDAP Servers"
+REMOVED /v1/computer-inventory-collection-settings
+REMOVED /v1/computer-inventory-collection-settings/custom-path
+REMOVED /v1/computer-inventory-collection-settings/custom-path/{id}
+CHANGED /v1/computer-inventory/{id}/erase
+--- 
+
++++ 
+
+@@ -46,4 +46,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/erase",
+     "x-required-privileges": [
+       "Send Computer Remote Wipe Command"
+CHANGED /v1/computer-inventory/{id}/remove-mdm-profile
+--- 
+
++++ 
+
+@@ -36,4 +36,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/remove-mdm-profile",
+     "x-required-privileges": [
+       "Send Computer Unmanage Command"
+CHANGED /v1/computers-inventory
+--- 
+
++++ 
+
+@@ -65,4 +65,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -111,4 +112,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory",
+     "x-required-privileges": [
+       "Create Computers"
+CHANGED /v1/computers-inventory-detail/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory-detail/{id}",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -102,4 +103,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory-detail/{id}",
+     "x-required-privileges": [
+       "Update Computers"
+CHANGED /v1/computers-inventory/filevault
+--- 
+
++++ 
+
+@@ -22,4 +22,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory/filevault",
+     "x-required-privileges": [
+       "View Disk Encryption Recovery Key"
+CHANGED /v1/computers-inventory/{id}
+--- 
+
++++ 
+
+@@ -51,4 +51,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -82,4 +83,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}",
+     "x-required-privileges": [
+       "Delete Computers"
+CHANGED /v1/computers-inventory/{id}/attachments
+--- 
+
++++ 
+
+@@ -54,4 +54,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/attachments",
+     "x-required-privileges": [
+       "Update Computers"
+CHANGED /v1/computers-inventory/{id}/attachments/{attachmentId}
+--- 
+
++++ 
+
+@@ -46,4 +46,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/attachments/{attachmentId}",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -87,4 +88,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/attachments/{attachmentId}",
+     "x-required-privileges": [
+       "Update Computers"
+CHANGED /v1/computers-inventory/{id}/filevault
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/filevault",
+     "x-required-privileges": [
+       "View Disk Encryption Recovery Key"
+CHANGED /v1/computers-inventory/{id}/view-device-lock-pin
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/view-device-lock-pin",
+     "x-required-privileges": [
+       "View Computer Device Lock Pin"
+CHANGED /v1/computers-inventory/{id}/view-recovery-lock-password
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/view-recovery-lock-password",
+     "x-required-privileges": [
+       "View Recovery Lock"
+ADDED /v1/directory-cache/sync-status
+ADDED /v1/directory-cache/sync/group
+ADDED /v1/directory-cache/sync/user
+CHANGED /v1/groups
+--- 
+
++++ 
+
+@@ -49,4 +49,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/groups",
+     "x-authentication-required": true
+   }
+CHANGED /v1/groups/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/groups/{id}",
+     "x-authentication-required": true
+   },
+@@ -82,4 +83,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/groups/{id}",
+     "x-authentication-required": true
+   },
+@@ -148,4 +150,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/groups/{id}",
+     "x-authentication-required": true
+   }
+CHANGED /v1/jcds/files
+--- 
+
++++ 
+
+@@ -18,4 +18,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-08-28",
++    "x-deprecation-replacement": "/v1/cloud-distribution-point/files",
+     "x-authentication-required": true,
+     "x-required-privileges": [
+@@ -37,4 +38,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-08-28",
++    "x-deprecation-replacement": "none",
+     "x-authentication-required": true,
+     "x-required-privileges": [
+CHANGED /v1/jcds/files/{fileName}
+--- 
+
++++ 
+
+@@ -26,4 +26,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-08-28",
++    "x-deprecation-replacement": "none",
+     "x-authentication-required": true,
+     "x-required-privileges": [
+@@ -49,4 +50,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-08-28",
++    "x-deprecation-replacement": "none",
+     "x-authentication-required": true,
+     "x-required-privileges": [
+CHANGED /v1/jcds/refresh-inventory
+--- 
+
++++ 
+
+@@ -29,4 +29,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-08-28",
++    "x-deprecation-replacement": "/v1/cloud-distribution-point/refresh-inventory",
+     "x-authentication-required": true,
+     "x-action": true,
+CHANGED /v1/jcds/renew-credentials
+--- 
+
++++ 
+
+@@ -14,4 +14,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-08-28",
++    "x-deprecation-replacement": "none",
+     "x-authentication-required": true,
+     "x-required-privileges": [
+CHANGED /v1/macos-managed-software-updates/available-updates
+--- 
+
++++ 
+
+@@ -14,4 +14,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2022-12-14",
++    "x-deprecation-replacement": "/v1/managed-software-updates/available-updates",
+     "x-authentication-required": true
+   }
+CHANGED /v1/macos-managed-software-updates/send-updates
+--- 
+
++++ 
+
+@@ -33,4 +33,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2022-10-17",
++    "x-deprecation-replacement": "/v1/managed-software-updates/plans",
+     "x-required-privileges": [
+       "Send Computer Remote Command to Download and Install OS X Update"
+CHANGED /v1/mdm/commands
+--- 
+
++++ 
+
+@@ -62,5 +62,6 @@
+
+       "View MDM command information in Jamf Pro API"
+     ],
+-    "x-deprecation-date": "2023-10-16"
++    "x-deprecation-date": "2023-10-16",
++    "x-deprecation-replacement": "/v2/mdm/commands"
+   }
+ }
+CHANGED /v1/mobile-device-groups
+--- 
+
++++ 
+
+@@ -17,4 +17,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups",
+     "x-required-privileges": [
+       "Read Smart Mobile Device Groups",
+CHANGED /v1/mobile-device-groups/smart-group-membership/{id}
+--- 
+
++++ 
+
+@@ -68,4 +68,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/smart-group-membership/{id}",
+     "x-required-privileges": [
+       "Read Smart Mobile Device Groups",
+CHANGED /v1/mobile-device-groups/smart-groups
+--- 
+
++++ 
+
+@@ -49,4 +49,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/smart-groups",
+     "x-required-privileges": [
+       "Read Smart Mobile Device Groups"
+@@ -99,4 +100,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/smart-groups",
+     "x-required-privileges": [
+       "Create Smart Mobile Device Groups"
+CHANGED /v1/mobile-device-groups/smart-groups/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/smart-groups/{id}",
+     "x-required-privileges": [
+       "Read Smart Mobile Device Groups"
+@@ -84,4 +85,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/smart-groups/{id}",
+     "x-required-privileges": [
+       "Update Smart Mobile Device Groups"
+@@ -106,4 +108,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/smart-groups/{id}",
+     "x-required-privileges": [
+       "Delete Smart Mobile Device Groups"
+CHANGED /v1/mobile-device-groups/static-group-membership/{id}
+--- 
+
++++ 
+
+@@ -68,4 +68,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/static-group-membership/{id}",
+     "x-required-privileges": [
+       "Read Static Mobile Device Groups",
+CHANGED /v1/mobile-device-groups/static-groups
+--- 
+
++++ 
+
+@@ -49,4 +49,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/static-groups",
+     "x-required-privileges": [
+       "Read Static Mobile Device Groups"
+@@ -99,4 +100,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/static-groups",
+     "x-required-privileges": [
+       "Create Static Mobile Device Groups"
+CHANGED /v1/mobile-device-groups/static-groups/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/static-groups/{id}",
+     "x-required-privileges": [
+       "Read Static Mobile Device Groups"
+@@ -57,4 +58,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/static-groups/{id}",
+     "x-required-privileges": [
+       "Delete Static Mobile Device Groups"
+@@ -106,4 +108,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/static-groups/{id}",
+     "x-required-privileges": [
+       "Update Static Mobile Device Groups"
+CHANGED /v1/mobile-device-groups/{id}/erase
+--- 
+
++++ 
+
+@@ -28,4 +28,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v2/mobile-device-groups/{id}/erase",
+     "x-required-privileges": [
+       "Send MDM command information in Jamf Pro API"
+CHANGED /v1/oidc/dispatch
+--- 
+
++++ 
+
+@@ -51,4 +51,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-02-17",
++    "x-deprecation-replacement": "/v2/oidc/dispatch",
+     "x-action": true,
+     "x-authentication-required": false
+ADDED /v1/remote-administration-configurations
+ADDED /v1/remote-administration-configurations/team-viewer
+ADDED /v1/remote-administration-configurations/team-viewer/{configurationId}/sessions
+ADDED /v1/remote-administration-configurations/team-viewer/{configurationId}/sessions/{sessionId}
+ADDED /v1/remote-administration-configurations/team-viewer/{configurationId}/sessions/{sessionId}/close
+ADDED /v1/remote-administration-configurations/team-viewer/{configurationId}/sessions/{sessionId}/resend-notification
+ADDED /v1/remote-administration-configurations/team-viewer/{configurationId}/sessions/{sessionId}/status
+ADDED /v1/remote-administration-configurations/team-viewer/{id}
+ADDED /v1/remote-administration-configurations/team-viewer/{id}/status
+CHANGED /v1/system/fedramp-initialize
+--- 
+
++++ 
+
+@@ -12,6 +12,25 @@
+
+     },
+     "responses": {
+-      "202": {},
++      "202": {
++        "headers": {
++          "Deprecation": {
++            "style": "simple",
++            "explode": false,
++            "schema": {
++              "type": "string"
++            }
++          }
++        }
++      },
+       "400": {
++        "headers": {
++          "Deprecation": {
++            "style": "simple",
++            "explode": false,
++            "schema": {
++              "type": "string"
++            }
++          }
++        },
+         "content": {
+           "application/json": {
+@@ -23,4 +42,6 @@
+
+       }
+     },
++    "deprecated": true,
++    "x-deprecation-date": "2026-09-16",
+     "x-authentication-required": false,
+     "x-action": true
+CHANGED /v1/user-sessions/active
+--- 
+
++++ 
+
+@@ -3,4 +3,13 @@
+
+     "responses": {
+       "200": {
++        "headers": {
++          "Deprecation": {
++            "style": "simple",
++            "explode": false,
++            "schema": {
++              "type": "string"
++            }
++          }
++        },
+         "content": {
+           "application/json": {
+@@ -24,8 +33,10 @@
+
+       }
+     },
++    "deprecated": true,
+     "x-required-privileges": [
+       "Read User"
+     ],
+-    "x-authentication-required": true
++    "x-authentication-required": true,
++    "x-deprecation-date": "2026-10-14"
+   }
+ }
+CHANGED /v1/user-sessions/count
+--- 
+
++++ 
+
+@@ -3,4 +3,13 @@
+
+     "responses": {
+       "200": {
++        "headers": {
++          "Deprecation": {
++            "style": "simple",
++            "explode": false,
++            "schema": {
++              "type": "string"
++            }
++          }
++        },
+         "content": {
+           "application/json": {
+@@ -21,8 +30,10 @@
+
+       }
+     },
++    "deprecated": true,
+     "x-required-privileges": [
+       "Read User"
+     ],
+-    "x-authentication-required": true
++    "x-authentication-required": true,
++    "x-deprecation-date": "2026-10-14"
+   }
+ }
+REMOVED /v2/account-preferences
+CHANGED /v2/computer-groups/smart-group-membership/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/smart-group-membership/{id}",
+     "x-required-privileges": [
+       "Read Smart Computer Groups"
+CHANGED /v2/computer-groups/smart-groups
+--- 
+
++++ 
+
+@@ -49,4 +49,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/smart-groups",
+     "x-required-privileges": [
+       "Read Smart Computer Groups"
+@@ -90,4 +91,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/smart-groups",
+     "x-required-privileges": [
+       "Create Smart Computer Groups"
+CHANGED /v2/computer-groups/smart-groups/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/smart-groups/{id}",
+     "x-required-privileges": [
+       "Read Smart Computer Groups"
+@@ -84,4 +85,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/smart-groups/{id}",
+     "x-required-privileges": [
+       "Update Smart Computer Groups"
+@@ -115,4 +117,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/smart-groups/{id}",
+     "x-required-privileges": [
+       "Delete Smart Computer Groups"
+CHANGED /v2/computer-groups/static-groups
+--- 
+
++++ 
+
+@@ -49,4 +49,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/static-groups",
+     "x-required-privileges": [
+       "Read Static Computer Groups"
+@@ -108,4 +109,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/static-groups",
+     "x-required-privileges": [
+       "Create Static Computer Groups"
+CHANGED /v2/computer-groups/static-groups/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/static-groups/{id}",
+     "x-required-privileges": [
+       "Read Static Computer Groups"
+@@ -93,4 +94,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/static-groups/{id}",
+     "x-required-privileges": [
+       "Update Static Computer Groups"
+@@ -124,4 +126,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-05-28",
++    "x-deprecation-replacement": "/v3/computer-groups/static-groups/{id}",
+     "x-required-privileges": [
+       "Delete Static Computer Groups"
+CHANGED /v2/computers-inventory
+--- 
+
++++ 
+
+@@ -65,4 +65,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -111,4 +112,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory",
+     "x-required-privileges": [
+       "Create Computers"
+CHANGED /v2/computers-inventory-detail/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory-detail/{id}",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -94,4 +95,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory-detail/{id}",
+     "x-required-privileges": [
+       "Update Computers"
+CHANGED /v2/computers-inventory/filevault
+--- 
+
++++ 
+
+@@ -22,4 +22,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory/filevault",
+     "x-required-privileges": [
+       "View Disk Encryption Recovery Key"
+CHANGED /v2/computers-inventory/{id}
+--- 
+
++++ 
+
+@@ -51,4 +51,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -82,4 +83,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}",
+     "x-required-privileges": [
+       "Delete Computers"
+CHANGED /v2/computers-inventory/{id}/attachments
+--- 
+
++++ 
+
+@@ -54,4 +54,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/attachments",
+     "x-required-privileges": [
+       "Update Computers"
+CHANGED /v2/computers-inventory/{id}/attachments/{attachmentId}
+--- 
+
++++ 
+
+@@ -46,4 +46,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/attachments/{attachmentId}",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -87,4 +88,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/attachments/{attachmentId}",
+     "x-required-privileges": [
+       "Update Computers"
+CHANGED /v2/computers-inventory/{id}/filevault
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/filevault",
+     "x-required-privileges": [
+       "View Disk Encryption Recovery Key"
+CHANGED /v2/computers-inventory/{id}/view-device-lock-pin
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/view-device-lock-pin",
+     "x-required-privileges": [
+       "View Computer Device Lock Pin"
+CHANGED /v2/computers-inventory/{id}/view-recovery-lock-password
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-11-06",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/view-recovery-lock-password",
+     "x-required-privileges": [
+       "View Recovery Lock"
+CHANGED /v2/groups
+--- 
+
++++ 
+
+@@ -34,4 +34,14 @@
+
+           "default": ""
+         }
++      },
++      {
++        "name": "division-id",
++        "in": "query",
++        "required": false,
++        "style": "form",
++        "explode": true,
++        "schema": {
++          "type": "string"
++        }
+       }
+     ],
+@@ -45,4 +55,22 @@
+
+           }
+         }
++      },
++      "400": {
++        "content": {
++          "application/json": {
++            "schema": {
++              "$ref": "#/components/schemas/ApiError"
++            }
++          }
++        }
++      },
++      "403": {
++        "content": {
++          "application/json": {
++            "schema": {
++              "$ref": "#/components/schemas/ApiError"
++            }
++          }
++        }
+       }
+     },
+CHANGED /v2/mobile-device-prestages
+--- 
+
++++ 
+
+@@ -38,4 +38,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages",
+     "x-required-privileges": [
+       "Read Mobile Device PreStage Enrollments"
+@@ -66,4 +67,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages",
+     "x-required-privileges": [
+       "Create Mobile Device PreStage Enrollments"
+CHANGED /v2/mobile-device-prestages/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages/{id}",
+     "x-required-privileges": [
+       "Read Mobile Device PreStage Enrollments"
+@@ -93,4 +94,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages/{id}",
+     "x-required-privileges": [
+       "Update Mobile Device PreStage Enrollments"
+@@ -115,4 +117,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages/{id}",
+     "x-required-privileges": [
+       "Delete Mobile Device PreStage Enrollments"
+CHANGED /v2/mobile-device-prestages/{id}/attachments
+--- 
+
++++ 
+
+@@ -38,4 +38,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages/{id}/attachments",
+     "x-required-privileges": [
+       "Read Mobile Device PreStage Enrollments"
+@@ -104,4 +105,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages/{id}/attachments",
+     "x-required-privileges": [
+       "Create Mobile Device PreStage Enrollments"
+CHANGED /v2/mobile-device-prestages/{id}/attachments/delete-multiple
+--- 
+
++++ 
+
+@@ -28,4 +28,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages/{id}/attachments/delete-multiple",
+     "x-required-privileges": [
+       "Delete Mobile Device PreStage Enrollments"
+CHANGED /v2/mobile-device-prestages/{id}/history
+--- 
+
++++ 
+
+@@ -48,4 +48,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages/{id}/history",
+     "x-required-privileges": [
+       "Read Mobile Device PreStage Enrollments"
+@@ -97,4 +98,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2025-06-30",
++    "x-deprecation-replacement": "/v3/mobile-device-prestages/{id}/history",
+     "x-required-privileges": [
+       "Update Mobile Device PreStage Enrollments"
+CHANGED /v2/patch-software-title-configurations
+--- 
+
++++ 
+
+@@ -17,4 +17,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+@@ -54,4 +55,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations",
+     "x-required-privileges": [
+       "Create Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+@@ -66,4 +67,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}",
+     "x-required-privileges": [
+       "Delete Patch Management Software Titles"
+@@ -133,4 +135,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}",
+     "x-required-privileges": [
+       "Update Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}/dashboard
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/dashboard",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+@@ -57,4 +58,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/dashboard",
+     "x-action": true,
+     "x-required-privileges": [
+@@ -80,4 +82,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/dashboard",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}/definitions
+--- 
+
++++ 
+
+@@ -68,4 +68,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/definitions",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}/dependencies
+--- 
+
++++ 
+
+@@ -26,4 +26,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/dependencies",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}/export-report
+--- 
+
++++ 
+
+@@ -112,4 +112,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/export-report",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}/extension-attributes
+--- 
+
++++ 
+
+@@ -38,4 +38,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/extension-attributes",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}/history
+--- 
+
++++ 
+
+@@ -68,4 +68,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/history",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+@@ -135,4 +136,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/history",
+     "x-required-privileges": [
+       "Update Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}/patch-report
+--- 
+
++++ 
+
+@@ -77,4 +77,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/patch-report",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}/patch-summary
+--- 
+
++++ 
+
+@@ -44,4 +44,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/patch-summary",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+CHANGED /v2/patch-software-title-configurations/{id}/patch-summary/versions
+--- 
+
++++ 
+
+@@ -47,4 +47,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v3/patch-software-title-configurations/{id}/patch-summary/versions",
+     "x-required-privileges": [
+       "Read Patch Management Software Titles"
+ADDED /v2/system/fedramp-initialize
+ADDED /v2/user-sessions/active
+ADDED /v2/user-sessions/count
+CHANGED /v3/computers-inventory
+--- 
+
++++ 
+
+@@ -65,4 +65,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -111,4 +112,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory",
+     "x-required-privileges": [
+       "Create Computers"
+CHANGED /v3/computers-inventory-detail/{id}
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory-detail/{id}",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -94,4 +95,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory-detail/{id}",
+     "x-required-privileges": [
+       "Update Computers"
+CHANGED /v3/computers-inventory/filevault
+--- 
+
++++ 
+
+@@ -22,4 +22,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/filevault",
+     "x-required-privileges": [
+       "View Disk Encryption Recovery Key"
+CHANGED /v3/computers-inventory/{id}
+--- 
+
++++ 
+
+@@ -51,4 +51,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -82,4 +83,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}",
+     "x-required-privileges": [
+       "Delete Computers"
+CHANGED /v3/computers-inventory/{id}/attachments
+--- 
+
++++ 
+
+@@ -54,4 +54,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/attachments",
+     "x-required-privileges": [
+       "Update Computers"
+CHANGED /v3/computers-inventory/{id}/attachments/{attachmentId}
+--- 
+
++++ 
+
+@@ -46,4 +46,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/attachments/{attachmentId}",
+     "x-required-privileges": [
+       "Read Computers"
+@@ -87,4 +88,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/attachments/{attachmentId}",
+     "x-required-privileges": [
+       "Update Computers"
+CHANGED /v3/computers-inventory/{id}/filevault
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/filevault",
+     "x-required-privileges": [
+       "View Disk Encryption Recovery Key"
+CHANGED /v3/computers-inventory/{id}/view-device-lock-pin
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/view-device-lock-pin",
+     "x-required-privileges": [
+       "View Computer Device Lock Pin"
+CHANGED /v3/computers-inventory/{id}/view-recovery-lock-password
+--- 
+
++++ 
+
+@@ -35,4 +35,5 @@
+
+     "deprecated": true,
+     "x-deprecation-date": "2026-07-14",
++    "x-deprecation-replacement": "/v4/computers-inventory/{id}/view-recovery-lock-password",
+     "x-required-privileges": [
+       "View Recovery Lock"
+
+schemas
+REMOVED AccountPreferencesV5
+ADDED ActionLogDetailV1
+ADDED ActionLogDeviceSearchResultsV1
+ADDED ActionLogDeviceV1
+ADDED ActionLogRequestorV1
+ADDED ActionLogSearchResultsV1
+ADDED ActionLogStatusSummaryV1
+ADDED ActionLogSummaryV1
+ADDED ActionLogTargetV1
+CHANGED AvailableOsUpdates
+--- 
+
++++ 
+
+@@ -16,4 +16,16 @@
+
+             "type": "string"
+           }
++        },
++        "tvOS": {
++          "type": "array",
++          "items": {
++            "type": "string"
++          }
++        },
++        "visionOS": {
++          "type": "array",
++          "items": {
++            "type": "string"
++          }
+         }
+       },
+CHANGED ComplianceVendorDeviceInformation
+--- 
+
++++ 
+
+@@ -7,4 +7,18 @@
+
+         "type": "string"
+       }
++    },
++    "registrations": {
++      "type": "array",
++      "items": {
++        "$ref": "#/components/schemas/ComplianceVendorRegistration"
++      }
++    },
++    "gracePeriodSettingsState": {
++      "nullable": true,
++      "allOf": [
++        {
++          "$ref": "#/components/schemas/GracePeriodSettingsState"
++        }
++      ]
+     }
+   }
+ADDED ComplianceVendorRegistration
+REMOVED ComputerInventoryCollectionPreferences
+REMOVED ComputerInventoryCollectionSettings
+REMOVED CreatePath
+ADDED DirectorySyncStatusResponse
+CHANGED EnrollmentSettingsV4
+--- 
+
++++ 
+
+@@ -80,11 +80,25 @@
+
+     "signQuickAdd": {
+       "type": "boolean",
++      "readOnly": true,
++      "deprecated": true,
+       "default": false
+     },
+     "developerCertificateIdentity": {
+-      "$ref": "#/components/schemas/CertificateIdentityV2"
++      "readOnly": true,
++      "deprecated": true,
++      "allOf": [
++        {
++          "$ref": "#/components/schemas/CertificateIdentityV2"
++        }
++      ]
+     },
+     "developerCertificateIdentityDetails": {
+-      "$ref": "#/components/schemas/CertificateDetails"
++      "readOnly": true,
++      "deprecated": true,
++      "allOf": [
++        {
++          "$ref": "#/components/schemas/CertificateDetails"
++        }
++      ]
+     },
+     "mdmSigningCertificateDetails": {
+ADDED FedRampBrokerInitializeV2
+REMOVED FontPath
+ADDED GracePeriodSettingsState
+CHANGED GroupDtoV1
+--- 
+
++++ 
+
+@@ -34,4 +34,9 @@
+
+       "type": "integer",
+       "readOnly": true
++    },
++    "divisionId": {
++      "type": "string",
++      "nullable": true,
++      "readOnly": true
+     }
+   }
+CHANGED GroupWithCriteriaDtoV1
+--- 
+
++++ 
+
+@@ -35,4 +35,9 @@
+
+       "readOnly": true
+     },
++    "divisionId": {
++      "type": "string",
++      "nullable": true,
++      "readOnly": true
++    },
+     "criteria": {
+       "type": "array",
+CHANGED MacOsBrandingConfiguration
+--- 
+
++++ 
+
+@@ -7,4 +7,5 @@
+
+     },
+     "applicationName": {
++      "maxLength": 44,
+       "type": "string"
+     },
+CHANGED ManagedSoftwareUpdateStatus
+--- 
+
++++ 
+
+@@ -16,5 +16,6 @@
+
+             "COMPUTER",
+             "MOBILE_DEVICE",
+-            "APPLE_TV"
++            "APPLE_TV",
++            "VISION_PRO"
+           ]
+         },
+CHANGED PlanDevice
+--- 
+
++++ 
+
+@@ -14,5 +14,6 @@
+
+         "COMPUTER",
+         "MOBILE_DEVICE",
+-        "APPLE_TV"
++        "APPLE_TV",
++        "VISION_PRO"
+       ]
+     },
+CHANGED PlanDevicePost
+--- 
+
++++ 
+
+@@ -16,5 +16,6 @@
+
+         "COMPUTER",
+         "MOBILE_DEVICE",
+-        "APPLE_TV"
++        "APPLE_TV",
++        "VISION_PRO"
+       ]
+     }
+REMOVED PluginPath
+CHANGED ReturnToService
+--- 
+
++++ 
+
+@@ -16,4 +16,7 @@
+
+     "bootstrapToken": {
+       "type": "string"
++    },
++    "shouldRetryEnrollment": {
++      "type": "boolean"
+     }
+   }
+CHANGED UserAccount
+--- 
+
++++ 
+
+@@ -81,4 +81,11 @@
+
+       ],
+       "default": "DEFAULT"
++    },
++    "ropfMigrationScope": {
++      "type": "string",
++      "enum": [
++        "AUTO",
++        "EXCLUDED"
++      ]
+     }
+   }

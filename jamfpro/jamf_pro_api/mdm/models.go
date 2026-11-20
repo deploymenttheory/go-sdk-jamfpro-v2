@@ -150,9 +150,10 @@ type CommandData struct {
 
 // ReturnToService represents the return to service structure in the erase device command.
 type ReturnToService struct {
-	Enabled         bool   `json:"enabled"`
-	MDMProfileData  string `json:"mdmProfileData,omitempty"`
-	WifiProfileData string `json:"wifiProfileData,omitempty"`
+	ShouldRetryEnrollment *bool  `json:"shouldRetryEnrollment,omitempty"`
+	Enabled               bool   `json:"enabled"`
+	MDMProfileData        string `json:"mdmProfileData,omitempty"`
+	WifiProfileData       string `json:"wifiProfileData,omitempty"`
 }
 
 // ApplicationAttributes represents the application attributes structure in the settings command.

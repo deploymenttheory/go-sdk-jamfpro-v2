@@ -15,3 +15,16 @@ type ResourceActiveUserSession struct {
 type ResourceUserSessionCount struct {
 	Count int `json:"count"`
 }
+
+type ResourceActiveUserSessionV2 struct {
+	Username         string  `json:"username"`
+	SessionID        string  `json:"sessionId"`
+	LastAccessedTime string  `json:"lastAccessedTime"`
+	CreationTime     string  `json:"creationTime"`
+	UserAgent        *string `json:"userAgent"`
+	IPAddress        *string `json:"ipAddress"`
+}
+
+type ResourceUserSessionCountV2 struct {
+	ActiveUserCount int `json:"activeUserCount"`
+}

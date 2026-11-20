@@ -1,0 +1,11 @@
+{
+  "httpStatus": 400,
+  "errors": [
+    {
+      "code": "INVALID_FIELD",
+      "description": "Invalid sort fields: invalid",
+      "id": "1",
+      "field": "sort"
+    }
+  ]
+}

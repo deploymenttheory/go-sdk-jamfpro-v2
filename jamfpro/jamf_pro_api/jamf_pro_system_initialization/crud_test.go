@@ -135,3 +135,18 @@ func TestUnit_PlatformInitialize_UnregisteredPath(t *testing.T) {
 	require.Error(t, err)
 	assert.NotNil(t, resp)
 }
+
+func TestUnit_System_InitializeFedRampV2(t *testing.T) {
+	svc, mock := setupMockService(t)
+	resp, err := svc.InitializeFedRampV2(context.Background(), nil)
+	require.Error(t, err)
+	require.Nil(t, resp)
+	mock.Register("POST", "/api/v2/system/fedramp-initialize", 202, "")
+	resp, err = svc.InitializeFedRampV2(context.Background(), &RequestFedRampInitializeV2{})
+	require.NoError(t, err)
+	require.Equal(t, 202, resp.StatusCode())
+	mock.RegisterError("POST", "/api/v2/system/fedramp-initialize", 400, "", "INVALID_STATE")
+	resp, err = svc.InitializeFedRampV2(context.Background(), &RequestFedRampInitializeV2{})
+	require.Error(t, err)
+	require.Equal(t, 400, resp.StatusCode())
+}

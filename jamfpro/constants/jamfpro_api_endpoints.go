@@ -266,3 +266,11 @@ const (
 	ApplicationProtect = "protect"
 	ApplicationConnect = "connect"
 )
+
+const (
+	EndpointJamfProActionLogsV1         = "/api/v1/action-logs"
+	EndpointJamfProDirectoryCacheV1     = "/api/v1/directory-cache"
+	EndpointJamfProUserSessionsActiveV2 = "/api/v2/user-sessions/active"
+	EndpointJamfProUserSessionsCountV2  = "/api/v2/user-sessions/count"
+	EndpointJamfProFedRampInitializeV2  = "/api/v2/system/fedramp-initialize"
+)

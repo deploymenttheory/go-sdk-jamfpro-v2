@@ -51,3 +51,16 @@ func TestAcceptance_UserSessions_get_count_v1(t *testing.T) {
 	assert.GreaterOrEqual(t, result.Count, 0)
 	acc.LogTestSuccess(t, "user session count=%d", result.Count)
 }
+
+func TestAcceptance_UserSessions_V2(t *testing.T) {
+	acc.RequireClient(t)
+	acc.AtLeastJamfProVersion(t, "11.34.0")
+	svc := acc.Client.JamfProAPI.UserSessions
+	_, resp, err := svc.GetActiveV2(context.Background())
+	require.NoError(t, err)
+	require.Equal(t, 200, resp.StatusCode())
+	count, resp, err := svc.GetCountV2(context.Background())
+	require.NoError(t, err)
+	require.Equal(t, 200, resp.StatusCode())
+	require.GreaterOrEqual(t, count.ActiveUserCount, 0)
+}

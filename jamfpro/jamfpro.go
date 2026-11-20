@@ -57,6 +57,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/account_groups"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/account_preferences"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/accounts"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/action_logs"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/activation_code"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/adcs_settings"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/adue_session_token_settings"
@@ -97,6 +98,7 @@ import (
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/device_enrollments"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/devices"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/digicert"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/directory_cache"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/distribution_point"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/dock_items"
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/dss_declarations"
@@ -336,6 +338,8 @@ type JamfProAPIClient struct {
 	MobileDeviceGroups                  *mobile_device_groups.MobileDeviceGroups
 	MobileDevicePrestages               *mobile_device_prestages.MobileDevicePrestages
 	MobileDevices                       *mobile_devices.MobileDevices
+	ActionLogs                          *action_logs.ActionLogs
+	DirectoryCache                      *directory_cache.DirectoryCache
 	Notifications                       *notifications.Notifications
 	Oauth2SessionTokens                 *oauth2_session_tokens.Oauth2SessionTokens
 	Oidc                                *oidc.Oidc
@@ -534,6 +538,8 @@ func newJamfProAPIClient(transport *client.Transport) *JamfProAPIClient {
 		MobileDeviceGroups:                  mobile_device_groups.NewMobileDeviceGroups(transport),
 		MobileDevicePrestages:               mobile_device_prestages.NewMobileDevicePrestages(transport),
 		MobileDevices:                       mobile_devices.NewMobileDevices(transport),
+		ActionLogs:                          action_logs.NewActionLogs(transport),
+		DirectoryCache:                      directory_cache.NewDirectoryCache(transport),
 		Notifications:                       notifications.NewNotifications(transport),
 		Oauth2SessionTokens:                 oauth2_session_tokens.NewOauth2SessionTokens(transport),
 		Oidc:                                oidc.NewOidc(transport),

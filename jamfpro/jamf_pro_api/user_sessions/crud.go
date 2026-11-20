@@ -60,3 +60,41 @@ func (s *UserSessions) GetCountV1(ctx context.Context) (*ResourceUserSessionCoun
 
 	return &result, resp, nil
 }
+
+// GetActiveV2 returns detailed information about currently logged-in users.
+// URL: GET /api/v2/user-sessions/active
+// https://developer.jamf.com/jamf-pro/reference/get_v2-user-sessions-active
+func (s *UserSessions) GetActiveV2(ctx context.Context) ([]ResourceActiveUserSessionV2, *resty.Response, error) {
+	endpoint := constants.EndpointJamfProUserSessionsActiveV2
+
+	var result []ResourceActiveUserSessionV2
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get active user sessions: %w", err)
+	}
+
+	return result, resp, nil
+}
+
+// GetCountV2 returns the number of currently logged-in users.
+// URL: GET /api/v2/user-sessions/count
+// https://developer.jamf.com/jamf-pro/reference/get_v2-user-sessions-count
+func (s *UserSessions) GetCountV2(ctx context.Context) (*ResourceUserSessionCountV2, *resty.Response, error) {
+	endpoint := constants.EndpointJamfProUserSessionsCountV2
+
+	var result ResourceUserSessionCountV2
+
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(endpoint)
+	if err != nil {
+		return nil, resp, fmt.Errorf("failed to get user session count: %w", err)
+	}
+
+	return &result, resp, nil
+}

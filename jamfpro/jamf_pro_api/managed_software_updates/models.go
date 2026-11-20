@@ -7,8 +7,10 @@ type ResponseAvailableUpdates struct {
 
 // ResourceAvailableUpdates represents the available updates for macOS and iOS.
 type ResourceAvailableUpdates struct {
-	MacOS []string `json:"macOS"`
-	IOS   []string `json:"iOS"`
+	TvOS     []string `json:"tvOS"`
+	VisionOS []string `json:"visionOS"`
+	MacOS    []string `json:"macOS"`
+	IOS      []string `json:"iOS"`
 }
 
 // ResponsePlanList represents the paginated response for managed software update plans.

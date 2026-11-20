@@ -2,12 +2,12 @@ package managed_software_updates
 
 // ManagedSoftwareUpdatePlanUpdateAction represents the update action for a managed software update plan.
 const (
-	UpdateActionDownloadOnly                  = "DOWNLOAD_ONLY"
-	UpdateActionDownloadInstall               = "DOWNLOAD_INSTALL"
-	UpdateActionDownloadInstallAllowDeferral  = "DOWNLOAD_INSTALL_ALLOW_DEFERRAL"
-	UpdateActionDownloadInstallRestart        = "DOWNLOAD_INSTALL_RESTART"
-	UpdateActionDownloadInstallSchedule       = "DOWNLOAD_INSTALL_SCHEDULE"
-	UpdateActionUnknown                       = "UNKNOWN"
+	UpdateActionDownloadOnly                 = "DOWNLOAD_ONLY"
+	UpdateActionDownloadInstall              = "DOWNLOAD_INSTALL"
+	UpdateActionDownloadInstallAllowDeferral = "DOWNLOAD_INSTALL_ALLOW_DEFERRAL"
+	UpdateActionDownloadInstallRestart       = "DOWNLOAD_INSTALL_RESTART"
+	UpdateActionDownloadInstallSchedule      = "DOWNLOAD_INSTALL_SCHEDULE"
+	UpdateActionUnknown                      = "UNKNOWN"
 )
 
 // ManagedSoftwareUpdatePlanVersionType represents the version type for a managed software update plan.
@@ -29,21 +29,21 @@ const (
 
 // ManagedSoftwareUpdateStatusStatus represents the status of a managed software update.
 const (
-	UpdateStatusDownloading                   = "DOWNLOADING"
-	UpdateStatusIdle                          = "IDLE"
-	UpdateStatusInstalling                    = "INSTALLING"
-	UpdateStatusInstalled                     = "INSTALLED"
-	UpdateStatusError                         = "ERROR"
-	UpdateStatusDownloadFailed                = "DOWNLOAD_FAILED"
-	UpdateStatusDownloadRequiresComputer      = "DOWNLOAD_REQUIRES_COMPUTER"
-	UpdateStatusDownloadInsufficientSpace     = "DOWNLOAD_INSUFFICIENT_SPACE"
-	UpdateStatusDownloadInsufficientPower     = "DOWNLOAD_INSUFFICIENT_POWER"
-	UpdateStatusDownloadInsufficientNetwork   = "DOWNLOAD_INSUFFICIENT_NETWORK"
-	UpdateStatusInstallInsufficientSpace      = "INSTALL_INSUFFICIENT_SPACE"
-	UpdateStatusInstallInsufficientPower      = "INSTALL_INSUFFICIENT_POWER"
-	UpdateStatusInstallPhoneCallInProgress    = "INSTALL_PHONE_CALL_IN_PROGRESS"
-	UpdateStatusInstallFailed                 = "INSTALL_FAILED"
-	UpdateStatusUnknown                       = "UNKNOWN"
+	UpdateStatusDownloading                 = "DOWNLOADING"
+	UpdateStatusIdle                        = "IDLE"
+	UpdateStatusInstalling                  = "INSTALLING"
+	UpdateStatusInstalled                   = "INSTALLED"
+	UpdateStatusError                       = "ERROR"
+	UpdateStatusDownloadFailed              = "DOWNLOAD_FAILED"
+	UpdateStatusDownloadRequiresComputer    = "DOWNLOAD_REQUIRES_COMPUTER"
+	UpdateStatusDownloadInsufficientSpace   = "DOWNLOAD_INSUFFICIENT_SPACE"
+	UpdateStatusDownloadInsufficientPower   = "DOWNLOAD_INSUFFICIENT_POWER"
+	UpdateStatusDownloadInsufficientNetwork = "DOWNLOAD_INSUFFICIENT_NETWORK"
+	UpdateStatusInstallInsufficientSpace    = "INSTALL_INSUFFICIENT_SPACE"
+	UpdateStatusInstallInsufficientPower    = "INSTALL_INSUFFICIENT_POWER"
+	UpdateStatusInstallPhoneCallInProgress  = "INSTALL_PHONE_CALL_IN_PROGRESS"
+	UpdateStatusInstallFailed               = "INSTALL_FAILED"
+	UpdateStatusUnknown                     = "UNKNOWN"
 )
 
 // MacOsManagedSoftwareUpdatePriority represents the priority of a macOS managed software update.
@@ -86,4 +86,9 @@ const (
 	PlanDeviceObjectTypeComputer     = "COMPUTER"
 	PlanDeviceObjectTypeMobileDevice = "MOBILE_DEVICE"
 	PlanDeviceObjectTypeAppleTv      = "APPLE_TV"
+)
+
+const (
+	StatusObjectTypeVisionPro     = "VISION_PRO"
+	PlanDeviceObjectTypeVisionPro = "VISION_PRO"
 )
