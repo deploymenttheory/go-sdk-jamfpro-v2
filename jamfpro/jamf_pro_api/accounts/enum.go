@@ -25,6 +25,7 @@ const (
 const (
 	AccountTypeDefault   = "DEFAULT"
 	AccountTypeFederated = "FEDERATED"
+	AccountTypeMigrated  = "MIGRATED"
 )
 
 var validAccessLevels = map[string]struct{}{
@@ -48,4 +49,5 @@ var validAccountStatuses = map[string]struct{}{
 var validAccountTypes = map[string]struct{}{
 	AccountTypeDefault:   {},
 	AccountTypeFederated: {},
+	AccountTypeMigrated:  {},
 }

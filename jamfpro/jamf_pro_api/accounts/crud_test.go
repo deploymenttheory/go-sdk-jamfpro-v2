@@ -267,3 +267,12 @@ func TestUnit_Accounts_DeleteByIDV1_Error(t *testing.T) {
 	_, err := svc.DeleteByIDV1(context.Background(), "1")
 	require.Error(t, err)
 }
+
+func TestUnit_Accounts_CreateV1_Migrated(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.RegisterCreateAccountMock()
+	result, resp, err := svc.CreateV1(context.Background(), &RequestAccount{Username: "newuser", AccountType: AccountTypeMigrated})
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, 201, resp.StatusCode())
+}

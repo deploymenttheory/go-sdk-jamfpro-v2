@@ -74,3 +74,34 @@ type CreateResponse struct {
 	ID   string `json:"id"`
 	Href string `json:"href"`
 }
+
+// ResourceOidcBrokerConfig is the selected broker configuration. Credentials are never returned.
+type ResourceOidcBrokerConfig struct {
+	ID                   string   `json:"id"`
+	ClientType           *string  `json:"clientType"`
+	ClientAuthMethod     *string  `json:"clientAuthMethod"`
+	ProductUsernameClaim string   `json:"productUsernameClaim,omitempty"`
+	ProductUserMapping   *string  `json:"productUserMapping"`
+	Capabilities         []string `json:"capabilities"`
+	DiscoveryURL         string   `json:"discoveryUrl"`
+	ClientID             string   `json:"clientId"`
+	Scopes               []string `json:"scopes"`
+	RedirectURIs         []string `json:"redirectUris"`
+	Enabled              bool     `json:"enabled"`
+	CreatedAt            string   `json:"createdAt,omitempty"`
+	UpdatedAt            string   `json:"updatedAt,omitempty"`
+}
+
+// RequestOidcBrokerConfig replaces non-secret broker settings. Omitted credentials
+// retain the existing value; changing authentication methods requires a credential.
+type RequestOidcBrokerConfig struct {
+	ClientAuthMethod     string   `json:"clientAuthMethod"`
+	ProductUsernameClaim string   `json:"productUsernameClaim,omitempty"`
+	ProductUserMapping   string   `json:"productUserMapping"`
+	DiscoveryURL         string   `json:"discoveryUrl"`
+	ClientID             string   `json:"clientId"`
+	Scopes               []string `json:"scopes"`
+	ClientSecret         string   `json:"clientSecret,omitempty"`
+	PrivateKeyJWT        string   `json:"privateKeyJwt,omitempty"`
+	Enabled              bool     `json:"enabled"`
+}
