@@ -84,6 +84,8 @@ func (b *RequestBuilder) SetResult(result any) *RequestBuilder {
 // SetMultipartFile configures the request for a multipart file upload.
 // Execute with Post after setting any additional form fields or headers.
 // Content-Type is managed automatically by resty.
+// If fileReader implements io.Closer, Resty closes it when the upload finishes
+// or the server responds early. Close must unblock any pending Read.
 func (b *RequestBuilder) SetMultipartFile(fileField, fileName string, fileReader io.Reader, fileSize int64, callback MultipartProgressCallback) *RequestBuilder {
 	if fileReader != nil && fileName != "" && fileField != "" {
 		field := &resty.MultipartField{

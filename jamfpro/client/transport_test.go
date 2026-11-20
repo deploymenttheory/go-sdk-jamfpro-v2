@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
+	"sync"
 	"testing"
 	"time"
 
@@ -452,7 +454,10 @@ func TestTransport_GlobalHeaders(t *testing.T) {
 	srv := newMockAuthServer(t)
 	defer srv.Close()
 	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
-	tr, err := NewTransport(cfg, func(s *TransportSettings) error { s.GlobalHeaders = map[string]string{"X-Global": "global-val"}; return nil })
+	tr, err := NewTransport(cfg, func(s *TransportSettings) error {
+		s.GlobalHeaders = map[string]string{"X-Global": "global-val"}
+		return nil
+	})
 	require.NoError(t, err)
 	ctx := context.Background()
 
@@ -538,4 +543,111 @@ func TestTransport_PostMultipart_NoFile(t *testing.T) {
 		Post("/api/x")
 	require.NoError(t, err)
 	assert.Equal(t, 200, resp.StatusCode())
+}
+
+// uploadRoundTripFunc lets the upload test return a response while its source is blocked.
+type uploadRoundTripFunc func(*http.Request) (*http.Response, error)
+
+func (f uploadRoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return f(req)
+}
+
+type startedUploadReader struct {
+	*io.PipeReader
+	started chan struct{}
+	once    sync.Once
+}
+
+func (r *startedUploadReader) Read(p []byte) (int, error) {
+	r.once.Do(func() { close(r.started) })
+	return r.PipeReader.Read(p)
+}
+
+func TestUnit_Transport_MultipartEarlyRejection(t *testing.T) {
+	pipeReader, pipeWriter := io.Pipe()
+	source := &startedUploadReader{PipeReader: pipeReader, started: make(chan struct{})}
+	t.Cleanup(func() { _ = source.Close(); _ = pipeWriter.Close() })
+	transport := uploadRoundTripFunc(func(req *http.Request) (*http.Response, error) {
+		defer req.Body.Close()
+		body := `{"access_token":"test-token","expires_in":3600}`
+		status := http.StatusOK
+		if req.URL.Path == "/api/upload" {
+			reader, err := req.MultipartReader()
+			if err != nil {
+				return nil, err
+			}
+			if _, err := reader.NextPart(); err != nil {
+				return nil, err
+			}
+			// Ensure the producer has entered Read before returning the rejection.
+			select {
+			case <-source.started:
+			case <-req.Context().Done():
+				return nil, req.Context().Err()
+			}
+			body = `{"code":"UPLOAD_TOO_LARGE","message":"Upload rejected"}`
+			status = http.StatusRequestEntityTooLarge
+		}
+		return &http.Response{
+			StatusCode: status, Status: http.StatusText(status),
+			Header: http.Header{"Content-Type": []string{"application/json"}},
+			Body:   io.NopCloser(bytes.NewBufferString(body)), Request: req,
+		}, nil
+	})
+	cfg := &config.AuthConfig{InstanceDomain: "https://example.test", AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	tr, err := NewTransport(cfg, func(s *TransportSettings) error { s.HTTPTransport = transport; return nil })
+	require.NoError(t, err)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	type outcome struct {
+		status int
+		err    error
+	}
+	done := make(chan outcome, 1)
+	go func() {
+		resp, err := tr.NewRequest(ctx).SetMultipartFile("file", "blocked.pkg", source, 1, nil).Post("/api/upload")
+		status := 0
+		if resp != nil {
+			status = resp.StatusCode()
+		}
+		done <- outcome{status: status, err: err}
+	}()
+	select {
+	case result := <-done:
+		require.Equal(t, http.StatusRequestEntityTooLarge, result.status)
+		var apiErr *APIError
+		require.ErrorAs(t, result.err, &apiErr)
+		require.Equal(t, "UPLOAD_TOO_LARGE", apiErr.Code)
+	case <-ctx.Done():
+		// Release the producer even when running against a dependency that hangs.
+		_ = source.Close()
+		select {
+		case <-done:
+		case <-time.After(time.Second):
+			t.Fatal("multipart request did not stop after closing its reader")
+		}
+		t.Fatal("multipart rejection hung until the caller closed the source reader")
+	}
+}
+
+func TestUnit_Transport_RequestDefaultsIsolation(t *testing.T) {
+	srv := newMockAuthServer(t)
+	defer srv.Close()
+	cfg := &config.AuthConfig{InstanceDomain: srv.URL, AuthMethod: constants.AuthMethodOAuth2, ClientID: "c", ClientSecret: "s"}
+	tr, err := NewTransport(cfg, func(s *TransportSettings) error {
+		s.GlobalHeaders = map[string]string{"X-SDK-Default": "original"}
+		return nil
+	})
+	require.NoError(t, err)
+	tr.GetHTTPClient().SetQueryParam("sdk-default", "original")
+	first, err := tr.NewRequest(context.Background()).Get("/api/test")
+	require.NoError(t, err)
+	// A caller may modify request metadata returned with a response. It must not
+	// change the defaults or metadata used by subsequent requests.
+	first.Request.Header["X-Sdk-Default"][0] = "changed"
+	first.Request.QueryParams["sdk-default"][0] = "changed"
+	second, err := tr.NewRequest(context.Background()).Get("/api/test")
+	require.NoError(t, err)
+	require.Equal(t, "original", second.Request.RawRequest.Header.Get("X-SDK-Default"))
+	require.Equal(t, "original", second.Request.RawRequest.URL.Query().Get("sdk-default"))
 }
