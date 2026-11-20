@@ -6,6 +6,7 @@ type ListResponse struct {
 }
 
 type ResourceGroup struct {
+	DivisionID       *string            `json:"divisionId,omitempty"`
 	GroupPlatformId  string             `json:"groupPlatformId,omitempty"`
 	GroupJamfProId   string             `json:"groupJamfProId,omitempty"`
 	GroupName        string             `json:"groupName,omitempty"`

@@ -1,0 +1,24 @@
+{
+  "id": "1",
+  "createdTime": "2026-11-20T10:01:03.064Z",
+  "requestor": {
+    "type": "API_CLIENT",
+    "id": "1",
+    "name": "example"
+  },
+  "actionType": "DELETE",
+  "target": {
+    "type": "DEVICES",
+    "id": "1",
+    "name": "example",
+    "deviceClass": "DEVICE",
+    "deviceCount": 1
+  },
+  "status": "COMPLETED",
+  "statusSummary": {
+    "completed": 1,
+    "failed": 0,
+    "pending": 0,
+    "canceled": 0
+  }
+}

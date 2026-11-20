@@ -54,3 +54,32 @@ func TestUnit_UserSessions_GetCountV1_Error(t *testing.T) {
 	_, _, err := svc.GetCountV1(context.Background())
 	require.Error(t, err)
 }
+
+func TestUnit_UserSessions_V2(t *testing.T) {
+	svc, mock := setupMockService(t)
+	mock.Register("GET", "/api/v2/user-sessions/active", 200, "validate_active_v2.json")
+	mock.Register("GET", "/api/v2/user-sessions/count", 200, "validate_count_v2.json")
+	active, resp, err := svc.GetActiveV2(context.Background())
+	require.NoError(t, err)
+	require.Equal(t, 200, resp.StatusCode())
+	require.Empty(t, active)
+	count, resp, err := svc.GetCountV2(context.Background())
+	require.NoError(t, err)
+	require.Equal(t, 200, resp.StatusCode())
+	require.Zero(t, count.ActiveUserCount)
+	// Nonzero synthetic count catches incorrect JSON tags hidden by an empty tenant.
+	mock.RegisterRawBody("GET", "/api/v2/user-sessions/count", 200, []byte(`{"activeUserCount":3}`))
+	count, _, err = svc.GetCountV2(context.Background())
+	require.NoError(t, err)
+	require.Equal(t, 3, count.ActiveUserCount)
+	mock.RegisterError("GET", "/api/v2/user-sessions/active", 403, "", "Forbidden")
+	active, resp, err = svc.GetActiveV2(context.Background())
+	require.Error(t, err)
+	require.Nil(t, active)
+	require.Equal(t, 403, resp.StatusCode())
+	mock.RegisterError("GET", "/api/v2/user-sessions/count", 500, "", "Server error")
+	count, resp, err = svc.GetCountV2(context.Background())
+	require.Error(t, err)
+	require.Nil(t, count)
+	require.Equal(t, 500, resp.StatusCode())
+}

@@ -89,3 +89,17 @@ func (s *JamfProSystemInitialization) PlatformInitialize(ctx context.Context, re
 
 	return resp, nil
 }
+
+// InitializeFedRampV2 initializes a fresh FedRAMP installation with broker settings.
+// This operation is intended for a fresh installation only.
+func (s *JamfProSystemInitialization) InitializeFedRampV2(ctx context.Context, request *RequestFedRampInitializeV2) (*resty.Response, error) {
+	if request == nil {
+		return nil, fmt.Errorf("request is required")
+	}
+	endpoint := constants.EndpointJamfProFedRampInitializeV2
+	resp, err := s.client.NewRequest(ctx).SetHeader("Content-Type", constants.ApplicationJSON).SetBody(request).Post(endpoint)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
+}

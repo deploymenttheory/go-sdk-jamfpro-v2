@@ -1,0 +1,15 @@
+{
+  "totalCount": 1,
+  "results": [
+    {
+      "deviceName": "example",
+      "deviceClass": "DEVICE",
+      "deviceId": "1",
+      "deviceType": "IOS",
+      "deviceModel": "",
+      "serialNumber": "SDKDELTATEST001",
+      "managementId": "example",
+      "outcome": "COMPLETED"
+    }
+  ]
+}

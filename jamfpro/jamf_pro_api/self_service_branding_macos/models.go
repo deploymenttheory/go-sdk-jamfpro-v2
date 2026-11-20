@@ -2,7 +2,8 @@ package self_service_branding_macos
 
 // ResourceSelfServiceBrandingMacOS represents the details of a self-service branding configuration for macOS.
 type ResourceSelfServiceBrandingMacOS struct {
-	ID                    string `json:"id"`
+	ID string `json:"id"`
+	// ApplicationName is limited by Jamf Pro 11.34 to 44 characters.
 	ApplicationName       string `json:"applicationName"`
 	BrandingName          string `json:"brandingName"`
 	BrandingNameSecondary string `json:"brandingNameSecondary"`
@@ -14,6 +15,6 @@ type ResourceSelfServiceBrandingMacOS struct {
 
 // ListResponse is the response for ListV1.
 type ListResponse struct {
-	TotalCount int                              `json:"totalCount"`
+	TotalCount int                                `json:"totalCount"`
 	Results    []ResourceSelfServiceBrandingMacOS `json:"results"`
 }

@@ -2,6 +2,7 @@ package accounts
 
 // ResourceAccount represents a Jamf Pro user account.
 type ResourceAccount struct {
+	RopfMigrationScope        string `json:"ropfMigrationScope,omitempty"`
 	ID                        string `json:"id"`
 	Username                  string `json:"username"`
 	Realname                  string `json:"realname"`
@@ -27,6 +28,7 @@ type ListResponse struct {
 
 // RequestAccount is the body for creating and updating accounts.
 type RequestAccount struct {
+	RopfMigrationScope        string `json:"ropfMigrationScope,omitempty"`
 	PlainPassword             string `json:"plainPassword,omitempty"`
 	Password                  string `json:"password,omitempty"`
 	Username                  string `json:"username,omitempty"`

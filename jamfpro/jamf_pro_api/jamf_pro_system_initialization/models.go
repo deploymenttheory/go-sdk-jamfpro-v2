@@ -29,3 +29,20 @@ type ResourcePlatformInitialize struct {
 	Email           string `json:"email"`
 	JssUrl          string `json:"jssUrl"`
 }
+
+// RequestFedRampInitializeV2 contains fresh-install broker initialization settings.
+type RequestFedRampInitializeV2 struct {
+	ActivationCode       string   `json:"activationCode,omitempty"`
+	InstitutionName      string   `json:"institutionName"`
+	EulaAccepted         bool     `json:"eulaAccepted"`
+	Username             string   `json:"username"`
+	Email                string   `json:"email"`
+	JssUrl               string   `json:"jssUrl"`
+	DiscoveryUrl         string   `json:"discoveryUrl"`
+	ClientId             string   `json:"clientId"`
+	ClientSecret         string   `json:"clientSecret,omitempty"`
+	PrivateKeyJWT        string   `json:"privateKeyJwt,omitempty"`
+	ProductUsernameClaim string   `json:"productUsernameClaim,omitempty"`
+	ProductUserMapping   string   `json:"productUserMapping,omitempty"`
+	Scopes               []string `json:"scopes,omitempty"`
+}

@@ -6,36 +6,39 @@ import (
 
 // ResourceEnrollment represents the enrollment settings (API v4).
 type ResourceEnrollment struct {
-	InstallSingleProfile                         bool                           `json:"installSingleProfile"`
-	SigningMdmProfileEnabled                     bool                           `json:"signingMdmProfileEnabled"`
-	MdmSigningCertificate                        *ResourceEnrollmentCertificate `json:"mdmSigningCertificate"`
-	RestrictReenrollment                         bool                           `json:"restrictReenrollment"`
-	FlushLocationInformation                     bool                           `json:"flushLocationInformation"`
-	FlushLocationHistoryInformation              bool                           `json:"flushLocationHistoryInformation"`
-	FlushPolicyHistory                           bool                           `json:"flushPolicyHistory"`
-	FlushExtensionAttributes                     bool                           `json:"flushExtensionAttributes"`
-	FlushSoftwareUpdatePlans                     bool                           `json:"flushSoftwareUpdatePlans"`
-	FlushMdmCommandsOnReenroll                   string                         `json:"flushMdmCommandsOnReenroll,omitempty"`
-	MacOsEnterpriseEnrollmentEnabled             bool                           `json:"macOsEnterpriseEnrollmentEnabled"`
-	ManagementUsername                           string                         `json:"managementUsername"`
-	CreateManagementAccount                      bool                           `json:"createManagementAccount"`
-	HideManagementAccount                        bool                           `json:"hideManagementAccount"`
-	AllowSshOnlyManagementAccount                bool                           `json:"allowSshOnlyManagementAccount"`
-	EnsureSshRunning                             bool                           `json:"ensureSshRunning"`
-	LaunchSelfService                            bool                           `json:"launchSelfService"`
-	SignQuickAdd                                 bool                           `json:"signQuickAdd"`
-	DeveloperCertificateIdentity                 *ResourceEnrollmentCertificate `json:"developerCertificateIdentity"`
-	DeveloperCertificateIdentityDetails          ResourceCertificateDetails     `json:"developerCertificateIdentityDetails"`
-	MdmSigningCertificateDetails                 ResourceCertificateDetails     `json:"mdmSigningCertificateDetails"`
-	IosEnterpriseEnrollmentEnabled               bool                           `json:"iosEnterpriseEnrollmentEnabled"`
-	IosPersonalEnrollmentEnabled                 bool                           `json:"iosPersonalEnrollmentEnabled"`
-	PersonalDeviceEnrollmentType                 string                         `json:"personalDeviceEnrollmentType,omitempty"`
-	AccountDrivenUserEnrollmentEnabled           bool                           `json:"accountDrivenUserEnrollmentEnabled"`
-	AccountDrivenDeviceIosEnrollmentEnabled      bool                           `json:"accountDrivenDeviceIosEnrollmentEnabled"`
-	AccountDrivenDeviceMacosEnrollmentEnabled    bool                           `json:"accountDrivenDeviceMacosEnrollmentEnabled"`
-	AccountDrivenUserVisionosEnrollmentEnabled   bool                           `json:"accountDrivenUserVisionosEnrollmentEnabled"`
-	AccountDrivenDeviceVisionosEnrollmentEnabled bool                           `json:"accountDrivenDeviceVisionosEnrollmentEnabled"`
-	MaidUsernameMergeEnabled                     bool                           `json:"maidUsernameMergeEnabled"`
+	InstallSingleProfile             bool                           `json:"installSingleProfile"`
+	SigningMdmProfileEnabled         bool                           `json:"signingMdmProfileEnabled"`
+	MdmSigningCertificate            *ResourceEnrollmentCertificate `json:"mdmSigningCertificate"`
+	RestrictReenrollment             bool                           `json:"restrictReenrollment"`
+	FlushLocationInformation         bool                           `json:"flushLocationInformation"`
+	FlushLocationHistoryInformation  bool                           `json:"flushLocationHistoryInformation"`
+	FlushPolicyHistory               bool                           `json:"flushPolicyHistory"`
+	FlushExtensionAttributes         bool                           `json:"flushExtensionAttributes"`
+	FlushSoftwareUpdatePlans         bool                           `json:"flushSoftwareUpdatePlans"`
+	FlushMdmCommandsOnReenroll       string                         `json:"flushMdmCommandsOnReenroll,omitempty"`
+	MacOsEnterpriseEnrollmentEnabled bool                           `json:"macOsEnterpriseEnrollmentEnabled"`
+	ManagementUsername               string                         `json:"managementUsername"`
+	CreateManagementAccount          bool                           `json:"createManagementAccount"`
+	HideManagementAccount            bool                           `json:"hideManagementAccount"`
+	AllowSshOnlyManagementAccount    bool                           `json:"allowSshOnlyManagementAccount"`
+	EnsureSshRunning                 bool                           `json:"ensureSshRunning"`
+	LaunchSelfService                bool                           `json:"launchSelfService"`
+	// Deprecated: read-only since Jamf Pro 11.34.
+	SignQuickAdd bool `json:"signQuickAdd"`
+	// Deprecated: read-only since Jamf Pro 11.34.
+	DeveloperCertificateIdentity *ResourceEnrollmentCertificate `json:"developerCertificateIdentity"`
+	// Deprecated: read-only since Jamf Pro 11.34.
+	DeveloperCertificateIdentityDetails          ResourceCertificateDetails `json:"developerCertificateIdentityDetails"`
+	MdmSigningCertificateDetails                 ResourceCertificateDetails `json:"mdmSigningCertificateDetails"`
+	IosEnterpriseEnrollmentEnabled               bool                       `json:"iosEnterpriseEnrollmentEnabled"`
+	IosPersonalEnrollmentEnabled                 bool                       `json:"iosPersonalEnrollmentEnabled"`
+	PersonalDeviceEnrollmentType                 string                     `json:"personalDeviceEnrollmentType,omitempty"`
+	AccountDrivenUserEnrollmentEnabled           bool                       `json:"accountDrivenUserEnrollmentEnabled"`
+	AccountDrivenDeviceIosEnrollmentEnabled      bool                       `json:"accountDrivenDeviceIosEnrollmentEnabled"`
+	AccountDrivenDeviceMacosEnrollmentEnabled    bool                       `json:"accountDrivenDeviceMacosEnrollmentEnabled"`
+	AccountDrivenUserVisionosEnrollmentEnabled   bool                       `json:"accountDrivenUserVisionosEnrollmentEnabled"`
+	AccountDrivenDeviceVisionosEnrollmentEnabled bool                       `json:"accountDrivenDeviceVisionosEnrollmentEnabled"`
+	MaidUsernameMergeEnabled                     bool                       `json:"maidUsernameMergeEnabled"`
 }
 
 // ResourceEnrollmentCertificate represents enrollment certificate details.
@@ -95,7 +98,7 @@ type ResourceEnrollmentLanguage struct {
 	// Deprecated: PersonalProfileName is deprecated as of Jamf Pro 11.25 and always returns an empty string.
 	PersonalProfileName string `json:"personalProfileName"`
 	// Deprecated: PersonalProfileDescription is deprecated as of Jamf Pro 11.25 and always returns an empty string.
-	PersonalProfileDescription string `json:"personalProfileDescription"`
+	PersonalProfileDescription       string `json:"personalProfileDescription"`
 	UserEnrollmentText               string `json:"userEnrollmentText"`
 	UserEnrollmentButton             string `json:"userEnrollmentButton"`
 	UserEnrollmentProfileName        string `json:"userEnrollmentProfileName"`

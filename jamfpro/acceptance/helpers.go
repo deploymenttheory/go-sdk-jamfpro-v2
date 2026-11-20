@@ -3,6 +3,7 @@ package acceptance
 import (
 	"context"
 	"fmt"
+	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/shared/apilifecycle"
 	"os"
 	"strconv"
 	"strings"
@@ -128,17 +129,17 @@ func RetryOnNotFound(t *testing.T, maxRetries int, initialDelay time.Duration, f
 	t.Helper()
 	var lastErr error
 	delay := initialDelay
-	
+
 	for i := 0; i < maxRetries; i++ {
 		lastErr = fn()
 		if lastErr == nil {
 			return nil
 		}
-		
+
 		if !client.IsNotFound(lastErr) {
 			return lastErr
 		}
-		
+
 		if i < maxRetries-1 {
 			if Config.Verbose {
 				t.Logf("Resource not found (404), retry %d/%d: waiting %v before next attempt", i+1, maxRetries, delay)
@@ -147,7 +148,7 @@ func RetryOnNotFound(t *testing.T, maxRetries int, initialDelay time.Duration, f
 			delay *= 2
 		}
 	}
-	
+
 	return lastErr
 }
 
@@ -215,4 +216,31 @@ func GreaterThanJamfProVersion(t *testing.T, major, minor, patch int) {
 		return
 	}
 	t.Skipf("Jamf Pro version %s is not greater than %d.%d.%d", v, major, minor, patch)
+}
+
+// AtLeastJamfProVersion skips acceptance checks for APIs unavailable before minimum.
+// Unlike GreaterThanJamfProVersion, this includes the release that introduced an API.
+func AtLeastJamfProVersion(t *testing.T, minimum string) {
+	t.Helper()
+	if Client == nil {
+		t.Skip("Jamf Pro client not initialised")
+	}
+	result, _, err := Client.JamfProAPI.JamfProVersion.GetV1(context.Background())
+	if err != nil {
+		t.Fatalf("get Jamf Pro version: %v", err)
+	}
+	if result == nil || result.Version == nil {
+		t.Fatal("Jamf Pro version is empty")
+	}
+	current, err := apilifecycle.Parse(*result.Version)
+	if err != nil {
+		t.Fatal(err)
+	}
+	required, err := apilifecycle.Parse(minimum)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !current.AtLeast(required) {
+		t.Skipf("Jamf Pro %s requires at least %s", current, required)
+	}
 }
