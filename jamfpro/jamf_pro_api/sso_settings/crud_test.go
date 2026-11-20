@@ -35,9 +35,9 @@ func TestUnit_SsoSettings_Update_Success(t *testing.T) {
 	mock.RegisterUpdateMock()
 
 	request := &ResourceSsoSettings{
-		SsoEnabled:       false,
+		SsoEnabled:        false,
 		ConfigurationType: "OIDC",
-		SsoBypassAllowed: true,
+		SsoBypassAllowed:  true,
 	}
 	result, resp, err := svc.UpdateV3(context.Background(), request)
 	require.NoError(t, err)
@@ -212,4 +212,47 @@ func TestUnit_SsoSettings_DownloadMetadataV3_Error(t *testing.T) {
 	require.NotNil(t, resp)
 	assert.Equal(t, 500, resp.StatusCode())
 	assert.Contains(t, err.Error(), "Jamf Pro API error")
+}
+
+func TestUnit_SsoSettings_OidcBrokerConfigV3(t *testing.T) {
+	t.Run("unconfigured tenant", func(t *testing.T) {
+		svc, mock := setupMockService(t)
+		mock.RegisterError("GET", "/api/v3/sso/oidc-broker-config", 404, "validate_broker_unconfigured.json", "No broker configuration is available for this tenant")
+		result, resp, err := svc.GetOidcBrokerConfigV3(context.Background())
+		require.Error(t, err)
+		require.Nil(t, result)
+		require.Equal(t, 404, resp.StatusCode())
+	})
+	t.Run("nil update", func(t *testing.T) {
+		svc, _ := setupMockService(t)
+		result, resp, err := svc.UpdateOidcBrokerConfigV3(context.Background(), nil)
+		require.ErrorContains(t, err, "request is required")
+		require.Nil(t, result)
+		require.Nil(t, resp)
+	})
+	t.Run("update error", func(t *testing.T) {
+		svc, mock := setupMockService(t)
+		mock.RegisterError("PUT", "/api/v3/sso/oidc-broker-config", 404, "validate_broker_unconfigured.json", "No broker configuration is available for this tenant")
+		result, resp, err := svc.UpdateOidcBrokerConfigV3(context.Background(), &RequestOidcBrokerConfig{})
+		require.Error(t, err)
+		require.Nil(t, result)
+		require.Equal(t, 404, resp.StatusCode())
+	})
+}
+
+func TestUnit_SsoSettings_OidcBrokerConfigV3_Success(t *testing.T) {
+	svc, mock := setupMockService(t)
+	// Synthetic configured-tenant shape; this tenant's captured fixture is 404.
+	fixture := []byte(`{"id":"test","clientType":null,"clientAuthMethod":null,"productUserMapping":null,"capabilities":["ADMIN_SSO"],"discoveryUrl":"https://example.test/.well-known/openid-configuration","clientId":"test","scopes":["openid"],"redirectUris":[],"enabled":false}`)
+	mock.RegisterRawBody("GET", "/api/v3/sso/oidc-broker-config", 200, fixture)
+	mock.RegisterRawBody("PUT", "/api/v3/sso/oidc-broker-config", 200, fixture)
+	result, resp, err := svc.GetOidcBrokerConfigV3(context.Background())
+	require.NoError(t, err)
+	require.Equal(t, 200, resp.StatusCode())
+	require.Nil(t, result.ClientAuthMethod)
+	require.False(t, result.Enabled)
+	result, resp, err = svc.UpdateOidcBrokerConfigV3(context.Background(), &RequestOidcBrokerConfig{ClientID: "test", Scopes: []string{"openid"}})
+	require.NoError(t, err)
+	require.Equal(t, 200, resp.StatusCode())
+	require.Equal(t, "test", result.ClientID)
 }

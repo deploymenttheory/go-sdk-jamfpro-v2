@@ -266,3 +266,5 @@ const (
 	ApplicationProtect = "protect"
 	ApplicationConnect = "connect"
 )
+
+const EndpointJamfProSsoOidcBrokerConfigV3 = "/api/v3/sso/oidc-broker-config"

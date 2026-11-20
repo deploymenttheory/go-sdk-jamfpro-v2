@@ -95,10 +95,13 @@ type ResourceComputerInventoryV4 struct {
 
 // ComputerInventorySubsetGeneralV4 is the v4 GENERAL section.
 type ComputerInventorySubsetGeneralV4 struct {
-	Name             string `json:"name"`
-	LastIpAddress    string `json:"lastIpAddress"`
-	LastReportedIpV4 string `json:"lastReportedIpV4"`
-	LastReportedIpV6 string `json:"lastReportedIpV6"`
+	// Inventory may report null when enrollment status has not been collected.
+	AppleEnrollmentType   *string `json:"appleEnrollmentType"`
+	AwaitingConfiguration *bool   `json:"awaitingConfiguration"`
+	Name                  string  `json:"name"`
+	LastIpAddress         string  `json:"lastIpAddress"`
+	LastReportedIpV4      string  `json:"lastReportedIpV4"`
+	LastReportedIpV6      string  `json:"lastReportedIpV6"`
 	// LastContact replaces v3's lastContactTime (same date-time value). It is the
 	// most recent time the device communicated with Jamf Pro via any channel
 	// (binary check-in, MDM ack, or DDM status report).
@@ -140,6 +143,9 @@ type ComputerInventorySubsetGeneralV4 struct {
 // General
 
 type ComputerInventorySubsetGeneral struct {
+	// Inventory may report null when enrollment status has not been collected.
+	AppleEnrollmentType                      *string                                        `json:"appleEnrollmentType"`
+	AwaitingConfiguration                    *bool                                          `json:"awaitingConfiguration"`
 	Name                                     string                                         `json:"name"`
 	LastIpAddress                            string                                         `json:"lastIpAddress"`
 	LastReportedIp                           string                                         `json:"lastReportedIp"`
@@ -418,6 +424,8 @@ type ComputerInventorySubsetFont struct {
 // Security
 
 type ComputerInventorySubsetSecurity struct {
+	// Nil means that lockdown mode status has not been collected.
+	LockdownModeEnabled          *bool  `json:"lockdownModeEnabled"`
 	SipStatus                    string `json:"sipStatus"`
 	GatekeeperStatus             string `json:"gatekeeperStatus"`
 	XprotectVersion              string `json:"xprotectVersion"`

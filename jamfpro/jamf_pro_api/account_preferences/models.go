@@ -2,6 +2,7 @@ package account_preferences
 
 // ResourceAccountPreferencesV2 represents the account preferences resource (get/update).
 type ResourceAccountPreferencesV2 struct {
+	ShowDirectoryGroupUuidColumn         bool   `json:"showDirectoryGroupUuidColumn"`
 	Language                             string `json:"language"`
 	DateFormat                           string `json:"dateFormat"`
 	Timezone                             string `json:"timezone"`

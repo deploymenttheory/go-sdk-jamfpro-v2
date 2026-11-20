@@ -206,3 +206,31 @@ func (s *SsoSettings) DownloadMetadataV3(ctx context.Context) ([]byte, *resty.Re
 
 	return data, resp, nil
 }
+
+// GetOidcBrokerConfigV3 returns the selected OIDC broker configuration.
+// URL: GET /api/v3/sso/oidc-broker-config
+// An unconfigured tenant returns HTTP 404.
+func (s *SsoSettings) GetOidcBrokerConfigV3(ctx context.Context) (*ResourceOidcBrokerConfig, *resty.Response, error) {
+	var result ResourceOidcBrokerConfig
+	endpoint := constants.EndpointJamfProSsoOidcBrokerConfigV3
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetResult(&result).Get(endpoint)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &result, resp, nil
+}
+
+// UpdateOidcBrokerConfigV3 updates the selected OIDC broker configuration.
+// URL: PUT /api/v3/sso/oidc-broker-config
+func (s *SsoSettings) UpdateOidcBrokerConfigV3(ctx context.Context, request *RequestOidcBrokerConfig) (*ResourceOidcBrokerConfig, *resty.Response, error) {
+	if request == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+	var result ResourceOidcBrokerConfig
+	endpoint := constants.EndpointJamfProSsoOidcBrokerConfigV3
+	resp, err := s.client.NewRequest(ctx).SetHeader("Accept", constants.ApplicationJSON).SetHeader("Content-Type", constants.ApplicationJSON).SetBody(request).SetResult(&result).Put(endpoint)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &result, resp, nil
+}

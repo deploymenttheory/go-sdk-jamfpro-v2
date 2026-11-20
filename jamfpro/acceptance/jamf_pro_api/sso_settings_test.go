@@ -96,3 +96,18 @@ func TestAcceptance_SsoSettings_add_history_note_v3(t *testing.T) {
 	assert.Equal(t, 201, resp.StatusCode())
 	t.Logf("Added history note successfully")
 }
+
+func TestAcceptance_SsoSettings_GetOidcBrokerConfigV3(t *testing.T) {
+	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 32, 0)
+	result, resp, err := acc.Client.JamfProAPI.SsoSettings.GetOidcBrokerConfigV3(context.Background())
+	require.NotNil(t, resp)
+	if resp.StatusCode() == 404 {
+		require.Error(t, err)
+		require.Nil(t, result)
+		t.Skip("tenant has no selected OIDC broker configuration")
+	}
+	require.NoError(t, err)
+	require.Equal(t, 200, resp.StatusCode())
+	require.NotNil(t, result)
+}

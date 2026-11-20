@@ -83,6 +83,7 @@ type MobileDeviceSubsetExtensionAttribute struct {
 
 // MobileDeviceSubsetHardware is the HARDWARE section.
 type MobileDeviceSubsetHardware struct {
+	SystemHealth              *MobileDeviceSubsetSystemHealth        `json:"systemHealth,omitempty"`
 	CapacityMb                int                                    `json:"capacityMb,omitempty"`
 	AvailableSpaceMb          int                                    `json:"availableSpaceMb,omitempty"`
 	UsedSpacePercentage       int                                    `json:"usedSpacePercentage,omitempty"`
@@ -117,11 +118,14 @@ type MobileDeviceSubsetUserAndLocation struct {
 
 // MobileDeviceSubsetGeneral is the GENERAL section.
 type MobileDeviceSubsetGeneral struct {
-	Udid                    string `json:"udid,omitempty"`
-	DisplayName             string `json:"displayName,omitempty"`
-	AssetTag                string `json:"assetTag,omitempty"`
-	SiteID                  string `json:"siteId,omitempty"`
-	LastInventoryUpdateDate string `json:"lastInventoryUpdateDate,omitempty"`
+	AppleEnrollmentType     *string `json:"appleEnrollmentType,omitempty"`
+	AwaitingConfiguration   *bool   `json:"awaitingConfiguration,omitempty"`
+	ReturnToServiceEnabled  *bool   `json:"returnToServiceEnabled,omitempty"`
+	Udid                    string  `json:"udid,omitempty"`
+	DisplayName             string  `json:"displayName,omitempty"`
+	AssetTag                string  `json:"assetTag,omitempty"`
+	SiteID                  string  `json:"siteId,omitempty"`
+	LastInventoryUpdateDate string  `json:"lastInventoryUpdateDate,omitempty"`
 	// LastContactDate is the date and time of the most recent device contact via
 	// MDM or DDM channels. Added in Jamf Pro 11.30.
 	LastContactDate                          string                                      `json:"lastContactDate,omitempty"`
@@ -180,6 +184,7 @@ type MobileDeviceSubsetEnrollmentMethodPrestage struct {
 
 // MobileDeviceSubsetSecurity is the SECURITY section (iOS only).
 type MobileDeviceSubsetSecurity struct {
+	LockdownModeEnabled                    *bool                               `json:"lockdownModeEnabled,omitempty"`
 	DataProtected                          bool                                `json:"dataProtected,omitempty"`
 	BlockLevelEncryptionCapable            bool                                `json:"blockLevelEncryptionCapable,omitempty"`
 	FileLevelEncryptionCapable             bool                                `json:"fileLevelEncryptionCapable,omitempty"`
@@ -366,11 +371,13 @@ type MobileDeviceSubsetSite struct {
 // ResourceMobileDeviceDetailsV2 is the full mobile device record returned by
 // GET /v2/mobile-devices/{id}/detail.
 type ResourceMobileDeviceDetailsV2 struct {
-	ID                           string `json:"id,omitempty"`
-	Name                         string `json:"name,omitempty"`
-	EnforceName                  bool   `json:"enforceName,omitempty"`
-	AssetTag                     string `json:"assetTag,omitempty"`
-	LastInventoryUpdateTimestamp string `json:"lastInventoryUpdateTimestamp,omitempty"`
+	AppleEnrollmentType          *string `json:"appleEnrollmentType,omitempty"`
+	AwaitingConfiguration        *bool   `json:"awaitingConfiguration,omitempty"`
+	ID                           string  `json:"id,omitempty"`
+	Name                         string  `json:"name,omitempty"`
+	EnforceName                  bool    `json:"enforceName,omitempty"`
+	AssetTag                     string  `json:"assetTag,omitempty"`
+	LastInventoryUpdateTimestamp string  `json:"lastInventoryUpdateTimestamp,omitempty"`
 	// LastContactTimestamp is the date and time of the most recent device contact
 	// via MDM or DDM channels. Added in Jamf Pro 11.30.
 	LastContactTimestamp               string                                   `json:"lastContactTimestamp,omitempty"`
@@ -431,6 +438,8 @@ type MobileDeviceSubsetLocationV2 struct {
 
 // MobileDeviceSubsetDetailsV2 is the ios / visionos device-type detail object.
 type MobileDeviceSubsetDetailsV2 struct {
+	ReturnToServiceEnabled      *bool                                    `json:"returnToServiceEnabled,omitempty"`
+	SystemHealth                *MobileDeviceSubsetSystemHealth          `json:"systemHealth,omitempty"`
 	Model                       string                                   `json:"model,omitempty"`
 	ModelIdentifier             string                                   `json:"modelIdentifier,omitempty"`
 	ModelNumber                 string                                   `json:"modelNumber,omitempty"`
@@ -527,6 +536,7 @@ type MobileDeviceSubsetPurchasingV2 struct {
 
 // MobileDeviceSubsetSecurityV2 is the security object for the /{id}/detail endpoint.
 type MobileDeviceSubsetSecurityV2 struct {
+	LockdownModeEnabled           *bool  `json:"lockdownModeEnabled,omitempty"`
 	DataProtected                 bool   `json:"dataProtected,omitempty"`
 	BlockLevelEncryptionCapable   bool   `json:"blockLevelEncryptionCapable,omitempty"`
 	FileLevelEncryptionCapable    bool   `json:"fileLevelEncryptionCapable,omitempty"`
@@ -623,4 +633,15 @@ type RequestMobileDeviceUpdateIosV2 struct {
 type RequestMobileDeviceUpdateTvOsV2 struct {
 	AirplayPassword string                        `json:"airplayPassword,omitempty"`
 	Purchasing      *MobileDeviceSubsetPurchasing `json:"purchasing,omitempty"`
+}
+
+// MobileDeviceSubsetSystemHealth contains component health when reported by iOS.
+type MobileDeviceSubsetSystemHealth struct {
+	Baseband      *string `json:"baseband,omitempty"`
+	Camera        *string `json:"camera,omitempty"`
+	Display       *string `json:"display,omitempty"`
+	FaceID        *string `json:"faceId,omitempty"`
+	TouchID       *string `json:"touchId,omitempty"`
+	NFC           *string `json:"nfc,omitempty"`
+	UltraWideband *string `json:"ultraWideband,omitempty"`
 }

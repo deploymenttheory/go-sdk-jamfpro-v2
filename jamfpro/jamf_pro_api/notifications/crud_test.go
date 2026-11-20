@@ -2,6 +2,7 @@ package notifications
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/deploymenttheory/go-sdk-jamfpro-v2/jamfpro/jamf_pro_api/notifications/mocks"
@@ -69,4 +70,25 @@ func TestUnit_Notifications_DeleteByTypeAndIDV1_ValidationErrors(t *testing.T) {
 		require.Nil(t, resp)
 		require.Contains(t, err.Error(), "id is required")
 	})
+}
+
+func TestUnit_Notifications_DeleteV1(t *testing.T) {
+	for _, status := range []int{204, 403, 500} {
+		t.Run(fmt.Sprint(status), func(t *testing.T) {
+			svc, mock := setupMockService(t)
+			if status == 204 {
+				mock.Register("DELETE", "/api/v1/notifications", status, "")
+			} else {
+				mock.RegisterError("DELETE", "/api/v1/notifications", status, "", "notification dismissal failed")
+			}
+			resp, err := svc.DeleteV1(context.Background())
+			require.NotNil(t, resp)
+			require.Equal(t, status, resp.StatusCode())
+			if status == 204 {
+				require.NoError(t, err)
+			} else {
+				require.Error(t, err)
+			}
+		})
+	}
 }

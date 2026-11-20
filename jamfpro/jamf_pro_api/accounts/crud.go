@@ -109,7 +109,7 @@ func (s *Accounts) CreateV1(ctx context.Context, req *RequestAccount) (*CreateRe
 	}
 	if req.AccountType != "" {
 		if _, ok := validAccountTypes[req.AccountType]; !ok {
-			return nil, nil, fmt.Errorf("invalid accountType %q: must be one of DEFAULT, FEDERATED", req.AccountType)
+			return nil, nil, fmt.Errorf("invalid accountType %q: must be one of DEFAULT, FEDERATED, MIGRATED", req.AccountType)
 		}
 	}
 
@@ -159,7 +159,7 @@ func (s *Accounts) UpdateByIDV1(ctx context.Context, id string, req *RequestAcco
 	}
 	if req.AccountType != "" {
 		if _, ok := validAccountTypes[req.AccountType]; !ok {
-			return nil, nil, fmt.Errorf("invalid accountType %q: must be one of DEFAULT, FEDERATED", req.AccountType)
+			return nil, nil, fmt.Errorf("invalid accountType %q: must be one of DEFAULT, FEDERATED, MIGRATED", req.AccountType)
 		}
 	}
 

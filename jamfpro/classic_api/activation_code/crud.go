@@ -30,6 +30,8 @@ func NewActivationCode(client client.Client) *ActivationCode {
 // GetActivationCode retrieves the activation code information.
 // URL: GET /JSSResource/activationcode
 // https://developer.jamf.com/jamf-pro/reference/findactivationcode
+//
+// Deprecated: Jamf marked this Classic endpoint deprecated on 2026-07-14.
 func (s *ActivationCode) GetActivationCode(ctx context.Context) (*ResourceActivationCode, *resty.Response, error) {
 	var result ResourceActivationCode
 
@@ -51,6 +53,8 @@ func (s *ActivationCode) GetActivationCode(ctx context.Context) (*ResourceActiva
 // UpdateActivationCode updates the activation code information.
 // URL: PUT /JSSResource/activationcode
 // https://developer.jamf.com/jamf-pro/reference/updateactivationcode
+//
+// Deprecated: Jamf marked this Classic endpoint deprecated on 2026-07-14.
 func (s *ActivationCode) UpdateActivationCode(ctx context.Context, request *RequestActivationCode) (*resty.Response, error) {
 	if request == nil {
 		return nil, fmt.Errorf("request is required")

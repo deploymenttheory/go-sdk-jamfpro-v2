@@ -65,3 +65,14 @@ func (s *Notifications) ListV1(ctx context.Context) ([]ResourceNotification, *re
 
 	return result, resp, nil
 }
+
+// DeleteV1 dismisses all notifications for the current user and site.
+// URL: DELETE /api/v1/notifications
+func (s *Notifications) DeleteV1(ctx context.Context) (*resty.Response, error) {
+	endpoint := constants.EndpointJamfProNotificationsV1
+	resp, err := s.client.NewRequest(ctx).Delete(endpoint)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
+}
