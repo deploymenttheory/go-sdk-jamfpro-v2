@@ -35,3 +35,17 @@ func TestAcceptance_Notifications_delete_by_type_and_id_v1(t *testing.T) {
 	require.NotNil(t, resp)
 	require.Equal(t, 204, resp.StatusCode())
 }
+
+func TestAcceptance_Notifications_DeleteV1_EmptyList(t *testing.T) {
+	acc.RequireClient(t)
+	acc.GreaterThanJamfProVersion(t, 11, 32, 0)
+	svc := acc.Client.JamfProAPI.Notifications
+	result, _, err := svc.ListV1(context.Background())
+	require.NoError(t, err)
+	if len(result) != 0 {
+		t.Skip("only dismiss an empty notification list")
+	}
+	resp, err := svc.DeleteV1(context.Background())
+	require.NoError(t, err)
+	require.Equal(t, 204, resp.StatusCode())
+}

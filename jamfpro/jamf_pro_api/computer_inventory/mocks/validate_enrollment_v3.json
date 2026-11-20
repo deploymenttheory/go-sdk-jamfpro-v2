@@ -1,0 +1,9 @@
+{
+  "general": {
+    "appleEnrollmentType": null,
+    "awaitingConfiguration": null
+  },
+  "security": {
+    "lockdownModeEnabled": null
+  }
+}

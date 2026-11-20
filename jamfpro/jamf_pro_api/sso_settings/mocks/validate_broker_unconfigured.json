@@ -1,0 +1,9 @@
+{
+  "httpStatus" : 404,
+  "errors" : [ {
+    "code" : null,
+    "description" : "No broker configuration is available for this tenant",
+    "id" : "0",
+    "field" : null
+  } ]
+}

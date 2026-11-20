@@ -17,7 +17,7 @@ type ResourceAccount struct {
 	ChangePasswordOnNextLogin bool   `json:"changePasswordOnNextLogin"`
 	FailedLoginAttempts       int    `json:"failedLoginAttempts"`
 	AccountStatus             string `json:"accountStatus"` // Enabled, Disabled
-	AccountType               string `json:"accountType"`   // DEFAULT, FEDERATED
+	AccountType               string `json:"accountType"`   // DEFAULT, FEDERATED, MIGRATED
 }
 
 // ListResponse is the response for listing user accounts.
@@ -42,7 +42,7 @@ type RequestAccount struct {
 	PrivilegeLevel            string `json:"privilegeLevel,omitempty"` // ADMINISTRATOR, AUDITOR, ENROLLMENT, CUSTOM
 	ChangePasswordOnNextLogin bool   `json:"changePasswordOnNextLogin,omitempty"`
 	AccountStatus             string `json:"accountStatus,omitempty"` // Enabled, Disabled
-	AccountType               string `json:"accountType,omitempty"`   // DEFAULT, FEDERATED
+	AccountType               string `json:"accountType,omitempty"`   // DEFAULT, FEDERATED, MIGRATED
 }
 
 // CreateResponse is the response for creating an account.
